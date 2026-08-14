@@ -4,8 +4,8 @@
 The builder produces ``fixtures/china/combined-v1`` from two verified originals:
 
 1. TPDC China mountain-soil workbook (DOI 10.11888/Terre.tpdc.302620) parsed by
-   the registered adapter into the full 6,570-observation slice (1,314 samples
-   x Cr/Cu/Ni/Pb/Zn).
+   the registered adapter into a deterministic 2,400-observation demo slice
+   (480 samples x Cr/Cu/Ni/Pb/Zn).
 2. Zenodo record 7098563 ``Data Set S2.xlsx`` (DOI 10.5281/zenodo.7098563)
    parsed here into the full 558-observation slice (93 residual-fraction
    sediment samples x As/Cr/Cu/Ni/Pb/Zn).
@@ -22,7 +22,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import re
 import sys
 import tempfile
 from collections import Counter
@@ -41,7 +40,7 @@ ZENODO_SOURCE_ID = "zenodo-yangtze-yellow-river-sediment"
 TPDC_SOURCE_ID = "tpdc-china-mountain-soil"
 CHINA_SOURCE_ORDER = (TPDC_SOURCE_ID, ZENODO_SOURCE_ID)
 EXPECTED_MEDIA = {TPDC_SOURCE_ID: "soil", ZENODO_SOURCE_ID: "sediment"}
-TPDC_FULL_OBSERVATIONS = 6570
+TPDC_DEMO_OBSERVATIONS = 2400
 
 ZENODO_S2_FILENAME = "Data Set S2.xlsx"
 ZENODO_S2_BYTES = 76596
@@ -115,27 +114,14 @@ ZENODO_REGISTRY_ENTRY: dict[str, Any] = {
     },
 }
 
-# Certified reference values (ug/g) used to verify the undeclared workbook
-# unit. GeoReM/USGS preferred values as published in the workbook QC block.
-ZENODO_QC_PREFERRED = {
-    ("BHVO-2", "Cr"): 299.0,
-    ("BHVO-2", "Cu"): 127.0,
-    ("BHVO-2", "Ni"): 126.0,
-    ("BHVO-2", "Zn"): 103.0,
-    ("BHVO-2", "Pb"): 1.6,
-    ("AGV-2", "Cr"): 17.0,
-    ("AGV-2", "Cu"): 53.0,
-    ("AGV-2", "Ni"): 20.0,
-    ("AGV-2", "Zn"): 86.0,
-    ("AGV-2", "Pb"): 13.2,
-}
-ZENODO_QC_TOLERANCE = 0.20
-
-ZENODO_LABEL_RE = re.compile(
-    r"^(?P<leach>HCl|AC)-residual (?P<sample>HH-\d+|CJ-\d+|CJ Sand-\d+)\s*"
-    r"(?P<fraction>.*)$"
+# The certified QC reference values and structural parsers live on the online
+# adapter; the fixture manifest keeps referencing the same frozen objects.
+ZENODO_QC_PREFERRED = (
+    source_adapters.ZenodoYangtzeYellowRiverSedimentAdapter._qc_preferred
 )
-NUMERIC_RE = re.compile(r"^-?\d+(\.\d+)?([eE][+-]?\d+)?$")
+ZENODO_QC_TOLERANCE = (
+    source_adapters.ZenodoYangtzeYellowRiverSedimentAdapter._qc_tolerance
+)
 
 CHINA_REQUEST: dict[str, Any] = {
     "elements": ["As", "Cr", "Cu", "Ni", "Pb", "Zn"],
@@ -180,94 +166,18 @@ def verify_zenodo_file(path: Path) -> None:
 
 
 def parse_zenodo_s2(path: Path) -> list[dict[str, Any]]:
-    """Return one entry per verified sample row with all target values."""
+    """Return one entry per verified sample row with all target values.
 
-    rows = source_adapters.TpdcChinaMountainSoilAdapter._xlsx_rows(path)
-    by_row = {number: row for number, row in rows}
-    for required in (1, 6, 12):
-        if required not in by_row:
-            raise ChinaDemoError(f"Zenodo S2 structure changed: row {required} missing")
-    if by_row[1][:1] != ["Preferred values"] or by_row[6][:1] != ["Measured values"]:
-        raise ChinaDemoError("Zenodo S2 QC block headers changed")
-    headers = by_row[12]
-    if (
-        headers[:1] != [""]
-        or by_row[1][1:] != headers[1:]
-        or by_row[6][1:] != headers[1:]
-    ):
-        raise ChinaDemoError("Zenodo S2 element headers changed between blocks")
-    missing = [item for item in ZENODO_TARGET_ANALYTES if item not in headers]
-    if missing:
-        raise ChinaDemoError(f"Zenodo S2 lacks target analyte columns: {missing}")
-    columns = {analyte: headers.index(analyte) for analyte in ZENODO_TARGET_ANALYTES}
+    The structural QC, unit verification and label parsing live on the online
+    adapter so the pinned fixture and online acquisition cannot diverge.
+    """
 
-    qc_rows = {
-        block: {by_row[number][0]: by_row[number] for number in numbers}
-        for block, numbers in (("preferred", (2, 3, 4, 5)), ("measured", (7, 8, 9, 10)))
-    }
-    for block, table in qc_rows.items():
-        if set(table) != {"BHVO-2", "AGV-2", "W-2", "GSP-2"}:
-            raise ChinaDemoError(
-                f"Zenodo S2 QC {block} standards changed: {sorted(table)}"
-            )
-    checks = 0
-    for (standard, analyte), certified in ZENODO_QC_PREFERRED.items():
-        index = columns[analyte]
-        preferred = float(qc_rows["preferred"][standard][index])
-        measured = float(qc_rows["measured"][standard][index])
-        for label, value in (("preferred", preferred), ("measured", measured)):
-            if abs(value - certified) > ZENODO_QC_TOLERANCE * certified:
-                raise ChinaDemoError(
-                    f"Zenodo S2 unit verification failed: {standard} {analyte} "
-                    f"{label} value {value} is outside {ZENODO_QC_TOLERANCE:.0%} "
-                    f"of the certified ug/g value {certified}"
-                )
-        checks += 1
-    if checks != len(ZENODO_QC_PREFERRED):
-        raise ChinaDemoError("Zenodo S2 QC alignment did not run for every standard")
-
-    samples: list[dict[str, Any]] = []
-    seen_labels: set[str] = set()
-    for number, row in rows:
-        if number < 13:
-            continue
-        if not any(cell.strip() for cell in row):
-            continue
-        label = row[0].strip()
-        match = ZENODO_LABEL_RE.match(label)
-        if match is None:
-            raise ChinaDemoError(
-                f"Zenodo S2 sample label changed at row {number}: {label!r}"
-            )
-        if label in seen_labels:
-            raise ChinaDemoError(
-                f"Zenodo S2 sample label duplicated at row {number}: {label!r}"
-            )
-        seen_labels.add(label)
-        values: dict[str, str] = {}
-        for analyte, index in columns.items():
-            raw = row[index].strip() if index < len(row) else ""
-            if not NUMERIC_RE.match(raw):
-                raise ChinaDemoError(
-                    f"Zenodo S2 {analyte} is not numeric at row {number}: {raw!r}"
-                )
-            values[analyte] = raw
-        samples.append(
-            {
-                "row": number,
-                "label": label,
-                "leach": match.group("leach"),
-                "sample": match.group("sample"),
-                "fraction": match.group("fraction").strip(),
-                "values": values,
-            }
+    try:
+        return source_adapters.ZenodoYangtzeYellowRiverSedimentAdapter.verified_samples(
+            path, ZENODO_REGISTRY_ENTRY
         )
-    if len(samples) != ZENODO_EXPECTED_SAMPLE_ROWS:
-        raise ChinaDemoError(
-            f"Zenodo S2 sample count changed: expected {ZENODO_EXPECTED_SAMPLE_ROWS}, "
-            f"found {len(samples)}"
-        )
-    return samples
+    except source_adapters.SourceAdapterError as exc:
+        raise ChinaDemoError(str(exc)) from exc
 
 
 def build_zenodo_demo(
@@ -296,10 +206,7 @@ def build_zenodo_demo(
             ZENODO_SOURCE_ID, sample["label"], locator
         )
         basis = f"{sample['leach']}_residual_size_fraction"
-        extraction = (
-            f"{sample['leach']}-leach residual component "
-            "(dataset-described size-differentiated separate)"
-        )
+        extraction = f"{sample['leach']}-leach residual component (dataset-described size-differentiated separate)"
         for analyte in ZENODO_TARGET_ANALYTES:
             raw_value = sample["values"][analyte]
             record_id = source_adapters.stable_record_id(
@@ -339,6 +246,7 @@ def build_zenodo_demo(
                     "source_file": ZENODO_S2_FILENAME,
                     "source_row": str(sample["row"]),
                     "source_locator": locator,
+                    "official_source_url": ZENODO_S2_URL,
                     "file_sha256": ZENODO_S2_SHA256,
                     "sampled_at": "",
                     "sample_depth_min_m": "",
@@ -370,8 +278,7 @@ def build_zenodo_demo(
                     "article_citations": [entry["citation"]],
                     "article_dois": [],
                     "selection_rule": (
-                        "full verified Data Set S2 slice: every sample row and "
-                        "registered target analyte"
+                        "full verified Data Set S2 slice: every sample row and registered target analyte"
                     ),
                     "sample_label": sample["label"],
                     "river_system": river_system(sample["sample"]),
@@ -386,8 +293,7 @@ def build_zenodo_demo(
             )
     if len(rows) != ZENODO_EXPECTED_OBSERVATIONS:
         raise ChinaDemoError(
-            f"Zenodo slice produced {len(rows)} observations, expected "
-            f"{ZENODO_EXPECTED_OBSERVATIONS}"
+            f"Zenodo slice produced {len(rows)} observations, expected {ZENODO_EXPECTED_OBSERVATIONS}"
         )
     if dict(leach_counts) != entry["expected_counts"]["leach_groups"]:
         raise ChinaDemoError(
@@ -469,7 +375,7 @@ def build_zenodo_demo(
     return manifest
 
 
-def build_tpdc_full_demo(
+def build_tpdc_demo(
     cache_dir: Path, output_dir: Path, generated_at: str, overwrite: bool
 ) -> dict[str, Any]:
     arguments = argparse.Namespace(
@@ -478,18 +384,18 @@ def build_tpdc_full_demo(
         output_dir=output_dir,
         mode="cached",
         archive=None,
-        observations=TPDC_FULL_OBSERVATIONS,
+        observations=TPDC_DEMO_OBSERVATIONS,
         elements=demos.DEFAULT_ANALYTES,
         bbox=None,
         generated_at=generated_at,
+        purpose="demo",
         overwrite=overwrite,
     )
     manifest = demos.generate(arguments)
     emitted = manifest["record_counts"]["emitted_observations"]
-    if emitted != TPDC_FULL_OBSERVATIONS:
+    if emitted != TPDC_DEMO_OBSERVATIONS:
         raise ChinaDemoError(
-            f"TPDC full slice emitted {emitted} observations, expected "
-            f"{TPDC_FULL_OBSERVATIONS}"
+            f"TPDC demo slice emitted {emitted} observations, expected {TPDC_DEMO_OBSERVATIONS}"
         )
     return manifest
 
@@ -675,7 +581,7 @@ def combine(
         ],
         "failures": [],
         "claim_boundary": (
-            "The combined package binds two verified slices (6,570 TPDC soil "
+            "The combined package binds two verified slices (2,400 TPDC soil "
             "observations and 558 Zenodo river-sediment observations) to one "
             "request and evidence chain. It does not increase their "
             "geographic representativeness."
@@ -722,7 +628,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     if args.work_dir is not None:
         args.work_dir.mkdir(parents=True, exist_ok=True)
         work = args.work_dir
-        build_tpdc_full_demo(
+        build_tpdc_demo(
             args.tpdc_cache_dir, work / TPDC_SOURCE_ID, args.generated_at, True
         )
         build_zenodo_demo(
@@ -731,7 +637,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         return combine(work, args.output_dir, args.generated_at, args.overwrite)
     with tempfile.TemporaryDirectory(prefix="china-demo-") as temporary:
         work = Path(temporary)
-        build_tpdc_full_demo(
+        build_tpdc_demo(
             args.tpdc_cache_dir, work / TPDC_SOURCE_ID, args.generated_at, True
         )
         build_zenodo_demo(

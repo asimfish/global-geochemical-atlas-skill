@@ -32,7 +32,7 @@ PAYLOAD_VERSION = "d3-compact-payload-v1"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
 PROFILE_VERSION = "d3-visualization-profile-v2"
 UI_HIERARCHY_VERSION = "atlas-progressive-disclosure-v2"
-TEMPLATE_CONTRACT_VERSION = "d3-dual-scope-atlas-v4"
+TEMPLATE_CONTRACT_VERSION = "d3-domain-confidence-atlas-v5"
 VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
 TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
@@ -342,6 +342,18 @@ def load_records(
                 confidence = {}
             if not isinstance(qc_flags, list):
                 qc_flags = []
+            quality_dimensions = confidence.get("quality_dimensions")
+            if not isinstance(quality_dimensions, Mapping):
+                quality_dimensions = {}
+
+            def quality_value(dimension: str, key: str) -> Any:
+                value = quality_dimensions.get(dimension)
+                return value.get(key) if isinstance(value, Mapping) else None
+
+            spatial_domain = spatial_scope.record_spatial_domain(row)
+            workflow_score = optional_float(
+                quality_value("workflow_usability", "score")
+            )
             records.append(
                 {
                     "record_id": row.get("record_id"),
@@ -349,6 +361,7 @@ def load_records(
                     "element": row.get("element_or_analyte"),
                     "analyte_reported": row.get("analyte_reported") or None,
                     "medium": row.get("medium"),
+                    "spatial_domain": spatial_domain,
                     "material": row.get("material") or None,
                     "sample_type": row.get("sample_type") or None,
                     "soil_horizon": row.get("soil_horizon") or None,
@@ -369,6 +382,20 @@ def load_records(
                     "latitude": latitude,
                     "longitude": longitude,
                     "coordinate_basis": coordinate_basis,
+                    "coordinate_uncertainty_m": optional_float(
+                        row.get("coordinate_uncertainty_m")
+                    ),
+                    "coordinate_representation_resolution_m": optional_float(
+                        row.get("coordinate_representation_resolution_m")
+                    ),
+                    "coordinate_representation_resolution_basis": row.get(
+                        "coordinate_representation_resolution_basis"
+                    )
+                    or None,
+                    "coordinate_accuracy_evidence_status": row.get(
+                        "coordinate_accuracy_evidence_status"
+                    )
+                    or None,
                     "lithology": row.get("lithology") or None,
                     "geologic_unit": row.get("matched_geologic_unit")
                     or row.get("geologic_unit")
@@ -378,6 +405,8 @@ def load_records(
                     "analytical_method": row.get("analytical_method") or None,
                     "method_family": row.get("method_family") or None,
                     "method_scope": row.get("method_scope") or None,
+                    "method_source_locator": row.get("method_source_locator") or None,
+                    "method_missing_reason": row.get("method_missing_reason") or None,
                     "digestion_or_extraction": row.get("digestion_or_extraction")
                     or None,
                     "source_id": row.get("source_id") or None,
@@ -385,9 +414,40 @@ def load_records(
                     "dataset_doi": row.get("dataset_doi") or None,
                     "dataset_version": row.get("dataset_version") or None,
                     "source_locator": row.get("source_locator") or None,
+                    "official_source_url": row.get("official_source_url") or None,
                     "license": row.get("license") or None,
                     "confidence_band": confidence.get("band", "unknown"),
                     "confidence_overall": optional_float(confidence.get("overall")),
+                    "confidence_source_evidence_band": quality_value(
+                        "source_evidence", "band"
+                    )
+                    or "unknown",
+                    "confidence_source_evidence_score": optional_float(
+                        quality_value("source_evidence", "score")
+                    ),
+                    "confidence_analytical_readiness_band": quality_value(
+                        "analytical_readiness", "band"
+                    )
+                    or "unknown",
+                    "confidence_analytical_readiness_score": optional_float(
+                        quality_value("analytical_readiness", "score")
+                    ),
+                    "confidence_spatial_usability_band": quality_value(
+                        "spatial_usability", "band"
+                    )
+                    or "unknown",
+                    "confidence_spatial_usability_score": optional_float(
+                        quality_value("spatial_usability", "score")
+                    ),
+                    "confidence_workflow_usability_band": quality_value(
+                        "workflow_usability", "band"
+                    )
+                    or confidence.get("band", "unknown"),
+                    "confidence_workflow_usability_score": (
+                        workflow_score
+                        if workflow_score is not None
+                        else optional_float(confidence.get("overall"))
+                    ),
                     "confidence_components": {
                         key: optional_float(confidence.get(key))
                         for key in ("source", "completeness", "method", "spatial", "qc")
@@ -406,6 +466,10 @@ def load_records(
 def database_visual_summary(path: Path) -> dict[str, Any]:
     """Aggregate the complete canonical CSV for D3 charts without embedding every row."""
     coverage: dict[str, dict[str, int]] = {}
+    map_availability: dict[str, dict[str, dict[str, int]]] = {
+        "elements": {},
+        "media": {},
+    }
     strata: dict[tuple[str, str, str, str, str], list[float]] = {}
     complete = {
         "standardized": 0,
@@ -436,13 +500,44 @@ def database_visual_summary(path: Path) -> dict[str, Any]:
                 complete["standardized"] += 1
             latitude = optional_float(row.get("latitude"))
             longitude = optional_float(row.get("longitude"))
-            if (
+            canonical_coordinates = (
                 latitude is not None
                 and longitude is not None
                 and -90 <= latitude <= 90
                 and -180 <= longitude <= 180
-            ):
+            )
+            reported_latitude = optional_float(row.get("original_latitude_raw"))
+            reported_longitude = optional_float(row.get("original_longitude_raw"))
+            reported_coordinates = (
+                reported_latitude is not None
+                and reported_longitude is not None
+                and -90 <= reported_latitude <= 90
+                and -180 <= reported_longitude <= 180
+            )
+            if canonical_coordinates:
                 complete["coordinates"] += 1
+                coordinate_class = "canonical_coordinate_records"
+            elif reported_coordinates:
+                coordinate_class = "reported_only_coordinate_records"
+            else:
+                coordinate_class = "unplottable_records"
+            for dimension, dimension_value in (
+                ("elements", element),
+                ("media", medium),
+            ):
+                if not dimension_value:
+                    continue
+                availability = map_availability[dimension].setdefault(
+                    dimension_value,
+                    {
+                        "database_records": 0,
+                        "canonical_coordinate_records": 0,
+                        "reported_only_coordinate_records": 0,
+                        "unplottable_records": 0,
+                    },
+                )
+                availability["database_records"] += 1
+                availability[coordinate_class] += 1
             if method:
                 complete["method"] += 1
             if (
@@ -510,6 +605,7 @@ def database_visual_summary(path: Path) -> dict[str, Any]:
         "schema_version": "d3-database-visual-summary-v1",
         "record_count": total,
         "coverage": coverage,
+        "map_availability": map_availability,
         "completeness": {
             key: {"count": count, "rate": count / total if total else 0.0}
             for key, count in complete.items()
@@ -1171,6 +1267,7 @@ PACKED_FIELDS = (
     "element",
     "analyte_reported",
     "medium",
+    "spatial_domain",
     "material",
     "sample_type",
     "measurement_basis",
@@ -1193,9 +1290,18 @@ PACKED_FIELDS = (
     "dataset_doi",
     "dataset_version",
     "source_locator",
+    "official_source_url",
     "license",
     "confidence_band",
     "confidence_overall",
+    "confidence_source_evidence_band",
+    "confidence_source_evidence_score",
+    "confidence_analytical_readiness_band",
+    "confidence_analytical_readiness_score",
+    "confidence_spatial_usability_band",
+    "confidence_spatial_usability_score",
+    "confidence_workflow_usability_band",
+    "confidence_workflow_usability_score",
     "confidence_source",
     "confidence_completeness",
     "confidence_method",
@@ -1204,6 +1310,12 @@ PACKED_FIELDS = (
     "qc_flags",
     "candidate_anomaly",
     "coordinate_basis",
+    "coordinate_uncertainty_m",
+    "coordinate_representation_resolution_m",
+    "coordinate_representation_resolution_basis",
+    "coordinate_accuracy_evidence_status",
+    "method_source_locator",
+    "method_missing_reason",
 )
 
 
@@ -1235,6 +1347,7 @@ def compact_map_payload(
                 string_index(record.get("element")),
                 string_index(record.get("analyte_reported")),
                 string_index(record.get("medium")),
+                string_index(record.get("spatial_domain")),
                 string_index(record.get("material")),
                 string_index(record.get("sample_type")),
                 string_index(record.get("measurement_basis")),
@@ -1257,9 +1370,18 @@ def compact_map_payload(
                 string_index(record.get("dataset_doi")),
                 string_index(record.get("dataset_version")),
                 string_index(record.get("source_locator")),
+                string_index(record.get("official_source_url")),
                 string_index(record.get("license")),
                 string_index(record.get("confidence_band")),
                 record.get("confidence_overall"),
+                string_index(record.get("confidence_source_evidence_band")),
+                record.get("confidence_source_evidence_score"),
+                string_index(record.get("confidence_analytical_readiness_band")),
+                record.get("confidence_analytical_readiness_score"),
+                string_index(record.get("confidence_spatial_usability_band")),
+                record.get("confidence_spatial_usability_score"),
+                string_index(record.get("confidence_workflow_usability_band")),
+                record.get("confidence_workflow_usability_score"),
                 confidence.get("source"),
                 confidence.get("completeness"),
                 confidence.get("method"),
@@ -1268,6 +1390,12 @@ def compact_map_payload(
                 [string_index(flag) for flag in record.get("qc_flags", [])],
                 1 if str(record.get("record_id")) in anomaly_ids else 0,
                 string_index(record.get("coordinate_basis")),
+                record.get("coordinate_uncertainty_m"),
+                record.get("coordinate_representation_resolution_m"),
+                string_index(record.get("coordinate_representation_resolution_basis")),
+                string_index(record.get("coordinate_accuracy_evidence_status")),
+                string_index(record.get("method_source_locator")),
+                string_index(record.get("method_missing_reason")),
             ]
         )
     return {
@@ -1349,6 +1477,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="deliverableCenter"',
         'id="databaseView"',
         'id="confidenceSummary"',
+        'id="confidenceGateReasons"',
         'id="databaseDistributionCanvas"',
         'id="databaseCoverageMatrix"',
         'id="databaseBoxCanvas"',
@@ -1357,12 +1486,28 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="globe"',
         'id="anomalyDensityCanvas"',
         "不是正确概率",
+        "来源证据画像（不是空间工作流评分）",
+        "空间工作流复核（不等于数据质量）",
+        'id="qualityDimension"',
+        "工作流可用性 / 复核级别",
+        'id="sourcePortfolioSummary"',
+        'id="comboUniverse"',
+        "returnToAnomalyRegion",
+        "发布方未报告位置不确定度（非处理失败）",
         'id="backView"',
         'id="databaseEditor"',
         'id="sourceTableBody"',
         'id="anomalyInspector"',
         'id="exportComparisonProfile"',
         "comparisonProfile",
+        "officialSourceLinks",
+        "记录级文件定位",
+        "官方来源 / DOI",
+        "来源声明坐标不确定度",
+        "坐标表达分辨率（非位置精度）",
+        "方法缺失责任",
+        "坐标精度证据状态",
+        "管线输入未记账（需修复）",
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:
@@ -1381,6 +1526,7 @@ def build_map(
     qc_report_path: Path | None = None,
     confidence_report_path: Path | None = None,
     source_manifest_path: Path | None = None,
+    sources_and_confidence_path: Path | None = None,
     anomaly_report_path: Path | None = None,
     anomaly_regions_path: Path | None = None,
     spatial_anomaly_report_path: Path | None = None,
@@ -1579,6 +1725,9 @@ def build_map(
             confidence_report_path, "confidence report"
         ),
         "source_manifest": load_json_object(source_manifest_path, "source manifest"),
+        "sources_and_confidence": load_json_object(
+            sources_and_confidence_path, "sources and confidence report"
+        ),
         "anomaly_report": load_json_object(anomaly_report_path, "anomaly report"),
         "spatial_anomaly_regions": anomaly_regions,
         "spatial_anomaly_report": load_json_object(
@@ -1731,6 +1880,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--source-manifest", type=Path, help="Optional D1 source_manifest.json"
     )
     parser.add_argument(
+        "--sources-and-confidence",
+        type=Path,
+        help="Optional sources_and_confidence.json metadata-completeness report",
+    )
+    parser.add_argument(
         "--anomaly-report", type=Path, help="Optional D2 anomaly_report.json"
     )
     parser.add_argument(
@@ -1795,6 +1949,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             qc_report_path=args.qc_report,
             confidence_report_path=args.confidence_report,
             source_manifest_path=args.source_manifest,
+            sources_and_confidence_path=args.sources_and_confidence,
             anomaly_report_path=args.anomaly_report,
             anomaly_regions_path=args.anomaly_regions,
             spatial_anomaly_report_path=args.spatial_anomaly_report,

@@ -20,7 +20,7 @@ import urllib.parse
 import urllib.request
 import zipfile
 from collections.abc import Callable, Sequence
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -73,7 +73,12 @@ def is_retryable_error(exc: Exception) -> bool:
 
 
 def utc_now() -> str:
-    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return (
+        datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
 
 
 def atomic_json(path: Path, value: Any) -> None:
@@ -109,6 +114,22 @@ def validate_sha256(value: str | None) -> str | None:
     return normalized
 
 
+def configured_proxy(parsed: urllib.parse.ParseResult) -> str | None:
+    """Return the operator-configured proxy that will carry this request."""
+
+    if not parsed.hostname:
+        return None
+    proxy = urllib.request.getproxies().get(parsed.scheme.casefold())
+    if not proxy:
+        return None
+    try:
+        if urllib.request.proxy_bypass(parsed.hostname):
+            return None
+    except OSError:
+        return None
+    return proxy
+
+
 def validate_public_https_url(url: str) -> None:
     parsed = urllib.parse.urlparse(url)
     if parsed.scheme.casefold() != "https":
@@ -129,6 +150,12 @@ def validate_public_https_url(url: str) -> None:
             "URL query appears to contain a credential or signed secret; do not persist it",
             status="invalid_input",
         )
+
+    if configured_proxy(parsed) is not None:
+        # Proxy-only egress: the operator-configured proxy resolves the name,
+        # so a direct getaddrinfo preflight fails spuriously and the private-
+        # address check cannot observe the destination the proxy connects to.
+        return
 
     try:
         addresses = {

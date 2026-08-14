@@ -21,8 +21,9 @@ DEFAULT_CATALOG = SKILL_DIR / "assets" / "source_catalog.json"
 FULL_PROFILE_ROOT = SKILL_DIR / "assets" / "v4-full-profiles"
 
 CATALOG_VERSION = "geochemical-source-catalog-v1"
-ROUTE_VERSION = "geochemical-source-route-v4"
+ROUTE_VERSION = "geochemical-source-route-v5"
 VALID_MEDIA = {"rock", "soil", "sediment", "water", "mineral", "concentrate"}
+VALID_SPATIAL_DOMAINS = set(spatial_scope.VALID_SPATIAL_DOMAINS)
 VALID_OUTPUT_FORMATS = {"csv", "json", "geojson", "html_map"}
 VALID_SOURCE_STATUS = {
     "approved",
@@ -35,6 +36,11 @@ ALLOWED_REQUEST_KEYS = {
     "elements",
     "region",
     "media",
+    "coverage_mode",
+    "minimum_elements",
+    "minimum_media",
+    "spatial_domains",
+    "adjacent_marine_distance_km",
     "measurement_basis",
     "geology_units",
     "geology_match",
@@ -159,6 +165,27 @@ def validate_request(
         raise SourceRoutingError(
             f"request contains unsupported media: {sorted(set(media) - VALID_MEDIA)}"
         )
+    coverage_mode = request.get("coverage_mode", "fixed")
+    if coverage_mode not in {"fixed", "maximize_evidence_breadth"}:
+        raise SourceRoutingError(
+            "coverage_mode must be fixed or maximize_evidence_breadth"
+        )
+    for key, selected in (
+        ("minimum_elements", elements),
+        ("minimum_media", media),
+    ):
+        minimum = request.get(key)
+        if minimum is None:
+            continue
+        if (
+            isinstance(minimum, bool)
+            or not isinstance(minimum, int)
+            or minimum < 1
+            or minimum > len(selected)
+        ):
+            raise SourceRoutingError(
+                f"{key} must be an integer from 1 to the selected dimension count"
+            )
     region = request.get("region")
     if not isinstance(region, (str, dict)) or not region:
         raise SourceRoutingError(
@@ -177,6 +204,54 @@ def validate_request(
             spatial_scope.resolve_region(region)
         except spatial_scope.SpatialScopeError as exc:
             raise SourceRoutingError(str(exc)) from exc
+    try:
+        resolved_region = spatial_scope.resolve_region(region)
+    except spatial_scope.SpatialScopeError as exc:
+        raise SourceRoutingError(str(exc)) from exc
+    spatial_domains = request.get("spatial_domains")
+    if spatial_domains is None:
+        derived: set[str] = set()
+        if set(media).intersection({"rock", "soil", "mineral", "concentrate"}):
+            derived.add("land")
+        if "sediment" in media:
+            derived.update({"land", "inland_water", "marine"})
+        if "water" in media:
+            derived.update({"inland_water", "marine"})
+        spatial_domains = [
+            item for item in spatial_scope.VALID_SPATIAL_DOMAINS if item in derived
+        ]
+    if (
+        not isinstance(spatial_domains, list)
+        or not spatial_domains
+        or not all(isinstance(item, str) for item in spatial_domains)
+        or len(spatial_domains) != len(set(spatial_domains))
+        or not set(spatial_domains).issubset(VALID_SPATIAL_DOMAINS)
+    ):
+        raise SourceRoutingError(
+            "spatial_domains must be a non-empty unique subset of land, inland_water and marine"
+        )
+    adjacent_default = (
+        int(spatial_scope.DEFAULT_ADJACENT_MARINE_DISTANCE_KM)
+        if resolved_region.get("country_code") and "marine" in spatial_domains
+        else 0
+    )
+    adjacent_marine_distance_km = request.get(
+        "adjacent_marine_distance_km", adjacent_default
+    )
+    if (
+        isinstance(adjacent_marine_distance_km, bool)
+        or not isinstance(adjacent_marine_distance_km, (int, float))
+        or not 0 <= float(adjacent_marine_distance_km) <= 1000
+    ):
+        raise SourceRoutingError(
+            "adjacent_marine_distance_km must be a number from 0 to 1000"
+        )
+    if float(adjacent_marine_distance_km) > 0 and (
+        "marine" not in spatial_domains or not resolved_region.get("country_code")
+    ):
+        raise SourceRoutingError(
+            "a positive adjacent_marine_distance_km requires a named-country request with marine in spatial_domains"
+        )
     sources = request.get("sources", "auto")
     if sources != "auto":
         if (
@@ -264,7 +339,10 @@ def validate_request(
         raise SourceRoutingError(
             "minimum_use_mode must be discovery, raw_observation, normalized_analysis or benchmark_ready"
         )
-    max_records = request.get("max_records", 50000)
+    default_max_records = (
+        200000 if coverage_mode == "maximize_evidence_breadth" else 50000
+    )
+    max_records = request.get("max_records", default_max_records)
     if (
         isinstance(max_records, bool)
         or not isinstance(max_records, int)
@@ -274,6 +352,11 @@ def validate_request(
     if not isinstance(request.get("offline", False), bool):
         raise SourceRoutingError("offline must be a boolean")
     normalized = dict(request)
+    normalized.setdefault("coverage_mode", "fixed")
+    normalized.setdefault("minimum_elements", None)
+    normalized.setdefault("minimum_media", None)
+    normalized["spatial_domains"] = list(spatial_domains)
+    normalized["adjacent_marine_distance_km"] = adjacent_marine_distance_km
     normalized.setdefault("measurement_basis", None)
     normalized.setdefault("geology_units", None)
     normalized.setdefault("geology_match", "reported_or_matched")
@@ -285,7 +368,7 @@ def validate_request(
     normalized.setdefault("research_use_policy", "permitted_research")
     normalized.setdefault("minimum_evidence_tier", "D")
     normalized.setdefault("minimum_use_mode", "normalized_analysis")
-    normalized.setdefault("max_records", 50000)
+    normalized.setdefault("max_records", default_max_records)
     normalized.setdefault("offline", False)
     return normalized
 
@@ -339,15 +422,19 @@ def _year(value: str) -> int:
     return int(match.group(1))
 
 
-def _source_bbox(source_id: str) -> list[float] | None:
+def _source_spatial_profile(source_id: str) -> dict[str, Any]:
     path = FULL_PROFILE_ROOT / source_id / "spatial_coverage.json"
     if not path.is_file():
-        return None
+        return {}
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError):
-        return None
-    bbox = value.get("bbox") if isinstance(value, dict) else None
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _source_bbox(source_id: str) -> list[float] | None:
+    bbox = _source_spatial_profile(source_id).get("bbox")
     if (
         not isinstance(bbox, list)
         or len(bbox) != 4
@@ -358,6 +445,188 @@ def _source_bbox(source_id: str) -> list[float] | None:
     ):
         return None
     return [float(item) for item in bbox]
+
+
+def _profile_country_applicability(
+    source_id: str,
+    resolved_request: Mapping[str, Any],
+    request: Mapping[str, Any],
+) -> dict[str, Any] | None:
+    """Return a fail-closed country decision from audited full-profile semantics.
+
+    Bounding boxes answer only whether two rectangles overlap.  They cannot
+    prove that a partial global archive actually contains observations for a
+    named country, and an ocean cruise cannot satisfy a land Admin-0 request.
+    This gate is used only when the profile explicitly declares auditable
+    applicability semantics; sources without them retain the older conservative
+    bbox/declaration path.
+    """
+
+    country_code = resolved_request.get("country_code")
+    if not isinstance(country_code, str) or not country_code:
+        return None
+    profile = _source_spatial_profile(source_id)
+    applicability = profile.get("region_applicability")
+    if not isinstance(applicability, Mapping):
+        return None
+    domain = str(applicability.get("spatial_domain") or "unknown")
+    index_status = str(applicability.get("country_index_status") or "unknown")
+    raw_codes = applicability.get("country_iso_a3_codes")
+    country_codes = sorted(
+        str(item)
+        for item in (raw_codes if isinstance(raw_codes, list) else [])
+        if isinstance(item, str)
+    )
+    evidence = {
+        "profile_version": profile.get("profile_version"),
+        "dataset_version": profile.get("dataset_version"),
+        "spatial_domain": domain,
+        "country_index_status": index_status,
+        "country_iso_a3_codes": country_codes,
+        "evidence_basis": applicability.get("evidence_basis"),
+    }
+    if domain == "marine":
+        if "marine" in request.get("spatial_domains", []):
+            source_bbox = _source_bbox(source_id)
+            analysis_bbox = spatial_scope.request_analysis_bbox(
+                resolved_request,
+                request.get("spatial_domains"),
+                float(request.get("adjacent_marine_distance_km") or 0),
+            )
+            if source_bbox is not None and not spatial_scope.bbox_intersects(
+                analysis_bbox, source_bbox
+            ):
+                return {
+                    "status": "incompatible",
+                    "reason_code": "adjacent_marine_bbox_disjoint",
+                    "note": (
+                        f"audited marine source bbox {source_bbox} does not intersect "
+                        f"the bounded adjacent-marine analysis bbox {analysis_bbox}"
+                    ),
+                    "profile_evidence": evidence,
+                }
+            return {
+                "status": "compatible",
+                "reason_code": "adjacent_marine_domain_requested",
+                "note": (
+                    f"request explicitly includes the marine domain within "
+                    f"{request.get('adjacent_marine_distance_km')} km of the frozen "
+                    "Admin-0 boundary; record-level distance filtering still runs and "
+                    "the buffer is not a territorial or sovereignty claim"
+                ),
+                "profile_evidence": evidence,
+            }
+        return {
+            "status": "incompatible",
+            "reason_code": "marine_domain_not_requested",
+            "note": (
+                f"resolved request {resolved_request['key']} does not include the "
+                "marine spatial domain, while the audited full profile is marine-only"
+            ),
+            "profile_evidence": evidence,
+        }
+    if index_status == "complete_for_snapshot":
+        if country_code not in country_codes:
+            return {
+                "status": "incompatible",
+                "reason_code": "profile_country_absent",
+                "note": (
+                    f"audited full-snapshot country index contains {len(country_codes)} "
+                    f"countries but not {country_code}; bbox overlap cannot promote the source"
+                ),
+                "profile_evidence": evidence,
+            }
+        return {
+            "status": "compatible",
+            "reason_code": "profile_country_present",
+            "note": (
+                f"audited full-snapshot country index explicitly contains {country_code}; "
+                "record-level country/polygon filtering still runs after acquisition"
+            ),
+            "profile_evidence": evidence,
+        }
+    return None
+
+
+def _bbox_contains(
+    outer: Sequence[float], inner: Sequence[float], tolerance_degrees: float = 0.5
+) -> bool:
+    """Return conservative containment for ordinary scopes.
+
+    A half-degree tolerance accommodates rounded task boxes such as China's
+    documented 73--135 E, 18--54 N shorthand versus the frozen Natural Earth
+    coastline bounds.  It is used only for source routing, never record joins.
+    """
+
+    if outer[0] > outer[2] or inner[0] > inner[2]:
+        return False
+    return (
+        outer[0] - tolerance_degrees <= inner[0]
+        and outer[1] - tolerance_degrees <= inner[1]
+        and outer[2] + tolerance_degrees >= inner[2]
+        and outer[3] + tolerance_degrees >= inner[3]
+    )
+
+
+def _declared_region_scopes(entry: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Resolve catalog region labels without promoting their coordinates to WGS84.
+
+    Some publishers state a country or named region but omit the source CRS.
+    That evidence is sufficient to decide whether the dataset is worth
+    acquiring for the region; it is *not* sufficient to canonicalize or map
+    individual coordinates.  Returned scopes are therefore routing evidence
+    only and always lead to ``compatible_reported_only``.
+    """
+
+    declared = [
+        str(item)
+        for item in (entry.get("coverage") or {}).get("regions", [])
+        if str(item or "").strip()
+    ]
+    if not declared:
+        return []
+    normalized_labels = [_normalized_scope(item) for item in declared]
+    candidates: dict[str, dict[str, Any]] = {}
+
+    def label_mentions(alias: str) -> bool:
+        normalized = _normalized_scope(alias)
+        if len(normalized) < 3:
+            return False
+        compact = normalized.replace("_", "")
+        return any(
+            normalized in label.split("_")
+            or (len(compact) >= 5 and compact in label.replace("_", ""))
+            for label in normalized_labels
+        )
+
+    for key, definition in spatial_scope.NAMED_BBOXES.items():
+        aliases = [key, *definition.get("aliases", ())]
+        if any(label_mentions(str(alias)) for alias in aliases):
+            try:
+                candidates[key] = spatial_scope.resolve_region(key)
+            except spatial_scope.SpatialScopeError:
+                pass
+
+    registry = spatial_scope.load_country_registry()
+    for code, country in registry["by_code"].items():
+        aliases = (code, country.get("name"), country.get("name_zh"))
+        if any(label_mentions(str(alias)) for alias in aliases if alias):
+            try:
+                candidates[code] = spatial_scope.resolve_region(code)
+            except spatial_scope.SpatialScopeError:
+                pass
+    return list(candidates.values())
+
+
+def _declared_region_matches(
+    entry: Mapping[str, Any], resolved_request: Mapping[str, Any]
+) -> dict[str, Any] | None:
+    for declared_scope in _declared_region_scopes(entry):
+        if resolved_request.get("key") == declared_scope.get("key") or _bbox_contains(
+            resolved_request["bbox"], declared_scope["bbox"]
+        ):
+            return declared_scope
+    return None
 
 
 def basis_matches(requested: str, declared: str) -> bool:
@@ -393,6 +662,9 @@ def request_compatibility(
     """Compare every retrieval-changing request field with frozen source evidence."""
 
     registered = registry_entry if isinstance(registry_entry, Mapping) else {}
+    registered_media = sorted(str(item) for item in entry.get("media", []))
+    matched_media = sorted(set(request["media"]).intersection(registered_media))
+    media_status = "compatible" if matched_media else "incompatible"
     target_analytes = sorted(
         str(item) for item in registered.get("target_analytes", {})
     )
@@ -407,6 +679,8 @@ def request_compatibility(
 
     region = request["region"]
     source_bbox = _source_bbox(source_id)
+    region_reason_code = "global_request"
+    region_profile_evidence: dict[str, Any] | None = None
     if region == "global":
         region_status = "not_applicable"
         region_note = "global request; source coverage remains partial as declared"
@@ -418,19 +692,50 @@ def request_compatibility(
             region_status = "unverified"
             region_note = str(exc)
     if region != "global" and resolved_region is not None:
-        if source_bbox is None:
-            region_status = "unverified"
-            region_note = (
-                "canonical source bbox unavailable; WGS84 filtering cannot be verified"
+        profile_decision = _profile_country_applicability(
+            source_id, resolved_region, request
+        )
+        if profile_decision is not None:
+            region_status = str(profile_decision["status"])
+            region_reason_code = str(profile_decision["reason_code"])
+            region_note = str(profile_decision["note"])
+            profile_evidence = profile_decision.get("profile_evidence")
+            region_profile_evidence = (
+                dict(profile_evidence)
+                if isinstance(profile_evidence, Mapping)
+                else None
             )
-        elif spatial_scope.bbox_intersects(resolved_region["bbox"], source_bbox):
+        elif source_bbox is None:
+            declared_scope = _declared_region_matches(entry, resolved_region)
+            if declared_scope is None:
+                region_status = "unverified"
+                region_reason_code = "canonical_scope_unverified"
+                region_note = (
+                    "canonical source bbox unavailable and the catalog's declared region "
+                    "does not resolve to the request scope"
+                )
+            else:
+                region_status = "compatible_reported_only"
+                region_reason_code = "catalog_declared_scope_match"
+                region_note = (
+                    f"catalog-declared scope {declared_scope['key']} matches the request; "
+                    "acquisition is relevant, but source coordinates remain reported-only "
+                    "until a CRS is evidenced"
+                )
+        elif spatial_scope.bbox_intersects(
+            spatial_scope.request_analysis_bbox(
+                resolved_region,
+                request.get("spatial_domains"),
+                float(request.get("adjacent_marine_distance_km") or 0),
+            ),
+            source_bbox,
+        ):
             region_status = "compatible"
-            region_note = (
-                f"resolved request scope {resolved_region['key']} intersects frozen canonical "
-                f"source bbox {source_bbox}"
-            )
+            region_reason_code = "canonical_bbox_intersection"
+            region_note = f"resolved request scope {resolved_region['key']} intersects frozen canonical source bbox {source_bbox}"
         else:
             region_status = "incompatible"
+            region_reason_code = "canonical_bbox_disjoint"
             region_note = (
                 f"resolved request scope {resolved_region['key']} does not intersect frozen "
                 f"canonical source bbox {source_bbox}"
@@ -498,6 +803,12 @@ def request_compatibility(
         )
 
     return {
+        "media": {
+            "status": media_status,
+            "requested": list(request["media"]),
+            "registered": registered_media,
+            "matched": matched_media,
+        },
         "analytes": {
             "status": analyte_status,
             "requested": list(request["elements"]),
@@ -506,8 +817,10 @@ def request_compatibility(
         },
         "region": {
             "status": region_status,
+            "reason_code": region_reason_code,
             "declared_regions": list(entry["coverage"].get("regions", [])),
             "canonical_bbox": source_bbox,
+            "profile_evidence": region_profile_evidence,
             "note": region_note,
         },
         "geology": {
@@ -579,7 +892,7 @@ def route_sources(
     for source_id in sorted(allowed_ids):
         entry = resolved_catalog["sources"][source_id]
         matching_media = sorted(requested_media.intersection(entry["media"]))
-        if not matching_media:
+        if not matching_media and explicit_sources == "auto":
             continue
         evidence = evidence_report["sources"][source_id]
         compatibility = request_compatibility(
@@ -685,6 +998,81 @@ def route_sources(
             "note": note,
         }
 
+    def dimension_audit(
+        requested: Sequence[str],
+        dimension: str,
+    ) -> dict[str, Any]:
+        items: dict[str, Any] = {}
+        for value in requested:
+            if dimension == "elements":
+                selected_ids = sorted(
+                    item["source_id"]
+                    for item in selected
+                    if value
+                    in (
+                        (
+                            (item["request_compatibility"].get("analytes") or {}).get(
+                                "matched"
+                            )
+                        )
+                        or []
+                    )
+                )
+                candidate_ids = sorted(
+                    item["source_id"]
+                    for item in review
+                    if value
+                    in (
+                        (
+                            (item["request_compatibility"].get("analytes") or {}).get(
+                                "matched"
+                            )
+                        )
+                        or []
+                    )
+                )
+            else:
+                selected_ids = sorted(
+                    item["source_id"]
+                    for item in selected
+                    if value in item["matching_media"]
+                )
+                candidate_ids = sorted(
+                    item["source_id"]
+                    for item in review
+                    if value in item["matching_media"]
+                )
+            status = (
+                "selected"
+                if selected_ids
+                else "review_only"
+                if candidate_ids
+                else "uncovered"
+            )
+            items[value] = {
+                "status": status,
+                "selected_sources": selected_ids,
+                "candidate_sources": candidate_ids,
+            }
+        return {
+            "minimum_required": normalized[
+                "minimum_elements" if dimension == "elements" else "minimum_media"
+            ],
+            "audited_candidates": list(requested),
+            "items": items,
+        }
+
+    breadth_audit = {
+        "coverage_mode": normalized["coverage_mode"],
+        "elements": dimension_audit(normalized["elements"], "elements"),
+        "media": dimension_audit(normalized["media"], "media"),
+        "claim_boundary": (
+            "selected means at least one currently routable source declares the candidate; "
+            "it does not prove that acquisition will return enough in-scope observations. "
+            "review_only and uncovered candidates remain explicit D1 discovery work."
+        ),
+    }
+
     if selected:
         status = (
             "partial"
@@ -716,6 +1104,7 @@ def route_sources(
         "selected_sources": selected,
         "review_sources": review,
         "coverage": coverage,
+        "breadth_audit": breadth_audit,
         "limitations": limitations,
         "claim_boundary": resolved_catalog["claim_boundary"],
     }

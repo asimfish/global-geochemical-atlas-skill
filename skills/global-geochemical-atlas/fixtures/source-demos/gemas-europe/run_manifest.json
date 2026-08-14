@@ -22,14 +22,14 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 82420,
+      "bytes": 85716,
       "path": "demo_input.csv",
-      "sha256": "711b19462c6da2d49bc8452f893fdc3e53e5428c5cf41cfa6e31e775aa753e1f"
+      "sha256": "ff00c957215f75fc5d80950f7d31efb9ce2a0d0a9c79fcf300ddea619e80166d"
     },
     {
-      "bytes": 89540,
+      "bytes": 86316,
       "path": "sources.jsonl",
-      "sha256": "63e8c9237e86708828453026064f39db5e8c8a4f062a57174e4ef7cd866f187e"
+      "sha256": "47a0a5ebc4a87d5c16d84cf9f830990a902404f05171a56bbec92380c142cadb"
     }
   ],
   "record_counts": {
@@ -49,7 +49,7 @@
     {
       "bytes": 4307359,
       "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
-      "retrieved_at": "2026-08-07T15:43:08Z",
+      "retrieved_at": "2026-08-09T15:23:37Z",
       "sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4",
       "source_url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
     }

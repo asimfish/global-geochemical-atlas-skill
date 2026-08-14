@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:self-correction-loop-report:v1",
+  "$id": "urn:global-geochemical-atlas:self-correction-loop-report:v5",
   "title": "Self-correction loop report",
-  "description": "Auditable multi-round self-correction record produced by scripts/run_self_correction_loop.py. The loop only performs provably safe autonomous repairs (retrying transient source failures); every other issue is routed to an explicit manual repair plan. Scientific limits are never counted as repairable.",
+  "description": "Auditable multi-round research record. The loop retries transient source failures and expands acquisition within an immutable request only when the data-sufficiency gate says more routed observations can help. Source discovery, license, CRS and method-evidence gaps remain explicit review work.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -11,8 +11,11 @@
     "request_sha256",
     "mode",
     "analysis_profile",
+    "checkpoint_only",
     "max_rounds",
     "time_budget_seconds",
+    "published_round",
+    "published_output_dir",
     "rounds",
     "repair_plan",
     "stop_reason",
@@ -21,13 +24,16 @@
     "claim_boundary"
   ],
   "properties": {
-    "schema_version": {"const": "self-correction-loop-report-v1"},
+    "schema_version": {"const": "self-correction-loop-report-v5"},
     "request_path": {"type": "string"},
     "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "mode": {"type": "string", "enum": ["demo", "input", "online"]},
     "analysis_profile": {"type": "string", "enum": ["demo", "production"]},
-    "max_rounds": {"type": "integer", "minimum": 1},
-    "time_budget_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "checkpoint_only": {"type": "boolean"},
+    "max_rounds": {"type": "integer", "minimum": 1, "maximum": 24},
+    "time_budget_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0, "maximum": 43200},
+    "published_round": {"type": ["integer", "null"], "minimum": 1},
+    "published_output_dir": {"type": "string"},
     "rounds": {
       "type": "array",
       "minItems": 0,
@@ -46,6 +52,8 @@
           "input_fingerprints",
           "counts",
           "issue_codes",
+          "acquisition_target",
+          "sufficiency",
           "failed_sources",
           "gate_events",
           "delta_vs_previous"
@@ -116,6 +124,16 @@
             "type": "object",
             "additionalProperties": {"type": "integer", "minimum": 1}
           },
+          "acquisition_target": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["per_analyte_observations", "maximum_per_analyte_observations"],
+            "properties": {
+              "per_analyte_observations": {"type": "integer", "minimum": 1},
+              "maximum_per_analyte_observations": {"type": "integer", "minimum": 1}
+            }
+          },
+          "sufficiency": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sufficiency"}]},
           "failed_sources": {
             "type": "array",
             "items": {
@@ -145,6 +163,7 @@
                     "run_exit",
                     "output_validation",
                     "issue_harvest",
+                    "data_sufficiency",
                     "progress"
                   ]
                 },
@@ -179,7 +198,7 @@
             "properties": {
               "action": {
                 "type": "string",
-                "enum": ["retry_failed_sources", "retry_run"]
+                "enum": ["retry_failed_sources", "retry_run", "expand_acquisition"]
               },
               "detail": {"type": "string"},
               "source_ids": {"type": "array", "items": {"type": "string"}}
@@ -209,6 +228,7 @@
         "converged",
         "no_autonomous_repair",
         "no_progress",
+        "insufficient_data",
         "round_budget_exhausted",
         "time_budget_exhausted",
         "needs_human_review",
@@ -225,5 +245,436 @@
     },
     "next_step": {"type": "string"},
     "claim_boundary": {"type": "string"}
+  },
+  "$defs": {
+    "criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "required", "observed", "target", "detail"],
+      "properties": {
+        "status": {"type": "string", "enum": ["pass", "fail", "warning"]},
+        "required": {"type": "boolean"},
+        "observed": {},
+        "target": {},
+        "detail": {"type": "string"}
+      }
+    },
+    "geographicSearchTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "country_iso_a3", "country_name", "country_name_zh", "macroregion",
+        "priority_tier", "reason_codes", "canonical_unique_samples",
+        "reported_display_unique_samples", "target_land_grid_cells",
+        "canonical_occupied_grid_cells", "minimum_canonical_unique_samples",
+        "minimum_canonical_occupied_grid_cells",
+        "macroregion_canonical_occupied_grid_cells",
+        "macroregion_minimum_occupied_grid_cells", "repair_mode",
+        "selected_source_candidates", "registered_source_candidates",
+        "catalog_candidate_source_ids"
+      ],
+      "properties": {
+        "country_iso_a3": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "country_name": {"type": "string", "minLength": 1},
+        "country_name_zh": {"type": "string"},
+        "macroregion": {"type": "string", "minLength": 1},
+        "priority_tier": {
+          "type": "string",
+          "enum": ["core", "extended", "macroregion_backfill", "global_backfill"]
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "canonical_sample_shortfall", "canonical_cell_shortfall",
+              "reported_only_coordinate_evidence", "macroregion_grid_shortfall",
+              "global_land_grid_shortfall"
+            ]
+          }
+        },
+        "canonical_unique_samples": {"type": "integer", "minimum": 0},
+        "reported_display_unique_samples": {"type": "integer", "minimum": 0},
+        "target_land_grid_cells": {"type": "integer", "minimum": 1},
+        "canonical_occupied_grid_cells": {"type": "integer", "minimum": 0},
+        "minimum_canonical_unique_samples": {"type": "integer", "minimum": 1},
+        "minimum_canonical_occupied_grid_cells": {"type": "integer", "minimum": 1},
+        "macroregion_canonical_occupied_grid_cells": {"type": "integer", "minimum": 0},
+        "macroregion_minimum_occupied_grid_cells": {"type": "integer", "minimum": 1},
+        "repair_mode": {
+          "type": "string",
+          "enum": [
+            "repair_coordinate_evidence", "requery_selected_source",
+            "route_registered_source", "implement_catalog_candidate",
+            "targeted_source_discovery"
+          ]
+        },
+        "selected_source_candidates": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "registered_source_candidates": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "catalog_candidate_source_ids": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "regionalSpatialGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_version", "scope_key", "scope_label", "clip_method",
+        "country_iso_a3", "bbox", "grid_cell_degrees",
+        "target_coverage_grid_cells", "reference_land_grid_cells",
+        "minimum_canonical_occupied_grid_cells",
+        "canonical_occupied_grid_cells", "reported_display_occupied_grid_cells",
+        "minimum_canonical_unique_samples", "canonical_unique_samples",
+        "reported_display_unique_samples", "canonical_grid_coverage_rate",
+        "reason_codes", "repair_mode", "assessable", "passes", "claim_boundary"
+      ],
+      "properties": {
+        "policy_version": {"const": "atlas-spatial-sufficiency-policy-v3"},
+        "scope_key": {"type": "string", "minLength": 1},
+        "scope_label": {"type": "string", "minLength": 1},
+        "clip_method": {"type": "string", "minLength": 1},
+        "country_iso_a3": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Z]{3}$"
+        },
+        "bbox": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "items": {"type": "number"}
+        },
+        "grid_cell_degrees": {"type": "number", "exclusiveMinimum": 0},
+        "target_coverage_grid_cells": {"type": "integer", "minimum": 2},
+        "reference_land_grid_cells": {"type": "integer", "minimum": 0},
+        "minimum_canonical_occupied_grid_cells": {"type": "integer", "minimum": 2},
+        "canonical_occupied_grid_cells": {"type": "integer", "minimum": 0},
+        "reported_display_occupied_grid_cells": {"type": "integer", "minimum": 0},
+        "minimum_canonical_unique_samples": {"type": "integer", "minimum": 1},
+        "canonical_unique_samples": {"type": "integer", "minimum": 0},
+        "reported_display_unique_samples": {"type": "integer", "minimum": 0},
+        "canonical_grid_coverage_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "reason_codes": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "canonical_sample_shortfall", "canonical_cell_shortfall",
+              "reported_only_coordinate_evidence"
+            ]
+          }
+        },
+        "repair_mode": {
+          "type": "string",
+          "enum": ["repair_coordinate_evidence", "targeted_source_discovery"]
+        },
+        "assessable": {"const": true},
+        "passes": {"const": false},
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    },
+    "spatialDimensionCountryTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "country_iso_a3", "country_name", "country_name_zh", "macroregion",
+        "repair_mode", "selected_source_candidates",
+        "registered_source_candidates", "catalog_candidate_source_ids"
+      ],
+      "properties": {
+        "country_iso_a3": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "country_name": {"type": "string", "minLength": 1},
+        "country_name_zh": {"type": "string"},
+        "macroregion": {"type": "string", "minLength": 1},
+        "repair_mode": {
+          "type": "string",
+          "enum": [
+            "repair_coordinate_evidence", "requery_selected_source",
+            "route_registered_source", "implement_catalog_candidate",
+            "targeted_source_discovery"
+          ]
+        },
+        "selected_source_candidates": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "registered_source_candidates": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "catalog_candidate_source_ids": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "spatialDimensionGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "view_id", "view_kind", "required_elements", "required_media",
+        "scope_key", "scope_label", "bbox", "reason_codes",
+        "canonical_unique_samples", "reported_display_unique_samples",
+        "canonical_occupied_grid_cells",
+        "reported_display_occupied_grid_cells",
+        "minimum_canonical_unique_samples",
+        "minimum_canonical_occupied_grid_cells", "qualifying_coverage_zones",
+        "covered_land_macroregions", "missing_land_macroregions",
+        "minimum_land_macroregions", "minimum_qualifying_coverage_zones",
+        "repair_mode", "country_targets"
+      ],
+      "properties": {
+        "view_id": {"type": "string", "minLength": 1},
+        "view_kind": {
+          "type": "string",
+          "enum": ["overall", "element", "medium", "element_medium"]
+        },
+        "required_elements": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "required_media": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "scope_key": {"type": "string", "minLength": 1},
+        "scope_label": {"type": "string", "minLength": 1},
+        "bbox": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "items": {"type": "number"}
+        },
+        "reason_codes": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "canonical_sample_shortfall", "canonical_cell_shortfall",
+              "canonical_coverage_zone_shortfall",
+              "reported_only_coordinate_evidence",
+              "land_macroregion_coverage_debt"
+            ]
+          }
+        },
+        "canonical_unique_samples": {"type": "integer", "minimum": 0},
+        "reported_display_unique_samples": {"type": "integer", "minimum": 0},
+        "canonical_occupied_grid_cells": {"type": "integer", "minimum": 0},
+        "reported_display_occupied_grid_cells": {"type": "integer", "minimum": 0},
+        "minimum_canonical_unique_samples": {"type": "integer", "minimum": 1},
+        "minimum_canonical_occupied_grid_cells": {"type": "integer", "minimum": 1},
+        "qualifying_coverage_zones": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "covered_land_macroregions": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "missing_land_macroregions": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "minimum_land_macroregions": {"type": "integer", "minimum": 0, "maximum": 6},
+        "minimum_qualifying_coverage_zones": {"type": "integer", "minimum": 0},
+        "repair_mode": {
+          "type": "string",
+          "enum": [
+            "repair_coordinate_evidence", "requery_selected_source",
+            "route_registered_source", "implement_catalog_candidate",
+            "targeted_source_discovery"
+          ]
+        },
+        "country_targets": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/spatialDimensionCountryTarget"}
+        }
+      }
+    },
+    "sufficiency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessment_version", "status", "criteria", "unmet_required_criteria",
+        "acquisition_repairable_criteria", "acquisition_blocking_criteria",
+        "discovery_gaps", "reporting_facts", "can_expand_acquisition", "current_per_analyte_observations",
+        "next_per_analyte_observations", "claim_boundary"
+      ],
+      "properties": {
+        "assessment_version": {"const": "atlas-data-sufficiency-v5"},
+        "status": {"type": "string", "enum": ["sufficient", "insufficient"]},
+        "criteria": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/criterion"}
+        },
+        "unmet_required_criteria": {
+          "type": "array", "uniqueItems": true, "items": {"type": "string"}
+        },
+        "acquisition_repairable_criteria": {
+          "type": "array", "uniqueItems": true, "items": {"type": "string"}
+        },
+        "acquisition_blocking_criteria": {
+          "type": "array", "uniqueItems": true, "items": {"type": "string"}
+        },
+        "discovery_gaps": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "elements", "media", "element_medium_cells", "independent_lineages",
+            "medium_lineages", "macroregions_below_minimum",
+            "priority_countries_below_minimum",
+            "macroregions_below_grid_minimum", "geographic_search_targets",
+            "regional_spatial_gap", "spatial_dimension_gaps",
+            "metadata_evidence_gaps", "source_link_gaps"
+          ],
+          "properties": {
+            "viable_selected_source_ids": {
+              "type": "array", "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "observed_source_ids": {
+              "type": "array", "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "observed_lineage_ids": {
+              "type": "array", "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "observed_lineage_ids_by_medium": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array", "uniqueItems": true,
+                "items": {"type": "string", "minLength": 1}
+              }
+            },
+            "elements": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+            "media": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+            "spatial_domains": {
+              "type": "array", "uniqueItems": true,
+              "items": {"type": "string", "enum": ["land", "inland_water", "marine"]}
+            },
+            "element_medium_cells": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+            "independent_lineages": {"type": "integer", "minimum": 0},
+            "medium_lineages": {
+              "type": "object",
+              "additionalProperties": {"type": "integer", "minimum": 1}
+            },
+            "macroregions_below_minimum": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string"}
+            },
+            "priority_countries_below_minimum": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string", "pattern": "^[A-Z]{3}$"}
+            },
+            "macroregions_below_grid_minimum": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string"}
+            },
+            "geographic_search_targets": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/geographicSearchTarget"}
+            },
+            "regional_spatial_gap": {
+              "oneOf": [
+                {"type": "null"},
+                {"$ref": "#/$defs/regionalSpatialGap"}
+              ]
+            },
+            "spatial_dimension_gaps": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/spatialDimensionGap"}
+            },
+            "metadata_evidence_gaps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "medium", "record_count", "analytical_method_count",
+                  "analytical_method_rate", "minimum_analytical_method_rate",
+                  "reason_codes"
+                ],
+                "properties": {
+                  "medium": {"type": "string", "minLength": 1},
+                  "record_count": {"type": "integer", "minimum": 1},
+                  "analytical_method_count": {"type": "integer", "minimum": 0},
+                  "analytical_method_rate": {"type": "number", "minimum": 0, "maximum": 1},
+                  "minimum_analytical_method_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+                  "reason_codes": {
+                    "type": "array", "minItems": 1, "uniqueItems": true,
+                    "items": {"const": "analytical_method_evidence_shortfall"}
+                  }
+                }
+              }
+            },
+            "source_link_gaps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "source_id", "record_count", "official_linked_record_count",
+                  "official_link_count", "row_official_link_count", "reason_codes"
+                ],
+                "properties": {
+                  "source_id": {"type": "string", "minLength": 1},
+                  "record_count": {"type": "integer", "minimum": 1},
+                  "official_linked_record_count": {"type": "integer", "minimum": 0},
+                  "official_link_count": {"type": "integer", "minimum": 0},
+                  "row_official_link_count": {"type": "integer", "minimum": 0},
+                  "reason_codes": {
+                    "type": "array", "minItems": 1, "uniqueItems": true,
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "official_source_link_missing",
+                        "source_confidence_summary_missing"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "reporting_facts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "measurement_records",
+            "required_measurement_records",
+            "measurement_record_shortfall_factor",
+            "independent_samples",
+            "required_independent_samples",
+            "independent_sample_shortfall_factor",
+            "quality_dimension_band_counts",
+            "single_quality_label_prohibited"
+          ],
+          "properties": {
+            "measurement_records": {"type": "integer", "minimum": 0},
+            "required_measurement_records": {"type": "integer", "minimum": 0},
+            "measurement_record_shortfall_factor": {"type": ["number", "null"], "minimum": 1},
+            "independent_samples": {"type": "integer", "minimum": 0},
+            "required_independent_samples": {"type": "integer", "minimum": 0},
+            "independent_sample_shortfall_factor": {"type": ["number", "null"], "minimum": 1},
+            "quality_dimension_band_counts": {"type": "object"},
+            "single_quality_label_prohibited": {"const": true}
+          }
+        },
+        "can_expand_acquisition": {"type": "boolean"},
+        "current_per_analyte_observations": {"type": "integer", "minimum": 1},
+        "next_per_analyte_observations": {"type": ["integer", "null"], "minimum": 1},
+        "claim_boundary": {"type": "string"}
+      }
+    }
   }
 }

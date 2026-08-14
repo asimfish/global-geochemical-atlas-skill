@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:spatial-sufficiency-policy:v3",
+  "title": "Spatial sufficiency policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_version",
+    "global_scope",
+    "regional_scope",
+    "dimension_views",
+    "claim_boundary"
+  ],
+  "properties": {
+    "policy_version": {
+      "const": "atlas-spatial-sufficiency-policy-v3"
+    },
+    "global_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grid_cell_degrees",
+        "excluded_country_iso_a3",
+        "priority_country_count",
+        "core_priority_country_count",
+        "minimum_priority_country_pass_rate",
+        "minimum_country_canonical_samples",
+        "minimum_country_occupied_cells",
+        "maximum_country_occupied_cells",
+        "minimum_country_grid_coverage_rate",
+        "minimum_macroregion_occupied_cells",
+        "minimum_macroregion_grid_coverage_rate",
+        "minimum_land_grid_coverage_rate",
+        "breadth_mode_minimum_land_macroregions"
+      ],
+      "properties": {
+        "grid_cell_degrees": {"type": "number", "exclusiveMinimum": 0},
+        "excluded_country_iso_a3": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z]{3}$"}
+        },
+        "priority_country_count": {"type": "integer", "minimum": 1},
+        "core_priority_country_count": {"type": "integer", "minimum": 1},
+        "minimum_priority_country_pass_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "minimum_country_canonical_samples": {"type": "integer", "minimum": 1},
+        "minimum_country_occupied_cells": {"type": "integer", "minimum": 1},
+        "maximum_country_occupied_cells": {"type": "integer", "minimum": 1},
+        "minimum_country_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "minimum_macroregion_occupied_cells": {"type": "integer", "minimum": 1},
+        "minimum_macroregion_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "minimum_land_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "breadth_mode_minimum_land_macroregions": {"type": "integer", "minimum": 1, "maximum": 6}
+      }
+    },
+    "regional_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed_grid_cell_degrees",
+        "target_cells_across_long_axis",
+        "minimum_assessable_coverage_cells",
+        "minimum_canonical_samples",
+        "minimum_grid_coverage_rate"
+      ],
+      "properties": {
+        "allowed_grid_cell_degrees": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "number", "exclusiveMinimum": 0}
+        },
+        "target_cells_across_long_axis": {"type": "integer", "minimum": 2},
+        "minimum_assessable_coverage_cells": {"type": "integer", "minimum": 1},
+        "minimum_canonical_samples": {"type": "integer", "minimum": 1},
+        "minimum_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "dimension_views": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element", "medium", "element_medium"],
+      "properties": {
+        "element": {"$ref": "#/$defs/dimensionRule"},
+        "medium": {"$ref": "#/$defs/dimensionRule"},
+        "element_medium": {"$ref": "#/$defs/dimensionRule"}
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "dimensionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_canonical_samples",
+        "minimum_occupied_cells",
+        "overall_cell_target_fraction",
+        "minimum_global_coverage_zones",
+        "minimum_cells_per_global_coverage_zone",
+        "maximum_country_targets"
+      ],
+      "properties": {
+        "minimum_canonical_samples": {"type": "integer", "minimum": 1},
+        "minimum_occupied_cells": {"type": "integer", "minimum": 1},
+        "overall_cell_target_fraction": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "minimum_global_coverage_zones": {"type": "integer", "minimum": 1},
+        "minimum_cells_per_global_coverage_zone": {"type": "integer", "minimum": 1},
+        "maximum_country_targets": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

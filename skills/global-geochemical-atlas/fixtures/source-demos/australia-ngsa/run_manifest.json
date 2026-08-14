@@ -1,0 +1,65 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-12T21:32:57Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "online",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 79228,
+      "path": "demo_input.csv",
+      "sha256": "bb02c6088f08f3e3ae15fc545f8db6e0397afb5273919e79ff8b07f547bc7cfe"
+    },
+    {
+      "bytes": 85148,
+      "path": "sources.jsonl",
+      "sha256": "c6bb07e336092700b86073a4f1a079787f5a359b45cb555e3fd72d5ed6cb787a"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 7890,
+    "selected_source_rows": 12
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.11636/Record.2011.020",
+    "dataset_version": "2011-07-06",
+    "license": "CC-BY-3.0-AU",
+    "source_id": "australia-ngsa",
+    "title": "National Geochemical Survey of Australia: Geochemical Atlas dataset"
+  },
+  "source_files": [
+    {
+      "bytes": 4843809,
+      "filename": "Rec2011_020_110706.csv",
+      "retrieved_at": "2026-08-12T21:58:03Z",
+      "sha256": "d9fa6d5b92642c56cc0b1ea7cc1ca22b763cde283cb71dc7194004a005f87812",
+      "source_url": "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "NGSA catchment-outlet transported regolith is sediment, not in-situ soil or a regular grid.",
+    "Only the <75 µm ICP-MS layer is extracted; TOS and BOS remain distinct and field duplicates are excluded from independent selection.",
+    "The publisher does not report coordinate accuracy; decimal representation resolution is not promoted to positional uncertainty.",
+    "The 2011 CSV declares CC BY 3.0 Australia while the current portal describes CC BY 4.0; this extraction retains the file-level 3.0 AU licence and records the version difference."
+  ]
+}

@@ -27,6 +27,7 @@ REQUIRED_INPUTS = (
     "qc_report.json",
     "confidence_report.json",
     "source_manifest.json",
+    "sources_and_confidence.json",
     "anomaly_report.json",
 )
 OPTIONAL_INPUTS = (
@@ -146,6 +147,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             qc_report_path=inputs["qc_report.json"],
             confidence_report_path=inputs["confidence_report.json"],
             source_manifest_path=inputs["source_manifest.json"],
+            sources_and_confidence_path=inputs["sources_and_confidence.json"],
             anomaly_report_path=inputs["anomaly_report.json"],
             anomaly_regions_path=anomaly_regions_path
             if anomaly_regions_path.is_file()
@@ -315,7 +317,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--input-dir",
         required=True,
         type=Path,
-        help="Directory containing the six required standard D1/D2 artifacts",
+        help="Directory containing the seven required standard D1/D2 artifacts",
     )
     parser.add_argument(
         "--output-dir", required=True, type=Path, help="New visualization bundle"

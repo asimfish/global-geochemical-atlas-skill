@@ -11,6 +11,7 @@ import ipaddress
 import json
 import os
 import re
+import shutil
 import socket
 import struct
 import tempfile
@@ -23,7 +24,7 @@ from abc import ABC, abstractmethod
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 
 import download_data as downloader
@@ -1012,14 +1013,22 @@ class GemstatOpenArchiveAdapter(RegistryAdapter):
         if any(
             not (root / "members" / entry["filename"]).is_file() for entry in entries
         ):
-            action = (
-                "Run acquire_gemstat_multielement.py first"
-                if mode == "online"
-                else "Populate the verified cache"
-            )
-            raise SourceAdapterError(
-                f"{action}; the pinned GEMStat v3 seven-element subset is incomplete at {root}"
-            )
+            if mode == "online":
+                try:
+                    import acquire_gemstat_multielement
+
+                    acquire_gemstat_multielement.run(cache_dir, "online", 180.0)
+                except (OSError, RuntimeError, ValueError) as exc:
+                    raise SourceAdapterError(
+                        f"GEMStat online pre-acquisition failed closed: {exc}"
+                    ) from exc
+            if any(
+                not (root / "members" / entry["filename"]).is_file()
+                for entry in entries
+            ):
+                raise SourceAdapterError(
+                    f"Populate the verified cache; the pinned GEMStat v3 seven-element subset is incomplete at {root}"
+                )
         files: list[DownloadedFile] = []
         for entry in entries:
             path = root / "members" / entry["filename"]
@@ -1240,6 +1249,97 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
 
     source_id = "geotraces-idp2025"
 
+    @staticmethod
+    def _canonical_payload_identity(
+        archive_path: Path, download_entry: Mapping[str, Any]
+    ) -> tuple[str, str]:
+        """Bind scientific payload while excluding declared webODV session noise."""
+
+        try:
+            with zipfile.ZipFile(archive_path) as archive:
+                members = archive.infolist()
+                names = [item.filename for item in members]
+                if (
+                    len(members) != int(download_entry["expected_member_count"])
+                    or len(names) != len(set(names))
+                    or sum(item.file_size for item in members)
+                    != int(download_entry["expected_uncompressed_bytes"])
+                ):
+                    raise SourceAdapterError(
+                        "GEOTRACES archive structure differs from the registered payload"
+                    )
+                if any(
+                    item.is_dir()
+                    or PurePosixPath(item.filename).is_absolute()
+                    or ".." in PurePosixPath(item.filename).parts
+                    or "\\" in item.filename
+                    for item in members
+                ):
+                    raise SourceAdapterError(
+                        "GEOTRACES archive contains an unsafe member path"
+                    )
+                data_members = [
+                    item
+                    for item in members
+                    if "/" not in item.filename
+                    and re.fullmatch(
+                        r"IDP2025_seawater_GEOTRACES_IDP2025_Seawater_[A-Za-z0-9]{8}\.txt",
+                        item.filename,
+                    )
+                ]
+                if len(data_members) != 1:
+                    raise SourceAdapterError(
+                        "GEOTRACES archive lacks one session-scoped ODV data member"
+                    )
+                data_member = data_members[0]
+                stem = data_member.filename.removesuffix(".txt")
+                expected_prefix = f"{stem}.misc/infos/"
+                if any(
+                    item is not data_member
+                    and (
+                        not item.filename.startswith(expected_prefix)
+                        or not item.filename.endswith(".html")
+                    )
+                    for item in members
+                ):
+                    raise SourceAdapterError(
+                        "GEOTRACES method-member layout differs from the registered export"
+                    )
+                identities: dict[str, str] = {}
+                for item in members:
+                    payload = archive.read(item)
+                    payload = payload.replace(stem.encode("utf-8"), b"NORMALIZED_STEM")
+                    payload = re.sub(
+                        rb"//<CreateTime>[^\r\n]*",
+                        b"//<CreateTime>NORMALIZED</CreateTime>",
+                        payload,
+                    )
+                    payload = re.sub(
+                        rb"//<View>[^\r\n]*",
+                        b"//<View>NORMALIZED</View>",
+                        payload,
+                    )
+                    key = (
+                        "DATA.txt"
+                        if item is data_member
+                        else item.filename.split(".misc/", 1)[1]
+                    )
+                    identities[key] = hashlib.sha256(payload).hexdigest()
+        except (OSError, zipfile.BadZipFile, KeyError, ValueError) as exc:
+            if isinstance(exc, SourceAdapterError):
+                raise
+            raise SourceAdapterError(
+                "GEOTRACES archive cannot be canonicalized safely"
+            ) from exc
+        aggregate = hashlib.sha256(
+            json.dumps(identities, sort_keys=True).encode("utf-8")
+        ).hexdigest()
+        if aggregate != download_entry["canonical_payload_sha256"]:
+            raise SourceAdapterError(
+                "GEOTRACES canonical scientific payload differs from the registry"
+            )
+        return data_member.filename, aggregate
+
     def _method_index(
         self, data_path: Path
     ) -> dict[tuple[str, str], list[dict[str, Any]]]:
@@ -1327,16 +1427,18 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
         """Verify and safely extract the registered webODV export."""
 
         download_entry = self.candidate.registry_entry["download"]
-        archive_entry = download_entry["files"][0]
         member_entry = download_entry["members"][0]
         if not archive_path.is_file():
             raise SourceAdapterError(
                 f"GEOTRACES export archive does not exist: {archive_path}"
             )
-        if archive_path.stat().st_size != archive_entry["bytes"]:
+        if not 0 < archive_path.stat().st_size <= int(download_entry["max_bytes"]):
             raise SourceAdapterError(
-                "GEOTRACES export archive size does not match the registry"
+                "GEOTRACES export archive exceeds the registered byte ceiling"
             )
+        member_filename, _ = self._canonical_payload_identity(
+            archive_path, download_entry
+        )
         if not extract_dir.exists():
             try:
                 downloader.safe_extract_zip(
@@ -1346,14 +1448,14 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
                     max_extracted_bytes=int(
                         download_entry["expected_uncompressed_bytes"]
                     ),
-                    required_members=[member_entry["filename"]],
+                    required_members=[member_filename],
                     required_fields=(),
                 )
             except (downloader.DownloadError, OSError) as exc:
                 raise SourceAdapterError(
                     f"GEOTRACES safe extraction failed: {exc}"
                 ) from exc
-        member_path = extract_dir / member_entry["filename"]
+        member_path = extract_dir / member_filename
         if member_path.stat().st_size != member_entry["bytes"]:
             raise SourceAdapterError(
                 "GEOTRACES export member size does not match the registry"
@@ -1386,18 +1488,84 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
             )
         root = self._cache_root(cache_dir)
         archive_path = root / candidate.registry_entry["download"]["archive_filename"]
+        expected_hash = candidate.registry_entry["download"]["canonical_payload_sha256"]
+        registered_archive_hash = candidate.registry_entry["download"]["files"][0][
+            "expected_sha256"
+        ]
+
+        def extracted_root(path: Path) -> Path:
+            return root / (
+                f"members-{expected_hash[:12]}-{downloader.sha256_file(path)[:12]}"
+            )
+
+        if archive_path.is_file():
+            try:
+                archive_status = (
+                    "cache_verified"
+                    if downloader.sha256_file(archive_path) == registered_archive_hash
+                    else "payload_verified_archive_container_variant"
+                )
+                return self.files_from_archive(
+                    archive_path,
+                    extracted_root(archive_path),
+                    cache_status=archive_status,
+                )
+            except SourceAdapterError:
+                if mode != "online":
+                    raise
+        if mode == "online":
+            try:
+                import acquire_geotraces_idp2025
+
+                with tempfile.TemporaryDirectory(
+                    prefix="geotraces-online-candidate-"
+                ) as temporary:
+                    temporary_root = Path(temporary)
+                    candidate_archive = temporary_root / archive_path.name
+                    client = acquire_geotraces_idp2025.opener()
+                    output_url = acquire_geotraces_idp2025.fetch_export_url(
+                        client, 180.0
+                    )
+                    acquire_geotraces_idp2025.download_archive(
+                        client,
+                        output_url,
+                        candidate_archive,
+                        timeout=180.0,
+                        max_bytes=int(
+                            candidate.registry_entry["download"]["max_bytes"]
+                        ),
+                        overwrite=False,
+                    )
+                    # The official exporter is session-specific. Promote only a
+                    # container whose normalized scientific payload exactly
+                    # matches the registered canonical payload.
+                    self.files_from_archive(
+                        candidate_archive,
+                        temporary_root / "members",
+                        cache_status="online_candidate_verified",
+                    )
+                    root.mkdir(parents=True, exist_ok=True)
+                    temporary_archive = root / f".{archive_path.name}.verified"
+                    shutil.copyfile(candidate_archive, temporary_archive)
+                    os.replace(temporary_archive, archive_path)
+            except (OSError, RuntimeError, ValueError) as exc:
+                raise SourceAdapterError(
+                    f"GEOTRACES online exporter attempt did not reproduce the registered snapshot: {exc}"
+                ) from exc
         if not archive_path.is_file():
-            action = (
-                "Run acquire_geotraces_idp2025.py first"
-                if mode == "online"
-                else "Populate the verified cache"
-            )
             raise SourceAdapterError(
-                f"{action}; the official webODV exporter creates a session-specific URL and the pinned archive "
-                f"is not present at {archive_path}"
+                "Populate the verified cache; the official webODV exporter creates "
+                f"a session-specific URL and the pinned archive is absent at {archive_path}"
             )
+        final_status = (
+            "cache_verified"
+            if downloader.sha256_file(archive_path) == registered_archive_hash
+            else "payload_verified_archive_container_variant"
+        )
         return self.files_from_archive(
-            archive_path, root / "members", cache_status="cache_verified"
+            archive_path,
+            extracted_root(archive_path),
+            cache_status=final_status,
         )
 
     def _rows(self, path: Path) -> Iterable[tuple[int, dict[str, Any]]]:
@@ -2973,6 +3141,175 @@ class _PinnedSingleFileAdapter(RegistryAdapter):
         ]
 
 
+class AustraliaNgsaAtlasAdapter(_PinnedSingleFileAdapter):
+    """Pinned four-element NGSA catchment-outlet sediment table."""
+
+    source_id = "australia-ngsa"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "atlas-csv":
+            raise SourceAdapterError("NGSA atlas adapter requires the registered CSV")
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            handle = downloaded.path.open("r", encoding="cp1252", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(
+                f"NGSA atlas CSV is unreadable: {downloaded.path.name}"
+            ) from exc
+        with handle:
+            for _ in range(11):
+                next(handle, None)
+            reader = csv.DictReader(handle)
+            missing = sorted(
+                set(registry["required_fields"]) - set(reader.fieldnames or [])
+            )
+            if missing:
+                raise SourceAdapterError(
+                    f"NGSA atlas CSV lacks fields: {', '.join(missing)}"
+                )
+            rows = 0
+            samples: set[str] = set()
+            sites: set[str] = set()
+            selected_grain_rows = 0
+            target_counts: Counter[str] = Counter()
+            depths: Counter[str] = Counter()
+            grains: Counter[str] = Counter()
+            duplicate_codes: Counter[str] = Counter()
+            coordinate_rows = 0
+            independent_complete_rows = 0
+            independent_target_counts: Counter[str] = Counter()
+            for row in reader:
+                values = {
+                    str(key): str(value or "").strip()
+                    for key, value in row.items()
+                    if key is not None
+                }
+                if not any(values.values()):
+                    continue
+                line_number = reader.line_num + 11
+                sample_id = values["SAMPLEID"]
+                site_id = values["SITEID"]
+                if not sample_id or sample_id in samples or not site_id:
+                    raise SourceAdapterError(
+                        f"NGSA atlas sample/site identity is missing or duplicated at row {line_number}"
+                    )
+                try:
+                    float(values["LATITUDE"])
+                    float(values["LONGITUDE"])
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"NGSA atlas coordinate is not numeric at row {line_number}"
+                    ) from exc
+                if values["DEPTH"] not in {"TOS", "BOS"} or values[
+                    "GRAIN SIZE"
+                ] not in {"Bulk", "<2 mm", "<75 µm"}:
+                    raise SourceAdapterError(
+                        f"NGSA atlas grain or depth classification changed at row {line_number}"
+                    )
+                rows += 1
+                samples.add(sample_id)
+                sites.add(site_id)
+                depths[values["DEPTH"]] += 1
+                grains[values["GRAIN SIZE"]] += 1
+                duplicate_codes[values["DUPLICATE CODE"]] += 1
+                coordinate_rows += 1
+                targets: dict[str, dict[str, str]] = {}
+                if values["GRAIN SIZE"] == "<75 µm":
+                    selected_grain_rows += 1
+                    for analyte, field in registry["target_analytes"].items():
+                        raw_value = values[field]
+                        if not raw_value:
+                            continue
+                        try:
+                            float(raw_value.lstrip("<>").strip())
+                        except ValueError as exc:
+                            raise SourceAdapterError(
+                                f"NGSA atlas {analyte} value is invalid at row {line_number}"
+                            ) from exc
+                        target_counts[analyte] += 1
+                        targets[analyte] = {
+                            "field": field,
+                            "value": raw_value,
+                            "unit": "mg/kg",
+                            "measurement_basis": (
+                                f"ICP-MS reported concentration in <75 µm catchment-outlet sediment; {values['DEPTH']}"
+                            ),
+                            "analytical_method": (
+                                "inductively coupled plasma mass spectrometry (ICP-MS; publisher header and method key)"
+                            ),
+                            "digestion_or_extraction": (
+                                "publisher classifies ICP-MS in the total analytical "
+                                "suite; digestion chemistry is not stated in the CSV"
+                            ),
+                            "laboratory": "",
+                            "laboratory_missing_reason": "publisher_not_reported_in_csv",
+                            "method_source_locator": f"{downloaded.path.name}#row=6",
+                            "variable_metadata_locator": (
+                                f"{downloaded.path.name}#row=12#column={field}"
+                            ),
+                            "detection_limit": field.rsplit(" ", 1)[-1],
+                        }
+                    if not values["DUPLICATE CODE"] and len(targets) == len(
+                        registry["target_analytes"]
+                    ):
+                        independent_complete_rows += 1
+                        independent_target_counts.update(targets.keys())
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(
+                        self.source_id, sample_id, source_locator
+                    ),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "EPSG:4283",
+                        "_coordinate_transformation": (
+                            "gda94-geographic-wgs84-identity-v1"
+                        ),
+                        "_sample_type": "top outlet sediment"
+                        if values["DEPTH"] == "TOS"
+                        else "bottom outlet sediment",
+                        "_grain_fraction": values["GRAIN SIZE"],
+                        "_target_observations": targets,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed = {
+            "physical_rows": rows,
+            "distinct_samples": len(samples),
+            "distinct_sites": len(sites),
+            "target_observations": sum(target_counts.values()),
+            "selected_grain_rows": selected_grain_rows,
+            "target_value_counts": dict(sorted(target_counts.items())),
+            "depth_counts": dict(sorted(depths.items())),
+            "grain_counts": dict(sorted(grains.items())),
+            "duplicate_code_counts": dict(sorted(duplicate_codes.items())),
+            "valid_coordinate_rows": coordinate_rows,
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"NGSA atlas reconciliation changed: {observed!r} != {registry['expected_counts']!r}"
+            )
+        research_capacity = registry.get("research_slice_capacity")
+        if not isinstance(research_capacity, Mapping):
+            raise SourceAdapterError("NGSA atlas research slice capacity is missing")
+        expected_independent = research_capacity.get("independent_complete_sample_rows")
+        expected_target_counts = research_capacity.get("per_analyte_observation_count")
+        if (
+            independent_complete_rows != expected_independent
+            or dict(sorted(independent_target_counts.items())) != expected_target_counts
+            or independent_complete_rows * len(registry["target_analytes"])
+            != research_capacity.get("four_analyte_observation_count")
+        ):
+            raise SourceAdapterError(
+                "NGSA atlas independent research capacity changed: "
+                f"rows={independent_complete_rows}, targets={dict(sorted(independent_target_counts.items()))!r}"
+            )
+
+
 class AustraliaNgsaMercuryAdapter(_PinnedSingleFileAdapter):
     """Pinned NGSA top/bottom outlet-sediment total-mercury table."""
 
@@ -3053,7 +3390,13 @@ class AustraliaNgsaMercuryAdapter(_PinnedSingleFileAdapter):
                     fields={
                         **values,
                         "_source_file": downloaded.path.name,
+                        # Preserve the publisher datum. D2/full-profile code may
+                        # create canonical WGS84 fields only through the registered
+                        # identity-tolerance policy; raw GDA94 values remain intact.
                         "_source_crs": "EPSG:4283",
+                        "_coordinate_transformation": (
+                            "gda94-geographic-wgs84-identity-v1"
+                        ),
                         "_sample_type": "top outlet sediment"
                         if values["DEPTH"] == "TOS"
                         else "bottom outlet sediment",
@@ -3313,6 +3656,712 @@ class PangaeaArabianSeaSedimentAdapter(_PinnedSingleFileAdapter):
             )
 
 
+class PangaeaEastChinaSeaClayAdapter(_PinnedSingleFileAdapter):
+    """Pinned PANGAEA East China Sea, Yangtze and Taiwan river clay table."""
+
+    source_id = "pangaea-east-china-sea-clay"
+
+    _BASIS_BY_SAMPLE_TYPE = {
+        "Bulk": "clay_fraction_bulk_sediment_analysis",
+        "Residue": "clay_fraction_leach_residue_sediment_analysis",
+    }
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "dataset-table":
+            raise SourceAdapterError(
+                "PANGAEA East China Sea clay adapter requires the registered table"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            handle = downloaded.path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(
+                f"PANGAEA East China Sea clay table is unreadable: {downloaded.path.name}"
+            ) from exc
+        with handle:
+            reader = csv.reader(handle, delimiter="\t")
+            header: list[str] | None = None
+            rows = 0
+            sample_ids: set[str] = set()
+            events: set[str] = set()
+            sample_type_rows: Counter[str] = Counter()
+            target_counts: Counter[str] = Counter()
+            for row in reader:
+                if header is None:
+                    if row and row[0].strip() == "*/":
+                        header = [value.strip() for value in next(reader)]
+                        missing = sorted(set(registry["required_fields"]) - set(header))
+                        if missing:
+                            raise SourceAdapterError(
+                                "PANGAEA East China Sea clay table lacks fields: "
+                                + ", ".join(missing)
+                            )
+                        mgkg_fields = [
+                            field for field in header if field.endswith(" [mg/kg]")
+                        ]
+                        if (
+                            len(mgkg_fields)
+                            != registry["expected_counts"]["mgkg_fields"]
+                        ):
+                            raise SourceAdapterError(
+                                "PANGAEA East China Sea clay mg/kg field count changed"
+                            )
+                    continue
+                if not any(value.strip() for value in row):
+                    continue
+                padded = [value.strip() for value in row] + [""] * max(
+                    0, len(header) - len(row)
+                )
+                values = dict(zip(header, padded, strict=False))
+                line_number = reader.line_num
+                event = values["Event"]
+                description = values["Description"]
+                sample_type = values["Samp type"]
+                if not event or not description:
+                    raise SourceAdapterError(
+                        f"PANGAEA East China Sea clay identity is missing at row {line_number}"
+                    )
+                basis = self._BASIS_BY_SAMPLE_TYPE.get(sample_type)
+                if basis is None:
+                    raise SourceAdapterError(
+                        f"PANGAEA East China Sea clay sample type is unknown at row {line_number}: {sample_type!r}"
+                    )
+                try:
+                    float(values["Latitude"])
+                    float(values["Longitude"])
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"PANGAEA East China Sea clay coordinates are not numeric at row {line_number}"
+                    ) from exc
+                sample_label = f"{event}|{description}|{sample_type}"
+                if sample_label in sample_ids:
+                    raise SourceAdapterError(
+                        f"PANGAEA East China Sea clay sample id is duplicated at row {line_number}"
+                    )
+                target_observations: dict[str, dict[str, Any]] = {}
+                for analyte, field_name in registry["target_analytes"].items():
+                    raw_value = values[field_name]
+                    if not raw_value:
+                        continue
+                    try:
+                        float(raw_value)
+                    except ValueError as exc:
+                        raise SourceAdapterError(
+                            f"PANGAEA East China Sea clay {analyte} is not numeric at row {line_number}"
+                        ) from exc
+                    target_counts[analyte] += 1
+                    target_observations[analyte] = {
+                        "field": field_name,
+                        "value": raw_value,
+                        "unit": "mg/kg",
+                        "measurement_basis": basis,
+                        "analytical_method": (
+                            "X-ray diffraction (XRD) per publisher parameter labels"
+                        ),
+                        "digestion_or_extraction": (
+                            "clay fraction, bulk analysis"
+                            if sample_type == "Bulk"
+                            else "clay fraction, post-leach residue"
+                        ),
+                        "variable_metadata_locator": f"{downloaded.path.name}#parameter={field_name}",
+                    }
+                rows += 1
+                sample_ids.add(sample_label)
+                events.add(event)
+                sample_type_rows[sample_type] += 1
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(
+                        self.source_id, sample_label, source_locator
+                    ),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "EPSG:4326",
+                        "_sample_type": "core sediment clay fraction",
+                        "_target_observations": target_observations,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed = {
+            "physical_rows": rows,
+            "distinct_events": len(events),
+            "distinct_sample_ids": len(sample_ids),
+            "sample_type_rows": dict(sorted(sample_type_rows.items())),
+            "mgkg_fields": registry["expected_counts"]["mgkg_fields"],
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"PANGAEA East China Sea clay reconciliation changed: {observed!r}"
+            )
+
+
+class PangaeaSouthChinaSeaSedimentAdapter(_PinnedSingleFileAdapter):
+    """Pinned PANGAEA southern China Sea surface-sediment trace-element table."""
+
+    source_id = "pangaea-south-china-sea-sediment"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "dataset-table":
+            raise SourceAdapterError(
+                "PANGAEA South China Sea adapter requires the registered table"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            handle = downloaded.path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(
+                f"PANGAEA South China Sea table is unreadable: {downloaded.path.name}"
+            ) from exc
+        with handle:
+            reader = csv.reader(handle, delimiter="\t")
+            header: list[str] | None = None
+            rows = 0
+            events: set[str] = set()
+            target_counts: Counter[str] = Counter()
+            for row in reader:
+                if header is None:
+                    if row and row[0].strip() == "*/":
+                        header = [value.strip() for value in next(reader)]
+                        missing = sorted(set(registry["required_fields"]) - set(header))
+                        if missing:
+                            raise SourceAdapterError(
+                                "PANGAEA South China Sea table lacks fields: "
+                                + ", ".join(missing)
+                            )
+                        ppm_fields = [
+                            field
+                            for field in header
+                            if field.endswith("(original unit is in ppm)")
+                        ]
+                        if (
+                            len(ppm_fields)
+                            != registry["expected_counts"]["ppm_annotated_fields"]
+                        ):
+                            raise SourceAdapterError(
+                                "PANGAEA South China Sea ppm-annotated field count changed"
+                            )
+                    continue
+                if not any(value.strip() for value in row):
+                    continue
+                padded = [value.strip() for value in row] + [""] * max(
+                    0, len(header) - len(row)
+                )
+                values = dict(zip(header, padded, strict=False))
+                line_number = reader.line_num
+                event = values["Event"]
+                if not event:
+                    raise SourceAdapterError(
+                        f"PANGAEA South China Sea event is missing at row {line_number}"
+                    )
+                if event in events:
+                    raise SourceAdapterError(
+                        f"PANGAEA South China Sea event is duplicated at row {line_number}"
+                    )
+                try:
+                    float(values["Latitude"])
+                    float(values["Longitude"])
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"PANGAEA South China Sea coordinates are not numeric at row {line_number}"
+                    ) from exc
+                target_observations: dict[str, dict[str, Any]] = {}
+                for analyte, field_name in registry["target_analytes"].items():
+                    raw_value = values[field_name]
+                    if not raw_value:
+                        continue
+                    try:
+                        float(raw_value)
+                    except ValueError as exc:
+                        raise SourceAdapterError(
+                            f"PANGAEA South China Sea {analyte} is not numeric at row {line_number}"
+                        ) from exc
+                    target_counts[analyte] += 1
+                    target_observations[analyte] = {
+                        "field": field_name,
+                        "value": raw_value,
+                        "unit": "mg/kg",
+                        "measurement_basis": "bulk_marine_surface_sediment_geochemical_analysis",
+                        "analytical_method": "ICP-MS, Perkin-Elmer, Elan 6000",
+                        "digestion_or_extraction": "not reported in publisher table",
+                        "variable_metadata_locator": f"{downloaded.path.name}#parameter={field_name}",
+                    }
+                rows += 1
+                events.add(event)
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(
+                        self.source_id, event, source_locator
+                    ),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "EPSG:4326",
+                        "_sample_type": "marine surface sediment",
+                        "_target_observations": target_observations,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed = {
+            "physical_rows": rows,
+            "distinct_events": len(events),
+            "ppm_annotated_fields": registry["expected_counts"]["ppm_annotated_fields"],
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"PANGAEA South China Sea reconciliation changed: {observed!r}"
+            )
+
+
+class PangaeaBarentsCHorizonSoilAdapter(_PinnedSingleFileAdapter):
+    """Pinned Kola Ecogeochemistry C-horizon soil table for the central Barents region."""
+
+    source_id = "pangaea-barents-c-horizon-soil"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "dataset-table":
+            raise SourceAdapterError(
+                "PANGAEA Barents C-horizon adapter requires the registered table"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        column_map = registry["target_columns"]
+        identity = registry["identity_columns"]
+        try:
+            handle = downloaded.path.open("r", encoding="utf-8-sig", newline="")
+        except OSError as exc:
+            raise SourceAdapterError(
+                f"PANGAEA Barents C-horizon table is unreadable: {downloaded.path.name}"
+            ) from exc
+        with handle:
+            reader = csv.reader(handle, delimiter="\t")
+            header: list[str] | None = None
+            rows = 0
+            labels: set[str] = set()
+            target_counts: Counter[str] = Counter()
+            censored_counts: Counter[str] = Counter()
+            for row in reader:
+                if header is None:
+                    if row and row[0].strip() == "*/":
+                        header = [value.strip() for value in next(reader)]
+                        if len(header) != registry["expected_counts"]["table_columns"]:
+                            raise SourceAdapterError(
+                                "PANGAEA Barents C-horizon column count changed"
+                            )
+                        # Duplicate publisher column labels force index-pinned
+                        # parsing; every pinned index re-verifies its label.
+                        for name, spec in {**identity, **column_map}.items():
+                            index = int(spec["column"])
+                            prefix = str(spec["label_prefix"])
+                            if not header[index].startswith(prefix):
+                                raise SourceAdapterError(
+                                    "PANGAEA Barents C-horizon column moved: "
+                                    f"{name} expected {prefix!r} at index {index}, "
+                                    f"found {header[index]!r}"
+                                )
+                    continue
+                if not any(value.strip() for value in row):
+                    continue
+                padded = [value.strip() for value in row] + [""] * max(
+                    0, len(header) - len(row)
+                )
+                line_number = reader.line_num
+                sample_label = padded[int(identity["sample_label"]["column"])]
+                latitude = padded[int(identity["latitude"]["column"])]
+                longitude = padded[int(identity["longitude"]["column"])]
+                depth = padded[int(identity["sample_depth"]["column"])]
+                description = padded[int(identity["description"]["column"])]
+                if not sample_label:
+                    raise SourceAdapterError(
+                        f"PANGAEA Barents C-horizon identity is missing at row {line_number}"
+                    )
+                if sample_label in labels:
+                    raise SourceAdapterError(
+                        f"PANGAEA Barents C-horizon sample is duplicated at row {line_number}"
+                    )
+                try:
+                    float(latitude)
+                    float(longitude)
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"PANGAEA Barents C-horizon coordinates are not numeric at row {line_number}"
+                    ) from exc
+                target_observations: dict[str, dict[str, Any]] = {}
+                for analyte, spec in column_map.items():
+                    raw_value = padded[int(spec["column"])]
+                    if not raw_value:
+                        continue
+                    qualifier = ""
+                    numeric_text = raw_value
+                    if raw_value.startswith("<"):
+                        qualifier = "<"
+                        numeric_text = raw_value[1:].strip()
+                        censored_counts[analyte] += 1
+                    try:
+                        float(numeric_text)
+                    except ValueError as exc:
+                        raise SourceAdapterError(
+                            f"PANGAEA Barents C-horizon {analyte} is not numeric at row {line_number}"
+                        ) from exc
+                    target_counts[analyte] += 1
+                    target_observations[analyte] = {
+                        "field": str(spec["label_prefix"]),
+                        "value": numeric_text,
+                        "unit": "mg/kg",
+                        "value_qualifier": qualifier,
+                        "detection_limit": str(spec["detection_limit"]),
+                        "detection_limit_unit": "mg/kg",
+                        "measurement_basis": "aqua_regia_extractable_c_horizon_soil_analysis",
+                        "analytical_method": str(spec["analytical_method"]),
+                        "digestion_or_extraction": "aqua regia digestion; fraction < 2 mm",
+                        "variable_metadata_locator": (
+                            f"{downloaded.path.name}#column={int(spec['column'])}"
+                        ),
+                    }
+                rows += 1
+                labels.add(sample_label)
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(
+                        self.source_id, sample_label, source_locator
+                    ),
+                    source_locator=source_locator,
+                    fields={
+                        "Sample label": sample_label,
+                        "Latitude": latitude,
+                        "Longitude": longitude,
+                        "Depth sed [m]": depth,
+                        "Description": description,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "EPSG:4326",
+                        "_sample_type": "C-horizon soil",
+                        "_target_observations": target_observations,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed = {
+            "physical_rows": rows,
+            "distinct_sample_labels": len(labels),
+            "table_columns": registry["expected_counts"]["table_columns"],
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+            "censored_value_counts": dict(sorted(censored_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"PANGAEA Barents C-horizon reconciliation changed: {observed!r}"
+            )
+
+
+class PangaeaAmazonasSoilAdapter(_PinnedSingleFileAdapter):
+    """Pinned multi-element soil chemistry from Amazonas state, Brazil."""
+
+    source_id = "pangaea-amazonas-soil"
+
+    _event_pattern = re.compile(
+        r"(?:Event\(s\):\s*)?(?P<event>Amazonas_\d+)\s+\*\s+"
+        r"LATITUDE:\s*(?P<latitude>-?\d+(?:\.\d+)?)\s+\*\s+"
+        r"LONGITUDE:\s*(?P<longitude>-?\d+(?:\.\d+)?)"
+    )
+
+    @classmethod
+    def _event_coordinates(cls, lines: Sequence[str]) -> dict[str, tuple[str, str]]:
+        coordinates: dict[str, tuple[str, str]] = {}
+        for line in lines:
+            match = cls._event_pattern.search(line)
+            if match is None:
+                continue
+            event = match.group("event")
+            value = (match.group("latitude"), match.group("longitude"))
+            if event in coordinates and coordinates[event] != value:
+                raise SourceAdapterError(
+                    f"PANGAEA Amazonas event coordinate changed within metadata: {event}"
+                )
+            coordinates[event] = value
+        return coordinates
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "dataset-table":
+            raise SourceAdapterError(
+                "PANGAEA Amazonas adapter requires the registered table"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            lines = downloaded.path.read_text(encoding="utf-8-sig").splitlines()
+        except OSError as exc:
+            raise SourceAdapterError(
+                f"PANGAEA Amazonas table is unreadable: {downloaded.path.name}"
+            ) from exc
+        terminators = [
+            index for index, line in enumerate(lines) if line.strip() == "*/"
+        ]
+        if len(terminators) != 1:
+            raise SourceAdapterError("PANGAEA Amazonas metadata boundary changed")
+        header_index = terminators[0] + 1
+        coordinates = self._event_coordinates(lines[:header_index])
+        expected_events = int(registry["expected_counts"]["distinct_events"])
+        if len(coordinates) != expected_events:
+            raise SourceAdapterError(
+                f"PANGAEA Amazonas event coordinate count changed: {len(coordinates)}"
+            )
+        reader = csv.DictReader(lines[header_index:], delimiter="\t")
+        missing = sorted(
+            set(registry["required_fields"]) - set(reader.fieldnames or [])
+        )
+        if missing:
+            raise SourceAdapterError(
+                "PANGAEA Amazonas table lacks fields: " + ", ".join(missing)
+            )
+        rows = 0
+        sample_keys: set[str] = set()
+        target_counts: Counter[str] = Counter()
+        for values in reader:
+            line_number = header_index + reader.line_num
+            if not any(str(value or "").strip() for value in values.values()):
+                continue
+            values = {key: str(value or "").strip() for key, value in values.items()}
+            event = values["Event"]
+            if event not in coordinates:
+                raise SourceAdapterError(
+                    f"PANGAEA Amazonas event lacks registered metadata coordinates at row {line_number}"
+                )
+            sample_key = "|".join(
+                (
+                    event,
+                    values["Date/Time"],
+                    values["Depth desc"],
+                    values["No (Number of Campaign)"],
+                )
+            )
+            if (
+                not event
+                or not values["Depth desc"]
+                or not values["No (Number of Campaign)"]
+                or sample_key in sample_keys
+            ):
+                raise SourceAdapterError(
+                    f"PANGAEA Amazonas sample identity is missing or duplicated at row {line_number}"
+                )
+            if values["Depth desc"] not in {"TOP", "BOT"}:
+                raise SourceAdapterError(
+                    f"PANGAEA Amazonas depth class changed at row {line_number}"
+                )
+            target_observations: dict[str, dict[str, Any]] = {}
+            for analyte, field_name in registry["target_analytes"].items():
+                raw_value = values[field_name]
+                if not raw_value:
+                    continue
+                try:
+                    float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"PANGAEA Amazonas {analyte} is not numeric at row {line_number}"
+                    ) from exc
+                target_counts[analyte] += 1
+                is_mercury = analyte == "Hg"
+                target_observations[analyte] = {
+                    "field": field_name,
+                    "value": raw_value,
+                    "unit": "mg/kg",
+                    "measurement_basis": "gemas_protocol_multi_acid_digest_dry_mineral_soil",
+                    "analytical_method": (
+                        "Cold vapour atomic absorption spectrometry (CV-AAS)"
+                        if is_mercury
+                        else "Inductively coupled plasma mass spectrometry (ICP-MS)"
+                    ),
+                    "digestion_or_extraction": (
+                        "GEMAS protocol preparation; publisher parameter metadata assigns CV-AAS Hg determination"
+                        if is_mercury
+                        else "GEMAS protocol multi-acid digestion"
+                    ),
+                    "variable_metadata_locator": (
+                        f"{downloaded.path.name}#parameter={field_name}"
+                    ),
+                }
+            rows += 1
+            sample_keys.add(sample_key)
+            latitude, longitude = coordinates[event]
+            source_locator = f"{downloaded.path.name}#row={line_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, sample_key, source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "Latitude": latitude,
+                    "Longitude": longitude,
+                    "_source_file": downloaded.path.name,
+                    "_source_crs": "EPSG:4326",
+                    "_sample_type": (
+                        "topsoil 0-20 cm"
+                        if values["Depth desc"] == "TOP"
+                        else "bottom soil 30-50 cm"
+                    ),
+                    "_target_observations": target_observations,
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        observed = {
+            "physical_rows": rows,
+            "distinct_sample_keys": len(sample_keys),
+            "distinct_events": len(coordinates),
+            "table_columns": len(reader.fieldnames or []),
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"PANGAEA Amazonas reconciliation changed: {observed!r}"
+            )
+
+
+class PangaeaBatagaySoilAdapter(_PinnedSingleFileAdapter):
+    """Pinned ICP-MS soil and soil-inclusion table from Batagay, Russia."""
+
+    source_id = "pangaea-batagay-soil"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "dataset-table":
+            raise SourceAdapterError(
+                "PANGAEA Batagay adapter requires the registered table"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        try:
+            lines = downloaded.path.read_text(encoding="utf-8-sig").splitlines()
+        except OSError as exc:
+            raise SourceAdapterError(
+                f"PANGAEA Batagay table is unreadable: {downloaded.path.name}"
+            ) from exc
+        terminators = [
+            index for index, line in enumerate(lines) if line.strip() == "*/"
+        ]
+        if len(terminators) != 1:
+            raise SourceAdapterError("PANGAEA Batagay metadata boundary changed")
+        header_index = terminators[0] + 1
+        metadata = "\n".join(lines[:header_index])
+        coordinate = re.search(
+            r"Coverage:\s*LATITUDE:\s*(?P<latitude>-?\d+(?:\.\d+)?)\s*\*\s*"
+            r"LONGITUDE:\s*(?P<longitude>-?\d+(?:\.\d+)?)",
+            metadata,
+        )
+        if coordinate is None:
+            raise SourceAdapterError("PANGAEA Batagay metadata coordinate is missing")
+        latitude = coordinate.group("latitude")
+        longitude = coordinate.group("longitude")
+        reader = csv.DictReader(lines[header_index:], delimiter="\t")
+        missing = sorted(
+            set(registry["required_fields"]) - set(reader.fieldnames or [])
+        )
+        if missing:
+            raise SourceAdapterError(
+                "PANGAEA Batagay table lacks fields: " + ", ".join(missing)
+            )
+        rows = 0
+        sample_keys: set[str] = set()
+        sample_ids: set[str] = set()
+        target_counts: Counter[str] = Counter()
+        sample_type_counts: Counter[str] = Counter()
+        for values in reader:
+            line_number = header_index + reader.line_num
+            if not any(str(value or "").strip() for value in values.values()):
+                continue
+            values = {key: str(value or "").strip() for key, value in values.items()}
+            sample_id = values["Sample ID"]
+            if not sample_id:
+                # PANGAEA appends one upper-crust reference row whose values are
+                # literature comparators, not sampled Batagay observations.
+                continue
+            sample_key = "|".join(
+                (
+                    sample_id,
+                    values["Sample comment (soil horizon)"],
+                    values["Depth sed [m] (mean)"],
+                    values["Lab label"],
+                )
+            )
+            if not sample_id or sample_key in sample_keys:
+                raise SourceAdapterError(
+                    f"PANGAEA Batagay sample identity is missing or duplicated at row {line_number}"
+                )
+            target_observations: dict[str, dict[str, Any]] = {}
+            for analyte, field_name in registry["target_analytes"].items():
+                raw_value = values[field_name]
+                if not raw_value:
+                    continue
+                try:
+                    float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"PANGAEA Batagay {analyte} is not numeric at row {line_number}"
+                    ) from exc
+                target_counts[analyte] += 1
+                target_observations[analyte] = {
+                    "field": field_name,
+                    "value": raw_value,
+                    "unit": "mg/kg",
+                    "measurement_basis": "certified_acid_digest_soil_and_soil_inclusions",
+                    "analytical_method": (
+                        "Inductively Coupled Plasma Mass Spectrometry, Thermo Fisher Scientific, iCap Q ICP-MS"
+                    ),
+                    "digestion_or_extraction": (
+                        "certified NSAM 499-AES/MS (2015) laboratory method; exact digestion reagent not reported in table"
+                    ),
+                    "variable_metadata_locator": (
+                        f"{downloaded.path.name}#parameter={field_name}"
+                    ),
+                }
+            rows += 1
+            sample_keys.add(sample_key)
+            sample_ids.add(sample_id)
+            sample_type_counts[values["Samp type"] or "not_reported"] += 1
+            source_locator = f"{downloaded.path.name}#row={line_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, sample_key, source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "Latitude": latitude,
+                    "Longitude": longitude,
+                    "_source_file": downloaded.path.name,
+                    "_source_crs": "EPSG:4326",
+                    "_sample_type": values["Samp type"] or "not reported",
+                    "_target_observations": target_observations,
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        observed = {
+            "physical_rows": rows,
+            "distinct_sample_keys": len(sample_keys),
+            "distinct_sample_ids": len(sample_ids),
+            "table_columns": len(reader.fieldnames or []),
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+            "sample_type_counts": dict(sorted(sample_type_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"PANGAEA Batagay reconciliation changed: {observed!r}"
+            )
+
+
 class GeorocAntarcticaIntraplateAdapter(RegistryAdapter):
     """Pinned GEOROC Antarctica member from the Intraplate Volcanics compilation."""
 
@@ -3443,6 +4492,167 @@ class GeorocAntarcticaIntraplateAdapter(RegistryAdapter):
                 )
 
 
+class EidcNingboSoilAdapter(RegistryAdapter):
+    """Official EIDC Ningbo topsoil dataset with verified CSV/support members."""
+
+    source_id = "eidc-ningbo-soil"
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("EIDC adapter received another source")
+        if mode == "fixture":
+            raise SourceAdapterError("EIDC has no adapter-level fixture mode")
+        entry = candidate.registry_entry["download"]
+        root = self._cache_root(cache_dir)
+        archive = root / entry["archive_filename"]
+        manifest = root / "archive.download.json"
+        args = _download_args(
+            url=entry["url"],
+            output=archive,
+            manifest=manifest,
+            license_id=candidate.license_id,
+            expected_sha256=None,
+            max_bytes=int(entry["max_bytes"]),
+            dataset_doi=candidate.dataset_doi,
+            dataset_version=candidate.version,
+            offline=mode == "cached",
+        )
+        try:
+            result = downloader.run(args)
+        except (downloader.DownloadError, OSError) as exc:
+            raise SourceAdapterError(f"EIDC archive download failed: {exc}") from exc
+        try:
+            with zipfile.ZipFile(archive) as bundle:
+                members = bundle.infolist()
+                if (
+                    len(members) > 100
+                    or sum(item.file_size for item in members) > 5_000_000
+                ):
+                    raise SourceAdapterError(
+                        "EIDC archive exceeds safe structural limits"
+                    )
+                names = bundle.namelist()
+                if names.count(entry["csv_member"]) != 1:
+                    raise SourceAdapterError("EIDC CSV member is missing or duplicated")
+                if names.count(entry["support_member"]) != 1:
+                    raise SourceAdapterError(
+                        "EIDC method attachment is missing or duplicated"
+                    )
+                payload = bundle.read(entry["csv_member"])
+                support_payload = bundle.read(entry["support_member"])
+        except (OSError, zipfile.BadZipFile, KeyError) as exc:
+            raise SourceAdapterError(f"EIDC archive is invalid: {exc}") from exc
+        observed = hashlib.sha256(payload).hexdigest()
+        if observed != entry["csv_sha256"] or len(payload) != entry["csv_bytes"]:
+            raise SourceAdapterError("EIDC CSV content identity changed")
+        if (
+            hashlib.sha256(support_payload).hexdigest() != entry["support_sha256"]
+            or len(support_payload) != entry["support_bytes"]
+        ):
+            raise SourceAdapterError("EIDC method attachment identity changed")
+        output = root / Path(entry["csv_member"]).name
+        output.parent.mkdir(parents=True, exist_ok=True)
+        temporary = output.with_suffix(output.suffix + ".tmp")
+        temporary.write_bytes(payload)
+        os.replace(temporary, output)
+        return [
+            DownloadedFile(
+                source_id=self.source_id,
+                file_id="measurements",
+                path=output,
+                source_url=entry["url"],
+                bytes=len(payload),
+                cache_status=str(result["status"]),
+                retrieved_at=result.get("accessed_at")
+                or result.get("cache_verified_at"),
+                sha256=observed,
+            )
+        ]
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "measurements":
+            raise SourceAdapterError("EIDC adapter requires its verified CSV")
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        counts: Counter[str] = Counter()
+        samples: set[str] = set()
+        with downloaded.path.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.DictReader(handle)
+            missing = sorted(
+                set(registry["required_fields"]) - set(reader.fieldnames or [])
+            )
+            if missing:
+                raise SourceAdapterError("EIDC CSV lacks fields: " + ", ".join(missing))
+            for values in reader:
+                line_number = reader.line_num
+                sample_id = str(values["IGFS no."]).strip()
+                if not sample_id or sample_id in samples:
+                    raise SourceAdapterError(
+                        f"EIDC sample identity invalid at row {line_number}"
+                    )
+                samples.add(sample_id)
+                observations: dict[str, dict[str, Any]] = {}
+                for analyte, field_name in registry["target_analytes"].items():
+                    raw = str(values.get(field_name) or "").strip()
+                    if not raw:
+                        continue
+                    try:
+                        float(raw)
+                    except ValueError as exc:
+                        raise SourceAdapterError(
+                            f"EIDC {analyte} is not numeric at row {line_number}"
+                        ) from exc
+                    counts[analyte] += 1
+                    technique = "ICP-MS" if field_name.endswith("ICP-MS") else "XRF"
+                    observations[analyte] = {
+                        "field": field_name,
+                        "value": raw,
+                        "unit": "mg/kg",
+                        "measurement_basis": (
+                            "nitric_acid_hydrogen_peroxide_extractable_dry_topsoil"
+                            if technique == "ICP-MS"
+                            else "xrf_total_dry_topsoil"
+                        ),
+                        "analytical_method": technique,
+                        "digestion_or_extraction": (
+                            "69% nitric acid and 30% hydrogen peroxide extraction/digestion"
+                            if technique == "ICP-MS"
+                            else "XRF preparation; details in publisher supporting document"
+                        ),
+                        "variable_metadata_locator": "ElementalanalysisofsoilinNingboWatershed.rtf#methods",
+                    }
+                source_locator = f"{downloaded.path.name}#row={line_number}"
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(
+                        self.source_id, sample_id, source_locator
+                    ),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "_source_file": downloaded.path.name,
+                        "_source_crs": "not declared; reported coordinates only",
+                        "_sample_type": "composite topsoil 0-20 cm",
+                        "_target_observations": observations,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+        observed_counts = {
+            "physical_rows": len(samples),
+            "target_observations": sum(counts.values()),
+            "target_value_counts": dict(sorted(counts.items())),
+        }
+        if observed_counts != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"EIDC reconciliation changed: {observed_counts!r}"
+            )
+
+
 class TpdcChinaMountainSoilAdapter(RegistryAdapter):
     """TPDC China mountain-soil workbook with article-scoped analytical methods."""
 
@@ -3520,10 +4730,38 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
             raise SourceAdapterError("use the checked-in TPDC demo for fixture tests")
         standard = self._cache_root(cache_dir)
         fallback = SKILL_DIR.parents[1] / ".cache" / "tpdc-profile" / "source"
-        root = standard if standard.exists() else fallback
+        registered_files = candidate.registry_entry["download"]["files"]
+
+        def complete(root: Path) -> bool:
+            return all(
+                (root / entry["filename"]).is_file() for entry in registered_files
+            )
+
+        if not complete(standard) and mode == "online":
+            try:
+                import acquire_tpdc_bundle
+
+                acquire_tpdc_bundle.run(cache_dir, "online", 180.0)
+            except (OSError, RuntimeError, ValueError) as exc:
+                raise SourceAdapterError(
+                    f"TPDC online pre-acquisition failed closed: {exc}"
+                ) from exc
+        root = standard if complete(standard) else fallback
+        retrieved_at = None
+        acquisition_path = root / "tpdc-acquisition.json"
+        if acquisition_path.is_file():
+            try:
+                acquisition = json.loads(acquisition_path.read_text(encoding="utf-8"))
+                retrieved_at = (
+                    acquisition.get("retrieved_at") or acquisition.get("accessed_at")
+                    if isinstance(acquisition, Mapping)
+                    else None
+                )
+            except (OSError, UnicodeError, json.JSONDecodeError):
+                retrieved_at = None
         results: list[DownloadedFile] = []
         missing = []
-        for entry in candidate.registry_entry["download"]["files"]:
+        for entry in registered_files:
             path = root / entry["filename"]
             if not path.exists():
                 missing.append(entry["filename"])
@@ -3544,12 +4782,14 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
                     source_url=entry["url"],
                     bytes=path.stat().st_size,
                     cache_status="verified_cache",
-                    retrieved_at=None,
+                    retrieved_at=(
+                        str(retrieved_at) if isinstance(retrieved_at, str) else None
+                    ),
                 )
             )
         if missing:
             raise SourceAdapterError(
-                "TPDC POST bundle is not cached; retrieve the registered file ID and extract these members: "
+                "TPDC verified POST bundle is unavailable; missing registered members: "
                 + ", ".join(missing)
             )
         return results
@@ -3648,6 +4888,204 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
         if observed != expected:
             raise SourceAdapterError(
                 f"TPDC reconciliation changed: {observed!r} != {expected!r}"
+            )
+
+
+class ZenodoYangtzeYellowRiverSedimentAdapter(_PinnedSingleFileAdapter):
+    """Pinned Zenodo Data Set S2 leach-residual river-sediment workbook."""
+
+    source_id = "zenodo-yangtze-yellow-river-sediment"
+
+    _label_re = re.compile(
+        r"^(?P<leach>HCl|AC)-residual (?P<sample>HH-\d+|CJ-\d+|CJ Sand-\d+)\s*"
+        r"(?P<fraction>.*)$"
+    )
+    _numeric_re = re.compile(r"^-?\d+(\.\d+)?([eE][+-]?\d+)?$")
+    # Certified reference values (ug/g) used to verify the undeclared workbook
+    # unit. GeoReM/USGS preferred values as published in the workbook QC block.
+    _qc_preferred = {
+        ("BHVO-2", "Cr"): 299.0,
+        ("BHVO-2", "Cu"): 127.0,
+        ("BHVO-2", "Ni"): 126.0,
+        ("BHVO-2", "Zn"): 103.0,
+        ("BHVO-2", "Pb"): 1.6,
+        ("AGV-2", "Cr"): 17.0,
+        ("AGV-2", "Cu"): 53.0,
+        ("AGV-2", "Ni"): 20.0,
+        ("AGV-2", "Zn"): 86.0,
+        ("AGV-2", "Pb"): 13.2,
+    }
+    _qc_tolerance = 0.20
+
+    @classmethod
+    def verified_samples(
+        cls, path: Path, registry_entry: Mapping[str, Any]
+    ) -> list[dict[str, Any]]:
+        """Return one entry per verified sample row with all target values.
+
+        Shared with the checked-in China fixture builder so the pinned fixture
+        and the online acquisition path can never diverge structurally.
+        """
+
+        target_analytes = tuple(registry_entry["target_analytes"])
+        expected = registry_entry["expected_counts"]
+        rows = TpdcChinaMountainSoilAdapter._xlsx_rows(path)
+        by_row = {number: row for number, row in rows}
+        for required in (1, 6, 12):
+            if required not in by_row:
+                raise SourceAdapterError(
+                    f"Zenodo S2 structure changed: row {required} missing"
+                )
+        if by_row[1][:1] != ["Preferred values"] or by_row[6][:1] != [
+            "Measured values"
+        ]:
+            raise SourceAdapterError("Zenodo S2 QC block headers changed")
+        headers = by_row[12]
+        if (
+            headers[:1] != [""]
+            or by_row[1][1:] != headers[1:]
+            or by_row[6][1:] != headers[1:]
+        ):
+            raise SourceAdapterError("Zenodo S2 element headers changed between blocks")
+        missing = [item for item in target_analytes if item not in headers]
+        if missing:
+            raise SourceAdapterError(
+                f"Zenodo S2 lacks target analyte columns: {missing}"
+            )
+        columns = {analyte: headers.index(analyte) for analyte in target_analytes}
+
+        qc_rows = {
+            block: {by_row[number][0]: by_row[number] for number in numbers}
+            for block, numbers in (
+                ("preferred", (2, 3, 4, 5)),
+                ("measured", (7, 8, 9, 10)),
+            )
+        }
+        for block, table in qc_rows.items():
+            if set(table) != {"BHVO-2", "AGV-2", "W-2", "GSP-2"}:
+                raise SourceAdapterError(
+                    f"Zenodo S2 QC {block} standards changed: {sorted(table)}"
+                )
+        checks = 0
+        for (standard, analyte), certified in cls._qc_preferred.items():
+            index = columns[analyte]
+            preferred = float(qc_rows["preferred"][standard][index])
+            measured = float(qc_rows["measured"][standard][index])
+            for label, value in (("preferred", preferred), ("measured", measured)):
+                if abs(value - certified) > cls._qc_tolerance * certified:
+                    raise SourceAdapterError(
+                        f"Zenodo S2 unit verification failed: {standard} {analyte} "
+                        f"{label} value {value} is outside {cls._qc_tolerance:.0%} "
+                        f"of the certified ug/g value {certified}"
+                    )
+            checks += 1
+        if checks != len(cls._qc_preferred):
+            raise SourceAdapterError(
+                "Zenodo S2 QC alignment did not run for every standard"
+            )
+
+        samples: list[dict[str, Any]] = []
+        seen_labels: set[str] = set()
+        for number, row in rows:
+            if number < 13:
+                continue
+            if not any(cell.strip() for cell in row):
+                continue
+            label = row[0].strip()
+            match = cls._label_re.match(label)
+            if match is None:
+                raise SourceAdapterError(
+                    f"Zenodo S2 sample label changed at row {number}: {label!r}"
+                )
+            if label in seen_labels:
+                raise SourceAdapterError(
+                    f"Zenodo S2 sample label duplicated at row {number}: {label!r}"
+                )
+            seen_labels.add(label)
+            values: dict[str, str] = {}
+            for analyte, index in columns.items():
+                raw = row[index].strip() if index < len(row) else ""
+                if not cls._numeric_re.match(raw):
+                    raise SourceAdapterError(
+                        f"Zenodo S2 {analyte} is not numeric at row {number}: {raw!r}"
+                    )
+                values[analyte] = raw
+            samples.append(
+                {
+                    "row": number,
+                    "label": label,
+                    "leach": match.group("leach"),
+                    "sample": match.group("sample"),
+                    "fraction": match.group("fraction").strip(),
+                    "values": values,
+                }
+            )
+        if len(samples) != int(expected["sample_rows"]):
+            raise SourceAdapterError(
+                f"Zenodo S2 sample count changed: expected {expected['sample_rows']}, found {len(samples)}"
+            )
+        return samples
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "data-set-s2":
+            raise SourceAdapterError(
+                "Zenodo S2 adapter requires the registered workbook"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        samples = self.verified_samples(downloaded.path, registry)
+        target_analytes = tuple(registry["target_analytes"])
+        counts: Counter[str] = Counter()
+        leach_counts: Counter[str] = Counter()
+        for sample in samples:
+            observations: dict[str, dict[str, Any]] = {}
+            for analyte in target_analytes:
+                counts[analyte] += 1
+                leach_counts[sample["leach"]] += 1
+                observations[analyte] = {
+                    "field": analyte,
+                    "value": sample["values"][analyte],
+                    "unit": "ug/g",
+                }
+            source_locator = f"{downloaded.path.name}#sheet1-row={sample['row']}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, sample["label"], source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    "_source_file": downloaded.path.name,
+                    "_target_observations": observations,
+                    "_sample_label": sample["label"],
+                    "_river_sample": sample["sample"],
+                    "_leach_group": sample["leach"],
+                    "_size_fraction": sample["fraction"],
+                    "_sheet_row": sample["row"],
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        observed = {
+            "sample_rows": len(samples),
+            "target_observations": sum(counts.values()),
+            "target_value_counts": dict(sorted(counts.items())),
+            "leach_groups": dict(sorted(leach_counts.items())),
+        }
+        expected = {
+            "sample_rows": int(registry["expected_counts"]["sample_rows"]),
+            "target_observations": int(
+                registry["expected_counts"]["target_observations"]
+            ),
+            "target_value_counts": dict(
+                sorted(registry["expected_counts"]["target_value_counts"].items())
+            ),
+            "leach_groups": dict(
+                sorted(registry["expected_counts"]["leach_groups"].items())
+            ),
+        }
+        if observed != expected:
+            raise SourceAdapterError(
+                f"Zenodo S2 reconciliation changed: {observed!r} != {expected!r}"
             )
 
 
@@ -3865,6 +5303,9 @@ class GemasEuropeAdapter(RegistryAdapter):
 
 
 ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
+    ZenodoYangtzeYellowRiverSedimentAdapter.source_id: (
+        ZenodoYangtzeYellowRiverSedimentAdapter
+    ),
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
     MarchemSnapshotAdapter.source_id: MarchemSnapshotAdapter,
@@ -3880,10 +5321,19 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     ForegsFloodplainSedimentAdapter.source_id: ForegsFloodplainSedimentAdapter,
     AfsisPhaseIWetChemistryAdapter.source_id: AfsisPhaseIWetChemistryAdapter,
     WqpSacramentoRiverArsenicAdapter.source_id: WqpSacramentoRiverArsenicAdapter,
+    AustraliaNgsaAtlasAdapter.source_id: AustraliaNgsaAtlasAdapter,
     AustraliaNgsaMercuryAdapter.source_id: AustraliaNgsaMercuryAdapter,
     GsjJapanMarineSedimentAdapter.source_id: GsjJapanMarineSedimentAdapter,
     PangaeaArabianSeaSedimentAdapter.source_id: PangaeaArabianSeaSedimentAdapter,
+    PangaeaEastChinaSeaClayAdapter.source_id: PangaeaEastChinaSeaClayAdapter,
+    PangaeaSouthChinaSeaSedimentAdapter.source_id: (
+        PangaeaSouthChinaSeaSedimentAdapter
+    ),
+    PangaeaBarentsCHorizonSoilAdapter.source_id: PangaeaBarentsCHorizonSoilAdapter,
+    PangaeaAmazonasSoilAdapter.source_id: PangaeaAmazonasSoilAdapter,
+    PangaeaBatagaySoilAdapter.source_id: PangaeaBatagaySoilAdapter,
     GeorocAntarcticaIntraplateAdapter.source_id: GeorocAntarcticaIntraplateAdapter,
+    EidcNingboSoilAdapter.source_id: EidcNingboSoilAdapter,
     TpdcChinaMountainSoilAdapter.source_id: TpdcChinaMountainSoilAdapter,
     GemasEuropeAdapter.source_id: GemasEuropeAdapter,
 }

@@ -1,0 +1,63 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-12T16:30:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "online",
+    "observations": 32,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 47600,
+      "path": "demo_input.csv",
+      "sha256": "d98acfa0ee302261bffd77e52a4f9d3b9df18acdc32f9a17082dbd32ea3ec729"
+    },
+    {
+      "bytes": 50840,
+      "path": "sources.jsonl",
+      "sha256": "b870def8b8ca3b0dea0b725f1ef29b5ff9d8e5023f998cc9077b1539da5b1696"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 32,
+    "raw_source_rows": 606,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.1594/PANGAEA.56227",
+    "dataset_version": "1998-01-01",
+    "license": "CC-BY-3.0",
+    "source_id": "pangaea-barents-c-horizon-soil",
+    "title": "Geochemistry of C-horizon"
+  },
+  "source_files": [
+    {
+      "bytes": 407662,
+      "filename": "PANGAEA.56227.tab",
+      "retrieved_at": "2026-08-12T08:39:19Z",
+      "sha256": "e22093a40b9c68d25398f2322b68ae7af9b00e331483ae8a3927fc2c13be3d30",
+      "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.56227?format=textfile"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The Kola Ecogeochemistry C-horizon survey covers the central Barents region (northwest Russia, northern Finland and northern Norway), not all of Russia.",
+    "Values are aqua-regia extractable concentrations on the < 2 mm fraction; censored rows keep their publisher qualifier and are never treated as zero."
+  ]
+}

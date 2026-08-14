@@ -12,6 +12,7 @@ import re
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 REQUIRED_FILES = {
     "database": "geochemistry.csv",
@@ -19,6 +20,7 @@ REQUIRED_FILES = {
     "record_evidence": "record_evidence.jsonl",
     "qc_report": "qc_report.json",
     "confidence_report": "confidence_report.json",
+    "sources_and_confidence": "sources_and_confidence.json",
     "anomalies": "anomalies.geojson",
     "anomaly_report": "anomaly_report.json",
     "batch_acceptance": "batch_acceptance.csv",
@@ -67,11 +69,17 @@ REQUIRED_DATABASE_COLUMNS = {
     "latitude",
     "longitude",
     "coordinate_evidence_scope",
+    "coordinate_uncertainty_m",
+    "coordinate_representation_resolution_m",
+    "coordinate_representation_resolution_basis",
+    "coordinate_accuracy_evidence_status",
     "coordinate_policy_id",
     "coordinate_policy_version",
     "coordinate_policy_url",
     "coordinate_policy_sha256",
     "analytical_method",
+    "method_missing_reason",
+    "method_source_locator",
     "method_scope",
     "digestion_or_extraction",
     "geologic_unit_raw",
@@ -79,6 +87,7 @@ REQUIRED_DATABASE_COLUMNS = {
     "citation_scope",
     "source_id",
     "source_locator",
+    "official_source_url",
     "license",
     "qc_flags",
     "operational_confidence",
@@ -116,10 +125,33 @@ def valid_coordinate_pair(coordinates: Any) -> bool:
     )
 
 
+def valid_web_url(value: Any) -> bool:
+    text = str(value or "").strip()
+    try:
+        parsed = urlsplit(text)
+    except ValueError:
+        return False
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
 def validate_database(
     path: Path, errors: list[str], warnings: list[str]
 ) -> dict[str, int]:
-    metrics = {"record_count": 0, "source_locator_missing": 0, "invalid_json_cells": 0}
+    metrics = {
+        "record_count": 0,
+        "source_locator_missing": 0,
+        "official_source_url_missing": 0,
+        "invalid_official_source_url": 0,
+        "method_evidence_unaccounted": 0,
+        "method_source_locator_missing": 0,
+        "coordinate_accuracy_evidence_unaccounted": 0,
+        "invalid_json_cells": 0,
+    }
+    coordinate_accuracy_statuses = {
+        "source_reported_uncertainty",
+        "not_reported",
+        "not_applicable_no_canonical_coordinate",
+    }
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         headers = set(reader.fieldnames or [])
@@ -139,6 +171,37 @@ def validate_database(
             record_ids.add(record_id)
             if not (row.get("source_locator") or "").strip():
                 metrics["source_locator_missing"] += 1
+            official_source_url = (row.get("official_source_url") or "").strip()
+            if not official_source_url:
+                metrics["official_source_url_missing"] += 1
+            elif not valid_web_url(official_source_url):
+                metrics["invalid_official_source_url"] += 1
+                errors.append(
+                    f"geochemistry.csv:{line_number} has invalid official_source_url"
+                )
+            analytical_method = (row.get("analytical_method") or "").strip()
+            method_missing_reason = (row.get("method_missing_reason") or "").strip()
+            method_source_locator = (row.get("method_source_locator") or "").strip()
+            if analytical_method:
+                if method_missing_reason:
+                    errors.append(
+                        f"geochemistry.csv:{line_number} reports both analytical_method and method_missing_reason"
+                    )
+                if not method_source_locator:
+                    metrics["method_source_locator_missing"] += 1
+            elif not method_missing_reason:
+                metrics["method_evidence_unaccounted"] += 1
+            accuracy_status = (
+                row.get("coordinate_accuracy_evidence_status") or ""
+            ).strip()
+            uncertainty = (row.get("coordinate_uncertainty_m") or "").strip()
+            if accuracy_status not in coordinate_accuracy_statuses:
+                metrics["coordinate_accuracy_evidence_unaccounted"] += 1
+            elif accuracy_status == "source_reported_uncertainty" and not uncertainty:
+                metrics["coordinate_accuracy_evidence_unaccounted"] += 1
+                errors.append(
+                    f"geochemistry.csv:{line_number} claims source-reported coordinate uncertainty without a value"
+                )
             for column, expected in (
                 ("qc_flags", list),
                 ("operational_confidence", dict),
@@ -162,7 +225,57 @@ def validate_database(
         warnings.append(
             f"{metrics['source_locator_missing']} record(s) lack source_locator"
         )
+    if metrics["official_source_url_missing"]:
+        warnings.append(
+            f"{metrics['official_source_url_missing']} record(s) lack official_source_url"
+        )
+    if metrics["method_evidence_unaccounted"]:
+        warnings.append(
+            f"{metrics['method_evidence_unaccounted']} record(s) have neither analytical_method nor method_missing_reason"
+        )
+    if metrics["method_source_locator_missing"]:
+        warnings.append(
+            f"{metrics['method_source_locator_missing']} record(s) report a method without method_source_locator"
+        )
+    if metrics["coordinate_accuracy_evidence_unaccounted"]:
+        warnings.append(
+            f"{metrics['coordinate_accuracy_evidence_unaccounted']} record(s) do not explicitly account for coordinate accuracy evidence"
+        )
     return metrics
+
+
+def enforce_research_evidence_contract(
+    data_mode: Any,
+    metrics: Mapping[str, int],
+    errors: list[str],
+    *,
+    synthetic_data_present: bool = False,
+) -> None:
+    """Fail closed for every real-data output with broken evidence debt.
+
+    Only a package explicitly marked synthetic may omit external evidence.
+    Hash-pinned real-data fixtures remain real observations and therefore must
+    satisfy the same locator, URL, method-accounting and coordinate-accounting
+    requirements as online or cached runs.
+    """
+
+    if data_mode == "synthetic_fixture" or synthetic_data_present:
+        return
+    requirements = {
+        "source_locator_missing": "real-data records lack an exact source_locator",
+        "official_source_url_missing": "real-data records lack a clickable official source URL or DOI",
+        "method_evidence_unaccounted": (
+            "real-data records have neither an analytical method nor an explicit source-not-reported reason"
+        ),
+        "method_source_locator_missing": "reported analytical methods lack a method_source_locator",
+        "coordinate_accuracy_evidence_unaccounted": (
+            "research records do not explicitly distinguish reported coordinate uncertainty from not reported"
+        ),
+    }
+    for metric, message in requirements.items():
+        count = int(metrics.get(metric, 0))
+        if count:
+            errors.append(f"{count} {message}")
 
 
 def validate_iteration_backlog(
@@ -311,6 +424,7 @@ def database_evidence_index(path: Path) -> dict[str, dict[str, str]]:
         "source_file",
         "source_row",
         "file_sha256",
+        "official_source_url",
     )
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         return {
@@ -369,10 +483,23 @@ def validate_record_evidence(
             "source_file": "source_file",
             "source_row": "source_row",
             "source_file_sha256": "file_sha256",
+            "source_file_url": "official_source_url",
         }
         for evidence_field, canonical_field in comparable.items():
             evidence_value = value.get(evidence_field)
             canonical_value = canonical.get(record_id, {}).get(canonical_field)
+            if (
+                evidence_field == "source_file_url"
+                and canonical_value
+                and (
+                    evidence_value in (None, "")
+                    or str(evidence_value).strip() != canonical_value
+                )
+            ):
+                errors.append(
+                    f"record_evidence.jsonl:{line_number} does not bind geochemistry.csv official_source_url"
+                )
+                continue
             if (
                 evidence_value not in (None, "")
                 and canonical_value
@@ -545,7 +672,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
         "comparisonProfile",
         "导出可复现配置",
         'id="openAnomalyRegions"',
-        "d3-dual-scope-atlas-v4",
+        "d3-domain-confidence-atlas-v5",
         'id="projectionMode"',
         'id="globe"',
         'id="statisticalRegionTable"',
@@ -575,6 +702,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="confidenceComponents"',
         'href="geochemistry.csv"',
         'href="confidence_report.json"',
+        'href="sources_and_confidence.json"',
         "不是正确概率",
         'id="backView"',
         'id="zoomIn"',
@@ -657,6 +785,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         "source_manifest",
         "qc_report",
         "confidence_report",
+        "sources_and_confidence",
         "anomalies",
         "anomaly_report",
         "batch_qc_report",
@@ -740,7 +869,8 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             elif scope_mode == "regional":
                 expected_variant = "regional_focus"
             if (
-                map_report.get("template_contract_version") != "d3-dual-scope-atlas-v4"
+                map_report.get("template_contract_version")
+                != "d3-domain-confidence-atlas-v5"
                 or expected_variant is None
                 or map_report.get("template_variant") != expected_variant
                 or map_report.get("template_sha256") != sha256_file(template_path)
@@ -780,6 +910,13 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     manifest = parsed.get("source_manifest")
     if not isinstance(manifest, dict) or not isinstance(manifest.get("sources"), list):
         errors.append("source_manifest.json must contain a sources array")
+    else:
+        enforce_research_evidence_contract(
+            manifest.get("data_mode"),
+            database_metrics,
+            errors,
+            synthetic_data_present=manifest.get("synthetic_data_present") is True,
+        )
     confidence = parsed.get("confidence_report")
     if (
         not isinstance(confidence, dict)
@@ -788,6 +925,307 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         errors.append(
             "confidence_report.json must state that operational confidence is not a probability"
         )
+    source_confidence = parsed.get("sources_and_confidence")
+    dimensions = {
+        "source_evidence",
+        "analytical_readiness",
+        "spatial_usability",
+        "workflow_usability",
+    }
+    if (
+        not isinstance(source_confidence, dict)
+        or source_confidence.get("report_version") != "sources-and-confidence-v3"
+        or source_confidence.get("single_quality_label_prohibited") is not True
+    ):
+        errors.append(
+            "sources_and_confidence.json must preserve the four-dimensional interpretation boundary"
+        )
+    else:
+        overall_counts = source_confidence.get("overall_dimension_band_counts")
+        overall_means = source_confidence.get("overall_dimension_score_means")
+        overall_workflow = source_confidence.get("overall_workflow_confidence")
+        if (
+            not isinstance(overall_means, dict)
+            or set(overall_means) != dimensions
+            or any(
+                value is not None
+                and (
+                    not isinstance(value, (int, float))
+                    or isinstance(value, bool)
+                    or not 0 <= value <= 1
+                )
+                for value in overall_means.values()
+            )
+        ):
+            errors.append(
+                "sources_and_confidence.json must report valid means for all four quality dimensions"
+            )
+        if (
+            not isinstance(overall_workflow, dict)
+            or overall_workflow.get("not_a_probability") is not True
+            or overall_workflow.get("record_count") != database_metrics["record_count"]
+            or overall_workflow.get("score_mean")
+            != (
+                overall_means.get("workflow_usability")
+                if isinstance(overall_means, dict)
+                else None
+            )
+        ):
+            errors.append(
+                "sources_and_confidence.json overall workflow confidence is invalid"
+            )
+        if not isinstance(overall_counts, dict) or set(overall_counts) != dimensions:
+            errors.append(
+                "sources_and_confidence.json must report all four quality dimensions"
+            )
+        else:
+            for dimension, counts in overall_counts.items():
+                if (
+                    not isinstance(counts, dict)
+                    or any(
+                        band not in {"high", "medium", "low", "unknown"}
+                        or not isinstance(count, int)
+                        or isinstance(count, bool)
+                        or count < 0
+                        for band, count in counts.items()
+                    )
+                    or sum(counts.values()) != database_metrics["record_count"]
+                ):
+                    errors.append(
+                        f"sources_and_confidence.json has invalid band counts for {dimension}"
+                    )
+        source_items = source_confidence.get("sources")
+        valid_source_items = source_items if isinstance(source_items, list) else []
+        metadata_completeness = source_confidence.get("metadata_completeness")
+        if (
+            not isinstance(metadata_completeness, dict)
+            or metadata_completeness.get("record_count")
+            != database_metrics["record_count"]
+        ):
+            errors.append(
+                "sources_and_confidence.json metadata completeness does not match geochemistry.csv"
+            )
+        overall_absence = source_confidence.get("metadata_absence_accounting")
+        overall_method_present = (
+            metadata_completeness.get("analytical_method", {}).get("count")
+            if isinstance(metadata_completeness, dict)
+            else None
+        )
+        if (
+            not isinstance(overall_absence, dict)
+            or not isinstance(overall_method_present, int)
+            or overall_absence.get("analytical_method", {}).get("record_count")
+            != database_metrics["record_count"] - overall_method_present
+            or overall_absence.get("analytical_method", {}).get("accounted_count")
+            != database_metrics["record_count"] - overall_method_present
+            or overall_absence.get("coordinate_accuracy", {}).get("record_count")
+            != database_metrics["record_count"]
+            or overall_absence.get("coordinate_accuracy", {}).get("accounted_count")
+            != database_metrics["record_count"]
+        ):
+            errors.append(
+                "sources_and_confidence.json overall metadata-absence accounting does not match geochemistry.csv"
+            )
+        if not isinstance(source_items, list):
+            errors.append("sources_and_confidence.json sources must be an array")
+        else:
+            record_total = 0
+            seen_source_ids: set[str] = set()
+            for item in source_items:
+                if not isinstance(item, dict):
+                    errors.append(
+                        "sources_and_confidence.json source entries must be objects"
+                    )
+                    continue
+                source_id = item.get("source_id")
+                source_record_count = item.get("record_count")
+                source_sample_count = item.get("independent_sample_count")
+                if (
+                    not isinstance(source_id, str)
+                    or not source_id
+                    or source_id in seen_source_ids
+                ):
+                    errors.append(
+                        "sources_and_confidence.json source_id values must be unique and non-empty"
+                    )
+                else:
+                    seen_source_ids.add(source_id)
+                if (
+                    not isinstance(source_record_count, int)
+                    or isinstance(source_record_count, bool)
+                    or source_record_count < 0
+                    or not isinstance(source_sample_count, int)
+                    or isinstance(source_sample_count, bool)
+                    or source_sample_count < 0
+                    or source_sample_count > source_record_count
+                ):
+                    errors.append(
+                        f"sources_and_confidence.json has invalid counts for {source_id}"
+                    )
+                else:
+                    record_total += source_record_count
+                band_counts = item.get("dimension_band_counts")
+                dimension_means = item.get("dimension_score_means")
+                if (
+                    not isinstance(dimension_means, dict)
+                    or set(dimension_means) != dimensions
+                    or any(
+                        value is not None
+                        and (
+                            not isinstance(value, (int, float))
+                            or isinstance(value, bool)
+                            or not 0 <= value <= 1
+                        )
+                        for value in dimension_means.values()
+                    )
+                ):
+                    errors.append(
+                        f"sources_and_confidence.json has invalid dimension means for {source_id}"
+                    )
+                if not isinstance(band_counts, dict) or set(band_counts) != dimensions:
+                    errors.append(
+                        f"sources_and_confidence.json lacks four-dimensional counts for {source_id}"
+                    )
+                elif isinstance(source_record_count, int):
+                    for dimension, counts in band_counts.items():
+                        if (
+                            not isinstance(counts, dict)
+                            or any(
+                                band not in {"high", "medium", "low", "unknown"}
+                                or not isinstance(count, int)
+                                or isinstance(count, bool)
+                                or count < 0
+                                for band, count in counts.items()
+                            )
+                            or sum(
+                                count
+                                for count in counts.values()
+                                if isinstance(count, int)
+                                and not isinstance(count, bool)
+                            )
+                            != source_record_count
+                        ):
+                            errors.append(
+                                "sources_and_confidence.json source band counts do not "
+                                f"match records for {source_id}/{dimension}"
+                            )
+                official_links = item.get("official_links")
+                provenance = item.get("record_provenance")
+                if (
+                    not isinstance(official_links, list)
+                    or any(
+                        not isinstance(link, dict)
+                        or not isinstance(link.get("kind"), str)
+                        or not isinstance(link.get("url"), str)
+                        or not valid_web_url(link.get("url"))
+                        for link in official_links
+                    )
+                    or not isinstance(provenance, dict)
+                    or not isinstance(
+                        provenance.get("official_linked_record_count"), int
+                    )
+                ):
+                    errors.append(
+                        f"sources_and_confidence.json has invalid official provenance links for {source_id}"
+                    )
+                elif isinstance(source_record_count, int):
+                    linked_count = provenance["official_linked_record_count"]
+                    metadata = item.get("metadata_completeness")
+                    metadata_link_count = (
+                        metadata.get("official_source_link", {}).get("count")
+                        if isinstance(metadata, dict)
+                        and isinstance(metadata.get("official_source_link"), dict)
+                        else None
+                    )
+                    if (
+                        linked_count < 0
+                        or linked_count > source_record_count
+                        or metadata_link_count != linked_count
+                        or (linked_count > 0 and not official_links)
+                    ):
+                        errors.append(
+                            "sources_and_confidence.json official-link record counts "
+                            f"do not match metadata completeness for {source_id}"
+                        )
+                acquisition_times = item.get("acquisition_times")
+                acquisition_time = item.get("acquisition_time")
+                acquisition_status = item.get("acquisition_time_status")
+                if (
+                    not isinstance(acquisition_times, list)
+                    or any(
+                        not isinstance(value, str) or not value
+                        for value in acquisition_times
+                    )
+                    or len(acquisition_times) != len(set(acquisition_times))
+                    or (
+                        acquisition_time is not None
+                        and acquisition_time not in acquisition_times
+                    )
+                    or not isinstance(acquisition_status, str)
+                    or not acquisition_status
+                ):
+                    errors.append(
+                        f"sources_and_confidence.json has invalid acquisition-time evidence for {source_id}"
+                    )
+                absence = item.get("metadata_absence_accounting")
+                if not isinstance(absence, dict):
+                    errors.append(
+                        f"sources_and_confidence.json lacks metadata-absence accounting for {source_id}"
+                    )
+                elif isinstance(source_record_count, int):
+                    metadata = item.get("metadata_completeness")
+                    method_present = (
+                        metadata.get("analytical_method", {}).get("count")
+                        if isinstance(metadata, dict)
+                        else None
+                    )
+                    method_absence = absence.get("analytical_method")
+                    coordinate_status = absence.get("coordinate_accuracy")
+                    if (
+                        not isinstance(method_present, int)
+                        or not isinstance(method_absence, dict)
+                        or method_absence.get("record_count")
+                        != source_record_count - method_present
+                        or method_absence.get("accounted_count")
+                        != method_absence.get("record_count")
+                        or not isinstance(coordinate_status, dict)
+                        or coordinate_status.get("record_count") != source_record_count
+                        or coordinate_status.get("accounted_count")
+                        != source_record_count
+                    ):
+                        errors.append(
+                            f"sources_and_confidence.json metadata-absence counts do not match records for {source_id}"
+                        )
+                    elif "unaccounted_in_input" in (
+                        method_absence.get("counts") or {}
+                    ) or "unaccounted_in_input" in (
+                        coordinate_status.get("counts") or {}
+                    ):
+                        errors.append(
+                            f"sources_and_confidence.json contains unaccounted metadata absence for {source_id}"
+                        )
+            if record_total != database_metrics["record_count"]:
+                errors.append(
+                    "sources_and_confidence.json source record counts do not match geochemistry.csv"
+                )
+        portfolio = source_confidence.get("source_portfolio")
+        if (
+            not isinstance(portfolio, dict)
+            or portfolio.get("formal_included_source_count") != len(valid_source_items)
+            or set(portfolio.get("formal_included_source_ids") or [])
+            != {
+                str(item.get("source_id"))
+                for item in valid_source_items
+                if isinstance(item, dict) and item.get("source_id")
+            }
+            or portfolio.get("routed_selected_source_count")
+            != len(portfolio.get("selected_sources") or [])
+            or portfolio.get("review_or_blocked_source_count")
+            != len(portfolio.get("review_or_blocked_sources") or [])
+        ):
+            errors.append(
+                "sources_and_confidence.json source portfolio is internally inconsistent"
+            )
     if isinstance(manifest, dict) and isinstance(confidence, dict):
         if manifest.get("manifest_version") != "geochemical-source-manifest-v2":
             errors.append("source_manifest.json has an unsupported manifest_version")
@@ -882,6 +1320,68 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                 errors.append(
                     "unverified evidence must not contribute to verified coverage"
                 )
+        if isinstance(source_confidence, dict):
+            if source_confidence.get("data_mode") != manifest.get("data_mode"):
+                errors.append(
+                    "sources_and_confidence.json data_mode does not match source_manifest.json"
+                )
+            source_ids = {
+                str(item.get("source_id"))
+                for item in manifest.get("sources", [])
+                if isinstance(item, dict) and item.get("source_id")
+            }
+            confidence_source_ids = {
+                str(item.get("source_id"))
+                for item in source_confidence.get("sources", [])
+                if isinstance(item, dict) and item.get("source_id")
+            }
+            if confidence_source_ids != source_ids:
+                errors.append(
+                    "sources_and_confidence.json source IDs do not match source_manifest.json"
+                )
+            manifest_sources = {
+                str(item.get("source_id")): item
+                for item in manifest.get("sources", [])
+                if isinstance(item, dict) and item.get("source_id")
+            }
+            for item in source_confidence.get("sources", []):
+                if not isinstance(item, dict):
+                    continue
+                source_id = str(item.get("source_id") or "")
+                source_manifest = manifest_sources.get(source_id, {})
+                allowed_urls = {
+                    str(url)
+                    for url in source_manifest.get("official_source_urls", [])
+                    if valid_web_url(url)
+                }
+                allowed_urls.update(
+                    str(source_file.get("url"))
+                    for source_file in source_manifest.get("source_files", [])
+                    if isinstance(source_file, dict)
+                    and valid_web_url(source_file.get("url"))
+                )
+                for doi in list(source_manifest.get("dataset_dois", [])) + list(
+                    source_manifest.get("article_dois", [])
+                ):
+                    doi_text = str(doi or "").strip()
+                    if doi_text.casefold().startswith("https://doi.org/"):
+                        allowed_urls.add(doi_text)
+                    elif doi_text.casefold().startswith("doi:"):
+                        allowed_urls.add(f"https://doi.org/{doi_text[4:].strip()}")
+                    elif re.fullmatch(
+                        r"10\.\d{4,9}/\S+", doi_text, flags=re.IGNORECASE
+                    ):
+                        allowed_urls.add(f"https://doi.org/{doi_text}")
+                confidence_urls = {
+                    str(link.get("url"))
+                    for link in item.get("official_links", [])
+                    if isinstance(link, dict) and valid_web_url(link.get("url"))
+                }
+                if not confidence_urls.issubset(allowed_urls):
+                    errors.append(
+                        "sources_and_confidence.json contains official links not bound "
+                        f"by source_manifest.json for {source_id}"
+                    )
     anomaly_report = parsed.get("anomaly_report")
     if (
         not isinstance(anomaly_report, dict)

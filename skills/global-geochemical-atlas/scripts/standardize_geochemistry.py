@@ -130,6 +130,9 @@ SCHEMA_COLUMNS = (
     "coordinate_latitude_field",
     "coordinate_longitude_field",
     "coordinate_uncertainty_m",
+    "coordinate_representation_resolution_m",
+    "coordinate_representation_resolution_basis",
+    "coordinate_accuracy_evidence_status",
     "sampled_at",
     "sample_depth_min_m",
     "sample_depth_max_m",
@@ -202,6 +205,7 @@ SCHEMA_COLUMNS = (
     "source_file",
     "source_row",
     "source_locator",
+    "official_source_url",
     "file_sha256",
     "license",
     "access_status",
@@ -272,6 +276,7 @@ INPUT_FIELDS = {
     "source_file",
     "source_row",
     "source_locator",
+    "official_source_url",
     "file_sha256",
     "license",
     "source_tier",
@@ -283,6 +288,7 @@ RECOMMENDED_INPUT_COLUMNS = {
     "measurement_basis",
     "source_id",
     "source_locator",
+    "official_source_url",
     "dataset_title",
     "dataset_version",
     "source_file",
@@ -334,6 +340,7 @@ FLAG_SEVERITY = {
     "OUTSIDE_REQUEST_REGION": "warning",
     "MISSING_SOURCE_CRS": "warning",
     "PLATFORM_CRS_POLICY_APPLIED": "info",
+    "REGISTERED_CRS_POLICY_APPLIED": "info",
     "MISSING_COORDINATE_UNCERTAINTY": "warning",
     "INVALID_COORDINATE_UNCERTAINTY": "warning",
     "MISSING_SOURCE_ID": "warning",
@@ -809,6 +816,44 @@ def parse_optional_float(value: Any) -> float | None:
     return number if math.isfinite(number) else None
 
 
+def coordinate_representation_resolution(
+    latitude_raw: str | None,
+    longitude_raw: str | None,
+    latitude: float | None,
+) -> float | None:
+    """Estimate numeric display resolution, never positional accuracy.
+
+    The result is the larger one-step distance implied by the source latitude
+    and longitude strings. It deliberately does not replace source-reported
+    uncertainty or improve the spatial confidence score.
+    """
+
+    if latitude_raw is None or longitude_raw is None or latitude is None:
+        return None
+
+    def degree_step(value: str) -> float | None:
+        cleaned = value.strip().replace(",", "")
+        match = NUMBER_RE.fullmatch(cleaned)
+        if match is None:
+            return None
+        mantissa, separator, exponent_text = cleaned.casefold().partition("e")
+        fraction_digits = len(mantissa.partition(".")[2])
+        exponent = int(exponent_text) if separator else 0
+        return 10.0 ** (exponent - fraction_digits)
+
+    latitude_step = degree_step(latitude_raw)
+    longitude_step = degree_step(longitude_raw)
+    if latitude_step is None or longitude_step is None:
+        return None
+    latitude_metres = abs(latitude_step) * 111_320.0
+    longitude_metres = (
+        abs(longitude_step)
+        * 111_320.0
+        * max(0.0, abs(math.cos(math.radians(latitude))))
+    )
+    return round(max(latitude_metres, longitude_metres), 6)
+
+
 def normalize_analyte(value: Any) -> tuple[str, bool]:
     text = blank_to_none(value)
     if text is None:
@@ -1153,15 +1198,43 @@ def coordinate_evidence(
     doi = blank_to_none(row.get("dataset_doi")) or ""
     latitude_field = metadata["coordinate_latitude_field"] or ""
     longitude_field = metadata["coordinate_longitude_field"] or ""
+    dataset_bindings = policy.get("dataset_bindings") if policy else None
+    if isinstance(dataset_bindings, list):
+        source_id = blank_to_none(row.get("source_id")) or ""
+        binding_valid = any(
+            isinstance(binding, Mapping)
+            and binding.get("source_id") == source_id
+            and re.fullmatch(
+                str(binding.get("dataset_doi_pattern") or "(?!)"),
+                doi,
+                re.IGNORECASE,
+            )
+            and latitude_field.casefold()
+            in {str(value).casefold() for value in binding.get("latitude_fields", [])}
+            and longitude_field.casefold()
+            in {str(value).casefold() for value in binding.get("longitude_fields", [])}
+            for binding in dataset_bindings
+        )
+    else:
+        source_ids = (
+            {str(value) for value in (policy.get("source_ids") or [])}
+            if policy
+            else set()
+        )
+        binding_valid = bool(
+            policy
+            and (not source_ids or blank_to_none(row.get("source_id")) in source_ids)
+            and re.fullmatch(
+                str(policy.get("dataset_doi_pattern") or "(?!)"), doi, re.IGNORECASE
+            )
+            and latitude_field.casefold()
+            in {str(value).casefold() for value in policy.get("latitude_fields", [])}
+            and longitude_field.casefold()
+            in {str(value).casefold() for value in policy.get("longitude_fields", [])}
+        )
     valid = bool(
         policy
-        and re.fullmatch(
-            str(policy.get("dataset_doi_pattern") or "(?!)"), doi, re.IGNORECASE
-        )
-        and latitude_field.casefold()
-        in {str(value).casefold() for value in policy.get("latitude_fields", [])}
-        and longitude_field.casefold()
-        in {str(value).casefold() for value in policy.get("longitude_fields", [])}
+        and binding_valid
         and policy.get("target_crs") == "EPSG:4326"
         and re.fullmatch(
             r"[0-9a-f]{64}", str(policy.get("authority_page_sha256") or "")
@@ -1178,7 +1251,12 @@ def coordinate_evidence(
             "coordinate_policy_sha256": str(policy["authority_page_sha256"]),
         }
     )
-    add_flag(flags, "PLATFORM_CRS_POLICY_APPLIED")
+    applied_flag = (
+        "PLATFORM_CRS_POLICY_APPLIED"
+        if policy.get("platform") == "PANGAEA"
+        else "REGISTERED_CRS_POLICY_APPLIED"
+    )
+    add_flag(flags, applied_flag)
     return "EPSG:4326", f"identity:{policy['policy_id']}", metadata
 
 
@@ -1295,6 +1373,10 @@ def stable_record_id(row: Mapping[str, Any], row_number: int) -> str:
         json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()
     ).hexdigest()[:16]
     return f"gen-{digest}"
+
+
+def confidence_band(score: float) -> str:
+    return "high" if score >= 0.80 else "medium" if score >= 0.60 else "low"
 
 
 def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
@@ -1417,7 +1499,47 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
     if str(record.get("source_id") or "").casefold().startswith("synthetic"):
         overall = min(overall, 0.59)
         gates_applied.append("synthetic_fixture_low_cap")
-    band = "high" if overall >= 0.80 else "medium" if overall >= 0.60 else "low"
+    band = confidence_band(overall)
+    analytical = 0.55 * method + 0.45 * qc
+    if severity_counts["error"]:
+        analytical = min(analytical, 0.59)
+    if any(
+        record[field] in (None, "")
+        for field in (
+            "measurement_basis",
+            "analytical_method",
+            "method_family",
+            "digestion_or_extraction",
+        )
+    ):
+        analytical = min(analytical, 0.79)
+    coordinate_status = (
+        "canonical_wgs84"
+        if record["latitude"] is not None and record["longitude"] is not None
+        else "reported_only"
+        if record.get("original_latitude_raw") not in (None, "")
+        and record.get("original_longitude_raw") not in (None, "")
+        else "unlocated"
+    )
+    quality_dimensions = {
+        "source_evidence": {
+            "score": round(source, 6),
+            "band": confidence_band(source),
+        },
+        "analytical_readiness": {
+            "score": round(analytical, 6),
+            "band": confidence_band(analytical),
+        },
+        "spatial_usability": {
+            "score": round(spatial, 6),
+            "band": confidence_band(spatial),
+            "coordinate_status": coordinate_status,
+        },
+        "workflow_usability": {
+            "score": round(overall, 6),
+            "band": band,
+        },
+    }
     return {
         "version": CONFIDENCE_VERSION,
         "source": round(source, 6),
@@ -1428,6 +1550,7 @@ def score_confidence(record: Mapping[str, Any]) -> dict[str, Any]:
         "overall": round(overall, 6),
         "band": band,
         "gates_applied": sorted(gates_applied),
+        "quality_dimensions": quality_dimensions,
     }
 
 
@@ -1547,7 +1670,8 @@ def normalize_row(
     source_crs, coordinate_transform_method, coordinate_metadata = coordinate_evidence(
         row, flags
     )
-    if source_crs is None:
+    coordinate_observation_present = lat_raw is not None or lon_raw is not None
+    if source_crs is None and coordinate_observation_present:
         add_flag(flags, "MISSING_SOURCE_CRS")
         if latitude is not None or longitude is not None:
             add_flag(flags, "COORDINATE_NOT_CANONICALIZED")
@@ -1563,11 +1687,29 @@ def normalize_row(
         longitude = None
     coordinate_uncertainty = parse_optional_float(row.get("coordinate_uncertainty_m"))
     uncertainty_raw = blank_to_none(row.get("coordinate_uncertainty_m"))
-    if uncertainty_raw is None:
+    canonical_coordinate_present = latitude is not None and longitude is not None
+    if uncertainty_raw is None and canonical_coordinate_present:
         add_flag(flags, "MISSING_COORDINATE_UNCERTAINTY")
     elif coordinate_uncertainty is None or coordinate_uncertainty < 0:
+        if uncertainty_raw is not None:
+            add_flag(flags, "INVALID_COORDINATE_UNCERTAINTY")
         coordinate_uncertainty = None
-        add_flag(flags, "INVALID_COORDINATE_UNCERTAINTY")
+    coordinate_resolution = coordinate_representation_resolution(
+        lat_raw,
+        lon_raw,
+        latitude if latitude is not None else parse_optional_float(lat_raw),
+    )
+    coordinate_resolution_basis = (
+        "derived_from_source_decimal_places"
+        if coordinate_resolution is not None
+        else "not_available"
+    )
+    if latitude is None or longitude is None:
+        coordinate_accuracy_status = "not_applicable_no_canonical_coordinate"
+    elif coordinate_uncertainty is not None:
+        coordinate_accuracy_status = "source_reported_uncertainty"
+    else:
+        coordinate_accuracy_status = "not_reported"
 
     depth_min, depth_max = normalize_depth(row, flags)
     boundary_distance = parse_optional_float(row.get("distance_to_geologic_boundary_m"))
@@ -1632,6 +1774,9 @@ def normalize_row(
         "coordinate_transform_method": coordinate_transform_method,
         **coordinate_metadata,
         "coordinate_uncertainty_m": coordinate_uncertainty,
+        "coordinate_representation_resolution_m": coordinate_resolution,
+        "coordinate_representation_resolution_basis": coordinate_resolution_basis,
+        "coordinate_accuracy_evidence_status": coordinate_accuracy_status,
         "sampled_at": blank_to_none(row.get("sampled_at")),
         "sample_depth_min_m": depth_min,
         "sample_depth_max_m": depth_max,
@@ -1714,6 +1859,7 @@ def normalize_row(
         "source_file": blank_to_none(row.get("source_file")),
         "source_row": blank_to_none(row.get("source_row")),
         "source_locator": source_locator,
+        "official_source_url": blank_to_none(row.get("official_source_url")),
         "file_sha256": file_sha256,
         "license": license_value,
         "access_status": blank_to_none(row.get("access_status")),
@@ -2712,11 +2858,48 @@ def build_confidence_report(
         for record in records
         for gate in record["operational_confidence"].get("gates_applied", [])
     )
+    dimension_keys = (
+        "source_evidence",
+        "analytical_readiness",
+        "spatial_usability",
+        "workflow_usability",
+    )
+    dimension_score_means = {
+        key: round(
+            statistics.fmean(
+                float(
+                    record["operational_confidence"]["quality_dimensions"][key]["score"]
+                )
+                for record in records
+            ),
+            6,
+        )
+        if records
+        else 0.0
+        for key in dimension_keys
+    }
+    dimension_band_counts = {
+        key: {
+            band: sum(
+                record["operational_confidence"]["quality_dimensions"][key]["band"]
+                == band
+                for record in records
+            )
+            for band in ("high", "medium", "low")
+        }
+        for key in dimension_keys
+    }
     return {
         "confidence_version": CONFIDENCE_VERSION,
         "name": "operational_confidence",
         "not_a_probability": True,
         "meaning": "Record usability for this workflow; not truth probability, statistical confidence, or accuracy.",
+        "dimension_meaning": {
+            "source_evidence": "Reliability and traceability of the published source evidence; not affected by missing coordinates.",
+            "analytical_readiness": "Method-context and QC readiness for comparison; not a statement that the measurement is true.",
+            "spatial_usability": "Coordinate canonicalization and precision readiness for spatial operations.",
+            "workflow_usability": "Conservative combined score used to prioritize records for this end-to-end atlas workflow.",
+        },
         "run_metadata": dict(run_metadata),
         "weights": {
             "source": 0.30,
@@ -2762,6 +2945,8 @@ def build_confidence_report(
         "gate_counts": dict(sorted(gates.items())),
         "component_means": means,
         "band_counts": {band: bands.get(band, 0) for band in ("high", "medium", "low")},
+        "dimension_score_means": dimension_score_means,
+        "dimension_band_counts": dimension_band_counts,
     }
 
 

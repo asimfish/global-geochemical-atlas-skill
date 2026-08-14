@@ -23,15 +23,25 @@ BALANCE_PATH = SKILL_DIR / "assets" / "v4-coverage-balance.json"
 REPORT_PATH = SKILL_DIR / "references" / "v4-full-population-profile.md"
 MANIFEST_PATH = PROFILE_ROOT / "manifest.json"
 
+# The two NGSA adapters leave this contract on 2026-08-12: their declared
+# GDA94 geographic datum is canonicalized under the registered
+# identity-tolerance policy gda94-geographic-wgs84-identity-v1
+# (coordinate-policy-registry.json). Full profiles therefore use EPSG:4326
+# only after that source-specific evidence gate; the raw GDA94 expressions
+# remain present in row-level exchange assets.
 NON_CANONICAL = {
     "georoc-archaean": "withheld_pending_datum_verification",
     "georoc-antarctica-intraplate": "withheld_pending_datum_verification",
     "afsis-phase-i-wet-chemistry": "withheld_source_crs_not_reported",
     "japan-gsj-geochemical-map": "withheld_no_full_profile_coordinate_transform",
     "japan-gsj-marine-sediment": "withheld_source_crs_not_reported",
-    "australia-ngsa-mercury": "withheld_no_full_profile_coordinate_transform",
     "tpdc-china-mountain-soil": "withheld_source_crs_not_reported",
+    "eidc-ningbo-soil": "withheld_source_crs_not_reported",
     "us-wqp-sacramento-river-arsenic": "withheld_non_wgs84_source_datum",
+}
+REGISTERED_CANONICALIZATION = {
+    "australia-ngsa": "gda94-geographic-wgs84-identity-v1",
+    "australia-ngsa-mercury": "gda94-geographic-wgs84-identity-v1",
 }
 SOURCE_MEDIA = {
     "georoc-archaean": "rock",
@@ -39,8 +49,8 @@ SOURCE_MEDIA = {
     "afsis-phase-i-wet-chemistry": "soil",
     "japan-gsj-geochemical-map": "sediment",
     "japan-gsj-marine-sediment": "sediment",
-    "australia-ngsa-mercury": "sediment",
     "tpdc-china-mountain-soil": "soil",
+    "eidc-ningbo-soil": "soil",
     "us-wqp-sacramento-river-arsenic": "water",
 }
 SOURCE_ELEMENTS = {
@@ -49,8 +59,8 @@ SOURCE_ELEMENTS = {
     "afsis-phase-i-wet-chemistry": {"As", "Cr", "Cu", "Ni", "Pb", "Zn"},
     "japan-gsj-geochemical-map": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
     "japan-gsj-marine-sediment": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
-    "australia-ngsa-mercury": {"Hg"},
     "tpdc-china-mountain-soil": {"Cr", "Cu", "Ni", "Pb", "Zn"},
+    "eidc-ningbo-soil": {"As", "Cr", "Cu", "Ni", "Pb", "Zn"},
     "us-wqp-sacramento-river-arsenic": {"As"},
 }
 CLAIM_BOUNDARY = (
@@ -121,7 +131,15 @@ def _spatial_outputs() -> tuple[dict[Path, str], dict[str, dict[str, Any]]]:
                     ),
                     spatial_grid="canonical EPSG:4326 1-degree floor cell; no interpolation",
                     coordinate_canonicalization_status=(
-                        NON_CANONICAL.get(source_id, "source_crs_declared_epsg4326")
+                        NON_CANONICAL.get(source_id)
+                        or (
+                            "registered_identity_tolerance_policy"
+                            if source_id in REGISTERED_CANONICALIZATION
+                            else "source_crs_declared_epsg4326"
+                        )
+                    ),
+                    coordinate_canonicalization_policy_id=(
+                        REGISTERED_CANONICALIZATION.get(source_id)
                     ),
                 )
                 if source_id in NON_CANONICAL:

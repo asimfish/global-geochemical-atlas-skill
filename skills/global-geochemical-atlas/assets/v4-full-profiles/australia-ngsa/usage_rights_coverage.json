@@ -1,0 +1,22 @@
+{
+  "access_status_counts": {
+    "public_download": 10492
+  },
+  "as_of": "2026-08-13T10:00:00Z",
+  "attribution_required_counts": {
+    "true": 10492
+  },
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2011-07-06",
+  "license_id": "CC-BY-3.0-AU",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/au/",
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "redistribution_is_not_a_research_use_gate": true,
+  "redistribution_status_counts": {
+    "not_evaluated_for_project_output": 10492
+  },
+  "research_use_status_counts": {
+    "permitted_research": 10492
+  },
+  "source_id": "australia-ngsa"
+}

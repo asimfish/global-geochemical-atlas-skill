@@ -378,7 +378,10 @@ def _derive_use_mode(
         return "normalized_analysis", reasons
     if dimensions["file_record_integrity"]["status"] == "verified" and dimensions[
         "schema_semantics"
-    ]["status"] in {"verified", "partial"}:
+    ]["status"] in {
+        "verified",
+        "partial",
+    }:
         reasons.append("a production adapter is not yet verified")
         return "raw_observation", reasons
     reasons.append(

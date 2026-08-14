@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Monotonic global execution budgets for the official 900-second task limit."""
+"""Monotonic execution budgets for evaluation and extended research runs.
+
+The official evaluator allows 900 seconds per Skill invocation.  The default
+internal budget is therefore 840 seconds, reserving one minute for agent
+startup and hand-off.  A caller may explicitly opt into a longer research run,
+but that mode is outside the official evaluation envelope and is recorded as
+such in execution evidence.
+"""
 
 from __future__ import annotations
 
@@ -8,8 +15,9 @@ import time
 from collections.abc import Callable
 
 
-OFFICIAL_TASK_LIMIT_SECONDS = 900.0
-DEFAULT_INTERNAL_BUDGET_SECONDS = 840.0
+OFFICIAL_TASK_LIMIT_SECONDS = 15 * 60.0
+DEFAULT_INTERNAL_BUDGET_SECONDS = 14 * 60.0
+MAX_INTERNAL_BUDGET_SECONDS = 12 * 60 * 60.0
 
 
 class ExecutionBudgetError(RuntimeError):
@@ -29,10 +37,10 @@ class ExecutionBudget:
             isinstance(total_seconds, bool)
             or not isinstance(total_seconds, (int, float))
             or not math.isfinite(float(total_seconds))
-            or not 1 <= float(total_seconds) <= DEFAULT_INTERNAL_BUDGET_SECONDS
+            or not 1 <= float(total_seconds) <= MAX_INTERNAL_BUDGET_SECONDS
         ):
             raise ExecutionBudgetError(
-                f"total execution budget must be between 1 and {DEFAULT_INTERNAL_BUDGET_SECONDS:g} seconds"
+                f"total execution budget must be between 1 and {MAX_INTERNAL_BUDGET_SECONDS:g} seconds"
             )
         self._clock = clock
         self.total_seconds = float(total_seconds)

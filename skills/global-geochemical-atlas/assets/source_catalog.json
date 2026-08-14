@@ -1,9 +1,9 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-06T10:35:00Z",
+  "reviewed_at": "2026-08-13T10:00:00Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V4 automatic selection is determined separately by access status, research-use status, evidence tier, use mode, frozen spatial/geology compatibility, and execution context; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
-    "round": 6,
+    "round": 10,
     "status": "in_progress",
     "saturated": false,
     "channels_checked": [
@@ -20,7 +20,8 @@
       "southern_hemisphere_and_asian_national_portals",
       "state_and_provincial_geological_surveys",
       "publication_linked_datasets",
-      "institutional_doi_dataset_download_verification"
+      "institutional_doi_dataset_download_verification",
+      "targeted_south_america_and_russia_doi_dataset_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -83,6 +84,91 @@
       ],
       "limitations": [
         "Precompiled selected values are not an unfiltered set of every replicate determination."
+      ]
+    },
+    "pangaea-amazonas-soil": {
+      "title": "Amazonas soil chemistry - 64 elements",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "regional_discrete_repeated_samples",
+        "regions": ["amazonas-brazil-south-america"],
+        "notes": "174 campaign-by-depth records from 29 events at 13 locations in Amazonas state; canonical event coordinates, not national coverage."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.968463",
+        "publication_doi": "10.1016/j.gexplo.2019.106433"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.968463",
+      "interfaces": [{
+        "kind": "doi_tabular_download",
+        "url": "https://doi.pangaea.de/10.1594/PANGAEA.968463?format=textfile",
+        "format": "utf8_tsv_with_pangaea_metadata",
+        "access": "open",
+        "server_filters": ["dataset_doi", "format"]
+      }],
+      "license": {
+        "status": "open", "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "PANGAEA records CC BY 4.0; retain dataset and related-publication citations."
+      },
+      "version": {"status": "pinned", "value": "2024-04-10", "release_date": "2024-04-10"},
+      "adapter": {"status": "implemented", "name": "pangaea_amazonas_soil"},
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.968463",
+        "https://doi.org/10.1594/PANGAEA.968463",
+        "https://doi.org/10.1016/j.gexplo.2019.106433"
+      ],
+      "limitations": [
+        "Thirteen locations in Amazonas cannot be presented as uniform Brazil or South America coverage.",
+        "Repeated seasons, campaigns, depths and land-use classes are non-independent and remain explicit.",
+        "The registry exposes the atlas-wide As/Cr/Cu/Hg/Ni/Pb/Zn vocabulary from the 64-element source; a run still includes only elements frozen in its scientific request."
+      ]
+    },
+    "pangaea-batagay-soil": {
+      "title": "Trace elements content in soils and soil inclusions in Batagay ice wedges, North Yakutia, Russia",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "single_site_vertical_profile",
+        "regions": ["batagay-north-yakutia-russia"],
+        "notes": "31 sampled rows at one canonical event coordinate in North Yakutia; extends Russian longitude coverage but is not regional or national coverage."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.927867",
+        "parent_dataset_doi": "10.1594/PANGAEA.927874",
+        "publication_doi": "10.1016/j.apgeochem.2020.104669"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.927867",
+      "interfaces": [{
+        "kind": "doi_tabular_download",
+        "url": "https://doi.pangaea.de/10.1594/PANGAEA.927867?format=textfile",
+        "format": "utf8_tsv_with_pangaea_metadata",
+        "access": "open",
+        "server_filters": ["dataset_doi", "format"]
+      }],
+      "license": {
+        "status": "open", "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "PANGAEA records CC BY 4.0; retain dataset, bundled-publication and article citations."
+      },
+      "version": {"status": "pinned", "value": "2021-03-10", "release_date": "2021-03-10"},
+      "adapter": {"status": "implemented", "name": "pangaea_batagay_soil"},
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.927867",
+        "https://doi.org/10.1594/PANGAEA.927874",
+        "https://doi.org/10.1016/j.apgeochem.2020.104669"
+      ],
+      "limitations": [
+        "This single Batagay site cannot close the all-Russia coverage gap.",
+        "The dataset contains soil plus ice-wedge inclusions and thawed ground particles; sample types remain separate.",
+        "The source supplies Cu/Pb/Zn but no As."
       ]
     },
     "georoc-antarctica-intraplate": {
@@ -964,44 +1050,53 @@
       ]
     },
     "australia-ngsa": {
-      "title": "National Geochemical Survey of Australia",
-      "publisher": "Geoscience Australia and Australian state/territory geological surveys",
-      "source_kind": "official_national_program",
+      "title": "National Geochemical Survey of Australia: Geochemical Atlas dataset",
+      "publisher": "Geoscience Australia",
+      "source_kind": "official_national_geochemical_dataset",
       "status": "needs_human_review",
       "production_eligible": false,
       "media": ["sediment"],
       "coverage": {
         "extent_class": "national_partial",
         "regions": ["australia"],
-        "notes": "Ultra-low-density catchment-outlet transported regolith survey covering more than 90 percent of Australia; useful nationally, not locally."
+        "notes": "1,315 catchment-outlet sites across Australia; 2,623 nonblank <75 µm determinations per requested element. This is an ultra-low-density national survey, not a regular grid or local prediction surface."
       },
-      "identifiers": {},
-      "landing_page": "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
+      "identifiers": {
+        "dataset_doi": "10.11636/Record.2011.020",
+        "ecat_id": "82869"
+      },
+      "landing_page": "https://pid.geoscience.gov.au/dataset/ga/82869",
       "interfaces": [
         {
-          "kind": "project_data_and_atlas",
-          "url": "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
-          "format": "dataset_specific_downloads_and_atlas",
-          "access": "open_products",
-          "server_filters": ["element", "product"]
+          "kind": "official_dataset_csv",
+          "url": "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv",
+          "format": "cp1252_csv_with_metadata_preamble",
+          "access": "open",
+          "server_filters": []
         }
       ],
       "license": {
-        "status": "open_site_terms_product_review",
-        "id": "CC-BY-4.0",
-        "url": "https://www.ga.gov.au/copyright",
-        "notes": "Geoscience Australia material is generally CC BY 4.0, but each selected data product must be checked for third-party exceptions."
+        "status": "open",
+        "id": "CC-BY-3.0-AU",
+        "url": "https://creativecommons.org/licenses/by/3.0/au/",
+        "notes": "The 2011 CSV itself states CC BY 3.0 Australia. The current portal displays CC BY 4.0 International; the registry conservatively retains the contemporaneous file-level licence and records the version difference."
       },
-      "version": {"status": "dataset_specific", "value": null, "release_date": null},
-      "adapter": {"status": "not_implemented", "name": null},
+      "version": {"status": "pinned", "value": "2011-07-06", "release_date": "2011-01-01"},
+      "adapter": {"status": "implemented", "name": "australia_ngsa_atlas"},
       "evidence_urls": [
-        "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
-        "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
-        "https://www.ga.gov.au/copyright"
+        "https://pid.geoscience.gov.au/dataset/ga/82869",
+        "https://ecat.ga.gov.au/geonetwork/srv/api/records/0dc4a02b-21e9-9b28-e053-12a3070af396",
+        "https://doi.org/10.11636/Record.2011.020",
+        "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv",
+        "https://www.ga.gov.au/bigobj/GA10307.pdf",
+        "https://epsg.io/1150"
       ],
       "limitations": [
         "Catchment-outlet transported regolith is not interchangeable with in-situ topsoil or stream sediment.",
-        "The sampling density is designed for national-scale patterns, not site-scale prediction."
+        "The sampling density is designed for national-scale patterns, not site-scale prediction.",
+        "TOS/BOS depths, grain fractions and total/aqua-regia/MMI analytical bases remain separate.",
+        "The adapter extracts only <75 µm ICP-MS As, Cu, Pb and Zn and excludes field duplicates from independent-sample selection.",
+        "Coordinate positional accuracy is not reported by the publisher and remains explicitly unavailable."
       ]
     },
     "australia-ozchem": {
@@ -2389,6 +2484,45 @@
         "The variable workbook describes As.75 as Arsenic-78 and reports 2009-2013 sampling, while the related paper reports 2009-2012; these metadata conflicts require source-level review."
       ]
     },
+    "eidc-ningbo-soil": {
+      "title": "Elemental analysis of soil in the Ningbo watershed, China",
+      "publisher": "NERC Environmental Information Data Centre",
+      "source_kind": "official_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "regional_partial",
+        "regions": ["china-ningbo-zhangxi-catchment"],
+        "notes": "80 composite topsoil samples from one Ningbo watershed; not national coverage."
+      },
+      "identifiers": {"dataset_doi": "10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f"},
+      "landing_page": "https://catalogue.ceh.ac.uk/id/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+      "interfaces": [{
+        "kind": "official_data_package",
+        "url": "https://data-package.ceh.ac.uk/data/9c2e8b85-48ab-48c9-b69d-dd676a5d086f.zip",
+        "method": "GET", "format": "zip_csv_rtf", "access": "open",
+        "server_filters": []
+      }],
+      "license": {
+        "status": "open", "id": "OGL-UK-3.0",
+        "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+        "notes": "Official RO-Crate metadata declares OGL-UK-3.0."
+      },
+      "version": {"status": "pinned", "value": "2019-09-02", "release_date": "2019-09-02"},
+      "adapter": {"status": "implemented", "name": "eidc_ningbo_soil"},
+      "evidence_urls": [
+        "https://catalogue.ceh.ac.uk/id/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+        "https://doi.org/10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+        "https://doi.org/10.1007/s12403-018-0290-1"
+      ],
+      "limitations": [
+        "The source does not declare a coordinate datum or CRS, so decimal coordinates are reported-only.",
+        "Only 80 samples from one catchment are included.",
+        "The adapter exposes As/Cr/Cu/Ni/Pb by ICP-MS and Zn by XRF; method families and measurement bases stay separate.",
+        "Upstream half-LOD substitution is documented but row-level censoring qualifiers are unavailable."
+      ]
+    },
     "tpdc-china-mountain-soil": {
       "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains",
       "publisher": "National Tibetan Plateau / Third Pole Environment Data Center",
@@ -2652,6 +2786,242 @@
         "The portal is a collection of map-sheet products, not one proven continuous national measurement table.",
         "The verified layer mixes preferred stream sediment with fallback surface soil; record-level medium identification is required.",
         "Method, unit, detection-limit, version and full licence metadata have not yet been reconciled for the representative layer."
+      ]
+    },
+    "zenodo-yangtze-yellow-river-sediment": {
+      "title": "Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments",
+      "publisher": "Zenodo deposit by Chao Wu, State Key Laboratory of Isotope Geochemistry, Guangzhou Institute of Geochemistry, Chinese Academy of Sciences",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["sediment"],
+      "coverage": {
+        "extent_class": "regional_discrete_samples",
+        "regions": ["china-yangtze-yellow-river-sediments"],
+        "notes": "Ninety-three leach-residual size-fraction analyses of Yellow River (HH) and Yangtze River (CJ / CJ Sand) sediments; an author supplement without published sampling coordinates, not a basin survey grid."
+      },
+      "identifiers": {"dataset_doi": "10.5281/zenodo.7098563", "resource_id": "7098563"},
+      "landing_page": "https://zenodo.org/records/7098563",
+      "interfaces": [
+        {
+          "kind": "official_file_download",
+          "url": "https://zenodo.org/api/records/7098563/files/Data%20Set%20S2.xlsx/content",
+          "method": "GET",
+          "format": "xlsx",
+          "access": "open",
+          "server_filters": []
+        },
+        {
+          "kind": "official_metadata_api",
+          "url": "https://zenodo.org/api/records/7098563",
+          "method": "GET",
+          "format": "json",
+          "access": "open",
+          "server_filters": []
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "Zenodo record metadata declares license id cc-by-4.0. Retain the dataset DOI and author attribution."
+      },
+      "version": {"status": "pinned", "value": "zenodo-record-7098563-rev2-2022-09-21", "release_date": "2022-09-21"},
+      "adapter": {"status": "implemented", "name": "zenodo_yangtze_yellow_river_sediment"},
+      "evidence_urls": [
+        "https://zenodo.org/records/7098563",
+        "https://doi.org/10.5281/zenodo.7098563"
+      ],
+      "limitations": [
+        "No sampling coordinates are published; records are database-only and cannot enter map layers or spatial anomaly analysis.",
+        "Leach-residual size fractions are method-specific separates and must not be merged with bulk-sediment surveys.",
+        "Ninety-three samples from two river systems add lineage diversity, not regional statistical representativeness."
+      ]
+    },
+    "pangaea-east-china-sea-clay": {
+      "title": "(Appendix A) Concentrations of major oxides and trace elements in clay from different IODP Holes of 331-C0013, 331-C0017, East China sea shelf and different Taiwan rivers",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": [
+        "sediment"
+      ],
+      "coverage": {
+        "extent_class": "regional_discrete_samples",
+        "regions": [
+          "east-china-sea-shelf-cores",
+          "okinawa-trough-iodp-holes",
+          "yangtze-river-cores",
+          "taiwan-river-cores"
+        ],
+        "notes": "Ninety-eight clay-fraction rows from 28 events between 24.19-31.87 N and 117.71-126.91 E, including eight mainland Yangtze River sites with per-row WGS84 coordinates."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.856762",
+        "parent_dataset_doi": "10.1594/PANGAEA.856763"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.856762",
+      "interfaces": [
+        {
+          "kind": "doi_tabular_download",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.856762?format=textfile",
+          "format": "utf8_tsv_with_pangaea_metadata",
+          "access": "open",
+          "server_filters": [
+            "dataset_doi",
+            "format"
+          ]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/",
+        "notes": "PANGAEA records CC BY 3.0; retain dataset and bundled-publication citations."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "2016-01-11",
+        "release_date": "2016-01-11"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "pangaea_east_china_sea_clay"
+      },
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.856762",
+        "https://doi.org/10.1594/PANGAEA.856762",
+        "https://doi.org/10.1016/j.chemgeo.2015.02.001"
+      ],
+      "limitations": [
+        "Ninety-eight source rows are not continuous East China Sea coverage.",
+        "The publisher method label 'X-ray diffraction (XRD)' is generic and does not specify the concentration instrument or digestion.",
+        "Bulk and leached-residue rows describe the same physical sample and must retain fraction identity.",
+        "Marine shelf, IODP and terrestrial river events are mixed in one table and must keep land/marine semantics separate.",
+        "This publication-linked dataset may overlap later aggregations and must be deduplicated by event, sample and DOI lineage."
+      ]
+    },
+    "pangaea-south-china-sea-sediment": {
+      "title": "(Table 2) Trace elements from different sediment cores in the southern China Sea",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": [
+        "sediment"
+      ],
+      "coverage": {
+        "extent_class": "regional_discrete_samples",
+        "regions": [
+          "southern-china-sea-core-sites"
+        ],
+        "notes": "Forty-four surface-sediment core events between 4.07-20.60 N and 105.28-120.16 E with per-row WGS84 coordinates; discrete marine coverage, not a grid."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.855177",
+        "parent_dataset_doi": "10.1594/PANGAEA.855179"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.855177",
+      "interfaces": [
+        {
+          "kind": "doi_tabular_download",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.855177?format=textfile",
+          "format": "utf8_tsv_with_pangaea_metadata",
+          "access": "open",
+          "server_filters": [
+            "dataset_doi",
+            "format"
+          ]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/",
+        "notes": "PANGAEA records CC BY 3.0; retain dataset and bundled-publication citations."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "2015-11-23",
+        "release_date": "2015-11-23"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "pangaea_south_china_sea_sediment"
+      },
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.855177",
+        "https://doi.org/10.1594/PANGAEA.855177",
+        "https://doi.org/10.1594/PANGAEA.855179"
+      ],
+      "limitations": [
+        "Forty-four source rows are discrete marine cores, not continuous coverage.",
+        "Digestion details are not reported in the publisher table.",
+        "All events are marine; land-country audits must not count these records as terrestrial coverage.",
+        "This publication-linked dataset may overlap later aggregations and must be deduplicated by event and DOI lineage."
+      ]
+    },
+    "pangaea-barents-c-horizon-soil": {
+      "title": "Geochemistry of C-horizon",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": [
+        "soil"
+      ],
+      "coverage": {
+        "extent_class": "regional_discrete_samples",
+        "regions": [
+          "kola-peninsula-russia",
+          "northern-finland",
+          "northern-norway"
+        ],
+        "notes": "606 C-horizon soil sites across the central Barents region (about 66-71 N, 22-34 E) with per-row WGS84 coordinates; the first registered source with Russian terrestrial coverage."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.56227",
+        "parent_dataset_doi": "10.1594/PANGAEA.686641"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.56227",
+      "interfaces": [
+        {
+          "kind": "doi_tabular_download",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.56227?format=textfile",
+          "format": "utf8_tsv_with_pangaea_metadata",
+          "access": "open",
+          "server_filters": [
+            "dataset_doi",
+            "format"
+          ]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-3.0",
+        "url": "https://creativecommons.org/licenses/by/3.0/",
+        "notes": "PANGAEA records CC BY 3.0; retain dataset and atlas-project citations."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "1998-01-01",
+        "release_date": "1998-01-01"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "pangaea_barents_c_horizon_soil"
+      },
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.56227",
+        "https://doi.org/10.1594/PANGAEA.56227",
+        "https://doi.org/10.1594/PANGAEA.686641"
+      ],
+      "limitations": [
+        "Coverage is the central Barents region only; it must not be claimed as all-Russia coverage.",
+        "Duplicate publisher column labels force index-pinned parsing; any column reorder fails closed.",
+        "Ten As values are censored below the 0.1 mg/kg detection limit.",
+        "Aqua-regia extractable concentrations are not total contents and must keep their extraction basis in comparisons."
       ]
     }
   }

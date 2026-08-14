@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06T10:05:00Z",
+  "as_of": "2026-08-13T10:00:00Z",
   "bbox": [
     -139.78,
     -34.415567,
@@ -7,6 +7,7 @@
     81.9356
   ],
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_policy_id": null,
   "coordinate_canonicalization_status": "source_crs_declared_epsg4326",
   "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
   "coordinate_uncertainty_m_observation_counts": {
@@ -16,6 +17,48 @@
   "dataset_version": "v3",
   "distinct_sample_count": 689291,
   "profile_version": "d1-v4-full-population-profile-v1",
+  "region_applicability": {
+    "country_index_status": "complete_for_snapshot",
+    "country_iso_a3_codes": [
+      "ARG",
+      "AUT",
+      "BEL",
+      "BGR",
+      "BIH",
+      "CAN",
+      "CHE",
+      "CYP",
+      "CZE",
+      "DNK",
+      "EST",
+      "FIN",
+      "FRA",
+      "GRC",
+      "HRV",
+      "HUN",
+      "IND",
+      "IRL",
+      "ISL",
+      "ITA",
+      "LTU",
+      "LVA",
+      "MEX",
+      "MKD",
+      "MNE",
+      "NLD",
+      "NOR",
+      "POL",
+      "PRT",
+      "SRB",
+      "SVK",
+      "SVN",
+      "SWE",
+      "URY",
+      "USA"
+    ],
+    "evidence_basis": "The complete v3 seven-element snapshot joins every target observation to station Country Name; the 35 ISO-3 codes correspond one-to-one with spatial_coverage.region_observation_counts.",
+    "spatial_domain": "inland_water"
+  },
   "region_count": 35,
   "region_observation_counts": {
     "Argentina": 173,

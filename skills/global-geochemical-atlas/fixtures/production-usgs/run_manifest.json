@@ -14,19 +14,20 @@
     "bbox": null,
     "filter_execution": "local deterministic filtering after verified source parsing",
     "mode": "cached",
-    "observations": 996
+    "observations": 996,
+    "purpose": "demo"
   },
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 1488089,
+      "bytes": 1565565,
       "path": "demo_input.csv",
-      "sha256": "02122d1a5ae7250a806bea8c0c9807b659ccbe70217b27947716490730a0f00f"
+      "sha256": "2bf560a25a647c644383339f1c2e4d7b3f40f1126af78c67c30722d1a202b918"
     },
     {
       "bytes": 2120533,
       "path": "sources.jsonl",
-      "sha256": "6b159ef34e06a6f1fd02f80e06fad54d1c52cf9203a9a8af0ef85479c20e7e6d"
+      "sha256": "65ac1bb4672afcdf45e346c584f3e10a6331c4bdc6d5d8358ab155bbc400fe85"
     }
   ],
   "record_counts": {
@@ -46,21 +47,21 @@
     {
       "bytes": 1450062,
       "filename": "Appendix_2b_Top5_18Sept2013.txt",
-      "retrieved_at": "2026-08-06T22:17:06Z",
+      "retrieved_at": "2026-08-10T12:04:11Z",
       "sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894",
       "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt"
     },
     {
       "bytes": 1987189,
       "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
-      "retrieved_at": "2026-08-06T22:17:08Z",
+      "retrieved_at": "2026-08-10T12:04:13Z",
       "sha256": "462821c1164b5b4c27905a3ea62a22fa3f6172da09125d8f80ec5b2f6a69a202",
       "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt"
     },
     {
       "bytes": 1996147,
       "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
-      "retrieved_at": "2026-08-06T22:17:10Z",
+      "retrieved_at": "2026-08-10T12:04:15Z",
       "sha256": "4aa8080f81f690587f762300bada16e33e376eea0003243d5333b47c78b4c90c",
       "source_url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
     }

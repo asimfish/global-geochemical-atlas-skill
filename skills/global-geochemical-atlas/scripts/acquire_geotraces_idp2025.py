@@ -20,14 +20,8 @@ from collections.abc import Sequence
 from pathlib import Path, PurePosixPath
 from typing import Any
 
-EXTRACTOR_URL = (
-    "https://geotraces.webodv.awi.de/"
-    "IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
-)
-DOWNLOAD_URL = (
-    "https://geotraces.webodv.awi.de/webodv/data/"
-    "IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/Download"
-)
+EXTRACTOR_URL = "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+DOWNLOAD_URL = "https://geotraces.webodv.awi.de/webodv/data/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/Download"
 DATASET_PATH = "IDP2025>seawater>GEOTRACES_IDP2025_Seawater"
 DATASET_DOI = "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
 MAX_MEMBERS = 500

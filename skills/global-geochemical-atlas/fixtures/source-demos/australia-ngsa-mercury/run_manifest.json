@@ -11,19 +11,20 @@
     "bbox": null,
     "filter_execution": "local deterministic filtering after verified source parsing",
     "mode": "cached",
-    "observations": 48
+    "observations": 48,
+    "purpose": "demo"
   },
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 68053,
+      "bytes": 75455,
       "path": "demo_input.csv",
-      "sha256": "d5191ed1fc917d482b746a7e851b3a676130836f0036b98aa60081a294e95159"
+      "sha256": "e1d275b6c625989d84b558d75c4cc7f1ce078ce4757a1fb457e6feb37865abec"
     },
     {
-      "bytes": 79804,
+      "bytes": 85324,
       "path": "sources.jsonl",
-      "sha256": "2a975227887f48325738ce4d9a32a9ee9847eab8b3fdfd82eb855b733b4fb9b7"
+      "sha256": "1c23e213ab496a19bb3034385b836393871ad2b88da461c99a29604d08e3c6e8"
     }
   ],
   "record_counts": {
@@ -43,7 +44,7 @@
     {
       "bytes": 208089,
       "filename": "150328_00_1.CSV",
-      "retrieved_at": "2026-08-07T15:42:52Z",
+      "retrieved_at": "2026-08-10T20:57:41Z",
       "sha256": "3089b02331e8aff7e78ec8b972fa6ff9acfe85c9b49ae67462605cef3fbb247c",
       "source_url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
     }
@@ -54,6 +55,7 @@
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
     "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
     "NGSA provides total Hg only; it does not supply the other target elements.",
-    "TOS, BOS and QA/QC duplicates remain distinguishable and are not treated as independent sites."
+    "TOS, BOS and QA/QC duplicates remain distinguishable and are not treated as independent sites.",
+    "GDA94 values are canonicalized only through the registered identity-tolerance policy; publisher positional accuracy is not reported."
   ]
 }

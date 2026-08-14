@@ -4,7 +4,7 @@
 
 D3 是 Agent 可重复执行的“可视化生成步骤”，不是一张固定网页。Agent 根据用户问题生成任务配置，
 再用确定性脚本把任意合规 D1/D2 目录渲染为地图。`assets/interactive-atlas-v3.html` 是
-`d3-dual-scope-atlas-v4` 的内部资产；Agent 只填写数据和 profile 参数，不得手工修改 HTML、内嵌 JSON
+`d3-domain-confidence-atlas-v5` 的内部资产；Agent 只填写数据和 profile 参数，不得手工修改 HTML、内嵌 JSON
 或 Canvas 代码，也不得在官方渲染成功时另写替代页面。
 
 D3 只消费 D1/D2 结论：
@@ -25,7 +25,7 @@ D3 只消费 D1/D2 结论：
 按顺序执行，不能跳过配置与验证：
 
 1. 读取用户问题，提取主要元素、区域、介质、地质单元和目标视图。
-2. 检查输入目录是否包含六个必需 D1/D2 文件；缺失时返回 `invalid_input`。
+2. 检查输入目录是否包含七个必需 D1/D2 文件（含 `sources_and_confidence.json`）；缺失时返回 `invalid_input`。
 3. 把问题解析成 story、空间范围、筛选和可选元素组合；运行 `scripts/create_visualization_profile.py` 生成并验证任务配置，不手写完整 JSON。
 4. 运行 `scripts/render_visualization.py`；不要直接编辑 HTML 模板或内嵌数据。
 5. 检查 `visualization_report.json.status`、`template_contract_version`、`template_sha256`、`template_variant`、`profile_warnings`、记录计数、文件大小和 `iteration_backlog.csv`；删失观测必须是科学限制，不得伪装成修复失败。
@@ -51,8 +51,8 @@ anomaly_report.json
 标准值/单位、坐标、QC、置信度、来源 ID 和来源定位。坐标为空、非有限或超出 WGS84 的记录不进入
 地图，但继续保留在数据库和 QC 报告。超过 `--max-points` 时失败关闭，不抽样冒充完整结果。
 
-核心十五产物目录还包含 `batch_acceptance.csv`、`batch_qc_report.json`、`anomaly_regions.geojson`、
-`spatial_anomaly_report.json`。D3 在它们存在时必须原样嵌入/复制并展示；独立兼容模式仍只要求上方六个历史最小输入，缺少统计区域时只能显示记录级候选和显示聚合，不能补造 FDR 结果。
+核心十六产物目录还包含 `sources_and_confidence.json`、`batch_acceptance.csv`、`batch_qc_report.json`、`anomaly_regions.geojson`、
+`spatial_anomaly_report.json`。D3 在它们存在时必须原样嵌入/复制并展示；独立兼容模式要求上方七个最小输入，缺少统计区域时只能显示记录级候选和显示聚合，不能补造 FDR 结果。
 
 ## 4. 任务配置模板
 
@@ -164,7 +164,7 @@ python scripts/create_visualization_profile.py \
 python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 ```
 
-`validate_outputs.py` 验证 `run_workflow.py` 的核心十五文件目录；它要求 `run_summary.json`，不用于
+`validate_outputs.py` 验证 `run_workflow.py` 的核心十六文件目录；它要求 `run_summary.json`，不用于
 独立 D3 目录。D3 验证器改为核对配置、报告、输入与输出哈希、地图计数、离线依赖和科学边界。
 
 ## 6. 输出与验收

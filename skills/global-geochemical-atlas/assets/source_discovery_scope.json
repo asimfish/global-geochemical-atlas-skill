@@ -1,13 +1,66 @@
 {
-  "scope_version": "geochemical-source-discovery-scope-v1",
-  "as_of": "2026-08-06T10:35:00Z",
-  "round": 6,
-  "status": "in_progress",
-  "saturated": false,
-  "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
   "areas": {
+    "africa": {
+      "catalogued_sources": [
+        "afsis-phase-i-wet-chemistry",
+        "pangaea-north-africa-soil",
+        "soils4africa",
+        "south-africa-cgs-geochemistry"
+      ],
+      "remaining_work": [
+        "Search additional national geological surveys and water-quality portals beyond South Africa and the implemented AfSIS soil dataset.",
+        "Resolve more African rock and water sources, and determine whether CGS map-sheet services expose reusable methods and stable numerical releases."
+      ],
+      "status": "in_progress"
+    },
+    "asia": {
+      "catalogued_sources": [
+        "eidc-ningbo-soil",
+        "india-gsi-ngcm",
+        "jamstec-darwin",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
+        "pangaea-arabian-sea-sediment",
+        "pangaea-batagay-soil",
+        "pangaea-east-china-sea-clay",
+        "pangaea-south-china-sea-sediment",
+        "tpdc-china-mountain-soil",
+        "zenodo-yangtze-yellow-river-sediment"
+      ],
+      "remaining_work": [
+        "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals beyond the verified TPDC China mountain-soil dataset. The completed pass has not yet found a broad, reusable, record-coordinate-complete terrestrial Middle East/West Asia multi-element source; retain this as a searched-but-unresolved boundary, not a claim of nonexistence.",
+        "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented river- and marine-sediment products into separately versioned surface-soil products; keep the China As canonical-map gap and its six reviewed candidates linked from references/china-arsenic-coverage-boundary.md.",
+        "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI."
+      ],
+      "status": "in_progress"
+    },
+    "europe": {
+      "catalogued_sources": [
+        "bgs-gbase",
+        "eea-waterbase",
+        "emodnet-chemistry",
+        "finland-gtk-geochemistry",
+        "foregs-europe",
+        "foregs-floodplain-sediment",
+        "foregs-humus",
+        "foregs-stream-sediment",
+        "foregs-stream-water",
+        "foregs-subsoil",
+        "foregs-topsoil",
+        "gemas-europe",
+        "ireland-tellus",
+        "norway-marchem",
+        "norway-ngu-lito",
+        "pangaea-barents-c-horizon-soil",
+        "sweden-sgu-geochemical-atlas"
+      ],
+      "remaining_work": [
+        "Search the remaining national geological surveys and regional marine or freshwater networks.",
+        "Keep the six implemented FOREGS media tied to one parent-project lineage; trace GEMAS, EEA and EMODnet records back to national or project-level upstream releases."
+      ],
+      "status": "in_progress"
+    },
     "global-disciplinary-and-repositories": {
-      "status": "in_progress",
       "catalogued_sources": [
         "earthchem-library",
         "earthchem-portal",
@@ -24,108 +77,10 @@
       "remaining_work": [
         "Continue publication-linked DOI searches by medium and target analyte beyond the first implemented North African soil dataset.",
         "Resolve each aggregator result to its upstream dataset and publication."
-      ]
-    },
-    "africa": {
-      "status": "in_progress",
-      "catalogued_sources": [
-        "afsis-phase-i-wet-chemistry",
-        "pangaea-north-africa-soil",
-        "soils4africa",
-        "south-africa-cgs-geochemistry"
       ],
-      "remaining_work": [
-        "Search additional national geological surveys and water-quality portals beyond South Africa and the implemented AfSIS soil dataset.",
-        "Resolve more African rock and water sources, and determine whether CGS map-sheet services expose reusable methods and stable numerical releases."
-      ]
-    },
-    "asia": {
-      "status": "in_progress",
-      "catalogued_sources": [
-        "india-gsi-ngcm",
-        "jamstec-darwin",
-        "japan-gsj-geochemical-map",
-        "japan-gsj-marine-sediment",
-        "pangaea-arabian-sea-sediment",
-        "tpdc-china-mountain-soil"
-      ],
-      "remaining_work": [
-        "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals beyond the verified TPDC China mountain-soil dataset.",
-        "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented river- and marine-sediment products into separately versioned surface-soil products.",
-        "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI."
-      ]
-    },
-    "europe": {
-      "status": "in_progress",
-      "catalogued_sources": [
-        "bgs-gbase",
-        "eea-waterbase",
-        "emodnet-chemistry",
-        "finland-gtk-geochemistry",
-        "foregs-europe",
-        "foregs-topsoil",
-        "foregs-subsoil",
-        "foregs-humus",
-        "foregs-stream-water",
-        "foregs-stream-sediment",
-        "foregs-floodplain-sediment",
-        "gemas-europe",
-        "ireland-tellus",
-        "norway-marchem",
-        "norway-ngu-lito",
-        "sweden-sgu-geochemical-atlas"
-      ],
-      "remaining_work": [
-        "Search the remaining national geological surveys and regional marine or freshwater networks.",
-        "Keep the six implemented FOREGS media tied to one parent-project lineage; trace GEMAS, EEA and EMODnet records back to national or project-level upstream releases."
-      ]
-    },
-    "north-america": {
-      "status": "in_progress",
-      "catalogued_sources": [
-        "alaska-dggs-webgeochem",
-        "canada-bc-rgs",
-        "canada-cdogs",
-        "mexico-sgm-geochemical-cartography",
-        "us-water-quality-portal",
-        "us-wqp-sacramento-river-arsenic",
-        "usgs-conus-soil",
-        "usgs-ngdb"
-      ],
-      "remaining_work": [
-        "Search additional state, provincial and territorial geological-survey releases beyond Alaska and British Columbia.",
-        "Determine whether Mexico SGM exposes raw sample measurements behind the interpreted national layer and reconcile its two licence notices.",
-        "Expand beyond the implemented single-station USGS/NWIS WQP snapshot while resolving every WQP record to NWIS, WQX and the original monitoring organization."
-      ]
-    },
-    "south-america": {
-      "status": "in_progress",
-      "catalogued_sources": [
-        "argentina-segemar-geochemistry",
-        "brazil-sgb-geochemistry",
-        "chile-sernageomin-geochemistry"
-      ],
-      "remaining_work": [
-        "Search the remaining Andean and northern South American national geological surveys.",
-        "Pin numerical files, licences and methods for the Chile and Argentina discoveries.",
-        "Add water-quality and publication-linked sources outside Brazil, Chile and Argentina."
-      ]
-    },
-    "oceania": {
-      "status": "in_progress",
-      "catalogued_sources": [
-        "australia-ngsa",
-        "australia-ngsa-mercury",
-        "australia-ozchem",
-        "nz-petlab"
-      ],
-      "remaining_work": [
-        "Search Australian state surveys and Pacific-island national or regional repositories.",
-        "Resolve OZCHEM's current official numerical endpoint."
-      ]
+      "status": "in_progress"
     },
     "marine-lacustrine-and-polar": {
-      "status": "in_progress",
       "catalogued_sources": [
         "emodnet-chemistry",
         "georoc-antarctica-intraplate",
@@ -143,8 +98,60 @@
         "Search additional oceanographic data centres, lake-sediment archives and polar repositories.",
         "Keep GSJ river and marine survey generations as separate source identities and continue resolving their analytical-method metadata.",
         "Separate sample inventories from downloadable numerical measurements and resolve all contributing programs."
-      ]
+      ],
+      "status": "in_progress"
+    },
+    "north-america": {
+      "catalogued_sources": [
+        "alaska-dggs-webgeochem",
+        "canada-bc-rgs",
+        "canada-cdogs",
+        "mexico-sgm-geochemical-cartography",
+        "us-water-quality-portal",
+        "us-wqp-sacramento-river-arsenic",
+        "usgs-conus-soil",
+        "usgs-ngdb"
+      ],
+      "remaining_work": [
+        "Search additional state, provincial and territorial geological-survey releases beyond Alaska and British Columbia.",
+        "Determine whether Mexico SGM exposes raw sample measurements behind the interpreted national layer and reconcile its two licence notices.",
+        "Expand beyond the implemented single-station USGS/NWIS WQP snapshot while resolving every WQP record to NWIS, WQX and the original monitoring organization."
+      ],
+      "status": "in_progress"
+    },
+    "oceania": {
+      "catalogued_sources": [
+        "australia-ngsa",
+        "australia-ngsa-mercury",
+        "australia-ozchem",
+        "nz-petlab"
+      ],
+      "remaining_work": [
+        "Search Australian state surveys and Pacific-island national or regional repositories.",
+        "Resolve OZCHEM's current official numerical endpoint."
+      ],
+      "status": "in_progress"
+    },
+    "south-america": {
+      "catalogued_sources": [
+        "argentina-segemar-geochemistry",
+        "brazil-sgb-geochemistry",
+        "pangaea-amazonas-soil",
+        "chile-sernageomin-geochemistry"
+      ],
+      "remaining_work": [
+        "Search the remaining Andean and northern South American national geological surveys.",
+        "Pin numerical files, licences and methods for the Chile and Argentina discoveries.",
+        "Add water-quality and publication-linked sources outside Brazil, Chile and Argentina; the implemented Amazonas DOI has only 13 locations and does not close continental coverage."
+      ],
+      "status": "in_progress"
     }
   },
-  "completion_rule": "Discovery can only become saturated after every area has documented searches across official agency, disciplinary repository, program archive and publication-linked channels, followed by two consecutive rounds with no new high-relevance source."
+  "as_of": "2026-08-13T10:00:00Z",
+  "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
+  "completion_rule": "Discovery can only become saturated after every area has documented searches across official agency, disciplinary repository, program archive and publication-linked channels, followed by two consecutive rounds with no new high-relevance source.",
+  "round": 10,
+  "saturated": false,
+  "scope_version": "geochemical-source-discovery-scope-v1",
+  "status": "in_progress"
 }

@@ -1,0 +1,15 @@
+{
+  "analytical_method_counts": {
+    "ICP-MS": 400,
+    "XRF": 80
+  },
+  "as_of": "2026-08-13T10:00:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2019-09-02",
+  "method_scope_counts": {
+    "dataset_analyte": 480
+  },
+  "observation_count": 480,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "eidc-ningbo-soil"
+}

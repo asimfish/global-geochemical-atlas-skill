@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:ai4s:geochemical-source-route-result:v3",
+  "$id": "urn:ai4s:geochemical-source-route-result:v5",
   "title": "D1 evidence-aware source routing result",
   "type": "object",
   "additionalProperties": false,
@@ -11,11 +11,12 @@
     "selected_sources",
     "review_sources",
     "coverage",
+    "breadth_audit",
     "limitations",
     "claim_boundary"
   ],
   "properties": {
-    "route_version": {"const": "geochemical-source-route-v4"},
+    "route_version": {"const": "geochemical-source-route-v5"},
     "status": {"type": "string", "enum": ["ready", "partial", "needs_human_review", "unsupported_scope"]},
     "request": {"type": "object"},
     "selected_sources": {"type": "array", "items": {"$ref": "#/$defs/routeSource"}},
@@ -34,6 +35,17 @@
         }
       }
     },
+    "breadth_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coverage_mode", "elements", "media", "claim_boundary"],
+      "properties": {
+        "coverage_mode": {"type": "string", "enum": ["fixed", "maximize_evidence_breadth"]},
+        "elements": {"$ref": "#/$defs/breadthDimension"},
+        "media": {"$ref": "#/$defs/breadthDimension"},
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    },
     "limitations": {"$ref": "#/$defs/uniqueStrings"},
     "claim_boundary": {"type": "string", "minLength": 1}
   },
@@ -42,6 +54,28 @@
       "type": "array",
       "uniqueItems": true,
       "items": {"type": "string", "minLength": 1}
+    },
+    "breadthDimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_required", "audited_candidates", "items"],
+      "properties": {
+        "minimum_required": {"type": ["integer", "null"], "minimum": 1},
+        "audited_candidates": {"$ref": "#/$defs/uniqueStrings"},
+        "items": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "selected_sources", "candidate_sources"],
+            "properties": {
+              "status": {"type": "string", "enum": ["selected", "review_only", "uncovered"]},
+              "selected_sources": {"$ref": "#/$defs/uniqueStrings"},
+              "candidate_sources": {"$ref": "#/$defs/uniqueStrings"}
+            }
+          }
+        }
+      }
     },
     "routeSource": {
       "type": "object",
@@ -76,8 +110,9 @@
         "request_compatibility": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["analytes", "region", "geology", "measurement_basis", "time_range", "max_records"],
+          "required": ["media", "analytes", "region", "geology", "measurement_basis", "time_range", "max_records"],
           "properties": {
+            "media": {"$ref": "#/$defs/compatibilityDimension"},
             "analytes": {"$ref": "#/$defs/compatibilityDimension"},
             "region": {"$ref": "#/$defs/compatibilityDimension"},
             "geology": {"$ref": "#/$defs/compatibilityDimension"},
@@ -95,7 +130,7 @@
       "properties": {
         "status": {
           "type": "string",
-          "enum": ["compatible", "incompatible", "unverified", "not_applicable", "enforced_downstream"]
+          "enum": ["compatible", "compatible_reported_only", "incompatible", "unverified", "not_applicable", "enforced_downstream"]
         }
       },
       "additionalProperties": true

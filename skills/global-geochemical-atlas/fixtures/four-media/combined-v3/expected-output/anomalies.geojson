@@ -464,7 +464,13 @@
       "type": "Feature"
     },
     {
-      "geometry": null,
+      "geometry": {
+        "coordinates": [
+          144.2791,
+          -38.0882
+        ],
+        "type": "Point"
+      },
       "properties": {
         "direction": "high",
         "element_or_analyte": "Hg",
@@ -480,7 +486,7 @@
         "method_version": "d2-robust-mad-v2",
         "normalized_unit": "mg/kg",
         "normalized_value": 0.18308,
-        "operational_confidence_band": "low",
+        "operational_confidence_band": "medium",
         "record_id": "rec-8a8818da62e396cb7294f1d75432fb426ab5121c5094460b19d8e31339bd6202",
         "robust_z": 4.088116,
         "sample_id": "2007190032001 Fine",

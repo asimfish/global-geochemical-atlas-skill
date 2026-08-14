@@ -1,6 +1,6 @@
 {
   "registry_version": "geochemical-source-registry-v1",
-  "verified_at": "2026-08-06T10:05:00Z",
+  "verified_at": "2026-08-13T10:00:00Z",
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -376,10 +376,26 @@
         "Longitude"
       ],
       "target_analytes": {
-        "As": ["Top5_As", "A_As", "C_As"],
-        "Cu": ["Top5_Cu", "A_Cu", "C_Cu"],
-        "Ni": ["Top5_Ni", "A_Ni", "C_Ni"],
-        "Zn": ["Top5_Zn", "A_Zn", "C_Zn"]
+        "As": [
+          "Top5_As",
+          "A_As",
+          "C_As"
+        ],
+        "Cu": [
+          "Top5_Cu",
+          "A_Cu",
+          "C_Cu"
+        ],
+        "Ni": [
+          "Top5_Ni",
+          "A_Ni",
+          "C_Ni"
+        ],
+        "Zn": [
+          "Top5_Zn",
+          "A_Zn",
+          "C_Zn"
+        ]
       },
       "license": {
         "spdx": "LicenseRef-USGS-Public-Domain",
@@ -518,6 +534,48 @@
         "water"
       ],
       "geographic_scope": "global-freshwater-partial",
+      "region_applicability": {
+        "spatial_domain": "inland_water",
+        "country_index_status": "complete_for_snapshot",
+        "country_iso_a3_codes": [
+          "ARG",
+          "AUT",
+          "BEL",
+          "BGR",
+          "BIH",
+          "CAN",
+          "CHE",
+          "CYP",
+          "CZE",
+          "DNK",
+          "EST",
+          "FIN",
+          "FRA",
+          "GRC",
+          "HRV",
+          "HUN",
+          "IND",
+          "IRL",
+          "ISL",
+          "ITA",
+          "LTU",
+          "LVA",
+          "MEX",
+          "MKD",
+          "MNE",
+          "NLD",
+          "NOR",
+          "POL",
+          "PRT",
+          "SRB",
+          "SVK",
+          "SVN",
+          "SWE",
+          "URY",
+          "USA"
+        ],
+        "evidence_basis": "The complete v3 seven-element snapshot joins every target observation to station Country Name; the 35 ISO-3 codes correspond one-to-one with spatial_coverage.region_observation_counts."
+      },
       "download": {
         "mode": "pinned-zip-member-byte-ranges",
         "archive_url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1",
@@ -805,6 +863,12 @@
         "water"
       ],
       "geographic_scope": "global-ocean-cruise-tracks",
+      "region_applicability": {
+        "spatial_domain": "marine",
+        "country_index_status": "not_applicable",
+        "country_iso_a3_codes": [],
+        "evidence_basis": "IDP2025 discrete seawater observations follow ocean cruise tracks; Natural Earth Admin-0 land polygons are not a country-water coverage index."
+      },
       "download": {
         "mode": "content-addressed-webodv-export",
         "exporter_landing_page": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV",
@@ -816,6 +880,8 @@
           "application/octet-stream"
         ],
         "max_bytes": 5000000,
+        "canonical_payload_sha256": "3d0ed1dc4bd7b126c1482ee96257d0bf87e45f9af91b0fed7f41d723bb06c598",
+        "canonicalization": "member paths normalize the eight-character webODV session stem; ODV CreateTime and View header values normalize to declared placeholders; all 242 normalized member hashes are bound in sorted-key JSON",
         "files": [
           {
             "file_id": "webodv-export-archive",
@@ -1156,7 +1222,7 @@
         "Publisher location strings are retained; border samples are not assigned to a country solely from coordinates."
       ]
     },
-  "foregs-topsoil": {
+    "foregs-topsoil": {
       "adapter": "foregs_static_zip",
       "title": "FOREGS Geochemical Atlas of Europe: topsoil",
       "publisher": "EuroGeoSurveys and Geological Survey of Finland",
@@ -1680,8 +1746,8 @@
         "files": [
           {
             "file_id": "archive",
-            "filename": "Stream-Water.zip",
-            "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip",
+            "filename": "Stream Water.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream%20Water.zip",
             "bytes": 404125,
             "expected_sha256": "2c081224ea3f3646d805f7bbe9fd7737ecfdf0938c2abff444ff28b540116fc3"
           }
@@ -1784,8 +1850,8 @@
         "files": [
           {
             "file_id": "archive",
-            "filename": "Stream-Sediment.zip",
-            "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip",
+            "filename": "Stream Sediment.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream%20Sediment.zip",
             "bytes": 641447,
             "expected_sha256": "639f9333d58a786609d86cfb52eeb48fb50e0841a2aeaaf3b7a01dbf48dab5c1"
           }
@@ -1945,8 +2011,8 @@
         "files": [
           {
             "file_id": "archive",
-            "filename": "Floodplain-Sediment.zip",
-            "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip",
+            "filename": "Floodplain Sediment.zip",
+            "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain%20Sediment.zip",
             "bytes": 560005,
             "expected_sha256": "6e3481e97beb3f831aaefd75032872c3bd15e4dd7f296bee3ba9262f172b6739"
           }
@@ -2320,6 +2386,141 @@
         "Ten field-replicate quality-control samples remain distinguishable from 179 routine samples and are not counted as independent routine evidence."
       ]
     },
+    "australia-ngsa": {
+      "adapter": "australia_ngsa_atlas",
+      "title": "National Geochemical Survey of Australia: Geochemical Atlas dataset",
+      "publisher": "Geoscience Australia",
+      "dataset_doi": "10.11636/Record.2011.020",
+      "dataset_version": "2011-07-06",
+      "release_date": "2011-01-01",
+      "landing_page": "https://pid.geoscience.gov.au/dataset/ga/82869",
+      "metadata_url": "https://ecat.ga.gov.au/geonetwork/srv/api/records/0dc4a02b-21e9-9b28-e053-12a3070af396",
+      "coordinate_evidence": {
+        "field_manual_url": "https://www.ga.gov.au/bigobj/GA10307.pdf",
+        "field_manual_bytes": 3443975,
+        "field_manual_sha256": "9f81cf509753ac5abced666e69fa1c166ef35ad1e300c0f52875698f930a60c2",
+        "field_manual_locator": "pp. 24-25, Latitude_GDA94 and Longitude_GDA94 field definitions",
+        "field_csv_linkage": "The atlas CSV metadata row 7 links the matching field-site-information product eCat 70478; the exported LATITUDE/LONGITUDE fields are governed by that NGSA field protocol.",
+        "declared_source_crs": "EPSG:4283",
+        "canonicalization_policy_id": "gda94-geographic-wgs84-identity-v1",
+        "positional_accuracy_status": "not_reported_by_publisher"
+      },
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "australia-national-outlet-sediment-survey-partial",
+      "region_applicability": {
+        "spatial_domain": "land_catchment_outlet_sediment",
+        "country_index_status": "complete_for_snapshot",
+        "country_iso_a3_codes": [
+          "AUS"
+        ],
+        "evidence_basis": "All 7,890 nonblank rows belong to the National Geochemical Survey of Australia and fall inside the published Australia extent."
+      },
+      "download": {
+        "mode": "pinned-official-csv",
+        "max_bytes": 10000000,
+        "accepted_content_types": [
+          "text/csv",
+          "text/plain",
+          "application/octet-stream"
+        ],
+        "observed_at": "2026-08-12T21:32:57Z",
+        "encoding": "Windows-1252",
+        "files": [
+          {
+            "file_id": "atlas-csv",
+            "filename": "Rec2011_020_110706.csv",
+            "url": "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv",
+            "bytes": 4843809,
+            "expected_sha256": "d9fa6d5b92642c56cc0b1ea7cc1ca22b763cde283cb71dc7194004a005f87812",
+            "sha256_basis": "independent_live_reverification_from_official_url_2026-08-12"
+          }
+        ]
+      },
+      "required_fields": [
+        "SITEID",
+        "DATE SAMPLED",
+        "LATITUDE",
+        "LONGITUDE",
+        "STATE",
+        "DUPLICATE CODE",
+        "DUPLICATE SITEID",
+        "SAMPLEID",
+        "GRAIN SIZE",
+        "DEPTH",
+        "As ICP-MS mg/kg 0.4",
+        "Cu ICP-MS mg/kg 0.2",
+        "Pb ICP-MS mg/kg 0.1",
+        "Zn ICP-MS mg/kg 0.9"
+      ],
+      "target_analytes": {
+        "As": "As ICP-MS mg/kg 0.4",
+        "Cu": "Cu ICP-MS mg/kg 0.2",
+        "Pb": "Pb ICP-MS mg/kg 0.1",
+        "Zn": "Zn ICP-MS mg/kg 0.9"
+      },
+      "expected_counts": {
+        "physical_rows": 7890,
+        "distinct_samples": 7890,
+        "distinct_sites": 1315,
+        "target_observations": 10492,
+        "selected_grain_rows": 2630,
+        "target_value_counts": {
+          "As": 2623,
+          "Cu": 2623,
+          "Pb": 2623,
+          "Zn": 2623
+        },
+        "depth_counts": {
+          "BOS": 3945,
+          "TOS": 3945
+        },
+        "grain_counts": {
+          "<2 mm": 2630,
+          "<75 µm": 2630,
+          "Bulk": 2630
+        },
+        "duplicate_code_counts": {
+          "": 6414,
+          "Duplicate 1": 738,
+          "Duplicate 2": 738
+        },
+        "valid_coordinate_rows": 7890
+      },
+      "research_slice_capacity": {
+        "selection_rule": "less-than-75-micrometre rows; DUPLICATE CODE blank; every requested analyte nonblank",
+        "independent_complete_sample_rows": 2131,
+        "per_analyte_observation_count": {
+          "As": 2131,
+          "Cu": 2131,
+          "Pb": 2131,
+          "Zn": 2131
+        },
+        "four_analyte_observation_count": 8524,
+        "claim_boundary": "This is the maximum independent research slice emitted by the generator, not the full-source audit denominator. QA/QC duplicate rows remain in expected_counts and full profiles."
+      },
+      "license": {
+        "spdx": "CC-BY-3.0-AU",
+        "name": "Creative Commons Attribution 3.0 Australia",
+        "url": "https://creativecommons.org/licenses/by/3.0/au/"
+      },
+      "license_evidence": {
+        "file_level_statement": "CSV metadata row 8 states Creative Commons Attribution 3.0 Australia and row 9 supplies its URL.",
+        "current_portal_statement": "Current Geoscience Australia metadata displays Creative Commons Attribution 4.0 International.",
+        "resolution": "Use the contemporaneous file-level CC BY 3.0 Australia declaration for redistributed derived records; retain the current portal statement as a version difference rather than silently replacing it."
+      },
+      "citation": "de Caritat, P.; Cooper, M. (2011). National Geochemical Survey of Australia: The Geochemical Atlas of Australia: Dataset. Geoscience Australia. https://doi.org/10.11636/Record.2011.020",
+      "redistribution": "Research analysis is permitted with attribution. The publisher CSV remains outside Git; derived records retain DOI, hash, row locator and the file-level licence.",
+      "scientific_notes": [
+        "Catchment-outlet transported regolith is treated as sediment and is not interchangeable with in-situ soil or stream sediment.",
+        "The production extraction uses only the less-than-75-micrometre ICP-MS values; TOS and BOS remain separate through sample type and measurement basis.",
+        "Aqua-regia and MMI values remain in the source file and are not pooled with the ICP-MS layer.",
+        "Field duplicates remain identifiable and are excluded from independent-sample selection.",
+        "The registered sampling-protocol review declares GDA94 geographic coordinates (EPSG:4283); exact LATITUDE/LONGITUDE fields are canonicalized only through gda94-geographic-wgs84-identity-v1 and raw values remain preserved.",
+        "The publisher does not state positional accuracy for these rows; numeric representation resolution is derived separately and is never presented as coordinate uncertainty."
+      ]
+    },
     "australia-ngsa-mercury": {
       "adapter": "australia_ngsa_mercury",
       "title": "National Geochemical Survey of Australia: Mercury Concentrations Dataset",
@@ -2330,6 +2531,13 @@
       "release_date": "2025-03-31",
       "landing_page": "https://pid.geoscience.gov.au/dataset/ga/150328",
       "metadata_url": "https://ecat.ga.gov.au/geonetwork/srv/api/records/150328",
+      "coordinate_evidence": {
+        "declared_source_crs": "EPSG:4283",
+        "latitude_field": "LATITUDE_GDA94",
+        "longitude_field": "LONGITUDE_GDA94",
+        "canonicalization_policy_id": "gda94-geographic-wgs84-identity-v1",
+        "positional_accuracy_status": "not_reported_by_publisher"
+      },
       "media": [
         "sediment"
       ],
@@ -2407,7 +2615,8 @@
         "Total mercury was measured directly on about 100 mg by Milestone tri-cell DMA-80 without acid digestion, following USEPA Method 7473.",
         "The header reports a 0.01 ng Hg mass detection limit, not a concentration detection limit; the adapter does not incorrectly store 0.01 ng/g as a row threshold.",
         "TOS and BOS horizons and all duplicate codes remain explicit. QA/QC duplicates are not counted as independent sites.",
-        "Coordinates use GDA94 geographic coordinates (EPSG:4283); the values are retained without an unrecorded transformation."
+        "Coordinates are declared GDA94 geographic (EPSG:4283) and are canonicalized to EPSG:4326 numerically unchanged under the registered identity-tolerance policy gda94-geographic-wgs84-identity-v1; the raw GDA94 columns remain in every record.",
+        "The publisher does not report positional accuracy; numeric representation resolution is kept separate and is never promoted to coordinate uncertainty."
       ]
     },
     "japan-gsj-marine-sediment": {
@@ -2597,6 +2806,192 @@
         "Core type, water depth and sediment depth are retained independently from elemental values."
       ]
     },
+    "pangaea-amazonas-soil": {
+      "adapter": "pangaea_amazonas_soil",
+      "title": "Amazonas soil chemistry - 64 elements",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.968463",
+      "publication_doi": "10.1016/j.gexplo.2019.106433",
+      "dataset_version": "2024-04-10",
+      "release_date": "2024-04-10",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.968463",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.968463",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "brazil-amazonas-discrete-soil-sites",
+      "region_applicability": {
+        "spatial_domain": "land",
+        "country_index_status": "complete_for_snapshot",
+        "country_iso_a3_codes": [
+          "BRA"
+        ],
+        "evidence_basis": "publisher event metadata identifies every site as Amazonas, Brazil, South America"
+      },
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 200000,
+        "accepted_content_types": [
+          "text/tab-separated-values",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-13T10:00:00Z",
+        "files": [
+          {
+            "file_id": "dataset-table",
+            "filename": "PANGAEA.968463.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.968463?format=textfile",
+            "bytes": 95653,
+            "expected_sha256": "a9de6cde912fa75851bbf90a6e8cd296ecf1dd4c79af8e33ffa1d5e19dcc3ca7",
+            "sha256_basis": "independent_live_reverification_from_official_url_2026-08-13"
+          }
+        ]
+      },
+      "required_fields": [
+        "Event",
+        "ID (Location)",
+        "Land use",
+        "LC type",
+        "Region",
+        "No (Number of Campaign)",
+        "Date/Time",
+        "Depth desc",
+        "As [mg/kg] (Inductively coupled plasma - ...)",
+        "Cr [mg/kg] (Inductively coupled plasma - ...)",
+        "Cu [mg/kg] (Inductively coupled plasma - ...)",
+        "Hg [mg/kg] (Cold Vapour Atomic Absorption...)",
+        "Ni [mg/kg] (Inductively coupled plasma - ...)",
+        "Pb [mg/kg] (Inductively coupled plasma - ...)",
+        "Zn [mg/kg] (Inductively coupled plasma - ...)"
+      ],
+      "target_analytes": {
+        "As": "As [mg/kg] (Inductively coupled plasma - ...)",
+        "Cr": "Cr [mg/kg] (Inductively coupled plasma - ...)",
+        "Cu": "Cu [mg/kg] (Inductively coupled plasma - ...)",
+        "Hg": "Hg [mg/kg] (Cold Vapour Atomic Absorption...)",
+        "Ni": "Ni [mg/kg] (Inductively coupled plasma - ...)",
+        "Pb": "Pb [mg/kg] (Inductively coupled plasma - ...)",
+        "Zn": "Zn [mg/kg] (Inductively coupled plasma - ...)"
+      },
+      "expected_counts": {
+        "physical_rows": 174,
+        "distinct_sample_keys": 174,
+        "distinct_events": 29,
+        "table_columns": 74,
+        "target_observations": 1181,
+        "target_value_counts": {
+          "As": 167,
+          "Cr": 168,
+          "Cu": 168,
+          "Hg": 174,
+          "Ni": 168,
+          "Pb": 168,
+          "Zn": 168
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Matschullat, Jörg (2024): Amazonas soil chemistry - 64 elements. PANGAEA. https://doi.org/10.1594/PANGAEA.968463",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic rows retain DOI, hash and source locators.",
+      "scientific_notes": [
+        "The source contains 174 repeated campaign-by-depth records from 29 named events at 13 locations in Amazonas state; it is not representative of Brazil or South America as a whole.",
+        "TOP (0-20 cm) and BOT (30-50 cm), dry/rainy seasons and land-use classes remain separate; repeated visits are not treated as independent sites.",
+        "The publisher reports 64 elements and GEMAS-protocol quality control. The registry exposes the atlas-wide As/Cr/Cu/Hg/Ni/Pb/Zn vocabulary; each request still freezes its own element set and never silently adds measurements.",
+        "Event coordinates and parameter-level ICP-MS or CV-AAS methods are parsed from the official PANGAEA metadata preamble; no coordinate or method values are inferred."
+      ]
+    },
+    "pangaea-batagay-soil": {
+      "adapter": "pangaea_batagay_soil",
+      "title": "Trace elements content in soils and soil inclusions in Batagay ice wedges, North Yakutia, Russia",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.927867",
+      "parent_dataset_doi": "10.1594/PANGAEA.927874",
+      "publication_doi": "10.1016/j.apgeochem.2020.104669",
+      "dataset_version": "2021-03-10",
+      "release_date": "2021-03-10",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.927867",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.927867",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "russia-north-yakutia-batagay-single-site",
+      "region_applicability": {
+        "spatial_domain": "land",
+        "country_index_status": "complete_for_snapshot",
+        "country_iso_a3_codes": [
+          "RUS"
+        ],
+        "evidence_basis": "publisher event metadata identifies the Batagay megaslump in North Yakutia, Russia"
+      },
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 50000,
+        "accepted_content_types": [
+          "text/tab-separated-values",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-13T10:00:00Z",
+        "files": [
+          {
+            "file_id": "dataset-table",
+            "filename": "PANGAEA.927867.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.927867?format=textfile",
+            "bytes": 13089,
+            "expected_sha256": "a5cb0f69973c7fb5e4fac29a7548fb7cbf10de1f291fe0070f4c9b8533f22d59",
+            "sha256_basis": "independent_live_reverification_from_official_url_2026-08-13"
+          }
+        ]
+      },
+      "required_fields": [
+        "Sample ID",
+        "Sample comment (Sampling site)",
+        "Samp type",
+        "Sample comment (soil horizon)",
+        "Lab label",
+        "Depth sed [m] (mean)",
+        "Cu [mg/kg]",
+        "Pb [mg/kg]",
+        "Zn [mg/kg]"
+      ],
+      "target_analytes": {
+        "Cu": "Cu [mg/kg]",
+        "Pb": "Pb [mg/kg]",
+        "Zn": "Zn [mg/kg]"
+      },
+      "expected_counts": {
+        "physical_rows": 31,
+        "distinct_sample_keys": 31,
+        "distinct_sample_ids": 10,
+        "table_columns": 30,
+        "target_observations": 93,
+        "target_value_counts": {
+          "Cu": 31,
+          "Pb": 31,
+          "Zn": 31
+        },
+        "sample_type_counts": {
+          "Ground particles included in ice, left after thawed ice water remove": 1,
+          "Inclusions in Ice Wedge": 11,
+          "Soil": 19
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Vasil'chuk, Yurij K et al. (2021): Trace elements content in soils and soil inclusions in Batagay ice wedges, North Yakutia, Russia. PANGAEA. https://doi.org/10.1594/PANGAEA.927867",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic rows retain DOI, hash and source locators.",
+      "scientific_notes": [
+        "This is a single Batagay megaslump site in North Yakutia and is not all-Russia coverage; it complements rather than replaces the 606-site central Barents source.",
+        "Soil, ice-wedge inclusions and thawed ground particles remain distinct sample types and must not be pooled into one background group.",
+        "The publisher documents certified NSAM 499-AES/MS methods and ICP-MS/ICP-AES instruments. Cu, Pb and Zn are registered from the ICP-MS parameter columns; no As field exists.",
+        "One publisher event coordinate is applied at dataset scope to all 31 sampled rows and retains that scope in evidence; the trailing upper-crust literature reference row is excluded as a non-sample comparator."
+      ]
+    },
     "georoc-antarctica-intraplate": {
       "adapter": "georoc_dataverse_member",
       "title": "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member",
@@ -2607,26 +3002,62 @@
       "data_generated_at": "2026-06-01",
       "landing_page": "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FRZZ9VM",
       "metadata_url": "https://data.goettingen-research-online.de/api/datasets/:persistentId/?persistentId=doi:10.25625/RZZ9VM&version=12.0",
-      "media": ["rock"],
+      "media": [
+        "rock"
+      ],
       "geographic_scope": "antarctica-intraplate-volcanics-partial",
       "download": {
         "mode": "versioned-dataverse-member",
         "max_bytes": 1000000,
-        "accepted_content_types": ["text/csv", "application/octet-stream"],
+        "accepted_content_types": [
+          "text/csv",
+          "application/octet-stream"
+        ],
         "encoding": "Windows-1252",
-        "files": [{
-          "file_id": "UYO5XO",
-          "dataverse_file_id": 173608,
-          "file_doi": "10.25625/RZZ9VM/UYO5XO",
-          "filename": "2026-06-RZZ9VM_ANTARCTICA.csv",
-          "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original",
-          "bytes": 367799,
-          "expected_sha256": "cdcc0d010f65d1a5d6ba357411a4d6a98d2f9ea3911de22a70bb26cc602b0492",
-          "sha256_basis": "observed_from_official_url_2026-08-07"
-        }]
+        "files": [
+          {
+            "file_id": "UYO5XO",
+            "dataverse_file_id": 173608,
+            "file_doi": "10.25625/RZZ9VM/UYO5XO",
+            "filename": "2026-06-RZZ9VM_ANTARCTICA.csv",
+            "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original",
+            "bytes": 367799,
+            "expected_sha256": "cdcc0d010f65d1a5d6ba357411a4d6a98d2f9ea3911de22a70bb26cc602b0492",
+            "sha256_basis": "observed_from_official_url_2026-08-07"
+          }
+        ]
       },
-      "required_fields": ["CITATIONS", "TECTONIC SETTING", "LOCATION", "LATITUDE MIN", "LATITUDE MAX", "LONGITUDE MIN", "LONGITUDE MAX", "SAMPLE NAME", "ROCK NAME", "AGE", "ROCK TYPE", "MATERIAL", "AS(PPM)", "CR(PPM)", "CU(PPM)", "HG(PPM)", "NI(PPM)", "PB(PPM)", "ZN(PPM)", "UNIQUE_ID"],
-      "target_analytes": {"As": "AS(PPM)", "Cr": "CR(PPM)", "Cu": "CU(PPM)", "Hg": "HG(PPM)", "Ni": "NI(PPM)", "Pb": "PB(PPM)", "Zn": "ZN(PPM)"},
+      "required_fields": [
+        "CITATIONS",
+        "TECTONIC SETTING",
+        "LOCATION",
+        "LATITUDE MIN",
+        "LATITUDE MAX",
+        "LONGITUDE MIN",
+        "LONGITUDE MAX",
+        "SAMPLE NAME",
+        "ROCK NAME",
+        "AGE",
+        "ROCK TYPE",
+        "MATERIAL",
+        "AS(PPM)",
+        "CR(PPM)",
+        "CU(PPM)",
+        "HG(PPM)",
+        "NI(PPM)",
+        "PB(PPM)",
+        "ZN(PPM)",
+        "UNIQUE_ID"
+      ],
+      "target_analytes": {
+        "As": "AS(PPM)",
+        "Cr": "CR(PPM)",
+        "Cu": "CU(PPM)",
+        "Hg": "HG(PPM)",
+        "Ni": "NI(PPM)",
+        "Pb": "PB(PPM)",
+        "Zn": "ZN(PPM)"
+      },
       "expected_counts": {
         "source_rows": 424,
         "unique_ids": 424,
@@ -2640,10 +3071,27 @@
         "citation_ids": 18,
         "references_with_doi": 15,
         "age_rows": 396,
-        "rock_types": {"MET": 175, "PER": 9, "PLU": 161, "VOL": 79},
-        "target_observations_by_analyte": {"As": 15, "Cr": 241, "Cu": 187, "Hg": 0, "Ni": 267, "Pb": 276, "Zn": 197}
+        "rock_types": {
+          "MET": 175,
+          "PER": 9,
+          "PLU": 161,
+          "VOL": 79
+        },
+        "target_observations_by_analyte": {
+          "As": 15,
+          "Cr": 241,
+          "Cu": 187,
+          "Hg": 0,
+          "Ni": 267,
+          "Pb": 276,
+          "Zn": 197
+        }
       },
-      "license": {"spdx": "CC-BY-SA-4.0", "name": "Creative Commons Attribution-ShareAlike 4.0 International", "url": "https://creativecommons.org/licenses/by-sa/4.0/"},
+      "license": {
+        "spdx": "CC-BY-SA-4.0",
+        "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
       "citation": "DIGIS Team (2026). GEOROC Compilation: Intraplate Volcanic Rocks, Version 12.0. GRO.data. https://doi.org/10.25625/RZZ9VM",
       "redistribution": "Research analysis with attribution under CC BY-SA 4.0; the full publisher member remains outside Git.",
       "scientific_notes": [
@@ -2651,6 +3099,95 @@
         "Only 423 rows are exact points; the remaining coordinate range is retained as an area and is not converted to an invented midpoint.",
         "The precompiled member does not encode the winning row-level analytical method, so method_missing_reason remains explicit.",
         "Numeric zero is retained as reported because the member has no qualifier or detection-limit fields."
+      ]
+    },
+    "eidc-ningbo-soil": {
+      "adapter": "eidc_ningbo_soil",
+      "title": "Elemental analysis of soil in the Ningbo watershed, China",
+      "publisher": "NERC Environmental Information Data Centre",
+      "dataset_doi": "10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+      "publication_doi": "10.1007/s12403-018-0290-1",
+      "dataset_version": "2019-09-02",
+      "release_date": "2019-09-02",
+      "landing_page": "https://catalogue.ceh.ac.uk/id/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+      "metadata_url": "https://catalogue.ceh.ac.uk/id/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "china-ningbo-zhangxi-catchment-topsoil",
+      "region_applicability": {
+        "spatial_domain": "land",
+        "country_index_status": "complete_for_snapshot",
+        "country_iso_a3_codes": [
+          "CHN"
+        ],
+        "evidence_basis": "publisher dataset title, catchment description and all reported points are within Ningbo, China; coordinates remain reported-only because datum is absent"
+      },
+      "download": {
+        "mode": "dynamic-official-zip-with-content-addressed-csv-member",
+        "url": "https://data-package.ceh.ac.uk/data/9c2e8b85-48ab-48c9-b69d-dd676a5d086f.zip",
+        "archive_filename": "9c2e8b85-48ab-48c9-b69d-dd676a5d086f.zip",
+        "max_bytes": 1000000,
+        "csv_member": "data/ElementalanalysisofsoilinNingboWatershed.csv",
+        "csv_bytes": 20451,
+        "csv_sha256": "4143a29a74e590db081b8d832ff4e7861188e9fcd1675a52425643b5d113993a",
+        "support_member": "supporting-documents/ElementalanalysisofsoilinNingboWatershed.rtf",
+        "support_bytes": 115355,
+        "support_sha256": "909cbc7bb0dce35573b8fb7abd443fefb182de64393501df826d0433c16afdf0",
+        "files": [
+          {
+            "file_id": "measurements",
+            "filename": "ElementalanalysisofsoilinNingboWatershed.csv",
+            "url": "https://data-package.ceh.ac.uk/data/9c2e8b85-48ab-48c9-b69d-dd676a5d086f.zip",
+            "bytes": 20451,
+            "expected_sha256": "4143a29a74e590db081b8d832ff4e7861188e9fcd1675a52425643b5d113993a",
+            "sha256_basis": "official_ro_crate_and_live_member_verification_2026-08-13"
+          }
+        ]
+      },
+      "required_fields": [
+        "IGFS no.",
+        "Latitude _degrees",
+        "Longitude_degrees",
+        "As_ICP-MS",
+        "Cr_ICP-MS",
+        "Cu_ICP-MS",
+        "Ni_ICP-MS",
+        "Pb_ICP-MS",
+        "Zn_XRF"
+      ],
+      "target_analytes": {
+        "As": "As_ICP-MS",
+        "Cr": "Cr_ICP-MS",
+        "Cu": "Cu_ICP-MS",
+        "Ni": "Ni_ICP-MS",
+        "Pb": "Pb_ICP-MS",
+        "Zn": "Zn_XRF"
+      },
+      "expected_counts": {
+        "physical_rows": 80,
+        "target_observations": 480,
+        "target_value_counts": {
+          "As": 80,
+          "Cr": 80,
+          "Cu": 80,
+          "Ni": 80,
+          "Pb": 80,
+          "Zn": 80
+        }
+      },
+      "license": {
+        "spdx": "OGL-UK-3.0",
+        "name": "Open Government Licence v3.0",
+        "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+      },
+      "citation": "Meharg et al. (2019), Elemental analysis of soil in the Ningbo watershed, China, NERC EIDC, https://doi.org/10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+      "redistribution": "Open research reuse with attribution under OGL-UK-3.0; full source archive remains in runtime cache.",
+      "scientific_notes": [
+        "Eighty composite 0-20 cm topsoil samples from one Ningbo catchment are not nationwide coverage.",
+        "The publisher CSV gives decimal latitude and longitude but neither the CSV nor supporting metadata declares a datum/CRS; coordinates remain reported-only.",
+        "ICP-MS and XRF are separate method families and measurement bases; Zn is taken from XRF while As/Cr/Cu/Ni/Pb are taken from ICP-MS.",
+        "The supporting document says half-LOD values were assigned upstream; original censored qualifiers cannot be reconstructed and this limitation must remain explicit."
       ]
     },
     "tpdc-china-mountain-soil": {
@@ -2664,7 +3201,9 @@
       "release_date": "2025-07-23",
       "landing_page": "https://data.tpdc.ac.cn/en/data/2f4c2f30-166c-4a76-9b4a-74c98b4ca3b1",
       "metadata_url": "https://data.tpdc.ac.cn/view/metadataView/detail/",
-      "media": ["soil"],
+      "media": [
+        "soil"
+      ],
       "geographic_scope": "china-30-mountain-ecosystems-partial",
       "download": {
         "mode": "official-post-bundle-extracted-members",
@@ -2673,23 +3212,78 @@
         "bundle_bytes": 1828683,
         "bundle_sha256": "8cf3189b44aad64b65cd213c0fd015d30df5f1c59676823846292f83baa1a84a",
         "files": [
-          {"file_id": "soil-dataset", "filename": "Soil dataset.xlsx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 577715, "expected_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d"},
-          {"file_id": "bulk-density-supplement", "filename": "Soil bulk density.xlsx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 33386, "expected_sha256": "bb03ed1ac9f2db514ca740c8a9c8eabe5965da871e9b77ca510942ba5159b682"},
-          {"file_id": "dataset-description", "filename": "Description of the dataset.docx", "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426", "bytes": 1246886, "expected_sha256": "e923ea91a29793cb224c29c1ff0693e92783c96889fbedb0100c10d48784999b"}
+          {
+            "file_id": "soil-dataset",
+            "filename": "Soil dataset.xlsx",
+            "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426",
+            "bytes": 577715,
+            "expected_sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d"
+          },
+          {
+            "file_id": "bulk-density-supplement",
+            "filename": "Soil bulk density.xlsx",
+            "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426",
+            "bytes": 33386,
+            "expected_sha256": "bb03ed1ac9f2db514ca740c8a9c8eabe5965da871e9b77ca510942ba5159b682"
+          },
+          {
+            "file_id": "dataset-description",
+            "filename": "Description of the dataset.docx",
+            "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426",
+            "bytes": 1246886,
+            "expected_sha256": "e923ea91a29793cb224c29c1ff0693e92783c96889fbedb0100c10d48784999b"
+          }
         ]
       },
-      "required_fields": ["Climaticzones", "Mountain", "site", "Sam.No", "Horizons", "Latitude", "Longitude", "Rock Class", "Rock Group", "Soil Order", "Great Soil Group", "Cr", "Cu", "Ni", "Pb", "Zn"],
-      "target_analytes": {"Cr": "Cr", "Cu": "Cu", "Ni": "Ni", "Pb": "Pb", "Zn": "Zn"},
+      "required_fields": [
+        "Climaticzones",
+        "Mountain",
+        "site",
+        "Sam.No",
+        "Horizons",
+        "Latitude",
+        "Longitude",
+        "Rock Class",
+        "Rock Group",
+        "Soil Order",
+        "Great Soil Group",
+        "Cr",
+        "Cu",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "target_analytes": {
+        "Cr": "Cr",
+        "Cu": "Cu",
+        "Ni": "Ni",
+        "Pb": "Pb",
+        "Zn": "Zn"
+      },
       "expected_counts": {
         "physical_rows": 1314,
         "distinct_profiles": 485,
         "distinct_sites": 166,
         "distinct_mountains": 30,
-        "horizon_counts": {"A": 481, "C": 452, "O": 381},
+        "horizon_counts": {
+          "A": 481,
+          "C": 452,
+          "O": 381
+        },
         "target_observations": 6570,
-        "target_value_counts": {"Cr": 1314, "Cu": 1314, "Ni": 1314, "Pb": 1314, "Zn": 1314}
+        "target_value_counts": {
+          "Cr": 1314,
+          "Cu": 1314,
+          "Ni": 1314,
+          "Pb": 1314,
+          "Zn": 1314
+        }
       },
-      "license": {"spdx": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0 International", "url": "https://creativecommons.org/licenses/by/4.0/"},
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
       "citation": "Zhang et al. (2025). A multi-element dataset of soil profiles across climatic zones in China's mountains. ESSD 17, 4779–4797. https://doi.org/10.5194/essd-17-4779-2025; dataset https://doi.org/10.11888/Terre.tpdc.302620",
       "redistribution": "Research analysis with attribution under CC BY 4.0; full workbooks remain outside Git.",
       "scientific_notes": [
@@ -2710,48 +3304,138 @@
       "release_date": "2024-04-02",
       "landing_page": "https://data.gov.ie/dataset/gsi-gemas-european-geochemical-data",
       "metadata_url": "https://gsi.geodata.gov.ie/server/rest/services/Geochemistry/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84/MapServer",
-      "media": ["soil"],
+      "media": [
+        "soil"
+      ],
       "geographic_scope": "europe-low-density-agricultural-and-grazing-soil",
       "download": {
         "mode": "pinned-official-zip-dbf-members",
         "max_bytes": 10000000,
-        "accepted_content_types": ["application/zip", "application/octet-stream"],
-        "files": [{
-          "file_id": "1725dd24-1b2f-46d5-bf24-ad2db5ee176e",
-          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
-          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
-          "bytes": 4307359,
-          "expected_sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4",
-          "sha256_basis": "observed_from_official_url_2026-08-07",
-          "required_members": ["IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf", "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf"],
-          "member_contracts": [
-            {"filename": "IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf", "sample_type": "Ap", "record_count": 2113, "field_count": 138},
-            {"filename": "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf", "sample_type": "Gr", "record_count": 2024, "field_count": 130}
-          ]
-        }]
+        "accepted_content_types": [
+          "application/zip",
+          "application/octet-stream"
+        ],
+        "files": [
+          {
+            "file_id": "1725dd24-1b2f-46d5-bf24-ad2db5ee176e",
+            "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+            "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+            "bytes": 4307359,
+            "expected_sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4",
+            "sha256_basis": "observed_from_official_url_2026-08-07",
+            "required_members": [
+              "IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf",
+              "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf"
+            ],
+            "member_contracts": [
+              {
+                "filename": "IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf",
+                "sample_type": "Ap",
+                "record_count": 2113,
+                "field_count": 138
+              },
+              {
+                "filename": "IE_GSI_GEMAS_Grazing_Land_Gr_Samples_AR_XRF_EU_WGS84.dbf",
+                "sample_type": "Gr",
+                "record_count": 2024,
+                "field_count": 130
+              }
+            ]
+          }
+        ]
       },
-      "required_fields": ["ID", "COUNTRY", "TYPE_", "TYPE2", "XCOO", "YCOO", "AS_", "CR", "CU", "HG", "NI", "PB", "ZN", "AS_XRF", "CR_XRF", "CU_XRF", "NI_XRF", "PB_XRF", "ZN_XRF"],
+      "required_fields": [
+        "ID",
+        "COUNTRY",
+        "TYPE_",
+        "TYPE2",
+        "XCOO",
+        "YCOO",
+        "AS_",
+        "CR",
+        "CU",
+        "HG",
+        "NI",
+        "PB",
+        "ZN",
+        "AS_XRF",
+        "CR_XRF",
+        "CU_XRF",
+        "NI_XRF",
+        "PB_XRF",
+        "ZN_XRF"
+      ],
       "target_analytes": {
-        "As": ["AS_", "AS_XRF"],
-        "Cr": ["CR", "CR_XRF"],
-        "Cu": ["CU", "CU_XRF"],
-        "Hg": ["HG"],
-        "Ni": ["NI", "NI_XRF"],
-        "Pb": ["PB", "PB_XRF"],
-        "Zn": ["ZN", "ZN_XRF"]
+        "As": [
+          "AS_",
+          "AS_XRF"
+        ],
+        "Cr": [
+          "CR",
+          "CR_XRF"
+        ],
+        "Cu": [
+          "CU",
+          "CU_XRF"
+        ],
+        "Hg": [
+          "HG"
+        ],
+        "Ni": [
+          "NI",
+          "NI_XRF"
+        ],
+        "Pb": [
+          "PB",
+          "PB_XRF"
+        ],
+        "Zn": [
+          "ZN",
+          "ZN_XRF"
+        ]
       },
       "analysis_groups": {
         "AR": {
-          "target_analytes": {"As": "AS_", "Cr": "CR", "Cu": "CU", "Hg": "HG", "Ni": "NI", "Pb": "PB", "Zn": "ZN"},
-          "detection_limits": {"As": 0.1, "Cr": 0.5, "Cu": 0.01, "Hg": 0.005, "Ni": 0.1, "Pb": 0.01, "Zn": 0.1},
+          "target_analytes": {
+            "As": "AS_",
+            "Cr": "CR",
+            "Cu": "CU",
+            "Hg": "HG",
+            "Ni": "NI",
+            "Pb": "PB",
+            "Zn": "ZN"
+          },
+          "detection_limits": {
+            "As": 0.1,
+            "Cr": 0.5,
+            "Cu": 0.01,
+            "Hg": 0.005,
+            "Ni": 0.1,
+            "Pb": 0.01,
+            "Zn": 0.1
+          },
           "measurement_basis": "modified_aqua_regia_extractable_dry_soil_<2mm",
           "analytical_method": "Spectro Ciros Vision ICP-AES and Perkin Elmer Elan 6000/9000 ICP-MS",
           "digestion_or_extraction": "15 g soil; 90 mL aqua regia; 95 C for one hour; diluted to 300 mL with 5% HCl",
           "grain_fraction": "<2 mm"
         },
         "XRF": {
-          "target_analytes": {"As": "AS_XRF", "Cr": "CR_XRF", "Cu": "CU_XRF", "Ni": "NI_XRF", "Pb": "PB_XRF", "Zn": "ZN_XRF"},
-          "detection_limits": {"As": 3, "Cr": 4, "Cu": 5, "Ni": 3, "Pb": 3, "Zn": 3},
+          "target_analytes": {
+            "As": "AS_XRF",
+            "Cr": "CR_XRF",
+            "Cu": "CU_XRF",
+            "Ni": "NI_XRF",
+            "Pb": "PB_XRF",
+            "Zn": "ZN_XRF"
+          },
+          "detection_limits": {
+            "As": 3,
+            "Cr": 4,
+            "Cu": 5,
+            "Ni": 3,
+            "Pb": 3,
+            "Zn": 3
+          },
           "measurement_basis": "xrf_total_fused_bead_dry_soil_milled_<63um",
           "analytical_method": "wavelength-dispersive XRF; PANalytical PW2400 and AXIOS",
           "digestion_or_extraction": "fused bead preparation after milling",
@@ -2763,10 +3447,25 @@
         "analysis_records": 8262,
         "country_labels": 33,
         "target_observations": 53703,
-        "analysis_group_observations": {"AR": 28917, "XRF": 24786},
-        "target_value_counts": {"As": 8262, "Cr": 8262, "Cu": 8262, "Hg": 4131, "Ni": 8262, "Pb": 8262, "Zn": 8262}
+        "analysis_group_observations": {
+          "AR": 28917,
+          "XRF": 24786
+        },
+        "target_value_counts": {
+          "As": 8262,
+          "Cr": 8262,
+          "Cu": 8262,
+          "Hg": 4131,
+          "Ni": 8262,
+          "Pb": 8262,
+          "Zn": 8262
+        }
       },
-      "license": {"spdx": "CC-BY-4.0", "name": "Creative Commons Attribution 4.0 International", "url": "https://creativecommons.org/licenses/by/4.0/"},
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
       "citation": "Geological Survey Ireland (2024), GSI GEMAS European Geochemical Data; EuroGeoSurveys GEMAS project.",
       "redistribution": "Research analysis with attribution under CC BY 4.0; full source ZIP remains outside Git.",
       "scientific_notes": [
@@ -2775,6 +3474,371 @@
         "Six blank DBF placeholders are excluded by TYPE_, country and coordinate validation.",
         "XRF half-detection-limit substitutions are flagged because original qualifiers cannot be recovered.",
         "GSI is the distribution publisher and GEMAS is the upstream sampling lineage."
+      ]
+    },
+    "zenodo-yangtze-yellow-river-sediment": {
+      "adapter": "zenodo_yangtze_yellow_river_sediment",
+      "title": "Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments",
+      "publisher": "Zenodo deposit by Chao Wu, State Key Laboratory of Isotope Geochemistry, Guangzhou Institute of Geochemistry, Chinese Academy of Sciences",
+      "dataset_doi": "10.5281/zenodo.7098563",
+      "dataset_version": "zenodo-record-7098563-rev2-2022-09-21",
+      "release_date": "2022-09-21",
+      "landing_page": "https://zenodo.org/records/7098563",
+      "metadata_url": "https://zenodo.org/api/records/7098563",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "china-yangtze-yellow-river-sediment-separates",
+      "download": {
+        "mode": "pinned-zenodo-record-file",
+        "max_bytes": 200000,
+        "accepted_content_types": [
+          "application/octet-stream",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ],
+        "observed_at": "2026-08-09T00:00:00Z",
+        "files": [
+          {
+            "file_id": "data-set-s2",
+            "filename": "Data Set S2.xlsx",
+            "url": "https://zenodo.org/api/records/7098563/files/Data%20Set%20S2.xlsx/content",
+            "bytes": 76596,
+            "expected_sha256": "413f54f6544967d1d96b9eacfbeae41ba410a8c4b0375bdfaabc1293fd6fadd2",
+            "publisher_checksum": "md5:f71702e1fc28c92ad4fcc139ce77b934",
+            "sha256_basis": "fixture_pin_2026-08-08_live_redownload_match_2026-08-09"
+          }
+        ]
+      },
+      "required_fields": [
+        "As",
+        "Cr",
+        "Cu",
+        "Ni",
+        "Pb",
+        "Zn"
+      ],
+      "target_analytes": {
+        "As": "As",
+        "Cr": "Cr",
+        "Cu": "Cu",
+        "Ni": "Ni",
+        "Pb": "Pb",
+        "Zn": "Zn"
+      },
+      "expected_counts": {
+        "sample_rows": 93,
+        "target_observations": 558,
+        "target_value_counts": {
+          "As": 93,
+          "Cr": 93,
+          "Cu": 93,
+          "Ni": 93,
+          "Pb": 93,
+          "Zn": 93
+        },
+        "leach_groups": {
+          "AC": 78,
+          "HCl": 480
+        }
+      },
+      "unit_evidence": "The workbook declares no unit row. The concentration unit ug/g is verified at parse time by aligning the embedded BHVO-2/AGV-2/W-2/GSP-2 'Preferred values' rows with certified ug/g reference values and their 'Measured values' rows within tolerance.",
+      "coordinate_evidence": "Data Set S2 publishes no sampling coordinates; records remain database-only and are excluded from every map layer (fail closed).",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Wu, Chao (2022). Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7098563",
+      "redistribution": "Research analysis with attribution under CC BY 4.0; the workbook remains outside Git and deterministic rows retain DOI, hash and sheet-row locators.",
+      "scientific_notes": [
+        "Ninety-three leach-residual analyses of Yellow River (HH) and Yangtze River (CJ / CJ Sand) sediment size fractions from one author supplement.",
+        "HCl- and AC-leach residual components are separate measurement bases and are never merged with bulk-sediment surveys.",
+        "No sampling coordinates are published, so records are database-only and cannot support map layers or spatial anomaly analysis.",
+        "The undeclared concentration unit is assigned as ug/g only after certified-reference QC alignment at parse time."
+      ]
+    },
+    "pangaea-east-china-sea-clay": {
+      "adapter": "pangaea_east_china_sea_clay",
+      "title": "(Appendix A) Concentrations of major oxides and trace elements in clay from different IODP Holes of 331-C0013, 331-C0017, East China sea shelf and different Taiwan rivers",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.856762",
+      "parent_dataset_doi": "10.1594/PANGAEA.856763",
+      "dataset_version": "2016-01-11",
+      "release_date": "2016-01-11",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.856762",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.856762",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "east-china-sea-yangtze-taiwan-clay-cores",
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 100000,
+        "accepted_content_types": [
+          "text/tab-separated-values",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-12T06:55:00Z",
+        "files": [
+          {
+            "file_id": "dataset-table",
+            "filename": "PANGAEA.856762.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.856762?format=textfile",
+            "bytes": 36898,
+            "expected_sha256": "b70b0d566d17d76c16e2bcad1f0ec176cca7c0efccf68243fb9ea28aac55d5e2",
+            "sha256_basis": "observed_from_official_url_2026-08-12"
+          }
+        ]
+      },
+      "required_fields": [
+        "Event",
+        "Latitude",
+        "Longitude",
+        "Description",
+        "Samp type",
+        "Cr [mg/kg]",
+        "Cu [mg/kg]",
+        "Pb [mg/kg]",
+        "Zn [mg/kg]"
+      ],
+      "target_analytes": {
+        "Cr": "Cr [mg/kg]",
+        "Cu": "Cu [mg/kg]",
+        "Pb": "Pb [mg/kg]",
+        "Zn": "Zn [mg/kg]"
+      },
+      "expected_counts": {
+        "physical_rows": 98,
+        "distinct_events": 28,
+        "distinct_sample_ids": 98,
+        "sample_type_rows": {
+          "Bulk": 49,
+          "Residue": 49
+        },
+        "mgkg_fields": 32,
+        "target_observations": 392,
+        "target_value_counts": {
+          "Cr": 98,
+          "Cu": 98,
+          "Pb": 98,
+          "Zn": 98
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-3.0",
+        "name": "Creative Commons Attribution 3.0 Unported",
+        "url": "https://creativecommons.org/licenses/by/3.0/"
+      },
+      "citation": "Shao, Hebin; Yang, Shouye; Wang, Quan; Guo, Yulong (2016): (Appendix A) Concentrations of major oxides and trace elements in clay from different IODP Holes of 331-C0013, 331-C0017, East China sea shelf and different Taiwan rivers. PANGAEA. https://doi.org/10.1594/PANGAEA.856762",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic rows retain DOI, hash and source locators.",
+      "scientific_notes": [
+        "The table contains 98 rows from 28 events across the East China Sea shelf, Okinawa Trough IODP holes, Yangtze River cores and Taiwan river cores; it is not a regional grid.",
+        "Cr, Cu, Pb and Zn are reported in mg/kg on the clay fraction; the publisher notes the original unit was ppm.",
+        "Each physical sample appears as a 'Bulk' row and a leached 'Residue' row; the fraction split is preserved in the measurement basis and the two rows must not be averaged together.",
+        "The publisher parameter metadata labels every concentration with 'X-ray diffraction (XRD)'; the adapter preserves that label and does not invent a different instrument or digestion.",
+        "Eight Yangtze River events and three Taiwan river events are terrestrial river-sediment sites with WGS84 coordinates; the remaining events are marine shelf and IODP drill sites."
+      ]
+    },
+    "pangaea-south-china-sea-sediment": {
+      "adapter": "pangaea_south_china_sea_sediment",
+      "title": "(Table 2) Trace elements from different sediment cores in the southern China Sea",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.855177",
+      "parent_dataset_doi": "10.1594/PANGAEA.855179",
+      "dataset_version": "2015-11-23",
+      "release_date": "2015-11-23",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.855177",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.855177",
+      "media": [
+        "sediment"
+      ],
+      "geographic_scope": "southern-china-sea-surface-sediment-cores",
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 100000,
+        "accepted_content_types": [
+          "text/tab-separated-values",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-12T16:30:00Z",
+        "files": [
+          {
+            "file_id": "dataset-table",
+            "filename": "PANGAEA.855177.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.855177?format=textfile",
+            "bytes": 25021,
+            "expected_sha256": "703995078eaa849014e5075d357adaba5f33c76f95e349dc2329e8656047ea5d",
+            "sha256_basis": "observed_from_official_url_2026-08-12"
+          }
+        ]
+      },
+      "required_fields": [
+        "Event",
+        "Latitude",
+        "Longitude",
+        "Depth sed [m]",
+        "Cr [mg/kg] (original unit is in ppm)",
+        "Cu [mg/kg] (original unit is in ppm)",
+        "Ni [mg/kg] (original unit is in ppm)",
+        "Pb [mg/kg] (original unit is in ppm)",
+        "Zn [mg/kg] (original unit is in ppm)"
+      ],
+      "target_analytes": {
+        "Cr": "Cr [mg/kg] (original unit is in ppm)",
+        "Cu": "Cu [mg/kg] (original unit is in ppm)",
+        "Ni": "Ni [mg/kg] (original unit is in ppm)",
+        "Pb": "Pb [mg/kg] (original unit is in ppm)",
+        "Zn": "Zn [mg/kg] (original unit is in ppm)"
+      },
+      "expected_counts": {
+        "physical_rows": 44,
+        "distinct_events": 44,
+        "ppm_annotated_fields": 41,
+        "target_observations": 220,
+        "target_value_counts": {
+          "Cr": 44,
+          "Cu": 44,
+          "Ni": 44,
+          "Pb": 44,
+          "Zn": 44
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-3.0",
+        "name": "Creative Commons Attribution 3.0 Unported",
+        "url": "https://creativecommons.org/licenses/by/3.0/"
+      },
+      "citation": "Wei, Gangjian; Liu, Ying; Ma, Jinlong; Xie, Luhua; Jianfang, Chen; Deng, Wenfeng; Song, Tang (2015): (Table 2) Trace elements from different sediment cores in the southern China Sea. PANGAEA. https://doi.org/10.1594/PANGAEA.855177",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic rows retain DOI, hash and source locators.",
+      "scientific_notes": [
+        "The table contains 44 surface-sediment core events between 4.07-20.60 N and 105.28-120.16 E; it is discrete marine coverage, not a southern China Sea grid.",
+        "Cr, Cu, Ni, Pb and Zn were measured by ICP-MS (Perkin-Elmer Elan 6000); the publisher normalized the original ppm values to mg/kg and the annotated field names are preserved.",
+        "Digestion details are not reported in the publisher table and are not inferred.",
+        "All events are marine; land-country audits must not claim these records as terrestrial coverage."
+      ]
+    },
+    "pangaea-barents-c-horizon-soil": {
+      "adapter": "pangaea_barents_c_horizon_soil",
+      "title": "Geochemistry of C-horizon",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.56227",
+      "parent_dataset_doi": "10.1594/PANGAEA.686641",
+      "dataset_version": "1998-01-01",
+      "release_date": "1998-01-01",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.56227",
+      "metadata_url": "https://doi.pangaea.de/10.1594/PANGAEA.56227",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "central-barents-region-c-horizon-soil",
+      "download": {
+        "mode": "pinned-doi-tabular-text",
+        "max_bytes": 600000,
+        "accepted_content_types": [
+          "text/tab-separated-values",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-12T16:30:00Z",
+        "files": [
+          {
+            "file_id": "dataset-table",
+            "filename": "PANGAEA.56227.tab",
+            "url": "https://doi.pangaea.de/10.1594/PANGAEA.56227?format=textfile",
+            "bytes": 407662,
+            "expected_sha256": "e22093a40b9c68d25398f2322b68ae7af9b00e331483ae8a3927fc2c13be3d30",
+            "sha256_basis": "observed_from_official_url_2026-08-12"
+          }
+        ]
+      },
+      "required_fields": [
+        "Latitude",
+        "Longitude",
+        "Depth sed [m]",
+        "Sample label",
+        "Description"
+      ],
+      "target_analytes": {
+        "As": "As [mg/kg] (aqua regia, AAS-GF, column 69)",
+        "Cu": "Cu [mg/kg] (aqua regia, ICP-AES, column 20)",
+        "Pb": "Pb [mg/kg] (aqua regia, AAS-GF, column 95)",
+        "Zn": "Zn [mg/kg] (aqua regia, ICP-AES, column 55)"
+      },
+      "identity_columns": {
+        "latitude": {
+          "column": 0,
+          "label_prefix": "Latitude"
+        },
+        "longitude": {
+          "column": 1,
+          "label_prefix": "Longitude"
+        },
+        "sample_depth": {
+          "column": 2,
+          "label_prefix": "Depth sed [m]"
+        },
+        "sample_label": {
+          "column": 3,
+          "label_prefix": "Sample label"
+        },
+        "description": {
+          "column": 4,
+          "label_prefix": "Description"
+        }
+      },
+      "target_columns": {
+        "As": {
+          "column": 69,
+          "label_prefix": "As [mg/kg]",
+          "detection_limit": "0.1",
+          "analytical_method": "Element analysis, AAS, graphite furnace, Aqua regia (Reimann et al., 1998)"
+        },
+        "Cu": {
+          "column": 20,
+          "label_prefix": "Cu [mg/kg]",
+          "detection_limit": "0.5",
+          "analytical_method": "ICP-AES, Aqua regia (Reimann et al., 1998, NGU-GTK-CKE spec.publ. Trondheim)"
+        },
+        "Pb": {
+          "column": 95,
+          "label_prefix": "Pb [mg/kg]",
+          "detection_limit": "0.2",
+          "analytical_method": "Element analysis, AAS, graphite furnace, Aqua regia (Reimann et al., 1998)"
+        },
+        "Zn": {
+          "column": 55,
+          "label_prefix": "Zn [mg/kg]",
+          "detection_limit": "0.5",
+          "analytical_method": "ICP-AES, Aqua regia (Reimann et al., 1998, NGU-GTK-CKE spec.publ. Trondheim)"
+        }
+      },
+      "expected_counts": {
+        "physical_rows": 606,
+        "distinct_sample_labels": 606,
+        "table_columns": 100,
+        "target_observations": 2419,
+        "target_value_counts": {
+          "As": 605,
+          "Cu": 605,
+          "Pb": 604,
+          "Zn": 605
+        },
+        "censored_value_counts": {
+          "As": 10
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-3.0",
+        "name": "Creative Commons Attribution 3.0 Unported",
+        "url": "https://creativecommons.org/licenses/by/3.0/"
+      },
+      "citation": "Reimann, Clemens (1998): Geochemistry of C-horizon. PANGAEA. https://doi.org/10.1594/PANGAEA.56227. In: Reimann, C; Äyräs, M; Chekushin, V et al. (1998): Geochemical analysis of soil in the central Barents Region. https://doi.org/10.1594/PANGAEA.686641",
+      "redistribution": "Research analysis is permitted with attribution. The complete publisher table remains outside Git; deterministic rows retain DOI, hash and source locators.",
+      "scientific_notes": [
+        "The Kola Ecogeochemistry C-horizon survey covers the central Barents region (northwest Russia including the Kola Peninsula, northern Finland and northern Norway) with 606 georeferenced sites; it is not all-Russia coverage.",
+        "The publisher header repeats identical column labels for different analytical methods, so the adapter pins column indexes and re-verifies each pinned label prefix on every parse.",
+        "The registered atlas targets use the aqua-regia extraction suite (As and Pb by graphite-furnace AAS; Cu and Zn by ICP-AES) on the < 2 mm fraction; parallel total/NAA columns exist in the table and remain unregistered.",
+        "Ten As values are censored below the 0.1 mg/kg detection limit; they keep the publisher '<' qualifier and are never stored as zero or as normal measurements.",
+        "PANGAEA dataset creation is dated 1992 (field campaigns) while the citation year is 1998; the registered version pins the 1998 atlas edition."
       ]
     }
   }

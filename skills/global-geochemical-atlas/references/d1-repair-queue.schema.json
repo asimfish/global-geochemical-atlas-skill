@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:d1-repair-queue:v1",
+  "title": "Machine-actionable D1 structural repair queue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "queue_version", "request_sha256", "generated_from_round", "status",
+    "task_count", "tasks", "execution_rule", "claim_boundary"
+  ],
+  "properties": {
+    "queue_version": {"const": "d1-repair-queue-v1"},
+    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "generated_from_round": {"type": ["integer", "null"], "minimum": 1},
+    "status": {"type": "string", "enum": ["clear", "pending"]},
+    "task_count": {"type": "integer", "minimum": 0},
+    "tasks": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "execution_rule": {"type": "string", "minLength": 1},
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "stringArray": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id", "priority", "status", "task_kind", "scope_key", "view_id",
+        "required_elements", "required_media", "bbox", "country_iso_a3",
+        "country_name", "macroregion", "reason_codes", "observed", "target",
+        "preferred_repair_mode", "fallback_action_chain",
+        "selected_source_candidates", "registered_source_candidates",
+        "catalog_candidate_source_ids", "discovery_queries",
+        "discovery_platform_sequence", "minimum_distinct_discovery_families",
+        "completion_evidence_required",
+        "continuation_strategy"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+        "priority": {"type": "integer", "minimum": 1},
+        "status": {"const": "pending"},
+        "task_kind": {
+          "type": "string",
+          "enum": [
+            "spatial_dimension_gap", "global_geographic_gap",
+            "source_dimension_gap", "source_lineage_gap", "medium_lineage_gap",
+            "metadata_evidence_gap",
+            "sufficiency_assessment_gap"
+          ]
+        },
+        "scope_key": {"type": "string"},
+        "view_id": {"type": "string"},
+        "required_elements": {"$ref": "#/$defs/stringArray"},
+        "required_media": {"$ref": "#/$defs/stringArray"},
+        "bbox": {"type": "array", "items": {"type": "number"}, "maxItems": 4},
+        "country_iso_a3": {"type": ["string", "null"], "pattern": "^[A-Z]{3}$"},
+        "country_name": {"type": ["string", "null"]},
+        "macroregion": {"type": ["string", "null"]},
+        "reason_codes": {"$ref": "#/$defs/stringArray"},
+        "observed": {"$ref": "#/$defs/facts"},
+        "target": {"$ref": "#/$defs/facts"},
+        "preferred_repair_mode": {"$ref": "#/$defs/repairMode"},
+        "fallback_action_chain": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/repairMode"}
+        },
+        "selected_source_candidates": {"$ref": "#/$defs/stringArray"},
+        "registered_source_candidates": {"$ref": "#/$defs/stringArray"},
+        "catalog_candidate_source_ids": {"$ref": "#/$defs/stringArray"},
+        "discovery_queries": {"$ref": "#/$defs/stringArray"},
+        "discovery_platform_sequence": {"$ref": "#/$defs/stringArray"},
+        "minimum_distinct_discovery_families": {
+          "type": "integer", "minimum": 0
+        },
+        "completion_evidence_required": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "continuation_strategy": {
+          "type": "string",
+          "enum": ["same_output_data_only", "new_output_after_skill_change"]
+        }
+      }
+    },
+    "repairMode": {
+      "type": "string",
+      "enum": [
+        "rerun_current_controller",
+        "repair_coordinate_evidence", "requery_selected_source",
+        "route_registered_source", "implement_catalog_candidate",
+        "targeted_source_discovery"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "clear"}}},
+      "then": {"properties": {"task_count": {"const": 0}, "tasks": {"maxItems": 0}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "pending"}}},
+      "then": {"properties": {"task_count": {"minimum": 1}, "tasks": {"minItems": 1}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "tasks": {
+            "contains": {
+              "properties": {
+                "task_kind": {"const": "sufficiency_assessment_gap"}
+              },
+              "required": ["task_kind"]
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "task_count": {"const": 1},
+          "tasks": {
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "properties": {
+                "preferred_repair_mode": {"const": "rerun_current_controller"},
+                "fallback_action_chain": {
+                  "prefixItems": [{"const": "rerun_current_controller"}],
+                  "minItems": 1,
+                  "maxItems": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

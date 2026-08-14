@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06T10:05:00Z",
+  "as_of": "2026-08-13T10:00:00Z",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "IDP2025",
   "denominator_definition": "all non-empty target-analyte observations emitted by the verified source adapter",
@@ -12,9 +12,9 @@
     },
     "analytical_method": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 17073,
+      "non_empty": 22254,
+      "rate": 0.565871
     },
     "citation_resolution_status": {
       "denominator": 39327,
@@ -102,15 +102,15 @@
     },
     "measurement_basis": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 0,
+      "non_empty": 39327,
+      "rate": 1.0
     },
     "method_assignment_basis": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 17073,
+      "non_empty": 22254,
+      "rate": 0.565871
     },
     "method_or_missing_reason": {
       "denominator": 39327,
@@ -120,9 +120,9 @@
     },
     "method_scope": {
       "denominator": 39327,
-      "missing": 39327,
-      "non_empty": 0,
-      "rate": 0.0
+      "missing": 17073,
+      "non_empty": 22254,
+      "rate": 0.565871
     },
     "research_use_status": {
       "denominator": 39327,

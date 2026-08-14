@@ -1,0 +1,3140 @@
+{
+  "claim_boundary": "Counts describe the processed request slice. Confidence bands are workflow evidence classes, not probabilities, accuracy guarantees, or statistical representativeness.",
+  "data_mode": "fixture",
+  "dimension_meaning": {
+    "analytical_readiness": "Method-context and QC readiness for comparison; not a statement that the measurement is true.",
+    "source_evidence": "Reliability and traceability of the published source evidence; not affected by missing coordinates.",
+    "spatial_usability": "Coordinate canonicalization and precision readiness for spatial operations.",
+    "workflow_usability": "Conservative combined score used to prioritize records for this end-to-end atlas workflow."
+  },
+  "interpretation": "source_evidence measures traceability; analytical_readiness measures method/QC comparability; spatial_usability measures coordinate fitness; workflow_usability is the operational pipeline band. A low workflow or spatial band does not mean the source or measurement is false or low quality.",
+  "metadata_absence_accounting": {
+    "analytical_method": {
+      "accounted_count": 248,
+      "accounted_rate": 1.0,
+      "counts": {
+        "multiple_linked_method_records_unresolved_to_observation": 48,
+        "not_reported": 96,
+        "not_reported_in_concentration_csv": 56,
+        "winning_method_not_encoded_in_precompiled_member": 48
+      },
+      "record_count": 248
+    },
+    "claim_boundary": "These totals assign metadata absence to publisher reporting, unresolved publisher linkage, publisher datum/CRS absence, policy-stopped canonicalization, lack of positional-accuracy evidence, or unaccounted pipeline input. They are diagnostics, not a single quality grade.",
+    "coordinate_accuracy": {
+      "accounted_count": 1144,
+      "accounted_rate": 1.0,
+      "counts": {
+        "not_applicable_no_canonical_coordinate": 288,
+        "not_reported": 808,
+        "source_reported_uncertainty": 48
+      },
+      "record_count": 1144
+    },
+    "coordinate_reference": {
+      "accounted_count": 1144,
+      "accounted_rate": 1.0,
+      "counts": {
+        "canonical_crs_evidenced": 856,
+        "coordinate_not_canonicalized_under_policy": 48,
+        "publisher_datum_not_declared": 240
+      },
+      "record_count": 1144
+    }
+  },
+  "metadata_completeness": {
+    "analytical_method": {
+      "count": 896,
+      "rate": 0.783217
+    },
+    "canonical_coordinate": {
+      "count": 856,
+      "rate": 0.748252
+    },
+    "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+    "coordinate_representation_resolution": {
+      "count": 1144,
+      "rate": 1.0
+    },
+    "exact_record_locator": {
+      "count": 1144,
+      "rate": 1.0
+    },
+    "method_source_locator": {
+      "count": 896,
+      "rate": 0.783217
+    },
+    "official_source_link": {
+      "count": 1144,
+      "rate": 1.0
+    },
+    "record_count": 1144,
+    "source_reported_coordinate_uncertainty": {
+      "count": 96,
+      "rate": 0.083916
+    }
+  },
+  "not_for_scientific_interpretation": true,
+  "overall_dimension_band_counts": {
+    "analytical_readiness": {
+      "high": 840,
+      "low": 256,
+      "medium": 48
+    },
+    "source_evidence": {
+      "high": 1144,
+      "low": 0,
+      "medium": 0
+    },
+    "spatial_usability": {
+      "high": 856,
+      "low": 288,
+      "medium": 0
+    },
+    "workflow_usability": {
+      "high": 0,
+      "low": 296,
+      "medium": 848
+    }
+  },
+  "overall_dimension_score_means": {
+    "analytical_readiness": 0.840679,
+    "source_evidence": 0.977448,
+    "spatial_usability": 0.606993,
+    "workflow_usability": 0.737155
+  },
+  "overall_workflow_confidence": {
+    "band_counts": {
+      "high": 0,
+      "low": 296,
+      "medium": 848
+    },
+    "interpretation": "This aggregate summarizes end-to-end usability and review priority. It is not source quality, measurement truth probability, positional accuracy, or statistical confidence.",
+    "label": "overall workflow usability and review confidence",
+    "not_a_probability": true,
+    "record_count": 1144,
+    "score_mean": 0.737155
+  },
+  "report_version": "sources-and-confidence-v3",
+  "single_quality_label_prohibited": true,
+  "source_portfolio": {
+    "claim_boundary": "Formal included sources produced admitted records in this output. Routed selected sources passed request-level catalog checks but may still fail acquisition or record filtering. Review/blocked sources are discovery leads only. Counts must never be added together as admitted data sources.",
+    "formal_included_source_count": 21,
+    "formal_included_source_ids": [
+      "afsis-phase-i-wet-chemistry",
+      "australia-ngsa-mercury",
+      "foregs-floodplain-sediment",
+      "foregs-humus",
+      "foregs-stream-sediment",
+      "foregs-stream-water",
+      "foregs-subsoil",
+      "foregs-topsoil",
+      "gemas-europe",
+      "gemstat-open-archive",
+      "georoc-antarctica-intraplate",
+      "georoc-archaean",
+      "geotraces-idp2025",
+      "japan-gsj-geochemical-map",
+      "japan-gsj-marine-sediment",
+      "norway-marchem",
+      "pangaea-arabian-sea-sediment",
+      "pangaea-north-africa-soil",
+      "tpdc-china-mountain-soil",
+      "us-wqp-sacramento-river-arsenic",
+      "usgs-conus-soil"
+    ],
+    "review_or_blocked_source_count": 0,
+    "review_or_blocked_sources": [],
+    "route_status": "not_available",
+    "routed_but_not_included_source_ids": [],
+    "routed_selected_source_count": 0,
+    "selected_sources": []
+  },
+  "sources": [
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.34725/DVN/66BFOB"
+      ],
+      "dataset_titles": [
+        "AfSIS Phase I archived soil samples: wet chemistry data"
+      ],
+      "dataset_versions": [
+        "2.0"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "low": 48
+        },
+        "workflow_usability": {
+          "low": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.928,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.0,
+        "workflow_usability": 0.59
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 12,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "soil": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_applicable_no_canonical_coordinate": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "publisher_datum_not_declared": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.34725/DVN/66BFOB"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.5194/soil-7-305-2021"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://data.worldagroforestry.org/api/access/datafile/11218?format=original"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://data.worldagroforestry.org/api/access/datafile/11218?format=original"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "AfSIS_Phase_I_wet_chemistry_v2.csv",
+            "sha256": "32a84536964d239969ecf3b7d805ceac0d14847b660ed99e209d70443d934605"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "afsis-phase-i-wet-chemistry",
+      "source_urls": [
+        "https://data.worldagroforestry.org/api/access/datafile/11218?format=original"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.26186/150328"
+      ],
+      "dataset_titles": [
+        "National Geochemical Survey of Australia: Mercury Concentrations Dataset"
+      ],
+      "dataset_versions": [
+        "2025-03-31"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.955,
+        "source_evidence": 0.95,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "Hg": 48
+      },
+      "independent_sample_count": 48,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "sediment": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.26186/150328"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.1021/acs.est.5c11189"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "150328_00_1.CSV",
+            "sha256": "3089b02331e8aff7e78ec8b972fa6ff9acfe85c9b49ae67462605cef3fbb247c"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "australia-ngsa-mercury",
+      "source_urls": [
+        "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: floodplain sediment"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 6,
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "medium_record_counts": {
+        "sediment": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_AR_data_2v6_7Aug07.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_XRF_data_2v6_7Aug07.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_AR_data_2v6_7Aug07.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_XRF_data_2v6_7Aug07.csv"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "F_AR_data_2v6_7Aug07.csv",
+            "sha256": "04fe3c65ffadc205a8c9d6c1d5869cb6d729a965faf399bd32874b7f50fb6b51"
+          },
+          {
+            "filename": "F_XRF_data_2v6_7Aug07.csv",
+            "sha256": "04628e52364b70a1c39492631568e1aa47b77285becd2393d283b7ea9088431f"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "foregs-floodplain-sediment",
+      "source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_AR_data_2v6_7Aug07.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_XRF_data_2v6_7Aug07.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: humus"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "Cu": 16,
+        "Ni": 16,
+        "Zn": 16
+      },
+      "independent_sample_count": 16,
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "medium_record_counts": {
+        "soil": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip#member=H_icp_data_2v2_11Mar04.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip#member=H_icp_data_2v2_11Mar04.csv"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "H_icp_data_2v2_11Mar04.csv",
+            "sha256": "d1a943e3bcf5e601541e44b48bafb7e73c61c5ededa23d008cf334ad3b9506f4"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "foregs-humus",
+      "source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip#member=H_icp_data_2v2_11Mar04.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: stream sediment"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 6,
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "medium_record_counts": {
+        "sediment": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_AR_data_2v5_30Nov2006.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_XRF_data_2v9_30Nov06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_AR_data_2v5_30Nov2006.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_XRF_data_2v9_30Nov06.csv"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "S_AR_data_2v5_30Nov2006.csv",
+            "sha256": "f59ebb27d8b81ba8285d52f7f64abe9e62f2d3ef8236df7c4ebd3054b87ff1ce"
+          },
+          {
+            "filename": "S_XRF_data_2v9_30Nov06.csv",
+            "sha256": "db5c895b573df0e15a1731020a602882a01381d4bb844e3160267ab468e6e6c8"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "foregs-stream-sediment",
+      "source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_AR_data_2v5_30Nov2006.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_XRF_data_2v9_30Nov06.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: stream water"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 12,
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "medium_record_counts": {
+        "water": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip#member=W_all_data_2v8_17Sep07.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip#member=W_all_data_2v8_17Sep07.csv"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "W_all_data_2v8_17Sep07.csv",
+            "sha256": "4a81bb1fbffccbc8e07290dfe1ccc1ed312b9e52e371e621526e39509f3075c3"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "foregs-stream-water",
+      "source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip#member=W_all_data_2v8_17Sep07.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: subsoil"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 6,
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "medium_record_counts": {
+        "soil": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_AR_data_2v5_8Feb06.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_XRF_data_2v6_8Feb06.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icp_data_2v6_9Feb06.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icpadd_data_2v5_9Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_AR_data_2v5_8Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_XRF_data_2v6_8Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icp_data_2v6_9Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icpadd_data_2v5_9Feb06.csv"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "C_AR_data_2v5_8Feb06.csv",
+            "sha256": "a6be09c8db44f22cac340285886d866d9420f58a649f46dab5eff7af489047bc"
+          },
+          {
+            "filename": "C_XRF_data_2v6_8Feb06.csv",
+            "sha256": "436ebabf7431b1d93769d63fcc2d50755bac9e72a2141dc6325c69cafa1c591b"
+          },
+          {
+            "filename": "C_icp_data_2v6_9Feb06.csv",
+            "sha256": "b983234ff136212be55b8fb9a2d12fb41433ad1315c8eca8d91d2ee207712d8b"
+          },
+          {
+            "filename": "C_icpadd_data_2v5_9Feb06.csv",
+            "sha256": "313446ee8924841c8c4725dd3084bb6ef949092c51130aa12be25b94008f74c7"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "foregs-subsoil",
+      "source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_AR_data_2v5_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_XRF_data_2v6_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icp_data_2v6_9Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icpadd_data_2v5_9Feb06.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "FOREGS Geochemical Atlas of Europe: topsoil"
+      ],
+      "dataset_versions": [
+        "FOREGS-Atlas-2005-publisher-files-2026-03-03"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 6,
+      "licenses": [
+        "LicenseRef-FOREGS-Research-Attribution-2005"
+      ],
+      "medium_record_counts": {
+        "soil": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_AR_data_2v4_8Feb06.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_XRF_data_2v6_8Feb06.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icp_data_2v3_8Feb06.csv"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icpadd_data_2v3_8Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_AR_data_2v4_8Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_XRF_data_2v6_8Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icp_data_2v3_8Feb06.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icpadd_data_2v3_8Feb06.csv"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "T_AR_data_2v4_8Feb06.csv",
+            "sha256": "e84a9ac9c20cb012a6eb496ac8427f138cc692393803e15769e74672b3cdd6d7"
+          },
+          {
+            "filename": "T_XRF_data_2v6_8Feb06.csv",
+            "sha256": "adb47a7303417d0d766d7ca46040c9cc0a37cfe34e14943e232507c98e0f7da8"
+          },
+          {
+            "filename": "T_icp_data_2v3_8Feb06.csv",
+            "sha256": "74656ebdf4cc8b1ef56f4302430d8ec47c24927bd684fd029f3db63d1622f0c6"
+          },
+          {
+            "filename": "T_icpadd_data_2v3_8Feb06.csv",
+            "sha256": "cf294bc77b30223459bba97c98dc2fe9a7d2d6fcaba50bf1bdca50db46a01102"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "foregs-topsoil",
+      "source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_AR_data_2v4_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_XRF_data_2v6_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icp_data_2v3_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icpadd_data_2v3_8Feb06.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "Geochemical Mapping of Agricultural and Grazing Land Soil (GEMAS)"
+      ],
+      "dataset_versions": [
+        "GSI-ArcGIS-Enterprise-republication-2024"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 52
+        },
+        "source_evidence": {
+          "high": 52
+        },
+        "spatial_usability": {
+          "high": 52
+        },
+        "workflow_usability": {
+          "medium": 52
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 8,
+        "Cr": 8,
+        "Cu": 8,
+        "Hg": 4,
+        "Ni": 8,
+        "Pb": 8,
+        "Zn": 8
+      },
+      "independent_sample_count": 4,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "soil": 52
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 52,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 52
+          },
+          "record_count": 52
+        },
+        "coordinate_reference": {
+          "accounted_count": 52,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 52
+          },
+          "record_count": 52
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 52,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 52,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 52,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 52,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 52,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 52,
+          "rate": 1.0
+        },
+        "record_count": 52,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+        }
+      ],
+      "record_count": 52,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
+            "sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4"
+          }
+        ],
+        "located_record_count": 52,
+        "official_linked_record_count": 52,
+        "verified_record_count": 52
+      },
+      "source_id": "gemas-europe",
+      "source_urls": [
+        "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.5281/zenodo.18459694"
+      ],
+      "dataset_titles": [
+        "UNEP GEMS/Water Global Freshwater Quality Archive: v3 seven-element subset"
+      ],
+      "dataset_versions": [
+        "v3"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48,
+          "low": 8
+        },
+        "source_evidence": {
+          "high": 56
+        },
+        "spatial_usability": {
+          "high": 56
+        },
+        "workflow_usability": {
+          "low": 8,
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.902857,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.761429
+      },
+      "element_record_counts": {
+        "As": 8,
+        "Cr": 8,
+        "Cu": 8,
+        "Hg": 8,
+        "Ni": 8,
+        "Pb": 8,
+        "Zn": 8
+      },
+      "independent_sample_count": 40,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "water": 56
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 56,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 56
+          },
+          "record_count": 56
+        },
+        "coordinate_reference": {
+          "accounted_count": 56,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 56
+          },
+          "record_count": 56
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "record_count": 56,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.5281/zenodo.18459694"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.5281/zenodo.18459694"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+        }
+      ],
+      "record_count": 56,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "Arsenic.csv",
+            "sha256": "11605175ed9912b3a508fbdfb32684d9684469633858e0e72fc7a08f1bf2e231"
+          },
+          {
+            "filename": "Chromium.csv",
+            "sha256": "164294931268c7427cb7c768f23e20484db9c4130044d99c766483fb881cc62c"
+          },
+          {
+            "filename": "Copper.csv",
+            "sha256": "82fb42ce1bba413a197825017727c8b2c04aa7042f92b07466f81fab3e93c451"
+          },
+          {
+            "filename": "Lead.csv",
+            "sha256": "6c7edbf736a32985394967ff30c175e4618c6914b7c8a77b38d40c255af7b9f0"
+          },
+          {
+            "filename": "Mercury.csv",
+            "sha256": "13805529f39c9ff6c90a84b341491af9739c72c43d3ec0eba07165957058906f"
+          },
+          {
+            "filename": "Nickel.csv",
+            "sha256": "fef4cc062e06ea4e3eafd8257b6849ed1d7ece2ac6522c5f9bfdef73ea206b8f"
+          },
+          {
+            "filename": "Zinc.csv",
+            "sha256": "0d77884198cdb0c01fa9f0ad8e101e086c709bdbc36ca80dc955a1c6172a192d"
+          }
+        ],
+        "located_record_count": 56,
+        "official_linked_record_count": 56,
+        "verified_record_count": 56
+      },
+      "source_id": "gemstat-open-archive",
+      "source_urls": [
+        "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.25625/RZZ9VM"
+      ],
+      "dataset_titles": [
+        "GEOROC Compilation: Intraplate Volcanic Rocks — Antarctica member"
+      ],
+      "dataset_versions": [
+        "12.0"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "low": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "low": 48
+        },
+        "workflow_usability": {
+          "low": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.4435,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.0,
+        "workflow_usability": 0.59
+      },
+      "element_record_counts": {
+        "As": 8,
+        "Cr": 8,
+        "Cu": 8,
+        "Ni": 8,
+        "Pb": 8,
+        "Zn": 8
+      },
+      "independent_sample_count": 27,
+      "licenses": [
+        "CC-BY-SA-4.0"
+      ],
+      "medium_record_counts": {
+        "rock": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "winning_method_not_encoded_in_precompiled_member": 48
+          },
+          "record_count": 48
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_applicable_no_canonical_coordinate": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "publisher_datum_not_declared": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "canonical_coordinate": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.25625/RZZ9VM"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.25625/RZZ9VM"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "2026-06-RZZ9VM_ANTARCTICA.csv",
+            "sha256": "cdcc0d010f65d1a5d6ba357411a4d6a98d2f9ea3911de22a70bb26cc602b0492"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "georoc-antarctica-intraplate",
+      "source_urls": [
+        "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.25625/1KRR1P"
+      ],
+      "dataset_titles": [
+        "GEOROC Compilation: Archaean Cratons"
+      ],
+      "dataset_versions": [
+        "12.0"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "low": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "low": 48
+        },
+        "workflow_usability": {
+          "low": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.4435,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.0,
+        "workflow_usability": 0.59
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 36,
+      "licenses": [
+        "CC-BY-SA-4.0"
+      ],
+      "medium_record_counts": {
+        "rock": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_applicable_no_canonical_coordinate": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "publisher_datum_not_declared": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "canonical_coordinate": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.25625/1KRR1P"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.1016/S0166-2635(04)13013-2"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.1016/j.epsl.2022.117975"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.1016/j.jsames.2015.12.011"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://doi.org/10.25625/1KRR1P/0YSJJR"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://doi.org/10.25625/1KRR1P/OHZY0O"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://doi.org/10.25625/1KRR1P/0YSJJR"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://doi.org/10.25625/1KRR1P/OHZY0O"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "2026-06-1KRR1P_ALDAN_SHIELD_ARCHEAN.csv",
+            "sha256": "6959b5f1d1ce74ba6608d11847cf12e6427535040bc10b5854ec5ef336fcf6aa"
+          },
+          {
+            "filename": "2026-06-1KRR1P_AMAZONIAN_CRATON.csv",
+            "sha256": "2123a1cba47aa354555582fecdfff7540a9aa8b1527e0ee0a705db8f11d30b57"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "georoc-archaean",
+      "source_urls": [
+        "https://doi.org/10.25625/1KRR1P/0YSJJR",
+        "https://doi.org/10.25625/1KRR1P/OHZY0O"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+      ],
+      "dataset_titles": [
+        "GEOTRACES Intermediate Data Product 2025: discrete seawater"
+      ],
+      "dataset_versions": [
+        "IDP2025"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "medium": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.653,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "Cu": 16,
+        "Ni": 16,
+        "Zn": 16
+      },
+      "independent_sample_count": 33,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "water": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "multiple_linked_method_records_unresolved_to_observation": 48
+          },
+          "record_count": 48
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.5285/42c92148-8d03-8be6-e063-7086abc09f0c"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_9ZNEKNrP.txt",
+            "sha256": "c8b36f03b5950d751a497c91898cd2988ac07e1e4e9c4cebcb37ee1801106c44"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "geotraces-idp2025",
+      "source_urls": [
+        "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "Geochemical Map of Japan: national river-sediment sample and concentration tables"
+      ],
+      "dataset_versions": [
+        "sample-2024-02-20_concentration-2007-01-10"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "low": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.5155,
+        "source_evidence": 0.95,
+        "spatial_usability": 1.0,
+        "workflow_usability": 0.763941
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 12,
+      "licenses": [
+        "LicenseRef-GSJ-Government-Standard-Terms-2.0"
+      ],
+      "medium_record_counts": {
+        "sediment": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "source_reported_uncertainty": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 48,
+          "rate": 1.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "noudo.csv",
+            "sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "japan-gsj-geochemical-map",
+      "source_urls": [
+        "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "Geochemical Map of Sea and Land of Japan: marine sediment concentrations"
+      ],
+      "dataset_versions": [
+        "content-snapshot-2026-08-06"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "low": 56
+        },
+        "source_evidence": {
+          "high": 56
+        },
+        "spatial_usability": {
+          "low": 56
+        },
+        "workflow_usability": {
+          "low": 56
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.4435,
+        "source_evidence": 0.95,
+        "spatial_usability": 0.0,
+        "workflow_usability": 0.589941
+      },
+      "element_record_counts": {
+        "As": 8,
+        "Cr": 8,
+        "Cu": 8,
+        "Hg": 8,
+        "Ni": 8,
+        "Pb": 8,
+        "Zn": 8
+      },
+      "independent_sample_count": 8,
+      "licenses": [
+        "LicenseRef-GSJ-Government-Standard-Terms-2.0"
+      ],
+      "medium_record_counts": {
+        "sediment": 56
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 56,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported_in_concentration_csv": 56
+          },
+          "record_count": 56
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 56,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_applicable_no_canonical_coordinate": 56
+          },
+          "record_count": 56
+        },
+        "coordinate_reference": {
+          "accounted_count": 56,
+          "accounted_rate": 1.0,
+          "counts": {
+            "publisher_datum_not_declared": 56
+          },
+          "record_count": 56
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "canonical_coordinate": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "official_source_link": {
+          "count": 56,
+          "rate": 1.0
+        },
+        "record_count": 56,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.5571/synth.3.281"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+        }
+      ],
+      "record_count": 56,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "ocean-noudo.csv",
+            "sha256": "e81046209e381a727de856eec14ee4a67ace37751c66d1d74467c3d8214bad49"
+          }
+        ],
+        "located_record_count": 56,
+        "official_linked_record_count": 56,
+        "verified_record_count": 56
+      },
+      "source_id": "japan-gsj-marine-sediment",
+      "source_urls": [
+        "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "MarChem marine chemistry database for Norwegian waters"
+      ],
+      "dataset_versions": [
+        "norway-marchem:2026-08-05T10:27:11Z:be888784ee2e"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 112
+        },
+        "source_evidence": {
+          "high": 112
+        },
+        "spatial_usability": {
+          "high": 112
+        },
+        "workflow_usability": {
+          "medium": 112
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.963357,
+        "source_evidence": 0.95,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 28,
+        "Cu": 28,
+        "Ni": 28,
+        "Zn": 28
+      },
+      "independent_sample_count": 28,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "sediment": 112
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 112,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 112
+          },
+          "record_count": 112
+        },
+        "coordinate_reference": {
+          "accounted_count": 112,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 112
+          },
+          "record_count": 112
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 112,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 112,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 112,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 112,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 112,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 112,
+          "rate": 1.0
+        },
+        "record_count": 112,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MarChem_Inorganic_Data_20260805T102709Z.csv"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MarChem_Inorganic_Data_20260805T102709Z.csv"
+        }
+      ],
+      "record_count": 112,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "MarChem_Inorganic_Data_20260805T102709Z.csv",
+            "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
+          }
+        ],
+        "located_record_count": 112,
+        "official_linked_record_count": 112,
+        "verified_record_count": 112
+      },
+      "source_id": "norway-marchem",
+      "source_urls": [
+        "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MarChem_Inorganic_Data_20260805T102709Z.csv"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.1594/PANGAEA.950139"
+      ],
+      "dataset_titles": [
+        "Geochemistry of modern sediments and the glacial Arabian Sea"
+      ],
+      "dataset_versions": [
+        "2022-11-02"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.964,
+        "source_evidence": 0.9,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 8,
+        "Cr": 8,
+        "Cu": 8,
+        "Ni": 8,
+        "Pb": 8,
+        "Zn": 8
+      },
+      "independent_sample_count": 7,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "sediment": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.1594/PANGAEA.950139"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.1594/PANGAEA.950139"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "PANGAEA.950139.tab",
+            "sha256": "d5c2b65e6a839bd3e45eaaa5593da37af7ebae83cec1725b678817c30405c990"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "pangaea-arabian-sea-sediment",
+      "source_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.1594/PANGAEA.949903"
+      ],
+      "dataset_titles": [
+        "Chemical compositions of deflatable soil fractions from North Africa"
+      ],
+      "dataset_versions": [
+        "2022-10-25"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "high": 48
+        },
+        "workflow_usability": {
+          "medium": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.955,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 12,
+        "Cu": 12,
+        "Ni": 12,
+        "Zn": 12
+      },
+      "independent_sample_count": 12,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "soil": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.1594/PANGAEA.949903"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.1016/j.quascirev.2022.107729"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "Table_S5.tab",
+            "sha256": "de402b7f469c2d7c182abb285e624f2a1e6b1d00ec66e3dc2fae7ec9c8e4a485"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "pangaea-north-africa-soil",
+      "source_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.11888/Terre.tpdc.302620"
+      ],
+      "dataset_titles": [
+        "Multi-element dataset of soil profiles across climatic zones in China's mountains"
+      ],
+      "dataset_versions": [
+        "tpdc-file-2025-07-23"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 40
+        },
+        "source_evidence": {
+          "high": 40
+        },
+        "spatial_usability": {
+          "low": 40
+        },
+        "workflow_usability": {
+          "low": 40
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.928,
+        "source_evidence": 1.0,
+        "spatial_usability": 0.0,
+        "workflow_usability": 0.59
+      },
+      "element_record_counts": {
+        "Cr": 8,
+        "Cu": 8,
+        "Ni": 8,
+        "Pb": 8,
+        "Zn": 8
+      },
+      "independent_sample_count": 8,
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "medium_record_counts": {
+        "soil": 40
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 40,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_applicable_no_canonical_coordinate": 40
+          },
+          "record_count": 40
+        },
+        "coordinate_reference": {
+          "accounted_count": 40,
+          "accounted_rate": 1.0,
+          "counts": {
+            "publisher_datum_not_declared": 40
+          },
+          "record_count": 40
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 40,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 40,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 40,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 40,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 40,
+          "rate": 1.0
+        },
+        "record_count": 40,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.11888/Terre.tpdc.302620"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.5194/essd-17-4779-2025"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+        }
+      ],
+      "record_count": 40,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "Soil dataset.xlsx",
+            "sha256": "923da5a896c0f403d227799cb04d565f75d641d5c81290889fcaddaa42ff593d"
+          }
+        ],
+        "located_record_count": 40,
+        "official_linked_record_count": 40,
+        "verified_record_count": 40
+      },
+      "source_id": "tpdc-china-mountain-soil",
+      "source_urls": [
+        "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [],
+      "dataset_titles": [
+        "USGS Sacramento River at Freeport dissolved arsenic via Water Quality Portal"
+      ],
+      "dataset_versions": [
+        "content-snapshot-2026-08-06"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "low": 48
+        },
+        "source_evidence": {
+          "high": 48
+        },
+        "spatial_usability": {
+          "low": 48
+        },
+        "workflow_usability": {
+          "low": 48
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.59,
+        "source_evidence": 0.95,
+        "spatial_usability": 0.0,
+        "workflow_usability": 0.59
+      },
+      "element_record_counts": {
+        "As": 48
+      },
+      "independent_sample_count": 48,
+      "licenses": [
+        "LicenseRef-USGS-Public-Domain"
+      ],
+      "medium_record_counts": {
+        "water": 48
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_applicable_no_canonical_coordinate": 48
+          },
+          "record_count": 48
+        },
+        "coordinate_reference": {
+          "accounted_count": 48,
+          "accounted_rate": 1.0,
+          "counts": {
+            "coordinate_not_canonicalized_under_policy": 48
+          },
+          "record_count": 48
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 0,
+          "rate": 0.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 48,
+          "rate": 1.0
+        },
+        "record_count": 48,
+        "source_reported_coordinate_uncertainty": {
+          "count": 48,
+          "rate": 1.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "record_official_url",
+          "url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+        }
+      ],
+      "record_count": 48,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "results.csv",
+            "sha256": "916f17a851b0597c55b4dfd78ace1ad65c13d2c30935b05b2e74b18910d28fcd"
+          }
+        ],
+        "located_record_count": 48,
+        "official_linked_record_count": 48,
+        "verified_record_count": 48
+      },
+      "source_id": "us-wqp-sacramento-river-arsenic",
+      "source_urls": [
+        "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+      ]
+    },
+    {
+      "acquisition_time": null,
+      "acquisition_time_status": "not_available; consult request_evidence/acquisition manifests; no time is inferred from normalized records",
+      "acquisition_times": [],
+      "dataset_dois": [
+        "10.3133/ds801"
+      ],
+      "dataset_titles": [
+        "Geochemical and mineralogical data for soils of the conterminous United States"
+      ],
+      "dataset_versions": [
+        "Data Series 801, 2013 release"
+      ],
+      "dimension_band_counts": {
+        "analytical_readiness": {
+          "high": 108
+        },
+        "source_evidence": {
+          "high": 108
+        },
+        "spatial_usability": {
+          "high": 108
+        },
+        "workflow_usability": {
+          "medium": 108
+        }
+      },
+      "dimension_score_means": {
+        "analytical_readiness": 0.96375,
+        "source_evidence": 0.95,
+        "spatial_usability": 0.8,
+        "workflow_usability": 0.79
+      },
+      "element_record_counts": {
+        "As": 27,
+        "Cu": 27,
+        "Ni": 27,
+        "Zn": 27
+      },
+      "independent_sample_count": 27,
+      "licenses": [
+        "LicenseRef-USGS-Public-Domain"
+      ],
+      "medium_record_counts": {
+        "soil": 108
+      },
+      "metadata_absence_accounting": {
+        "analytical_method": {
+          "accounted_count": 0,
+          "accounted_rate": 0.0,
+          "counts": {},
+          "record_count": 0
+        },
+        "claim_boundary": "Method reasons distinguish publisher absence or unresolved publisher linkage from unaccounted pipeline input. Coordinate-reference status distinguishes evidenced canonical coordinates from publisher datum absence, incomplete coordinate pairs and policy-stopped transformations. Coordinate-accuracy status separately distinguishes source-reported uncertainty, publisher-not-reported uncertainty and records without canonical coordinates. Neither status is a measurement-quality grade.",
+        "coordinate_accuracy": {
+          "accounted_count": 108,
+          "accounted_rate": 1.0,
+          "counts": {
+            "not_reported": 108
+          },
+          "record_count": 108
+        },
+        "coordinate_reference": {
+          "accounted_count": 108,
+          "accounted_rate": 1.0,
+          "counts": {
+            "canonical_crs_evidenced": 108
+          },
+          "record_count": 108
+        }
+      },
+      "metadata_completeness": {
+        "analytical_method": {
+          "count": 108,
+          "rate": 1.0
+        },
+        "canonical_coordinate": {
+          "count": 108,
+          "rate": 1.0
+        },
+        "claim_boundary": "Completeness reports whether evidence is present, not whether the measurement is correct. Coordinate representation resolution is derived from numeric text and is not positional accuracy; only source_reported_coordinate_uncertainty is accuracy/uncertainty evidence.",
+        "coordinate_representation_resolution": {
+          "count": 108,
+          "rate": 1.0
+        },
+        "exact_record_locator": {
+          "count": 108,
+          "rate": 1.0
+        },
+        "method_source_locator": {
+          "count": 108,
+          "rate": 1.0
+        },
+        "official_source_link": {
+          "count": 108,
+          "rate": 1.0
+        },
+        "record_count": 108,
+        "source_reported_coordinate_uncertainty": {
+          "count": 0,
+          "rate": 0.0
+        }
+      },
+      "official_links": [
+        {
+          "kind": "dataset_doi",
+          "url": "https://doi.org/10.3133/ds801"
+        },
+        {
+          "kind": "publication_doi",
+          "url": "https://doi.org/10.3133/ds801"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt"
+        },
+        {
+          "kind": "record_official_url",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt"
+        },
+        {
+          "kind": "source_file",
+          "url": "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+        }
+      ],
+      "record_count": 108,
+      "record_provenance": {
+        "file_hashes": [
+          {
+            "filename": "Appendix_2b_Top5_18Sept2013.txt",
+            "sha256": "e831095cba4549a87144804aa1ccb38e07d44550ab91b27390b84fc1dbdbc894"
+          },
+          {
+            "filename": "Appendix_3b_Ahorizon_18Sept2013.txt",
+            "sha256": "462821c1164b5b4c27905a3ea62a22fa3f6172da09125d8f80ec5b2f6a69a202"
+          },
+          {
+            "filename": "Appendix_4b_Chorizon_18Sept2013.txt",
+            "sha256": "4aa8080f81f690587f762300bada16e33e376eea0003243d5333b47c78b4c90c"
+          }
+        ],
+        "located_record_count": 108,
+        "official_linked_record_count": 108,
+        "verified_record_count": 108
+      },
+      "source_id": "usgs-conus-soil",
+      "source_urls": [
+        "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt",
+        "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt",
+        "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+      ]
+    }
+  ]
+}

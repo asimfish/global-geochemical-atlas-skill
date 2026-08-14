@@ -349,7 +349,11 @@ def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
                 errors.append(f"{sample_id} lacks V2 sample field: {field}")
             if sample.get("sample_type") and sample.get(
                 "sample_type_mapping_status"
-            ) not in {"exact", "dataset_constant", "mapped"}:
+            ) not in {
+                "exact",
+                "dataset_constant",
+                "mapped",
+            }:
                 errors.append(f"{sample_id} has a sample_type without mapping evidence")
             if sample.get("matched_geologic_unit") and not all(
                 sample.get(field)

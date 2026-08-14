@@ -148,7 +148,7 @@ Mendeley 或普通用户 CSV。
 
 未提供批次 policy 不表示批次通过：产物状态固定为 `not_supplied`，运行摘要说明这项证据未评估。
 
-## 5. 运行级置信度
+## 5. 分维度可用性与运行级置信度
 
 五个分量均为 0–1：
 
@@ -170,7 +170,14 @@ v3 使用可审计门控：任一 `error` 级 flag 或缺少 canonical WGS84 坐
 - medium：`0.60 <= overall < 0.80`
 - low：`overall < 0.60`
 
-该分数名称必须写作 `operational_confidence`。不得称为概率、统计置信水平或测量准确度。
+该兼容分数名称必须写作 `operational_confidence`，其 `overall/band` 只表示 `workflow_usability`。每条记录还必须在 `quality_dimensions` 中分别输出：
+
+- `source_evidence`：来源机构、定位、许可、版本/hash 的证据强度；
+- `analytical_readiness`：方法语义和 QC 对当前定量比较的就绪度；
+- `spatial_usability`：canonical WGS84、reported-only 或无坐标对当前空间工作流的可用性；
+- `workflow_usability`：五分量与门控合成的当前流程可用性。
+
+不得将任一维度称为概率、统计置信水平或测量准确度；不得把 low `workflow_usability` 简化为“低质量来源”。例如，政府来源可以有 high `source_evidence`，同时因 datum 未声明而只有 low `spatial_usability`。
 
 ## 6. 候选异常
 

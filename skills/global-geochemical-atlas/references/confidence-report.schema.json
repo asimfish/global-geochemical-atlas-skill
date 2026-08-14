@@ -9,6 +9,7 @@
     "name",
     "not_a_probability",
     "meaning",
+    "dimension_meaning",
     "run_metadata",
     "weights",
     "component_definitions",
@@ -17,13 +18,26 @@
     "gates",
     "component_means",
     "band_counts",
-    "gate_counts"
+    "gate_counts",
+    "dimension_score_means",
+    "dimension_band_counts"
   ],
   "properties": {
     "confidence_version": {"const": "d2-confidence-v3"},
     "name": {"const": "operational_confidence"},
     "not_a_probability": {"const": true},
     "meaning": {"type": "string", "minLength": 1},
+    "dimension_meaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_evidence", "analytical_readiness", "spatial_usability", "workflow_usability"],
+      "properties": {
+        "source_evidence": {"type": "string", "minLength": 1},
+        "analytical_readiness": {"type": "string", "minLength": 1},
+        "spatial_usability": {"type": "string", "minLength": 1},
+        "workflow_usability": {"type": "string", "minLength": 1}
+      }
+    },
     "run_metadata": {
       "type": "object",
       "required": ["run_id", "input_sha256", "input_row_count", "configuration"],
@@ -105,6 +119,43 @@
       }
     },
     "band_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["high", "medium", "low"],
+      "properties": {
+        "high": {"type": "integer", "minimum": 0},
+        "medium": {"type": "integer", "minimum": 0},
+        "low": {"type": "integer", "minimum": 0}
+      }
+    },
+    "dimension_score_means": {
+      "$ref": "#/$defs/dimensionScores"
+    },
+    "dimension_band_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_evidence", "analytical_readiness", "spatial_usability", "workflow_usability"],
+      "properties": {
+        "source_evidence": {"$ref": "#/$defs/bandCounts"},
+        "analytical_readiness": {"$ref": "#/$defs/bandCounts"},
+        "spatial_usability": {"$ref": "#/$defs/bandCounts"},
+        "workflow_usability": {"$ref": "#/$defs/bandCounts"}
+      }
+    }
+  },
+  "$defs": {
+    "dimensionScores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_evidence", "analytical_readiness", "spatial_usability", "workflow_usability"],
+      "properties": {
+        "source_evidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "analytical_readiness": {"type": "number", "minimum": 0, "maximum": 1},
+        "spatial_usability": {"type": "number", "minimum": 0, "maximum": 1},
+        "workflow_usability": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "bandCounts": {
       "type": "object",
       "additionalProperties": false,
       "required": ["high", "medium", "low"],

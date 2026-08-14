@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-06T10:35:00Z",
+  "as_of": "2026-08-13T10:00:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -151,13 +151,13 @@
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 6,
-        "Cr": 5,
-        "Cu": 6,
+        "As": 8,
+        "Cr": 8,
+        "Cu": 10,
         "Hg": 5,
-        "Ni": 6,
-        "Pb": 5,
-        "Zn": 6
+        "Ni": 8,
+        "Pb": 9,
+        "Zn": 10
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -181,7 +181,6 @@
       "candidate_sources": [
         "alaska-dggs-webgeochem",
         "argentina-segemar-geochemistry",
-        "australia-ngsa",
         "australia-ozchem",
         "bgs-gbase",
         "brazil-sgb-geochemistry",
@@ -207,14 +206,18 @@
         "us-water-quality-portal",
         "usgs-ngdb"
       ],
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 10,
       "lineage_ids": [
+        "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
         "norway-marchem",
-        "pangaea-arabian-sea-sediment"
+        "pangaea-arabian-sea-sediment",
+        "pangaea-east-china-sea-clay",
+        "pangaea-south-china-sea-sediment",
+        "zenodo-yangtze-yellow-river-sediment"
       ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
@@ -229,18 +232,22 @@
         "Zn"
       ],
       "selected_sources": [
+        "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
         "norway-marchem",
-        "pangaea-arabian-sea-sediment"
+        "pangaea-arabian-sea-sediment",
+        "pangaea-east-china-sea-clay",
+        "pangaea-south-china-sea-sediment",
+        "zenodo-yangtze-yellow-river-sediment"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
         "argentina-segemar-geochemistry": "D",
-        "australia-ngsa": "D",
+        "australia-ngsa": "A",
         "australia-ngsa-mercury": "A",
         "australia-ozchem": "D",
         "bgs-gbase": "D",
@@ -267,11 +274,14 @@
         "norway-marchem": "A",
         "nz-petlab": "D",
         "pangaea-arabian-sea-sediment": "A",
+        "pangaea-east-china-sea-clay": "A",
         "pangaea-repository": "D",
+        "pangaea-south-china-sea-sediment": "A",
         "south-africa-cgs-geochemistry": "D",
         "sweden-sgu-geochemical-atlas": "D",
         "us-water-quality-portal": "D",
-        "usgs-ngdb": "D"
+        "usgs-ngdb": "D",
+        "zenodo-yangtze-yellow-river-sediment": "A"
       },
       "source_independence": "multiple_independent_lineages",
       "source_scopes": {
@@ -304,13 +314,22 @@
         "norway-marchem": "national_partial",
         "nz-petlab": "national_plus_selected_global",
         "pangaea-arabian-sea-sediment": "regional_discrete_samples",
+        "pangaea-east-china-sea-clay": "regional_discrete_samples",
         "pangaea-repository": "global_collection",
+        "pangaea-south-china-sea-sediment": "regional_discrete_samples",
         "south-africa-cgs-geochemistry": "national_partial",
         "sweden-sgu-geochemical-atlas": "national_partial",
         "us-water-quality-portal": "national_partial",
-        "usgs-ngdb": "national_partial"
+        "usgs-ngdb": "national_partial",
+        "zenodo-yangtze-yellow-river-sediment": "regional_discrete_samples"
       },
       "source_target_analytes": {
+        "australia-ngsa": [
+          "As",
+          "Cu",
+          "Pb",
+          "Zn"
+        ],
         "australia-ngsa-mercury": [
           "Hg"
         ],
@@ -363,12 +382,33 @@
           "Ni",
           "Pb",
           "Zn"
+        ],
+        "pangaea-east-china-sea-clay": [
+          "Cr",
+          "Cu",
+          "Pb",
+          "Zn"
+        ],
+        "pangaea-south-china-sea-sediment": [
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "zenodo-yangtze-yellow-river-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
         ]
       },
       "source_use_modes": {
         "alaska-dggs-webgeochem": "discovery",
         "argentina-segemar-geochemistry": "discovery",
-        "australia-ngsa": "discovery",
+        "australia-ngsa": "normalized_analysis",
         "australia-ngsa-mercury": "normalized_analysis",
         "australia-ozchem": "discovery",
         "bgs-gbase": "discovery",
@@ -395,11 +435,14 @@
         "norway-marchem": "normalized_analysis",
         "nz-petlab": "discovery",
         "pangaea-arabian-sea-sediment": "normalized_analysis",
+        "pangaea-east-china-sea-clay": "normalized_analysis",
         "pangaea-repository": "discovery",
+        "pangaea-south-china-sea-sediment": "normalized_analysis",
         "south-africa-cgs-geochemistry": "discovery",
         "sweden-sgu-geochemical-atlas": "discovery",
         "us-water-quality-portal": "discovery",
-        "usgs-ngdb": "discovery"
+        "usgs-ngdb": "discovery",
+        "zenodo-yangtze-yellow-river-sediment": "normalized_analysis"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",
@@ -408,13 +451,13 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 6,
-        "Cr": 6,
-        "Cu": 8,
-        "Hg": 4,
-        "Ni": 8,
-        "Pb": 7,
-        "Zn": 8
+        "As": 9,
+        "Cr": 8,
+        "Cu": 12,
+        "Hg": 5,
+        "Ni": 10,
+        "Pb": 11,
+        "Zn": 12
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -448,11 +491,15 @@
         "usgs-ngdb",
         "wosis"
       ],
-      "independent_lineage_count": 6,
+      "independent_lineage_count": 10,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
+        "eidc-ningbo-soil",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
+        "pangaea-amazonas-soil",
+        "pangaea-barents-c-horizon-soil",
+        "pangaea-batagay-soil",
         "pangaea-north-africa-soil",
         "tpdc-china-mountain-soil",
         "usgs-conus-soil"
@@ -471,10 +518,14 @@
       ],
       "selected_sources": [
         "afsis-phase-i-wet-chemistry",
+        "eidc-ningbo-soil",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
         "gemas-europe",
+        "pangaea-amazonas-soil",
+        "pangaea-barents-c-horizon-soil",
+        "pangaea-batagay-soil",
         "pangaea-north-africa-soil",
         "tpdc-china-mountain-soil",
         "usgs-conus-soil"
@@ -485,12 +536,16 @@
         "bgs-gbase": "D",
         "brazil-sgb-geochemistry": "D",
         "earthchem-library": "D",
+        "eidc-ningbo-soil": "A",
         "foregs-europe": "D",
         "foregs-humus": "A",
         "foregs-subsoil": "A",
         "foregs-topsoil": "A",
         "gemas-europe": "A",
         "ireland-tellus": "D",
+        "pangaea-amazonas-soil": "A",
+        "pangaea-barents-c-horizon-soil": "A",
+        "pangaea-batagay-soil": "A",
         "pangaea-north-africa-soil": "A",
         "pangaea-repository": "D",
         "soils4africa": "D",
@@ -507,12 +562,16 @@
         "bgs-gbase": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
+        "eidc-ningbo-soil": "regional_partial",
         "foregs-europe": "regional_partial",
         "foregs-humus": "regional_partial",
         "foregs-subsoil": "regional_partial",
         "foregs-topsoil": "regional_partial",
         "gemas-europe": "regional_partial",
         "ireland-tellus": "national_partial",
+        "pangaea-amazonas-soil": "regional_discrete_repeated_samples",
+        "pangaea-barents-c-horizon-soil": "regional_discrete_samples",
+        "pangaea-batagay-soil": "single_site_vertical_profile",
         "pangaea-north-africa-soil": "regional_partial",
         "pangaea-repository": "global_collection",
         "soils4africa": "continental_partial",
@@ -524,6 +583,14 @@
       },
       "source_target_analytes": {
         "afsis-phase-i-wet-chemistry": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "eidc-ningbo-soil": [
           "As",
           "Cr",
           "Cu",
@@ -565,6 +632,26 @@
           "Pb",
           "Zn"
         ],
+        "pangaea-amazonas-soil": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "pangaea-barents-c-horizon-soil": [
+          "As",
+          "Cu",
+          "Pb",
+          "Zn"
+        ],
+        "pangaea-batagay-soil": [
+          "Cu",
+          "Pb",
+          "Zn"
+        ],
         "pangaea-north-africa-soil": [
           "As",
           "Cr",
@@ -593,12 +680,16 @@
         "bgs-gbase": "discovery",
         "brazil-sgb-geochemistry": "discovery",
         "earthchem-library": "discovery",
+        "eidc-ningbo-soil": "normalized_analysis",
         "foregs-europe": "discovery",
         "foregs-humus": "normalized_analysis",
         "foregs-subsoil": "normalized_analysis",
         "foregs-topsoil": "normalized_analysis",
         "gemas-europe": "normalized_analysis",
         "ireland-tellus": "discovery",
+        "pangaea-amazonas-soil": "normalized_analysis",
+        "pangaea-barents-c-horizon-soil": "normalized_analysis",
+        "pangaea-batagay-soil": "normalized_analysis",
         "pangaea-north-africa-soil": "normalized_analysis",
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
@@ -790,7 +881,8 @@
       "southern_hemisphere_and_asian_national_portals",
       "state_and_provincial_geological_surveys",
       "publication_linked_datasets",
-      "institutional_doi_dataset_download_verification"
+      "institutional_doi_dataset_download_verification",
+      "targeted_south_america_and_russia_doi_dataset_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -798,7 +890,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 6,
+    "round": 10,
     "saturated": false,
     "status": "in_progress"
   },
@@ -813,6 +905,8 @@
   ],
   "overall_status": "partial",
   "request": {
+    "adjacent_marine_distance_km": 0,
+    "coverage_mode": "fixed",
     "elements": [
       "As",
       "Cr",
@@ -833,7 +927,9 @@
       "sediment",
       "water"
     ],
+    "minimum_elements": null,
     "minimum_evidence_tier": "D",
+    "minimum_media": null,
     "minimum_use_mode": "normalized_analysis",
     "offline": false,
     "output_formats": [
@@ -845,6 +941,11 @@
     "region": "global",
     "research_use_policy": "permitted_research",
     "sources": "auto",
+    "spatial_domains": [
+      "land",
+      "inland_water",
+      "marine"
+    ],
     "target_crs": "EPSG:4326",
     "time_range": null
   },

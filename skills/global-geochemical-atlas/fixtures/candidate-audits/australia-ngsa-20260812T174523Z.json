@@ -1,0 +1,123 @@
+{
+  "acquisition": {
+    "mode": "pinned-official-csv",
+    "observed_at": "2026-08-12T17:45:23Z",
+    "request_url": "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv"
+  },
+  "archive": {
+    "members": [
+      {
+        "bytes": 4843809,
+        "file_id": "atlas-csv",
+        "name": "Rec2011_020_110706.csv",
+        "sha256": "d9fa6d5b92642c56cc0b1ea7cc1ca22b763cde283cb71dc7194004a005f87812",
+        "source_url": "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv"
+      }
+    ]
+  },
+  "claim_boundary": "This audit proves the pinned NGSA CSV contract, adapter parse, the official field-manual GDA94 declaration and the four requested ICP-MS columns. It does not imply a regular grid, in-situ soil coverage, rock coverage or continuous Australian coverage.",
+  "independent_reverification": {
+    "checked_at": "2026-08-12T21:32:57Z",
+    "data_file": {
+      "bytes": 4843809,
+      "sha256": "d9fa6d5b92642c56cc0b1ea7cc1ca22b763cde283cb71dc7194004a005f87812",
+      "result": "matched_registered_official_url"
+    },
+    "field_manual": {
+      "bytes": 3443975,
+      "locator": "pp. 24-25, Latitude_GDA94 and Longitude_GDA94 field definitions",
+      "sha256": "9f81cf509753ac5abced666e69fa1c166ef35ad1e300c0f52875698f930a60c2",
+      "url": "https://www.ga.gov.au/bigobj/GA10307.pdf"
+    },
+    "metadata_xml": {
+      "bytes": 41267,
+      "sha256": "a665451841213e9f9a2f6697498036f06a651221c6fed0518b2c0633f325ab1e",
+      "url": "https://ecat.ga.gov.au/geonetwork/srv/api/records/0dc4a02b-21e9-9b28-e053-12a3070af396/formatters/xml"
+    }
+  },
+  "limitations": [
+    "Catchment-outlet transported regolith is classified as sediment and is not interchangeable with in-situ soil or stream sediment.",
+    "The production extraction uses only the less-than-75-micrometre ICP-MS layer; aqua-regia and MMI results are not pooled.",
+    "TOS and BOS remain separate through sample type and measurement basis; field duplicates are excluded from independent-sample selection.",
+    "Seven less-than-75-micrometre rows have one or more blank requested-element values; no value is imputed.",
+    "Coordinates are GDA94 geographic (EPSG:4283), canonicalized only under the registered GDA94-to-WGS84 identity-tolerance policy.",
+    "The publisher does not report positional accuracy. Decimal representation resolution is not promoted to coordinate uncertainty.",
+    "The contemporaneous CSV states CC BY 3.0 Australia while the current portal states CC BY 4.0 International; derived redistribution follows the file-level 3.0 AU statement and exposes the version difference."
+  ],
+  "observed_data": {
+    "counts": {
+      "depth_counts": {
+        "BOS": 3945,
+        "TOS": 3945
+      },
+      "distinct_samples": 7890,
+      "distinct_sites": 1315,
+      "duplicate_code_counts": {
+        "": 6414,
+        "Duplicate 1": 738,
+        "Duplicate 2": 738
+      },
+      "grain_counts": {
+        "<2 mm": 2630,
+        "<75 µm": 2630,
+        "Bulk": 2630
+      },
+      "physical_rows": 7890,
+      "selected_grain_rows": 2630,
+      "target_observations": 10492,
+      "target_value_counts": {
+        "As": 2623,
+        "Cu": 2623,
+        "Pb": 2623,
+        "Zn": 2623
+      },
+      "independent_research_slice": {
+        "complete_nonduplicate_rows": 2131,
+        "four_analyte_observations": 8524,
+        "selection_rule": "less-than-75-micrometre rows; DUPLICATE CODE blank; As/Cu/Pb/Zn all nonblank"
+      }
+    },
+    "coverage": {
+      "bbox": [
+        113.8092,
+        -43.3302,
+        153.3335,
+        -11.0346
+      ],
+      "country_iso_a3_codes": [
+        "AUS"
+      ],
+      "valid_coordinate_rows": 7890
+    },
+    "target_analytes": {
+      "As": "As ICP-MS mg/kg 0.4",
+      "Cu": "Cu ICP-MS mg/kg 0.2",
+      "Pb": "Pb ICP-MS mg/kg 0.1",
+      "Zn": "Zn ICP-MS mg/kg 0.9"
+    }
+  },
+  "observed_metadata": {
+    "coordinate_accuracy_evidence_status": "not_reported_by_publisher",
+    "coordinate_policy_id": "gda94-geographic-wgs84-identity-v1",
+    "dataset_doi": "10.11636/Record.2011.020",
+    "dataset_version": "2011-07-06",
+    "license": {
+      "file_level_name": "Creative Commons Attribution 3.0 Australia",
+      "file_level_spdx": "CC-BY-3.0-AU",
+      "file_level_url": "https://creativecommons.org/licenses/by/3.0/au/",
+      "portal_current_name": "Creative Commons Attribution 4.0 International",
+      "resolution": "conservative_file_level_route"
+    },
+    "method_evidence": {
+      "analytical_method": "ICP-MS",
+      "method_key_locator": "Rec2011_020_110706.csv#row=6",
+      "parameter_locator": "Rec2011_020_110706.csv#row=12#column=<target field>",
+      "scope": "dataset_parameter"
+    },
+    "original_coordinate_crs": "EPSG:4283 (GDA94)",
+    "publisher": "Geoscience Australia"
+  },
+  "source_id": "australia-ngsa",
+  "status": "verified_content_addressed_official_or_doi_dataset",
+  "verification_version": "d1-repair-australia-ngsa-v2-independent-reverification"
+}

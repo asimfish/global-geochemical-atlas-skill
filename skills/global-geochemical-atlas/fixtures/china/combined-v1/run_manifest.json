@@ -1,5 +1,5 @@
 {
-  "claim_boundary": "The combined package binds two verified slices (6,570 TPDC soil observations and 558 Zenodo river-sediment observations) to one request and evidence chain. It does not increase their geographic representativeness.",
+  "claim_boundary": "The combined package binds two verified slices (2,400 TPDC soil observations and 558 Zenodo river-sediment observations) to one request and evidence chain. It does not increase their geographic representativeness.",
   "combined_demo_version": "d1-china-combined-v1",
   "comparison_isolation": {
     "explicit_boundaries": [
@@ -37,7 +37,7 @@
   "failures": [],
   "fixture_inputs": [
     {
-      "evidence_sha256": "993413a26b963c1a82b08a5b4e106bcaedf438fd8ec85e90658980a663c0be74",
+      "evidence_sha256": "16098773089c763340d6dc38c85a600578df09caeb9dc2e0756a43edd166b28b",
       "generation_manifest": {
         "demo_generation_version": "d1-demo-slice-v1",
         "generated_at": "2026-08-08T00:00:00Z",
@@ -52,7 +52,8 @@
           "bbox": null,
           "filter_execution": "local deterministic filtering after verified source parsing",
           "mode": "cached",
-          "observations": 6570
+          "observations": 2400,
+          "purpose": "demo"
         },
         "source": {
           "dataset_doi": "10.11888/Terre.tpdc.302620",
@@ -62,8 +63,8 @@
           "title": "Multi-element dataset of soil profiles across climatic zones in China's mountains"
         }
       },
-      "input_sha256": "132daac4ab9a17045aded87609ffd660f080319e056210e382dd09d266ba214e",
-      "record_count": 6570,
+      "input_sha256": "4446676a68875a9d07f6c5367d8360b1f06c5c46924e00b9bd94dd7fd600edce",
+      "record_count": 2400,
       "source_id": "tpdc-china-mountain-soil"
     },
     {
@@ -93,7 +94,7 @@
           "title": "Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments"
         }
       },
-      "input_sha256": "201ad05a57aadfe1d5d933e8ef8709e5972af916133f3074346b94d49c976b13",
+      "input_sha256": "d8e97e5b04fc739304f44d2f184654d31ffc9df788557eaba421210437d4774d",
       "record_count": 558,
       "source_id": "zenodo-yangtze-yellow-river-sediment"
     }
@@ -102,34 +103,34 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 9368518,
+      "bytes": 4202970,
       "path": "demo_input.csv",
-      "sha256": "545a3dafa8b6de51a32789c872cd5cb63a5c8d18992aafa1e20abd91b7df5709"
+      "sha256": "b1a14004bdc2db2aea223aabe47c2395b1966b97780dd0d54c6c3636a5e21782"
     },
     {
-      "bytes": 11166942,
+      "bytes": 4825892,
       "path": "sources.jsonl",
-      "sha256": "885971cab35df53b6e266813dc8cba3fe4e50182eb8920c25680f9d6136cc5fb"
+      "sha256": "031408cee775473da9d62dc79b11fbba30e5ff67aa91cbd9d4bfa075aa85c198"
     }
   ],
   "record_counts": {
     "by_analyte": {
       "As": 93,
-      "Cr": 1407,
-      "Cu": 1407,
-      "Ni": 1407,
-      "Pb": 1407,
-      "Zn": 1407
+      "Cr": 573,
+      "Cu": 573,
+      "Ni": 573,
+      "Pb": 573,
+      "Zn": 573
     },
     "by_medium": {
       "sediment": 558,
-      "soil": 6570
+      "soil": 2400
     },
     "by_source": {
-      "tpdc-china-mountain-soil": 6570,
+      "tpdc-china-mountain-soil": 2400,
       "zenodo-yangtze-yellow-river-sediment": 558
     },
-    "total": 7128
+    "total": 2958
   },
   "request": {
     "elements": [

@@ -26,7 +26,9 @@ DEFAULT_DEMOS = SKILL_DIR / "fixtures" / "source-demos"
 # generator demo. These sources are not in assets/source_manifest.json and are
 # rebuilt from verified originals by their dedicated builder
 # (fixtures/china/combined-v1 via scripts/build_china_demo.py).
-COMBINED_FIXTURE_CONTRACTS = ("zenodo-yangtze-yellow-river-sediment",)
+# Every V4 source contract is now registry-backed; sources that exist only in
+# combined fixtures (none currently) would be declared here.
+COMBINED_FIXTURE_CONTRACTS: tuple[str, ...] = ()
 
 
 class MigrationError(RuntimeError):

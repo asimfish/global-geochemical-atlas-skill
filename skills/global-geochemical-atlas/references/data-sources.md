@@ -129,6 +129,31 @@
 - 质量边界：不发布采样坐标，记录只入标准化数据库、不进任何地图层；HCl/AC 残余与粒级保持独立比较组；
 - 登记范围：本来源只注册在中国区域 fixture（构建器 `scripts/build_china_demo.py`），不进入通用 source catalog 路由；完整登记、哈希与重建命令见 `references/china-fixture.md`。
 
+### `pangaea-east-china-sea-clay`
+
+- 数据集：Shao et al. (2016) 东海陆架、冲绳海槽 IODP 钻孔、长江与台湾河流黏土组分主微量元素表（Appendix A）；DOI `10.1594/PANGAEA.856762`（父数据集 `10.1594/PANGAEA.856763`）；CC BY 3.0；
+- 内容：98 行 × 28 个带坐标事件，逐行 WGS84 经纬度；其中 8 个长江干流站位（CJ-01–08）与 3 个台湾河流站位为陆地河流沉积物，其余为东海陆架与 IODP 海洋钻孔；Cr/Cu/Pb/Zn 各 98 条、共 392 条目标测定（mg/kg，发布方注明原单位为 ppm）；不含 As；
+- 获取：官方 `?format=textfile` 直链已验证；36,898 bytes，SHA-256 `b70b0d566d17d76c16e2bcad1f0ec176cca7c0efccf68243fb9ea28aac55d5e2`；完整发布表只进本地缓存，不提交 Git；
+- 质量边界：每个物理样品有 Bulk 与酸浸 Residue 两行，测量基准分开登记、禁止平均合并；发布方把全部浓度参数方法标注为 X-ray diffraction (XRD)，按原样保留、不推断仪器或消解；
+- 当前状态：canonical adapter 已注册并通过组件测试；32 条 per-source demo 由适配器生成；这是中国区域首个逐行 canonical 坐标的沉积物在线来源，与 TPDC、Zenodo 组成三条独立血缘。
+
+### `pangaea-south-china-sea-sediment`
+
+- 数据集：Wei et al. (2015) 南海不同沉积物岩芯微量元素表（Table 2）；DOI `10.1594/PANGAEA.855177`（父数据集 `10.1594/PANGAEA.855179`）；CC BY 3.0；
+- 内容：44 个表层沉积物岩芯事件（4.07–20.60°N、105.28–120.16°E），逐行 WGS84 坐标；Cr/Cu/Ni/Pb/Zn 各 44 条、共 220 条 ICP-MS（Perkin-Elmer Elan 6000）测定；发布方已将原 ppm 单位归一为 mg/kg 并在字段名中注明；
+- 获取：官方 `?format=textfile` 直链已验证；25,021 bytes，SHA-256 `703995078eaa849014e5075d357adaba5f33c76f95e349dc2329e8656047ea5d`；
+- 质量边界：全部为海洋点位，陆地国家审计不得计入；消解细节表内未报告、不推断；
+- 当前状态：canonical adapter 已注册并通过组件测试；40 条 per-source demo 由适配器生成；补强南海海域沉积物扇区覆盖。
+
+### `pangaea-barents-c-horizon-soil`
+
+- 数据集：Reimann (1998) Kola 生态地球化学 C 层土壤表；DOI `10.1594/PANGAEA.56227`（父数据集 `10.1594/PANGAEA.686641`）；CC BY 3.0；
+- 内容：中央巴伦支地区（科拉半岛俄罗斯段、芬兰北部、挪威北部，约 66–71°N、22–34°E）606 个站位，逐行 WGS84 坐标；注册目标为王水提取套件：As（AAS-GF，检出限 0.1 mg/kg）、Cu/Zn（ICP-AES，0.5）、Pb（AAS-GF，0.2），共 2,419 条测定，其中 As 有 10 条低于检出限、保留 `<` 限定符；
+- 获取：官方 `?format=textfile` 直链已验证；407,662 bytes，SHA-256 `e22093a40b9c68d25398f2322b68ae7af9b00e331483ae8a3927fc2c13be3d30`；
+- 结构边界：发布表头存在同名重复列（不同分析方法），适配器按注册列索引解析并逐次核验列名前缀，任何列序变化都会失败关闭；平行的全量/NAA 列暂未注册；
+- 科学边界：王水可提取浓度不是全量含量，比较时必须保留提取基准；覆盖范围仅为中央巴伦支地区，不得声明为全俄覆盖；
+- 当前状态：canonical adapter 已注册并通过组件测试；32 条 per-source demo 由适配器生成；**这是注册表首条俄罗斯陆地血缘**，Loop 的 RUS 目标现在会路由本来源而不再要求从零发现；同族的腐殖质层与 B 层数据集仍在候选目录中待实现。
+
 ## D1 适配器和稳定 ID
 
 `scripts/source_adapters.py` 冻结以下接口：

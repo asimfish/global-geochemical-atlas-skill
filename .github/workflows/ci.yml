@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
-          python-version: "3.11"
+          python-version: "3.10"
       - name: Validate Forge commit messages
         if: github.event_name == 'pull_request'
         env:
@@ -53,6 +53,10 @@ jobs:
         run: python skills/global-geochemical-atlas/scripts/component_test.py --component all
       - name: Run deterministic regression suite
         run: python skills/global-geochemical-atlas/scripts/self_test.py
+      - name: Validate versioned spatial sufficiency policy
+        run: python skills/global-geochemical-atlas/scripts/spatial_sufficiency.py
+      - name: Validate online research-loop policy
+        run: python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py --self-test
       - name: Check every script interface
         shell: bash
         run: |

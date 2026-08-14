@@ -15,7 +15,11 @@
         "type": "object",
         "required": [
           "adapter", "title", "dataset_version", "landing_page", "media", "download",
-          "required_fields", "license", "citation", "redistribution", "scientific_notes"
+          "license", "citation", "redistribution", "scientific_notes"
+        ],
+        "anyOf": [
+          {"required": ["required_fields"]},
+          {"required": ["required_result_fields", "required_station_fields"]}
         ],
         "properties": {
           "adapter": {"type": "string", "minLength": 1},
@@ -23,8 +27,36 @@
           "dataset_version": {"type": "string", "minLength": 1},
           "landing_page": {"type": "string", "pattern": "^https://"},
           "media": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "region_applicability": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "spatial_domain",
+              "country_index_status",
+              "country_iso_a3_codes",
+              "evidence_basis"
+            ],
+            "properties": {
+              "spatial_domain": {
+                "type": "string",
+                "enum": ["terrestrial", "inland_water", "marine", "mixed", "unknown"]
+              },
+              "country_index_status": {
+                "type": "string",
+                "enum": ["complete_for_snapshot", "partial", "not_applicable", "unknown"]
+              },
+              "country_iso_a3_codes": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {"type": "string", "pattern": "^[A-Z]{3}$"}
+              },
+              "evidence_basis": {"type": "string", "minLength": 1}
+            }
+          },
           "download": {"type": "object"},
           "required_fields": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "required_result_fields": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "required_station_fields": {"type": "array", "minItems": 1, "items": {"type": "string"}},
           "license": {
             "type": "object",
             "required": ["spdx", "name", "url"],

@@ -8,12 +8,14 @@ result, network-download benchmark, or claim of scientific representativeness.
 
 ## Frozen workload
 
-- Measured repository revision: `dca2ce59f88da85e745ae346fab9cf5addc8342b`.
+- Revision binding: every newly generated JSON report records the exact executable
+  Skill-tree fingerprint; the historical numbers below are not a current-revision
+  attestation.
 - Request: `fixtures/production-usgs/request.json`.
 - Demo and analysis profile: `production-usgs` and `production`.
 - Protocol: 3 warm-up runs followed by 10 measured runs.
 - Isolation: every run used a new temporary output directory.
-- Validation: all 15 required artifacts were validated after every run.
+- Validation: all 16 required artifacts were validated after every run.
 - Consistency: the benchmark compared the canonical result signature across runs.
 
 Run the same protocol from the Skill directory:

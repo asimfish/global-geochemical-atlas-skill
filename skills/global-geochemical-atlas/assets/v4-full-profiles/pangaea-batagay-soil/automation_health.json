@@ -1,0 +1,68 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-13T10:00:00Z",
+  "cache_hit_count": 1,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2021-03-10",
+  "expected_target_observation_count": 93,
+  "files": [
+    {
+      "bytes": 13089,
+      "cache_status": "cache_hit",
+      "file_id": "dataset-table",
+      "filename": "PANGAEA.927867.tab",
+      "sha256": "a5cb0f69973c7fb5e4fac29a7548fb7cbf10de1f291fe0070f4c9b8533f22d59"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-13T10:00:00Z",
+  "last_successful_parse_at": "2026-08-13T10:00:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 31,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_field_count": 27,
+  "raw_schema_fields": [
+    "Bi [mg/kg]",
+    "Cd [mg/kg]",
+    "Cs [mg/kg]",
+    "Cu [mg/kg]",
+    "Depth bot [m]",
+    "Depth sed [m] (mean)",
+    "Depth top [m]",
+    "Ga [mg/kg]",
+    "Lab label",
+    "Latitude",
+    "Li [mg/kg]",
+    "Longitude",
+    "Pb [mg/kg]",
+    "Reference",
+    "Samp type",
+    "Sample ID",
+    "Sample comment (Sampling site)",
+    "Sample comment (soil horizon)",
+    "Sr [mg/kg]",
+    "Tl [mg/kg]",
+    "W [mg/kg]",
+    "Zn [mg/kg]",
+    "_dataset_version",
+    "_sample_type",
+    "_source_crs",
+    "_source_file",
+    "_target_observations"
+  ],
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "pangaea-batagay-soil",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 93,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

@@ -2,7 +2,28 @@
 
 > V4 内容寻址规则覆盖本文中早期接口卡的 checksum/hash 表述：当前同时使用 DOI/PID、版本、文件 ID/名称、发布/访问时间、字节数、SHA-256、schema、行数和关键统计；哈希证明字节一致性，不替代科学可信性审查。
 
-核对日期：2026-08-06。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
+核对日期：2026-08-13。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
+
+## 覆盖偏差诊断与下一批来源
+
+当前目录含 58 个候选、26 个可执行适配器。按可重叠大区标签统计：Africa 4/2、Asia 9/7、Europe 17/9、North America 8/2、Oceania 4/2、South America 3/0、全球/跨区入口 11/4（斜线前为候选、后为可执行；一个来源可进入多个类别）。因此欧洲密集主要来自可公开下载、字段清楚且已完成适配的 FOREGS/GEMAS/国家产品，不是路由器给欧洲加权。`coverage-balanced_source_order` 首轮反而优先空间区 × 介质边际增益；后续轮次再轮换队列。
+
+按覆盖增益排序的下一批工作：
+
+1. `usgs-ngdb`：先固定一个不可变 USGS release，保留历史项目、方法、qualifier 和上游血缘；不直接冻结动态总库。
+2. `wosis`：固定 2023 snapshot，并按记录路由 CC BY 与 CC BY-NC；NC 记录不能混入 open-only 输出，且 WoSIS 属性不自动等同于统一总量元素地球化学。
+3. `brazil-sgb-geochemistry`、`india-gsi-ngcm`：先解决文件级许可、稳定数值端点、字段与方法；`unresolved` 或活动登录分发不得直接接入。
+4. 中东/西亚：当前只有 Arabian Sea 海洋沉积物离散点等局部源，尚未找到可复用、记录级坐标齐全的广域陆地多介质开放源。必须把检索范围与失败证据留在修复队列，不能把“未检索到”写成“不存在”，也不能用欧洲或海洋点代填。
+
+### `australia-ngsa`
+
+- 介质与范围：澳大利亚近全国 1,315 个 catchment-outlet 站位的运移表生覆盖物；按任务语义归为 sediment，不等同于原位土壤或规则格网；
+- 固定产品：eCat 82869 / DOI `10.11636/Record.2011.020`，`Rec2011_020_110706.csv` 为 4,843,809 bytes，SHA-256 `d9fa6d5b92642c56cc0b1ea7cc1ca22b763cde283cb71dc7194004a005f87812`；
+- 全表审计分母为 10,492 条四元素观测；研究切片排除 QA/QC 重复并要求所选元素非空后为每元素 2,131 条、四元素 8,524 条。两个口径分别登记，循环不得拿全表含重复分母冒充独立可扩容量；
+- 对账：7,890 行、7,890 样品、1,315 站位；`<75 µm` As/Cu/Pb/Zn 各 2,623 条，共 10,492 条 ICP-MS 观测，TOS/BOS 分层，field duplicate 不计独立样品；
+- 坐标：官方 Field Manual GA10307 pp. 24–25 明确 GDA94；仅通过 `gda94-geographic-wgs84-identity-v1` 在粗尺度地图/覆盖审计中转成 canonical，原值保留，发布方位置精度记为 `not_reported`；
+- 许可：CSV 当期声明 CC BY 3.0 Australia，当前 portal 显示 CC BY 4.0；输出保守沿用文件级 3.0 AU 并显式保留版本差异；
+- 证据入口：`../fixtures/candidate-audits/australia-ngsa-20260812T174523Z.json`、`../assets/source_manifest.json` 和 `../references/coordinate-policy-registry.json`。
 
 ## V1 兼容状态说明
 
@@ -158,7 +179,7 @@ V3 当前登记二十一项 `normalized_analysis` 来源：岩石二项、土壤
 | `foregs-stream-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；<150 µm，总量/王水分开 |
 | `foregs-floodplain-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；0–25 cm，与溪流沉积物分开 |
 | `canada-cdogs` | 沉积物、水、精矿 | 加拿大 | 调查目录和部分标准化下载 | 逐调查版本/许可、复测关系 |
-| `australia-ngsa` | 沉积物（运移表生覆盖物） | 澳大利亚 | 国家 Atlas 和产品下载 | 固定具体产品、文件 hash、介质语义 |
+| `australia-ngsa` | 沉积物（运移表生覆盖物） | 澳大利亚 | 已实现；见上方固定产品卡 | 位置精度未报告；不是规则格网 |
 | `australia-ozchem` | 岩石、沉积物 | 澳大利亚 | 仅核实到官方旧版产品说明 | 当前数值端点、版本、上游重叠 |
 | `us-water-quality-portal` | 水、沉积物 | 美国 | WQP Web Services | 贡献者许可、介质/方法异质、上游去重 |
 | `soils4africa` | 土壤 | 非洲农业用地 | CSV、GeoPackage | 隐私与聚合条款、分析物清单、适配器 |
