@@ -21,7 +21,13 @@ RECORD_EVIDENCE_VERSION = "geochemical-record-evidence-v1"
 RECORD_EVIDENCE_FILENAME = "record_evidence.jsonl"
 CONFIDENCE_COMPONENTS = {"source", "completeness", "method", "spatial", "qc", "overall"}
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-MAX_EVIDENCE_BYTES = 100_000_000
+# Research requests may contain up to 200k long-form measurements.  Filtered
+# acquisition deduplicates repeated source-file metadata, but a fully auditable
+# sidecar can still exceed the competition's *repository* size limit.  Runtime
+# products are bounded separately: keep this ceiling aligned with the public
+# output validators and never interpret it as permission to check generated
+# research products into the <=250 MB submission repository.
+MAX_EVIDENCE_BYTES = 600_000_000
 REQUIRED_EVIDENCE_FIELDS = {
     "record_id",
     "source_id",
@@ -212,6 +218,33 @@ def load_record_evidence(path: Path) -> tuple[list[dict[str, Any]], bytes]:
         rows.append(value)
     if not rows:
         raise EvidenceError("record evidence contains no records")
+    rows_by_id = {str(item["record_id"]): item for item in rows}
+    for item in rows:
+        anchor_id = item.get("source_metadata_record_id")
+        if anchor_id in (None, ""):
+            continue
+        if not isinstance(anchor_id, str):
+            raise EvidenceError(
+                "record evidence source_metadata_record_id must be a string"
+            )
+        anchor = rows_by_id.get(anchor_id)
+        shared_fields = anchor.get("shared_source_metadata_fields") if anchor else None
+        if (
+            anchor is None
+            or not isinstance(shared_fields, list)
+            or not shared_fields
+            or any(
+                not isinstance(field, str) or field not in anchor or field in item
+                for field in shared_fields
+            )
+            or any(
+                item.get(field) != anchor.get(field)
+                for field in ("source_id", "source_file", "source_file_sha256")
+            )
+        ):
+            raise EvidenceError(
+                f"record evidence {item.get('record_id')} has an invalid source metadata anchor"
+            )
     return rows, raw
 
 

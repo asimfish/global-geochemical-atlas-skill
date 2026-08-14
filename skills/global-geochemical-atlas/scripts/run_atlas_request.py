@@ -53,15 +53,35 @@ PARAMETERIZED_SOURCES = {
     "geotraces-idp2025",
     "afsis-phase-i-wet-chemistry",
     "australia-ngsa",
+    "japan-gsj-geochemical-map",
     "pangaea-amazonas-soil",
     "pangaea-batagay-soil",
+    "pangaea-brasol-ne-brazil-soil",
+    "figshare-yangtze-basin-soil-heavy-metals",
+}
+# These sources support request-element filtering but deliberately do not
+# accept a bbox.  In particular, the GSJ marine table keeps its reported
+# JGD2000 coordinates non-canonical until a publication-grade transform policy
+# is registered; using them as if they were WGS84 for a boundary clip would
+# contradict that fail-closed evidence boundary.
+ELEMENT_ONLY_PARAMETERIZED_SOURCES = {
+    "japan-gsj-marine-sediment",
 }
 SCALABLE_BALANCED_SOURCES = {
     "gemstat-open-archive",
     "geotraces-idp2025",
     "afsis-phase-i-wet-chemistry",
+    "japan-gsj-geochemical-map",
     "pangaea-amazonas-soil",
     "pangaea-batagay-soil",
+}
+# These long-form sources have verified but intentionally unequal per-analyte
+# populations.  Their capacity is the sum of requested analyte counts, not the
+# smallest count multiplied by the number of analytes.
+VARIABLE_ANALYTE_CAPACITY_SOURCES = {
+    "pangaea-brasol-ne-brazil-soil",
+    "figshare-yangtze-basin-soil-heavy-metals",
+    "japan-gsj-marine-sediment",
 }
 DEFAULT_WORKFLOW_RESERVE_SECONDS = 180.0
 # Online-acquisition slice sizing. Sources with frozen exact-slice contracts
@@ -101,6 +121,24 @@ BALANCED_CAPACITY_OVERRIDES = {
 }
 DEFAULT_PER_ANALYTE_OBSERVATIONS = 512
 GENERATOR_MAX_OBSERVATIONS = 200_000
+# Source-level prose and publication metadata are commonly repeated verbatim
+# on every row by source adapters.  The filtered evidence sidecar keeps one
+# hash-bound anchor per acquired file and points later rows to it; record-level
+# identity, locator and acquired-file binding remain repeated on every row.
+SHARED_SOURCE_EVIDENCE_FIELDS = (
+    "article_citations",
+    "article_dois",
+    "dataset_title",
+    "dataset_doi",
+    "dataset_version",
+    "evidence_status",
+    "evidence_version",
+    "generation_version",
+    "retrieved_at",
+    "scientific_note",
+    "selection_rule",
+    "source_file_bytes",
+)
 # A deadline-squeezed fair-share window below this floor cannot complete any
 # real acquisition (GEMStat once got 14.6s and burned it on a doomed attempt);
 # such sources are deferred to the next round instead of attempted.
@@ -399,6 +437,65 @@ def _load_request_geology_grid(
         raise RequestRunError("conflicting_evidence", str(exc)) from exc
 
 
+def compact_record_evidence_rows(
+    rows: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    """Deduplicate identical source-file metadata without weakening linkage.
+
+    Compaction happens only after request filtering, so every metadata anchor
+    necessarily survives in the output.  Only an explicit allowlist of
+    source-level fields may be moved to that anchor.  Per-record values and the
+    source file name/hash/URL stay on every line for independent verification.
+    """
+
+    compacted = [dict(row) for row in rows]
+    grouped_indexes: dict[tuple[str, str, str], list[int]] = {}
+    for index, row in enumerate(compacted):
+        source_id = str(row.get("source_id") or "")
+        source_file = str(row.get("source_file") or "")
+        source_hash = str(row.get("source_file_sha256") or "")
+        if not source_id or not source_file or not source_hash:
+            continue
+        grouped_indexes.setdefault((source_id, source_file, source_hash), []).append(
+            index
+        )
+
+    for indexes in grouped_indexes.values():
+        if len(indexes) < 2:
+            continue
+        anchor = compacted[indexes[0]]
+        anchor_record_id = str(anchor.get("record_id") or "")
+        if not anchor_record_id:
+            continue
+        shared_fields: list[str] = []
+        for field in SHARED_SOURCE_EVIDENCE_FIELDS:
+            values = [compacted[index].get(field) for index in indexes]
+            if values[0] in (None, "", [], {}) or any(
+                value != values[0] for value in values[1:]
+            ):
+                continue
+            shared_fields.append(field)
+        if not shared_fields:
+            continue
+        anchor["shared_source_metadata_fields"] = shared_fields
+        for index in indexes[1:]:
+            row = compacted[index]
+            for field in shared_fields:
+                row.pop(field, None)
+            row["source_metadata_record_id"] = anchor_record_id
+    return compacted
+
+
+def serialize_record_evidence(rows: Sequence[Mapping[str, Any]]) -> bytes:
+    """Serialize record evidence deterministically for hashing and size gates."""
+
+    return "".join(
+        json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + "\n"
+        for row in rows
+    ).encode("utf-8")
+
+
 def filter_bundle(
     input_path: Path,
     evidence_path: Path | None,
@@ -422,7 +519,7 @@ def filter_bundle(
             "invalid_input", "input CSV must contain a header and at least one record"
         )
 
-    evidence_by_id: dict[str, str] = {}
+    evidence_by_id: dict[str, dict[str, Any]] = {}
     if evidence_path is not None:
         try:
             for line in evidence_path.read_text(encoding="utf-8").splitlines():
@@ -437,7 +534,7 @@ def filter_bundle(
                         "conflicting_evidence",
                         "record evidence has missing or duplicate record_id",
                     )
-                evidence_by_id[record_id] = line
+                evidence_by_id[record_id] = item
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             raise RequestRunError(
                 "conflicting_evidence",
@@ -599,9 +696,10 @@ def filter_bundle(
                 "conflicting_evidence",
                 f"record evidence does not cover filtered input IDs: {missing[:5]}",
             )
-        output_evidence.write_text(
-            "".join(evidence_by_id[item] + "\n" for item in ids), encoding="utf-8"
+        selected_evidence = compact_record_evidence_rows(
+            [evidence_by_id[item] for item in ids]
         )
+        output_evidence.write_bytes(serialize_record_evidence(selected_evidence))
     return len(rows), len(selected), warnings
 
 
@@ -820,6 +918,35 @@ def declared_slice_capacity(
     return int(total) if isinstance(total, int) else None
 
 
+def declared_variable_analyte_capacity(
+    source_id: str, analytes: Sequence[str] | None
+) -> int | None:
+    """Return a verified unequal-analyte population total when registered."""
+
+    if source_id not in VARIABLE_ANALYTE_CAPACITY_SOURCES:
+        return None
+    try:
+        entry = source_adapters.load_source_registry()["sources"][source_id]
+    except (KeyError, TypeError, source_adapters.SourceAdapterError):
+        return None
+    research_capacity = entry.get("research_slice_capacity")
+    counts = (
+        research_capacity.get("per_analyte_observation_count")
+        if isinstance(research_capacity, Mapping)
+        else None
+    )
+    if not isinstance(counts, Mapping):
+        counts = entry.get("expected_counts", {}).get("target_value_counts")
+    if not isinstance(counts, Mapping):
+        return None
+    selected = list(analytes) if analytes is not None else list(counts)
+    try:
+        values = [int(counts[analyte]) for analyte in selected]
+    except (KeyError, TypeError, ValueError):
+        return None
+    return sum(values) if values else None
+
+
 def foregs_balance_size(
     source_id: str, analytes: Sequence[str] | None = None
 ) -> int | None:
@@ -852,7 +979,13 @@ def planned_slice_observations(
 ) -> int:
     """Return the balanced-slice size requested from the demo generator."""
 
-    if source_id in SCALABLE_BALANCED_SOURCES:
+    if source_id in VARIABLE_ANALYTE_CAPACITY_SOURCES:
+        balance_size = 1
+        observations = max(analyte_count, analyte_count * per_analyte_observations)
+        capacity = declared_variable_analyte_capacity(source_id, analytes)
+        if capacity is not None:
+            observations = min(observations, capacity)
+    elif source_id in SCALABLE_BALANCED_SOURCES:
         balance_size = analyte_count
         observations = max(balance_size, balance_size * per_analyte_observations)
         capacity = declared_slice_capacity(source_id, analytes)
@@ -963,7 +1096,11 @@ def acquire_online_source(
         "--purpose",
         "research",
     ]
-    if source_id in PARAMETERIZED_SOURCES:
+    element_parameterized = (
+        source_id in PARAMETERIZED_SOURCES
+        or source_id in ELEMENT_ONLY_PARAMETERIZED_SOURCES
+    )
+    if element_parameterized:
         command.extend(["--elements", ",".join(analytes)])
     if source_id in PARAMETERIZED_SOURCES and region_bbox is not None:
         command.extend(["--bbox", ",".join(str(item) for item in region_bbox)])
@@ -1139,13 +1276,12 @@ def source_budgets(
 ) -> dict[str, int]:
     """Divide the record ceiling by what each source would actually take.
 
-    An even split starves large surveys: twenty-one routed sources once capped
-    GEMAS (28,917-observation balanced capacity) at ~2,380 records while
-    48-observation fixed slices could not spend their shares, so the loop's
-    per-round expansion changed nothing. Each source's demand is its unbounded
-    planned slice for this round; when total demand fits the ceiling every
-    source gets its demand, otherwise the surplus above the executable
-    minimums is scaled proportionally to demand.
+    An even or proportional split starves finite regional surveys whenever a
+    few open-ended global archives dominate demand.  Each source first receives
+    its executable minimum.  Verified finite surveys are then completed from
+    smallest to largest, maximizing fully represented independent datasets;
+    only the remaining ceiling is distributed proportionally across open-ended
+    sources.  No source can receive more than its current-round demand.
     """
 
     ordered = list(source_ids)
@@ -1186,21 +1322,52 @@ def source_budgets(
     total_demand = sum(demands.values())
     if total_demand <= maximum_records:
         return demands
-    demand_surplus = total_demand - required
-    record_surplus = maximum_records - required
-    budgets = {
-        source_id: minimums[source_id]
-        + (demands[source_id] - minimums[source_id]) * record_surplus // demand_surplus
-        for source_id in ordered
-    }
-    leftover = maximum_records - sum(budgets.values())
-    for source_id in sorted(
-        ordered, key=lambda item: (budgets[item] - demands[item], item)
-    ):
-        if leftover <= 0:
-            break
-        budgets[source_id] += 1
-        leftover -= 1
+    budgets = dict(minimums)
+    remaining = maximum_records - required
+
+    def finite_round_source(source_id: str) -> bool:
+        matched = (
+            supported_request_analytes(source_id, elements)
+            if elements is not None
+            else None
+        )
+        capacity = declared_slice_capacity(source_id, matched)
+        return (
+            source_id in FIXED_SLICE_OBSERVATIONS
+            or source_id in SLICE_DIVISORS
+            or source_id in VARIABLE_ANALYTE_CAPACITY_SOURCES
+            or (capacity is not None and capacity < GENERATOR_MAX_OBSERVATIONS)
+        )
+
+    finite_sources = sorted(
+        (source_id for source_id in ordered if finite_round_source(source_id)),
+        key=lambda source_id: (demands[source_id], source_id),
+    )
+    for source_id in finite_sources:
+        extra = demands[source_id] - budgets[source_id]
+        allocation = min(extra, remaining)
+        budgets[source_id] += allocation
+        remaining -= allocation
+        if remaining <= 0:
+            return budgets
+
+    open_sources = [
+        source_id for source_id in ordered if source_id not in set(finite_sources)
+    ]
+    open_surplus = sum(demands[item] - budgets[item] for item in open_sources)
+    if remaining and open_surplus:
+        for source_id in open_sources:
+            extra = demands[source_id] - budgets[source_id]
+            budgets[source_id] += extra * remaining // open_surplus
+        leftover = maximum_records - sum(budgets.values())
+        for source_id in sorted(
+            open_sources, key=lambda item: (budgets[item] - demands[item], item)
+        ):
+            if leftover <= 0:
+                break
+            if budgets[source_id] < demands[source_id]:
+                budgets[source_id] += 1
+                leftover -= 1
     return budgets
 
 
@@ -2220,8 +2387,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--source-timeout-seconds",
         type=float,
-        default=300.0,
-        help="Per-source timeout cap inside the shared request budget (default: 300)",
+        default=600.0,
+        help="Per-source timeout cap inside the shared request budget (default: 600)",
     )
     parser.add_argument(
         "--source-order-offset",
@@ -2237,8 +2404,8 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS,
         help=(
-            "Monotonic end-to-end budget (default 840 inside the official "
-            "900-second envelope; explicit extended-research maximum 43200)"
+            "Monotonic budget for one acquisition/workflow round "
+            "(default 1800; maximum 43200)"
         ),
     )
     parser.add_argument(

@@ -1,6 +1,6 @@
 {
   "registry_version": "geochemical-source-registry-v1",
-  "verified_at": "2026-08-13T10:00:00Z",
+  "verified_at": "2026-08-14T20:30:00Z",
   "sources": {
     "georoc-archaean": {
       "adapter": "georoc_dataverse",
@@ -450,9 +450,18 @@
         "archive_filename": "marchem-inorganic-2003-2024.zip",
         "expected_sha256": "be888784ee2eafd45ab43c036eefbae9e760057d25f64fbc323993e8809ca6c6",
         "expected_bytes": 81598,
-        "expected_member_count": 3,
-        "expected_uncompressed_bytes": 619072,
-        "members": [
+              "expected_member_count": 3,
+              "expected_uncompressed_bytes": 619072,
+              "max_uncompressed_bytes": 2000000,
+              "scientific_member_ids": ["data", "metadata"],
+              "max_information_member_bytes": 20000,
+              "information_member_required_text": [
+                "MarChem - The Marine Chemistry database for Norwegian waters",
+                "CC-BY 4.0",
+                "from year 2003 to 2024",
+                "from latitude 57.0 to 85.0 and from longitude -5.0 to 38.0"
+              ],
+              "members": [
           {
             "file_id": "metadata",
             "filename": "MetaData/MarChem_Inorganic_LabParameter_20260805T102709Z.csv",
@@ -517,7 +526,8 @@
         "As, Cu, Ni and Zn are reported as dry-weight mg/kg after partial nitric-acid digestion and are not total concentrations.",
         "The export contains 1,070 physical rows for 880 distinct sample codes because 190 samples occur in two parameter-group rows.",
         "Batch-level method metadata include accredited and not-accredited analyses and must be retained per observation.",
-        "This dataset version is a project content-addressed dynamic snapshot, not a publisher DOI or immutable publisher release."
+        "This dataset version is a project content-addressed dynamic snapshot, not a publisher DOI or immutable publisher release.",
+        "The API regenerates the outer ZIP, timestamped filenames and human-readable information member. Admission therefore pins the scientific data and batch-method member hashes exactly, validates the information member against the frozen query semantics, records the observed wrapper hash for replay, and fails closed if either scientific member changes."
       ]
     },
     "gemstat-open-archive": {
@@ -1126,6 +1136,20 @@
           "Pb": 3024,
           "Zn": 3024
         }
+      },
+      "research_slice_capacity": {
+        "capacity_basis": "all ordinal-joined rows with numeric registered target values; negative publisher values remain evidence-bound and are not erased",
+        "sample_rows": 3024,
+        "per_analyte_observation_count": {
+          "As": 3024,
+          "Cr": 3024,
+          "Cu": 3024,
+          "Hg": 3024,
+          "Ni": 3024,
+          "Pb": 3024,
+          "Zn": 3024
+        },
+        "all_registered_observation_count": 21168
       },
       "license": {
         "spdx": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
@@ -2256,6 +2280,20 @@
           "Zn": 22
         }
       },
+      "research_slice_capacity": {
+        "capacity_basis": "rows positive for every registered analyte; bbox requests may yield fewer rows and remain explicit",
+        "all_registered_positive_sample_rows": 1941,
+        "all_registered_positive_complete_coordinate_rows": 1821,
+        "per_analyte_observation_count": {
+          "As": 1941,
+          "Cr": 1941,
+          "Cu": 1941,
+          "Ni": 1941,
+          "Pb": 1941,
+          "Zn": 1941
+        },
+        "all_registered_observation_count": 11646
+      },
       "license": {
         "spdx": "CC-BY-4.0",
         "name": "Creative Commons Attribution 4.0 International",
@@ -2705,6 +2743,19 @@
           "Zn": 4905
         }
       },
+      "research_slice_capacity": {
+        "capacity_basis": "strictly positive numeric values; missing and non-positive publisher states remain in full-source audit counts",
+        "per_analyte_observation_count": {
+          "As": 4856,
+          "Cr": 4905,
+          "Cu": 4905,
+          "Hg": 4867,
+          "Ni": 4905,
+          "Pb": 4905,
+          "Zn": 4905
+        },
+        "positive_observation_count": 34248
+      },
       "license": {
         "spdx": "LicenseRef-GSJ-Government-Standard-Terms-2.0",
         "name": "GSJ website terms aligned with Japan Government Standard Terms of Use 2.0",
@@ -2804,6 +2855,227 @@
         "The publisher parameter metadata names the method only as 'Geochemical analysis on bulk sediment'; the adapter preserves that wording and does not invent an instrument or digestion.",
         "One sample label occurs twice as separate analytical rows; source row identity is retained so the replicate is not overwritten.",
         "Core type, water depth and sediment depth are retained independently from elemental values."
+      ]
+    },
+    "pangaea-brasol-ne-brazil-soil": {
+      "adapter": "pangaea_brasol_ne_brazil_soil",
+      "title": "Soil chemical database of the BraSol-2010 project",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "dataset_doi": "10.1594/PANGAEA.969055",
+      "publication_doi": "10.1144/1467-7873/10-RA-046",
+      "dataset_version": "2024-07-01",
+      "release_date": "2024-07-01",
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.969055",
+      "metadata_url": "https://download.pangaea.de/dataset/969055/files/Metadata_BraSol-2010_database.txt",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "northeastern-brazil-transects",
+      "region_applicability": {
+        "spatial_domain": "land",
+        "country_index_status": "complete_for_snapshot",
+        "country_iso_a3_codes": [
+          "BRA"
+        ],
+        "evidence_basis": "publisher workbook reports WGS84 coordinates for all 396 layer samples in northeastern Brazil"
+      },
+      "download": {
+        "mode": "pinned-doi-binary-files",
+        "max_bytes": 2000000,
+        "accepted_content_types": [
+          "application/octet-stream",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "text/plain"
+        ],
+        "observed_at": "2026-08-14T20:22:00Z",
+        "files": [
+          {
+            "file_id": "soil-workbook",
+            "filename": "Data_BraSol-2010_database.xlsx",
+            "url": "https://download.pangaea.de/dataset/969055/files/Data_BraSol-2010_database.xlsx",
+            "bytes": 658886,
+            "expected_sha256": "0b1ade544b3b4faaade86eaed6378999e542d978ab0af9b7fa5ceb0dc6b3574d"
+          },
+          {
+            "file_id": "method-metadata",
+            "filename": "Metadata_BraSol-2010_database.txt",
+            "url": "https://download.pangaea.de/dataset/969055/files/Metadata_BraSol-2010_database.txt",
+            "bytes": 17037,
+            "expected_sha256": "256a3e392f236205a0358f014b96fce1e4ced9657ba0f73f3c34b1196290dd40"
+          }
+        ]
+      },
+      "required_fields": [
+        "Site_ID",
+        "Lat_WGS84",
+        "Long_WGS84",
+        "Lat_dec_deg",
+        "Long_dec_deg",
+        "GPS_res_m",
+        "Biome",
+        "Land_use",
+        "Lithol_IBGE_EN",
+        "Soil_type_WRB",
+        "Lyr_name",
+        "Lyr_top_cm",
+        "Lyr_bot_cm"
+      ],
+      "target_analytes": {
+        "As": "As_*_mg_kg",
+        "Cr": "Cr_*_mg_kg",
+        "Cu": "Cu_*_mg_kg",
+        "Ni": "Ni_*_mg_kg",
+        "Pb": "Pb_*_mg_kg",
+        "Zn": "Zn_*_mg_kg"
+      },
+      "preferred_method_order": [
+        "ICPMS",
+        "ICPO",
+        "GFD",
+        "PPP"
+      ],
+      "expected_counts": {
+        "physical_rows": 396,
+        "target_bearing_rows": 270,
+        "distinct_sites": 142,
+        "layer_counts": {
+          "BOT": 112,
+          "ORG": 142,
+          "TOP": 142
+        },
+        "reported_coordinate_rows": 396,
+        "canonical_coordinate_rows": 390,
+        "coordinate_conflict_rows": 6,
+        "coordinate_conflict_sites": 3,
+        "target_observations": 1614,
+        "target_value_counts": {
+          "As": 264,
+          "Cr": 270,
+          "Cu": 270,
+          "Ni": 270,
+          "Pb": 270,
+          "Zn": 270
+        },
+        "censored_lod_counts": {
+          "As": 241,
+          "Cr": 56,
+          "Cu": 39,
+          "Ni": 122,
+          "Pb": 83,
+          "Zn": 54
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Matschullat, Jörg (2024): Soil chemical database of the BraSol-2010 project. PANGAEA. https://doi.org/10.1594/PANGAEA.969055",
+      "redistribution": "Research analysis is permitted with attribution. Full source files remain outside Git; deterministic records retain DOI, file hash and workbook row.",
+      "scientific_notes": [
+        "The 396 layer samples come from 142 sites along northeastern Brazil transects and are not nationally representative.",
+        "Publisher-declared WGS84 coordinates and handheld-GPS resolution are preserved independently; GPS resolution is not treated as statistical accuracy.",
+        "DMS and decimal coordinate fields are independently compared. Six layer rows across three sites conflict; their reported coordinates remain traceable but are not canonicalized or mapped.",
+        "For each sample and element the adapter selects the first reported determination in the frozen ICP-MS, ICP-OES, fused-disc XRF, pressed-pellet XRF order and retains the method-specific basis.",
+        "Publisher LOD markers remain left-censored at the paired reported LOD and never become zero or ordinary measurements."
+      ]
+    },
+    "figshare-yangtze-basin-soil-heavy-metals": {
+      "adapter": "figshare_yangtze_basin_soil_heavy_metals",
+      "title": "A georeferenced dataset of heavy metal occurrence in the soils of the Yangtze River Basin, China (2000-2020)",
+      "publisher": "Figshare / Wiley Geoscience Data Journal",
+      "dataset_doi": "10.6084/m9.figshare.22785971.v1",
+      "publication_doi": "10.1002/gdj3.280",
+      "dataset_version": "figshare-v1-2023-05-10",
+      "release_date": "2023-05-10",
+      "landing_page": "https://figshare.com/articles/dataset/22785971",
+      "metadata_url": "https://doi.org/10.1002/gdj3.280",
+      "media": [
+        "soil"
+      ],
+      "geographic_scope": "china-yangtze-river-basin-literature-compilation",
+      "region_applicability": {
+        "spatial_domain": "land",
+        "country_index_status": "complete_for_snapshot",
+        "country_iso_a3_codes": [
+          "CHN"
+        ],
+        "evidence_basis": "dataset scope and every location hierarchy identify the Yangtze River Basin, China"
+      },
+      "download": {
+        "mode": "pinned-figshare-file",
+        "max_bytes": 1000000,
+        "accepted_content_types": [
+          "application/octet-stream",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ],
+        "observed_at": "2026-08-14T20:22:00Z",
+        "files": [
+          {
+            "file_id": "records-workbook",
+            "figshare_file_id": "40503701",
+            "filename": "Records.xlsx",
+            "url": "https://ndownloader.figshare.com/files/40503701",
+            "bytes": 538969,
+            "expected_sha256": "6aa14bdaf87dac28864b59d867b27db536af7b7253fcf8ce0e50c483927289ae"
+          }
+        ]
+      },
+      "required_fields": [
+        "FID",
+        "lon",
+        "lat",
+        "loc_level",
+        "loc_l1",
+        "loc_l2",
+        "loc_l3",
+        "loc_l4",
+        "HM_cat",
+        "HM_cat_abbre",
+        "HM_cat_CAS",
+        "HM_conc_mean"
+      ],
+      "target_analytes": {
+        "As": "HM_cat_abbre=As",
+        "Cr": "HM_cat_abbre=Cr",
+        "Cu": "HM_cat_abbre=Cu",
+        "Hg": "HM_cat_abbre=Hg",
+        "Ni": "HM_cat_abbre=Ni",
+        "Pb": "HM_cat_abbre=Pb",
+        "Zn": "HM_cat_abbre=Zn"
+      },
+      "expected_counts": {
+        "source_rows": 7867,
+        "target_observations": 6625,
+        "distinct_coordinate_pairs": 855,
+        "target_value_counts": {
+          "As": 821,
+          "Cr": 980,
+          "Cu": 1140,
+          "Hg": 729,
+          "Ni": 649,
+          "Pb": 1261,
+          "Zn": 1045
+        },
+        "location_level_counts": {
+          "1": 605,
+          "2": 1275,
+          "3": 2253,
+          "4": 2492
+        }
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "name": "Creative Commons Attribution 4.0 International",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "citation": "Sun, Y. et al. (2023): A georeferenced dataset of heavy metal occurrence in the soils of the Yangtze River Basin, China (2000-2020). Figshare. https://doi.org/10.6084/m9.figshare.22785971.v1",
+      "redistribution": "CC BY 4.0 permits research reuse with attribution; the full workbook remains outside Git and every output retains its Figshare row locator and hash.",
+      "scientific_notes": [
+        "The dataset is a literature compilation of 6,625 in-scope As/Cr/Cu/Hg/Ni/Pb/Zn occurrences, not a probability sample or a new measurement campaign.",
+        "The workbook reports mg/kg means but no row-level analytical method, digestion, detection limit or original-paper identifier; these fields remain explicitly absent.",
+        "Coordinates were georeferenced by mixed procedures described in the linked article, but no single datum/CRS is declared; they remain reported-only and cannot be silently published as WGS84.",
+        "FID is used as the conservative sample identity because rows sharing coordinates cannot be assumed to describe the same physical sample."
       ]
     },
     "pangaea-amazonas-soil": {

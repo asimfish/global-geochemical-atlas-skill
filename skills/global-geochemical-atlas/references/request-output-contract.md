@@ -63,13 +63,13 @@ As、Cu、Pb、Zn 中 3 个”和“岩石、土壤、沉积物、水体中的 2
 
 使用 `run_atlas_request.py` 时还生成 `request_evidence/`，保存冻结的 `request.json`、请求特定 `source_route.json`、`coverage.json/.md` 和符合 `request-execution.schema.json` 的 `execution.json`；该 schema 由 Skill 直接路由。`geochemical-request-execution-v5.skill_snapshot` 绑定整棵 Skill 树的开始/结束 SHA-256，运行中修改会失败关闭。实际用于验证的请求过滤 manifest、父 manifest 与在线逐源 manifest 原字节保存在 `request_evidence/acquisition/`，并由 `execution.json.acquisition_manifests` 的相对路径和 SHA-256 绑定，避免临时目录退出后只剩不可复核的孤立哈希。这些是十六项核心产物之外的请求执行证据；其中实时路由状态与本地 fixture/hash 解析状态分开记录，不能互相覆盖。若下游 D2/D3 失败，控制器仍先写 `execution_progress.json` 和 `execution_failure.json`，保留逐源结果、过滤记录数与 manifest。`--online-source auto` 先根据版本化来源库和完整来源 profile 审计元素、介质、区域、measurement basis、许可、已知数据内容与可执行接口，再按空间区 × 介质边际增益和独立血缘确定首轮尝试顺序，验证各自 manifest，然后合并长表和逐记录证据。后续控制器轮次用固定步长轮换完整队列；`execution_progress.json` 保存生效顺序、offset 和 `coverage-balanced-then-round-robin-v1` 策略，避免 30 分钟公平份额反复延后同一尾部来源。题面中点名的平台必须进入适用性审计；不包含请求维度、不可访问或不允许当前用途时记录排除理由，不盲目下载。`execution.json.source_outcomes` 保留每源记录数、manifest hash 与失败。默认允许已验证子集以 `partial_success` 继续；`--require-all-sources` 改为任一来源失败即关闭。
 
-完整在线研究由 loop 额外生成 `loop_report.json`、`d1_repair_queue.json` 与 `research_delivery_receipt.json`。后者逐文件绑定根目录十六项核心产物与一个不可变轮次的 SHA-256，并且只有在线 loop 收敛、核心 validator、`atlas-data-sufficiency-v5`、清空的 D1 队列和当前 Skill 快照与执行快照一致时才写 `delivery_ready=true`。正式交付 MUST 通过 `python scripts/validate_research_delivery.py --output-dir OUTPUT_DIR`；直接单轮、fixture、数据不足检查点、待修队列、执行后改过的 Skill、显式 `--checkpoint-only` 或手工覆盖 staging 都不能通过。
+完整在线研究由 loop 额外生成 `loop_report.json`、`d1_repair_queue.json` 与 `research_delivery_receipt.json`。后者逐文件绑定根目录十六项核心产物与一个不可变轮次的 SHA-256，并且只有在线 loop 收敛、核心 validator、`atlas-data-sufficiency-v6`、清空的 D1 队列和当前 Skill 快照与执行快照一致时才写 `delivery_ready=true`。正式交付 MUST 通过 `python scripts/validate_research_delivery.py --output-dir OUTPUT_DIR`；直接单轮、fixture、数据不足检查点、待修队列、执行后改过的 Skill、显式 `--checkpoint-only` 或手工覆盖 staging 都不能通过。
 
 ## 证据链
 
 `standardize_geochemistry.py` 可在四个最低分析字段上输出 QC；完整 `run_workflow.py` 为保证任务要求的来源追溯，额外要求非空 `source_id`、`source_locator` 和 `license`。缺失时不得用 `unknown` 冒充已验证来源，应返回 `conflicting_evidence` 并提示补充 sidecar 或来源字段；`source_tier` 缺失可以保留为 `unknown`，但必须降低来源分量。`source_locator` 保存本地文件/表/行等精确定位；`official_source_url` 保存由 acquisition manifest、官方数据页或 DOI 绑定的可点击入口。除明确 synthetic fixture 外，每条记录必须同时有两者，D3 分栏显示，禁止互相冒充。
 
-完整请求共享一个 monotonic deadline。正式评测默认内部预算 840 秒，对应 900 秒任务上限；控制器可在剩余预算内运行多个短轮。短于 840 秒必须加 `--checkpoint-only` 且不能正式交付。需要非评测长研究时，调用方可显式把总预算扩到 43,200 秒，并显式设置轮次 timeout；这不会改变默认值。`request_evidence/execution.json.timing` 记录官方上限、实际内部预算、工作流预留、耗时与 deadline 策略；逐源和工作流 timeout 只能缩短剩余预算，不能叠加突破所声明总预算。
+完整请求共享一个只减不增的 monotonic 总 deadline。默认总上限 43,200 秒；控制器按 1,800 秒轮次运行，每轮给内部工作流 1,740 秒，并在轮末根据充分性门禁决定是否继续。短于一个完整轮次必须加 `--checkpoint-only` 且不能正式交付。`request_evidence/execution.json.timing` 记录任务上限、当前轮预算、工作流预留、耗时与 deadline 策略；逐源和工作流 timeout 只能缩短剩余预算，不能叠加突破所声明总预算。
 
 独立 D3 产物在核心十六文件之外按 profile 条件生成：元素组合任务生成 `element_comparison.json`，单元素任务生成 `concentration_grid.geojson`。二者均由 `visualization_report.json` 路径和 SHA-256 绑定，分别遵循 [element-comparison.schema.json](element-comparison.schema.json) 与 [concentration-grid.schema.json](concentration-grid.schema.json)。
 
@@ -96,7 +96,7 @@ As、Cu、Pb、Zn 中 3 个”和“岩石、土壤、沉积物、水体中的 2
 `operational_confidence` 是兼容字段，只表示 `workflow_usability`，不是测量准确度、统计置信水平或事实为真的概率。必须同时报告 `source_evidence`、`analytical_readiness`、`spatial_usability` 和 `workflow_usability`；不得把因坐标缺失造成的 low workflow band 简化为“来源低质量”。
 
 地图的默认全元素视图按有证据的样品标识折叠符号，KPI 仍统计测定记录；这只是显示层去叠加，
-不删除或合并 `geochemistry.csv`/`samples.geojson` 记录。浓度色阶的启用条件固定为单一元素、
+不删除或合并 `geochemistry.csv`/`samples.geojson` 记录。`samples.geojson` 使用 `d3-map-sample-properties-v3` 最小 GIS 字段保留每条可绘测定，并以 `record_id` 连接完整标准库，防止来源定位、完整置信度和方法长文本令十万级空间交换文件越过 100 MB。浓度色阶的启用条件固定为单一元素、
 介质、measurement basis、已知方法组和标准单位，否则使用介质分类色。
 
 证据等级分三层：只有 CSV 声明时为 `source_declared_in_input`；sidecar 通过字段与 record ID 校验时为 `validated_record_evidence`；`run_manifest.json` 同时绑定 CSV 与 sidecar SHA-256 时才是 `verified_record_evidence`。哈希和定位证明可追溯性，不证明测量真实、方法可比或异常成因。

@@ -23,7 +23,11 @@ import validate_outputs as output_validator
 
 SUMMARY_VERSION = "global-geochemical-atlas-result-v1"
 TRANSACTION_VERSION = "geochemical-workflow-artifact-transaction-v1"
-MAX_INPUT_BYTES = 200_000_000
+# ``max_records`` is bounded at 200k. A fully evidenced multi-source exchange
+# can legitimately exceed the older 200 MB guard because it retains raw values,
+# methods and row-level provenance. This is generated runtime data, not content
+# checked into the <=250 MB submission repository.
+MAX_INPUT_BYTES = 500_000_000
 
 
 class WorkflowError(RuntimeError):

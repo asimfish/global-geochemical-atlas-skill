@@ -679,7 +679,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="anomalyDensityCanvas"',
         "spatial_anomaly_report.json",
         "样点密度热力图",
-        "D2 未提供分析方法",
+        "发布方未报告分析方法",
         "该结果比较同类样品的统计背景",
         "showAnomalyRegion",
         'id="deliverableCenter"',
@@ -757,9 +757,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors.append(f"missing required output {key}: {path.name}")
         elif path.stat().st_size == 0:
             errors.append(f"required output is empty: {path.name}")
-        elif path.stat().st_size > 100_000_000:
+        elif path.stat().st_size > 600_000_000:
             errors.append(
-                f"output exceeds the 100 MB runtime safety limit: {path.name}"
+                f"output exceeds the 600 MB bounded-research safety limit: {path.name}"
             )
     if errors:
         return {

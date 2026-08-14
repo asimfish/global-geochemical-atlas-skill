@@ -3,7 +3,7 @@
     "ICP-AES (PerkinElmer Optima 2000)": 1314,
     "ICP-MS (Agilent 7700x)": 5256
   },
-  "as_of": "2026-08-13T10:00:00Z",
+  "as_of": "2026-08-14T20:30:00Z",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "tpdc-file-2025-07-23",
   "method_scope_counts": {

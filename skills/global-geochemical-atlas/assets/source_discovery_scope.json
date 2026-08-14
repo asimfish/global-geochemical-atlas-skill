@@ -16,6 +16,7 @@
     "asia": {
       "catalogued_sources": [
         "eidc-ningbo-soil",
+        "figshare-yangtze-basin-soil-heavy-metals",
         "india-gsi-ngcm",
         "jamstec-darwin",
         "japan-gsj-geochemical-map",
@@ -137,6 +138,7 @@
         "argentina-segemar-geochemistry",
         "brazil-sgb-geochemistry",
         "pangaea-amazonas-soil",
+        "pangaea-brasol-ne-brazil-soil",
         "chile-sernageomin-geochemistry"
       ],
       "remaining_work": [
@@ -147,10 +149,10 @@
       "status": "in_progress"
     }
   },
-  "as_of": "2026-08-13T10:00:00Z",
+  "as_of": "2026-08-14T20:30:00Z",
   "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
   "completion_rule": "Discovery can only become saturated after every area has documented searches across official agency, disciplinary repository, program archive and publication-linked channels, followed by two consecutive rounds with no new high-relevance source.",
-  "round": 10,
+  "round": 11,
   "saturated": false,
   "scope_version": "geochemical-source-discovery-scope-v1",
   "status": "in_progress"

@@ -506,7 +506,7 @@
         "next_per_analyte_observations", "claim_boundary"
       ],
       "properties": {
-        "assessment_version": {"const": "atlas-data-sufficiency-v5"},
+        "assessment_version": {"const": "atlas-data-sufficiency-v6"},
         "status": {"type": "string", "enum": ["sufficient", "insufficient"]},
         "criteria": {
           "type": "object",

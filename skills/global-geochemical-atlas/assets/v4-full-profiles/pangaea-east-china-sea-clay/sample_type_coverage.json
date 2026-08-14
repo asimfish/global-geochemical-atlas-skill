@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-13T10:00:00Z",
+  "as_of": "2026-08-14T20:30:00Z",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "2016-01-11",
   "media": {
@@ -11,7 +11,8 @@
     "sediment_clay_fraction_leach_residue": 196
   },
   "sediment_environments": {
-    "not_applicable": 392
+    "marine": 304,
+    "river": 88
   },
   "source_id": "pangaea-east-china-sea-clay",
   "water_body_types": {

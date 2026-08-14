@@ -1337,7 +1337,7 @@ def run_suite() -> dict[str, Any]:
                     'id="anomalyDensityCanvas"',
                     "showAnomalyRegion",
                     "focusAnomalyRegion",
-                    "D2 未提供分析方法",
+                    "发布方未报告分析方法",
                     "该结果比较同类样品的统计背景",
                     'id="deliverableCenter"',
                     'id="taskContext"',
@@ -1371,7 +1371,7 @@ def run_suite() -> dict[str, Any]:
                     'id="comboUniverse"',
                     "returnToAnomalyRegion",
                     "showRecord(row,{preserveAnomalyRegion:true})",
-                    "发布方未报告位置不确定度（非处理失败）",
+                    "发布方未报告位置不确定度；不代表坐标无效或处理失败",
                     "坐标参考证据状态",
                     "publisher_datum_not_declared",
                 )

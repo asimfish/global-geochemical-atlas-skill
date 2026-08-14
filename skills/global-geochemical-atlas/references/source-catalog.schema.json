@@ -110,6 +110,7 @@
             "catalog_uuid": {"type": "string", "minLength": 1},
             "dataset_doi": {"type": "string", "minLength": 1},
             "ecat_id": {"type": "string", "minLength": 1},
+            "figshare_file_id": {"type": "string", "minLength": 1},
             "dataverse_file_id": {"type": "string", "minLength": 1},
             "file_doi": {"type": "string", "minLength": 1},
             "file_id": {"type": "string", "minLength": 1},

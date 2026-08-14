@@ -29,6 +29,7 @@ def sha256_file(path: Path) -> str:
 
 MAP_VERSION = "d3-interactive-atlas-v3"
 PAYLOAD_VERSION = "d3-compact-payload-v1"
+SAMPLES_GEOJSON_PROPERTY_VERSION = "d3-map-sample-properties-v3"
 ANOMALY_RENDER_MODE = "zoom-adaptive-anomaly-bubbles-v1"
 PROFILE_VERSION = "d3-visualization-profile-v2"
 UI_HIERARCHY_VERSION = "atlas-progressive-disclosure-v2"
@@ -37,7 +38,7 @@ VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
 TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
-MISSING_METHOD_LABEL = "D2 未提供分析方法"
+MISSING_METHOD_LABEL = "发布方未报告分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
 COORDINATE_MODES = ("canonical", "reported")
 COORDINATE_BASIS_CANONICAL = "canonical_wgs84"
@@ -1223,13 +1224,29 @@ def samples_geojson(
     scope_region: Mapping[str, Any],
     coordinate_mode: str = "canonical",
 ) -> dict[str, Any]:
+    # GeoJSON is a spatial exchange view, not a second copy of the complete
+    # canonical database.  Repeating fifty-plus provenance/method fields on
+    # every feature made a 109k-record atlas exceed 250 MB even though the
+    # compact self-contained HTML was only 45 MB.  Keep every eligible feature
+    # and its stable database join key, but expose only fields needed for GIS
+    # filtering plus one clearly named workflow band. Full confidence
+    # dimensions, QC flags, provenance, methods, raw values and clickable links
+    # remain losslessly available in geochemistry.csv and the self-contained
+    # HTML payload through ``record_id``. This keeps a 200k-observation research
+    # run browser- and GIS-loadable without sampling or deleting locations.
+    property_fields = (
+        "record_id",
+        "element",
+        "medium",
+        "value",
+        "unit",
+        "source_id",
+        "confidence_workflow_usability_band",
+        "coordinate_basis",
+    )
     features = []
     for record in records:
-        properties = {
-            key: value
-            for key, value in record.items()
-            if key not in {"latitude", "longitude"}
-        }
+        properties = {key: record.get(key) for key in property_fields}
         properties["candidate_anomaly"] = str(record["record_id"]) in anomaly_ids
         features.append(
             {
@@ -1245,6 +1262,12 @@ def samples_geojson(
         "type": "FeatureCollection",
         "name": "standardized_geochemical_samples",
         "map_version": MAP_VERSION,
+        "property_contract_version": SAMPLES_GEOJSON_PROPERTY_VERSION,
+        "database_join_key": "record_id",
+        "property_scope": (
+            "compact spatial exchange view; join geochemistry.csv on record_id "
+            "for complete raw values, methods, provenance and source links"
+        ),
         "coordinate_mode": coordinate_mode,
         "spatial_scope": {
             "mode": profile["spatial_scope"],
@@ -1493,7 +1516,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="sourcePortfolioSummary"',
         'id="comboUniverse"',
         "returnToAnomalyRegion",
-        "发布方未报告位置不确定度（非处理失败）",
+        "发布方未报告位置不确定度；不代表坐标无效或处理失败",
         'id="backView"',
         'id="databaseEditor"',
         'id="sourceTableBody"',

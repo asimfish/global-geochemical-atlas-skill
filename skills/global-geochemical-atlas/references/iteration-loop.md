@@ -2,7 +2,7 @@
 
 ## 目标
 
-`run_self_correction_loop.py` 是完整图谱任务的默认入口。它不只在命令失败时重试，还在每个预算约束轮次后审计数据是否足以支撑请求。正式评测默认共享 840 秒内部总预算，对应 900 秒任务上限；首轮提前结束且仍有安全余量时可继续。调用方可以显式选择最长 12 小时的非评测研究模式，但不能改变默认值。统计通过不表示全球/全国代表性，只表示达到一个显式、可审计的最小证据包。
+`run_self_correction_loop.py` 是完整图谱任务的默认入口。它不只在命令失败时重试，还在每个 30 分钟轮次后审计数据是否足以支撑请求。默认共享 43,200 秒总上限；首轮未达到门禁时按精确缺口继续下一轮，最多 24 轮。若门禁提前通过可提前交付；到时仍不足则诚实输出检查点。统计通过不表示全球/全国代表性，只表示达到一个显式、可审计的最小证据包。
 
 hash 固定 fixture 只用于显式 demo、离线回归或在线失败后已声明的最小降级。研究请求必须尝试网络可访问、请求兼容的来源。
 
@@ -12,7 +12,7 @@ hash 固定 fixture 只用于显式 demo、离线回归或在线失败后已声�
 2. 在版本化 `source_catalog` 和完整来源 profile 中按元素、介质、空间域、区域、measurement basis、许可、evidence tier、已知数据内容与可执行接口路由。空间域按介质确定性派生为 `land`、`inland_water`、`marine`；命名国家的陆地/内陆水体使用冻结 Admin-0，多边形外仅来源明确标注的 marine 记录可进入默认 600 km 邻近海洋分析域，该缓冲区不是领海、EEZ 或主权边界。题面点名的平台必须逐个进入适用性审计；不含请求维度的来源记录排除理由，不盲目下载。
 3. 尝试全部已选且可执行的在线来源，保留逐源 `source_outcomes`、manifest、hash、获取时间与失败。有限轮次内的顺序按完整 profile 的空间区 × 介质边际增益与独立血缘确定，避免同一区域的兄弟表先耗尽时限；reported 覆盖只用于公平调度，仍不计入 canonical 空间通过。研究路径优先真实在线/已验证缓存的完整可扩切片，不以 hash fixture 替代在线采集。
 4. 运行 D2/D3，验证固定十六文件契约和渲染门禁。即使 D2/D3 失败，已完成的来源尝试、过滤数量和 manifest 也先写入 `request_evidence/execution_failure.json`，不得随临时目录丢失。
-5. 计算 `atlas-data-sufficiency-v5`：
+5. 计算 `atlas-data-sufficiency-v6`：
    - 每个显式请求元素、介质、空间域以及每个元素 × 介质组合单元均须有观测；75% 覆盖率或集合并集不得通过；
    - 自适应记录下限 `max(5000, 500 × 元素数 × 介质数)`，不超过 `max_records`；
    - 自适应独立物理样品下限 `max(2000, 250 × 元素数 × 介质数)`，不超过 `max_records`；同一样品的多元素测定行不重复计数；
@@ -26,6 +26,7 @@ hash 固定 fixture 只用于显式 demo、离线回归或在线失败后已声�
    - 全球最多要求 500 个、区域最多要求 250 个可映射独立样品，而不是测定行；
    - 全球 canonical 陆地样品至少覆盖 4 个 Natural Earth 大区、每个至少 100 个独立样品，最大大区占比不超过 60%；这是总体分布门禁，不替代下方逐视图六大区与三十个优先国家全覆盖门禁。
    - 运行[策略驱动空间覆盖门禁](global-spatial-coverage.md)：整体全球视图检查六个核心大国、由固定陆地格面积自动导出的三十个优先国家、每个非南极大区及非极地陆地格；这组哨兵覆盖中东、俄罗斯各经度带、美国、非洲、澳大利亚、中国和南美等大块陆地，而非按用户点名增补。请求还自动枚举 overall、逐元素、逐介质和逐元素 × 介质视图，逐一检查 canonical 独立样品、覆盖格及全球 coverage-zone 广度。`maximize_evidence_breadth` 要求每个视图触达六个陆地大区，缺失大区优先各派生一个国家补采目标。陆地点按大区、海洋点按固定经度扇区审计；reported-only 坐标可以带警示展示，但不计入 canonical 通过。
+   - `maximize_evidence_breadth` 另有采集容量门禁：最低记录量、最少三种元素或两个介质只是可用性底线；只要任一成功来源仍填满本轮分配，就继续下一轮。仅在达到 `max_records`、达到每元素扩展上限，或所有可执行来源均返回低于分配量的容量信号时才认为已尽量扩展；固定容量恰等于分配量的适配器由外层无进展保护终止，不能制造无限循环。
    - 非全球命名国家或 bbox 依范围尺度从策略允许的 5° 至 0.25°选择网格；整体至少 20 个 canonical 独立样品并覆盖目标陆地、内陆水体或邻近海洋审计格的至少 15%，每个筛选视图再按策略比例检查。marine 点必须有明确来源语义并通过逐记录边界距离门禁；最细网格仍不足两个目标格时明确标记不可评估并继续使用精确点/边界 validator，不能把不可评估写成通过。
 6. 若未通过，分别判断每个缺口。记录量、独立样品量或背景组等通用数量缺口可将 `per_analyte_observations` 扩大 2 倍；空间空洞不属于通用扩量修复，必须从 `spatial_dimension_gaps` 与 `geographic_search_targets` 生成符合 [D1 修复队列 schema](d1-repair-queue.schema.json) 的 `d1_repair_queue.json`。逐介质方法短缺与逐来源官方链接短缺分别生成 `metadata_evidence_gap`，精确保留介质/来源、observed、target 与不可推断边界。队列由请求和观测自动派生，不按示例国家/元素写规则。每次检索或 adapter 修复只要产生经过验证的正记录/样品/canonical 格/方法/链接增量，就先纳入新轮次并重算，即使尚未一次关闭整项缺口；无增量才沿 fallback chain 前进。当前 v5 报告缺少或未完成充分性评估时，队列先生成单步 `rerun_current_controller` 任务；旧版 `loop_report` 不能原地续跑，必须以相同冻结请求换新输出目录，让当前控制器重新评估。旧字段不能被解释为“无缺口”，也不能在重新评估前驱动当前修复策略。结构性缺口不能阻断其他已覆盖维度的真实改进，但也不能被更多无关区域或其他视图记录掩盖。只有来源证据/溯源损坏时才禁止所有扩量。
 7. 通过、不再有自主修复、扩大目标后记录数与独立样品数仍无变化（来源容量）、达到 24 轮或声明的总预算时诚实停机。没有通过充分性门禁的终态是 `needs_human_review` 检查点，不是成功或正式研究交付。`sufficiency.reporting_facts` 固定记录 observed、target、短缺倍数与四维 band，供最终报告原样引用。
@@ -57,9 +58,9 @@ python scripts/run_self_correction_loop.py \
   --output-dir OUTPUT_DIR
 ```
 
-正式评测默认单轮上限 840 秒、内部工作流 780 秒、单来源 300 秒、总预算 840 秒；这是 900 秒任务上限内给 Agent 预留 60 秒的执行路径。短于 840 秒必须显式声明 `--checkpoint-only`，其结果永远不能成为正式交付。非评测研究可显式设置 `--time-budget-seconds 43200 --round-timeout-seconds 1800 --run-timeout-seconds 1740 --source-timeout-seconds 600`。续跑累计既有轮次耗时，不重新获得预算。fixture 更快不是跳过在线尝试的理由。
+默认单轮上限 1,800 秒、内部工作流 1,740 秒、单来源 600 秒、总预算上限 43,200 秒。短于一个完整 1,800 秒轮次必须显式声明 `--checkpoint-only`，其结果永远不能成为正式交付。续跑累计既有轮次耗时，不重新获得预算；`fixed` 请求在门禁通过时可提前结束，`maximize_evidence_breadth` 还必须满足采集容量门禁。fixture 更快不是跳过在线尝试的理由。
 
-每轮产物保存在 `OUTPUT_DIR/rounds/round-NN/`。最新通过十六文件验证的完整包可作为检查点发布到 `OUTPUT_DIR/`；`loop_report.json` 记录路由、轮次、充分性标准、扩采目标、修复计划、停机理由和已发布轮次，`d1_repair_queue.json` 是 Agent 必须消费的结构化 D1 控制面，`research_delivery_receipt.json` 将根目录十六文件逐字节绑定到该不可变轮次、清空的修复队列与未变的完整 Skill 树。在同一输出目录续跑时，请求 hash 必须不变且既有报告必须是当前 v5；旧版本报告应保留作历史证据，并在新输出目录用相同请求重新开始。执行证据使用 `geochemical-request-execution-v5`；若另一个进程在一轮中修改 Skill，当前轮以 `conflicting_evidence` 失败关闭，避免混合版本产物。
+每轮产物保存在 `OUTPUT_DIR/rounds/round-NN/`。最新通过十六文件验证的完整包可作为检查点发布到 `OUTPUT_DIR/`；`loop_report.json` 记录路由、轮次、充分性标准、扩采目标、修复计划、停机理由和已发布轮次，`d1_repair_queue.json` 是 Agent 必须消费的结构化 D1 控制面，`research_delivery_receipt.json` 将根目录十六文件逐字节绑定到该不可变轮次、清空的修复队列与未变的完整 Skill 树。在同一输出目录续跑时，请求 hash 必须不变且既有充分性评估必须是当前 `atlas-data-sufficiency-v6`；旧版本报告应保留作历史证据，并在新输出目录用相同请求重新开始。执行证据使用 `geochemical-request-execution-v5`；若另一个进程在一轮中修改 Skill，当前轮以 `conflicting_evidence` 失败关闭，避免混合版本产物。
 
 正式交付必须再运行：
 

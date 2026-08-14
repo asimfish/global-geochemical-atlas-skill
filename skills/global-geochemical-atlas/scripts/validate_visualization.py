@@ -22,7 +22,9 @@ import render_visualization as renderer
 import validate_outputs as workflow_validator
 
 
-MAX_OUTPUT_BYTES = 100_000_000
+# Database/evidence inputs may contain up to the task contract's bounded 200k
+# records. The map builder keeps its stricter 100 MB browser-artifact limit.
+MAX_OUTPUT_BYTES = 600_000_000
 
 # --- headless render smoke -------------------------------------------------
 BROWSER_ENV = "GGA_HEADLESS_BROWSER"
@@ -308,7 +310,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
         elif path.stat().st_size == 0:
             errors.append(f"required D3 output is empty: {name}")
         elif path.stat().st_size > MAX_OUTPUT_BYTES:
-            errors.append(f"D3 output exceeds the 100 MB runtime safety limit: {name}")
+            errors.append(
+                f"D3 input/output exceeds the 600 MB bounded-research safety limit: {name}"
+            )
     if errors:
         return {
             "status": "invalid",

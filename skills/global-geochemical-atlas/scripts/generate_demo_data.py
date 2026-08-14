@@ -789,10 +789,18 @@ def marchem_demo(
     files: Mapping[str, DownloadedFile],
     candidate: Any,
     observation_limit: int,
+    requested_analytes: Sequence[str] = ANALYTES,
+    purpose: str = "demo",
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
-    if observation_limit % len(ANALYTES) != 0:
-        raise DemoError("MarChem observation limit must be divisible by 4")
-    sample_limit = observation_limit // len(ANALYTES)
+    target_fields: Mapping[str, str] = candidate.registry_entry["target_analytes"]
+    analytes = tuple(item for item in requested_analytes if item in set(target_fields))
+    if not analytes:
+        raise DemoError("MarChem registers none of the requested analytes")
+    if observation_limit % len(analytes) != 0:
+        raise DemoError(
+            "MarChem observation limit must be divisible by the selected analyte count"
+        )
+    sample_limit = observation_limit // len(analytes)
     review_rows = [
         row
         for row in _marchem_review_rows()
@@ -801,29 +809,81 @@ def marchem_demo(
             for value in row.get("target_raw_values", {}).values()
         )
     ]
-    if sample_limit > len(review_rows):
-        raise DemoError(
-            "MarChem fixture is capped at the 28 target-bearing prepared review rows"
-        )
     by_source_row: dict[int, RawRecord] = {}
     for record in records:
         _, _, row_text = record.source_locator.partition("#row=")
         if row_text.isdigit():
             by_source_row[int(row_text)] = record
+    review_by_source_row = {
+        int(row["source_row_number"]): row
+        for row in review_rows
+        if isinstance(row.get("source_row_number"), int)
+    }
+    if purpose == "demo":
+        if sample_limit > len(review_rows):
+            raise DemoError(
+                "MarChem demonstration is capped at the 28 target-bearing prepared review rows"
+            )
+        selected_records = [
+            (by_source_row[int(row["source_row_number"])], row)
+            for row in review_rows[:sample_limit]
+            if int(row["source_row_number"]) in by_source_row
+        ]
+        if len(selected_records) != sample_limit:
+            raise DemoError("MarChem prepared review rows are missing from the export")
+        selection_rule = (
+            "prepared stratified 30-row review sample; selected target analytes per row"
+        )
+    else:
+        eligible: list[tuple[int, RawRecord]] = []
+        for source_row, record in sorted(by_source_row.items()):
+            if all(
+                str(record.fields.get(target_fields[analyte]) or "").strip()
+                for analyte in analytes
+            ):
+                eligible.append((source_row, record))
+        if sample_limit > len(eligible):
+            raise DemoError(
+                f"MarChem has {len(eligible)} complete target rows, below requested {sample_limit}"
+            )
+        if sample_limit == len(eligible):
+            selected = eligible
+            selection_rule = (
+                "complete verified target-bearing MarChem population; scientific data "
+                "and batch-method member hashes pinned; human review remains unsigned"
+            )
+        elif sample_limit == 1:
+            selected = [eligible[0]]
+            selection_rule = "deterministic first eligible research row; scientific member hashes pinned"
+        else:
+            # Spread a bounded extraction over the full publisher row order so
+            # a small request does not silently become an early-cruise slice.
+            indexes = [
+                round(index * (len(eligible) - 1) / (sample_limit - 1))
+                for index in range(sample_limit)
+            ]
+            selected = [eligible[index] for index in indexes]
+            selection_rule = (
+                "deterministic evenly spaced research slice across all eligible "
+                "publisher rows; scientific member hashes pinned"
+            )
+        selected_records = [
+            (record, review_by_source_row.get(source_row))
+            for source_row, record in selected
+        ]
     data_file = next((item for item in files.values() if item.file_id == "data"), None)
     if data_file is None:
         raise DemoError("MarChem fixture has no verified data member")
 
-    target_fields: Mapping[str, str] = candidate.registry_entry["target_analytes"]
     rows: list[dict[str, str]] = []
     evidence_rows: list[dict[str, Any]] = []
     selected_source_rows: set[str] = set()
-    for prepared in review_rows[:sample_limit]:
-        source_row = prepared.get("source_row_number")
-        record = by_source_row.get(source_row)
-        if record is None:
-            raise DemoError(f"MarChem prepared source row is missing: {source_row}")
-        if str(record.fields.get("Sample_code") or "") != prepared.get("sample_code"):
+    for record, prepared in selected_records:
+        _, _, source_row_text = record.source_locator.partition("#row=")
+        source_row = int(source_row_text)
+        if prepared is not None and str(
+            record.fields.get("Sample_code") or ""
+        ) != prepared.get("sample_code"):
             raise DemoError(f"MarChem review sample changed at source row {source_row}")
         methods = record.fields.get("_lab_parameters")
         if not isinstance(methods, Mapping):
@@ -831,10 +891,12 @@ def marchem_demo(
                 f"MarChem method mapping is missing at source row {source_row}"
             )
         depth_min, depth_max = _marchem_depth_m(record)
-        for analyte in ANALYTES:
+        for analyte in analytes:
             field_name = target_fields[analyte]
             raw_value = str(record.fields.get(field_name) or "").strip()
-            if raw_value != prepared.get("target_raw_values", {}).get(analyte):
+            if prepared is not None and raw_value != prepared.get(
+                "target_raw_values", {}
+            ).get(analyte):
                 raise DemoError(
                     f"MarChem prepared {analyte} value changed at source row {source_row}"
                 )
@@ -889,7 +951,7 @@ def marchem_demo(
                 {
                     "article_citations": [candidate.registry_entry["citation"]],
                     "article_dois": [],
-                    "selection_rule": "prepared stratified 30-row review sample; four target analytes per row",
+                    "selection_rule": selection_rule,
                     "snapshot_id": candidate.version,
                     "batch_code": str(record.fields.get("Batch_code") or ""),
                     "cruise_year": str(record.fields.get("Cruise_year") or ""),
@@ -908,7 +970,10 @@ def marchem_demo(
                     "accreditation_status": method.get("_accreditation_status"),
                     "digestion_scope": "partial",
                     "not_total_content": True,
-                    "review_selection_reasons": prepared.get("selection_reasons", []),
+                    "human_review_status": "prepared_unsigned",
+                    "review_selection_reasons": (
+                        prepared.get("selection_reasons", []) if prepared else []
+                    ),
                 }
             )
             evidence_rows.append(entry)
@@ -1404,8 +1469,9 @@ def wqp_sacramento_demo(
         lambda fields: fields.get("ResultDetectionConditionText") == "Not Detected"
     )
     add_first(
-        lambda fields: fields.get("ActivityTypeCode")
-        == "Quality Control Sample-Field Replicate"
+        lambda fields: (
+            fields.get("ActivityTypeCode") == "Quality Control Sample-Field Replicate"
+        )
     )
     add_first(lambda fields: fields.get("ResultStatusIdentifier") == "Preliminary")
     add_first(
@@ -1630,10 +1696,23 @@ def gsj_japan_demo(
     files: Mapping[str, DownloadedFile],
     candidate: Any,
     observation_limit: int,
+    requested_analytes: Sequence[str] = ANALYTES,
+    bbox: tuple[float, float, float, float] | None = None,
+    purpose: str = "demo",
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
-    if observation_limit % len(ANALYTES) != 0:
-        raise DemoError("GSJ observation limit must be divisible by 4")
-    sample_limit = observation_limit // len(ANALYTES)
+    registered_analytes = tuple(candidate.registry_entry["target_analytes"])
+    selected_analytes = (
+        ANALYTES
+        if purpose == "demo"
+        else tuple(item for item in requested_analytes if item in registered_analytes)
+    )
+    if not selected_analytes:
+        raise DemoError("GSJ registers none of the requested analytes")
+    if observation_limit % len(selected_analytes) != 0:
+        raise DemoError(
+            "GSJ observation limit must be divisible by the requested analyte count"
+        )
+    sample_limit = observation_limit // len(selected_analytes)
     sample_file = files.get("samplejoho.csv")
     concentration_file = files.get("noudo.csv")
     if sample_file is None or concentration_file is None:
@@ -1643,7 +1722,16 @@ def gsj_japan_demo(
     rows: list[dict[str, str]] = []
     evidence_rows: list[dict[str, Any]] = []
     selected_source_rows: set[str] = set()
-    for record in records[:sample_limit]:
+    selected_records = [
+        record
+        for record in records
+        if _inside_bbox(
+            str(record.fields.get("緯度(JGD2000)") or ""),
+            str(record.fields.get("経度(JGD2000)") or ""),
+            bbox,
+        )
+    ][:sample_limit]
+    for record in selected_records:
         raw_id = str(record.fields.get("試料番号") or "").strip()
         occurrence = int(record.fields.get("_sample_id_occurrence") or 1)
         sample_id = raw_id if occurrence == 1 else f"{raw_id}#{occurrence}"
@@ -1655,7 +1743,7 @@ def gsj_japan_demo(
             raise DemoError(
                 f"GSJ sample identity or coordinates are invalid: {record.source_locator}"
             )
-        for analyte in ANALYTES:
+        for analyte in selected_analytes:
             field_name = target_fields[analyte]
             raw_value = str(record.fields.get(field_name) or "").strip()
             unit = target_units[analyte]
@@ -1704,7 +1792,12 @@ def gsj_japan_demo(
                 {
                     "article_citations": [candidate.registry_entry["citation"]],
                     "article_dois": [],
-                    "selection_rule": "first ordinal-joined samples with valid coordinates; balanced As/Cu/Ni/Zn",
+                    "selection_rule": (
+                        "first ordinal-joined samples with valid coordinates; balanced As/Cu/Ni/Zn"
+                        if purpose == "demo"
+                        else "ordinal-joined samples inside the requested scope; "
+                        f"balanced {'/'.join(selected_analytes)}"
+                    ),
                     "sample_source_locator": record.fields["_sample_source_locator"],
                     "concentration_source_locator": record.fields[
                         "_concentration_source_locator"
@@ -1729,7 +1822,7 @@ def gsj_japan_demo(
             )
             evidence_rows.append(entry)
             selected_source_rows.add(record.source_record_id)
-    if len(rows) != observation_limit:
+    if len(rows) != observation_limit and purpose == "demo":
         raise DemoError(
             f"GSJ produced {len(rows)} observations, expected {observation_limit}"
         )
@@ -2203,7 +2296,7 @@ def afsis_demo(
                 }
             )
             evidence_rows.append(entry)
-    if len(rows) != observation_limit:
+    if len(rows) != observation_limit and purpose == "demo":
         raise DemoError(
             f"AfSIS produced {len(rows)} observations, expected {observation_limit}"
         )
@@ -2481,11 +2574,49 @@ def gsj_marine_demo(
     files: Mapping[str, DownloadedFile],
     candidate: Any,
     observation_limit: int,
+    requested_analytes: Sequence[str] = ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"),
+    purpose: str = "demo",
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
-    analytes = ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
-    if observation_limit % len(analytes) != 0:
-        raise DemoError("GSJ marine observation limit must be divisible by seven")
-    per_analyte = observation_limit // len(analytes)
+    registered_analytes = tuple(candidate.registry_entry["target_analytes"])
+    analytes = (
+        registered_analytes
+        if purpose == "demo"
+        else tuple(item for item in requested_analytes if item in registered_analytes)
+    )
+    if not analytes:
+        raise DemoError("GSJ marine registers none of the requested analytes")
+    if purpose == "demo":
+        if observation_limit % len(analytes) != 0:
+            raise DemoError("GSJ marine observation limit must be divisible by seven")
+        per_analyte_limits = {
+            analyte: observation_limit // len(analytes) for analyte in analytes
+        }
+    else:
+        capacity = candidate.registry_entry.get("research_slice_capacity", {})
+        available = capacity.get("per_analyte_observation_count", {})
+        if not isinstance(available, Mapping) or any(
+            analyte not in available for analyte in analytes
+        ):
+            raise DemoError("GSJ marine research capacity is not registered")
+        total_capacity = sum(int(available[analyte]) for analyte in analytes)
+        if observation_limit > total_capacity:
+            raise DemoError(
+                "GSJ marine observation request exceeds the audited positive-value capacity"
+            )
+        per_analyte_limits = {analyte: 0 for analyte in analytes}
+        remaining = observation_limit
+        while remaining:
+            advanced = False
+            for analyte in analytes:
+                if per_analyte_limits[analyte] >= int(available[analyte]):
+                    continue
+                per_analyte_limits[analyte] += 1
+                remaining -= 1
+                advanced = True
+                if remaining == 0:
+                    break
+            if not advanced:
+                raise DemoError("GSJ marine capacity allocation cannot make progress")
     downloaded = files.get("ocean-noudo.csv")
     if downloaded is None:
         raise DemoError("GSJ marine concentration CSV is missing")
@@ -2498,7 +2629,7 @@ def gsj_marine_demo(
         if not isinstance(observations, Mapping):
             continue
         for analyte in analytes:
-            if selected_counts[analyte] >= per_analyte:
+            if selected_counts[analyte] >= per_analyte_limits[analyte]:
                 continue
             values = observations.get(analyte)
             if not isinstance(values, Mapping):
@@ -2549,7 +2680,12 @@ def gsj_marine_demo(
                 {
                     "article_citations": [candidate.registry_entry["citation"]],
                     "article_dois": [candidate.registry_entry["publication_doi"]],
-                    "selection_rule": "first positive records per analyte; eight each for As/Cr/Cu/Hg/Ni/Pb/Zn",
+                    "selection_rule": (
+                        "first positive records per analyte; eight each for As/Cr/Cu/Hg/Ni/Pb/Zn"
+                        if purpose == "demo"
+                        else "first positive records per requested analyte up to the "
+                        "audited per-analyte research capacity"
+                    ),
                     "cruise": str(record.fields.get("航海") or ""),
                     "region": str(record.fields.get("地域") or ""),
                     "water_depth_m": str(record.fields.get("深度_m_") or ""),
@@ -2561,7 +2697,10 @@ def gsj_marine_demo(
             evidence_rows.append(entry)
             selected_counts[analyte] += 1
             selected_source_rows.add(record.source_record_id)
-        if all(selected_counts[analyte] >= per_analyte for analyte in analytes):
+        if all(
+            selected_counts[analyte] >= per_analyte_limits[analyte]
+            for analyte in analytes
+        ):
             break
     if len(rows) != observation_limit:
         raise DemoError(
@@ -3081,6 +3220,283 @@ def pangaea_registered_soil_demo(
     return rows, evidence_rows, len(selected)
 
 
+def evidence_breadth_soil_demo(
+    records: Sequence[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+    requested_analytes: Sequence[str],
+    bbox: tuple[float, float, float, float] | None = None,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    """Spatially balance the audited BraSol and Yangtze soil sources."""
+
+    supported = set(candidate.registry_entry["target_analytes"])
+    requested = tuple(item for item in requested_analytes if item in supported)
+    if not requested:
+        raise DemoError(
+            f"{candidate.source_id} registers none of the requested analytes"
+        )
+    brasol = candidate.source_id == "pangaea-brasol-ne-brazil-soil"
+    buckets: dict[tuple[str, int, int], list[tuple[RawRecord, str]]] = {}
+    for record in records:
+        observations = record.fields.get("_target_observations")
+        if not isinstance(observations, Mapping):
+            continue
+        latitude = str(
+            record.fields.get("_canonical_latitude")
+            if brasol
+            else record.fields.get("Latitude") or ""
+        )
+        longitude = str(
+            record.fields.get("_canonical_longitude")
+            if brasol
+            else record.fields.get("Longitude") or ""
+        )
+        lat = _reported_float(latitude)
+        lon = _reported_float(longitude)
+        selection_lat = lat
+        selection_lon = lon
+        if brasol and (lat is None or lon is None):
+            # Conflicting publisher coordinate fields are retained in the
+            # standardized database but never promoted to canonical map
+            # coordinates.  Either publisher-reported representation may be
+            # used only to keep the record in an in-scope acquisition slice.
+            selection_lat = _reported_float(
+                str(record.fields.get("_coordinate_dms_latitude") or "")
+            ) or _reported_float(str(record.fields.get("Latitude") or ""))
+            selection_lon = _reported_float(
+                str(record.fields.get("_coordinate_dms_longitude") or "")
+            ) or _reported_float(str(record.fields.get("Longitude") or ""))
+        if selection_lat is None or selection_lon is None:
+            continue
+        if bbox is not None and not (
+            bbox[1] <= selection_lat <= bbox[3] and bbox[0] <= selection_lon <= bbox[2]
+        ):
+            continue
+        for analyte in requested:
+            if not isinstance(observations.get(analyte), Mapping):
+                continue
+            cell = (
+                analyte,
+                int(math.floor(selection_lat / 2.0)),
+                int(math.floor(selection_lon / 2.0)),
+            )
+            buckets.setdefault(cell, []).append((record, analyte))
+    # First balance spatial cells within each analyte, then balance analytes.
+    # Sorting the (analyte, cell) keys directly starved later analytes whenever
+    # a caller requested a bounded slice, which made a multi-element source
+    # appear to contain only its first few alphabetic elements.
+    analyte_queues: dict[str, list[tuple[RawRecord, str]]] = {}
+    for analyte in requested:
+        keys = sorted(key for key in buckets if key[0] == analyte)
+        queue: list[tuple[RawRecord, str]] = []
+        offsets = {key: 0 for key in keys}
+        while len(queue) < sum(len(buckets[key]) for key in keys):
+            advanced = False
+            for key in keys:
+                index = offsets[key]
+                if index >= len(buckets[key]):
+                    continue
+                queue.append(buckets[key][index])
+                offsets[key] = index + 1
+                advanced = True
+            if not advanced:
+                break
+        analyte_queues[analyte] = queue
+    ordered: list[tuple[RawRecord, str]] = []
+    analyte_offsets = {analyte: 0 for analyte in requested}
+    while len(ordered) < sum(len(queue) for queue in analyte_queues.values()):
+        advanced = False
+        for analyte in requested:
+            index = analyte_offsets[analyte]
+            queue = analyte_queues[analyte]
+            if index >= len(queue):
+                continue
+            ordered.append(queue[index])
+            analyte_offsets[analyte] = index + 1
+            advanced = True
+        if not advanced:
+            break
+    selected = ordered[:observation_limit]
+    if not selected:
+        raise DemoError(f"{candidate.source_id} has no usable in-scope observations")
+
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    selected_source_rows: set[str] = set()
+    for record, analyte in selected:
+        values = record.fields["_target_observations"][analyte]
+        raw_value = str(values["value"])
+        unit = str(values["unit"])
+        qualifier = str(values.get("qualifier") or "")
+        record_id = stable_record_id(
+            record.source_id,
+            record.source_record_id,
+            analyte,
+            raw_value,
+            unit,
+        )
+        source_id = candidate.source_id
+        brasol = source_id == "pangaea-brasol-ne-brazil-soil"
+        sample_id = (
+            f"{record.fields.get('Site_ID', '')}|{record.fields.get('Lyr_name', '')}"
+            if brasol
+            else str(record.fields.get("FID") or "")
+        )
+        downloaded = files.get(str(record.fields.get("_source_file") or ""))
+        if downloaded is None:
+            raise DemoError(f"{source_id} record references an unknown source file")
+        depth_min = depth_max = ""
+        if brasol:
+            try:
+                depth_min = format(
+                    float(str(record.fields.get("Lyr_top_cm") or "")) / 100.0,
+                    ".12g",
+                )
+                depth_max = format(
+                    float(str(record.fields.get("Lyr_bot_cm") or "")) / 100.0,
+                    ".12g",
+                )
+            except ValueError:
+                depth_min = depth_max = ""
+        rows.append(
+            {
+                "record_id": record_id,
+                "source_record_id": record.source_record_id,
+                "sample_id": sample_id,
+                "element_or_analyte": analyte,
+                "analyte_reported": analyte,
+                "value": raw_value,
+                "unit": unit,
+                "medium": "soil",
+                "measurement_basis": str(values.get("measurement_basis") or ""),
+                "value_qualifier": qualifier,
+                "detection_limit": str(values.get("detection_limit") or ""),
+                "detection_limit_unit": unit if values.get("detection_limit") else "",
+                "original_latitude_raw": str(
+                    record.fields.get("Lat_dec_deg")
+                    or record.fields.get("Latitude")
+                    or ""
+                ),
+                "original_longitude_raw": str(
+                    record.fields.get("Long_dec_deg")
+                    or record.fields.get("Longitude")
+                    or ""
+                ),
+                "latitude": str(
+                    record.fields.get("_canonical_latitude")
+                    if brasol
+                    else record.fields.get("Latitude") or ""
+                ),
+                "longitude": str(
+                    record.fields.get("_canonical_longitude")
+                    if brasol
+                    else record.fields.get("Longitude") or ""
+                ),
+                "source_crs": str(record.fields.get("_source_crs") or ""),
+                "coordinate_transform_method": (
+                    "publisher WGS84 DMS/decimal agreement; identity"
+                    if brasol
+                    and record.fields.get("_coordinate_evidence_status")
+                    == "publisher_wgs84_dms_decimal_agree"
+                    else "not canonicalized: publisher DMS/decimal coordinate conflict"
+                    if brasol
+                    else ""
+                ),
+                "coordinate_uncertainty_m": str(
+                    record.fields.get("_coordinate_uncertainty_m") or ""
+                ),
+                "analytical_method": str(values.get("analytical_method") or ""),
+                "digestion_or_extraction": str(
+                    values.get("digestion_or_extraction") or ""
+                ),
+                "method_missing_reason": str(values.get("method_missing_reason") or ""),
+                "license": candidate.license_id,
+                "source_tier": "peer_reviewed",
+                "source_id": source_id,
+                "source_locator": record.source_locator,
+                "sample_depth_min_m": depth_min,
+                "sample_depth_max_m": depth_max,
+                "sample_type_raw": str(record.fields.get("_sample_type") or ""),
+                "lithology_raw": str(record.fields.get("Lithol_IBGE_EN") or ""),
+                "soil_horizon_raw": str(record.fields.get("Lyr_name") or ""),
+                "geographic_context_raw": " | ".join(
+                    str(record.fields.get(field) or "")
+                    for field in (
+                        ("Biome", "Land_use")
+                        if brasol
+                        else ("loc_l1", "loc_l2", "loc_l3", "loc_l4")
+                    )
+                    if str(record.fields.get(field) or "")
+                ),
+            }
+        )
+        entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+        entry.update(
+            {
+                "article_citations": [candidate.registry_entry["citation"]],
+                "article_dois": [
+                    item
+                    for item in (
+                        candidate.registry_entry.get("publication_doi"),
+                        candidate.dataset_doi,
+                    )
+                    if item
+                ],
+                "selection_rule": (
+                    "requested analyte × two-degree spatial cells round-robin; "
+                    "then deterministic source order"
+                ),
+                "method_source_locator": str(
+                    values.get("variable_metadata_locator") or ""
+                ),
+                "method_missing_reason": str(values.get("method_missing_reason") or ""),
+                "reported_value_raw": str(
+                    values.get("reported_value_raw") or raw_value
+                ),
+                "coordinate_evidence": (
+                    {
+                        "source_crs": "EPSG:4326",
+                        "publisher_reported_uncertainty_m": record.fields.get(
+                            "_coordinate_uncertainty_m"
+                        ),
+                        "coordinate_evidence_status": record.fields.get(
+                            "_coordinate_evidence_status"
+                        ),
+                        "publisher_dms_latitude_decimal": record.fields.get(
+                            "_coordinate_dms_latitude"
+                        ),
+                        "publisher_dms_longitude_decimal": record.fields.get(
+                            "_coordinate_dms_longitude"
+                        ),
+                    }
+                    if brasol
+                    else {
+                        "source_crs": "not reported",
+                        "location_level": record.fields.get("loc_level"),
+                    }
+                ),
+                "site_id": str(record.fields.get("Site_ID") or ""),
+                "layer": str(record.fields.get("Lyr_name") or ""),
+                "biome": str(record.fields.get("Biome") or ""),
+                "land_use": str(record.fields.get("Land_use") or ""),
+                "location_hierarchy": [
+                    str(record.fields.get(field) or "")
+                    for field in ("loc_l1", "loc_l2", "loc_l3", "loc_l4")
+                    if str(record.fields.get(field) or "")
+                ],
+                "scientific_note": (
+                    "Publisher WGS84 DMS and decimal fields are cross-checked; conflicting rows remain traceable but are not mapped. Handheld-GPS resolution is preserved without treating it as statistical accuracy; layers and method bases remain separate."
+                    if brasol
+                    else "Literature-compilation occurrence; upstream row method and datum are not reported and are not inferred."
+                ),
+            }
+        )
+        evidence_rows.append(entry)
+        selected_source_rows.add(record.source_record_id)
+    return rows, evidence_rows, len(selected_source_rows)
+
+
 def v4_m6_demo(
     records: Sequence[RawRecord],
     files: Mapping[str, DownloadedFile],
@@ -3331,10 +3747,15 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         "geotraces-idp2025",
         "afsis-phase-i-wet-chemistry",
         "australia-ngsa",
+        "japan-gsj-geochemical-map",
+        "japan-gsj-marine-sediment",
         "pangaea-amazonas-soil",
         "pangaea-batagay-soil",
+        "pangaea-brasol-ne-brazil-soil",
+        "figshare-yangtze-basin-soil-heavy-metals",
     }
-    if args.source not in parameterized_sources and args.bbox is not None:
+    bbox_parameterized_sources = parameterized_sources - {"japan-gsj-marine-sediment"}
+    if args.source not in bbox_parameterized_sources and args.bbox is not None:
         raise DemoError(
             f"bbox filtering is not implemented for source {args.source}; refusing to ignore it"
         )
@@ -3389,7 +3810,12 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             )
         elif args.source == "norway-marchem":
             rows, evidence, selected_source_rows = marchem_demo(
-                raw_records, files, candidate, args.observations
+                raw_records,
+                files,
+                candidate,
+                args.observations,
+                args.elements,
+                args.purpose,
             )
             raw_source_rows = len(raw_records)
         elif args.source == "geotraces-idp2025":
@@ -3429,7 +3855,13 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             raw_source_rows = len(raw_records)
         elif args.source == "japan-gsj-geochemical-map":
             rows, evidence, selected_source_rows = gsj_japan_demo(
-                raw_records, files, candidate, args.observations
+                raw_records,
+                files,
+                candidate,
+                args.observations,
+                args.elements,
+                args.bbox,
+                args.purpose,
             )
             raw_source_rows = len(raw_records)
         elif args.source == "zenodo-yangtze-yellow-river-sediment":
@@ -3469,7 +3901,12 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             raw_source_rows = len(raw_records)
         elif args.source == "japan-gsj-marine-sediment":
             rows, evidence, selected_source_rows = gsj_marine_demo(
-                raw_records, files, candidate, args.observations
+                raw_records,
+                files,
+                candidate,
+                args.observations,
+                args.elements,
+                args.purpose,
             )
             raw_source_rows = len(raw_records)
         elif args.source == "pangaea-arabian-sea-sediment":
@@ -3494,6 +3931,19 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             raw_source_rows = len(raw_records)
         elif args.source in {"pangaea-amazonas-soil", "pangaea-batagay-soil"}:
             rows, evidence, selected_source_rows = pangaea_registered_soil_demo(
+                raw_records,
+                files,
+                candidate,
+                args.observations,
+                args.elements,
+                args.bbox,
+            )
+            raw_source_rows = len(raw_records)
+        elif args.source in {
+            "pangaea-brasol-ne-brazil-soil",
+            "figshare-yangtze-basin-soil-heavy-metals",
+        }:
+            rows, evidence, selected_source_rows = evidence_breadth_soil_demo(
                 raw_records,
                 files,
                 candidate,
@@ -3613,7 +4063,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 "AfSIS Phase I contains 2,002 archived samples from 51 LDSF sites and is not a uniform African grid.",
                 "Aqua-regia values are quasi-total and remain separate from total and other soil extraction bases.",
                 "Published negative instrument results and positive values below source-wide DL or QL remain explicit quality flags; this positive extraction excludes negative rows.",
-                "One hundred twenty-six source samples have no coordinates; the extraction selects only complete-coordinate rows and does not infer missing positions.",
+                "One hundred twenty-six source samples have no coordinates; an unbounded research extraction may retain otherwise eligible database rows with explicit missing positions, while bbox requests exclude them.",
                 "The source does not state a coordinate reference system; latitude/longitude are preserved while source_crs remains blank.",
                 "The variable workbook description conflicts with field As.75 by saying Arsenic-78, and its 2009-2013 sampling period differs from the related paper's 2009-2012; both conflicts stay in evidence.",
                 "Publisher country labels are retained verbatim, with SAfrica and Zimbambwe normalized only in separate evidence fields.",
@@ -3690,6 +4140,22 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             [
                 "The PANGAEA source is one Batagay site in North Yakutia and cannot close the all-Russia coverage gap.",
                 "Soil, ice-wedge inclusions and thawed ground particles remain separate sample types; the source has Cu/Pb/Zn but no As.",
+            ]
+        )
+    elif args.source == "pangaea-brasol-ne-brazil-soil":
+        warnings.extend(
+            [
+                "BraSol covers 142 northeastern Brazil transect sites and is not nationally representative.",
+                "Publisher WGS84 coordinates and handheld-GPS resolution are preserved; ORG, TOP and BOT layers remain distinct.",
+                "One preferred reported determination per sample and element is selected by the frozen ICP-MS→ICP-OES→GFD-XRF→PPP-XRF order; LOD markers remain censored.",
+            ]
+        )
+    elif args.source == "figshare-yangtze-basin-soil-heavy-metals":
+        warnings.extend(
+            [
+                "The Yangtze basin product is a heterogeneous literature compilation, not a probability sample.",
+                "The workbook omits row-level methods, detection limits and original-publication identifiers; none are inferred.",
+                "The linked article describes mixed georeferencing workflows without one declared datum/CRS, so coordinates remain reported-only.",
             ]
         )
     elif args.source == "eidc-ningbo-soil":
@@ -3787,6 +4253,12 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 if args.source == "pangaea-barents-c-horizon-soil"
                 else tuple(args.elements)
                 if args.source in {"pangaea-amazonas-soil", "pangaea-batagay-soil"}
+                else tuple(args.elements)
+                if args.source
+                in {
+                    "pangaea-brasol-ne-brazil-soil",
+                    "figshare-yangtze-basin-soil-heavy-metals",
+                }
                 else ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
                 if args.source == "georoc-antarctica-intraplate"
                 else ("Cr", "Cu", "Ni", "Pb", "Zn")
@@ -3864,6 +4336,8 @@ def build_parser() -> argparse.ArgumentParser:
             "eidc-ningbo-soil",
             "gemas-europe",
             "zenodo-yangtze-yellow-river-sediment",
+            "pangaea-brasol-ne-brazil-soil",
+            "figshare-yangtze-basin-soil-heavy-metals",
         ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)

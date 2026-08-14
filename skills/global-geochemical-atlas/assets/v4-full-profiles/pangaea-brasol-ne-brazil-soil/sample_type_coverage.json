@@ -1,0 +1,24 @@
+{
+  "as_of": "2026-08-14T20:30:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2024-07-01",
+  "media": {
+    "soil": 1614
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "soil_organic_litter": 180,
+    "soil_subsoil": 600,
+    "soil_topsoil": 834
+  },
+  "sediment_environments": {
+    "not_applicable": 1614
+  },
+  "source_id": "pangaea-brasol-ne-brazil-soil",
+  "water_body_types": {
+    "not_applicable": 1614
+  },
+  "water_fractions": {
+    "not_applicable": 1614
+  }
+}

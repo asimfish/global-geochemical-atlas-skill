@@ -1,0 +1,14 @@
+{
+  "as_of": "2026-08-14T20:30:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2024-07-01",
+  "geographic_context_is_not_counted_as_geologic_unit": true,
+  "geologic_age_raw": 0,
+  "geologic_unit_raw": 0,
+  "lithology_raw": 1614,
+  "matched_geologic_unit": 0,
+  "observation_denominator": 1614,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "pangaea-brasol-ne-brazil-soil",
+  "tectonic_setting_raw": 0
+}

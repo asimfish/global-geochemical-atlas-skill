@@ -352,6 +352,38 @@ def _sample_and_place(
             _text(fields.get("Longitude")),
             _text(fields.get("_source_crs")) or "EPSG:4326",
         )
+    if source_id == "pangaea-brasol-ne-brazil-soil":
+        canonical_latitude = _text(fields.get("_canonical_latitude"))
+        canonical_longitude = _text(fields.get("_canonical_longitude"))
+        return (
+            "|".join((_text(fields.get("Site_ID")), _text(fields.get("Lyr_name")))),
+            "northeastern Brazil transects",
+            canonical_latitude or _text(fields.get("Latitude")),
+            canonical_longitude or _text(fields.get("Longitude")),
+            (
+                _text(fields.get("_source_crs"))
+                if canonical_latitude and canonical_longitude
+                else "publisher-declared EPSG:4326; DMS/decimal conflict"
+            ),
+        )
+    if source_id == "figshare-yangtze-basin-soil-heavy-metals":
+        return (
+            _text(fields.get("FID")),
+            " / ".join(
+                part
+                for part in (
+                    "Yangtze River Basin, China",
+                    _text(fields.get("loc_l1")),
+                    _text(fields.get("loc_l2")),
+                    _text(fields.get("loc_l3")),
+                    _text(fields.get("loc_l4")),
+                )
+                if part
+            ),
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            "",
+        )
     if source_id == "pangaea-batagay-soil":
         return (
             "|".join(
@@ -572,6 +604,22 @@ def _semantic_evidence(
         evidence["campaign"] = _text(fields.get("No (Number of Campaign)"))
         evidence["sampled_at"] = _text(fields.get("Date/Time"))
         evidence["depth_class"] = _text(fields.get("Depth desc"))
+    elif source_id == "pangaea-brasol-ne-brazil-soil":
+        evidence["site_id"] = _text(fields.get("Site_ID"))
+        evidence["layer"] = _text(fields.get("Lyr_name"))
+        evidence["biome"] = _text(fields.get("Biome"))
+        evidence["land_use"] = _text(fields.get("Land_use"))
+    elif source_id == "figshare-yangtze-basin-soil-heavy-metals":
+        evidence["location_hierarchy"] = [
+            value
+            for value in (
+                _text(fields.get("loc_l1")),
+                _text(fields.get("loc_l2")),
+                _text(fields.get("loc_l3")),
+                _text(fields.get("loc_l4")),
+            )
+            if value
+        ]
     elif source_id == "pangaea-batagay-soil":
         evidence["sample_id"] = _text(fields.get("Sample ID"))
         evidence["sampling_site"] = _text(fields.get("Sample comment (Sampling site)"))
@@ -648,6 +696,7 @@ def _observation(
         "unit": unit,
         "medium": _text((registry_entry.get("media") or [""])[0]),
         "measurement_basis": _text(values.get("measurement_basis")),
+        "value_qualifier": _text(values.get("qualifier")),
         "detection_limit": _text(values.get("detection_limit")),
         "latitude": latitude,
         "longitude": longitude,
@@ -664,6 +713,8 @@ def _observation(
             if source_id in {"japan-gsj-geochemical-map", "japan-gsj-marine-sediment"}
             else "15"
             if source_id == "us-wqp-sacramento-river-arsenic"
+            else _text(raw.fields.get("_coordinate_uncertainty_m"))
+            if source_id == "pangaea-brasol-ne-brazil-soil"
             else ""
         ),
         "analytical_method": method,
@@ -674,6 +725,8 @@ def _observation(
         or (
             _text(raw.fields.get("Rock Group"))
             if source_id == "tpdc-china-mountain-soil"
+            else _text(raw.fields.get("Lithol_IBGE_EN"))
+            if source_id == "pangaea-brasol-ne-brazil-soil"
             else ""
         ),
         "geologic_age_raw": _text(raw.fields.get("AGE")),
@@ -682,6 +735,7 @@ def _observation(
     row = v4_semantics.enrich_row(row, evidence, registry_entry, registry_verified_at)
     comparable = bool(
         _numeric(value) is not None
+        and not _text(values.get("qualifier"))
         and unit
         and sample_id
         and spatial_cell

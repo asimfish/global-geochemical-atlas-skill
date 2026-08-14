@@ -172,7 +172,7 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 核心 D3 输出：
 
 - `interactive_map.html`：任务配置驱动、离线、自包含的交互地图；
-- `samples.geojson`：一条 feature 对应一条当前空间产物内的合格坐标测定记录；区域模式只含 bbox 内记录；
+- `samples.geojson`：一条 feature 对应一条当前空间产物内的合格坐标测定记录；区域模式只含 bbox 内记录。为避免十万级地图重复整张标准库，feature properties 采用 `d3-map-sample-properties-v3` 最小空间交换字段（元素、介质、值、单位、来源、坐标口径、整体工作流档位与异常标记），并以 `record_id` 无损连接 `geochemistry.csv` 中的完整置信度维度、QC、原值、方法、证据定位和来源链接；记录不抽样、不聚合；
 - `visualization_profile.json`：本次可复现任务配置；
 - `visualization_report.json`：输入哈希、配置、警告、地图计数和失败边界，结构见
   [visualization-report.schema.json](visualization-report.schema.json)；

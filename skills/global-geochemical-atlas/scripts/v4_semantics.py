@@ -173,6 +173,18 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "article_element_method_mapping",
         "citation_scope": "dataset",
     },
+    "pangaea-brasol-ne-brazil-soil": {
+        "method_scope": "dataset_parameter",
+        "method_assignment_basis": "publisher_metadata_and_selected_method_column",
+        "citation_scope": "dataset",
+    },
+    "figshare-yangtze-basin-soil-heavy-metals": {
+        "sample_type_raw": "literature-compiled soil occurrence",
+        "sample_type": "soil_literature_occurrence",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_missing_reason": "publisher_compilation_omits_row_method",
+        "citation_scope": "dataset",
+    },
     "eidc-ningbo-soil": {
         "sample_type_raw": "composite topsoil 0-20 cm",
         "sample_type": "soil_topsoil",
@@ -425,6 +437,22 @@ def _sample_semantics(
             soil_horizon_raw=raw,
             soil_horizon=mapped[1],
         )
+    elif source_id == "pangaea-brasol-ne-brazil-soil":
+        raw = _text(evidence.get("layer"))
+        mapped = {
+            "ORG": ("soil_organic_litter", "organic_litter"),
+            "TOP": ("soil_topsoil", "topsoil_0_20cm"),
+            "BOT": ("soil_subsoil", "subsoil_30_50cm"),
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped BraSol layer: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped[0],
+            sample_type_mapping_status="exact",
+            soil_horizon_raw=raw,
+            soil_horizon=mapped[1],
+        )
     elif source_id == "pangaea-batagay-soil":
         raw = _text(evidence.get("sample_type")) or "not reported"
         mapped = {
@@ -564,6 +592,29 @@ def _geographic_semantics(
                 _text(evidence.get("land_use")),
             )
             if part
+        )
+    elif source_id == "pangaea-brasol-ne-brazil-soil":
+        result["survey_area"] = "northeastern Brazil transects"
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                result["survey_area"],
+                _text(evidence.get("site_id")),
+                _text(evidence.get("biome")),
+                _text(evidence.get("land_use")),
+            )
+            if part
+        )
+    elif source_id == "figshare-yangtze-basin-soil-heavy-metals":
+        result["survey_area"] = "Yangtze River Basin, China"
+        hierarchy = evidence.get("location_hierarchy")
+        result["geographic_context_raw"] = " / ".join(
+            [result["survey_area"]]
+            + [
+                _text(item)
+                for item in (hierarchy if isinstance(hierarchy, list) else [])
+                if _text(item)
+            ]
         )
     elif source_id == "pangaea-batagay-soil":
         result["survey_area"] = "Batagay megaslump, North Yakutia, Russia"

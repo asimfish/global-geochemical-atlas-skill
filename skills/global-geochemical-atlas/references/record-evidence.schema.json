@@ -29,7 +29,18 @@
       "description": "HTTPS is preferred. The evidence builder accepts the legacy FOREGS HTTP publisher only when source_file_sha256 is pinned."
     },
     "evidence_version": {"type": ["string", "null"]},
-    "evidence_status": {"type": ["string", "null"]}
+    "evidence_status": {"type": ["string", "null"]},
+    "source_metadata_record_id": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "description": "When source-level fields are compacted, points to the anchor evidence row that carries them."
+    },
+    "shared_source_metadata_fields": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true,
+      "description": "Present only on a compaction anchor; names source-level fields inherited by rows that reference this anchor."
+    }
   },
   "additionalProperties": true
 }

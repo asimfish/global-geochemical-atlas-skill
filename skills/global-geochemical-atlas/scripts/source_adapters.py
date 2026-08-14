@@ -627,10 +627,25 @@ class GeorocArchaeanAdapter(RegistryAdapter):
 
 
 class MarchemSnapshotAdapter(RegistryAdapter):
-    """Content-addressed MarChem ZIP with semicolon data and method tables."""
+    """Semantically pinned MarChem export with immutable scientific members.
+
+    MarChem regenerates the outer ZIP and the human-readable information member
+    on every otherwise identical export.  Treating that wrapper hash as the
+    scientific version therefore creates false source failures.  Admission is
+    instead fail-closed on the registered data and method-member hashes while
+    the timestamped information member is checked against the frozen request
+    semantics and retained as observed provenance.
+    """
 
     source_id = "norway-marchem"
     BATCH_CODE_RE = re.compile(r"\b\d{4}-\d{4}\b")
+    MEMBER_PATTERNS: Mapping[str, re.Pattern[str]] = {
+        "metadata": re.compile(
+            r"^MetaData/MarChem_Inorganic_LabParameter_\d{8}T\d{6}Z\.csv$"
+        ),
+        "data": re.compile(r"^MarChem_Inorganic_Data_\d{8}T\d{6}Z\.csv$"),
+        "info": re.compile(r"^MarChem_Info_\d{8}T\d{6}Z$"),
+    }
 
     @staticmethod
     def _semicolon_rows(
@@ -670,29 +685,79 @@ class MarchemSnapshotAdapter(RegistryAdapter):
         retrieved_at: str | None,
     ) -> list[DownloadedFile]:
         download_entry = self.candidate.registry_entry["download"]
-        expected = {item["filename"]: item for item in download_entry["members"]}
-        actual = {
-            str(path.relative_to(extract_dir))
-            for path in extract_dir.rglob("*")
-            if path.is_file()
-        }
-        if actual != set(expected):
+        expected = {item["file_id"]: item for item in download_entry["members"]}
+        actual_paths = sorted(path for path in extract_dir.rglob("*") if path.is_file())
+        if len(actual_paths) != len(self.MEMBER_PATTERNS):
             raise SourceAdapterError(
-                "MarChem member set changed; "
-                f"missing={sorted(set(expected) - actual)}, unexpected={sorted(actual - set(expected))}"
+                "MarChem member count changed; "
+                f"expected={len(self.MEMBER_PATTERNS)}, observed={len(actual_paths)}"
+            )
+        actual: dict[str, tuple[str, Path]] = {}
+        for path in actual_paths:
+            relative_name = path.relative_to(extract_dir).as_posix()
+            roles = [
+                role
+                for role, pattern in self.MEMBER_PATTERNS.items()
+                if pattern.fullmatch(relative_name)
+            ]
+            if len(roles) != 1 or roles[0] in actual:
+                raise SourceAdapterError(
+                    f"MarChem member cannot be assigned uniquely: {relative_name}"
+                )
+            actual[roles[0]] = (relative_name, path)
+        if set(actual) != set(expected):
+            raise SourceAdapterError(
+                "MarChem semantic member roles changed; "
+                f"missing={sorted(set(expected) - set(actual))}, "
+                f"unexpected={sorted(set(actual) - set(expected))}"
+            )
+
+        scientific_member_ids = set(
+            download_entry.get("scientific_member_ids", ["data", "metadata"])
+        )
+        if scientific_member_ids != {"data", "metadata"}:
+            raise SourceAdapterError(
+                "MarChem registry must pin exactly the data and metadata members"
             )
         verified: list[DownloadedFile] = []
-        for relative_name, entry in expected.items():
-            path = extract_dir / relative_name
-            if path.stat().st_size != entry["bytes"]:
-                raise SourceAdapterError(
-                    f"MarChem member size changed: {relative_name}"
-                )
-            observed = downloader.sha256_file(path)
-            if observed != entry["expected_sha256"]:
-                raise SourceAdapterError(
-                    f"MarChem member SHA-256 changed: {relative_name}"
-                )
+        for role in ("metadata", "data", "info"):
+            entry = expected[role]
+            relative_name, path = actual[role]
+            if role in scientific_member_ids:
+                if path.stat().st_size != entry["bytes"]:
+                    raise SourceAdapterError(
+                        f"MarChem scientific member size changed: {role}"
+                    )
+                observed = downloader.sha256_file(path)
+                if observed != entry["expected_sha256"]:
+                    raise SourceAdapterError(
+                        f"MarChem scientific member SHA-256 changed: {role}"
+                    )
+            else:
+                try:
+                    info_text = path.read_text(encoding="utf-8-sig")
+                except (OSError, UnicodeError) as exc:
+                    raise SourceAdapterError(
+                        "MarChem information member is not valid UTF-8 text"
+                    ) from exc
+                if path.stat().st_size > int(
+                    download_entry.get("max_information_member_bytes", 20_000)
+                ):
+                    raise SourceAdapterError(
+                        "MarChem information member exceeds the registered bound"
+                    )
+                missing_semantics = [
+                    value
+                    for value in download_entry.get(
+                        "information_member_required_text", []
+                    )
+                    if value not in info_text
+                ]
+                if missing_semantics:
+                    raise SourceAdapterError(
+                        "MarChem information member no longer proves the frozen "
+                        f"request semantics: {missing_semantics}"
+                    )
             verified.append(
                 DownloadedFile(
                     source_id=self.source_id,
@@ -713,30 +778,26 @@ class MarchemSnapshotAdapter(RegistryAdapter):
         *,
         cache_status: str = "verified_local_snapshot",
     ) -> list[DownloadedFile]:
-        """Verify and safely extract an explicitly supplied copy of the frozen snapshot."""
+        """Verify a dynamic wrapper against the frozen scientific-member contract."""
 
         download_entry = self.candidate.registry_entry["download"]
         if not archive_path.is_file():
             raise SourceAdapterError(
                 f"MarChem snapshot archive does not exist: {archive_path}"
             )
-        if archive_path.stat().st_size != download_entry["expected_bytes"]:
+        if archive_path.stat().st_size > int(download_entry["max_bytes"]):
             raise SourceAdapterError(
-                "MarChem snapshot archive size does not match the registry"
-            )
-        if downloader.sha256_file(archive_path) != download_entry["expected_sha256"]:
-            raise SourceAdapterError(
-                "MarChem snapshot archive SHA-256 does not match the registry"
+                "MarChem snapshot archive exceeds the registered download bound"
             )
         try:
             downloader.safe_extract_zip(
                 archive_path,
                 extract_dir,
                 max_members=int(download_entry["expected_member_count"]),
-                max_extracted_bytes=int(download_entry["expected_uncompressed_bytes"]),
-                required_members=[
-                    item["filename"] for item in download_entry["members"]
-                ],
+                max_extracted_bytes=int(
+                    download_entry.get("max_uncompressed_bytes", 2_000_000)
+                ),
+                required_members=[],
                 required_fields=(),
             )
         except (downloader.DownloadError, OSError) as exc:
@@ -766,7 +827,11 @@ class MarchemSnapshotAdapter(RegistryAdapter):
             output=archive_path,
             manifest=manifest_path,
             license_id=candidate.license_id,
-            expected_sha256=download_entry["expected_sha256"],
+            # The publisher regenerates the wrapper. Scientific integrity is
+            # established below from the independently pinned data and method
+            # member hashes, while the observed wrapper hash stays in the
+            # download manifest for exact replay.
+            expected_sha256=None,
             max_bytes=int(download_entry["max_bytes"]),
             dataset_doi=candidate.dataset_doi,
             dataset_version=candidate.version,
@@ -785,7 +850,12 @@ class MarchemSnapshotAdapter(RegistryAdapter):
             raise SourceAdapterError(
                 f"MarChem returned unexpected content type: {content_type}"
             )
-        extract_dir = root / "members"
+        observed_archive_sha = str(result.get("sha256") or "")
+        if not re.fullmatch(r"[0-9a-f]{64}", observed_archive_sha):
+            raise SourceAdapterError(
+                "MarChem download manifest lacks the observed wrapper SHA-256"
+            )
+        extract_dir = root / f"members-{observed_archive_sha[:16]}"
         if not extract_dir.exists():
             try:
                 downloader.safe_extract_zip(
@@ -793,11 +863,9 @@ class MarchemSnapshotAdapter(RegistryAdapter):
                     extract_dir,
                     max_members=int(download_entry["expected_member_count"]),
                     max_extracted_bytes=int(
-                        download_entry["expected_uncompressed_bytes"]
+                        download_entry.get("max_uncompressed_bytes", 2_000_000)
                     ),
-                    required_members=[
-                        item["filename"] for item in download_entry["members"]
-                    ],
+                    required_members=[],
                     required_fields=(),
                 )
             except (downloader.DownloadError, OSError) as exc:
@@ -1822,12 +1890,24 @@ class GsjJapanRiverSedimentAdapter(RegistryAdapter):
 
         concentration_occurrences: dict[str, int] = {}
         concentration_by_key: dict[tuple[str, int], tuple[int, dict[str, str]]] = {}
+        target_counts: Counter[str] = Counter()
         for line_number, values in concentrations:
             key = self._join_key(values["番号2"], concentration_occurrences)
             if key in concentration_by_key:
                 raise SourceAdapterError(
                     f"GSJ concentration occurrence key is duplicated: {key}"
                 )
+            for analyte, field_name in self.candidate.registry_entry[
+                "target_analytes"
+            ].items():
+                raw_value = str(values.get(field_name) or "").strip()
+                try:
+                    float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"GSJ {analyte} is not numeric at row {line_number}"
+                    ) from exc
+                target_counts[analyte] += 1
             concentration_by_key[key] = (line_number, values)
 
         sample_occurrences: dict[str, int] = {}
@@ -1876,6 +1956,11 @@ class GsjJapanRiverSedimentAdapter(RegistryAdapter):
         ):
             raise SourceAdapterError(
                 "GSJ duplicate sample 78013 reconciliation changed"
+            )
+        if dict(sorted(target_counts.items())) != expected["target_value_counts"]:
+            raise SourceAdapterError(
+                "GSJ registered target-value population changed: "
+                f"{dict(sorted(target_counts.items()))!r}"
             )
 
 
@@ -2675,6 +2760,8 @@ class AfsisPhaseIWetChemistryAdapter(RegistryAdapter):
         target_counts: dict[str, int] = {analyte: 0 for analyte in target_fields}
         negative_counts: dict[str, int] = {analyte: 0 for analyte in target_fields}
         below_dl_counts: dict[str, int] = {analyte: 0 for analyte in target_fields}
+        all_positive_rows = 0
+        all_positive_complete_coordinate_rows = 0
         emitted = 0
         try:
             handle = by_id["measurements"].path.open(
@@ -2760,6 +2847,14 @@ class AfsisPhaseIWetChemistryAdapter(RegistryAdapter):
                         "variable_metadata_locator": variable["source_locator"],
                         "threshold_metadata_locator": threshold["source_locator"],
                     }
+                all_positive = all(
+                    float(observations[analyte]["value"]) > 0
+                    for analyte in target_fields
+                )
+                all_positive_rows += int(all_positive)
+                all_positive_complete_coordinate_rows += int(
+                    all_positive and bool(latitude and longitude)
+                )
                 source_locator = (
                     f"{by_id['measurements'].path.name}#row={reader.line_num}"
                 )
@@ -2811,6 +2906,27 @@ class AfsisPhaseIWetChemistryAdapter(RegistryAdapter):
         if reconciled != expected:
             raise SourceAdapterError(
                 f"AfSIS reconciliation changed: {reconciled!r} != {expected!r}"
+            )
+        research_capacity = self.candidate.registry_entry.get("research_slice_capacity")
+        expected_capacity = (
+            research_capacity.get("per_analyte_observation_count")
+            if isinstance(research_capacity, Mapping)
+            else None
+        )
+        if (
+            not isinstance(expected_capacity, Mapping)
+            or all_positive_rows
+            != research_capacity.get("all_registered_positive_sample_rows")
+            or all_positive_complete_coordinate_rows
+            != research_capacity.get("all_registered_positive_complete_coordinate_rows")
+            or set(expected_capacity.values()) != {all_positive_rows}
+            or sum(int(value) for value in expected_capacity.values())
+            != research_capacity.get("all_registered_observation_count")
+        ):
+            raise SourceAdapterError(
+                "AfSIS research slice capacity changed: "
+                f"positive={all_positive_rows}, "
+                f"positive_with_coordinates={all_positive_complete_coordinate_rows}"
             )
 
 
@@ -3141,6 +3257,51 @@ class _PinnedSingleFileAdapter(RegistryAdapter):
         ]
 
 
+_FIGSHARE_SIGNED_QUERY_KEYS = {
+    "X-Amz-Algorithm",
+    "X-Amz-Credential",
+    "X-Amz-Date",
+    "X-Amz-Expires",
+    "X-Amz-Signature",
+    "X-Amz-SignedHeaders",
+}
+
+
+def validate_figshare_storage_redirect(url: str, file_id: str, filename: str) -> str:
+    """Validate one ephemeral Figshare storage capability without persisting it."""
+
+    parsed = urllib.parse.urlparse(url)
+    redacted = urllib.parse.urlunparse(parsed._replace(query="", fragment=""))
+    downloader.validate_public_https_url(redacted)
+    expected_path = f"/pfigshare-u-files/{file_id}/{urllib.parse.quote(filename)}"
+    if (
+        parsed.hostname != "s3-eu-west-1.amazonaws.com"
+        or parsed.path != expected_path
+        or parsed.fragment
+    ):
+        raise SourceAdapterError(
+            "Figshare redirect left the registered storage host or file path"
+        )
+    query = urllib.parse.parse_qs(parsed.query, keep_blank_values=True)
+    if set(query) != _FIGSHARE_SIGNED_QUERY_KEYS or any(
+        len(values) != 1 or not values[0] for values in query.values()
+    ):
+        raise SourceAdapterError("Figshare signed redirect envelope changed")
+    try:
+        expires = int(query["X-Amz-Expires"][0])
+    except ValueError as exc:
+        raise SourceAdapterError("Figshare redirect expiry is invalid") from exc
+    if (
+        query["X-Amz-Algorithm"][0] != "AWS4-HMAC-SHA256"
+        or not re.fullmatch(r"\d{8}T\d{6}Z", query["X-Amz-Date"][0])
+        or not 1 <= expires <= 60
+        or query["X-Amz-SignedHeaders"][0] != "host"
+        or not re.fullmatch(r"[0-9a-f]{64}", query["X-Amz-Signature"][0])
+    ):
+        raise SourceAdapterError("Figshare signed redirect policy changed")
+    return redacted
+
+
 class AustraliaNgsaAtlasAdapter(_PinnedSingleFileAdapter):
     """Pinned four-element NGSA catchment-outlet sediment table."""
 
@@ -3464,6 +3625,7 @@ class GsjJapanMarineSedimentAdapter(_PinnedSingleFileAdapter):
             cruises: set[str] = set()
             regions: set[str] = set()
             target_counts: Counter[str] = Counter()
+            positive_counts: Counter[str] = Counter()
             negative_hg = 0
             missing_depth = 0
             for row in reader:
@@ -3500,6 +3662,7 @@ class GsjJapanMarineSedimentAdapter(_PinnedSingleFileAdapter):
                         ) from exc
                     unit = registry["target_units"][analyte]
                     target_counts[analyte] += 1
+                    positive_counts[analyte] += int(number > 0)
                     negative_hg += int(analyte == "Hg" and number < 0)
                     target_observations[analyte] = {
                         "field": field_name,
@@ -3542,6 +3705,22 @@ class GsjJapanMarineSedimentAdapter(_PinnedSingleFileAdapter):
         }
         if observed != registry["expected_counts"]:
             raise SourceAdapterError(f"GSJ marine reconciliation changed: {observed!r}")
+        research_capacity = registry.get("research_slice_capacity")
+        expected_positive = (
+            research_capacity.get("per_analyte_observation_count")
+            if isinstance(research_capacity, Mapping)
+            else None
+        )
+        if (
+            not isinstance(expected_positive, Mapping)
+            or dict(sorted(positive_counts.items())) != expected_positive
+            or sum(positive_counts.values())
+            != research_capacity.get("positive_observation_count")
+        ):
+            raise SourceAdapterError(
+                "GSJ marine positive research capacity changed: "
+                f"{dict(sorted(positive_counts.items()))!r}"
+            )
 
 
 class PangaeaArabianSeaSedimentAdapter(_PinnedSingleFileAdapter):
@@ -4891,6 +5070,622 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
             )
 
 
+class PangaeaBrasolNeBrazilSoilAdapter(RegistryAdapter):
+    """Pinned BraSol workbook with WGS84/GPS and method-specific evidence."""
+
+    source_id = "pangaea-brasol-ne-brazil-soil"
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("BraSol adapter received another source")
+        if mode == "fixture":
+            raise SourceAdapterError("use the checked-in BraSol demo for fixture tests")
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        results: list[DownloadedFile] = []
+        for file_entry in download_entry["files"]:
+            output = root / file_entry["filename"]
+            args = _download_args(
+                url=file_entry["url"],
+                output=output,
+                manifest=root / f"{file_entry['file_id']}.download.json",
+                license_id=candidate.license_id,
+                expected_sha256=file_entry["expected_sha256"],
+                max_bytes=int(download_entry["max_bytes"]),
+                dataset_doi=candidate.dataset_doi,
+                dataset_version=candidate.version,
+                offline=mode == "cached",
+                required_fields=(),
+            )
+            try:
+                result = downloader.run(args)
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(f"BraSol download failed: {exc}") from exc
+            content_type = result.get("content_type")
+            if content_type and content_type not in set(
+                download_entry["accepted_content_types"]
+            ):
+                raise SourceAdapterError(
+                    f"BraSol returned unexpected content type: {content_type}"
+                )
+            if output.stat().st_size != int(file_entry["bytes"]):
+                raise SourceAdapterError(
+                    f"BraSol file byte count changed: {output.name}"
+                )
+            results.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=file_entry["file_id"],
+                    path=output,
+                    source_url=file_entry["url"],
+                    bytes=result["bytes"],
+                    cache_status=result["status"],
+                    retrieved_at=result.get("accessed_at")
+                    or result.get("cache_verified_at"),
+                )
+            )
+        return results
+
+    @staticmethod
+    def _method_name(code: str) -> str:
+        return {
+            "ICPMS": "ICP-MS (ELAN 9000) after full HF-HNO3 digestion",
+            "ICPO": "ICP-OES (PerkinElmer Optima 4300 Dual View) after digestion",
+            "GFD": "WD-XRF (Bruker S8 Tiger) on glass fusion disc",
+            "PPP": "WD-XRF (Bruker S8 Tiger) on pressed powder pellet",
+        }[code]
+
+    @staticmethod
+    def _digestion(code: str, layer: str) -> str:
+        if code == "ICPMS":
+            return "full digestion with HF and HNO3 in Walner equipment"
+        if code == "ICPO":
+            return (
+                "dry ashing of milled organic sample"
+                if layer == "ORG"
+                else "digestion with 7N HNO3"
+            )
+        if code == "GFD":
+            return "glass fusion disc preparation"
+        return "pressed powder pellet; no wet digestion"
+
+    @staticmethod
+    def _dms_decimal(raw: str, *, axis: str) -> float | None:
+        """Parse a publisher DMS coordinate for independent decimal-field QC.
+
+        The frozen workbook contains both DMS and decimal WGS84 fields.  One
+        longitude uses a double quote in the degree position, so that known
+        punctuation variant is accepted.  Impossible minute/second values are
+        rejected; they are evidence conflicts, not values to repair silently.
+        """
+
+        match = re.fullmatch(
+            r"\s*(\d{1,3})\s*[°\"]\s*(\d{1,2})\s*['′]\s*"
+            r"(\d+(?:\.\d+)?)\s*(?:[\"″]|'')?\s*([NSEW])\s*",
+            raw,
+            flags=re.IGNORECASE,
+        )
+        if match is None:
+            return None
+        degrees, minutes, seconds = (
+            float(match.group(1)),
+            float(match.group(2)),
+            float(match.group(3)),
+        )
+        hemisphere = match.group(4).upper()
+        if minutes >= 60 or seconds >= 60:
+            return None
+        if axis == "latitude":
+            if hemisphere not in {"N", "S"} or degrees > 90:
+                return None
+        elif axis == "longitude":
+            if hemisphere not in {"E", "W"} or degrees > 180:
+                return None
+        else:  # defensive programming for internal callers
+            raise SourceAdapterError(f"unknown DMS axis: {axis}")
+        decimal = degrees + minutes / 60.0 + seconds / 3600.0
+        return -decimal if hemisphere in {"S", "W"} else decimal
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        if set(by_id) != {"soil-workbook", "method-metadata"}:
+            raise SourceAdapterError(
+                "BraSol adapter requires the registered workbook and method metadata"
+            )
+        workbook = by_id["soil-workbook"]
+        metadata = by_id["method-metadata"]
+        try:
+            metadata_text = metadata.path.read_text(encoding="cp1252")
+        except (OSError, UnicodeError) as exc:
+            raise SourceAdapterError("BraSol method metadata is unreadable") from exc
+        for phrase in (
+            "Coordinates (WGS84)",
+            "PPP = Pressed powder pellet",
+            "GFD = Glas fusion disc",
+            "ICPO = Inductively-coupled plasma optical-emission spectrometry",
+            "ICPMS = Inductively-coupled plasma quadrupole mass spectrometry",
+        ):
+            if phrase not in metadata_text:
+                raise SourceAdapterError(
+                    f"BraSol method metadata contract changed: missing {phrase!r}"
+                )
+        rows = TpdcChinaMountainSoilAdapter._xlsx_rows(workbook.path)
+        headers = rows[0][1] if rows else []
+        required = set(self.candidate.registry_entry["required_fields"])
+        if not required.issubset(headers):
+            raise SourceAdapterError(
+                f"BraSol workbook schema changed; missing={sorted(required - set(headers))}"
+            )
+        order = list(self.candidate.registry_entry["preferred_method_order"])
+        method_fields: dict[str, list[tuple[str, str, str]]] = {}
+        for analyte in self.candidate.registry_entry["target_analytes"]:
+            candidates: list[tuple[str, str, str]] = []
+            for method in order:
+                value_fields = [
+                    field
+                    for field in headers
+                    if re.fullmatch(f"{analyte}_{method}_mg_kg", field)
+                ]
+                if not value_fields:
+                    continue
+                lod_fields = [
+                    field
+                    for field in headers
+                    if field.startswith(f"{analyte}_{method}") and "LOD" in field
+                ]
+                if len(value_fields) != 1 or len(lod_fields) != 1:
+                    raise SourceAdapterError(
+                        f"BraSol {analyte}/{method} field mapping changed"
+                    )
+                candidates.append((method, value_fields[0], lod_fields[0]))
+            if not candidates:
+                raise SourceAdapterError(f"BraSol has no fields for {analyte}")
+            method_fields[analyte] = candidates
+
+        physical_rows = 0
+        target_bearing_rows = 0
+        sites: set[str] = set()
+        sample_keys: set[str] = set()
+        layer_counts: Counter[str] = Counter()
+        target_counts: Counter[str] = Counter()
+        censored_counts: Counter[str] = Counter()
+        reported_coordinate_rows = 0
+        canonical_coordinate_rows = 0
+        coordinate_conflict_rows = 0
+        coordinate_conflict_sites: set[str] = set()
+        for row_number, row in rows[1:]:
+            padded = row + [""] * max(0, len(headers) - len(row))
+            values = dict(zip(headers, padded, strict=False))
+            site_id = values["Site_ID"].strip()
+            layer = values["Lyr_name"].strip()
+            sample_key = f"{site_id}|{layer}"
+            if not site_id or layer not in {"ORG", "TOP", "BOT"}:
+                raise SourceAdapterError(
+                    f"BraSol sample identity/layer changed at row {row_number}"
+                )
+            if sample_key in sample_keys:
+                raise SourceAdapterError(
+                    f"BraSol sample identity repeats at row {row_number}"
+                )
+            sample_keys.add(sample_key)
+            sites.add(site_id)
+            layer_counts[layer] += 1
+            physical_rows += 1
+            try:
+                latitude = float(values["Lat_dec_deg"])
+                longitude = float(values["Long_dec_deg"])
+                uncertainty = float(values["GPS_res_m"])
+            except ValueError as exc:
+                raise SourceAdapterError(
+                    f"BraSol coordinate/GPS evidence changed at row {row_number}"
+                ) from exc
+            if (
+                not (-90 <= latitude <= 90 and -180 <= longitude <= 180)
+                or uncertainty <= 0
+            ):
+                raise SourceAdapterError(
+                    f"BraSol coordinate/GPS evidence is invalid at row {row_number}"
+                )
+            reported_coordinate_rows += 1
+            dms_latitude = self._dms_decimal(values["Lat_WGS84"], axis="latitude")
+            dms_longitude = self._dms_decimal(values["Long_WGS84"], axis="longitude")
+            coordinate_agrees = bool(
+                dms_latitude is not None
+                and dms_longitude is not None
+                and abs(dms_latitude - latitude) <= 0.000002
+                and abs(dms_longitude - longitude) <= 0.000002
+            )
+            if coordinate_agrees:
+                canonical_coordinate_rows += 1
+                coordinate_status = "publisher_wgs84_dms_decimal_agree"
+            else:
+                coordinate_conflict_rows += 1
+                coordinate_conflict_sites.add(site_id)
+                coordinate_status = "publisher_wgs84_dms_decimal_conflict_fail_closed"
+            observations: dict[str, dict[str, Any]] = {}
+            for analyte, mappings in method_fields.items():
+                for method, value_field, lod_field in mappings:
+                    reported = values[value_field].strip()
+                    if not reported or reported == "NA":
+                        continue
+                    lod_raw = values[lod_field].strip()
+                    qualifier = ""
+                    value = reported
+                    detection_limit = ""
+                    if reported == "LOD":
+                        try:
+                            float(lod_raw)
+                        except ValueError as exc:
+                            raise SourceAdapterError(
+                                f"BraSol LOD is missing for {analyte} at row {row_number}"
+                            ) from exc
+                        qualifier = "<"
+                        value = lod_raw
+                        detection_limit = lod_raw
+                        censored_counts[analyte] += 1
+                    else:
+                        try:
+                            float(reported)
+                        except ValueError as exc:
+                            raise SourceAdapterError(
+                                f"BraSol {analyte} value is invalid at row {row_number}"
+                            ) from exc
+                        if lod_raw not in {"", "NA"}:
+                            try:
+                                float(lod_raw)
+                            except ValueError as exc:
+                                raise SourceAdapterError(
+                                    f"BraSol {analyte} LOD is invalid at row {row_number}"
+                                ) from exc
+                            detection_limit = lod_raw
+                    target_counts[analyte] += 1
+                    observations[analyte] = {
+                        "field": value_field,
+                        "value": value,
+                        "reported_value_raw": reported,
+                        "unit": "mg/kg",
+                        "qualifier": qualifier,
+                        "detection_limit": detection_limit,
+                        "measurement_basis": f"{method.casefold()}_method_specific_total_or_extractable_soil",
+                        "analytical_method": self._method_name(method),
+                        "digestion_or_extraction": self._digestion(method, layer),
+                        "variable_metadata_locator": f"{metadata.path.name}#method={method}",
+                    }
+                    break
+            if observations:
+                target_bearing_rows += 1
+            source_locator = f"{workbook.path.name}#sheet=Tabelle1&row={row_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, sample_key, source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "Latitude": format(latitude, ".12g"),
+                    "Longitude": format(longitude, ".12g"),
+                    "_canonical_latitude": (
+                        format(latitude, ".12g") if coordinate_agrees else ""
+                    ),
+                    "_canonical_longitude": (
+                        format(longitude, ".12g") if coordinate_agrees else ""
+                    ),
+                    "_target_observations": observations,
+                    "_source_file": workbook.path.name,
+                    "_method_metadata_file": metadata.path.name,
+                    "_source_crs": "EPSG:4326",
+                    "_coordinate_uncertainty_m": format(uncertainty, ".12g"),
+                    "_coordinate_evidence_status": coordinate_status,
+                    "_coordinate_dms_latitude": (
+                        format(dms_latitude, ".12g") if dms_latitude is not None else ""
+                    ),
+                    "_coordinate_dms_longitude": (
+                        format(dms_longitude, ".12g")
+                        if dms_longitude is not None
+                        else ""
+                    ),
+                    "_medium": "soil",
+                    "_sample_type": layer,
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        observed = {
+            "physical_rows": physical_rows,
+            "target_bearing_rows": target_bearing_rows,
+            "distinct_sites": len(sites),
+            "layer_counts": dict(sorted(layer_counts.items())),
+            "reported_coordinate_rows": reported_coordinate_rows,
+            "canonical_coordinate_rows": canonical_coordinate_rows,
+            "coordinate_conflict_rows": coordinate_conflict_rows,
+            "coordinate_conflict_sites": len(coordinate_conflict_sites),
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+            "censored_lod_counts": dict(sorted(censored_counts.items())),
+        }
+        if observed != self.candidate.registry_entry["expected_counts"]:
+            raise SourceAdapterError(f"BraSol reconciliation changed: {observed!r}")
+
+
+class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
+    """Pinned Yangtze River Basin literature-compilation workbook."""
+
+    source_id = "figshare-yangtze-basin-soil-heavy-metals"
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        """Fetch a fixed Figshare file without persisting its signed redirect."""
+
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError(
+                "Yangtze basin adapter received a candidate for another source"
+            )
+        if mode == "fixture":
+            raise SourceAdapterError(
+                "use the checked-in Yangtze basin demo directly for fixture tests"
+            )
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        file_entry = download_entry["files"][0]
+        output = root / file_entry["filename"]
+        manifest_path = root / "dataset.download.json"
+        expected_sha256 = str(file_entry["expected_sha256"])
+        public_url = str(file_entry["url"])
+
+        if mode == "cached":
+            result = downloader.existing_verified_cache(
+                output,
+                manifest_path,
+                public_url,
+                expected_sha256,
+                candidate.version,
+            )
+        else:
+            result: dict[str, Any] = {}
+            if output.is_file() and manifest_path.is_file():
+                try:
+                    result = downloader.existing_verified_cache(
+                        output,
+                        manifest_path,
+                        public_url,
+                        expected_sha256,
+                        candidate.version,
+                    )
+                except downloader.DownloadError:
+                    result = {}
+            if not result:
+                file_id = str(file_entry["figshare_file_id"])
+                filename = str(file_entry["filename"])
+
+                class FigshareRedirectHandler(urllib.request.HTTPRedirectHandler):
+                    def redirect_request(
+                        self,
+                        req: urllib.request.Request,
+                        fp: Any,
+                        code: int,
+                        msg: str,
+                        headers: Any,
+                        newurl: str,
+                    ) -> urllib.request.Request | None:
+                        if (
+                            urllib.parse.urlparse(req.full_url).hostname
+                            != "ndownloader.figshare.com"
+                        ):
+                            raise SourceAdapterError(
+                                "Figshare attempted an unexpected redirect chain"
+                            )
+                        validate_figshare_storage_redirect(newurl, file_id, filename)
+                        return super().redirect_request(
+                            req, fp, code, msg, headers, newurl
+                        )
+
+                downloader.validate_public_https_url(public_url)
+                opener = urllib.request.build_opener(FigshareRedirectHandler())
+                request = urllib.request.Request(
+                    public_url,
+                    headers={"User-Agent": downloader.USER_AGENT, "Accept": "*/*"},
+                )
+                output.parent.mkdir(parents=True, exist_ok=True)
+                temporary_path: Path | None = None
+                try:
+                    with opener.open(request, timeout=30.0) as response:
+                        redacted_storage_url = validate_figshare_storage_redirect(
+                            response.geturl(), file_id, filename
+                        )
+                        content_type = response.headers.get_content_type().casefold()
+                        downloader.validate_response_metadata(
+                            content_type,
+                            response.headers.get("Content-Length"),
+                            int(download_entry["max_bytes"]),
+                        )
+                        with tempfile.NamedTemporaryFile(
+                            "wb",
+                            prefix=f".{output.name}.",
+                            suffix=".part",
+                            dir=output.parent,
+                            delete=False,
+                        ) as handle:
+                            temporary_path = Path(handle.name)
+                            total, observed = downloader.copy_response_bounded(
+                                response, handle, int(download_entry["max_bytes"])
+                            )
+                        if total == 0 or observed != expected_sha256:
+                            raise SourceAdapterError(
+                                "Figshare workbook bytes do not match the pinned SHA-256"
+                            )
+                        os.replace(temporary_path, output)
+                        temporary_path = None
+                        result = {
+                            "status": "downloaded",
+                            "source_url": public_url,
+                            "resolved_url": public_url,
+                            "resolved_storage_url_redacted": redacted_storage_url,
+                            "signed_redirect_persisted": False,
+                            "content_type": content_type,
+                            "bytes": total,
+                            "sha256": observed,
+                            "sha256_basis": "expected",
+                            "accessed_at": downloader.utc_now(),
+                            "http_status": getattr(response, "status", 200),
+                            "etag": response.headers.get("ETag"),
+                            "last_modified": response.headers.get("Last-Modified"),
+                            "content_disposition": response.headers.get(
+                                "Content-Disposition"
+                            ),
+                        }
+                except (
+                    downloader.DownloadError,
+                    SourceAdapterError,
+                    urllib.error.HTTPError,
+                    urllib.error.URLError,
+                    TimeoutError,
+                    OSError,
+                ) as exc:
+                    raise SourceAdapterError(
+                        "Yangtze basin Figshare download failed without persisting "
+                        "the ephemeral storage capability"
+                    ) from exc
+                finally:
+                    if temporary_path is not None:
+                        temporary_path.unlink(missing_ok=True)
+                result.update(
+                    {
+                        "manifest_version": "geochemical-download-v1",
+                        "license": candidate.license_id,
+                        "output_filename": output.name,
+                        "offline": False,
+                        "dataset_doi": candidate.dataset_doi,
+                        "dataset_version": candidate.version,
+                    }
+                )
+                downloader.atomic_json(manifest_path, result)
+
+        content_type = result.get("content_type")
+        if content_type and content_type not in set(
+            download_entry["accepted_content_types"]
+        ):
+            raise SourceAdapterError(
+                f"Yangtze basin returned unexpected content type: {content_type}"
+            )
+        if output.stat().st_size != int(file_entry["bytes"]):
+            raise SourceAdapterError("Yangtze basin workbook byte count changed")
+        return [
+            DownloadedFile(
+                source_id=self.source_id,
+                file_id=file_entry["file_id"],
+                path=output,
+                source_url=public_url,
+                bytes=int(result["bytes"]),
+                cache_status=str(result["status"]),
+                retrieved_at=result.get("accessed_at")
+                or result.get("cache_verified_at"),
+            )
+        ]
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "records-workbook":
+            raise SourceAdapterError(
+                "Yangtze basin adapter requires the registered workbook"
+            )
+        downloaded = files[0]
+        rows = TpdcChinaMountainSoilAdapter._xlsx_rows(downloaded.path)
+        headers = rows[0][1] if rows else []
+        required = set(self.candidate.registry_entry["required_fields"])
+        if not required.issubset(headers):
+            raise SourceAdapterError(
+                f"Yangtze basin workbook schema changed; missing={sorted(required - set(headers))}"
+            )
+        supported = set(self.candidate.registry_entry["target_analytes"])
+        source_rows = 0
+        fids: set[str] = set()
+        target_counts: Counter[str] = Counter()
+        location_levels: Counter[str] = Counter()
+        coordinate_pairs: set[tuple[str, str]] = set()
+        for row_number, row in rows[1:]:
+            padded = row + [""] * max(0, len(headers) - len(row))
+            values = dict(zip(headers, padded, strict=False))
+            fid = values["FID"].strip()
+            analyte = values["HM_cat_abbre"].strip()
+            source_rows += 1
+            if not fid or fid in fids:
+                raise SourceAdapterError(
+                    f"Yangtze basin FID is missing or repeated at row {row_number}"
+                )
+            fids.add(fid)
+            if analyte not in supported:
+                continue
+            try:
+                latitude = float(values["lat"])
+                longitude = float(values["lon"])
+                concentration = float(values["HM_conc_mean"])
+            except ValueError as exc:
+                raise SourceAdapterError(
+                    f"Yangtze basin numeric field changed at row {row_number}"
+                ) from exc
+            if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+                raise SourceAdapterError(
+                    f"Yangtze basin coordinate is invalid at row {row_number}"
+                )
+            location_level = values["loc_level"].strip()
+            if location_level not in {"1", "2", "3", "4"}:
+                raise SourceAdapterError(
+                    f"Yangtze basin location level changed at row {row_number}"
+                )
+            target_counts[analyte] += 1
+            location_levels[location_level] += 1
+            coordinate_pairs.add((values["lon"], values["lat"]))
+            source_locator = f"{downloaded.path.name}#sheet=Records&row={row_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, f"{fid}|{analyte}", source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "Latitude": format(latitude, ".12g"),
+                    "Longitude": format(longitude, ".12g"),
+                    "_target_observations": {
+                        analyte: {
+                            "field": "HM_conc_mean",
+                            "value": format(concentration, ".12g"),
+                            "unit": "mg/kg",
+                            "measurement_basis": "publisher_compiled_soil_concentration_mean",
+                            "analytical_method": "",
+                            "digestion_or_extraction": "",
+                            "method_missing_reason": "publisher_compilation_omits_row_method",
+                            "variable_metadata_locator": "doi:10.1002/gdj3.280",
+                        }
+                    },
+                    "_source_file": downloaded.path.name,
+                    "_source_crs": "",
+                    "_medium": "soil",
+                    "_sample_type": "literature-compiled soil occurrence",
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        observed = {
+            "source_rows": source_rows,
+            "target_observations": sum(target_counts.values()),
+            "distinct_coordinate_pairs": len(coordinate_pairs),
+            "target_value_counts": dict(sorted(target_counts.items())),
+            "location_level_counts": dict(sorted(location_levels.items())),
+        }
+        if observed != self.candidate.registry_entry["expected_counts"]:
+            raise SourceAdapterError(
+                f"Yangtze basin reconciliation changed: {observed!r}"
+            )
+
+
 class ZenodoYangtzeYellowRiverSedimentAdapter(_PinnedSingleFileAdapter):
     """Pinned Zenodo Data Set S2 leach-residual river-sediment workbook."""
 
@@ -5335,6 +6130,10 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocAntarcticaIntraplateAdapter.source_id: GeorocAntarcticaIntraplateAdapter,
     EidcNingboSoilAdapter.source_id: EidcNingboSoilAdapter,
     TpdcChinaMountainSoilAdapter.source_id: TpdcChinaMountainSoilAdapter,
+    PangaeaBrasolNeBrazilSoilAdapter.source_id: PangaeaBrasolNeBrazilSoilAdapter,
+    FigshareYangtzeBasinSoilHeavyMetalsAdapter.source_id: (
+        FigshareYangtzeBasinSoilHeavyMetalsAdapter
+    ),
     GemasEuropeAdapter.source_id: GemasEuropeAdapter,
 }
 

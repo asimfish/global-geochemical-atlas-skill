@@ -66,7 +66,7 @@ import v4_semantics
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 REPORT_VERSION = "self-correction-loop-report-v5"
-SUFFICIENCY_VERSION = "atlas-data-sufficiency-v5"
+SUFFICIENCY_VERSION = "atlas-data-sufficiency-v6"
 REPORT_FILENAME = "loop_report.json"
 RESEARCH_RECEIPT_FILENAME = "research_delivery_receipt.json"
 D1_REPAIR_QUEUE_FILENAME = "d1_repair_queue.json"
@@ -83,11 +83,12 @@ SOURCE_MANIFEST_PATH = SKILL_DIR / "assets" / "source_manifest.json"
 FULL_PROFILE_ROOT = SKILL_DIR / "assets" / "v4-full-profiles"
 DEFAULT_MAX_ROUNDS = 24
 MAX_ROUNDS_CAP = 24
-DEFAULT_TIME_BUDGET_SECONDS = 14 * 60.0
-DEFAULT_ROUND_TIMEOUT_SECONDS = DEFAULT_TIME_BUDGET_SECONDS
-DEFAULT_RUN_TIMEOUT_SECONDS = 13 * 60.0
-DEFAULT_SOURCE_TIMEOUT_SECONDS = 5 * 60.0
 MAX_TIME_BUDGET_SECONDS = 12 * 60 * 60.0
+DEFAULT_TIME_BUDGET_SECONDS = MAX_TIME_BUDGET_SECONDS
+DEFAULT_ROUND_TIMEOUT_SECONDS = 30 * 60.0
+DEFAULT_RUN_TIMEOUT_SECONDS = 29 * 60.0
+DEFAULT_SOURCE_TIMEOUT_SECONDS = 10 * 60.0
+MINIMUM_DELIVERY_TIME_BUDGET_SECONDS = DEFAULT_ROUND_TIMEOUT_SECONDS
 DEFAULT_PER_ANALYTE_OBSERVATIONS = 512
 # Four requested elements can now consume the complete 200k research ceiling.
 # The former 10k default silently stopped a four-element run near 40k rows even
@@ -367,10 +368,10 @@ def source_order_offset(round_index: int) -> int:
 
 
 def requires_checkpoint_only(args: argparse.Namespace) -> bool:
-    """Return whether an online run truncates the official internal budget."""
+    """Return whether an online run cannot complete even one default round."""
 
     return args.mode == "online" and (
-        args.time_budget_seconds < DEFAULT_TIME_BUDGET_SECONDS
+        args.time_budget_seconds < MINIMUM_DELIVERY_TIME_BUDGET_SECONDS
     )
 
 
@@ -828,6 +829,24 @@ def _entry_matches_request(
     target_analytes = entry.get("target_analytes")
     if isinstance(target_analytes, Mapping):
         elements = {str(item) for item in target_analytes}
+        expected_counts = entry.get("expected_counts")
+        count_by_analyte: Mapping[str, Any] = {}
+        if isinstance(expected_counts, Mapping):
+            for count_field in (
+                "target_observations_by_analyte",
+                "target_value_counts",
+            ):
+                candidate = expected_counts.get(count_field)
+                if isinstance(candidate, Mapping):
+                    count_by_analyte = candidate
+                    break
+        elements = {
+            element
+            for element in elements
+            if element not in count_by_analyte
+            or not isinstance(count_by_analyte[element], (int, float))
+            or count_by_analyte[element] > 0
+        }
         if not elements.intersection(
             str(item) for item in request.get("elements") or []
         ):
@@ -1673,6 +1692,41 @@ def build_spatial_dimension_gaps(
     return gaps
 
 
+def spatial_requery_source_ids(
+    geographic_targets: Sequence[Mapping[str, Any]],
+    spatial_dimension_gaps: Sequence[Mapping[str, Any]],
+) -> list[str]:
+    """Return selected sources that a machine-generated spatial gap can grow.
+
+    A spatial warning alone is not enough: only targets whose preferred action
+    is ``requery_selected_source`` authorize another autonomous acquisition
+    round.  CRS repair, unimplemented candidates and new-source discovery stay
+    in the explicit D1 repair queue.
+    """
+
+    selected: set[str] = set()
+
+    def collect(target: Mapping[str, Any]) -> None:
+        if target.get("repair_mode") != "requery_selected_source":
+            return
+        selected.update(
+            str(source_id)
+            for source_id in target.get("selected_source_candidates") or []
+            if isinstance(source_id, str) and source_id
+        )
+
+    for target in geographic_targets:
+        if isinstance(target, Mapping):
+            collect(target)
+    for gap in spatial_dimension_gaps:
+        if not isinstance(gap, Mapping):
+            continue
+        for target in gap.get("country_targets") or []:
+            if isinstance(target, Mapping):
+                collect(target)
+    return sorted(selected)
+
+
 def _criterion(
     passed: bool, observed: Any, target: Any, detail: str, *, required: bool = True
 ) -> dict[str, Any]:
@@ -1682,6 +1736,88 @@ def _criterion(
         "observed": observed,
         "target": target,
         "detail": detail,
+    }
+
+
+def acquisition_breadth_state(
+    request: Mapping[str, Any],
+    outcomes: Sequence[Mapping[str, Any]],
+    viable_selected_ids: set[str],
+    observed_source_ids: set[str],
+    database_records: int,
+    current_target: int,
+    maximum_target: int,
+    mode: str,
+) -> dict[str, Any]:
+    """Decide whether a breadth request has exhausted autonomous acquisition.
+
+    Minimum scientific gates answer whether an atlas is usable; they do not
+    answer a user's separate request to collect as much registered evidence as
+    practical.  In ``maximize_evidence_breadth`` mode, keep expanding while a
+    successful source filled its allocated slice exactly.  Stop only when the
+    request record ceiling or per-analyte ceiling is reached, or every viable
+    source returned fewer records than allocated (an auditable capacity signal).
+    A no-progress guard in the outer loop remains the final protection against
+    fixed-size adapters whose exact capacity equals their allocation.
+    """
+
+    required = (
+        mode == "online" and request.get("coverage_mode") == "maximize_evidence_breadth"
+    )
+    successful = {
+        str(item.get("source_id")): item
+        for item in outcomes
+        if item.get("status") == "success" and item.get("source_id")
+    }
+    unobserved = sorted(viable_selected_ids - observed_source_ids)
+    filled_allocations: list[str] = []
+    capacity_signals: list[str] = []
+    for source_id in sorted(viable_selected_ids):
+        outcome = successful.get(source_id)
+        if outcome is None:
+            continue
+        try:
+            record_count = int(outcome.get("record_count") or 0)
+            allocation = int(outcome.get("allocated_max_records") or 0)
+        except (TypeError, ValueError):
+            continue
+        if allocation > 0 and record_count >= allocation:
+            filled_allocations.append(source_id)
+        elif allocation > 0:
+            capacity_signals.append(source_id)
+
+    record_ceiling = int(request.get("max_records") or 0)
+    record_ceiling_reached = record_ceiling > 0 and database_records >= record_ceiling
+    target_ceiling_reached = current_target >= maximum_target
+    all_viable_observed = bool(viable_selected_ids) and not unobserved
+    source_capacity_reached = (
+        all_viable_observed
+        and viable_selected_ids.issubset(successful)
+        and not filled_allocations
+    )
+    passed = (
+        not required
+        or record_ceiling_reached
+        or target_ceiling_reached
+        or source_capacity_reached
+    )
+    return {
+        "required": required,
+        "passed": passed,
+        "record_ceiling_reached": record_ceiling_reached,
+        "target_ceiling_reached": target_ceiling_reached,
+        "source_capacity_reached": source_capacity_reached,
+        "viable_selected_source_count": len(viable_selected_ids),
+        "observed_viable_source_count": len(
+            viable_selected_ids.intersection(observed_source_ids)
+        ),
+        "unobserved_viable_source_ids": unobserved,
+        "sources_filling_current_allocation": filled_allocations,
+        "sources_below_current_allocation": capacity_signals,
+        "current_per_analyte_observations": current_target,
+        "maximum_per_analyte_observations": maximum_target,
+        "database_records": database_records,
+        "max_records": record_ceiling,
     }
 
 
@@ -1818,6 +1954,34 @@ def assess_sufficiency(
         else "not required for explicit input/demo mode",
         "Research mode must attempt compatible online sources; fixtures are explicit demos only.",
         required=mode == "online",
+    )
+    breadth_state = acquisition_breadth_state(
+        request,
+        outcomes,
+        viable_selected_ids,
+        observed_source_ids,
+        database["records"],
+        current_target,
+        args.max_per_analyte_observations,
+        mode,
+    )
+    criteria["acquisition_breadth"] = _criterion(
+        breadth_state["passed"],
+        breadth_state,
+        {
+            "stop_when_any": [
+                "request max_records reached",
+                "maximum per-analyte target reached",
+                "all viable sources return below their current allocation",
+            ]
+        },
+        (
+            "maximize_evidence_breadth is an expansion contract, not a synonym for "
+            "passing minimum delivery gates. A source that fills its allocation keeps "
+            "the next 30-minute round eligible; source capacities and the request ceiling "
+            "remain explicit stopping evidence."
+        ),
+        required=breadth_state["required"],
     )
     criteria["requested_dimensions"] = _criterion(
         not missing_elements and not missing_media and not missing_spatial_domains,
@@ -2404,6 +2568,7 @@ def assess_sufficiency(
     # those sources. They cannot repair the other criteria; those remain in the
     # manual plan even when an independent acquisition improvement proceeds.
     independently_repairable = {
+        "acquisition_breadth",
         "record_volume",
         "independent_sample_volume",
         "anomaly_background",
@@ -2418,10 +2583,24 @@ def assess_sufficiency(
     spatial_dimension_gaps = build_spatial_dimension_gaps(
         spatial_dimension_audit, viable_selected_ids, request
     )
+    spatial_requery_ids = spatial_requery_source_ids(
+        geographic_search_targets, spatial_dimension_gaps
+    )
     if route_can_cover_missing_dimensions:
         expansion_targets.update(set(unmet).intersection({"requested_dimensions"}))
     if route_can_cover_missing_cells:
         expansion_targets.update(set(unmet).intersection({"element_medium_coverage"}))
+    if spatial_requery_ids:
+        expansion_targets.update(
+            set(unmet).intersection(
+                {
+                    "global_geographic_breadth",
+                    "global_spatial_coverage",
+                    "regional_spatial_coverage",
+                    "spatial_dimension_coverage",
+                }
+            )
+        )
     expandable_unmet = sorted(expansion_targets)
     non_expandable_unmet = sorted(set(unmet) - expansion_targets)
     discovery_gaps = {
@@ -2478,6 +2657,7 @@ def assess_sufficiency(
             else None
         ),
         "spatial_dimension_gaps": spatial_dimension_gaps,
+        "spatial_requery_source_ids": spatial_requery_ids,
         "metadata_evidence_gaps": method_evidence_gaps,
         "source_link_gaps": source_link_gaps,
     }
@@ -2628,14 +2808,30 @@ def build_repair_plan(record: dict[str, Any]) -> dict[str, Any]:
     if sufficiency.get("status") == "insufficient" and sufficiency.get(
         "can_expand_acquisition"
     ):
+        expansion_source_ids = sorted(
+            str(item)
+            for item in (
+                (sufficiency.get("discovery_gaps") or {}).get(
+                    "spatial_requery_source_ids"
+                )
+                or []
+            )
+        )
         autonomous.append(
             {
                 "action": "expand_acquisition",
                 "detail": (
                     "数据充分性门禁未通过；在冻结请求和已路由来源内把每元素目标提高到 "
                     f"{sufficiency.get('next_per_analyte_observations')} 后继续一轮。"
+                    + (
+                        " 空间缺口已证明这些已选来源仍值得重查："
+                        + ", ".join(expansion_source_ids)
+                        + "。"
+                        if expansion_source_ids
+                        else ""
+                    )
                 ),
-                "source_ids": [],
+                "source_ids": expansion_source_ids,
             }
         )
     discovery_gaps = sufficiency.get("discovery_gaps") or {}
@@ -4681,13 +4877,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--source-timeout-seconds",
         type=float,
         default=DEFAULT_SOURCE_TIMEOUT_SECONDS,
-        help="Per-source timeout inside each research round (default: 300)",
+        help="Per-source timeout inside each research round (default: 600)",
     )
     parser.add_argument(
         "--run-timeout-seconds",
         type=float,
         default=DEFAULT_RUN_TIMEOUT_SECONDS,
-        help="Internal atlas timeout, leaving one minute in the default 840-second round",
+        help="Internal atlas timeout, leaving one minute in the default 1800-second round",
     )
     parser.add_argument(
         "--analysis-profile", choices=("demo", "production"), default="production"
@@ -4714,21 +4910,21 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=DEFAULT_TIME_BUDGET_SECONDS,
         help=(
-            "Total wall-clock budget (default: 840 inside the official 900-second "
-            "task; explicit extended-research maximum: 43200)"
+            "Total wall-clock ceiling across adaptive 30-minute rounds "
+            "(default and maximum: 43200 seconds / 12 hours)"
         ),
     )
     parser.add_argument(
         "--round-timeout-seconds",
         type=float,
         default=DEFAULT_ROUND_TIMEOUT_SECONDS,
-        help="Hard per-round subprocess timeout (default: 840 seconds)",
+        help="Hard per-round subprocess timeout (default: 1800 seconds)",
     )
     parser.add_argument(
         "--checkpoint-only",
         action="store_true",
         help=(
-            "Explicitly allow a run shorter than the official 840-second internal budget. "
+            "Explicitly allow an online run shorter than one 1800-second research round. "
             "The receipt remains delivery_ready=false even if this checkpoint passes."
         ),
     )
@@ -5325,6 +5521,25 @@ def _self_test() -> int:
             and target_by_country["IND"]["selected_source_candidates"]
             == ["gemstat-open-archive"],
             "a selected full-profile source with India observations is distinguished from a catalog gap",
+        )
+        check(
+            spatial_requery_source_ids(spatial_audit["geographic_search_targets"], [])
+            == ["gemstat-open-archive"],
+            "machine-generated geographic gaps expose selected sources that can be expanded autonomously",
+        )
+        georoc_antarctica = _json_object(SOURCE_MANIFEST_PATH)["sources"][
+            "georoc-antarctica-intraplate"
+        ]
+        check(
+            not _entry_matches_request(
+                georoc_antarctica,
+                {"elements": ["Hg"], "media": ["rock"]},
+            )
+            and _entry_matches_request(
+                georoc_antarctica,
+                {"elements": ["Cu"], "media": ["rock"]},
+            ),
+            "source routing ignores a declared analyte whose audited full-source count is zero",
         )
         check(
             "australia-ngsa-mercury"
@@ -6060,6 +6275,68 @@ def _self_test() -> int:
             not assessed["can_expand_acquisition"],
             "more same-source records cannot hide provenance defects",
         )
+    breadth_request = {
+        "coverage_mode": "maximize_evidence_breadth",
+        "max_records": 200_000,
+    }
+    breadth = acquisition_breadth_state(
+        breadth_request,
+        [
+            {
+                "source_id": "source-a",
+                "status": "success",
+                "record_count": 512,
+                "allocated_max_records": 512,
+            }
+        ],
+        {"source-a"},
+        {"source-a"},
+        512,
+        512,
+        50_000,
+        "online",
+    )
+    check(
+        breadth["required"]
+        and not breadth["passed"]
+        and breadth["sources_filling_current_allocation"] == ["source-a"],
+        "maximize-breadth continues after minimum gates while a source fills its current allocation",
+    )
+    breadth = acquisition_breadth_state(
+        breadth_request,
+        [
+            {
+                "source_id": "source-a",
+                "status": "success",
+                "record_count": 320,
+                "allocated_max_records": 512,
+            }
+        ],
+        {"source-a"},
+        {"source-a"},
+        320,
+        512,
+        50_000,
+        "online",
+    )
+    check(
+        breadth["passed"] and breadth["source_capacity_reached"],
+        "maximize-breadth stops with an explicit all-source capacity signal",
+    )
+    breadth = acquisition_breadth_state(
+        breadth_request,
+        [],
+        {"source-a"},
+        {"source-a"},
+        200_000,
+        512,
+        50_000,
+        "online",
+    )
+    check(
+        breadth["passed"] and breadth["record_ceiling_reached"],
+        "maximize-breadth stops at the frozen request record ceiling",
+    )
     checkpoint_args = argparse.Namespace(
         mode="online",
         max_rounds=2,
@@ -6073,7 +6350,7 @@ def _self_test() -> int:
     checkpoint_args.time_budget_seconds = DEFAULT_TIME_BUDGET_SECONDS
     check(
         not requires_checkpoint_only(checkpoint_args),
-        "the default 840-second evaluation controller may produce a delivery when all gates pass",
+        "the default 12-hour controller may deliver after one or more 30-minute rounds when all gates pass",
     )
     check(
         [source_order_offset(round_index) for round_index in range(1, 25)]
@@ -6152,7 +6429,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         if requires_checkpoint_only(args) and not args.checkpoint_only:
             raise LoopUsageError(
-                "online budgets below the official 840-second internal envelope "
+                "online budgets below one 1800-second research round "
                 "require --checkpoint-only"
             )
         args.request_sha256 = sha256_file(args.request)

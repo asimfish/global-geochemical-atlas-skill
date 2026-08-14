@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-13T10:00:00Z",
+  "as_of": "2026-08-14T20:30:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -451,13 +451,13 @@
     "soil": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 9,
-        "Cr": 8,
-        "Cu": 12,
-        "Hg": 5,
-        "Ni": 10,
-        "Pb": 11,
-        "Zn": 12
+        "As": 11,
+        "Cr": 10,
+        "Cu": 14,
+        "Hg": 6,
+        "Ni": 12,
+        "Pb": 13,
+        "Zn": 14
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -491,15 +491,17 @@
         "usgs-ngdb",
         "wosis"
       ],
-      "independent_lineage_count": 10,
+      "independent_lineage_count": 12,
       "lineage_ids": [
         "afsis-phase-i-wet-chemistry",
         "eidc-ningbo-soil",
+        "figshare-yangtze-basin-soil-heavy-metals",
         "foregs-geochemical-atlas-europe-2005",
         "gemas-europe",
         "pangaea-amazonas-soil",
         "pangaea-barents-c-horizon-soil",
         "pangaea-batagay-soil",
+        "pangaea-brasol-ne-brazil-soil",
         "pangaea-north-africa-soil",
         "tpdc-china-mountain-soil",
         "usgs-conus-soil"
@@ -519,6 +521,7 @@
       "selected_sources": [
         "afsis-phase-i-wet-chemistry",
         "eidc-ningbo-soil",
+        "figshare-yangtze-basin-soil-heavy-metals",
         "foregs-humus",
         "foregs-subsoil",
         "foregs-topsoil",
@@ -526,6 +529,7 @@
         "pangaea-amazonas-soil",
         "pangaea-barents-c-horizon-soil",
         "pangaea-batagay-soil",
+        "pangaea-brasol-ne-brazil-soil",
         "pangaea-north-africa-soil",
         "tpdc-china-mountain-soil",
         "usgs-conus-soil"
@@ -537,6 +541,7 @@
         "brazil-sgb-geochemistry": "D",
         "earthchem-library": "D",
         "eidc-ningbo-soil": "A",
+        "figshare-yangtze-basin-soil-heavy-metals": "A",
         "foregs-europe": "D",
         "foregs-humus": "A",
         "foregs-subsoil": "A",
@@ -546,6 +551,7 @@
         "pangaea-amazonas-soil": "A",
         "pangaea-barents-c-horizon-soil": "A",
         "pangaea-batagay-soil": "A",
+        "pangaea-brasol-ne-brazil-soil": "A",
         "pangaea-north-africa-soil": "A",
         "pangaea-repository": "D",
         "soils4africa": "D",
@@ -563,6 +569,7 @@
         "brazil-sgb-geochemistry": "national_partial",
         "earthchem-library": "global_collection",
         "eidc-ningbo-soil": "regional_partial",
+        "figshare-yangtze-basin-soil-heavy-metals": "river_basin_literature_compilation",
         "foregs-europe": "regional_partial",
         "foregs-humus": "regional_partial",
         "foregs-subsoil": "regional_partial",
@@ -572,6 +579,7 @@
         "pangaea-amazonas-soil": "regional_discrete_repeated_samples",
         "pangaea-barents-c-horizon-soil": "regional_discrete_samples",
         "pangaea-batagay-soil": "single_site_vertical_profile",
+        "pangaea-brasol-ne-brazil-soil": "regional_transect_layer_samples",
         "pangaea-north-africa-soil": "regional_partial",
         "pangaea-repository": "global_collection",
         "soils4africa": "continental_partial",
@@ -594,6 +602,15 @@
           "As",
           "Cr",
           "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
+        "figshare-yangtze-basin-soil-heavy-metals": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
           "Ni",
           "Pb",
           "Zn"
@@ -652,6 +669,14 @@
           "Pb",
           "Zn"
         ],
+        "pangaea-brasol-ne-brazil-soil": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "pangaea-north-africa-soil": [
           "As",
           "Cr",
@@ -681,6 +706,7 @@
         "brazil-sgb-geochemistry": "discovery",
         "earthchem-library": "discovery",
         "eidc-ningbo-soil": "normalized_analysis",
+        "figshare-yangtze-basin-soil-heavy-metals": "normalized_analysis",
         "foregs-europe": "discovery",
         "foregs-humus": "normalized_analysis",
         "foregs-subsoil": "normalized_analysis",
@@ -690,6 +716,7 @@
         "pangaea-amazonas-soil": "normalized_analysis",
         "pangaea-barents-c-horizon-soil": "normalized_analysis",
         "pangaea-batagay-soil": "normalized_analysis",
+        "pangaea-brasol-ne-brazil-soil": "normalized_analysis",
         "pangaea-north-africa-soil": "normalized_analysis",
         "pangaea-repository": "discovery",
         "soils4africa": "discovery",
@@ -882,7 +909,8 @@
       "state_and_provincial_geological_surveys",
       "publication_linked_datasets",
       "institutional_doi_dataset_download_verification",
-      "targeted_south_america_and_russia_doi_dataset_verification"
+      "targeted_south_america_and_russia_doi_dataset_verification",
+      "targeted_china_and_brazil_primary_repository_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -890,7 +918,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 10,
+    "round": 11,
     "saturated": false,
     "status": "in_progress"
   },

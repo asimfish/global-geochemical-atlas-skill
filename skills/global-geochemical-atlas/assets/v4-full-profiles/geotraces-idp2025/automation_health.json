@@ -1,6 +1,6 @@
 {
   "adapter_registered": true,
-  "as_of": "2026-08-13T10:00:00Z",
+  "as_of": "2026-08-14T20:30:00Z",
   "cache_hit_count": 1,
   "cached_parse_status": "pass",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -11,12 +11,12 @@
       "bytes": 28760915,
       "cache_status": "payload_verified_archive_container_variant",
       "file_id": "seawater-depth-cu-ni-zn",
-      "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_YXZcAbEg.txt",
-      "sha256": "dcf7ece87a189b4dffff006004edf2daadfa9718126641ba9fbd92d0ce58473e"
+      "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_a7OXUh2F.txt",
+      "sha256": "a66e23b3ed80c46107a6606e30eaaafa11894dfdb52980715ebd6459c0f87a60"
     }
   ],
   "last_successful_fetch_at": "2026-08-05T13:41:55Z",
-  "last_successful_parse_at": "2026-08-13T10:00:00Z",
+  "last_successful_parse_at": "2026-08-14T20:30:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",
   "parsed_source_record_count": 69704,

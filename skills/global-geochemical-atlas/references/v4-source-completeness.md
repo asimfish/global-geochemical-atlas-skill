@@ -4,12 +4,12 @@
 
 ## 摘要
 
-- 可执行来源：29
+- 可执行来源：31
 - 有全量候选审计：20
-- 有明确目标测定分母：29
-- 缺少全量候选审计：9
-- 演示样板记录：1489（仅工程测试）
-- 已完成统一全量逐字段 profile：29
+- 有明确目标测定分母：31
+- 缺少全量候选审计：11
+- 演示样板记录：1593（仅工程测试）
+- 已完成统一全量逐字段 profile：31
 
 ## 来源口径
 
@@ -19,6 +19,7 @@
 | `australia-ngsa` | uniform_full_profile | 10492 | 48 | 100.0% | 100.0% |
 | `australia-ngsa-mercury` | uniform_full_profile | 2396 | 48 | 100.0% | 100.0% |
 | `eidc-ningbo-soil` | uniform_full_profile | 480 | 48 | 100.0% | 100.0% |
+| `figshare-yangtze-basin-soil-heavy-metals` | uniform_full_profile | 6625 | 56 | 100.0% | 0.0% |
 | `foregs-floodplain-sediment` | uniform_full_profile | 9672 | 48 | 100.0% | 100.0% |
 | `foregs-humus` | uniform_full_profile | 1845 | 48 | 100.0% | 100.0% |
 | `foregs-stream-sediment` | uniform_full_profile | 11030 | 48 | 100.0% | 100.0% |
@@ -37,6 +38,7 @@
 | `pangaea-arabian-sea-sediment` | uniform_full_profile | 162 | 48 | 100.0% | 100.0% |
 | `pangaea-barents-c-horizon-soil` | uniform_full_profile | 2419 | 32 | 100.0% | 100.0% |
 | `pangaea-batagay-soil` | uniform_full_profile | 93 | 48 | 100.0% | 100.0% |
+| `pangaea-brasol-ne-brazil-soil` | uniform_full_profile | 1614 | 48 | 100.0% | 100.0% |
 | `pangaea-east-china-sea-clay` | uniform_full_profile | 392 | 32 | 100.0% | 100.0% |
 | `pangaea-north-africa-soil` | uniform_full_profile | 258 | 48 | 100.0% | 100.0% |
 | `pangaea-south-china-sea-sediment` | uniform_full_profile | 220 | 40 | 100.0% | 100.0% |
@@ -47,7 +49,7 @@
 
 ## 当前阻塞
 
-1. 统一全量逐字段 profile 已完成 29/29；任何缺口仍显示 `not_measured`。
+1. 统一全量逐字段 profile 已完成 31/31；任何缺口仍显示 `not_measured`。
 2. 候选来源审计与全量 adapter profile 分开保留，缺候选审计不再用 demo 补位。
 3. 在线实时可用性仍需独立探测；固定缓存的 hash、schema、row-count 与离线重放已纳入 profile。
 

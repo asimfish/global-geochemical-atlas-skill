@@ -64,7 +64,7 @@
   },
   "limitations": [
     "The database contains natural elements and anthropogenic contaminants; target-analyte scope must be selected explicitly.",
-    "The verified public API export is dynamic and timestamped; the selected inorganic response is fixed by request, observation time, member inventory, byte counts and scientific row statistics but has no matching immutable DOI.",
+    "The verified public API export is dynamic and timestamped; the selected inorganic response is fixed by request, scientific data/member hashes, byte counts and row statistics but has no matching immutable DOI. The outer ZIP and information filename may drift only when the pinned scientific data and method members remain byte-identical and the information text still proves the frozen query semantics.",
     "The As, Cu, Ni and Zn measurements are reported on a dry-weight basis after partial nitric-acid digestion and must not be represented as total content.",
     "Batch metadata mix accredited and not-accredited analyses, and the export can repeat a sample across parameter groups; both facts must survive record-level mapping."
   ],

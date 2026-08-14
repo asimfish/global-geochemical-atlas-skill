@@ -2,7 +2,7 @@
 
 ## 为什么需要这一门禁
 
-大洲样品数会掩盖国家级空洞，总体样品数还会掩盖筛选图层空洞：某一元素在欧洲的高密度数据不能证明另一个元素在全球有覆盖。`atlas-data-sufficiency-v5` 因此同时执行整体层级审计和请求维度审计。该门禁回答“现有可追溯观测是否达到显式的最低图谱证据包”，不回答“抽样是否均匀或具有统计代表性”。阈值统一来自 `assets/spatial-sufficiency-policy.json`，其结构由 `spatial-sufficiency-policy.schema.json` 固定；代码不按国家名称选择规则。
+大洲样品数会掩盖国家级空洞，总体样品数还会掩盖筛选图层空洞：某一元素在欧洲的高密度数据不能证明另一个元素在全球有覆盖。`atlas-data-sufficiency-v6` 因此同时执行整体层级审计和请求维度审计，并把 `maximize_evidence_breadth` 的来源容量扩展与最低可用门禁分开。该门禁回答“现有可追溯观测是否达到显式的最低图谱证据包”，不回答“抽样是否均匀或具有统计代表性”。阈值统一来自 `assets/spatial-sufficiency-policy.json`，其结构由 `spatial-sufficiency-policy.schema.json` 固定；代码不按国家名称选择规则。
 
 ## 固定空间证据与阈值
 

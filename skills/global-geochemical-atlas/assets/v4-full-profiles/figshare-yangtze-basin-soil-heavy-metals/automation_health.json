@@ -1,0 +1,61 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-14T20:30:00Z",
+  "cache_hit_count": 1,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "figshare-v1-2023-05-10",
+  "expected_target_observation_count": 6625,
+  "files": [
+    {
+      "bytes": 538969,
+      "cache_status": "cache_hit",
+      "file_id": "records-workbook",
+      "filename": "Records.xlsx",
+      "sha256": "6aa14bdaf87dac28864b59d867b27db536af7b7253fcf8ce0e50c483927289ae"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-14T20:22:00Z",
+  "last_successful_parse_at": "2026-08-14T20:30:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 6625,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_field_count": 20,
+  "raw_schema_fields": [
+    "FID",
+    "HM_cat",
+    "HM_cat_CAS",
+    "HM_cat_abbre",
+    "HM_conc_mean",
+    "Latitude",
+    "Longitude",
+    "_dataset_version",
+    "_medium",
+    "_sample_type",
+    "_source_crs",
+    "_source_file",
+    "_target_observations",
+    "lat",
+    "loc_l1",
+    "loc_l2",
+    "loc_l3",
+    "loc_l4",
+    "loc_level",
+    "lon"
+  ],
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "figshare-yangtze-basin-soil-heavy-metals",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 6625,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

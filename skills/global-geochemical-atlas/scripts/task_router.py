@@ -151,22 +151,22 @@ def validate_contract(raw: Mapping[str, Any]) -> dict[str, Any]:
         "four_media_demo",
     }:
         raise TaskRoutingError("acquisition_mode is unsupported")
-    # TaskContract deadline is the total controller budget.  Default to the
-    # official 840-second internal envelope; values above 900 seconds are an
-    # explicit extended-research choice rather than an evaluation default.
-    deadline = raw.get(
-        "deadline_seconds", execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS
+    # Online full-atlas work gets the 12-hour controller ceiling; each child
+    # round is still capped at 30 minutes.  Provided-input and narrow tasks need
+    # only the single-round default unless the caller declares another limit.
+    default_deadline = (
+        execution_budget.MAX_INTERNAL_BUDGET_SECONDS
+        if acquisition_mode == "online_auto" and task_type == "full_atlas"
+        else execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS
     )
+    deadline = raw.get("deadline_seconds", default_deadline)
     if (
         isinstance(deadline, bool)
         or not isinstance(deadline, (int, float))
         or not math.isfinite(float(deadline))
         or not 1 <= float(deadline) <= execution_budget.MAX_INTERNAL_BUDGET_SECONDS
     ):
-        raise TaskRoutingError(
-            "deadline_seconds must be between 1 and 43200; "
-            "the official-evaluation default is 840"
-        )
+        raise TaskRoutingError("deadline_seconds must be between 1 and 43200")
     required_outputs = raw.get("required_outputs")
     defaults = TASK_OUTPUTS[str(task_type)]
     if required_outputs is None:
@@ -318,7 +318,7 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
                 "--run-timeout-seconds",
                 str(run_timeout),
                 "--source-timeout-seconds",
-                str(min(300.0, run_timeout)),
+                str(min(600.0, run_timeout)),
             ]
             if deadline < execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:
                 command.append("--checkpoint-only")

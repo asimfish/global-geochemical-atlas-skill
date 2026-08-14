@@ -1,0 +1,17 @@
+{
+  "analytical_method_counts": {
+    "ICP-MS (ELAN 9000) after full HF-HNO3 digestion": 161,
+    "ICP-OES (PerkinElmer Optima 4300 Dual View) after digestion": 241,
+    "WD-XRF (Bruker S8 Tiger) on glass fusion disc": 351,
+    "WD-XRF (Bruker S8 Tiger) on pressed powder pellet": 861
+  },
+  "as_of": "2026-08-14T20:30:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2024-07-01",
+  "method_scope_counts": {
+    "dataset_parameter": 1614
+  },
+  "observation_count": 1614,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "source_id": "pangaea-brasol-ne-brazil-soil"
+}

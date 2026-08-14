@@ -1,9 +1,9 @@
 {
   "catalog_version": "geochemical-source-catalog-v1",
-  "reviewed_at": "2026-08-13T10:00:00Z",
+  "reviewed_at": "2026-08-14T20:30:00Z",
   "claim_boundary": "This catalog records discovered sources and interface facts. V4 automatic selection is determined separately by access status, research-use status, evidence tier, use mode, frozen spatial/geology compatibility, and execution context; legacy production_eligible is compatibility-only. Catalog inclusion is not scientific endorsement.",
   "discovery_state": {
-    "round": 10,
+    "round": 11,
     "status": "in_progress",
     "saturated": false,
     "channels_checked": [
@@ -21,7 +21,8 @@
       "state_and_provincial_geological_surveys",
       "publication_linked_datasets",
       "institutional_doi_dataset_download_verification",
-      "targeted_south_america_and_russia_doi_dataset_verification"
+      "targeted_south_america_and_russia_doi_dataset_verification",
+      "targeted_china_and_brazil_primary_repository_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -84,6 +85,117 @@
       ],
       "limitations": [
         "Precompiled selected values are not an unfiltered set of every replicate determination."
+      ]
+    },
+    "pangaea-brasol-ne-brazil-soil": {
+      "title": "Soil chemical database of the BraSol-2010 project",
+      "publisher": "PANGAEA Data Publisher for Earth & Environmental Science",
+      "source_kind": "publication_linked_doi_binary_dataset",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "regional_transect_layer_samples",
+        "regions": ["northeastern-brazil-south-america"],
+        "notes": "396 ORG/TOP/BOT layer samples at 142 sites along northeastern Brazil transects; WGS84 coordinates and publisher GPS resolution are explicit."
+      },
+      "identifiers": {
+        "dataset_doi": "10.1594/PANGAEA.969055",
+        "publication_doi": "10.1144/1467-7873/10-RA-046"
+      },
+      "landing_page": "https://doi.pangaea.de/10.1594/PANGAEA.969055",
+      "interfaces": [
+        {
+          "kind": "doi_binary_download",
+          "url": "https://download.pangaea.de/dataset/969055/files/Data_BraSol-2010_database.xlsx",
+          "format": "xlsx",
+          "access": "open",
+          "server_filters": ["dataset_doi", "filename"]
+        },
+        {
+          "kind": "doi_method_metadata",
+          "url": "https://download.pangaea.de/dataset/969055/files/Metadata_BraSol-2010_database.txt",
+          "format": "windows_1252_text",
+          "access": "open",
+          "server_filters": ["dataset_doi", "filename"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "PANGAEA declares CC BY 4.0; retain dataset and linked-publication attribution."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "2024-07-01",
+        "release_date": "2024-07-01"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "pangaea_brasol_ne_brazil_soil"
+      },
+      "evidence_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.969055",
+        "https://doi.org/10.1144/1467-7873/10-RA-046"
+      ],
+      "limitations": [
+        "Transects in northeastern Brazil cannot be presented as national or continental coverage.",
+        "ORG, TOP and BOT layers and method-specific measurement bases remain separate.",
+        "LOD markers are censored observations and are excluded from ordinary anomaly statistics."
+      ]
+    },
+    "figshare-yangtze-basin-soil-heavy-metals": {
+      "title": "A georeferenced dataset of heavy metal occurrence in the soils of the Yangtze River Basin, China (2000-2020)",
+      "publisher": "Figshare / Wiley Geoscience Data Journal",
+      "source_kind": "publication_linked_literature_compilation",
+      "status": "needs_human_review",
+      "production_eligible": false,
+      "media": ["soil"],
+      "coverage": {
+        "extent_class": "river_basin_literature_compilation",
+        "regions": ["yangtze-river-basin-china"],
+        "notes": "6,625 in-scope As/Cr/Cu/Hg/Ni/Pb/Zn records at 855 reported coordinate pairs and four stated location-resolution levels."
+      },
+      "identifiers": {
+        "dataset_doi": "10.6084/m9.figshare.22785971.v1",
+        "publication_doi": "10.1002/gdj3.280",
+        "figshare_file_id": "40503701"
+      },
+      "landing_page": "https://figshare.com/articles/dataset/22785971",
+      "interfaces": [
+        {
+          "kind": "figshare_file_download",
+          "url": "https://ndownloader.figshare.com/files/40503701",
+          "format": "xlsx",
+          "access": "open",
+          "server_filters": ["file_id"]
+        }
+      ],
+      "license": {
+        "status": "open",
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "notes": "Figshare declares CC BY 4.0; retain dataset DOI, authors and linked article."
+      },
+      "version": {
+        "status": "pinned",
+        "value": "figshare-v1-2023-05-10",
+        "release_date": "2023-05-10"
+      },
+      "adapter": {
+        "status": "implemented",
+        "name": "figshare_yangtze_basin_soil_heavy_metals"
+      },
+      "evidence_urls": [
+        "https://figshare.com/articles/dataset/22785971",
+        "https://doi.org/10.1002/gdj3.280"
+      ],
+      "limitations": [
+        "The compilation is not a probability sample and has heterogeneous upstream studies.",
+        "The workbook omits row-level analytical method, digestion, detection-limit and original-publication identifiers.",
+        "The linked article describes mixed georeferencing workflows but no single datum/CRS, so coordinates remain reported-only.",
+        "Rows sharing a coordinate are not silently merged into one physical sample."
       ]
     },
     "pangaea-amazonas-soil": {
@@ -2067,7 +2179,7 @@
       ],
       "limitations": [
         "The database contains natural elements and anthropogenic contaminants; target-analyte scope must be selected explicitly.",
-        "The verified public API export is dynamic and timestamped; the selected inorganic response is fixed by request, observation time, member inventory, byte counts and scientific row statistics but has no matching immutable DOI.",
+        "The verified public API export is dynamic and timestamped; the selected inorganic response is fixed by request, scientific data/member hashes, byte counts and row statistics but has no matching immutable DOI. The outer ZIP and information filename may drift only when the pinned scientific data and method members remain byte-identical and the information text still proves the frozen query semantics.",
         "The As, Cu, Ni and Zn measurements are reported on a dry-weight basis after partial nitric-acid digestion and must not be represented as total content.",
         "Batch metadata mix accredited and not-accredited analyses, and the export can repeat a sample across parameter groups; both facts must survive record-level mapping."
       ]
