@@ -24,7 +24,9 @@ python scripts/autopilot.py --prompt-file TASK_PROMPT.txt --output-dir OUT
 # 已有冻结请求时：python scripts/autopilot.py --request REQUEST.json --output-dir OUT
 ```
 
-autopilot 确定性完成：冻结请求（抽取证据写 `freeze_report.json`，题面候选全集进入请求、最低线只作验收）→ `task_router.py` 规划 → 执行与全部验证 → 对抗审计 → 写 `executor_compliance_report.json`。终态机读：`AUTOPILOT_STATE=DONE|CONTINUE_REQUIRED|NEEDS_HUMAN_REVIEW|FAILED`。`CONTINUE_REQUIRED` 时唯一正确动作是执行报告中的 `next_command`（`--continue` 消费修复队列），不得改写为总结交差；最终回复的数字必须逐字取自报告的 `final_answer_facts`。autopilot 不豁免任何门禁，手工路径与它执行同一套契约。
+autopilot 确定性完成：冻结请求（抽取证据写 `freeze_report.json`，题面候选全集进入请求、最低线只作验收）→ `task_router.py` 规划 → 执行与全部验证 → 对抗审计 → 断言台账 → 写 `executor_compliance_report.json`。终态机读：`AUTOPILOT_STATE=DONE|CONTINUE_REQUIRED|NEEDS_HUMAN_REVIEW|FAILED`。`CONTINUE_REQUIRED` 时唯一正确动作是执行报告中的 `next_command`（`--continue` 消费修复队列），不得改写为总结交差；最终回复的数字必须逐字取自报告的 `final_answer_facts`，`required_scope_notes` 与 `claims.scoped_claims` 中的范围句必须随对应数字一起出现。回复草稿建议先过 `python scripts/claim_ledger.py --run-dir OUT --check-answer DRAFT.md`（幻数与缺范围句会被判 `answer_unbound`）。autopilot 不豁免任何门禁，手工路径与它执行同一套契约。
+
+跨次运行可传 `--memory-file MEM.json` 启用采集记忆：已证明来源作为第一轮调度种子（loop 的 `--seed-priority-source-id`），本次成败运行后自动收割回记忆文件；建议只重排已路由来源，永不扩大采集面。见 [acquisition-memory.md](references/acquisition-memory.md)。
 
 ## 执行状态机
 
@@ -238,7 +240,7 @@ python scripts/adversarial_audit.py --output-dir OUTPUT_DIR
 
 第一个核验十六文件和 hash 链；第二个仅用于完整在线研究，要求 sufficiency 通过、修复队列清空、根目录与最后合法轮次逐字节一致、Skill 快照稳定。fixture、直接单轮或 `checkpoint-only` 不得产生 delivery-ready 收据。任一门禁失败，不交付“看起来正常”的局部地图。
 
-第三个是内容真实性裁判（Builder/Skeptic/Referee 互搏协议的单 Agent 形态）：先在影子副本植入 10 类金丝雀缺陷校准审计能力，全部抓到后才对真实目录出具可采信裁决；再做单位换算重推、异常 z 重算、证据链与坐标一致性等确定性复核。执行者可以驱动修复，但永远不能自我豁免——最终回复必须引用 `audit_receipt.json` 的 verdict 与 calibration recall。双 Agent 深度互搏（`--mode brief` 独立审计考试 + `--adjudicate` 裁决并回流修复队列）见 [adversarial-audit.md](references/adversarial-audit.md)。
+第三个是内容真实性裁判（Builder/Skeptic/Referee 互搏协议的单 Agent 形态）：先在影子副本植入 10 类金丝雀缺陷校准审计能力，全部抓到后才对真实目录出具可采信裁决；再做单位换算重推、异常 z 重算、证据链与坐标一致性等确定性复核。裁决分级：`pass` / `pass_scope_narrowed`（warning 收窄口径，`scope_notes` 随数字进最终回复）/ `fail`——诚实的代价是一个从句，不是整个结果。执行者可以驱动修复，但永远不能自我豁免——最终回复必须引用 `audit_receipt.json` 的 verdict 与 calibration recall。审计之后由 `claim_ledger.py` 生成断言台账（逐断言绑证据指针并重算复核），回复草稿经 `--check-answer` 抓幻数与缺范围句。双 Agent 深度互搏（`--mode brief` 独立审计考试 + 评审者契约：跨模型家族、新鲜线程、访问分级、路径哈希钉死 + `--adjudicate` 裁决并回流修复队列）见 [adversarial-audit.md](references/adversarial-audit.md)。
 
 显式 demo/回归才使用随包 fixture；它们是真实、hash 固定的工程切片，不代表区域完整性。命令与重建说明见 [demo-guide.md](references/demo-guide.md)、[production-demo.md](references/production-demo.md) 和 [china-fixture.md](references/china-fixture.md)。中国 demo 为 2,400 条 TPDC 土壤加 558 条 Zenodo 河流沉积物；完整 TPDC 6,570 条能力仍通过注册来源和全量 profile 保留。
 
@@ -289,7 +291,7 @@ python scripts/build_discovery_candidates.py --research-dir OUTPUT_DIR/research
 ## 按需资源
 
 - 输入输出与闭环：[request-output-contract.md](references/request-output-contract.md)、[iteration-loop.md](references/iteration-loop.md)、[research-delivery-receipt.schema.json](references/research-delivery-receipt.schema.json)。
-- 受限执行器与互搏：[adversarial-audit.md](references/adversarial-audit.md)、[audit-receipt.schema.json](references/audit-receipt.schema.json)、[declarative-adapter.md](references/declarative-adapter.md)、[declarative-adapter.schema.json](references/declarative-adapter.schema.json)。
+- 受限执行器与互搏：[adversarial-audit.md](references/adversarial-audit.md)、[audit-receipt.schema.json](references/audit-receipt.schema.json)、[claim-ledger.schema.json](references/claim-ledger.schema.json)、[acquisition-memory.md](references/acquisition-memory.md)、[declarative-adapter.md](references/declarative-adapter.md)、[declarative-adapter.schema.json](references/declarative-adapter.schema.json)。
 - 来源与证据：[data-sources.md](references/data-sources.md)、[source-acceptance-standard.md](references/source-acceptance-standard.md)、[source-evidence-standard-v3.md](references/source-evidence-standard-v3.md)、[coordinate-policy-registry.json](references/coordinate-policy-registry.json)。
 - D2 科学：[scientific-rules.md](references/scientific-rules.md)、[data-model.md](references/data-model.md)、[schema-mapping.md](references/schema-mapping.md)、[platform-field-crosswalk.md](references/platform-field-crosswalk.md)。
 - D3 与空间：[d3-visualization-contract.md](references/d3-visualization-contract.md)、[render-gate.md](references/render-gate.md)、[global-spatial-coverage.md](references/global-spatial-coverage.md)。

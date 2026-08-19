@@ -53,6 +53,23 @@ python scripts/adversarial_audit.py --output-dir OUTPUT_DIR --mode brief
 4. 发现按 schema 写入 findings JSON，由裁判 `--adjudicate FINDINGS.json` 逐条分类：`confirmed_deterministic` / `recorded_suspicion` / `unconfirmed_requires_evidence`；
 5. 已确认发现回流修复队列，进入下一轮 Builder 修复——互搏结果直接驱动自纠错循环，而不是停在报告里。
 
+## 评审者契约（信息保障）
+
+`audit_brief.json` 携带机读 `reviewer_contract`，独立评审只有满足契约才可采信：
+
+1. **跨模型家族**：Skeptic 所用模型家族必须不同于执行者——同族自审是可预测噪声，跨族评审才是会探弱点的对抗信号；
+2. **新鲜线程**：全新上下文，无共享记忆，杜绝多轮评审的记忆衰减与叙述污染；
+3. **访问分级**：`doc_only`（只读 brief 列出的文件）/ `artifact_aware`（可对列出产物重算数值，默认档）/ `repo_grounded`（可对照技能脚本交叉核查）；
+4. **拒审规则**：brief 中任何路径缺失、相对路径或 sha256 不符时，评审者必须**拒审**而不是评审一份转述——不能核验输入的评审没有效力。
+
+## 分级裁决（诚实但不杀稿）
+
+审计裁决分为三级：`pass`（无发现）、`pass_scope_narrowed`（仅有 warning 级发现）、`fail`（存在 error 级发现）。warning 不否决运行，而是**收窄口径**：每条 warning 生成一句 `scope_notes`，经 `final_answer_facts.required_scope_notes` 送达最终回复——受影响数字只能连同范围句一起引用。诚实的代价是一个从句，而不是整个结果；口径只许收窄，不许悄悄放宽。
+
+## 断言台账（结果到断言映射）
+
+审计通过只说明产物完整，不担保**最终回复**里的每个数字。`claim_ledger.py` 从运行产物推导全部可报告断言，逐条绑定证据指针（文件 + JSON pointer + sha256）并尽可能从证据重算复核，给出 `pass` / `warn_scope` / `fail_unsupported` 三级完整性；回复草稿再经 `--check-answer` 交叉核对——不能追溯到台账的承重数字判为幻数（phantom），引用了 `warn_scope` 断言却缺范围关键词判为越界。执行者可以构建台账，但永远不能改写完整性判定：每次调用都从证据重新计算。schema 见 [claim-ledger.schema.json](claim-ledger.schema.json)。
+
 ## 与交付门禁的关系
 
 `validate_outputs.py` 与 `validate_research_delivery.py` 检查契约完整性；对抗审计检查**内容真实性**（可重推导性）。三者独立，缺一不可。最终回复必须引用 `audit_receipt.json` 的 verdict 与 calibration recall；没有可采信 PASS 的交付一律如实标注。

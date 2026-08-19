@@ -1027,6 +1027,26 @@ def write_brief(output_dir: Path, audit_dir: Path, seed: int) -> dict[str, Any]:
             "referee_canary_truth.json must be withheld from the auditing agent "
             "until adjudication"
         ),
+        # Reviewer contract, adapted from cross-model adversarial review
+        # practice: an independent reviewer is only credible when it comes
+        # from a different model family, starts with a fresh context, and is
+        # handed pinned absolute paths instead of a summary written by the
+        # executor it is auditing.
+        "reviewer_contract": {
+            "model_family": "must differ from the executor's model family",
+            "context": "fresh thread; no shared memory with the executor",
+            "access_level": "artifact_aware",
+            "access_levels": {
+                "doc_only": "reads only the files listed in this brief",
+                "artifact_aware": "may recompute values from listed artifacts",
+                "repo_grounded": "may cross-check against skill scripts",
+            },
+            "reject_if": (
+                "any listed path is missing, relative, or fails its sha256; "
+                "a reviewer that cannot verify its inputs must reject the "
+                "brief instead of reviewing a paraphrase"
+            ),
+        },
     }
     (audit_dir / "audit_brief.json").write_text(
         json.dumps(brief, ensure_ascii=False, indent=2), encoding="utf-8"
@@ -1142,15 +1162,24 @@ def main() -> int:
         )
         check_rows, findings = run_checks(output_dir)
         errors = [f for f in findings if f["severity"] == "error"]
+        warnings = [f for f in findings if f["severity"] == "warning"]
         admissible = bool(calibration and calibration["admissible"])
+        # Graded verdicts: a warning does not kill the run, it narrows the
+        # claim. Every warning becomes a scope note the final answer must
+        # carry, so honesty costs a clause instead of the whole result.
         if calibration is None:
             verdict = "inadmissible_uncalibrated"
         elif not admissible:
             verdict = "inadmissible_calibration_failed"
         elif errors:
             verdict = "fail"
+        elif warnings:
+            verdict = "pass_scope_narrowed"
         else:
             verdict = "pass"
+        scope_notes = [
+            f"{f['defect_class']}: {f['detail']}" for f in warnings
+        ]
         receipt = {
             "receipt_schema": RECEIPT_SCHEMA,
             "audit_version": AUDIT_VERSION,
@@ -1160,6 +1189,8 @@ def main() -> int:
             "checks": check_rows,
             "finding_count": len(findings),
             "error_count": len(errors),
+            "warning_count": len(warnings),
+            "scope_notes": scope_notes,
             "findings": findings,
             "verdict": verdict,
             "principle": "the executor can drive repairs but can never acquit itself",
@@ -1183,7 +1214,7 @@ def main() -> int:
                 ensure_ascii=False,
             )
         )
-        if verdict == "pass":
+        if verdict in ("pass", "pass_scope_narrowed"):
             return 0
         if verdict == "fail":
             return 1

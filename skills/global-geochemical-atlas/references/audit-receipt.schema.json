@@ -44,6 +44,12 @@
     },
     "finding_count": {"type": "integer", "minimum": 0},
     "error_count": {"type": "integer", "minimum": 0},
+    "warning_count": {"type": "integer", "minimum": 0},
+    "scope_notes": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "description": "One sentence per warning finding; the final answer may only quote the affected numbers together with these scope sentences (a scoped claim narrows, it must not silently widen)."
+    },
     "findings": {
       "type": "array",
       "items": {
@@ -62,7 +68,7 @@
       }
     },
     "verdict": {
-      "enum": ["pass", "fail", "inadmissible_uncalibrated", "inadmissible_calibration_failed"]
+      "enum": ["pass", "pass_scope_narrowed", "fail", "inadmissible_uncalibrated", "inadmissible_calibration_failed"]
     },
     "principle": {"type": "string", "minLength": 1}
   }

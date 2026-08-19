@@ -283,7 +283,7 @@ def load_json(path: Path) -> Any:
     return None
 
 
-def collect_final_answer_facts(output_dir: Path) -> dict[str, Any]:
+def collect_final_answer_facts(output_dir: Path, audit_dir: Path) -> dict[str, Any]:
     """Extract the numbers the final chat answer must copy verbatim."""
 
     facts: dict[str, Any] = {}
@@ -323,8 +323,25 @@ def collect_final_answer_facts(output_dir: Path) -> dict[str, Any]:
                 "operator_continuation_required"
             ),
         }
+    ledger = load_json(audit_dir / "claim_ledger.json")
+    if isinstance(ledger, dict):
+        facts["claims"] = {
+            "ledger": str(audit_dir / "claim_ledger.json"),
+            "summary": ledger.get("summary"),
+            "scoped_claims": [
+                {"claim_id": c.get("claim_id"), "scope": c.get("scope")}
+                for c in ledger.get("claims", [])
+                if c.get("integrity") == "warn_scope"
+            ],
+        }
+    audit = load_json(audit_dir / "audit_receipt.json")
+    if isinstance(audit, dict) and audit.get("scope_notes"):
+        facts["required_scope_notes"] = audit["scope_notes"]
     facts["instruction"] = (
-        "copy these numbers verbatim into the final reply; do not restate from memory"
+        "copy these numbers verbatim into the final reply; do not restate from "
+        "memory. Scoped claims may only be quoted together with their scope "
+        "sentence. Before sending, cross-check the draft with "
+        "claim_ledger.py --check-answer."
     )
     return facts
 
@@ -360,15 +377,29 @@ def evaluate_compliance(
             "repair queue has unattempted action groups; the run must be continued, "
             "not summarized as finished"
         )
+    ledger = load_json(audit_dir / "claim_ledger.json")
+    if isinstance(ledger, dict):
+        unsupported = (ledger.get("summary") or {}).get("fail_unsupported", 0)
+        if unsupported:
+            violations.append(
+                f"claim ledger has {unsupported} unsupported claim(s); "
+                "the affected numbers must not appear in the final answer"
+            )
+    else:
+        violations.append("claim ledger missing")
     audit = load_json(audit_dir / "audit_receipt.json")
     audit_summary: dict[str, Any] = {}
     if isinstance(audit, dict):
         audit_summary = {
             "verdict": audit.get("verdict"),
             "error_count": audit.get("error_count"),
+            "warning_count": audit.get("warning_count"),
+            "scope_notes": audit.get("scope_notes"),
             "calibration_recall": (audit.get("calibration") or {}).get("recall"),
         }
-        if audit.get("verdict") not in ("pass",):
+        # pass_scope_narrowed is a pass whose claims must carry scope notes;
+        # the notes travel via final_answer_facts.required_scope_notes.
+        if audit.get("verdict") not in ("pass", "pass_scope_narrowed"):
             violations.append(f"adversarial audit verdict: {audit.get('verdict')}")
     else:
         violations.append("adversarial audit receipt missing")
@@ -420,6 +451,15 @@ def main() -> int:
     )
     parser.add_argument("--skip-audit", action="store_true")
     parser.add_argument("--audit-seed", type=int, default=20260817)
+    parser.add_argument(
+        "--memory-file",
+        type=Path,
+        default=None,
+        help=(
+            "cross-run acquisition memory JSON; proven sources seed round-1 "
+            "priorities and this run's outcomes are harvested back afterwards"
+        ),
+    )
     args = parser.parse_args()
 
     output_dir: Path = args.output_dir.resolve()
@@ -481,6 +521,30 @@ def main() -> int:
     loop_invoked = False
 
     # ------------------------------------------------------------------
+    # Cross-run acquisition memory: consult before running
+    # ------------------------------------------------------------------
+    memory_advice: dict[str, Any] | None = None
+    if args.memory_file is not None and args.memory_file.is_file():
+        advice_path = control_dir / "memory_advice.json"
+        run_step(
+            "memory_advise",
+            [
+                PYTHON,
+                str(SCRIPT_DIR / "acquisition_memory.py"),
+                "advise",
+                "--memory-file",
+                str(args.memory_file.resolve()),
+                "--request",
+                str(request_path),
+                "--output",
+                str(advice_path),
+            ],
+            steps,
+            required=False,
+        )
+        memory_advice = load_json(advice_path)
+
+    # ------------------------------------------------------------------
     # Execute
     # ------------------------------------------------------------------
     if args.demo:
@@ -519,6 +583,9 @@ def main() -> int:
         ]
         if loop_budget:
             loop_argv.extend(["--time-budget-seconds", str(int(loop_budget))])
+        if memory_advice:
+            for source_id in memory_advice.get("priority_source_ids", []):
+                loop_argv.extend(["--seed-priority-source-id", str(source_id)])
         run_step("self_correction_loop", loop_argv, steps)
         loop_invoked = True
     else:
@@ -604,6 +671,36 @@ def main() -> int:
             ],
             steps,
         )
+    # Result-to-claim ledger: bind every reportable number to evidence so the
+    # final answer can be cross-checked instead of trusted.
+    run_step(
+        "claim_ledger",
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "claim_ledger.py"),
+            "--run-dir",
+            str(output_dir),
+            "--ledger",
+            str(audit_dir / "claim_ledger.json"),
+        ],
+        steps,
+    )
+    # Harvest this run's source outcomes back into cross-run memory.
+    if args.memory_file is not None:
+        run_step(
+            "memory_update",
+            [
+                PYTHON,
+                str(SCRIPT_DIR / "acquisition_memory.py"),
+                "update",
+                "--memory-file",
+                str(args.memory_file.resolve()),
+                "--run-dir",
+                str(output_dir),
+            ],
+            steps,
+            required=False,
+        )
 
     # ------------------------------------------------------------------
     # Compliance report
@@ -632,7 +729,8 @@ def main() -> int:
         "steps": steps,
         "violations": violations,
         "audit": audit_summary,
-        "final_answer_facts": collect_final_answer_facts(output_dir),
+        "memory": memory_advice,
+        "final_answer_facts": collect_final_answer_facts(output_dir, audit_dir),
         "next_command": (
             f"{PYTHON} scripts/autopilot.py --output-dir {output_dir} --continue"
             if state == "CONTINUE_REQUIRED"

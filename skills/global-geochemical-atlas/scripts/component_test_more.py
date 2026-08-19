@@ -1,11 +1,16 @@
 """Deterministic offline regression suite for the skill_more layer.
 
-Covers the three additions on top of the frozen v16 snapshot:
+Covers the additions on top of the acquisition-coverage baseline:
 
-1. adversarial audit: canary calibration, clean pass, tampered fail;
+1. adversarial audit: canary calibration, clean pass, tampered fail, and
+   graded verdicts (pass_scope_narrowed with scope notes);
 2. autopilot: prompt freezing and single-command fixture conduction;
 3. declarative adapter channel: proposal drafting, fail-closed gates, and
-   end-to-end provided-input delivery through the main workflow.
+   end-to-end provided-input delivery through the main workflow;
+4. claim ledger: evidence-bound claims, phantom-number and missing-scope
+   detection in draft answers;
+5. cross-run acquisition memory: harvest, proven-source priorities, banlist
+   and the loop's round-1 seeding hook.
 
 Run:  python scripts/component_test_more.py
 """
@@ -479,6 +484,177 @@ def test_proposer(tmp: Path) -> None:
     )
 
 
+def test_claim_ledger(tmp: Path, out_dir: Path) -> None:
+    ledger_path = tmp / "ledger" / "claim_ledger.json"
+    result = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "claim_ledger.py"),
+            "--run-dir",
+            str(out_dir),
+            "--ledger",
+            str(ledger_path),
+        ]
+    )
+    check("ledger.builds", result.returncode == 0, result.stdout[-300:])
+    if not ledger_path.is_file():
+        check("ledger.file", False, "claim_ledger.json not written")
+        return
+    ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+    check(
+        "ledger.no_unsupported",
+        ledger["summary"]["fail_unsupported"] == 0,
+        json.dumps(ledger["summary"]),
+    )
+    check(
+        "ledger.records_recomputed",
+        any(
+            c["claim_id"] == "records" and (c.get("recompute") or {}).get("match")
+            for c in ledger["claims"]
+        ),
+    )
+    check(
+        "ledger.scoped_claims_present",
+        any(c["integrity"] == "warn_scope" and c["scope"] for c in ledger["claims"]),
+    )
+
+    run_summary = json.loads((out_dir / "run_summary.json").read_text(encoding="utf-8"))
+    records = run_summary["metrics"]["standardized_record_count"]
+    anomalies = run_summary["metrics"]["candidate_anomaly_count"]
+    good = tmp / "ledger" / "draft_good.md"
+    good.write_text(
+        f"standardized {records} records; {anomalies} statistical candidate "
+        "anomalies (robust-z screen, not confirmed).",
+        encoding="utf-8",
+    )
+    bad = tmp / "ledger" / "draft_bad.md"
+    bad.write_text(
+        f"acquired 999999 high-quality records and found {anomalies} anomalies.",
+        encoding="utf-8",
+    )
+    good_result = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "claim_ledger.py"),
+            "--run-dir",
+            str(out_dir),
+            "--ledger",
+            str(ledger_path),
+            "--check-answer",
+            str(good),
+        ]
+    )
+    check(
+        "ledger.good_answer_bound",
+        good_result.returncode == 0 and "answer_bound" in good_result.stdout,
+        good_result.stdout[-300:],
+    )
+    bad_result = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "claim_ledger.py"),
+            "--run-dir",
+            str(out_dir),
+            "--ledger",
+            str(ledger_path),
+            "--check-answer",
+            str(bad),
+        ]
+    )
+    bad_payload = json.loads(bad_result.stdout.splitlines()[-1])
+    check(
+        "ledger.phantom_caught",
+        bad_result.returncode == 1 and bad_payload["phantom_count"] >= 1,
+        bad_result.stdout[-300:],
+    )
+    check(
+        "ledger.scope_violation_caught",
+        bad_payload["scope_violation_count"] >= 1,
+        bad_result.stdout[-300:],
+    )
+
+
+def test_acquisition_memory(tmp: Path, out_dir: Path) -> None:
+    memory_path = tmp / "memory" / "memory.json"
+    update = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "acquisition_memory.py"),
+            "update",
+            "--memory-file",
+            str(memory_path),
+            "--run-dir",
+            str(out_dir),
+        ]
+    )
+    check("memory.updates", update.returncode == 0, update.stderr[-300:])
+    memory = json.loads(memory_path.read_text(encoding="utf-8"))
+    check(
+        "memory.sources_harvested",
+        memory["runs_recorded"] == 1 and len(memory["sources"]) >= 1,
+        json.dumps(memory)[:200],
+    )
+    # A repeat offender enters the banlist; one success clears the streak.
+    memory["sources"]["dead-source"] = {
+        "ok_runs": 0,
+        "fail_runs": 3,
+        "fail_streak": 3,
+        "total_records": 0,
+        "media": ["soil"],
+        "last_outcome": "error:source_not_accessible",
+        "last_seen": memory["updated_at"],
+    }
+    memory_path.write_text(json.dumps(memory), encoding="utf-8")
+    request_path = out_dir / "request_evidence" / "request.json"
+    advise = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "acquisition_memory.py"),
+            "advise",
+            "--memory-file",
+            str(memory_path),
+            "--request",
+            str(request_path),
+        ]
+    )
+    check("memory.advises", advise.returncode == 0, advise.stderr[-300:])
+    advice = json.loads(advise.stdout.splitlines()[-1])
+    check(
+        "memory.proven_prioritized",
+        len(advice["priority_source_ids"]) >= 1
+        and "dead-source" not in advice["priority_source_ids"],
+        json.dumps(advice),
+    )
+    check(
+        "memory.banlist",
+        any(item["source_id"] == "dead-source" for item in advice["banlist"]),
+        json.dumps(advice["banlist"]),
+    )
+    seed_help = run(
+        [PYTHON, str(SCRIPT_DIR / "run_self_correction_loop.py"), "--help"]
+    )
+    check(
+        "memory.loop_seed_arg",
+        "--seed-priority-source-id" in seed_help.stdout,
+    )
+
+
+def test_graded_verdict_schema() -> None:
+    schema = json.loads(
+        (SKILL_DIR / "references" / "audit-receipt.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    check(
+        "audit.graded_verdict_in_schema",
+        "pass_scope_narrowed" in schema["properties"]["verdict"]["enum"],
+    )
+    check(
+        "audit.scope_notes_in_schema",
+        "scope_notes" in schema["properties"],
+    )
+
+
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="skill-more-tests.") as tmp_name:
         tmp = Path(tmp_name)
@@ -487,6 +663,9 @@ def main() -> int:
         if out_dir.is_dir():
             test_audit_clean(tmp, out_dir)
             test_audit_tampered(tmp, out_dir)
+            test_claim_ledger(tmp, out_dir)
+            test_acquisition_memory(tmp, out_dir)
+        test_graded_verdict_schema()
         test_autopilot_fixture(tmp)
         test_declarative_gates(tmp)
         test_declarative_end_to_end(tmp)
