@@ -6721,8 +6721,11 @@ def check_d3(output_dir: Path) -> list[str]:
         and '<script id="temporal-payload" type="application/json">' in temporal_html
         and '"schema_version":"temporal-atlas-payload-v1"' in temporal_html
         and '<script id="basemap-data" type="application/json">' in temporal_html
+        and "\u533a\u57df\u5bf9\u6bd4" in temporal_html
         and "\u91c7\u6837\u53f2\u56de\u653e" in temporal_html
         and "\u7ad9\u70b9\u6f14\u53d8" in temporal_html
+        and 'id="modeCompare"' in temporal_html
+        and 'id="colorConc"' in temporal_html
         and "<script src=" not in temporal_html
         and "https://" not in temporal_html.split("<style>")[0],
         "D3 temporal map ships both replay and station modes as one offline HTML",

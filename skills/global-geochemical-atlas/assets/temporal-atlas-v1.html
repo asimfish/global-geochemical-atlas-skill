@@ -123,7 +123,7 @@ button,select,input{font:inherit}
 <header class="hero">
   <div class="eyebrow">GLOBAL GEOCHEMICAL ATLAS · TEMPORAL EVOLUTION</div>
   <h1>全球地球化学 <em>时间演变</em> 可交互地图</h1>
-  <p id="heroSub">按采样时刻回放全球地球化学观测的时空扩张史，并核查长期监测站点的浓度演变。仅 <b>publisher_reported</b> 的采样时刻参与时间回放；无采样时刻的记录绝不假装有时间，只作为可选的灰色底衬并计入统计。</p>
+  <p id="heroSub">看同一个地区的元素含量随时间怎么变：<b>区域对比</b>把带采样时刻的观测按 5° 网格分成早晚两期，直接标出同一格子的中位含量是升是降；<b>站点演变</b>给出单个监测点的浓度—时间序列；<b>采样史回放</b>按含量着色回放逐条观测。仅 <b>publisher_reported</b> 的采样时刻参与时间分析；无采样时刻的记录绝不假装有时间，只作为可选的灰色底衬并计入统计。</p>
 </header>
 <main class="shell" data-template-contract="temporal-atlas-v1">
   <section class="kpis">
@@ -136,7 +136,8 @@ button,select,input{font:inherit}
     <div class="stage-head">
       <div class="head-row">
         <div class="seg" role="tablist" aria-label="模式切换">
-          <button id="modeReplay" class="active" role="tab" aria-selected="true">采样史回放</button>
+          <button id="modeCompare" class="active" role="tab" aria-selected="true">区域对比</button>
+          <button id="modeReplay" role="tab" aria-selected="false">采样史回放</button>
           <button id="modeStation" role="tab" aria-selected="false">站点演变</button>
         </div>
         <div class="head-note" id="modeNote"></div>
@@ -146,6 +147,11 @@ button,select,input{font:inherit}
       </div>
       <div class="head-row">
         <div class="chip-group" id="mediumChips"><span class="chip-label">介质</span></div>
+        <div class="chip-group" id="colorSeg" style="display:none">
+          <span class="chip-label">着色</span>
+          <button class="chip active" id="colorConc">按含量高低</button>
+          <button class="chip" id="colorElement">按元素类别</button>
+        </div>
         <div class="chip-group" style="margin-left:auto">
           <button class="chip ghost" id="undatedToggle"><i></i>显示无时间记录（灰色底衬）<small id="undatedCount"></small></button>
         </div>
@@ -226,21 +232,125 @@ const YEAR_MIN = HAS_DATED ? STATS.year_min : 2000;
 const YEAR_MAX = HAS_DATED ? STATS.year_max : 2024;
 const T_LO = YEAR_MIN, T_HI = YEAR_MAX + 1;
 
+/* ====== 含量分位（同元素 × 同介质 × 同单位层内比较，跨层浓度不可比） ====== */
+const CONC_RAMP = ["#3d7bff", "#38cdb8", "#f4c15d", "#ff9e4f", "#ff5c6a"];
+/* 只用实测数值：删失点只有上限信息，参与分位或中位数会引入偏差 */
+function recNumeric(r) { return r[11]; }
+function concLayerKey(r) { return r[2] + "|" + r[3] + "|" + (r[12] || ""); }
+const concLayers = new Map();
+for (const r of REC) {
+  const v = recNumeric(r);
+  if (v === null) continue;
+  const k = concLayerKey(r);
+  if (!concLayers.has(k)) concLayers.set(k, []);
+  concLayers.get(k).push(v);
+}
+concLayers.forEach(arr => arr.sort((a, b) => a - b));
+function concPctl(r) {
+  const v = recNumeric(r);
+  if (v === null) return null;
+  const arr = concLayers.get(concLayerKey(r));
+  if (!arr || arr.length < 2) return null;
+  let lo = 0, hi = arr.length;
+  while (lo < hi) { const mid = (lo + hi) >> 1; if (arr[mid] <= v) lo = mid + 1; else hi = mid; }
+  return (lo - 0.5) / arr.length;
+}
+function concColor(r) {
+  const p = concPctl(r);
+  if (p === null) return "#8fa6ae";
+  return CONC_RAMP[Math.min(CONC_RAMP.length - 1, Math.floor(p * CONC_RAMP.length))];
+}
+
+/* ====== 区域对比（5° 网格 × 分割年，早晚两期中位含量升降） ====== */
+const CELL_DEG = 5;
+const DELTA_THRESHOLD = 0.15; /* 与站点趋势 TREND_RELATIVE_THRESHOLD 一致 */
+const DELTA_COLOR = { up: "#ff5c6a", down: "#54a7ff", flat: "#9fc6c4" };
+const DELTA_LABEL = { up: "中位含量上升", down: "中位含量下降", flat: "基本持平（|变化| ≤15%）" };
+function median(sorted) {
+  const n = sorted.length;
+  return n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+}
+function defaultSplitYear() {
+  if (!HAS_DATED) return YEAR_MIN;
+  const ts = REC.map(r => r[6]).sort((a, b) => a - b);
+  const m = Math.round(median(ts));
+  return Math.max(YEAR_MIN + 1, Math.min(YEAR_MAX, m));
+}
+let compareCells = [];
+let compareSummary = { comparable: 0, up: 0, down: 0, flat: 0, single: 0 };
+function computeCells() {
+  compareCells = [];
+  compareSummary = { comparable: 0, up: 0, down: 0, flat: 0, single: 0 };
+  /* 跨元素含量不可比：区域对比要求选定单个元素 */
+  if (state.element === "ALL") return;
+  const groups = new Map();
+  for (const r of filtered) {
+    const v = recNumeric(r);
+    if (v === null) continue;
+    const gx = Math.floor(r[0] / CELL_DEG), gy = Math.floor(r[1] / CELL_DEG);
+    const key = gx + "|" + gy + "|" + r[2] + "|" + r[3] + "|" + (r[12] || "");
+    if (!groups.has(key)) groups.set(key, { gx, gy, el: r[2], med: r[3], unit: r[12] || "", early: [], late: [], recs: [] });
+    const g = groups.get(key);
+    (r[6] < state.splitYear ? g.early : g.late).push(v);
+    g.recs.push(r);
+  }
+  groups.forEach(g => {
+    g.early.sort((a, b) => a - b); g.late.sort((a, b) => a - b);
+    const nE = g.early.length, nL = g.late.length;
+    if (nE >= 2 && nL >= 2) {
+      const mE = median(g.early), mL = median(g.late);
+      const delta = mE > 0 ? (mL - mE) / mE : 0;
+      const cls = delta > DELTA_THRESHOLD ? "up" : (delta < -DELTA_THRESHOLD ? "down" : "flat");
+      compareCells.push({ ...g, nE, nL, mE, mL, delta, cls, comparable: true });
+      compareSummary.comparable++; compareSummary[cls]++;
+    } else {
+      compareCells.push({ ...g, nE, nL, mE: null, mL: null, delta: null, cls: "single", comparable: false });
+      compareSummary.single++;
+    }
+  });
+  /* 可比格子后画（覆盖在单期格子之上），同类内按格子坐标稳定排序 */
+  compareCells.sort((a, b) => (a.comparable === b.comparable ? (a.gx - b.gx || a.gy - b.gy) : (a.comparable ? 1 : -1)));
+}
+function bestCompareElement() {
+  let best = null, bestN = -1;
+  for (const el of ELEMENTS) {
+    const groups = new Map();
+    for (const r of REC) {
+      if (ELEMENTS[r[2]] !== el) continue;
+      if (state.medium !== "ALL" && MEDIA[r[3]] !== state.medium) continue;
+      const v = recNumeric(r);
+      if (v === null) continue;
+      const key = Math.floor(r[0] / CELL_DEG) + "|" + Math.floor(r[1] / CELL_DEG) + "|" + r[3] + "|" + (r[12] || "");
+      if (!groups.has(key)) groups.set(key, [0, 0]);
+      groups.get(key)[r[6] < state.splitYear ? 0 : 1]++;
+    }
+    let n = 0;
+    groups.forEach(c => { if (c[0] >= 2 && c[1] >= 2) n++; });
+    if (n > bestN) { bestN = n; best = el; }
+  }
+  return best || (ELEMENTS.length ? ELEMENTS[0] : "ALL");
+}
+
 /* ====== 全局状态 ====== */
 const state = {
-  mode: "replay",
+  mode: "compare",
   element: "ALL",
   medium: "ALL",
+  colorBy: "conc",
+  splitYear: 0, /* 启动时由 defaultSplitYear() 填充 */
   showUndated: false,
   win: [T_LO, T_HI],
   playing: false,
   speed: 6,
   view: { lon: 12, lat: 12, zoom: 1 },
   hoverRec: null,
+  hoverCell: null,
+  activeCell: null,
   activeStation: -1,
   popupElement: null,
   filterFadeStart: 0
 };
+state.splitYear = defaultSplitYear();
 
 /* ====== DOM ====== */
 const $ = id => document.getElementById(id);
@@ -259,8 +369,10 @@ function recMatches(r) {
 let filtered = [];
 function refilter() {
   filtered = REC.filter(recMatches);
+  if (state.mode === "compare") computeCells();
   state.filterFadeStart = performance.now();
   enteredAt.clear();
+  closeStation();
   updateEmptyState();
   updateKpis();
   drawTimeline();
@@ -331,6 +443,7 @@ function glowSprite(color) {
 let drawQueued = false;
 let hitPoints = [];   /* {x,y,rec} */
 let hitStations = []; /* {x,y,r,st,idx} */
+let hitCells = [];    /* {x0,y0,x1,y1,cell} */
 const enteredAt = new Map(); /* 记录数组引用 -> 进入窗口时刻，用于新点脉冲 */
 let windowCount = 0;
 
@@ -368,6 +481,60 @@ function drawGraticule() {
   }
 }
 
+function drawCompare(fade) {
+  hitCells = [];
+  for (const cell of compareCells) {
+    const lon0 = cell.gx * CELL_DEG, lat1 = (cell.gy + 1) * CELL_DEG;
+    const a = project(lon0, lat1), b = project(lon0 + CELL_DEG, cell.gy * CELL_DEG);
+    const x0 = a[0], y0 = a[1], x1 = b[0], y1 = b[1];
+    if (x1 < -4 || x0 > W + 4 || y1 < -4 || y0 > H + 4) continue;
+    const cw = x1 - x0, chh = y1 - y0;
+    if (cell.comparable) {
+      const color = DELTA_COLOR[cell.cls];
+      const mag = Math.min(1, Math.abs(cell.delta) / 1.5);
+      ctx.globalAlpha = (0.28 + mag * 0.3) * fade;
+      ctx.fillStyle = color;
+      ctx.fillRect(x0 + 1, y0 + 1, cw - 2, chh - 2);
+      ctx.globalAlpha = 0.95 * fade;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = state.activeCell === cell ? 2.6 : (state.hoverCell === cell ? 2 : 1.4);
+      ctx.strokeRect(x0 + 1, y0 + 1, cw - 2, chh - 2);
+      if (cw > 34) {
+        const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+        ctx.fillStyle = "#f2fffb";
+        ctx.font = `800 ${Math.min(15, cw / 4)}px Inter,'Noto Sans SC',sans-serif`;
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        const arrow = cell.cls === "up" ? "\u2191" : (cell.cls === "down" ? "\u2193" : "\u2192");
+        const pctTxt = `${cell.delta > 0 ? "+" : ""}${(cell.delta * 100).toFixed(0)}%`;
+        ctx.fillText(arrow + " " + pctTxt, cx, cy);
+        ctx.textBaseline = "alphabetic";
+      }
+    } else {
+      ctx.globalAlpha = 0.16 * fade;
+      ctx.fillStyle = "#7d95a0";
+      ctx.fillRect(x0 + 1, y0 + 1, cw - 2, chh - 2);
+      ctx.globalAlpha = 0.5 * fade;
+      ctx.strokeStyle = "rgba(125,149,160,.6)"; ctx.lineWidth = 0.8;
+      ctx.setLineDash([4, 4]);
+      ctx.strokeRect(x0 + 1, y0 + 1, cw - 2, chh - 2);
+      ctx.setLineDash([]);
+    }
+    ctx.globalAlpha = 1;
+    hitCells.push({ x0, y0, x1, y1, cell });
+  }
+  /* 单条观测过小无法进格子统计时依然作淡点提示 */
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  ctx.globalAlpha = 0.35 * fade;
+  for (const r of filtered) {
+    const p = project(r[0], r[1]);
+    if (p[0] < -8 || p[0] > W + 8 || p[1] < -8 || p[1] > H + 8) continue;
+    ctx.drawImage(glowSprite(r[6] < state.splitYear ? "#67e6d8" : "#ffb46b"), p[0] - 4.5, p[1] - 4.5, 9, 9);
+  }
+  ctx.restore();
+  ctx.globalAlpha = 1;
+}
+
 function drawMap(now) {
   if (!W || !H) return;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -392,6 +559,12 @@ function drawMap(now) {
     ctx.globalAlpha = 1;
   }
 
+  if (state.mode === "compare") {
+    drawCompare(fade);
+    updateCounter();
+    if (needMore || state.playing) scheduleDraw();
+    return;
+  }
   if (state.mode === "replay") {
     const w0 = state.win[0], w1 = state.win[1];
     ctx.save();
@@ -403,7 +576,7 @@ function drawMap(now) {
       inWin++;
       const p = project(r[0], r[1]);
       if (p[0] < -14 || p[0] > W + 14 || p[1] < -14 || p[1] > H + 14) continue;
-      const color = elementColor[ELEMENTS[r[2]]];
+      const color = state.colorBy === "conc" ? concColor(r) : elementColor[ELEMENTS[r[2]]];
       const size = 15 + Math.min(8, state.view.zoom);
       ctx.globalAlpha = 0.85 * fade;
       if (PRECISIONS[r[5]] === "year_range") {
@@ -474,7 +647,11 @@ function fmtYear(t) {
 }
 function updateCounter() {
   const el = $("winCounter");
-  if (state.mode === "replay") {
+  if (state.mode === "compare") {
+    const s = compareSummary;
+    el.innerHTML = `分割年 <span class="win">${state.splitYear}</span> · 元素 ${state.element === "ALL" ? "未选定" : state.element}<br>` +
+      `可比格子 <b>${s.comparable}</b>（升 ${s.up} / 降 ${s.down} / 平 ${s.flat}）· 仅单期 ${s.single}`;
+  } else if (state.mode === "replay") {
     el.innerHTML = `窗口 <span class="win">${fmtYear(state.win[0])} – ${fmtYear(state.win[1])}</span><br>窗口内记录 <b>${windowCount}</b> / 已过滤 ${filtered.length} · 全部带时间 ${STATS.dated_records}`;
   } else {
     const visible = state.element === "ALL" ? STATIONS.length : STATIONS.filter(s => s.series[state.element]).length;
@@ -491,7 +668,13 @@ function updateKpis() {
   $("kDatedBar").style.width = pct + "%";
   $("kStations").textContent = STATS.stations_mode_b;
   $("kStationsSub").textContent = `同一位置 ≥3 采样时相 · 共识别站点 ${STATS.station_total} 个`;
-  if (state.mode === "replay") {
+  if (state.mode === "compare") {
+    $("kWinLabel").textContent = "可比区域格子（早晚两期）";
+    $("kWindow").textContent = String(compareSummary.comparable);
+    $("kWindowSub").textContent = HAS_DATED
+      ? `升 ${compareSummary.up} · 降 ${compareSummary.down} · 平 ${compareSummary.flat} · 分割年 ${state.splitYear}`
+      : "本数据集无带采样时刻的记录";
+  } else if (state.mode === "replay") {
     $("kWinLabel").textContent = "当前时间窗口内记录";
     $("kWindow").textContent = windowCount.toLocaleString("en-US");
     $("kWindowSub").textContent = HAS_DATED ? `时间跨度 ${YEAR_MIN}–${YEAR_MAX}` : "本数据集无带采样时刻的记录";
@@ -507,7 +690,25 @@ function updateKpisWindowOnly() {
 }
 function updateLegend() {
   const el = $("mapLegend");
+  if (state.mode === "compare") {
+    el.innerHTML = ["up", "down", "flat"]
+      .map(k => `<div class="row"><i class="dot" style="background:${DELTA_COLOR[k]};box-shadow:0 0 8px ${DELTA_COLOR[k]}"></i>${DELTA_LABEL[k]}</div>`)
+      .join("") +
+      `<div class="row"><i class="dot" style="background:#7d95a0;opacity:.5"></i>虚线暗格 = 仅单期观测，无法比较</div>` +
+      `<div class="row" style="margin-top:4px"><i class="dot" style="background:#67e6d8"></i>淡点 = 早期观测 <i class="dot" style="background:#ffb46b;margin-left:6px"></i>晚期观测</div>` +
+      `<div class="row" style="opacity:.75">比较仅在同元素 · 同介质 · 同单位内进行</div>`;
+    return;
+  }
   if (state.mode === "replay") {
+    if (state.colorBy === "conc") {
+      const stops = CONC_RAMP.map(c => `<i class="dot" style="background:${c};box-shadow:0 0 6px ${c}"></i>`).join("");
+      el.innerHTML =
+        `<div class="row">${stops}<span style="margin-left:4px">含量低 → 高（同元素·同介质·同单位层内分位）</span></div>` +
+        `<div class="row"><i class="dot" style="background:#8fa6ae"></i>灰点 = 无可比数值（缺值或删失）</div>` +
+        `<div class="row" style="margin-top:4px"><i class="dot" style="background:#cfeeea"></i>圆点 = 精确时点（秒/分/日/月/年）</div>` +
+        `<div class="row"><i class="dia" style="background:#cfeeea"></i>菱形 = 年段记录（置于区间中点）</div>`;
+      return;
+    }
     const rows = ELEMENTS
       .filter(e => state.element === "ALL" || e === state.element)
       .map(e => `<div class="row"><i class="dot" style="background:${elementColor[e]};box-shadow:0 0 8px ${elementColor[e]}"></i>${e}</div>`)
@@ -526,6 +727,19 @@ function updateLegend() {
 /* ====== 空状态 ====== */
 function updateEmptyState() {
   const empty = $("mapEmpty");
+  if (state.mode === "compare") {
+    if (!HAS_DATED) {
+      empty.innerHTML = `<strong>本数据集无带采样时刻的记录</strong><span>区域对比、采样史回放与站点演变都依赖发布方报告的采样时刻——这是时间元数据缺口，不代表没有观测。可开启「显示无时间记录」查看空间分布。</span>`;
+      empty.style.display = "block";
+    } else if (state.element === "ALL") {
+      empty.innerHTML = `<strong>请先选定一个元素</strong><span>不同元素的含量之间不可比，区域对比只在「同元素 × 同介质 × 同单位」内进行。请在上方元素栏选择一个元素。</span>`;
+      empty.style.display = "block";
+    } else if (compareSummary.comparable === 0) {
+      empty.innerHTML = `<strong>当前条件下没有可比的区域格子</strong><span>「${state.element}」在分割年 ${state.splitYear} 前后，没有任何 ${CELL_DEG}° 格子早晚两期都有 ≥2 条数值观测（共 ${compareSummary.single} 个格子只有单期数据）。可拖动下方分割线换分期、切换介质或元素——这是时序覆盖缺口，不代表该区域含量没有变化。</span>`;
+      empty.style.display = "block";
+    } else empty.style.display = "none";
+    return;
+  }
   if (state.mode === "station") {
     const visible = state.element === "ALL" ? STATIONS.length : STATIONS.filter(s => s.series[state.element]).length;
     if (visible === 0) {
@@ -591,6 +805,26 @@ function drawTimeline() {
     tctx.fillStyle = "#6f8f94";
   }
   tctx.textAlign = "left";
+  if (state.mode === "compare") {
+    /* 对比模式：单条分割线，把观测切成早期 / 晚期两组 */
+    tctx.fillText(`早期 < ${state.splitYear} ｜ 晚期 ≥ ${state.splitYear} · 拖动分割线改变分期 · 金色柱段 = 年段记录`, 2, TL_PAD.t + 8);
+    const xs = tlX(state.splitYear);
+    tctx.fillStyle = "rgba(103,230,216,.07)";
+    tctx.fillRect(TL_PAD.l, TL_PAD.t, Math.max(0, xs - TL_PAD.l), innerH);
+    tctx.fillStyle = "rgba(255,180,107,.08)";
+    tctx.fillRect(xs, TL_PAD.t, Math.max(0, TLW - TL_PAD.r - xs), innerH);
+    tctx.strokeStyle = "#ffd9a8"; tctx.lineWidth = 2;
+    tctx.beginPath(); tctx.moveTo(xs, TL_PAD.t); tctx.lineTo(xs, TL_PAD.t + innerH); tctx.stroke();
+    tctx.beginPath();
+    if (tctx.roundRect) tctx.roundRect(xs - 14, TL_PAD.t - 1, 28, 13, 4);
+    else tctx.rect(xs - 14, TL_PAD.t - 1, 28, 13);
+    tctx.fillStyle = "#3a2c17"; tctx.fill();
+    tctx.strokeStyle = "#ffd9a8"; tctx.lineWidth = 1; tctx.stroke();
+    tctx.fillStyle = "#ffe9c9"; tctx.font = "800 9px Inter,'Noto Sans SC',sans-serif"; tctx.textAlign = "center";
+    tctx.fillText(String(state.splitYear), xs, TL_PAD.t + 9);
+    tctx.textAlign = "left";
+    return;
+  }
   tctx.fillText(`峰值 ${peak} 条/年 · 金色柱段 = 年段记录`, 2, TL_PAD.t + 8);
   const xa = tlX(state.win[0]), xb = tlX(state.win[1]);
   tctx.fillStyle = "rgba(3,15,23,.55)";
@@ -615,8 +849,26 @@ function tlPointerT(e) {
   const rect = tlCanvas.getBoundingClientRect();
   return tlT(e.clientX - rect.left);
 }
+function setSplitYear(y) {
+  y = Math.round(Math.max(YEAR_MIN + 1, Math.min(YEAR_MAX, y)));
+  if (y === state.splitYear) return;
+  state.splitYear = y;
+  computeCells();
+  state.activeCell = null;
+  closeStation();
+  updateEmptyState();
+  updateCounter();
+  drawTimeline();
+  scheduleDraw();
+}
 tlCanvas.addEventListener("pointerdown", e => {
   const t = tlPointerT(e);
+  if (state.mode === "compare") {
+    tlDrag = { kind: "split" };
+    setSplitYear(t);
+    tlCanvas.setPointerCapture(e.pointerId);
+    return;
+  }
   const xa = tlX(state.win[0]), xb = tlX(state.win[1]);
   const rect = tlCanvas.getBoundingClientRect(), px = e.clientX - rect.left;
   stopPlay();
@@ -633,6 +885,7 @@ tlCanvas.addEventListener("pointerdown", e => {
 tlCanvas.addEventListener("pointermove", e => {
   if (!tlDrag) return;
   const t = tlPointerT(e);
+  if (tlDrag.kind === "split") { setSplitYear(t); return; }
   if (tlDrag.kind === "a") setWindow(Math.min(t, state.win[1] - 0.25), state.win[1]);
   else if (tlDrag.kind === "b") setWindow(state.win[0], Math.max(t, state.win[0] + 0.25));
   else {
@@ -725,8 +978,22 @@ mapCanvas.addEventListener("pointerup", e => {
     }
     if (best) openStation(best.idx);
     else closeStation();
+  } else if (state.mode === "compare") {
+    const rect = mapCanvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const hit = pickCell(mx, my);
+    if (hit) openCell(hit.cell);
+    else { state.activeCell = null; closeStation(); }
   }
 });
+function pickCell(mx, my) {
+  /* 可比格子排在数组尾部（后画在上层），倒序拾取保证优先命中可比格子 */
+  for (let i = hitCells.length - 1; i >= 0; i--) {
+    const h = hitCells[i];
+    if (mx >= h.x0 && mx <= h.x1 && my >= h.y0 && my <= h.y1) return h;
+  }
+  return null;
+}
 mapCanvas.addEventListener("pointerleave", () => {
   state.hoverRec = null;
   tooltip.style.display = "none";
@@ -750,6 +1017,16 @@ $("zoomOut").addEventListener("click", () => { state.view.zoom = Math.max(0.85, 
 $("zoomReset").addEventListener("click", () => { state.view = { lon: 12, lat: 12, zoom: 1 }; scheduleDraw(); });
 
 function handleHover(mx, my, cx, cy) {
+  if (state.mode === "compare") {
+    const hit = pickCell(mx, my);
+    const prev = state.hoverCell;
+    state.hoverCell = hit ? hit.cell : null;
+    if (hit) showCellTooltip(hit.cell, cx, cy);
+    else tooltip.style.display = "none";
+    mapCanvas.style.cursor = hit ? "pointer" : "grab";
+    if (prev !== state.hoverCell) scheduleDraw();
+    return;
+  }
   if (state.mode === "replay") {
     let best = null, bd = 81;
     for (const h of hitPoints) {
@@ -799,6 +1076,24 @@ function showRecTooltip(r, cx, cy) {
     `<div class="t-muted">样品 ${r[10]}</div><div class="t-muted">来源 ${SOURCES[r[4]]}</div>`;
   positionTooltip(cx, cy);
 }
+function cellRangeText(cell) {
+  const lon0 = cell.gx * CELL_DEG, lat0 = cell.gy * CELL_DEG;
+  const fmtLon = v => `${Math.abs(v)}°${v < 0 ? "W" : "E"}`;
+  const fmtLat = v => `${Math.abs(v)}°${v < 0 ? "S" : "N"}`;
+  return `${fmtLon(lon0)}–${fmtLon(lon0 + CELL_DEG)}, ${fmtLat(lat0)}–${fmtLat(lat0 + CELL_DEG)}`;
+}
+function showCellTooltip(cell, cx, cy) {
+  const head = cell.comparable
+    ? `<div class="t-el" style="color:${DELTA_COLOR[cell.cls]}">${state.element} ${DELTA_LABEL[cell.cls]} · ${cell.delta > 0 ? "+" : ""}${(cell.delta * 100).toFixed(0)}%</div>`
+    : `<div class="t-el" style="color:#9db0bd">${state.element} · 仅单期观测，无法比较</div>`;
+  const body = cell.comparable
+    ? `<div>早期中位 ${shortNum(cell.mE)} → 晚期中位 ${shortNum(cell.mL)} ${cell.unit}</div><div>观测数 早 ${cell.nE} / 晚 ${cell.nL} · ${mediumLabel(MEDIA[cell.med])}</div>`
+    : `<div>观测数 早 ${cell.nE} / 晚 ${cell.nL}（两期各需 ≥2 条数值观测）· ${mediumLabel(MEDIA[cell.med])}</div>`;
+  tooltip.innerHTML = head + body +
+    `<div class="t-muted">格子 ${cellRangeText(cell)} · 分割年 ${state.splitYear}</div>` +
+    `<div class="t-muted">点击查看该区域的含量—时间散点</div>`;
+  positionTooltip(cx, cy);
+}
 function showStationTooltip(st, cx, cy) {
   const els = Object.keys(st.series).sort();
   tooltip.innerHTML =
@@ -839,10 +1134,112 @@ function openStation(idx) {
 }
 function closeStation() {
   state.activeStation = -1;
+  state.activeCell = null;
   $("stationPopup").style.display = "none";
   scheduleDraw();
 }
 $("popupClose").addEventListener("click", closeStation);
+
+/* ====== 区域对比：格子弹窗（同一区域的含量—时间散点） ====== */
+function openCell(cell) {
+  state.activeCell = cell;
+  state.activeStation = -1;
+  $("popupTitle").textContent = `${state.element} · ${mediumLabel(MEDIA[cell.med])} · ${CELL_DEG}° 格子`;
+  $("popupCoords").textContent = cellRangeText(cell);
+  $("popupMeta").textContent = cell.comparable
+    ? `${DELTA_LABEL[cell.cls]} ${cell.delta > 0 ? "+" : ""}${(cell.delta * 100).toFixed(0)}% · 早期中位 ${shortNum(cell.mE)} → 晚期中位 ${shortNum(cell.mL)} ${cell.unit} · 观测 早 ${cell.nE} / 晚 ${cell.nL}`
+    : `仅单期观测（早 ${cell.nE} / 晚 ${cell.nL}），无法比较——需早晚两期各 ≥2 条数值观测`;
+  $("popupTabs").innerHTML = "";
+  const trendEl = $("popupTrend");
+  if (cell.comparable) {
+    trendEl.style.display = "";
+    trendEl.className = "p-trend " + (cell.cls === "up" ? "rising" : (cell.cls === "down" ? "falling" : "stable"));
+    trendEl.textContent = `${state.element} 两期中位对比：${DELTA_LABEL[cell.cls]}`;
+  } else trendEl.style.display = "none";
+  $("popupNote").textContent = "散点为该格子内全部带采样时刻的数值观测（空心倒三角 = 删失点，按检出限绘制，不参与中位数）。两期对比只描述观测中位数的变化，不外推、不代表成因。";
+  const popup = $("stationPopup");
+  popup.style.display = "block";
+  const wrapRect = mapWrap.getBoundingClientRect();
+  const px = (project(cell.gx * CELL_DEG + CELL_DEG / 2, cell.gy * CELL_DEG + CELL_DEG / 2));
+  const pw = Math.min(392, wrapRect.width * 0.86);
+  let x = px[0] + 24, y = px[1] - 60;
+  if (x + pw > wrapRect.width - 10) x = px[0] - pw - 24;
+  if (x < 10) x = 10;
+  y = Math.max(10, Math.min(y, wrapRect.height - 330));
+  popup.style.left = x + "px"; popup.style.top = y + "px";
+  renderCellChart(cell);
+  scheduleDraw();
+}
+function renderCellChart(cell) {
+  const cw = chartCanvas.clientWidth || 360, ch = 172;
+  chartCanvas.width = Math.round(cw * dpr); chartCanvas.height = Math.round(ch * dpr);
+  cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cctx.clearRect(0, 0, cw, ch);
+  const P = { l: 46, r: 12, t: 12, b: 22 };
+  /* 绘图包含删失点（按检出限画空心三角），但中位数与格子统计只用实测值 */
+  const pts = cell.recs
+    .map(r => [r[6], r[11] !== null ? r[11] : (r[13] && r[14] !== null ? r[14] : null), r[13]])
+    .filter(p => p[1] !== null);
+  if (!pts.length) return;
+  const ts = pts.map(p => p[0]);
+  const vals = pts.map(p => p[1]);
+  let t0 = Math.min.apply(null, ts), t1 = Math.max.apply(null, ts);
+  if (t1 - t0 < 1) { t0 -= 0.5; t1 += 0.5; }
+  const vmin0 = Math.min.apply(null, vals), vmax0 = Math.max.apply(null, vals);
+  const vpad = (vmax0 - vmin0) * 0.14 || Math.abs(vmax0) * 0.2 || 1;
+  const vmin = Math.max(0, vmin0 - vpad), vmax = vmax0 + vpad;
+  const X = t => P.l + (t - t0) / (t1 - t0) * (cw - P.l - P.r);
+  const Y = v => ch - P.b - (v - vmin) / (vmax - vmin) * (ch - P.t - P.b);
+  cctx.strokeStyle = "rgba(130,198,198,.12)"; cctx.lineWidth = 1;
+  cctx.fillStyle = "#6f8f94"; cctx.font = "9px Inter,'Noto Sans SC',sans-serif";
+  for (let i = 0; i <= 3; i++) {
+    const v = vmin + (vmax - vmin) * i / 3, y = Y(v);
+    cctx.beginPath(); cctx.moveTo(P.l, y); cctx.lineTo(cw - P.r, y); cctx.stroke();
+    cctx.textAlign = "right";
+    cctx.fillText(shortNum(v), P.l - 4, y + 3);
+  }
+  cctx.textAlign = "center";
+  const span = t1 - t0, yrStep = span > 8 ? 5 : (span > 3 ? 2 : 1);
+  for (let y = Math.ceil(t0); y <= Math.floor(t1); y++) {
+    if (y % yrStep !== 0) continue;
+    cctx.fillText(String(y), X(y), ch - 8);
+  }
+  cctx.save();
+  cctx.translate(11, (ch - P.b + P.t) / 2); cctx.rotate(-Math.PI / 2);
+  cctx.fillText(cell.unit || "数值", 0, 0);
+  cctx.restore();
+  /* 分割线 */
+  if (state.splitYear > t0 && state.splitYear < t1) {
+    const xs = X(state.splitYear);
+    cctx.strokeStyle = "rgba(255,217,168,.7)"; cctx.lineWidth = 1.2; cctx.setLineDash([4, 4]);
+    cctx.beginPath(); cctx.moveTo(xs, P.t); cctx.lineTo(xs, ch - P.b); cctx.stroke();
+    cctx.setLineDash([]);
+    cctx.fillStyle = "#ffe9c9"; cctx.textAlign = "center";
+    cctx.fillText(String(state.splitYear), xs, P.t + 2);
+  }
+  /* 两期中位横线 */
+  if (cell.comparable) {
+    for (const [m, a, b, color] of [[cell.mE, t0, state.splitYear, "#67e6d8"], [cell.mL, state.splitYear, t1, "#ffb46b"]]) {
+      const xa = X(Math.max(t0, a)), xb = X(Math.min(t1, b)), y = Y(m);
+      cctx.strokeStyle = color; cctx.lineWidth = 2;
+      cctx.beginPath(); cctx.moveTo(xa, y); cctx.lineTo(xb, y); cctx.stroke();
+    }
+  }
+  /* 散点：早期青 / 晚期橙，删失空心倒三角 */
+  for (const p of pts) {
+    const x = X(p[0]), y = Y(p[1]);
+    const color = p[0] < state.splitYear ? "#67e6d8" : "#ffb46b";
+    if (p[2]) {
+      cctx.beginPath();
+      cctx.moveTo(x, y + 4); cctx.lineTo(x - 4, y - 3.2); cctx.lineTo(x + 4, y - 3.2); cctx.closePath();
+      cctx.strokeStyle = color; cctx.lineWidth = 1.3; cctx.stroke();
+    } else {
+      cctx.beginPath(); cctx.arc(x, y, 3.2, 0, Math.PI * 2);
+      cctx.fillStyle = color; cctx.fill();
+      cctx.strokeStyle = "rgba(4,20,29,.9)"; cctx.lineWidth = 1; cctx.stroke();
+    }
+  }
+}
 
 function shortNum(v) {
   if (v === 0) return "0";
@@ -857,6 +1254,7 @@ function renderStationChart() {
   const series = st.series[state.popupElement];
   const tr = series.trend;
   const trendEl = $("popupTrend");
+  trendEl.style.display = "";
   trendEl.className = "p-trend " + tr.class;
   const slopeTxt = tr.slope !== null ? `斜率 ${tr.slope > 0 ? "+" : ""}${tr.slope} ${series.unit || ""}/年 · ` : "";
   trendEl.textContent = `${state.popupElement} 趋势：${TREND_LABEL[tr.class]} · ${slopeTxt}数值点 ${tr.n_numeric} / 时相 ${series.points.length}`;
@@ -954,20 +1352,35 @@ function renderStationList() {
 }
 
 /* ====== 模式与过滤控件 ====== */
+const MODE_BADGE = { compare: "区域对比", replay: "采样史回放", station: "站点演变" };
 function setMode(m) {
   state.mode = m;
   stopPlay();
   closeStation();
-  $("modeReplay").classList.toggle("active", m === "replay");
-  $("modeStation").classList.toggle("active", m === "station");
-  $("modeReplay").setAttribute("aria-selected", String(m === "replay"));
-  $("modeStation").setAttribute("aria-selected", String(m === "station"));
-  $("timelinePanel").style.display = m === "replay" ? "" : "none";
+  state.activeCell = null;
+  for (const [btn, key] of [["modeCompare", "compare"], ["modeReplay", "replay"], ["modeStation", "station"]]) {
+    $(btn).classList.toggle("active", m === key);
+    $(btn).setAttribute("aria-selected", String(m === key));
+  }
+  $("timelinePanel").style.display = (m === "replay" || m === "compare") ? "" : "none";
+  $("playBtn").style.display = m === "replay" ? "" : "none";
+  $("speedSel").style.display = m === "replay" ? "" : "none";
+  $("resetWin").style.display = m === "replay" ? "" : "none";
   $("stationPanel").style.display = m === "station" ? "block" : "none";
-  $("badgeMode").textContent = m === "replay" ? "采样史回放" : "站点演变";
-  $("modeNote").innerHTML = m === "replay"
-    ? `拖动或播放时间轴回放采样史；<b>金色柱段</b>为年段记录（按区间中点计年）。仅 ${STATS.dated_records} 条（${(STATS.dated_share * 100).toFixed(1)}%）带采样时刻的记录参与回放。`
-    : `站点 = 同一位置 ≥3 个采样时相（GEMStat 站号前缀 / us-wqp 站点等）。标记颜色 = 浓度趋势（暖=上升 / 冷=下降 / 中性=平稳）；点击查看浓度—时间序列。`;
+  $("colorSeg").style.display = m === "replay" ? "" : "none";
+  $("badgeMode").textContent = MODE_BADGE[m];
+  if (m === "compare") {
+    /* 区域对比需要选定单个元素——跨元素含量不可比 */
+    if (state.element === "ALL" && HAS_DATED) selectElement(bestCompareElement());
+    computeCells();
+    $("modeNote").innerHTML =
+      `同一个 ${CELL_DEG}° 格子（同介质、同单位）里早晚两期都有 ≥2 条数值观测时，直接对比两期<b>中位含量</b>：` +
+      `<b style="color:${DELTA_COLOR.up}">红=上升</b> / <b style="color:${DELTA_COLOR.down}">蓝=下降</b> / 灰=持平；虚线暗格 = 只有单期观测，无法比较。点击格子看该区域的含量—时间散点。`;
+  } else {
+    $("modeNote").innerHTML = m === "replay"
+      ? `拖动或播放时间轴回放采样史，点色默认表示<b>该元素同介质同单位层内的含量高低</b>；<b>金色柱段</b>为年段记录（按区间中点计年）。仅 ${STATS.dated_records} 条（${(STATS.dated_share * 100).toFixed(1)}%）带采样时刻的记录参与回放。`
+      : `站点 = 同一位置 ≥3 个采样时相（GEMStat 站号前缀 / us-wqp 站点等）。标记颜色 = 浓度趋势（暖=上升 / 冷=下降 / 中性=平稳）；点击查看浓度—时间序列。`;
+  }
   state.filterFadeStart = performance.now();
   updateEmptyState();
   updateKpis();
@@ -976,9 +1389,19 @@ function setMode(m) {
   if (m === "station") renderStationList(); else drawTimeline();
   scheduleDraw();
 }
+$("modeCompare").addEventListener("click", () => setMode("compare"));
 $("modeReplay").addEventListener("click", () => setMode("replay"));
 $("modeStation").addEventListener("click", () => setMode("station"));
 
+function selectElement(val) {
+  state.element = val;
+  $("elementChips").querySelectorAll(".chip").forEach(x => x.classList.toggle("active", x.dataset.el === val));
+  updateLegend();
+  if (state.mode === "station") {
+    renderStationList(); updateEmptyState(); updateCounter();
+    state.filterFadeStart = performance.now(); scheduleDraw();
+  } else refilter();
+}
 function buildChips() {
   const elWrap = $("elementChips");
   const counts = {};
@@ -988,15 +1411,17 @@ function buildChips() {
     (dot ? "<i></i>" : "") + `${label}${count !== undefined ? ` <small>${count}</small>` : ""}</button>`;
   elWrap.insertAdjacentHTML("beforeend", mk("ALL", "全部元素", null, REC.length));
   ELEMENTS.forEach(e => elWrap.insertAdjacentHTML("beforeend", mk(e, e, elementColor[e], counts[e] || 0)));
-  elWrap.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
-    state.element = b.dataset.el;
-    elWrap.querySelectorAll(".chip").forEach(x => x.classList.toggle("active", x === b));
-    updateLegend();
-    if (state.mode === "station") {
-      renderStationList(); updateEmptyState(); updateCounter();
-      state.filterFadeStart = performance.now(); scheduleDraw();
-    } else refilter();
-  }));
+  elWrap.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => selectElement(b.dataset.el)));
+  $("colorConc").addEventListener("click", () => {
+    state.colorBy = "conc";
+    $("colorConc").classList.add("active"); $("colorElement").classList.remove("active");
+    updateLegend(); state.filterFadeStart = performance.now(); scheduleDraw();
+  });
+  $("colorElement").addEventListener("click", () => {
+    state.colorBy = "element";
+    $("colorElement").classList.add("active"); $("colorConc").classList.remove("active");
+    updateLegend(); state.filterFadeStart = performance.now(); scheduleDraw();
+  });
   const medWrap = $("mediumChips");
   const mcounts = {};
   REC.forEach(r => { mcounts[MEDIA[r[3]]] = (mcounts[MEDIA[r[3]]] || 0) + 1; });
@@ -1041,6 +1466,7 @@ function renderFooter() {
     `<b>时间语义与诚实降级</b>：采样时刻取自 sampling_time / sampling_time_precision / sampling_time_status 三列，仅 publisher_reported 记录参与回放，publisher_not_reported / unparseable_raw_value 记录绝不假装有时间` +
     `（${STATS.dated_records}/${STATS.total_records} · ${(STATS.dated_share * 100).toFixed(1)}%）。精度构成：${precBits}。` +
     `年段记录显示为区间并置于中点参与排序。${unmapped}` +
+    `区域对比在同元素 · 同介质 · 同单位层内按 ${CELL_DEG}° 网格对比早晚两期实测中位数（删失点不参与统计），只描述观测变化，不外推、不代表成因。` +
     `其中 ${STATS.coordinate_fallback_used} 条使用发布方原始坐标回退（original_latitude_raw / original_longitude_raw，未规范化，图上有标注）。<br>` +
     `<b>制图</b>：海岸线 Natural Earth 1:110m Land（公有领域）· WGS84 等经纬投影 · 仅科学示意，不作法定边界依据。` +
     `数据集：${PAYLOAD.source_dataset} · 模板 temporal-atlas-v1。`;
@@ -1050,8 +1476,8 @@ function renderFooter() {
 buildChips();
 renderFooter();
 updateLegend();
-setMode("replay");
 refilter();
+setMode("compare");
 resize();
 setWindow(T_LO, T_HI);
 </script>
