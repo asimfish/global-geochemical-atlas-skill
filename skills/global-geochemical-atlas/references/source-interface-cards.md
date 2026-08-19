@@ -2,11 +2,11 @@
 
 > V4 内容寻址规则覆盖本文中早期接口卡的 checksum/hash 表述：当前同时使用 DOI/PID、版本、文件 ID/名称、发布/访问时间、字节数、SHA-256、schema、行数和关键统计；哈希证明字节一致性，不替代科学可信性审查。
 
-核对日期：2026-08-13。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
+核对日期：2026-08-16。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
 
 ## 覆盖偏差诊断与下一批来源
 
-当前目录含 58 个候选、26 个可执行适配器。按可重叠大区标签统计：Africa 4/2、Asia 9/7、Europe 17/9、North America 8/2、Oceania 4/2、South America 3/0、全球/跨区入口 11/4（斜线前为候选、后为可执行；一个来源可进入多个类别）。因此欧洲密集主要来自可公开下载、字段清楚且已完成适配的 FOREGS/GEMAS/国家产品，不是路由器给欧洲加权。`coverage-balanced_source_order` 首轮反而优先空间区 × 介质边际增益；后续轮次再轮换队列。
+当前目录含 65 条审计记录，其中 33 个已有可执行适配器、32 个仍为 discovery-only；证据分层为 A 32、B 1、D 32。欧洲密集主要来自可公开下载、字段清楚且已完成适配的 FOREGS/GEMAS/国家产品，不是路由器给欧洲加权。`coverage-balanced_source_order` 首轮优先空间区 × 介质边际增益，后续轮换完整队列；当前 5×3 区域门禁还会把国家内部空洞拆成 bbox 级补采动作组，并把新疆、西藏、台湾、华北等可命名行政区加入定向检索队列。
 
 按覆盖增益排序的下一批工作：
 
@@ -37,15 +37,34 @@
 
 ## 当前可执行样板来源
 
-V3 当前登记二十一项 `normalized_analysis` 来源：岩石二项、土壤八项、沉积物七项、水体四项；其中二十项为 A 级、一项为 B 级。30 条人工复核样本均只完成机器准备，尚未由具名人员签署，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
+V3 当前登记三十三项 `normalized_analysis` 来源：岩石三项、土壤十四项、沉积物十二项、水体四项；其中三十二项为 A 级、一项为 B 级。30 条人工复核样本均只完成机器准备，尚未由具名人员签署，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
+
+### `4tu-northern-china-sediment`
+
+- 介质与范围：中国北方—西北河流/冲积沉积物，并含黄土高原末次冰期黄土与现代间冰期古土壤；覆盖准噶尔、塔里木、柴达木、河套、阿拉善和青藏高原东部等发布方分区；
+- 接口与版本：4TU.ResearchData/Figshare 数据集 `10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0`，CC0；固定 workbook、README 和 KML 三个官方文件；
+- 校验：workbook 693,878 bytes / SHA-256 `6b06695e359986bf0a50c6d0febda08ffa25a61028c00cdadd60cc8426001232`，README 95,467 bytes / `ef1bfdf082c86529682bfbc0446b1f571db16935c4ea16ee3a2813726778fd76`，KML 2,479 bytes / `3633ceb7c8ddc639c1a646c0c5acc0f6264daa09f58f4c4121b8c5a64950678c`；
+- 对账：867 个样品、799 个坐标对、As/Cr/Cu/Hg/Ni/Pb/Zn 各 867 条，共 6,069 条观测；workbook 的 737 个表层沉积物样品与论文摘要的 738 个存在发布方口径差异，按文件实数保留并标记；
+- 方法与 QC：As 为王水消解后 HG-AFS，Cr 为熔片 XRF，Cu/Ni/Pb/Zn 为四酸消解 ICP-MS；README 还报告 3% 野外重复、实验室盲重复和标准物质。Hg 的逐元素技术没有在固定证据中说明，必须显式缺失；
+- 空间边界：发布方没有声明 datum/CRS 或位置不确定度，故坐标为 reported-only，不能进入 canonical WGS84 覆盖或空间异常计算。它实质补强新疆、西藏及中国北方的可追溯观测与方法证据，但不能伪装成 canonical 空间门禁已通过。
+
+### `earthchem-dehailonggang-rock`
+
+- 介质与范围：中国东昆仑北部西藏高原德海龙岗火山—深成杂岩，15 个 whole-rock 样品、两个发布方坐标对；它补足中国岩石介质与方法证据，但不是新疆或全国覆盖；
+- 接口与版本：EarthChem Library dataset 3338 version 1.0 (2024)，DOI `10.60520/IEDA/113338`，CC BY-SA 4.0；固定 POST 下载合同和四个精确成员；
+- 校验：ZIP 374,124 bytes，SHA-256 `38ac6ff1a0890dc6eb6fa92039c068ef8d46990953e1b83d7256572486898420`；主 workbook 33,004 bytes，SHA-256 `ccdc26ee169919144f7d1c8726eb8075c99b4d9cba30d249906f79c045a12ca7`；
+- 对账：Cr/Cu/Ni/Pb/Zn 各 15 条，共 75 条目标观测；方法表报告 ICP-MS、Agilent 7700e 与武汉上谱实验室，并通过样品键连接；
+- 边界：发布方未声明 CRS、位置不确定度、消解和检出限，因此坐标只作 reported 展示，不能进入 canonical 覆盖门禁，缺失字段不推断。
 
 ### `georoc-archaean`
 
 - 介质与范围：全球太古宙克拉通岩石，属于全球岩石覆盖的局部集合；
-- 接口：GRO.data Dataverse 版本化元数据 API 和完整 ZIP 下载；
+- 中国路由证据：冻结的 28 个发布方成员清单明确包含 `NORTH_CHINA_CRATON` 与 `YANGTZE_BLOCK`，因此可作为中国岩石补采的正向适用证据；该清单不是完整国家索引，成员内记录仍须按请求范围逐条筛选，也不把来源报告坐标升级为 WGS84；
+- 接口：GRO.data Dataverse 版本化元数据 API；完整 ZIP 不可用时，回退到同一冻结版本的 member persistent-ID 官方下载；
 - 版本：12.0，数据集 DOI `10.25625/1KRR1P`；
 - 许可：CC BY-SA 4.0，必须保留 GEOROC 与原始论文引用；
-- 校验：28 个成员文件名、大小、发布方 MD5 和本地 SHA-256；
+- 校验：整包与成员回退共用同一套 28 成员文件名、大小、发布方 MD5、必需字段和本地 SHA-256 门禁；回退批次全部通过后才原子发布；
+- 有界研究抽样：先按 28 个发布方克拉通成员轮转，再满足逐元素配额，避免 archive 文件顺序造成单一区域前缀偏差；
 - 适配器：`georoc_dataverse`，已实现；
 - 边界：预编译选择值不是所有重复测定的无筛选全集。
 

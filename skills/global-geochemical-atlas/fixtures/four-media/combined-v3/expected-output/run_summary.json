@@ -37,9 +37,9 @@
         "sha256": "4e9beaa87d6cba4a7313d8a5153f79ffd98d03ef978a333f59eec0799f2df4ae"
       },
       "interactive_map": {
-        "bytes": 1416986,
+        "bytes": 1677856,
         "filename": "interactive_map.html",
-        "sha256": "09c0ecbd87d6fd858a08fd48f1ba418216ce200f6b234320a340b43d4e125282"
+        "sha256": "a254934c4c16108a39919afcc90fdc42c07114a9ec69cde681ea7ca6adc177e8"
       },
       "iteration_backlog": {
         "bytes": 703571,
@@ -57,9 +57,9 @@
         "sha256": "84e2b2a558b52bcbb6fe20aafb99aecec6a20841224b55505e4a5ae6c2cb75ed"
       },
       "samples": {
-        "bytes": 327231,
+        "bytes": 327684,
         "filename": "samples.geojson",
-        "sha256": "202bd1f86be46bb093a8a84bbba2dfab62b4cb0395b0a9e52c6ac0e9e2b2285c"
+        "sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82"
       },
       "source_manifest": {
         "bytes": 43899,
@@ -127,12 +127,25 @@
     "Partial-success reasons: one_or_more_anomaly_background_groups_not_analyzed, one_or_more_records_not_map_eligible, spatial_candidate_region_background_insufficient."
   ],
   "map_report": {
+    "admin1_boundary_asset": {
+      "asset_version": "ai4s-natural-earth-admin1-china-visual-v1",
+      "boundary_count": 31,
+      "boundary_semantics": "Generalized Natural Earth Admin-1 linework for visual orientation only; not an authoritative or legal administrative boundary, spatial join, country-membership result, or scientific coverage evidence.",
+      "country_iso_a3": "CHN",
+      "license": "public domain",
+      "natural_earth_version": "5.1.1",
+      "point_count": 7868,
+      "source_commit": "ca96624a56bd078437bca8184e78163e5039ad19",
+      "source_geojson_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_admin_1_states_provinces.geojson",
+      "source_sha256": "69a0e06e640b2d505858ae1cb63034e4677f3000b35a98e16312932b98c426b9",
+      "title": "Natural Earth 1:50m China Admin-1 visual boundaries"
+    },
     "anomaly_region_render_mode": "zoom-adaptive-anomaly-bubbles-v1",
     "artifact_bindings": {
       "anomalies_sha256": "9221a087e73e8cf794b15a29c86c1880cfc5ccf24da821723c381c8689f29702",
       "database_sha256": "4e9beaa87d6cba4a7313d8a5153f79ffd98d03ef978a333f59eec0799f2df4ae",
-      "interactive_map_sha256": "09c0ecbd87d6fd858a08fd48f1ba418216ce200f6b234320a340b43d4e125282",
-      "samples_geojson_sha256": "202bd1f86be46bb093a8a84bbba2dfab62b4cb0395b0a9e52c6ac0e9e2b2285c"
+      "interactive_map_sha256": "a254934c4c16108a39919afcc90fdc42c07114a9ec69cde681ea7ca6adc177e8",
+      "samples_geojson_sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82"
     },
     "basemap": {
       "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
@@ -172,12 +185,14 @@
         "hierarchy_version": "atlas-progressive-disclosure-v2",
         "keyboard_map_navigation": true,
         "localized_measurement_basis": true,
+        "optional_china_admin1_orientation_boundaries": true,
         "professional_navigation_labels": true,
         "recoverable_map_navigation": true,
         "regional_combination_scope_lock_supported": true,
         "regional_pan_without_scope_expansion": true,
         "research_patch_crud": "proposal_only_no_direct_mutation",
         "single_primary_navigation": true,
+        "single_world_no_repeat_planar_navigation": true,
         "template_contract_version": "d3-domain-confidence-atlas-v5",
         "terminology_contract": "competition-geochemistry-v1"
       },
@@ -209,6 +224,9 @@
     "coordinate_statistics": {
       "canonical_coordinate_records": 856,
       "coordinate_mode": "canonical",
+      "embedded_canonical_records": 856,
+      "embedded_record_count": 856,
+      "embedded_reported_fallback_records": 0,
       "mapped_canonical_records": 856,
       "mapped_record_count": 856,
       "mapped_reported_fallback_records": 0,
@@ -253,20 +271,47 @@
           "sample_count": 85
         }
       },
+      "evidence_layer_counts": {
+        "strict_scientific_ready": 693,
+        "traceable_screening_only": 163
+      },
       "geologic_unit_completeness_rate": 0.0,
       "geologic_unit_missing_record_count": 856,
+      "geological_background_completeness_rate": 1.0,
+      "geological_background_missing_record_count": 0,
       "interpretation": "Sample type and analytical method are independent fields; media count imbalance describes input coverage, not concentration or anomaly prevalence.",
       "method_completeness_rate": 0.88785,
       "method_missing_record_count": 96,
-      "sample_type_field": "medium"
+      "provenance_status_counts": {
+        "strict_complete": 856
+      },
+      "quality_control_status_counts": {
+        "completed_with_flags": 848,
+        "failed_or_excluded": 8
+      },
+      "sample_type_field": "medium",
+      "strict_scientific_ready_rate": 0.809579
     },
     "database_visual_summary_schema": "d3-database-visual-summary-v1",
     "default_view": "all_data_sample_deduplicated",
     "display_sample_count": 274,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1416986,
+    "html_bytes": 1677856,
     "interpolation": false,
+    "map_preview_sampling": {
+      "applied": false,
+      "candidate_anomaly_records_preserved": true,
+      "complete_database_artifact": "geochemistry.csv",
+      "embedded_physical_sample_count": 274,
+      "embedded_record_count": 856,
+      "input_physical_sample_count": 274,
+      "input_record_count": 856,
+      "maximum_embedded_records": 50000,
+      "policy_version": "d3-coverage-preserving-preview-v1",
+      "stratification_cell_degrees": null,
+      "whole_physical_sample_groups_preserved": true
+    },
     "map_version": "d3-interactive-atlas-v3",
     "mapped_record_count": 856,
     "region_coverage": {
@@ -433,8 +478,9 @@
       "custom_bbox"
     ],
     "reported_coordinate_banner": false,
-    "samples_geojson_bytes": 327231,
+    "samples_geojson_bytes": 327684,
     "scope_excluded_mappable_record_count": 0,
+    "scope_mappable_record_count": 856,
     "source_mappable_record_count": 856,
     "spatial_scope": {
       "bounds": {
@@ -451,7 +497,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-domain-confidence-atlas-v5",
-    "template_sha256": "7a566662bf892e22f1d211403c0ad3c89dcb22b9826897c1302cd9787e23e41d",
+    "template_sha256": "8cf96dbfe5800c9e23b95961258f9c3f9e1ab3f6f729239e040a296fe86fd300",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "atlas-progressive-disclosure-v2",

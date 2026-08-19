@@ -557,12 +557,40 @@ def score_source(
     observed_metadata = (
         candidate.get("observed_metadata") if isinstance(candidate, Mapping) else None
     )
-    if isinstance(observed_metadata, Mapping) and (
+    method_qc_audit = (
+        observed_metadata.get("method_qc_audit")
+        if isinstance(observed_metadata, Mapping)
+        else None
+    )
+    method_qc_audit_verified = bool(
+        isinstance(method_qc_audit, Mapping)
+        and method_qc_audit.get("status") == "verified"
+        and isinstance(method_qc_audit.get("observation_denominator"), int)
+        and method_qc_audit["observation_denominator"] > 0
+        and isinstance(method_qc_audit.get("method_present_observations"), int)
+        and isinstance(method_qc_audit.get("explicit_method_missing_observations"), int)
+        and method_qc_audit["method_present_observations"]
+        + method_qc_audit["explicit_method_missing_observations"]
+        == method_qc_audit["observation_denominator"]
+        and bool(method_qc_audit.get("explicit_method_missing_reason"))
+        and isinstance(method_qc_audit.get("method_evidence_file_sha256"), str)
+        and len(method_qc_audit["method_evidence_file_sha256"]) == 64
+        and bool(method_qc_audit.get("qc_scope"))
+        and method_qc_audit.get("qc_evidence_present") is True
+    )
+    if method_qc_audit_verified:
+        method_status: EvidenceStatus = "verified"
+        method_note = (
+            "The complete observation denominator is reconciled to documented methods "
+            "or one explicit publisher-level missing reason, and QC scope is bound to a "
+            "content-addressed evidence file."
+        )
+    elif isinstance(observed_metadata, Mapping) and (
         observed_metadata.get("partial_digestion_disclosed")
         or observed_metadata.get("target_llq_values_mg_per_kg")
         or observed_metadata.get("accreditation_rows")
     ):
-        method_status: EvidenceStatus = "partial"
+        method_status = "partial"
         method_note = "Digestion scope, LLQ and accreditation evidence are available, but method/QC coverage is not complete."
     elif registry_entry is not None:
         method_status = "partial"

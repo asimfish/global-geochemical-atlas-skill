@@ -1,1284 +1,1407 @@
 {
   "artifacts": [
     {
-      "bytes": 31971,
+      "bytes": 33277,
       "path": "assets/v4-coverage-balance.json",
-      "sha256": "ef25cf58608e2826c6b41e52fee2f52943536f745361bae58a4e818e6954e4b3"
+      "sha256": "682e2e13574dc588eec5ab03416b263ad368d58f152786920543a4cf7b716a1d"
     },
     {
-      "bytes": 3281565,
+      "bytes": 6844749,
       "path": "assets/v4-coverage-cube.csv",
-      "sha256": "759c9a808e3e799d46242663c4798619568aa45dc3cfc4768004f4258e2d28c6"
+      "sha256": "1714d5ca5656f62825522b3ac6fabee5447cf640ac770c6136340ec06f32bc1e"
+    },
+    {
+      "bytes": 3636,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/automation_health.json",
+      "sha256": "2f9b303d3566b2b6b3b152414d78daff31f93be0526e49c4d94dc6ac4a1f5959"
+    },
+    {
+      "bytes": 840,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/citation_coverage.json",
+      "sha256": "3528a0968cd5ffffe4071c6a73b757205f33ea908f892c519d7e33fccfa06e24"
+    },
+    {
+      "bytes": 4911,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/field_completeness.json",
+      "sha256": "32040f33eb58a4567acffd37e95d70412571c1706614a94d4d312dd3e5eca271"
+    },
+    {
+      "bytes": 756,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/geology_coverage.json",
+      "sha256": "0f07b291e485019228fbb4bad941270705193ea2df60d75240a65330dec105e5"
+    },
+    {
+      "bytes": 884,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/method_completeness.json",
+      "sha256": "2db1023b41b4788eba4ba0b930fdccdb63e46373f397d82f9e91549cf424101a"
+    },
+    {
+      "bytes": 970,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/sample_type_coverage.json",
+      "sha256": "f367df21ad23f7d4a33e5d3b10fb016da4ab6487c407da91d19519cd6b936f91"
+    },
+    {
+      "bytes": 6202,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/spatial_coverage.json",
+      "sha256": "568627e04f15ebe0cbf2e84e66458ee2fcf87f007e02ada49ffbc96b956324d8"
+    },
+    {
+      "bytes": 952,
+      "path": "assets/v4-full-profiles/4tu-northern-china-sediment/usage_rights_coverage.json",
+      "sha256": "c521d4323380ac7b26d230fbdad128d1c3b89f7ad5ead312c67f8e2af2edc3ea"
     },
     {
       "bytes": 2976,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/automation_health.json",
-      "sha256": "30c089a73493c6f7ce10fc7d5e7563a8c8910ddfe3267907706e1f4487f419bc"
+      "sha256": "1316a86d2c35e1c27210ebb7cce357cc623873a7a1a8d49d2bc0d57f556f8ce3"
     },
     {
       "bytes": 790,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/citation_coverage.json",
-      "sha256": "65f18ae05ac3cb5f38eadb30711311baf46feae859b4b8b99e33fca846071741"
+      "sha256": "89dd92943f294dfa34e9309b928f99ffc727633c85177b143208c480057f63fc"
     },
     {
       "bytes": 4943,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/field_completeness.json",
-      "sha256": "14027543cfb81c2cf519c64687b5bf29d6479ab50186f6127dc6b9a5def3c5c9"
+      "sha256": "f40dbbe572a31560ca5166e6349cc5012d28d4423eb308518e02eaa5dea55c60"
     },
     {
       "bytes": 734,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/geology_coverage.json",
-      "sha256": "50426db8389125430b4e415eee8ef2f734c936931ac44ffbb61917736796572b"
+      "sha256": "5c80260fe412a89cbc435787862f810317c6dd052ed379599a4ddd1991c46493"
     },
     {
       "bytes": 745,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/method_completeness.json",
-      "sha256": "a42fa842923548d378c837f5d97d924579026ec48b8b29067962283181f366e3"
+      "sha256": "0f3679c862b689e096f9611ca75feb88225914fa68c6b86d2a6840c28533fb27"
     },
     {
       "bytes": 791,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/sample_type_coverage.json",
-      "sha256": "c86f3c76638569f4f7025a07eab866ef8e05b1e40fc298d2afc62f5aa4f7fc23"
+      "sha256": "6b608ef04115d6a2bc037c60083c1b13295c7bb9d7c8346c4f8faa5182c3aacc"
     },
     {
       "bytes": 2685,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/spatial_coverage.json",
-      "sha256": "e532e0a45abca0155d3a25a353cbca0f962ab3422d236b06ae1d493dd3baf706"
+      "sha256": "3b903df36e6305eff43fc54cba1636f06aaa0b2067d093cca45377714d93edfb"
     },
     {
       "bytes": 929,
       "path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/usage_rights_coverage.json",
-      "sha256": "4262d2b6a84baf23f0062fe3998fb58b4b2f1c05e31f52c672530ef4bba3a874"
+      "sha256": "f190c8c5fad1fe769a9ec8a8da4b26d06f986fbd9dbfe2c69a77d24d7b6d0b96"
     },
     {
       "bytes": 1967,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/automation_health.json",
-      "sha256": "214ebb40856e8a39710f70c974be6a91dde7ba20e86ecea28fce110f2ce441f9"
+      "sha256": "1cb98096d9fd5d00ba7f15cec3a4fd4485a282cc7ee369c1cac54ee8dc7a6515"
     },
     {
       "bytes": 785,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/citation_coverage.json",
-      "sha256": "b1f62c247151de45036bd3b71dffcc7fa65c6fd3fe71a0d2a42dd52177c8c0e3"
+      "sha256": "20dd6f4e01b18d8b9de314e876c24cff8a4c70aab77dc200a415263c560f7d45"
     },
     {
       "bytes": 4869,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/field_completeness.json",
-      "sha256": "4b9e28828d19d376cbfdd7cb31079f2de809f4fd5a5bc44801beb4d7ec0acfda"
+      "sha256": "e83326580e15e25e777ca9669b1365ad33ee53a6a68d140dc7354fdeb88ec3ea"
     },
     {
       "bytes": 735,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/geology_coverage.json",
-      "sha256": "f5caf8a09cd2b801808449a95886353d07d1a15aabe0f727898d34f6c0540712"
+      "sha256": "17f70e23154f7675e5ddcf1afc4cdf5d17a3be6cbf3bc8c97b5be4d7e019a888"
     },
     {
       "bytes": 705,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/method_completeness.json",
-      "sha256": "50f49bf2c41f0c6c8336ad930450d8720ca60b7573d43a68b8a1ae8a48faaf8e"
+      "sha256": "0bb2d3b8760755a9a9124187d1a852a211b594312fd651c3190322ece87fe204"
     },
     {
       "bytes": 812,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/sample_type_coverage.json",
-      "sha256": "a293272f715ffe2e16a27a31b4c1bb9a27e5df7d71993f2e1e8add98b4a8f50d"
+      "sha256": "f591002374cb10cfc08ca9a26c9d9343d75b8bb2a819d6cc2572ad24c5afe72d"
     },
     {
       "bytes": 19113,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/spatial_coverage.json",
-      "sha256": "301db70ec22bcd95b0ffce6ca0d6b5a70a38ffee9e939fd86dde31a3a96820b5"
+      "sha256": "74b308729118fcab9310c326da808ac72dd73b2a47721b9c31f3442a611bd8fc"
     },
     {
       "bytes": 927,
       "path": "assets/v4-full-profiles/australia-ngsa-mercury/usage_rights_coverage.json",
-      "sha256": "39edf2d7ac5f4f4b8c47ce6d37a93ab2119b3f721cf7d64a2937e4f51766a824"
+      "sha256": "b936972095dd80c8dd87638f7b1e737254be2bd78b7626e1450d1c0a4c54135d"
     },
     {
       "bytes": 6499,
       "path": "assets/v4-full-profiles/australia-ngsa/automation_health.json",
-      "sha256": "43803e7a62e6e532e90db49e923113719a0c7b01ca2eae437eb961c5d570af17"
+      "sha256": "382b7769958bafed97fe859b796e4cc52822d71dedaaf51e1f7c52599f7d876f"
     },
     {
       "bytes": 789,
       "path": "assets/v4-full-profiles/australia-ngsa/citation_coverage.json",
-      "sha256": "761055910984afcde24692c14bbb3acf232ca11dc85222cfb940d8655c1c2d01"
+      "sha256": "6cf6dbb2e22be95754144520c8c8169a486fecd604c1fbb357b53e1d1792d0a7"
     },
     {
       "bytes": 4930,
       "path": "assets/v4-full-profiles/australia-ngsa/field_completeness.json",
-      "sha256": "ca7e5abfb76db44a49341ea43dd491aab8ea1a41d289960938887e80527a848e"
+      "sha256": "b543a83cb0cbf2feae1bb4ec804d4324a03baab093ec6a848f785108dab3912a"
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/australia-ngsa/geology_coverage.json",
-      "sha256": "39cf8c48826680524d46acd40cb88c1066ecaace3b145e34b5a30e4c83d6b95a"
+      "sha256": "cc51124a9dd6d6bdcaa85b8e2344caa6085a7225fe0fd5cb30ba65bc7fcedacf"
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/australia-ngsa/method_completeness.json",
-      "sha256": "07b67f7deb957caf9766921bd9673188c0fd88e1a3f1b975ed28493e7212a260"
+      "sha256": "d7f70307c89b7266c17a54747909cde1e5379f191e624d3ef4b1d359d8104a60"
     },
     {
       "bytes": 808,
       "path": "assets/v4-full-profiles/australia-ngsa/sample_type_coverage.json",
-      "sha256": "afad1d88be058362fbc87302af61a32c0c713187f96fced5e8eeb713e370eb3c"
+      "sha256": "40ca4efa15acd34786c6403175efe75bdbca6b090cb3c51c6494d0d30e795016"
     },
     {
       "bytes": 19647,
       "path": "assets/v4-full-profiles/australia-ngsa/spatial_coverage.json",
-      "sha256": "dbf060b0a3865bca952f1b8558f12a755cc1989bd485cd22dc38e49a678d0ff6"
+      "sha256": "aacffb3f9682435d6a9757a601b965f796aeffbf87b0a9cf0800b1574e0e7651"
     },
     {
       "bytes": 929,
       "path": "assets/v4-full-profiles/australia-ngsa/usage_rights_coverage.json",
-      "sha256": "7b55dcbbe97be83b4df8becef9ca592a03346c4ae4534fb905add9f1a20c1179"
+      "sha256": "2fc8a447622a13996df8072c78a7581a51872a24d40e3fc0c6ae7392bc80a04b"
+    },
+    {
+      "bytes": 2063,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/automation_health.json",
+      "sha256": "3e502bb83ce2c7b30d00da7e22897571c836ca7309eafd69e7d694c7cf3b8e36"
+    },
+    {
+      "bytes": 829,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/citation_coverage.json",
+      "sha256": "85123ae238304667d922334f4629b1ebec14aa948049aff14a1436392ba4640f"
+    },
+    {
+      "bytes": 4776,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/field_completeness.json",
+      "sha256": "bd6efa82ed90d0b8affdfc4dac12e0bd50e5492d6fedb65777db1959033c3463"
+    },
+    {
+      "bytes": 779,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/geology_coverage.json",
+      "sha256": "ca774babd129a204ead7135bf32f762d3e50799a5ab24b4e93bd09a8fc034dab"
+    },
+    {
+      "bytes": 691,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/method_completeness.json",
+      "sha256": "441a68adf841895efe8ae37b8297bce3610b6379c858d2840d1fc7d9f648d60f"
+    },
+    {
+      "bytes": 801,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/sample_type_coverage.json",
+      "sha256": "79662591ff8b2cd8e2e16093652853bcb9678443820379a40f1483937ae90b6a"
+    },
+    {
+      "bytes": 1903,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/spatial_coverage.json",
+      "sha256": "a77ae42b9c56f26a4739605cdbde15a2ce1077fdc48aa0e2ef7884672f3d5d60"
+    },
+    {
+      "bytes": 970,
+      "path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/usage_rights_coverage.json",
+      "sha256": "dde6d5328d5a2b50f39446adb26611536bd06eb44c31d60e1d96b9226f8b6f34"
     },
     {
       "bytes": 2381,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/automation_health.json",
-      "sha256": "61306f26b704008b98cc90017989ab6540af7b4718a282f0985e6f38aa324c1c"
+      "sha256": "e291c094bd28c2c0a75dba355cd5ef1dbfac55e6a382ce85b27d96dff6715b8f"
     },
     {
       "bytes": 805,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/citation_coverage.json",
-      "sha256": "cf379fb4aa0f0dc4af6a5c9d47ec37b5ab1e0f66cf6993f0b8b768f67d2839a0"
+      "sha256": "c4c33698e82f5176e89edd855666c5b378eb3ea3481c382469f8a50737865c21"
     },
     {
       "bytes": 4794,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/field_completeness.json",
-      "sha256": "83a55ca5ef76003409bf8bf7a4054e0076e1a31efe3532fa40c8a35dbfeed84b"
+      "sha256": "fe2eac8a6faccd7613f7cd2b8e97311f0ba2b45eb56e2e7c397bcf021f7aa56b"
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/geology_coverage.json",
-      "sha256": "c3e7bae49f1d3346f40024c28313e5ad90e362dc5b5b73bb9d156cc580acb052"
+      "sha256": "5ea6358a523d9a03b66934d075aabcf208def5cc3428cda7dbd44b0bd6ad72c6"
     },
     {
       "bytes": 657,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/method_completeness.json",
-      "sha256": "1a14292c47f90be625dc5b2cecf2b4a7cfec9d0b81cc015e5fb6c3ceaec2b20a"
+      "sha256": "b4df84ddf6a5b29d2450245584bbec3953efec3f7c63d0cac4a80e9089154a0e"
     },
     {
       "bytes": 752,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/sample_type_coverage.json",
-      "sha256": "29a05f8ce0d6c540488213b1951417b3dd89e598939027ce772b54413dbe09ac"
+      "sha256": "30f6aeb1cb2eb1ad82b360a661a31f6b37b5b0fecc77c06a65ec1449addda8b9"
     },
     {
       "bytes": 1851,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/spatial_coverage.json",
-      "sha256": "bcca7c9c41c4017770755b0f25ec911ef83c9a1fe2e925bced61d2c8dbb5e913"
+      "sha256": "524985723f3bff33b0ee8385ca06c92e0e44c6c1b76daa9c81e46eb8800b8371"
     },
     {
       "bytes": 948,
       "path": "assets/v4-full-profiles/eidc-ningbo-soil/usage_rights_coverage.json",
-      "sha256": "2dfa31a842a25b40fa2ba8837da5ffe1c827d963aadf552cce2082b26df2cd9e"
+      "sha256": "bcb6d5d40fc6d8d80d4dfa8d8b351bd9c8f117762940e0e700e16779ea86da6a"
     },
     {
       "bytes": 1959,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/automation_health.json",
-      "sha256": "546365cb6ac98db17452eba325c90eb0a6b600b0a20b1982b60de59e6f2c5324"
+      "sha256": "d0e49344c6f88a4922e7edb1ada3d11725b011bbc722f55f01b8011e5b394eea"
     },
     {
       "bytes": 831,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/citation_coverage.json",
-      "sha256": "346d73515ced6c22c29526a024bd701549be3ec32c04fd2985a48311b9234e60"
+      "sha256": "953597e58156eaff3d1ed649b91dbe59274a074a650206b38e9c51671e3dcf94"
     },
     {
       "bytes": 4899,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/field_completeness.json",
-      "sha256": "d0cea4001ace5bcb33312767f5497731826ae377c669381f5b41ca7301717251"
+      "sha256": "931d0f03260add9326bf32546c3353e46f085e07d234609c08b894014c2dd377"
     },
     {
       "bytes": 765,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/geology_coverage.json",
-      "sha256": "c104a6af8d1d6cdd5cddc044c59b58a55e9de4965941c2ef5a5abd617bbdd44a"
+      "sha256": "db1f9494c4e2f0713adb853c6dce004a696258a9571386a58e9dd189109655e5"
     },
     {
       "bytes": 674,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/method_completeness.json",
-      "sha256": "bb56dda369255d2c9a1eedc797e3e3f5a4eb11ff92c7c1924acb9c17ec1c8ca8"
+      "sha256": "2bdd8f7e10034c7f591c783ced66377c859db0382ad810f02ec0a8e5b073f465"
     },
     {
       "bytes": 807,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/sample_type_coverage.json",
-      "sha256": "54fdb39300ccd7c54f421c134c2614fb75e573a6a0c75ce67d6a05935c3b0e6b"
+      "sha256": "b8d5be67eff28fe903d27d1852a719f506540786b1f82eefff24c6379773871a"
     },
     {
-      "bytes": 71020,
+      "bytes": 71009,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/spatial_coverage.json",
-      "sha256": "cc05c48a00e1287cf988b14588cb175be8c99bc86e4ce50428506f785e088741"
+      "sha256": "92ce40c79cf45261ec735c16fcd28dcd6fa9a28760b52dd7030d3fd76f74ca01"
     },
     {
       "bytes": 957,
       "path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/usage_rights_coverage.json",
-      "sha256": "106beefc99b0ea6d18c458e01c0235fdc300713a2d57f76b46e50f1bd58dab4f"
+      "sha256": "4df58d8a1dc84eae5f34e6214af4f307ca4c10fbfad76af2b0faf251c591a540"
     },
     {
       "bytes": 3459,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/automation_health.json",
-      "sha256": "07200307c500ccf8be47b8c4b276fd89d4a70a9045d0ba66849e23fa04dad587"
+      "sha256": "da9aeac39a995138e5b744339d155b5032b9eca343efc5d84fe7db8bf7f45fba"
     },
     {
       "bytes": 811,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/citation_coverage.json",
-      "sha256": "860d6237e4322242616996b4f88592373e360f6019c097fe20db7d0eba691970"
+      "sha256": "34c670f9d224600e9e4fdbd636ae7dc4a884e381232d650ae92c14fddcdebf98"
     },
     {
       "bytes": 4919,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/field_completeness.json",
-      "sha256": "f829d2ed47f2bc26175fff6a6c29593b75fa33d34289a00467306c1cb774d06d"
+      "sha256": "eb9961980919f53fc5d92494d8af8a49255be1406b7c3c1e59ff9cb786f797ea"
     },
     {
       "bytes": 773,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/geology_coverage.json",
-      "sha256": "bab8ac056a000a385dfc49523835f6b03dbd87d9e466bcb105b2ec6689b42fa5"
+      "sha256": "ec38d5341d127618588ae44467d112def60b2642cd5e60e91b01a59a836f4108"
     },
     {
       "bytes": 797,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/method_completeness.json",
-      "sha256": "9f2d3a966afd697ae429aa14a69ba0483eee377c6d642de3ea16eaf647c5ef25"
+      "sha256": "6078b0eda108df158358177db7a51b3b3c8b9bd07adbe759db9561305c56f28a"
     },
     {
       "bytes": 808,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/sample_type_coverage.json",
-      "sha256": "2be0056ed0839d3c1269609c56c29d7540063a5c6137e51097a7997ab17e7c82"
+      "sha256": "1f2f0b4276d0a128fd1d8ff46c00adbceaeb00d93f45e2e3e879b033591f375c"
     },
     {
       "bytes": 16860,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/spatial_coverage.json",
-      "sha256": "f89ecc865c9f1b50d6d19f7cd72aa16f7adaa950d08d7fe9e3fc90b2cac6c193"
+      "sha256": "815e93722b78f3ed19a673a53e0afa296e16246f135868e86b0cf3ad229181ae"
     },
     {
       "bytes": 1007,
       "path": "assets/v4-full-profiles/foregs-floodplain-sediment/usage_rights_coverage.json",
-      "sha256": "c7cea103c2c56ec807b5c2547d391c0c958ef14863cdc16c9924afd9e7fac545"
+      "sha256": "2a7c3e7d31c692dce299bd35fa6b7553432da46169ebbf5d34cd535f2931591b"
     },
     {
       "bytes": 2594,
       "path": "assets/v4-full-profiles/foregs-humus/automation_health.json",
-      "sha256": "b048f915831c3f423c1e0464014bd608d33e8b8642e1ee9d9b1b3c63663649e4"
+      "sha256": "a31a20912d966998f5fa426b01580da3bb501227f7c38633dad1c360f5947608"
     },
     {
       "bytes": 797,
       "path": "assets/v4-full-profiles/foregs-humus/citation_coverage.json",
-      "sha256": "b724dd9c83f35c1550a77b90546c79a9cb8fe9b51835fdd64f059cbe0ddc65ed"
+      "sha256": "41375848cb5305fe7430ebefc5467b535b1d32e79877948a4ed20d679fdd7195"
     },
     {
       "bytes": 4893,
       "path": "assets/v4-full-profiles/foregs-humus/field_completeness.json",
-      "sha256": "db6c0388e2f3e93e97215778d65b180f920ceeaa0c8b70429ec5335fc431eff8"
+      "sha256": "854e777220cc2d03837ba12d1495fd869c9adf54f6f0a9d5e63a63e0a0febe48"
     },
     {
       "bytes": 759,
       "path": "assets/v4-full-profiles/foregs-humus/geology_coverage.json",
-      "sha256": "3671f9e68f3665e081af69972d84b4d60c32d3f3723820a1102b833fa5bb29e4"
+      "sha256": "fc7b5644248b0abf841d330b8700dc45600f6cf1dda66dfbd1611dd515016a29"
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/foregs-humus/method_completeness.json",
-      "sha256": "3017e22d855d6591bb72f85f4b75dd221f1630a9f06410a7990896af3fdf6273"
+      "sha256": "9f7f669822eac3752dc6d228acf2d6776f550e94cb4ce7cd412505b1cb7b5931"
     },
     {
       "bytes": 785,
       "path": "assets/v4-full-profiles/foregs-humus/sample_type_coverage.json",
-      "sha256": "9349ad346972b4f614300147800dd019295fb5897df36e54bd0acbd108781557"
+      "sha256": "4f4fca3d52cb00d8737d81e19fbbfff48fc1c6524f3cbb118a5a021dc5513e0e"
     },
     {
       "bytes": 10709,
       "path": "assets/v4-full-profiles/foregs-humus/spatial_coverage.json",
-      "sha256": "515e610fb2827dd5d002b853068d63f9614b88fdb69ee1404191793c858d02c9"
+      "sha256": "e528b87d285f67bc41af660fb12824245dc3c99b56cb94f81061d70664502f45"
     },
     {
       "bytes": 993,
       "path": "assets/v4-full-profiles/foregs-humus/usage_rights_coverage.json",
-      "sha256": "955fa937d85b32fbae3ec093d8e7e71c7e5ed52f721bfe0e3d6d41d3a3bb1069"
+      "sha256": "f9b37b2a91c10c6b09666006cfd5851d98f0c28d88755e3c4fec303154fb7cba"
     },
     {
       "bytes": 3474,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/automation_health.json",
-      "sha256": "a9d8aff538ee0ebeedc507f058ec000c39bf7dbc88df2994703857a8c2ddc1b8"
+      "sha256": "8564cd8dabe6c3df0a0ce81368922e32b39e7e4d225063df83880d1d99f705df"
     },
     {
       "bytes": 810,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/citation_coverage.json",
-      "sha256": "f4167f6e116b918a6e8b31e66f5ea82d318e4c05b3a350c13ab55d2654a38e89"
+      "sha256": "4266ec0bb2eeed05605b7cbd2e6c309ad443b4678faf63ab714cd6db604ae452"
     },
     {
       "bytes": 4986,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/field_completeness.json",
-      "sha256": "173efad7a2cb652352931ca4ee3562202f866a78da45059df6a295e80ef65cea"
+      "sha256": "421c217d50fc3e74e3f9178d3a098bbe3c57a69e21befd21bf476c82a8bb0fa6"
     },
     {
       "bytes": 770,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/geology_coverage.json",
-      "sha256": "210d0f1abe191225b8a0c691701ffbb0e6e7189888f9472bd1084c215f71366f"
+      "sha256": "7699ec3c5e5c63dc8f619e198c39cf8a84830ad1225615471b3cb0b3f8c44e9a"
     },
     {
       "bytes": 795,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/method_completeness.json",
-      "sha256": "266a971a3949a4e905a3715754ffa86369eab4d2bb57307b9c88a4de9bf219ac"
+      "sha256": "3706cafb95bf0b486dd6d714ca69fc37cc106f5ebe8c86ca99a3a95197364f4e"
     },
     {
       "bytes": 801,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/sample_type_coverage.json",
-      "sha256": "dc138b9a623e63e89f326a91e686dab5992fe1535b84d38a3469bd801fd2e6ab"
+      "sha256": "be16aefde033af61039247c6e6d42638197d4b965288bccb45e3cd6c0e517ad8"
     },
     {
       "bytes": 18264,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/spatial_coverage.json",
-      "sha256": "1190d40cdacd16d5f7cbc3bf43620429b37aca4b90fde1b8d4d7cbb6ab350101"
+      "sha256": "34e4d50615e2151e0dc34a9fc664ed171dbc213e60605dd950144c4fbdd5ff26"
     },
     {
       "bytes": 1007,
       "path": "assets/v4-full-profiles/foregs-stream-sediment/usage_rights_coverage.json",
-      "sha256": "1868ae522800631254f1b5f38ac832af9f67e0f3161604bfc8b5ee9aeac6d01a"
+      "sha256": "c3195fe14fae8652b6bbd09024e5b5df819a46f656f1efc0935333e2afeebd53"
     },
     {
       "bytes": 2672,
       "path": "assets/v4-full-profiles/foregs-stream-water/automation_health.json",
-      "sha256": "b055da5751b8a366ebcbcb0f0b6b60dc5ff5b8c3d74fb230831a8d68e326e195"
+      "sha256": "64ba7b58b77b9ced3b504f95e0135565e491d13845409063058227ee01146dc2"
     },
     {
       "bytes": 804,
       "path": "assets/v4-full-profiles/foregs-stream-water/citation_coverage.json",
-      "sha256": "17bb34d74f5c2fdf1291bc3da1d452abc1490b9f7abc5bb1deced1d76601876b"
+      "sha256": "b1240e4c6ee0114a17cf49652ff6a5aa229e151ebfc4a487573c30515f8cfbf7"
     },
     {
       "bytes": 4900,
       "path": "assets/v4-full-profiles/foregs-stream-water/field_completeness.json",
-      "sha256": "66ee086c563814a41d7619d215ccff23a8876a81c963ffd1ad1b1668bca3639d"
+      "sha256": "c8e2cc215ca0c955c6cef2417455af0ae5ab8939668e39023da794a38ac22745"
     },
     {
       "bytes": 766,
       "path": "assets/v4-full-profiles/foregs-stream-water/geology_coverage.json",
-      "sha256": "7a706609d546cc71b0e68039b79b49cca8672771269f644b730c2a45119689b4"
+      "sha256": "f6a3de24db1a6433612767215404a4938e51db5d957776aa81a30f83df0d66dd"
     },
     {
       "bytes": 699,
       "path": "assets/v4-full-profiles/foregs-stream-water/method_completeness.json",
-      "sha256": "fa22810a5cfe18ca24930a8211024e34700123189754ea56f96c410ba9d9e4c6"
+      "sha256": "ef9b4b5ec9ccb4f96832b217dc6d1cef0b2bd48ab873ed3eae3252307286a291"
     },
     {
       "bytes": 782,
       "path": "assets/v4-full-profiles/foregs-stream-water/sample_type_coverage.json",
-      "sha256": "a2248bafe03e4749c801fdf65ee1224cedcf4aafae9f9964d70a36346d16d68e"
+      "sha256": "6f99066eb1411b0ac1f31e8ce20aa1890169650180dfbdf48afeb8b3daaf7eb6"
     },
     {
       "bytes": 17565,
       "path": "assets/v4-full-profiles/foregs-stream-water/spatial_coverage.json",
-      "sha256": "84d5b7ed451531055cac30225a53dccee2d2856d7ec09f901520ed93d97c4d6f"
+      "sha256": "e93e10aa3272cc8a85e3f650ce79feed62a7b2d307b60d9375309814fdc466ed"
     },
     {
       "bytes": 1000,
       "path": "assets/v4-full-profiles/foregs-stream-water/usage_rights_coverage.json",
-      "sha256": "746d107a9fef64133c8c3a3ad35a46ef788882204fb7e2461d1a9da23c3f9b72"
+      "sha256": "fd891dfaf8799587e1a461d17a0e997999e382e218be5a851c53c46bc81d054e"
     },
     {
       "bytes": 3862,
       "path": "assets/v4-full-profiles/foregs-subsoil/automation_health.json",
-      "sha256": "902980b8b0fe4ab9c7a5b6f112d4a635f62909256f4cab324e0ba3d84b854711"
+      "sha256": "bf5b86c8f5ecd866f35117262ae381904971a849c76d74e13c9cfcbfe044d03f"
     },
     {
       "bytes": 802,
       "path": "assets/v4-full-profiles/foregs-subsoil/citation_coverage.json",
-      "sha256": "80e1f1dbd6f915f80c9a12ceb9863c77048fad568f9665cdf0d261af0d198dc6"
+      "sha256": "557fd6cdd6d0efe6df0584cef92e95510130f7e26c2407d0461c273b700876fa"
     },
     {
       "bytes": 4964,
       "path": "assets/v4-full-profiles/foregs-subsoil/field_completeness.json",
-      "sha256": "4f872b84696efef03fc065db2417f9a9eaf9f143f2351a6ab289e2b78a58aeb3"
+      "sha256": "bfff307828a2c462b14d7d87703b2d04456948e9d3ffb521aa6daa9e2461d6b4"
     },
     {
       "bytes": 762,
       "path": "assets/v4-full-profiles/foregs-subsoil/geology_coverage.json",
-      "sha256": "6e28613441e5b0630bad3f0139de017c675a663e3ddb1b4984ba237b7f6e443e"
+      "sha256": "03df8b03f136f427210969e77d880ccca5d2dc6531597fadd8e0b116d4185b46"
     },
     {
       "bytes": 803,
       "path": "assets/v4-full-profiles/foregs-subsoil/method_completeness.json",
-      "sha256": "70d8c3aece2d8578799d0f135b6ba688c55947e6666e2e510e278e92761ab7b9"
+      "sha256": "56e3ac69d57699e89c5b49e69b1ab79322f0648f4b954820c3774714c50e700f"
     },
     {
       "bytes": 794,
       "path": "assets/v4-full-profiles/foregs-subsoil/sample_type_coverage.json",
-      "sha256": "608767f31c8d02a84ce7ec0122d76e69fb02fb65dfffc98e4ff7f8e9fe9af0d5"
+      "sha256": "8f23acb5890a9594a9609b183503c570bd33b0df71681f87128aa88d8fb816ce"
     },
     {
       "bytes": 17414,
       "path": "assets/v4-full-profiles/foregs-subsoil/spatial_coverage.json",
-      "sha256": "9bf02a4d0815c3e803035c973b138874376e4936b95b6be8b5ce80c128b8e68e"
+      "sha256": "119ed5da61c415b4a43b05bf2e3855deeefe25315e9741a49f17b4ab9b9bf875"
     },
     {
       "bytes": 999,
       "path": "assets/v4-full-profiles/foregs-subsoil/usage_rights_coverage.json",
-      "sha256": "e0ce0d86d6c80faee6638b61793bbd58d7a207b4c24c24a52d19039fdb2e047d"
+      "sha256": "0b2168903256530831c3b6137707a92b96528704f1ece0f86b5e77c56fc58406"
     },
     {
       "bytes": 3832,
       "path": "assets/v4-full-profiles/foregs-topsoil/automation_health.json",
-      "sha256": "cfdcef34f5931b4724067f454857885e51f68d8721733707375398481dff0d4c"
+      "sha256": "35e3f43253b7a40ba37f52c3a5f859040608fc0950561c9d6daf7ee73019b90b"
     },
     {
       "bytes": 802,
       "path": "assets/v4-full-profiles/foregs-topsoil/citation_coverage.json",
-      "sha256": "2f1cba4775b8d19d6818e4f9f036000b015cb1e5344953a67e7f53a691493c60"
+      "sha256": "01e909a471ed20e3f99ca7242dbc45cee79897f0e922cc0fd4f8ed17c77d95c0"
     },
     {
       "bytes": 4964,
       "path": "assets/v4-full-profiles/foregs-topsoil/field_completeness.json",
-      "sha256": "f0e6e28bd96bd9f465d959f7e351962ba563b851b16494dcbcc723e841c20cd8"
+      "sha256": "956fbaedb03b58cec5880665731ee57f8f5bef4de29ab458800df21da8ea5c71"
     },
     {
       "bytes": 762,
       "path": "assets/v4-full-profiles/foregs-topsoil/geology_coverage.json",
-      "sha256": "f0a1e26b07d65a422f569cc72f857abeaeb715d279a870e9a26b6aad29391c8e"
+      "sha256": "b4c05148e1e95b826e394dff3847567353a010703125e3ad2fb7be2b2aaeecdc"
     },
     {
       "bytes": 803,
       "path": "assets/v4-full-profiles/foregs-topsoil/method_completeness.json",
-      "sha256": "f815cf7c3d5dbeb452dde8625a176e759150acb715cb2f3fa7412416d491f3bb"
+      "sha256": "1439f1329a98bb266788878d60e0b7e062eda1bad4a8be6badb775da2231d9e4"
     },
     {
       "bytes": 794,
       "path": "assets/v4-full-profiles/foregs-topsoil/sample_type_coverage.json",
-      "sha256": "4e51adca5a689498bacda6f3071bc0346b4f9331501e84d3638d1c67558ca292"
+      "sha256": "0bf503b92950a53a77bb0532ff07b5d7947f727fd27eab44dd74afe6e23be82d"
     },
     {
       "bytes": 17927,
       "path": "assets/v4-full-profiles/foregs-topsoil/spatial_coverage.json",
-      "sha256": "ca46daa9cdefa1813a57f2e9b1f8db96112b531fa0ad7b9da0a4b90e753ed0eb"
+      "sha256": "e1dd831b9ea8c0774a726f0752ea3dbb1dd0bbd62e6832a4d08236ccf472bbe2"
     },
     {
       "bytes": 999,
       "path": "assets/v4-full-profiles/foregs-topsoil/usage_rights_coverage.json",
-      "sha256": "96d87d7cb558327660058dadd48d58f98ad16916e6a62868e56d62bd7537d88d"
+      "sha256": "3d9c379315eba1d36f2616f4df86a9c209cdf2c34c39c17292eaaabcbe75d67b"
     },
     {
       "bytes": 3565,
       "path": "assets/v4-full-profiles/gemas-europe/automation_health.json",
-      "sha256": "88e61f44e499d1b301fe2f387f0e544e00aa5c2a77883f8cb5b884f72cd48619"
+      "sha256": "754519a2d3777cae08ef47f7c3caac0f147905e51f4e0f4fa8d06aac558b36fd"
     },
     {
       "bytes": 796,
       "path": "assets/v4-full-profiles/gemas-europe/citation_coverage.json",
-      "sha256": "8a09a20cd1533be05b9b14b018677b0a14003700e1248c467508e61fc3b8dd1a"
+      "sha256": "d4efe22d05cef01e3ab3b4ed75f815b946666f6a6e33e92de5cb16b58445c993"
     },
     {
       "bytes": 4958,
       "path": "assets/v4-full-profiles/gemas-europe/field_completeness.json",
-      "sha256": "68743f6dadc5b61b93e449160042dc3623bff9657749b240c51b92a1ef22a1c0"
+      "sha256": "ee22742bf5a9a2cf8d1b730c10558a20a216a0ba05c90458cc709a238ea7ddf5"
     },
     {
       "bytes": 756,
       "path": "assets/v4-full-profiles/gemas-europe/geology_coverage.json",
-      "sha256": "918e77f42cca23594443f19dc23c7c3a9d12235740868daa9bbbad7e2619e583"
+      "sha256": "8f7e466ec7db5ab955581089dfc752daca0190b610993dea13f04627d54eb15d"
     },
     {
       "bytes": 812,
       "path": "assets/v4-full-profiles/gemas-europe/method_completeness.json",
-      "sha256": "6bd7059caf12b4dca8fd83b80e8f8cc4253bcda8d82687c3ae80fe0ceabe18a1"
+      "sha256": "e5c10743902f9301e99464763d7bafafacdedc5713779504a1335d29b0bc8ae0"
     },
     {
       "bytes": 834,
       "path": "assets/v4-full-profiles/gemas-europe/sample_type_coverage.json",
-      "sha256": "8a3ab7de396fac1832c4c51a1360fe77c4373f40e841105d6a9050edbcf52785"
+      "sha256": "9ba83bd251630c4991b90617c8401a886e5ec0bcaabf1b3dc8ea50fa4e8ae2cc"
     },
     {
       "bytes": 28612,
       "path": "assets/v4-full-profiles/gemas-europe/spatial_coverage.json",
-      "sha256": "c892ea533926134f147734a9f9af58e4a7bf24f0be7286b589dd6fd261a3ccee"
+      "sha256": "c52a2a3c8c10889fd36335cd9b25378962e45470b9b60c9043b21becfd725519"
     },
     {
       "bytes": 951,
       "path": "assets/v4-full-profiles/gemas-europe/usage_rights_coverage.json",
-      "sha256": "511e0f64f54f3efe3757e7f6beb298df7b7cb4a6b60a0fdc131c514b25b3006d"
+      "sha256": "ac3c93879eeb82b304a0ebb14dbab38c16784e80639f3806edada6a5c9fb3aa7"
     },
     {
       "bytes": 4336,
       "path": "assets/v4-full-profiles/gemstat-open-archive/automation_health.json",
-      "sha256": "12a76a43b730f4222ed4bbd816a362e7e1732f402d029d7837a4448961b6ff44"
+      "sha256": "abd7047312d645324ab51599284a41004eaf3019c0490dbd7ea281ca03371a6d"
     },
     {
       "bytes": 792,
       "path": "assets/v4-full-profiles/gemstat-open-archive/citation_coverage.json",
-      "sha256": "266aaa1c5c02f7aa9f9d6a6f439750ade0856e58b2a030e4508f6af811bbc75f"
+      "sha256": "4c174342c84aeb1107c5c4782308c2f0a04cbe11f9e14b69d635a00e61b4f6f8"
     },
     {
       "bytes": 5096,
       "path": "assets/v4-full-profiles/gemstat-open-archive/field_completeness.json",
-      "sha256": "f17cacf0d8b7cb5c055fe0412cfb983dfc03606627f4ff791fb46f39278aa524"
+      "sha256": "1990ffa5a484ffbb2774129404cf7292f5594c1053393cffdda9dccaa22cdbdc"
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/gemstat-open-archive/geology_coverage.json",
-      "sha256": "453a5d1207b41b333707930eaf3d5ca6b8704dd2a9b5b51188690e3868849371"
+      "sha256": "1d6c9421c3868becf6e77159021c11d34228a433496f882c57a0447c2bda7b29"
     },
     {
       "bytes": 5015,
       "path": "assets/v4-full-profiles/gemstat-open-archive/method_completeness.json",
-      "sha256": "a17a9a9cb7d0a06617131361e3e52599d10423e63464617247bccb14c29a7e52"
+      "sha256": "756acdd83bf6e8d7ee3ab230254f3fef88818d0bcc6194a23c6db8314214367f"
     },
     {
       "bytes": 1035,
       "path": "assets/v4-full-profiles/gemstat-open-archive/sample_type_coverage.json",
-      "sha256": "7c99c9d194d77931d2341bb78f43b3b859077402c6655ceef23232538466093e"
+      "sha256": "6a497c8ec98cd43ff8e6f17795c1fd0a8cabf8ae01b65b9f2c25c7382e9be673"
     },
     {
       "bytes": 40105,
       "path": "assets/v4-full-profiles/gemstat-open-archive/spatial_coverage.json",
-      "sha256": "caacd64ac1cec7c35428c87b150364ffa0ef81374721d68b4db8ddbf2faca14b"
+      "sha256": "d0d782724360bfed5e5425a9c0fcc18d6581f3116be0442e858d1af0cba4f25a"
     },
     {
       "bytes": 929,
       "path": "assets/v4-full-profiles/gemstat-open-archive/usage_rights_coverage.json",
-      "sha256": "6c1cfc9abf3094461d83d11082d77ff89853492286ff06bb14289c36f2929665"
+      "sha256": "592ce11fad3b7a4c4e07a36b53e8f9a9ee998277a67c3c217e18c02c7f3fe375"
     },
     {
       "bytes": 4518,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/automation_health.json",
-      "sha256": "8e80eb3021598669055fd05dbe02d1f881b944db36393946bdd51e75a1e75ca0"
+      "sha256": "6c5f896e60a93d107035746ab13aa7ec0880925e4264a0e73fcb6d3800ddfebc"
     },
     {
       "bytes": 789,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/citation_coverage.json",
-      "sha256": "454d57ea218cd3c3ec0d68adf531195b9dbb2440b9983bfe9b151c054220e1b2"
+      "sha256": "383d3bd84fcb4baf9578c0680c0df4a1b8884e3b2d46c18aba76cbd8496eb61c"
     },
     {
       "bytes": 4874,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/field_completeness.json",
-      "sha256": "c2aeb06a5a719a546cb84f72fd2dae9ace0164970418dae9a5fc09e5a7da1e48"
+      "sha256": "eb7881a2c623a03df4fa5322fac7f5c690b945ad1db83f454609f991e781c109"
     },
     {
       "bytes": 744,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/geology_coverage.json",
-      "sha256": "e78eb8a23112194fe22a9ccb0acf6e04f6b59442f1027ba801c73184e1f77042"
+      "sha256": "0ced8130eab23a169c474810703c6ef7578dc252e4d9fe350067872ac623da8c"
     },
     {
       "bytes": 644,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/method_completeness.json",
-      "sha256": "329c8f08d8978804932f663ac99baa355596275b366bb3586eb9d9bc9072781d"
+      "sha256": "8a2251d814491fb22a99f6364a33b47869a14124c624cc2f747fa49bcf68682e"
     },
     {
       "bytes": 766,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/sample_type_coverage.json",
-      "sha256": "c9eda21d8b3a58857a135ab3b5c435887f8b9e233d6872cbbf5de36a6ab44125"
+      "sha256": "89f0b447e74a608649e7066920e1143457e06b09387c74c651f1e7451aa7dc9b"
     },
     {
       "bytes": 2623,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/spatial_coverage.json",
-      "sha256": "ea41b5e261ccf346f175f31d8372c4fc72aba84456bef5f682c6854ab266ade6"
+      "sha256": "35321e17e2e3b839e24e3af83616b6cb8899f2d410d72ef90b8908955c597f17"
     },
     {
       "bytes": 933,
       "path": "assets/v4-full-profiles/georoc-antarctica-intraplate/usage_rights_coverage.json",
-      "sha256": "062ff2ad84ad6cc50d4b3a16242a7a51e7b9e9ff133183452a9994ff53aa6a13"
+      "sha256": "8949c610b4ea6e83439544f10bd7890cfb4c10c4c03e006d24ba694cf2676c32"
     },
     {
       "bytes": 11015,
       "path": "assets/v4-full-profiles/georoc-archaean/automation_health.json",
-      "sha256": "d427cae35e10546656a51a3cdbc95f134de4aa1131d730d29178d4f185a3d82d"
+      "sha256": "049e06a0eb5d4333aa9d47aab1aa9f6feafcfc1bbab701d87ac07a6b8caf3fe9"
     },
     {
       "bytes": 779,
       "path": "assets/v4-full-profiles/georoc-archaean/citation_coverage.json",
-      "sha256": "45d62afcbcdd868ff2066783fa94a2ca4792bdae34cf23162cf13eb91528d1bd"
+      "sha256": "bf7e97df722ac09484021df15b2f9ab43ad5ccb0685c35398533db61d29e99cc"
     },
     {
       "bytes": 4942,
       "path": "assets/v4-full-profiles/georoc-archaean/field_completeness.json",
-      "sha256": "d06f464ba32ec3b3d78e9f04b08973124f7d92657b1f94479c27c7afd5537e1c"
+      "sha256": "916b3c7c51139a060619c5ae72b262378f55400f8a989ab42fb52931049fd0d0"
     },
     {
       "bytes": 735,
       "path": "assets/v4-full-profiles/georoc-archaean/geology_coverage.json",
-      "sha256": "efb1b8c1e72f4505f832cc8355e38f88790e61004c922f148231452176ff4e9b"
+      "sha256": "57f05f84a7e53c229c906965eb9b6236692219da2b46713bf4db74362ae64fa5"
     },
     {
       "bytes": 634,
       "path": "assets/v4-full-profiles/georoc-archaean/method_completeness.json",
-      "sha256": "d7cb583765e0506baa0b0a852e9764142bbf23b22cf6ed8c1411fca8be28f09b"
+      "sha256": "5a9074a18f551371c8378d8e917619df8cfdcc5b826891bfb1be04d742349167"
     },
     {
       "bytes": 758,
       "path": "assets/v4-full-profiles/georoc-archaean/sample_type_coverage.json",
-      "sha256": "325ce9a934301c373294fc1a1d54ccfdcf2daedbccc8817cc8888f36972da994"
+      "sha256": "42ee6e6f16b1335921bdebe0a2740707c88c06ae6fee21db96f34a6001893b4f"
     },
     {
-      "bytes": 100759,
+      "bytes": 101193,
       "path": "assets/v4-full-profiles/georoc-archaean/spatial_coverage.json",
-      "sha256": "a931bbcb212308d1dcdb1be201da2abab46af23777a023d9200f8f2efa646f4a"
+      "sha256": "2d29a317d91d6f5484cbb6b239a730dbe541c919ebab319e3cf1ef1ed11f0f16"
     },
     {
       "bytes": 924,
       "path": "assets/v4-full-profiles/georoc-archaean/usage_rights_coverage.json",
-      "sha256": "787da2604ad941c93637852c635cbcc3219186d64d1ffc6ffc331eea1aa00fed"
+      "sha256": "a4d8f15692ce4e545bdd61cd191d455334b566099f9bbb8293c780a3175b7c36"
+    },
+    {
+      "bytes": 15318,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/automation_health.json",
+      "sha256": "dbaee1136e572265a3a280dd017813acdbe25820714af9ef8a0d6906006d573c"
+    },
+    {
+      "bytes": 792,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/citation_coverage.json",
+      "sha256": "0651e0bee760ae01ec3b2a01f2c2476f8de922c1cd4290d27a08de2bdcabf385"
+    },
+    {
+      "bytes": 5021,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/field_completeness.json",
+      "sha256": "6a47a72619126093c1ce4ed9c91a40a25f41a48edbb1f5e74f0afa667b928842"
+    },
+    {
+      "bytes": 748,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/geology_coverage.json",
+      "sha256": "3b8b448d9c4441d18b70e6d4c850490b38230e00b43929269f076dbc6013b014"
+    },
+    {
+      "bytes": 647,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/method_completeness.json",
+      "sha256": "9da40d7bd0b62597d0d2461a8ac3b6bd073362bb2d0b9117870c8f59ff79c1c2"
+    },
+    {
+      "bytes": 773,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/sample_type_coverage.json",
+      "sha256": "20ba17006363c0d27cd5e170ab239fdc59b18492d82268e7148714dc921d0327"
+    },
+    {
+      "bytes": 482578,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/spatial_coverage.json",
+      "sha256": "e76bd504d1f1dc284015d83739290c396c6fe9c239f3db8214ea052cc52809de"
+    },
+    {
+      "bytes": 938,
+      "path": "assets/v4-full-profiles/georoc-convergent-margins/usage_rights_coverage.json",
+      "sha256": "4dacf19f4c22726aa1d89085bb906c94b37755ac353c54bc7e8fc749770ca26e"
     },
     {
       "bytes": 2232,
       "path": "assets/v4-full-profiles/geotraces-idp2025/automation_health.json",
-      "sha256": "944f08caf62e3b31413dc502e3a0930f56406fed1fcb1c66d28b0918e2838a5f"
+      "sha256": "4dd68f041560cbcd453e3ae53c6cc7ea78734b766ab89d758827d3f46a02f21d"
     },
     {
       "bytes": 809,
       "path": "assets/v4-full-profiles/geotraces-idp2025/citation_coverage.json",
-      "sha256": "23cb71528050f75e7dc52f6fac6c525a9b91522a0ceaed3fe0b37a802df028a9"
+      "sha256": "09171a28e3c84fedd5a83e111d1b9eb43a7c9b9e1f726938457ef2fc13cf66c1"
     },
     {
       "bytes": 4957,
       "path": "assets/v4-full-profiles/geotraces-idp2025/field_completeness.json",
-      "sha256": "e8356c685de4c6032ac4bb8f2fa3ade504ea59db2cc6b27531ff94fdf2c4a289"
+      "sha256": "9d687c32673890b67a4845a8a27b208b7727df733a716403d61ba7d98580524a"
     },
     {
       "bytes": 728,
       "path": "assets/v4-full-profiles/geotraces-idp2025/geology_coverage.json",
-      "sha256": "36a3760b772184c2a2ff521f4bd01d1b9277ea56cd3954d4b8f81104678ac8e3"
+      "sha256": "e08063fc2675ddc5a036dd08c02349f90386f21ec40d25446bddfd9864f9f5dc"
     },
     {
       "bytes": 2883,
       "path": "assets/v4-full-profiles/geotraces-idp2025/method_completeness.json",
-      "sha256": "7edf34895fac700dbe30f0ad4efd5f3b8436d48d593d37a38fdd920f8199b4c5"
+      "sha256": "e6653d04fdb2b4e2c264413b976122e5397d5ddaf18538117736b3f0722acb50"
     },
     {
       "bytes": 752,
       "path": "assets/v4-full-profiles/geotraces-idp2025/sample_type_coverage.json",
-      "sha256": "8645f56d068236f66da2421f4008cabc7e486b647e3e292fbefe35ffcda07cb7"
+      "sha256": "0650b41fb3a18ac6a0ee922375313624f42520cb090bd7a75999e046ba476a9e"
     },
     {
       "bytes": 39988,
       "path": "assets/v4-full-profiles/geotraces-idp2025/spatial_coverage.json",
-      "sha256": "750372d982c90e6980859c344c22be10a147fe23fd12fbde03d4a4119b2a9f0e"
+      "sha256": "c6d289037f8dabc45b99d850989bb5ea8e4d3b9b3b8fb7de7b960867a71bf949"
     },
     {
       "bytes": 967,
       "path": "assets/v4-full-profiles/geotraces-idp2025/usage_rights_coverage.json",
-      "sha256": "334988c79a2f3615a856f46c15b0ffeea81fc323c0674f58de9fac2e4615259d"
+      "sha256": "f0433e60407326aecfaea2b02ce224ebaddc5d7e324e86ab328f23eff45b5f9d"
     },
     {
       "bytes": 2885,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/automation_health.json",
-      "sha256": "f6889ff7f163dc56232a806408965096c2102e7a6e7a1466c8af9833d849bbdc"
+      "sha256": "23d9c8b3191f685bd61d78323eb062e4014da2211b6decee090644659d030d7e"
     },
     {
       "bytes": 811,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/citation_coverage.json",
-      "sha256": "8ef1b23cd4f3f0a9161cf5e30b88ea8e6161c4a75a27cc9587f1604238993be0"
+      "sha256": "e7e404a3512ff9383ff25a0a472d961232c0c5bf86301bbf5dc01d45c42a0620"
     },
     {
       "bytes": 4973,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/field_completeness.json",
-      "sha256": "0d83508e8620062073edd6ab7fea331ab96c49c32e393326d256bd5bc61d20f4"
+      "sha256": "a23f6a012d2fbb624729d7f1253a41952fc5fbd102f5a59b7a8e75d708312f05"
     },
     {
       "bytes": 771,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/geology_coverage.json",
-      "sha256": "2fd5c878856fab413ae9a41e926ba1f601eed3f1a35ac50b8c2da58de605762c"
+      "sha256": "7746e54ac003705a1900239aed3dd5f654f241f1a5f0ccef9e50f0908b66ee8d"
     },
     {
       "bytes": 682,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/method_completeness.json",
-      "sha256": "25cae610dade56b88d8c8bb54280bf0623adea1919cfb3a9ed2f5339e48975aa"
+      "sha256": "e662247d431f3e8fd29f76351b80accec12f42caa6f3a18c9510abc6ec12a7d2"
     },
     {
       "bytes": 802,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/sample_type_coverage.json",
-      "sha256": "cea68393fcf5c95d7dbd34676528a1b589f78ef3f637089ae9e4b94bc22c84fc"
+      "sha256": "9eb851181b907de87f6fc7ab5a9e76de106356487980539deb1235e639436485"
     },
     {
       "bytes": 5209,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/spatial_coverage.json",
-      "sha256": "d48ed012638d5ecf5e2c3f325165d2984ee5950d5b643506aa7a2a24b9542403"
+      "sha256": "7e1d13e8e851148c1e092c8554c30d78d712dbe3e12c8e34bfefab9b81d6630c"
     },
     {
       "bytes": 994,
       "path": "assets/v4-full-profiles/japan-gsj-geochemical-map/usage_rights_coverage.json",
-      "sha256": "200e145df0420b48f2d37c717307155cb8f6fea1dc8a4a92d74ef2ed6b335d47"
+      "sha256": "24778d9b790cf3fee404fb7628ce1903767d471b0fc246338e98bfef08d4def2"
     },
     {
       "bytes": 2373,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/automation_health.json",
-      "sha256": "432b18ff4755192753c2e3b97804666e1f9aa6947e6e8691516e94fe93fc256a"
+      "sha256": "512ab002f652d6e9fc94cf272c7b1a2b50051019a4b25fd4e34158fa1bae2f8f"
     },
     {
       "bytes": 796,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/citation_coverage.json",
-      "sha256": "6fb1475e45d7cb69a84967f4f8625205c889675b8d3a7a6cb178b03df8f5ba78"
+      "sha256": "a6255efeec3574db2395b8f4e43ffff77759291581e7a67ad2313d1a918092ca"
     },
     {
       "bytes": 4958,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/field_completeness.json",
-      "sha256": "9b9c91d4e7a9b906ada2ba9779584d4a2ffbf66f609b5e6622de66f45c500a93"
+      "sha256": "cab8ab8ba6066254eed2b07c434e7276d16776df46128bdbcc4fd67dcbe78eef"
     },
     {
       "bytes": 756,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/geology_coverage.json",
-      "sha256": "de89a6bd0fcd947749a522ba6f5bf804ef044024b5798f0dde2ba62c09ec01e0"
+      "sha256": "5ff5774e033ca74a3014b93e93dcb3d824f91389f8f19645fa9f177056bac503"
     },
     {
       "bytes": 667,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/method_completeness.json",
-      "sha256": "2e50a021a5f3118880befbda4c28e26bde4d953c3dd63595b26e7f2865edacd2"
+      "sha256": "1e3e7d090254efc6ef07d2e3997d45aea31aae1373e5fdd5b83314760ff6957f"
     },
     {
       "bytes": 787,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/sample_type_coverage.json",
-      "sha256": "f8db85a11f1be7bab6719d423c167737f5b0a5f1dc017ee692a0ff6c16f5a80e"
+      "sha256": "db4d69d2a06b63d120f1d7749c0e367622a5d409916742406b0f2d4c76794620"
     },
     {
       "bytes": 4303,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/spatial_coverage.json",
-      "sha256": "ef203b011957b9691ce2a375cc3df43df841068000214b3757e16507645ebcb7"
+      "sha256": "4b02b9c0e8eccbfc28dbcacd7417c643444cf7bb3fcad2edeeeb7856134293f7"
     },
     {
       "bytes": 979,
       "path": "assets/v4-full-profiles/japan-gsj-marine-sediment/usage_rights_coverage.json",
-      "sha256": "50b20d1942e56e0ae67a42f4f461dc51ee49318f11a31fc541171cc8dd7929dc"
+      "sha256": "8dd8db381555a877032d650cf9b8bd94d4031ebea6f1200c3c913c0415274efd"
     },
     {
-      "bytes": 3556,
+      "bytes": 3325,
       "path": "assets/v4-full-profiles/norway-marchem/automation_health.json",
-      "sha256": "92a6b120e53dd08ab9490cc49d59feac2a9ab8e1f0de469acb1dd203d93a90da"
+      "sha256": "63787a600d163b3b6e8e33db3362c5c8725999d86ce58527815da1b489c3819b"
     },
     {
       "bytes": 803,
       "path": "assets/v4-full-profiles/norway-marchem/citation_coverage.json",
-      "sha256": "def53986ac1285d7e50c126091b05eec20752f4e9afd2c65685e4515c1e5eee3"
+      "sha256": "2bd20fa9d409b4edfb196970fa6804c4ff62fdc4e7704896a2cdd428acc4cec9"
     },
     {
       "bytes": 4899,
       "path": "assets/v4-full-profiles/norway-marchem/field_completeness.json",
-      "sha256": "04d202c101609dbe250e68639acb39eced2bedf90e02ab0f9fead01fd7ce8b47"
+      "sha256": "da50f8ce03551e8cd0c23aa29b9d1f65c2a20b116adece47c0754b96c31076a5"
     },
     {
       "bytes": 765,
       "path": "assets/v4-full-profiles/norway-marchem/geology_coverage.json",
-      "sha256": "3ed6d5d7aa11b65717bf025dfc80dd4663c1c60f5cdadeb21c8a86b73a37f22b"
+      "sha256": "38eae518aab729d3fb44c58e5f34b4f7708493a6b704308dcd5c2d79a7582daf"
     },
     {
       "bytes": 730,
       "path": "assets/v4-full-profiles/norway-marchem/method_completeness.json",
-      "sha256": "c73893b07e65a3de78c54e3417c8c03f8afcd376d3db1f86e40661b53e00c5b7"
+      "sha256": "4a1cf75294076f95f6b262814e0b961050a6cce206ba2044939d5784014fc254"
     },
     {
       "bytes": 792,
       "path": "assets/v4-full-profiles/norway-marchem/sample_type_coverage.json",
-      "sha256": "7973a6750b683fc7530fa62e3bebff91bcca161f89ee4af04be571185bd222fa"
+      "sha256": "ec04636132acf0228492fa48be280c7798d3e40f395f9249cd88ebc3f5ef0a51"
     },
     {
       "bytes": 4020,
       "path": "assets/v4-full-profiles/norway-marchem/spatial_coverage.json",
-      "sha256": "cdfa6b945b9a1b4dba191340edc20be87f41d5e234f2e26a27c52dedab936c81"
+      "sha256": "1762b2037974662992630dff9ebf637878eb023ef788dbadbc1a541ac52f8913"
     },
     {
       "bytes": 957,
       "path": "assets/v4-full-profiles/norway-marchem/usage_rights_coverage.json",
-      "sha256": "a64fbf478bdd691d629f1e904d93fcd1af5fefe6ec135153a8ef278d61982df1"
+      "sha256": "efc30e8550b1a108232cb8185f174e6d8264a826ab7c44c5400b3cb3b23f17ee"
     },
     {
       "bytes": 5235,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/automation_health.json",
-      "sha256": "23bda1b92a31b1a86978986680cb48f726ef0d3271b81431ce40c6ccd28355b7"
+      "sha256": "44793052b2ced382a418f228d5cde42dade3875793c8e87411006ccc1b770a26"
     },
     {
       "bytes": 791,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/citation_coverage.json",
-      "sha256": "01d4ec1bc61136223db31cb91d252d1b2243864cdc3dc36779d1fc0cfbf74add"
+      "sha256": "8c41eeea012440d58c8d4e6a840de95df644bfc6da8c12ed0451e5d3fdc73023"
     },
     {
       "bytes": 4868,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/field_completeness.json",
-      "sha256": "3ed1d1b130659128b20367bd3ebfcee5756e7154b490a14e4488c1cb46d9061d"
+      "sha256": "09b6011ed12739d7b082d152151a0e40d123413a9a548f7b72430680b26159ee"
     },
     {
       "bytes": 734,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/geology_coverage.json",
-      "sha256": "b674de75348bcc8def17f6935461f613e2f9aeae8ebf4b8bcd5b45e240aedd04"
+      "sha256": "91bbc6f40ea9d8d49af2e90b9743cde74e268b425fde338b04c77842fe57dbd7"
     },
     {
       "bytes": 755,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/method_completeness.json",
-      "sha256": "dcb846f12a1299e2e7adf80607f03049caf1f9d5a5d85fee396707f631d16224"
+      "sha256": "bc7d4eebd8dbc32d065962d7515ecece27af1866c8157eeda62cf760f39acbb3"
     },
     {
       "bytes": 786,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/sample_type_coverage.json",
-      "sha256": "acbc3d7f7ead2f724712f46039deae89c06d375bebe4d99180ba5a3a263a370a"
+      "sha256": "c8f67f0bba522a3722437121cefc775c3e667861de1b048be333b866e1db7277"
     },
     {
       "bytes": 2170,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/spatial_coverage.json",
-      "sha256": "3e58af6b7b4220be81f74876183518b9edac97a5b7ddf05b675355d0919003cf"
+      "sha256": "4950b8ffd3696bb2b3895fe8e354e264def1c0ae3aaea288136e3a41dd1416e8"
     },
     {
       "bytes": 926,
       "path": "assets/v4-full-profiles/pangaea-amazonas-soil/usage_rights_coverage.json",
-      "sha256": "47d78511b561ae9f3d705d0b7114b29c0647c2e990215f77f2f9c1307754d00a"
+      "sha256": "2f13f2e8e1494dacd9caf14dd160d61fa1163a1273a9260a2ebcf86607f3d5c3"
     },
     {
       "bytes": 2816,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/automation_health.json",
-      "sha256": "bfbb69247071753fa71b80d2e165ebbf61878e878d76751a2730e24850302203"
+      "sha256": "10584edde8bec1f9ec4e8f3e65022f0e822d6ff4f7bc43966f6a8ba74d54e5dc"
     },
     {
       "bytes": 795,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/citation_coverage.json",
-      "sha256": "f8ae9888a1622462692209095593e5188664f86af7de4b484bd3e02cb83c60e3"
+      "sha256": "468b969b5cf1447537fa82eeb072d317cdd5c0bd69919ace4e2116317e6adf3b"
     },
     {
       "bytes": 4806,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/field_completeness.json",
-      "sha256": "5a30ab87d0971351598af47c6b183991ddef3ab0c8a9c38692608f8b99a1b0be"
+      "sha256": "2813ee3124e37ab8bbc7d2631b6075e443f0f6d96e2c9baba4fd49ae4e4f2ffb"
     },
     {
       "bytes": 740,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/geology_coverage.json",
-      "sha256": "9ca02e66f1b3d0ede23f0cd6b021cc0b7f78710362195e8fe8203159f1e7e61c"
+      "sha256": "591c1e85eae7cce73a5e16ca214f3bba646699b02ea1ab08ba6c766ee6736542"
     },
     {
       "bytes": 679,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/method_completeness.json",
-      "sha256": "503264e45c80279605a6021acc66a3da53e65b2bdc0b92442019cf0a8f71b123"
+      "sha256": "161d9c985d13e9af9c636af4ee5eb816341ad448d8c842bf99f14526f01847fe"
     },
     {
       "bytes": 768,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/sample_type_coverage.json",
-      "sha256": "456a99b5bf398ddcd17fab6dccea5b1fbe5ead78870dd196f33c8d9036d46ec2"
+      "sha256": "3d706919389d2b5bcbd30cb9b5ab1da07e326b891f4233c2aefa9e500d8ab894"
     },
     {
       "bytes": 1861,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/spatial_coverage.json",
-      "sha256": "cc50d5118b81c181b9b2bb23c7213c5de932b12aac5b06ce7d90ff8ce4f2740b"
+      "sha256": "3683f18da53b08ce97551a574d1dd3694c4e484b58536afe55a41f4f2b97512e"
     },
     {
       "bytes": 929,
       "path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/usage_rights_coverage.json",
-      "sha256": "2c7cbbe6dd300aaf6d951d436f9383fb0dc7c3277b109d348fe30da89a36138f"
+      "sha256": "e07697b148f28edb1d00fe0b875da2a391fcada4117d082afc6208f93c47440a"
     },
     {
       "bytes": 1805,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/automation_health.json",
-      "sha256": "8cbf4b428ebfcae77eed12a0e6f0795aae64765ef06223af70117f5908733989"
+      "sha256": "c367f879927051299e92eb6cab5a2527c677c66f922cf335059e946e1404c418"
     },
     {
       "bytes": 799,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/citation_coverage.json",
-      "sha256": "c07f9969ac8cfb0dc5697181f67a0cbea031e89454c59ae8b2ed9fded0b55699"
+      "sha256": "dc3aaf937627a58e230862a39ce4a26208e1d4ea7c6173364ce4701b641cea88"
     },
     {
       "bytes": 4877,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/field_completeness.json",
-      "sha256": "8728ba2d79c634055bad9d943d2ebfb7f35aa74121f2971a217f2f76bf9d888e"
+      "sha256": "6fdf8e5f460712226f031892505d4bb4a27fc93111626a1259e34b55793f02f6"
     },
     {
       "bytes": 743,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/geology_coverage.json",
-      "sha256": "6c430f90e17ec92b5b68288607df7179b71b42ea140e4b7847ac58507f10f426"
+      "sha256": "b4bb05c96cf1d9cb4310c60c68f290ca8688269d57eb916b855bcd9715212f44"
     },
     {
       "bytes": 811,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/method_completeness.json",
-      "sha256": "9a586db6e86e43539bce8d9941bca6ddd7aebd3a8db80f2520fd8179bb7fae2b"
+      "sha256": "054010cd5afea23d245536546d7a08ec782284f408d8378737883d7c65362edd"
     },
     {
       "bytes": 773,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/sample_type_coverage.json",
-      "sha256": "952d6c9c3e5e5fda46b3120b795c56eca4b13b87f50c61d9ef32c1189c1611bd"
+      "sha256": "0721385923fec2703a45e9049763dadfd965a49176c87bb6207c4618e661f3cb"
     },
     {
       "bytes": 3351,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/spatial_coverage.json",
-      "sha256": "ae0e0ff9824d5e6c115e6fcc39ad8cd0047a4f571afab3b42225b06b3583a394"
+      "sha256": "2c8e5acc24c4571ab06b7892dc3124c8e92bdf88bc417e645576275678b8aec9"
     },
     {
       "bytes": 935,
       "path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/usage_rights_coverage.json",
-      "sha256": "eed238d1d3b6edc83f67ae8afe5c660930900ab063ecb234f82f0fc110f918cc"
+      "sha256": "1c4792d8699cbf9c97077f9f1531d490adc371c0485f6e969c5302e52d3afc28"
     },
     {
       "bytes": 2140,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/automation_health.json",
-      "sha256": "9f0566571722bcaf566820daa6a153673feeb341e365b5e2208793c1eef2e475"
+      "sha256": "1f4c3fb678ef10ba8fdf3fa4f8d9eda660ac74aabf88575cf08f201a94ed4b82"
     },
     {
       "bytes": 784,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/citation_coverage.json",
-      "sha256": "05e3c8124a7e9a394425fbf68200b30646df87ee9f2698276cbd643b06aa8b89"
+      "sha256": "7594d182d82440be78ae1b64ec3a35ed223009a032b94fe2816acb0752dc9e9a"
     },
     {
       "bytes": 4735,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/field_completeness.json",
-      "sha256": "f5a6aa61f8f81c2bf49b8da0bfb67ad29424dede5beed128f84701c9ebe424ce"
+      "sha256": "4a3a9aab698c941a0e7c624db05286cce0dfba0a1692a2142db71d4f2cb97f3f"
     },
     {
       "bytes": 731,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/geology_coverage.json",
-      "sha256": "e0494ec771d9d14c6c68791cd7697371167190a8ef18dfcc897fe1be87497515"
+      "sha256": "c798fc37fc59dc1d738e72fbc6715599b6aa7b042b071d8bb698ca83440e0c44"
     },
     {
       "bytes": 716,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/method_completeness.json",
-      "sha256": "9afd924389945d83a8ac41440c276f36615057784bef0974fdc50eecaa62dad7"
+      "sha256": "b027985eb921374bdfaef7821a1d918a0879257a7d3989379e1ebac55ed8e0cb"
     },
     {
       "bytes": 838,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/sample_type_coverage.json",
-      "sha256": "e2b4850b10a2a6160a883464c392b54aa2f229e3a2f84cf51c1018b6962447f7"
+      "sha256": "53511175f83bc904d54f57bb29431851a3872df714368c22443dbb1f5198c52e"
     },
     {
       "bytes": 1871,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/spatial_coverage.json",
-      "sha256": "c4ec35c8de9bec7eb0d509003dc32196596dbbe89f0055b7439295d8a2884137"
+      "sha256": "999d544572df36e20a2fe342b5961734b9541ea6074a029ef6f117da08628a0b"
     },
     {
       "bytes": 917,
       "path": "assets/v4-full-profiles/pangaea-batagay-soil/usage_rights_coverage.json",
-      "sha256": "f4ccc9533b0782ca9021e6bcb5a2a4647becc163d0cd88a5bf1e2f01193a4061"
+      "sha256": "45535b4569986c3c126996f27d96a09376bc82f398123fe0767b866a4ad8aafd"
     },
     {
       "bytes": 8595,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/automation_health.json",
-      "sha256": "309724d6bdf59fc89bff70bc171cb123f348dd511106563f669e78874732d7c8"
+      "sha256": "d07d345aa4ae359e2a03a0661444c37e242f00cad8c4a88aceb665c5adb36a76"
     },
     {
       "bytes": 799,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/citation_coverage.json",
-      "sha256": "775aae54e79d866cd63a657c26041740f54c298e40e3281df073f29afd692e4f"
+      "sha256": "450f16d9ff6ac1da60e1958e0b162eab2710e4d6a9fdb0037503d93bc073993c"
     },
     {
       "bytes": 4876,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/field_completeness.json",
-      "sha256": "1e0f79e0d678f93f94e2f02429c8b5ba4c829830ed6605383fb2c786192c36af"
+      "sha256": "028265eeb638a931efdfc38b1aedbe8bfbfe1aa40d0422fdae201dce7799b094"
     },
     {
       "bytes": 745,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/geology_coverage.json",
-      "sha256": "6403b70897122c42fb442287c70f125392385d7985003df9d709a07f3e5485f7"
+      "sha256": "11faa4ff37861b0f72559ccdcb8f78fdb0e3ecac81259e48dd4767802a5296e4"
     },
     {
       "bytes": 892,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/method_completeness.json",
-      "sha256": "0986cd3f6a64cca527a657fdeb9894a3bfa13b806fd4305db89df3d36a1f777b"
+      "sha256": "4f7b579952a126a212146bdd7c899203522b19714d3c3a5371d9deec4d107b37"
     },
     {
       "bytes": 826,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/sample_type_coverage.json",
-      "sha256": "d6897c111dbd5b6623aee5c7652a53b84baf96f5904e3e5ca015023c7cdc22a5"
+      "sha256": "e0e5f2588bc933047b5c3af2a239614f4c35fe08a27f408ec50654a8d9357db4"
     },
     {
       "bytes": 4427,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/spatial_coverage.json",
-      "sha256": "5c24cfc9e011e63b8c0b1445234f0e911f7442117c9f3bfca26dd23e271587ca"
+      "sha256": "b0097d74e147164a1d94589a1d31058bb11b959543fe172122cf49fa5adbd644"
     },
     {
       "bytes": 934,
       "path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/usage_rights_coverage.json",
-      "sha256": "08cf84ce2ce1232c6e8e673ebb805209de80986979b2651fd2a312f8450b8b15"
+      "sha256": "6c30bc9b95ad4773ddaa38b9589ffa07f9f996ad394823405c8ef4eeeffb1341"
     },
     {
       "bytes": 2471,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/automation_health.json",
-      "sha256": "7d722d16a70edf80265bb38534ae35caa481d4d52d9c6245cffb1c4b16eca0a5"
+      "sha256": "f7a56a348ee1f90017ec87e9af1090ed95d208b0c824f9a14e6a0937941761d0"
     },
     {
       "bytes": 794,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/citation_coverage.json",
-      "sha256": "ac97da1f7f7b3b6f69ef687358bfe495dfb5d406ca12aedfc25837f4d44d6b55"
+      "sha256": "ade516cd51dff1b35d1e163e09d315dc48fb684088d8cc3dac61c2efd1071768"
     },
     {
       "bytes": 4805,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/field_completeness.json",
-      "sha256": "d38998a383741f1effe7a6426265091a98176ea3fc205207c4b08ad079b8b039"
+      "sha256": "113bf45611005226854ff96986ef9bf2c19b1de87b0cb1fb1fb628799f9123b4"
     },
     {
       "bytes": 739,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/geology_coverage.json",
-      "sha256": "870c701bc3607f306f0c6d4e5793f6545bdcd6f2030c7d2ce9a97364f10d8bc6"
+      "sha256": "fb3e5d5bd8296cb772c5dea17ab088f3d6e2f0ba84c816ee8dda8a6928cf27c9"
     },
     {
       "bytes": 695,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/method_completeness.json",
-      "sha256": "acc797f928123ded5d89ae22a64f50c6187818e360b342ba6a0bcea820ab779a"
+      "sha256": "493a1f79fac8d233597b2ab8e0baf6354b6cc78c20f8e817e86978dffb704c2d"
     },
     {
       "bytes": 840,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/sample_type_coverage.json",
-      "sha256": "754f5578c060b1869e00ef713124ec411256f774f71a5086ab78af6cc70669bc"
+      "sha256": "05b11d42aeb0f4b27add0f940a8755e16ec1d4e2a0765613feaa9e8efd219dee"
     },
     {
       "bytes": 2550,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/spatial_coverage.json",
-      "sha256": "d968d2ade8085a49606c765f552950575b183926be6f3516f6213a8e7f56ab4a"
+      "sha256": "911aeeeab9e3c4686ec89a0944df23fc9f8cb3617e71afd080e99cacd4b63c13"
     },
     {
       "bytes": 928,
       "path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/usage_rights_coverage.json",
-      "sha256": "268d514a570cc7ba9fcfbfc36a671953fdf5e3012abef7893b69407bdb4f4cbe"
+      "sha256": "23ccd8c5dae3b16cd69fd5bc3f0888e5057807825b9cbc0866579497c305e5e1"
     },
     {
       "bytes": 2634,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/automation_health.json",
-      "sha256": "89e0ab4ece5e48c3cb1461002c03b70eb76f9df2511bfaec549fa1acb86c9cd1"
+      "sha256": "d97cbb2737e044ffe5a436151cdd722fd764a10424f02de8c9dc00399e88925c"
     },
     {
       "bytes": 792,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/citation_coverage.json",
-      "sha256": "5058cbda12a0bf3eb2c8de60950c17d756db82d085662f76d432054fa2576043"
+      "sha256": "ca525a1c36ee6b6117295fad771098967d97e65681162cd124f41f2326916c95"
     },
     {
       "bytes": 4803,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/field_completeness.json",
-      "sha256": "cccff5c9c601ec7d5dd1eb2ff6b414f00db7ea896a6d03c7157454543c6d1f0e"
+      "sha256": "9fe65526e6c51cf8678b4e4657d8ecb44d276f9d871786f2fa7f4b40cc47c751"
     },
     {
       "bytes": 737,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/geology_coverage.json",
-      "sha256": "67bf7d390ed71c6605dabb5ccc486f5d94e17058422612812c8c3d5ffe869fef"
+      "sha256": "81fad30bcc4ceed516a919420739185ff535c50a31237fb86a19a552effb22c7"
     },
     {
       "bytes": 685,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/method_completeness.json",
-      "sha256": "6537f44d3b16f589c47777edc06486463024d0654bbdd0911be74124c148f858"
+      "sha256": "349623e624207b9f862ee5017a1501b74a5aed7ad916f77439c69cc7267b21c8"
     },
     {
       "bytes": 761,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/sample_type_coverage.json",
-      "sha256": "db43a7b6d97e297941f45f4419a6aa0ca3375f49ce09e9054a91d1312bc7e42b"
+      "sha256": "683cef6abe9d146e53f6da1154fc3889f30fb8030b779f361d32fcb5dd4c20f2"
     },
     {
       "bytes": 2808,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/spatial_coverage.json",
-      "sha256": "9200cb3ea56987000ae58e8385881f364114dcbe6f14c8097e86f7bc8ff978f0"
+      "sha256": "ed5c98211593577e34e14f4a039cb661a52d751db367fb64350ecd8d5d87c4e1"
     },
     {
       "bytes": 926,
       "path": "assets/v4-full-profiles/pangaea-north-africa-soil/usage_rights_coverage.json",
-      "sha256": "6340d47bb75c21c91cc848c6de042f405c1b671ece1ce29b76982c81f2399901"
+      "sha256": "82e952013b4706bc31aa3b69d520e2ab51a39b8a062d4e8d5929e16b6f3a35c6"
     },
     {
       "bytes": 3544,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/automation_health.json",
-      "sha256": "cc984b2d83378b89f633f67f52e4d8a4f4d0e61854569fb7689c3574a20b9de9"
+      "sha256": "b2921ac564a991857479481a4b70b6cda41e15fa6141a14a8d7ec585a6fead53"
     },
     {
       "bytes": 799,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/citation_coverage.json",
-      "sha256": "3bb147da2b1b87c8486bc62aeed517da0ea8bff208dbdce8fe6ed2b2b3f1520f"
+      "sha256": "c7376f039950eb941c96ecfe12ea883901ea427bf0b479448cdd6c2d9622727b"
     },
     {
       "bytes": 4810,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/field_completeness.json",
-      "sha256": "22f198fc3e225a3adc6b1d601befe0bd16443f2c5424add874b2b45054b49524"
+      "sha256": "11c847e8ec93404063931685da84cc51b7d8cdfc5d40fa591d06a2fd30785cc9"
     },
     {
       "bytes": 744,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/geology_coverage.json",
-      "sha256": "701d8981b2ea61ce118328d3201d22e5e1cde4efa238be2224fbf7cd7c2fe9e4"
+      "sha256": "56d477652248157b8728cddb87ab9e95250fed57fe85bd9cec57b84d33808ccc"
     },
     {
       "bytes": 677,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/method_completeness.json",
-      "sha256": "ddbec3279931852c9b661c9b91b18524e41d93b547b73295b70e01a5182f3515"
+      "sha256": "4cfd0142b8bbd1f2cd7085400c43919d429b8622f06bd9d8e9143c7ded7c47c9"
     },
     {
       "bytes": 775,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/sample_type_coverage.json",
-      "sha256": "e13e4e69db591562260cfa6ca96385047d494a6a4e1aa22c3cf345861cb8aed5"
+      "sha256": "ae50f56f5e041dfaa47942c60a66e5b8499b14519200171f12c1e05577f03d58"
     },
     {
       "bytes": 4009,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/spatial_coverage.json",
-      "sha256": "407e717fcfc0bf3a5d913a10959148891e5d224b503270006a3701f268f99987"
+      "sha256": "e1dc8a025a51e7e8a26a48e2a4c64ece399e6bba912560ca0a65d9cec09890de"
     },
     {
       "bytes": 933,
       "path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/usage_rights_coverage.json",
-      "sha256": "7d6b7d1e35ab02c2f4f66cef70bf48b3e0dbb0a38041640ec12b05654652403b"
+      "sha256": "fe71c071de38370458d20edccc50eae2e3bfdff2c7e17a0c5693a95d37c57e6a"
     },
     {
       "bytes": 2830,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/automation_health.json",
-      "sha256": "839c29ed3985728cf3e0e0bccd8cf894b9e86fa1cbc00d398bcde367699996da"
+      "sha256": "0fe7489037855878dd9bc65cd90212de1ed21c81b7f7ad94b48c5a38b041db1e"
     },
     {
       "bytes": 808,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/citation_coverage.json",
-      "sha256": "fd1660e105095d4bb411b6bd915fe3eaca53d09e4505114b68549de0fc105b23"
+      "sha256": "e0e2d1cbc91b34ecb3f1351d1f65524c2e4c763f5ee0fb86321843c6572e1ab4"
     },
     {
       "bytes": 4881,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/field_completeness.json",
-      "sha256": "e95675e2b2954020c94dface63314d830f1df2612dbe435df3f444269db8a0e8"
+      "sha256": "e13ea6b96df325ef2a69dc7e0f427bc8cbd2b3bcea9dc12323d5076ea17db3c4"
     },
     {
       "bytes": 750,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/geology_coverage.json",
-      "sha256": "d5c9a28f60f1206740aca5b4bc706787a310693eae931753fdd5b6fbe9d3565f"
+      "sha256": "608af4797f32805dd775f58da9b3e3d0edf9925098d7b6da8c1bba1fb5cccafa"
     },
     {
       "bytes": 722,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/method_completeness.json",
-      "sha256": "0df3d7336aed0063e9f003a46d7aca2e0a789e988390aedb598ba1b52a226caf"
+      "sha256": "48888a3b3c074bee80b68fc38ae493662d45e4c6d093d477dfca1157a98777fb"
     },
     {
       "bytes": 839,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/sample_type_coverage.json",
-      "sha256": "1964875055d6bc50378c08bdb57b5a28f553210be1e8bfbf2d06af9f9f9764f2"
+      "sha256": "229fe870b90b9567f53a173da95181991d975815530886fcf45e4c68a00d5212"
     },
     {
       "bytes": 2611,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/spatial_coverage.json",
-      "sha256": "f20c16dc70d190eab4029727e94231a7e2775ab2adfe39a4c7484e48d0a4b543"
+      "sha256": "6c2aecccf0fed404db61e252ab770b051676867fbde4c16d3e6dbd0dbb78eb6e"
     },
     {
       "bytes": 939,
       "path": "assets/v4-full-profiles/tpdc-china-mountain-soil/usage_rights_coverage.json",
-      "sha256": "ab3b39828ccecd47cf41b5b7324604aac26702fca0b07422274c8015519e5034"
+      "sha256": "80400dd36fb98e5fa36205c753dd71cc7f2ed4a9170c86a82d7735da8b26bf57"
     },
     {
       "bytes": 4771,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/automation_health.json",
-      "sha256": "ed4bc8a9dd9e23a516ad7ca5d78b867d287428711f6ef35ce8a09dc835bbeed0"
+      "sha256": "d55a48803324503e3ca04d9e8fcf2acd3be83d89498c9cb0542c53261ad05585"
     },
     {
       "bytes": 800,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/citation_coverage.json",
-      "sha256": "fd0bbe5c42129d0914966732536c37c708a6e94fd4e083a2e004ee4dba3ce3a3"
+      "sha256": "8633413b4811a7a51145e7c29fa8b85da7b37845867c7c0008376a85d2f3d2e0"
     },
     {
       "bytes": 4826,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/field_completeness.json",
-      "sha256": "43ffe6508126534fdad47356731fdbee088e5d65de00bfcd495b774b48690a82"
+      "sha256": "890c29a7b1854916b688847acc1b14e0c62301df4546502c8d8fd77454713335"
     },
     {
       "bytes": 760,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/geology_coverage.json",
-      "sha256": "de805e07bce292a2be5ce2ea4cee53bfbe7c735182ca4c07db7d70bcdb42fbd5"
+      "sha256": "7e565669b01e66b6abf52ec0bb35a1ef360e66416be79f3e147aca46b1666d13"
     },
     {
       "bytes": 713,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/method_completeness.json",
-      "sha256": "8a7e290394c08ebd4848aeea30f0893eea81c79d5b501c3a636e3faace2a0448"
+      "sha256": "2e18c1e230d7e81a06c723588977b688c5d155a362920d0bada464a498815905"
     },
     {
       "bytes": 772,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/sample_type_coverage.json",
-      "sha256": "155f9b043f1c7d124521577b34ee3f169881eb12c5907f41a825a9f6bd24c8f0"
+      "sha256": "3c2c86848f799161069ffe4c6b73ada156d810d2dc8725edc063e13822d34643"
     },
     {
       "bytes": 1541,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/spatial_coverage.json",
-      "sha256": "90c1af36666971c6d193c1c515890e5717490564f429342b2aba6bf99c8638fe"
+      "sha256": "b9ce9498f646b6e3136a2c932563297aa36522622f80c0f61b7ce71527a2d4e2"
     },
     {
       "bytes": 1007,
       "path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/usage_rights_coverage.json",
-      "sha256": "c65a9ec3a1589473a2f6cb45f71179e73d1156cb1417f15178c6fb4524bc9ae9"
+      "sha256": "d5948f3347280ef7de8b992bc7467b18178b89f95ebd6795768c7893d1dce38c"
     },
     {
       "bytes": 5632,
       "path": "assets/v4-full-profiles/usgs-conus-soil/automation_health.json",
-      "sha256": "8e4af7aa6e639b115def94d1eb17b1228d77ad2954daa7255cc93f75a35bcb2a"
+      "sha256": "2a1a5268889db07be982b944d8cb165a78ca5b5349114efeaa48ad78b7b9e33f"
     },
     {
       "bytes": 798,
       "path": "assets/v4-full-profiles/usgs-conus-soil/citation_coverage.json",
-      "sha256": "ba7abe61b4195e6af82925aeeb31d94ce2e270db71ed875bdc642cf6f49c040f"
+      "sha256": "98ce92d962059455d5362f5e33cc589893e27687a7584960ac4798809e53e922"
     },
     {
       "bytes": 4950,
       "path": "assets/v4-full-profiles/usgs-conus-soil/field_completeness.json",
-      "sha256": "9008517ab7ab3c76f8a9cbfee1a879433eaa31e0017dd3f791ddfa08d0dc0d01"
+      "sha256": "bbd6a8ec6d93a2e4a07ed697cb307c90704208d7291d75c30f672f2132736d51"
     },
     {
       "bytes": 748,
       "path": "assets/v4-full-profiles/usgs-conus-soil/geology_coverage.json",
-      "sha256": "1b2448ee2a9ac66dd5c3c1e4695ee2f9f91a91ffc2228d9f59747586b55007d1"
+      "sha256": "dcb66b7de28ae40cfe71705ffcaadb5f382b1d1bfa5bc9447c4373ca989daed5"
     },
     {
       "bytes": 659,
       "path": "assets/v4-full-profiles/usgs-conus-soil/method_completeness.json",
-      "sha256": "403d35d2a7b3058f421511d669798269739ade4d06de4db4ea5fdaca17fdf239"
+      "sha256": "eb42573a9832d8b19fc322aeee7aea69f0379f056d8ba9e62c7faf26c4dc5d0d"
     },
     {
       "bytes": 838,
       "path": "assets/v4-full-profiles/usgs-conus-soil/sample_type_coverage.json",
-      "sha256": "ec04f952561005f0b18b9d3705b769ac91fc4d98b624de375272cb94e55caa76"
+      "sha256": "9d613d6fca61c447413ed73c2e0e7a5f0293994caa3f3afea8cc7c5df88858ff"
     },
     {
       "bytes": 30575,
       "path": "assets/v4-full-profiles/usgs-conus-soil/spatial_coverage.json",
-      "sha256": "db980f39ef924b5593f42fe6ee2b014320738c5e935d0abee82139bdad3cb4e2"
+      "sha256": "31c60fad2987b3ae298e078643259b58aa5c3d3bc5dae1e252408d701444d643"
     },
     {
       "bytes": 1001,
       "path": "assets/v4-full-profiles/usgs-conus-soil/usage_rights_coverage.json",
-      "sha256": "bd17a640720690e4c0a289cc570cf32e1245e8fb0e2658ce2bb3c16732e1f96a"
+      "sha256": "a70c31082dca81424c37b6707880aa50af685345f19ef6a5ca8429c272fe3645"
     },
     {
       "bytes": 1800,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/automation_health.json",
-      "sha256": "111848ef322bf605bb793429f8dfa0cbe06465b6027782bcbd0a3ce58a9aa6cf"
+      "sha256": "2775eeec93387501a7042fa252bdbf9614bf6f89cbc0d23d54c038099b4b09e3"
     },
     {
       "bytes": 830,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/citation_coverage.json",
-      "sha256": "bb71c9e471a1e647a036925d33f13557cf97ca7ec01a5ae37adb973dabc92dc6"
+      "sha256": "e8d5b320136e131f38ed2b1517a555199943ec87b0b2fcf1c2e669c8c65a15bd"
     },
     {
       "bytes": 4841,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/field_completeness.json",
-      "sha256": "8b174eaf35d145e3c511334abf7328fd1cd7efd4bfa8e1b8030ec93a5a264d50"
+      "sha256": "3251cf50935f3d2ff01c591d1453e2ba9ed8df4295b6e4accdfdf8edfee45b73"
     },
     {
       "bytes": 775,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/geology_coverage.json",
-      "sha256": "78a1815eeded430885e4641f9abfbd1591f870fe21341dbcf1b46ecd01a7e048"
+      "sha256": "9693126e7d9c455b5e5ae00c6d4b36a70fa8e671395b2b159ce2c207d8ebf2b8"
     },
     {
       "bytes": 682,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/method_completeness.json",
-      "sha256": "c8f543dabc011cdb7518b67c6e691a76e75bacd709149056214810a9f74c97cd"
+      "sha256": "47b10106f1c4d2fe19356ed14617fff0d42dde1f8d1aae86105daa3265e860ca"
     },
     {
       "bytes": 805,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/sample_type_coverage.json",
-      "sha256": "9f2de151a34600a9e32109693bdb2a337ccb1e8ebdc02a16311ed6f51f674407"
+      "sha256": "d3f6c5ca85cb42592b3c7cfc744ad36b9bea2cea551f3a2f2118d690c90930e0"
     },
     {
-      "bytes": 1569,
+      "bytes": 1558,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/spatial_coverage.json",
-      "sha256": "7234360c0710589dfd914b7766733f5d49094549a6465709f8af8a953fa8cdc0"
+      "sha256": "beccb8b06c9c4d39a2b2bc19c1871f13898521ba150c9bd0e7105818da0849b9"
     },
     {
       "bytes": 964,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/usage_rights_coverage.json",
-      "sha256": "c24ea823e7e441e5f726f00f9163e48e162ea736a495702a9305e66a4a82ab3d"
+      "sha256": "84f966de52a917c7d5ad5b15c523b72e9b1ac4fbe3cb8947c26be909b5a73454"
     },
     {
-      "bytes": 4413,
+      "bytes": 4665,
       "path": "references/v4-full-population-profile.md",
-      "sha256": "d77326135a8b9ad4042e5cb7904af772da05d4159b9178995a4e5b986f414d8e"
+      "sha256": "3ce74f34dd182f6282be97db2d6e7d64b71aa1495182c3941796698d842bd14d"
     }
   ],
-  "as_of": "2026-08-14T20:30:00Z",
+  "as_of": "2026-08-15T07:00:00Z",
   "comparable_observation_count": 424267,
-  "coverage_cube_rows": 12986,
+  "coverage_cube_rows": 26163,
   "coverage_cube_version": "d1-v4-coverage-cube-v1",
   "covered_spatial_cells_source_sum": 8169,
   "denominator_definition": "all non-empty registered target observations parsed from verified full caches",
-  "distinct_sample_count": 781965,
+  "distinct_sample_count": 861738,
   "media": {
     "rock": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 25972,
-      "independent_lineage_count": 1,
+      "distinct_sample_count": 104878,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
-      "observation_count": 67171,
+      "observation_count": 244463,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 21178,
-      "reported_covered_spatial_cells": 413,
+      "reported_coordinate_sample_count": 86484,
+      "reported_covered_spatial_cells": 1857,
       "source_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "georoc-convergent-margins"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -1286,9 +1409,10 @@
     "sediment": {
       "comparable_observation_count": 36340,
       "covered_spatial_cells": 1260,
-      "distinct_sample_count": 15689,
-      "independent_lineage_count": 10,
+      "distinct_sample_count": 16556,
+      "independent_lineage_count": 11,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-geochemical-atlas-europe-2005",
@@ -1300,11 +1424,12 @@
         "pangaea-south-china-sea-sediment",
         "zenodo-yangtze-yellow-river-sediment"
       ],
-      "observation_count": 93944,
+      "observation_count": 100013,
       "reported_comparable_observation_count": 36340,
-      "reported_coordinate_sample_count": 15596,
-      "reported_covered_spatial_cells": 1377,
+      "reported_coordinate_sample_count": 16463,
+      "reported_covered_spatial_cells": 1632,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-floodplain-sediment",
@@ -1387,12 +1512,23 @@
       "valid_coordinate_sample_count": 708416
     }
   },
-  "observation_count": 4110852,
+  "observation_count": 4294213,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "registered_source_count": 31,
-  "reported_coordinate_sample_count": 776952,
-  "source_count": 31,
+  "registered_source_count": 34,
+  "reported_coordinate_sample_count": 843125,
+  "source_count": 34,
   "sources": [
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 867,
+      "medium": "sediment",
+      "method_rate": 0.857143,
+      "observation_count": 6069,
+      "reported_coordinate_sample_count": 867,
+      "source_id": "4tu-northern-china-sediment",
+      "valid_coordinate_sample_count": 0
+    },
     {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
@@ -1425,6 +1561,17 @@
       "reported_coordinate_sample_count": 2396,
       "source_id": "australia-ngsa-mercury",
       "valid_coordinate_sample_count": 2396
+    },
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 15,
+      "medium": "rock",
+      "method_rate": 1.0,
+      "observation_count": 75,
+      "reported_coordinate_sample_count": 15,
+      "source_id": "earthchem-dehailonggang-rock",
+      "valid_coordinate_sample_count": 0
     },
     {
       "comparable_observation_count": 0,
@@ -1556,6 +1703,17 @@
       "observation_count": 65988,
       "reported_coordinate_sample_count": 20866,
       "source_id": "georoc-archaean",
+      "valid_coordinate_sample_count": 0
+    },
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 78891,
+      "medium": "rock",
+      "method_rate": 0.0,
+      "observation_count": 177217,
+      "reported_coordinate_sample_count": 65291,
+      "source_id": "georoc-convergent-margins",
       "valid_coordinate_sample_count": 0
     },
     {

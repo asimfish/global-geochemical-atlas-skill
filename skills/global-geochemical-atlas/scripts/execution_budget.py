@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Monotonic execution budgets for evidence-first research runs.
 
-One acquisition/workflow round defaults to 30 minutes.  The controller may
-start another round when the evidence and spatial-sufficiency gates remain
-open, up to the declared 12-hour task ceiling.  Time is a safety boundary, not
-a substitute for the delivery gates.
+The competition harness limit is 900 seconds.  The task planner reserves
+three minutes of that envelope for Agent setup and result hand-off, while the
+direct research controller retains an explicitly selected 12-hour ceiling for
+operator-authorized studies.  Time is a safety boundary, not a substitute for
+the delivery gates.
 """
 
 from __future__ import annotations
@@ -14,9 +15,11 @@ import time
 from collections.abc import Callable
 
 
-OFFICIAL_TASK_LIMIT_SECONDS = 12 * 60 * 60.0
+OFFICIAL_TASK_LIMIT_SECONDS = 15 * 60.0
+OFFICIAL_HARNESS_RESERVE_SECONDS = 3 * 60.0
+EXTENDED_RESEARCH_LIMIT_SECONDS = 12 * 60 * 60.0
 DEFAULT_INTERNAL_BUDGET_SECONDS = 30 * 60.0
-MAX_INTERNAL_BUDGET_SECONDS = 12 * 60 * 60.0
+MAX_INTERNAL_BUDGET_SECONDS = EXTENDED_RESEARCH_LIMIT_SECONDS
 
 
 class ExecutionBudgetError(RuntimeError):

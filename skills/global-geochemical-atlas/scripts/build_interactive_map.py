@@ -14,6 +14,7 @@ import tempfile
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import build_iteration_backlog as backlog_builder
 import spatial_scope
@@ -38,16 +39,46 @@ VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
 TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
 BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
+ADMIN1_BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin1-china-visual-v1"
 MISSING_METHOD_LABEL = "发布方未报告分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
+DEFAULT_MAX_EMBEDDED_RECORDS = 200_000
 COORDINATE_MODES = ("canonical", "reported")
 COORDINATE_BASIS_CANONICAL = "canonical_wgs84"
 COORDINATE_BASIS_REPORTED = "reported_unverified"
 REPORTED_BANNER_ID = "coordinate-mode-banner"
 REPORTED_BANNER_PHRASE = "报告坐标，datum 未验证，仅供示意浏览"
+STRICT_SCIENTIFIC_LAYER = "strict_scientific_ready"
+TRACEABLE_SCREENING_LAYER = "traceable_screening_only"
+PROVENANCE_INCOMPLETE_LAYER = "provenance_incomplete"
+D2_ERROR_QC_FLAGS = frozenset(
+    {
+        "MISSING_VALUE",
+        "INVALID_NUMERIC_VALUE",
+        "INVALID_MISSING_REASON",
+        "INVALID_DETECTION_LIMIT",
+        "INVALID_QUANTITATION_LIMIT",
+        "NEGATIVE_CONCENTRATION",
+        "UNSUPPORTED_UNIT",
+        "UNSUPPORTED_MOLAR_MASS",
+        "UNSUPPORTED_MOLAR_SPECIES",
+        "UNSUPPORTED_SPECIES_CONVERSION",
+        "OXIDE_ELEMENT_MISMATCH",
+        "AMBIGUOUS_AQUEOUS_RATIO_UNIT",
+        "INVALID_COORDINATE",
+        "UNSUPPORTED_SOURCE_CRS",
+        "INVALID_COORDINATE_POLICY",
+        "DEPTH_RANGE_INVALID",
+        "INVALID_GEOLOGIC_DISTANCE",
+        "BATCH_QC_FAILED",
+    }
+)
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
 DEFAULT_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
+DEFAULT_ADMIN1_BOUNDARIES = (
+    SKILL_DIR / "assets" / "natural-earth-50m-admin1-china-visual.json"
+)
 DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "interactive-atlas-v3.html"
 DEFAULT_PROFILE = SKILL_DIR / "assets" / "visualization-profile.template.json"
 REGION_PRESETS: dict[str, dict[str, Any]] = {
@@ -165,6 +196,185 @@ def parse_json_cell(value: Any, fallback: Any) -> Any:
 
 def parse_bool_cell(value: Any) -> bool:
     return str(value or "").strip().casefold() in {"1", "true", "yes"}
+
+
+def valid_web_url(value: Any) -> bool:
+    text = str(value or "").strip()
+    try:
+        parsed = urlsplit(text)
+    except ValueError:
+        return False
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
+def record_evidence_classification(
+    row: Mapping[str, Any],
+    *,
+    coordinate_basis: str,
+    spatial_domain: str,
+    qc_flags: Sequence[Any],
+) -> dict[str, Any]:
+    """Classify display eligibility without inventing missing source evidence."""
+
+    strict_provenance_fields = (
+        "source_id",
+        "source_record_id",
+        "source_file",
+        "source_locator",
+        "dataset_title",
+        "dataset_version",
+        "license",
+    )
+    missing_provenance = [
+        field
+        for field in strict_provenance_fields
+        if not str(row.get(field) or "").strip()
+    ]
+    if not valid_web_url(row.get("official_source_url")):
+        missing_provenance.append("official_source_url")
+    if not re.fullmatch(
+        r"[0-9a-f]{64}", str(row.get("file_sha256") or "").strip().casefold()
+    ):
+        missing_provenance.append("file_sha256")
+    traceable = bool(
+        str(row.get("source_id") or "").strip()
+        and str(row.get("source_locator") or "").strip()
+    )
+    strict_provenance = not missing_provenance
+
+    scientific_gaps: list[str] = []
+    if not strict_provenance:
+        scientific_gaps.append("strict_provenance_incomplete")
+    if coordinate_basis != COORDINATE_BASIS_CANONICAL:
+        scientific_gaps.append("canonical_wgs84_coordinate_missing")
+    if not str(row.get("method_family") or row.get("analytical_method") or "").strip():
+        scientific_gaps.append("analytical_method_missing")
+    geologic_context_present = any(
+        str(row.get(field) or "").strip()
+        for field in (
+            "matched_geologic_unit",
+            "geologic_unit",
+            "geologic_unit_raw",
+            "lithology",
+            "lithology_raw",
+            "soil_horizon",
+            "sediment_environment",
+            "water_body_type",
+            "tectonic_setting_raw",
+        )
+    )
+    marine_not_applicable = bool(
+        spatial_domain == "marine"
+        and str(row.get("medium") or "") in {"water", "sediment"}
+        and str(row.get("geology_missing_reason") or "")
+        in {"not_applicable_marine_water", "not_applicable_marine_sediment"}
+    )
+    if not geologic_context_present and not marine_not_applicable:
+        scientific_gaps.append("geological_context_missing")
+    if (
+        optional_float(row.get("normalized_value")) is None
+        or not str(row.get("normalized_unit") or "").strip()
+    ):
+        scientific_gaps.append("quantitative_standardization_missing")
+
+    raw_qc_flags = str(row.get("qc_flags") or "").strip()
+    qc_evaluated = bool(raw_qc_flags) and isinstance(qc_flags, list)
+    blocking_qc_flags = sorted(
+        D2_ERROR_QC_FLAGS.intersection(str(item) for item in qc_flags)
+    )
+    if not qc_evaluated:
+        scientific_gaps.append("qc_disposition_missing")
+        qc_status = "not_evaluated"
+    elif blocking_qc_flags:
+        scientific_gaps.append("qc_blocking_flag")
+        qc_status = "failed_or_excluded"
+    elif qc_flags:
+        qc_status = "completed_with_flags"
+    else:
+        qc_status = "completed_no_flags"
+
+    if not scientific_gaps:
+        evidence_layer = STRICT_SCIENTIFIC_LAYER
+    elif traceable:
+        evidence_layer = TRACEABLE_SCREENING_LAYER
+    else:
+        evidence_layer = PROVENANCE_INCOMPLETE_LAYER
+    return {
+        "evidence_layer": evidence_layer,
+        "provenance_status": (
+            "strict_complete"
+            if strict_provenance
+            else "traceable_partial"
+            if traceable
+            else "incomplete"
+        ),
+        "quality_control_status": qc_status,
+        "scientific_readiness_reasons": scientific_gaps,
+        "missing_provenance_fields": missing_provenance,
+        "blocking_qc_flags": blocking_qc_flags,
+    }
+
+
+def geological_context_display(
+    row: Mapping[str, Any], *, spatial_domain: str
+) -> dict[str, Any]:
+    """Separate formal map-unit evidence from publisher background text.
+
+    Missing canonical coordinates can prevent a polygon join even when the
+    publisher reports useful lithology, horizon, depositional environment or
+    survey-area context. The UI exposes both facts without upgrading descriptive
+    text into a formal geologic-unit match.
+    """
+
+    formal_geologic_unit = (
+        str(row.get("matched_geologic_unit") or row.get("geologic_unit") or "").strip()
+        or None
+    )
+    fields = (
+        ("geologic_unit_raw", "发布方地质单元"),
+        ("lithology_raw", "发布方岩性"),
+        ("lithology", "标准化岩性"),
+        ("soil_horizon", "土层 / 层位"),
+        ("sediment_environment", "沉积环境"),
+        ("water_body_type", "水体类型"),
+        ("tectonic_setting_raw", "构造背景"),
+        ("geographic_context_raw", "调查区 / 地理背景"),
+        ("survey_area", "调查范围"),
+    )
+    parts: list[str] = []
+    seen_values: set[str] = set()
+    for field, label in fields:
+        value = str(row.get(field) or "").strip()
+        if not value or value in seen_values:
+            continue
+        seen_values.add(value)
+        parts.append(f"{label}: {value}")
+    publisher_background = "；".join(parts) or None
+    missing_reason = str(row.get("geology_missing_reason") or "").strip()
+    if formal_geologic_unit:
+        status = "formal_geologic_unit_available"
+    elif publisher_background:
+        status = "publisher_context_reported"
+    elif spatial_domain == "marine" and missing_reason.startswith(
+        "not_applicable_marine"
+    ):
+        status = "formal_unit_not_applicable_marine"
+    elif missing_reason in {
+        "invalid_or_missing_canonical_coordinate",
+        "canonical_coordinate_unavailable",
+        "reported_only_coordinate_evidence",
+    }:
+        status = "spatial_match_unavailable"
+    elif missing_reason:
+        status = "publisher_context_not_reported"
+    else:
+        status = "geological_context_unaccounted"
+    return {
+        "geologic_unit": formal_geologic_unit,
+        "formal_geologic_unit": formal_geologic_unit,
+        "publisher_geological_background": publisher_background,
+        "geological_context_status": status,
+    }
 
 
 def coordinate_in_bounds(
@@ -352,8 +562,17 @@ def load_records(
                 return value.get(key) if isinstance(value, Mapping) else None
 
             spatial_domain = spatial_scope.record_spatial_domain(row)
+            geological_context = geological_context_display(
+                row, spatial_domain=spatial_domain
+            )
             workflow_score = optional_float(
                 quality_value("workflow_usability", "score")
+            )
+            evidence_classification = record_evidence_classification(
+                row,
+                coordinate_basis=coordinate_basis,
+                spatial_domain=spatial_domain,
+                qc_flags=qc_flags,
             )
             records.append(
                 {
@@ -364,6 +583,7 @@ def load_records(
                     "medium": row.get("medium"),
                     "spatial_domain": spatial_domain,
                     "material": row.get("material") or None,
+                    "sample_type_raw": row.get("sample_type_raw") or None,
                     "sample_type": row.get("sample_type") or None,
                     "soil_horizon": row.get("soil_horizon") or None,
                     "sediment_environment": row.get("sediment_environment") or None,
@@ -371,6 +591,7 @@ def load_records(
                     "water_fraction": row.get("water_fraction") or None,
                     "measurement_basis": row.get("measurement_basis") or None,
                     "original_value_raw": row.get("original_value_raw") or None,
+                    "original_value": optional_float(row.get("original_value")),
                     "original_unit": row.get("original_unit") or None,
                     "source_qualifier_raw": row.get("source_qualifier_raw") or None,
                     "qualifier": row.get("value_qualifier") or None,
@@ -398,17 +619,21 @@ def load_records(
                     )
                     or None,
                     "lithology": row.get("lithology") or None,
-                    "geologic_unit": row.get("matched_geologic_unit")
-                    or row.get("geologic_unit")
-                    or None,
+                    **geological_context,
                     "geologic_unit_raw": row.get("geologic_unit_raw") or None,
                     "matched_geologic_unit": row.get("matched_geologic_unit") or None,
+                    "geology_missing_reason": row.get("geology_missing_reason") or None,
                     "analytical_method": row.get("analytical_method") or None,
                     "method_family": row.get("method_family") or None,
                     "method_scope": row.get("method_scope") or None,
                     "method_source_locator": row.get("method_source_locator") or None,
                     "method_missing_reason": row.get("method_missing_reason") or None,
                     "digestion_or_extraction": row.get("digestion_or_extraction")
+                    or None,
+                    "preparation": row.get("preparation") or None,
+                    "grain_fraction": row.get("grain_fraction") or None,
+                    "reference_materials": row.get("reference_materials")
+                    or row.get("reference_material")
                     or None,
                     "source_id": row.get("source_id") or None,
                     "dataset_title": row.get("dataset_title") or None,
@@ -454,6 +679,7 @@ def load_records(
                         for key in ("source", "completeness", "method", "spatial", "qc")
                     },
                     "qc_flags": [str(flag) for flag in qc_flags],
+                    **evidence_classification,
                 }
             )
             if len(records) > max_points:
@@ -1113,6 +1339,78 @@ def load_country_boundaries(path: Path) -> dict[str, Any]:
     }
 
 
+def load_admin1_boundaries(path: Path) -> dict[str, Any]:
+    """Load optional generalized China province linework for visual orientation."""
+    value = load_json_object(path, "offline China Admin-1 visual boundaries")
+    boundaries = value.get("boundaries")
+    if (
+        value.get("asset_version") != ADMIN1_BOUNDARY_ASSET_VERSION
+        or value.get("license") != "public domain"
+        or value.get("country_iso_a3") != "CHN"
+        or not isinstance(boundaries, list)
+        or len(boundaries) != 31
+    ):
+        raise MapBuildError(
+            "offline China Admin-1 boundary provenance or structure is invalid"
+        )
+    point_total = 0
+    normalized: list[dict[str, Any]] = []
+    for boundary in boundaries:
+        if not isinstance(boundary, dict) or not str(boundary.get("name") or ""):
+            raise MapBuildError("offline China Admin-1 boundary has an invalid name")
+        geometry = boundary.get("geometry")
+        if not isinstance(geometry, dict) or geometry.get("type") not in {
+            "Polygon",
+            "MultiPolygon",
+        }:
+            raise MapBuildError(
+                "offline China Admin-1 boundary has an invalid geometry"
+            )
+        polygons = geometry_polygons(geometry)
+        if not polygons:
+            raise MapBuildError("offline China Admin-1 boundary has no polygon")
+        for polygon in polygons:
+            if not isinstance(polygon, list) or not polygon:
+                raise MapBuildError(
+                    "offline China Admin-1 boundary has an invalid polygon"
+                )
+            for ring in polygon:
+                if not isinstance(ring, list) or len(ring) < 4:
+                    raise MapBuildError(
+                        "offline China Admin-1 boundary has an invalid ring"
+                    )
+                for point in ring:
+                    point_total += 1
+                    if (
+                        not isinstance(point, list)
+                        or len(point) != 2
+                        or optional_float(point[0]) is None
+                        or optional_float(point[1]) is None
+                        or not (-180 <= float(point[0]) <= 180)
+                        or not (-90 <= float(point[1]) <= 90)
+                    ):
+                        raise MapBuildError(
+                            "offline China Admin-1 boundary has an invalid coordinate"
+                        )
+        normalized.append(boundary)
+    if point_total > 50_000 or value.get("point_count") != point_total:
+        raise MapBuildError("offline China Admin-1 boundary point count is invalid")
+    return {
+        "asset_version": value["asset_version"],
+        "title": value.get("title"),
+        "natural_earth_version": value.get("natural_earth_version"),
+        "country_iso_a3": value["country_iso_a3"],
+        "source_geojson_url": value.get("source_geojson_url"),
+        "source_commit": value.get("source_commit"),
+        "source_sha256": value.get("source_sha256"),
+        "license": value["license"],
+        "boundary_semantics": value.get("boundary_semantics"),
+        "boundary_count": len(normalized),
+        "point_count": point_total,
+        "boundaries": normalized,
+    }
+
+
 def sample_display_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
     return (
         record.get("source_id"),
@@ -1121,6 +1419,143 @@ def sample_display_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
         record.get("longitude"),
         record.get("latitude"),
     )
+
+
+def _stable_group_digest(key: tuple[Any, ...]) -> str:
+    return hashlib.sha256(
+        json.dumps(key, ensure_ascii=False, separators=(",", ":"), default=str).encode(
+            "utf-8"
+        )
+    ).hexdigest()
+
+
+def coverage_preserving_map_preview(
+    records: Sequence[Mapping[str, Any]],
+    anomaly_ids: set[str],
+    limit: int,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Select a deterministic physical-sample preview without changing the CSV.
+
+    The browser does not need every overlapping analyte row to communicate
+    coverage.  Keep whole physical-sample groups, every candidate-anomaly
+    group, and at least one group per source × medium × element × coarse cell;
+    use a stable hash to fill remaining capacity.  The complete canonical CSV
+    and aggregate charts remain unsampled.
+    """
+
+    if limit < 1:
+        raise MapBuildError("map preview limit must be positive")
+    normalized_records = [dict(record) for record in records]
+    groups: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
+    for record in normalized_records:
+        groups.setdefault(sample_display_key(record), []).append(record)
+    if len(normalized_records) <= limit:
+        return normalized_records, {
+            "policy_version": "d3-coverage-preserving-preview-v1",
+            "applied": False,
+            "input_record_count": len(normalized_records),
+            "embedded_record_count": len(normalized_records),
+            "input_physical_sample_count": len(groups),
+            "embedded_physical_sample_count": len(groups),
+            "maximum_embedded_records": limit,
+            "stratification_cell_degrees": None,
+            "candidate_anomaly_records_preserved": True,
+            "whole_physical_sample_groups_preserved": True,
+            "complete_database_artifact": "geochemistry.csv",
+        }
+
+    digests = {key: _stable_group_digest(key) for key in groups}
+    mandatory = {
+        key
+        for key, grouped in groups.items()
+        if any(str(record.get("record_id")) in anomaly_ids for record in grouped)
+    }
+    mandatory_records = sum(len(groups[key]) for key in mandatory)
+    if mandatory_records > limit:
+        raise MapBuildError(
+            "candidate-anomaly physical samples exceed the map preview limit; "
+            "raise --max-embedded-records rather than dropping anomaly evidence"
+        )
+
+    def preview_cell(record: Mapping[str, Any], degrees: float) -> str:
+        longitude = float(record["longitude"])
+        latitude = float(record["latitude"])
+        lon_index = min(
+            math.ceil(360.0 / degrees) - 1,
+            max(0, math.floor((longitude + 180.0) / degrees)),
+        )
+        lat_index = min(
+            math.ceil(180.0 / degrees) - 1,
+            max(0, math.floor((latitude + 90.0) / degrees)),
+        )
+        return f"{degrees:g}:{lat_index}:{lon_index}"
+
+    selected: set[tuple[Any, ...]] = set(mandatory)
+    chosen_degrees = 360.0
+    for degrees in (5.0, 10.0, 20.0, 40.0, 90.0, 360.0):
+        representatives: dict[tuple[str, str, str, str], tuple[Any, ...]] = {}
+        for group_key, grouped in groups.items():
+            for record in grouped:
+                stratum = (
+                    str(record.get("source_id") or "unknown"),
+                    str(record.get("medium") or "unknown"),
+                    str(record.get("element") or "unknown"),
+                    preview_cell(record, degrees),
+                )
+                current = representatives.get(stratum)
+                if current is None or digests[group_key] < digests[current]:
+                    representatives[stratum] = group_key
+        candidate = mandatory.union(representatives.values())
+        if sum(len(groups[key]) for key in candidate) <= limit:
+            selected = set(candidate)
+            chosen_degrees = degrees
+            break
+
+    selected_record_count = sum(len(groups[key]) for key in selected)
+    for group_key in sorted(groups, key=lambda key: digests[key]):
+        if group_key in selected:
+            continue
+        next_size = selected_record_count + len(groups[group_key])
+        if next_size <= limit:
+            selected.add(group_key)
+            selected_record_count = next_size
+    preview = [
+        record
+        for record in normalized_records
+        if sample_display_key(record) in selected
+    ]
+    preserved_anomaly_ids = {
+        str(record.get("record_id"))
+        for record in preview
+        if str(record.get("record_id")) in anomaly_ids
+    }
+    expected_anomaly_ids = {
+        str(record.get("record_id"))
+        for record in normalized_records
+        if str(record.get("record_id")) in anomaly_ids
+    }
+    return preview, {
+        "policy_version": "d3-coverage-preserving-preview-v1",
+        "applied": True,
+        "input_record_count": len(normalized_records),
+        "embedded_record_count": len(preview),
+        "input_physical_sample_count": len(groups),
+        "embedded_physical_sample_count": len(selected),
+        "maximum_embedded_records": limit,
+        "stratification_cell_degrees": chosen_degrees,
+        "candidate_anomaly_records_preserved": (
+            preserved_anomaly_ids == expected_anomaly_ids
+        ),
+        "candidate_anomaly_record_count": len(expected_anomaly_ids),
+        "whole_physical_sample_groups_preserved": True,
+        "strata": "source_id × medium × element × coarse spatial cell",
+        "selection_tiebreaker": "SHA-256 of the physical-sample display key",
+        "complete_database_artifact": "geochemistry.csv",
+        "claim_boundary": (
+            "The map is a coverage-preserving interactive preview. Aggregate "
+            "database charts and geochemistry.csv use the full canonical population."
+        ),
+    }
 
 
 def region_coverage(
@@ -1169,6 +1604,9 @@ def region_coverage(
 
 def data_coverage_diagnostics(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     media: dict[str, dict[str, Any]] = {}
+    evidence_layer_counts: dict[str, int] = {}
+    provenance_status_counts: dict[str, int] = {}
+    quality_control_status_counts: dict[str, int] = {}
     for record in records:
         medium = str(record.get("medium") or "unknown")
         item = media.setdefault(
@@ -1183,6 +1621,13 @@ def data_coverage_diagnostics(records: Sequence[Mapping[str, Any]]) -> dict[str,
         item["sample_keys"].add(sample_display_key(record))
         if not record.get("method_family") and not record.get("analytical_method"):
             item["method_missing_record_count"] += 1
+        for counts, field, fallback in (
+            (evidence_layer_counts, "evidence_layer", PROVENANCE_INCOMPLETE_LAYER),
+            (provenance_status_counts, "provenance_status", "incomplete"),
+            (quality_control_status_counts, "quality_control_status", "not_evaluated"),
+        ):
+            value = str(record.get(field) or fallback)
+            counts[value] = counts.get(value, 0) + 1
     normalized_media = {}
     for medium, item in sorted(media.items()):
         normalized_media[medium] = {
@@ -1198,6 +1643,11 @@ def data_coverage_diagnostics(records: Sequence[Mapping[str, Any]]) -> dict[str,
         for record in records
     )
     missing_geology = sum(not record.get("geologic_unit") for record in records)
+    missing_background = sum(
+        not record.get("geologic_unit")
+        and not record.get("publisher_geological_background")
+        for record in records
+    )
     return {
         "by_medium": normalized_media,
         "method_missing_record_count": missing_method,
@@ -1208,6 +1658,22 @@ def data_coverage_diagnostics(records: Sequence[Mapping[str, Any]]) -> dict[str,
         "geologic_unit_completeness_rate": round(1 - missing_geology / len(records), 6)
         if records
         else None,
+        "geological_background_missing_record_count": missing_background,
+        "geological_background_completeness_rate": round(
+            1 - missing_background / len(records), 6
+        )
+        if records
+        else None,
+        "evidence_layer_counts": dict(sorted(evidence_layer_counts.items())),
+        "strict_scientific_ready_rate": round(
+            evidence_layer_counts.get(STRICT_SCIENTIFIC_LAYER, 0) / len(records), 6
+        )
+        if records
+        else None,
+        "provenance_status_counts": dict(sorted(provenance_status_counts.items())),
+        "quality_control_status_counts": dict(
+            sorted(quality_control_status_counts.items())
+        ),
         "sample_type_field": "medium",
         "analysis_method_fields": ["analytical_method", "method_family"],
         "interpretation": (
@@ -1223,6 +1689,7 @@ def samples_geojson(
     profile: Mapping[str, Any],
     scope_region: Mapping[str, Any],
     coordinate_mode: str = "canonical",
+    map_preview_sampling: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     # GeoJSON is a spatial exchange view, not a second copy of the complete
     # canonical database.  Repeating fifty-plus provenance/method fields on
@@ -1231,9 +1698,9 @@ def samples_geojson(
     # and its stable database join key, but expose only fields needed for GIS
     # filtering plus one clearly named workflow band. Full confidence
     # dimensions, QC flags, provenance, methods, raw values and clickable links
-    # remain losslessly available in geochemistry.csv and the self-contained
-    # HTML payload through ``record_id``. This keeps a 200k-observation research
-    # run browser- and GIS-loadable without sampling or deleting locations.
+    # remain losslessly available in geochemistry.csv through ``record_id``.
+    # Large runs expose the same explicitly-attested, coverage-preserving
+    # preview in GeoJSON and HTML; neither artifact pretends to replace the CSV.
     property_fields = (
         "record_id",
         "element",
@@ -1265,9 +1732,11 @@ def samples_geojson(
         "property_contract_version": SAMPLES_GEOJSON_PROPERTY_VERSION,
         "database_join_key": "record_id",
         "property_scope": (
-            "compact spatial exchange view; join geochemistry.csv on record_id "
-            "for complete raw values, methods, provenance and source links"
+            "compact coverage-preserving spatial preview; join geochemistry.csv "
+            "on record_id for the complete population, raw values, methods, "
+            "provenance and source links"
         ),
+        "map_preview_sampling": dict(map_preview_sampling or {}),
         "coordinate_mode": coordinate_mode,
         "spatial_scope": {
             "mode": profile["spatial_scope"],
@@ -1292,9 +1761,11 @@ PACKED_FIELDS = (
     "medium",
     "spatial_domain",
     "material",
+    "sample_type_raw",
     "sample_type",
     "measurement_basis",
     "original_value_raw",
+    "original_value",
     "original_unit",
     "source_qualifier_raw",
     "qualifier",
@@ -1304,10 +1775,16 @@ PACKED_FIELDS = (
     "unit",
     "lithology",
     "geologic_unit",
+    "formal_geologic_unit",
+    "publisher_geological_background",
+    "geological_context_status",
     "analytical_method",
     "method_family",
     "method_scope",
     "digestion_or_extraction",
+    "preparation",
+    "grain_fraction",
+    "reference_materials",
     "source_id",
     "dataset_title",
     "dataset_doi",
@@ -1339,6 +1816,13 @@ PACKED_FIELDS = (
     "coordinate_accuracy_evidence_status",
     "method_source_locator",
     "method_missing_reason",
+    "geology_missing_reason",
+    "evidence_layer",
+    "provenance_status",
+    "quality_control_status",
+    "scientific_readiness_reasons",
+    "missing_provenance_fields",
+    "blocking_qc_flags",
 )
 
 
@@ -1372,9 +1856,11 @@ def compact_map_payload(
                 string_index(record.get("medium")),
                 string_index(record.get("spatial_domain")),
                 string_index(record.get("material")),
+                string_index(record.get("sample_type_raw")),
                 string_index(record.get("sample_type")),
                 string_index(record.get("measurement_basis")),
                 string_index(record.get("original_value_raw")),
+                record.get("original_value"),
                 string_index(record.get("original_unit")),
                 string_index(record.get("source_qualifier_raw")),
                 string_index(record.get("qualifier")),
@@ -1384,10 +1870,16 @@ def compact_map_payload(
                 string_index(record.get("unit")),
                 string_index(record.get("lithology")),
                 string_index(record.get("geologic_unit")),
+                string_index(record.get("formal_geologic_unit")),
+                string_index(record.get("publisher_geological_background")),
+                string_index(record.get("geological_context_status")),
                 string_index(record.get("analytical_method")),
                 string_index(record.get("method_family")),
                 string_index(record.get("method_scope")),
                 string_index(record.get("digestion_or_extraction")),
+                string_index(record.get("preparation")),
+                string_index(record.get("grain_fraction")),
+                string_index(record.get("reference_materials")),
                 string_index(record.get("source_id")),
                 string_index(record.get("dataset_title")),
                 string_index(record.get("dataset_doi")),
@@ -1419,6 +1911,19 @@ def compact_map_payload(
                 string_index(record.get("coordinate_accuracy_evidence_status")),
                 string_index(record.get("method_source_locator")),
                 string_index(record.get("method_missing_reason")),
+                string_index(record.get("geology_missing_reason")),
+                string_index(record.get("evidence_layer")),
+                string_index(record.get("provenance_status")),
+                string_index(record.get("quality_control_status")),
+                [
+                    string_index(item)
+                    for item in record.get("scientific_readiness_reasons", [])
+                ],
+                [
+                    string_index(item)
+                    for item in record.get("missing_provenance_fields", [])
+                ],
+                [string_index(item) for item in record.get("blocking_qc_flags", [])],
             ]
         )
     return {
@@ -1489,6 +1994,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         "__ANOMALIES_JSON__",
         "__BASEMAP_JSON__",
         "__BOUNDARIES_JSON__",
+        "__ADMIN1_BOUNDARIES_JSON__",
         "__CONTEXT_JSON__",
         MAP_VERSION,
         PAYLOAD_VERSION,
@@ -1531,6 +2037,14 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         "方法缺失责任",
         "坐标精度证据状态",
         "管线输入未记账（需修复）",
+        "中国省级参考线",
+        "Natural Earth 1:50m Admin‑1",
+        "zoom-aware-pixel-lod-v1",
+        "数据缺口与处理状态",
+        "发布方样品描述",
+        "标准化样品类型（Skill 控制词）",
+        "综合工作流可用性（非概率）",
+        "record ID（点击展开）",
     }
     missing = sorted(marker for marker in required if marker not in template)
     if missing:
@@ -1545,7 +2059,8 @@ def build_map(
     anomalies_path: Path,
     output_html: Path,
     output_geojson: Path,
-    max_points: int = 50_000,
+    max_points: int = 200_000,
+    max_embedded_records: int = DEFAULT_MAX_EMBEDDED_RECORDS,
     qc_report_path: Path | None = None,
     confidence_report_path: Path | None = None,
     source_manifest_path: Path | None = None,
@@ -1557,20 +2072,25 @@ def build_map(
     basemap_path: Path = DEFAULT_BASEMAP,
     visualization_profile_path: Path | None = None,
     boundaries_path: Path = DEFAULT_BOUNDARIES,
+    admin1_boundaries_path: Path = DEFAULT_ADMIN1_BOUNDARIES,
     coordinate_mode: str = "canonical",
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
+    if max_embedded_records < 1 or max_embedded_records > max_points:
+        raise MapBuildError("--max-embedded-records must be between 1 and --max-points")
     profile = load_visualization_profile(visualization_profile_path)
     scope_region = selected_region(profile)
     database_summary = database_visual_summary(database)
     boundaries = load_country_boundaries(boundaries_path)
+    admin1_boundaries = load_admin1_boundaries(admin1_boundaries_path)
     countries_by_code = {
         str(country["iso_a3"]): country for country in boundaries["countries"]
     }
     records, coordinate_counts = load_records(
         database, max_points, scope_region, countries_by_code, coordinate_mode
     )
+    full_scope_records = records
     total_records = coordinate_counts["total_records"]
     source_mappable_records = (
         coordinate_counts["canonical_coordinate_records"]
@@ -1601,13 +2121,14 @@ def build_map(
         # the emptiness is declared as a warning instead of a hard failure.
         scope_excludes_all_records = True
     mapped_reported_fallback = sum(
-        record["coordinate_basis"] == COORDINATE_BASIS_REPORTED for record in records
+        record["coordinate_basis"] == COORDINATE_BASIS_REPORTED
+        for record in full_scope_records
     )
     coordinate_statistics = {
         "coordinate_mode": coordinate_mode,
         **coordinate_counts,
-        "mapped_record_count": len(records),
-        "mapped_canonical_records": len(records) - mapped_reported_fallback,
+        "mapped_record_count": len(full_scope_records),
+        "mapped_canonical_records": len(full_scope_records) - mapped_reported_fallback,
         "mapped_reported_fallback_records": mapped_reported_fallback,
     }
     reported_banner = mapped_reported_fallback > 0
@@ -1623,6 +2144,16 @@ def build_map(
         for feature in anomalies["features"]
         if feature.get("properties", {}).get("record_id") is not None
     }
+    records, map_preview = coverage_preserving_map_preview(
+        full_scope_records, anomaly_ids, max_embedded_records
+    )
+    coordinate_statistics["embedded_record_count"] = len(records)
+    coordinate_statistics["embedded_canonical_records"] = sum(
+        record["coordinate_basis"] == COORDINATE_BASIS_CANONICAL for record in records
+    )
+    coordinate_statistics["embedded_reported_fallback_records"] = sum(
+        record["coordinate_basis"] == COORDINATE_BASIS_REPORTED for record in records
+    )
     scoped_record_ids = {str(record["record_id"]) for record in records}
     scoped_anomalies = {
         **anomalies,
@@ -1635,6 +2166,12 @@ def build_map(
     profile_warnings = visualization_profile_warnings(
         profile, records, anomaly_ids, countries_by_code
     )
+    if map_preview["applied"]:
+        profile_warnings.append(
+            "交互地图为覆盖保持预览：内嵌 "
+            f"{map_preview['embedded_record_count']}/{map_preview['input_record_count']} "
+            "条范围内可绘记录；完整记录、聚合统计与来源链保留在 geochemistry.csv。"
+        )
     if scope_excludes_all_records:
         profile_warnings.append(
             "选定区域范围内没有可绘制记录"
@@ -1642,7 +2179,12 @@ def build_map(
             "主画布仅显示底图与区域框架，请核对 bbox 或扩大范围。"
         )
     geojson = samples_geojson(
-        records, anomaly_ids, profile, scope_region, coordinate_mode
+        records,
+        anomaly_ids,
+        profile,
+        scope_region,
+        coordinate_mode,
+        map_preview,
     )
     map_payload = compact_map_payload(records, anomaly_ids)
     spatial_scope = {
@@ -1699,7 +2241,9 @@ def build_map(
             "duplicate_story_selector": False,
             "recoverable_map_navigation": True,
             "keyboard_map_navigation": True,
+            "single_world_no_repeat_planar_navigation": True,
             "regional_pan_without_scope_expansion": True,
+            "optional_china_admin1_orientation_boundaries": True,
             "localized_measurement_basis": True,
             "research_patch_crud": "proposal_only_no_direct_mutation",
         },
@@ -1723,6 +2267,7 @@ def build_map(
     template_variant = (
         "regional_focus" if profile["spatial_scope"] == "regional" else "global_globe"
     )
+    coverage_diagnostics = data_coverage_diagnostics(full_scope_records)
     context = {
         "map_version": MAP_VERSION,
         "ui_hierarchy_version": UI_HIERARCHY_VERSION,
@@ -1734,14 +2279,30 @@ def build_map(
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
         "spatial_scope": spatial_scope,
+        "admin1_boundary_asset": {
+            "asset_version": admin1_boundaries["asset_version"],
+            "title": admin1_boundaries["title"],
+            "natural_earth_version": admin1_boundaries["natural_earth_version"],
+            "country_iso_a3": admin1_boundaries["country_iso_a3"],
+            "source_geojson_url": admin1_boundaries["source_geojson_url"],
+            "source_commit": admin1_boundaries["source_commit"],
+            "source_sha256": admin1_boundaries["source_sha256"],
+            "license": admin1_boundaries["license"],
+            "boundary_semantics": admin1_boundaries["boundary_semantics"],
+            "boundary_count": admin1_boundaries["boundary_count"],
+            "point_count": admin1_boundaries["point_count"],
+        },
         "capability_matrix": capability_matrix,
         "visual_question_contract": VISUAL_QUESTION_CONTRACT,
         "total_record_count": total_records,
         "source_mappable_record_count": source_mappable_records,
-        "mappable_record_count": len(records),
+        "mappable_record_count": len(full_scope_records),
+        "embedded_record_count": len(records),
+        "map_preview_sampling": map_preview,
         "coordinate_mode": coordinate_mode,
         "coordinate_statistics": coordinate_statistics,
         "database_visual_summary": database_summary,
+        "data_coverage_diagnostics": coverage_diagnostics,
         "region_presets": REGION_PRESETS,
         "qc_report": load_json_object(qc_report_path, "QC report"),
         "confidence_report": load_json_object(
@@ -1765,6 +2326,7 @@ def build_map(
         .replace("__ANOMALIES_JSON__", safe_embedded_json(scoped_anomalies))
         .replace("__BASEMAP_JSON__", safe_embedded_json(basemap))
         .replace("__BOUNDARIES_JSON__", safe_embedded_json(boundaries))
+        .replace("__ADMIN1_BOUNDARIES_JSON__", safe_embedded_json(admin1_boundaries))
         .replace("__CONTEXT_JSON__", safe_embedded_json(context))
     )
     if reported_banner:
@@ -1796,11 +2358,15 @@ def build_map(
         "template_variant": template_variant,
         "terminology_contract": TERMINOLOGY_CONTRACT,
         "mapped_record_count": len(records),
+        "scope_mappable_record_count": len(full_scope_records),
+        "map_preview_sampling": map_preview,
         "coordinate_mode": coordinate_mode,
         "coordinate_statistics": coordinate_statistics,
         "reported_coordinate_banner": reported_banner,
         "source_mappable_record_count": source_mappable_records,
-        "scope_excluded_mappable_record_count": source_mappable_records - len(records),
+        "scope_excluded_mappable_record_count": (
+            source_mappable_records - len(full_scope_records)
+        ),
         "display_sample_count": len(sample_keys),
         "unmappable_record_count": total_records - source_mappable_records,
         "candidate_record_count": sum(
@@ -1821,6 +2387,7 @@ def build_map(
         "visualization_profile": profile,
         "visualization_profile_warnings": profile_warnings,
         "spatial_scope": spatial_scope,
+        "admin1_boundary_asset": context["admin1_boundary_asset"],
         "visual_question_contract": VISUAL_QUESTION_CONTRACT,
         "visualization_modes": [
             "distribution_points",
@@ -1841,8 +2408,8 @@ def build_map(
         ],
         "capability_matrix": capability_matrix,
         "region_presets": [*REGION_PRESETS, "custom_bbox"],
-        "region_coverage": region_coverage(records, countries_by_code),
-        "data_coverage_diagnostics": data_coverage_diagnostics(records),
+        "region_coverage": region_coverage(full_scope_records, countries_by_code),
+        "data_coverage_diagnostics": coverage_diagnostics,
         "database_visual_summary_schema": database_summary["schema_version"],
         "external_assets": 0,
         "interpolation": False,
@@ -1936,6 +2503,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Pinned offline Natural Earth Admin-0 boundary asset",
     )
     parser.add_argument(
+        "--admin1-boundaries",
+        type=Path,
+        default=DEFAULT_ADMIN1_BOUNDARIES,
+        help=(
+            "Pinned offline Natural Earth China Admin-1 visual boundary asset; "
+            "never used as a scientific or legal spatial join"
+        ),
+    )
+    parser.add_argument(
         "--profile",
         type=Path,
         help="Optional d3-visualization-profile-v2 JSON; defaults to the bundled template",
@@ -1943,8 +2519,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--max-points",
         type=int,
-        default=50_000,
-        help="Fail if valid coordinate points exceed this",
+        default=200_000,
+        help="Hard safety ceiling for valid coordinate rows read from the CSV",
+    )
+    parser.add_argument(
+        "--max-embedded-records",
+        type=int,
+        default=DEFAULT_MAX_EMBEDDED_RECORDS,
+        help=(
+            "Maximum measurement rows embedded in the interactive preview; "
+            "the complete canonical CSV and aggregate summaries remain unsampled"
+        ),
     )
     parser.add_argument(
         "--coordinate-mode",
@@ -1969,6 +2554,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             output_html=args.output_html,
             output_geojson=args.output_geojson,
             max_points=args.max_points,
+            max_embedded_records=args.max_embedded_records,
             qc_report_path=args.qc_report,
             confidence_report_path=args.confidence_report,
             source_manifest_path=args.source_manifest,
@@ -1980,6 +2566,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             basemap_path=args.basemap,
             visualization_profile_path=args.profile,
             boundaries_path=args.boundaries,
+            admin1_boundaries_path=args.admin1_boundaries,
             coordinate_mode=args.coordinate_mode,
         )
     except (MapBuildError, OSError) as exc:

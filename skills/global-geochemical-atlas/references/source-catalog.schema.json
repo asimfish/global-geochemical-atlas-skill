@@ -93,6 +93,14 @@
                 "national_partial",
                 "national_plus_selected_global",
                 "local_partial",
+                "local_complex",
+                "river_basin_literature_compilation",
+                "national_coastal_partial",
+                "regional_discrete_repeated_samples",
+                "regional_discrete_samples",
+                "single_site_vertical_profile",
+                "regional_transect_layer_samples",
+                "single_station_time_series",
                 "unknown"
               ]
             },
@@ -110,8 +118,14 @@
             "catalog_uuid": {"type": "string", "minLength": 1},
             "dataset_doi": {"type": "string", "minLength": 1},
             "ecat_id": {"type": "string", "minLength": 1},
+            "earthchem_dataset_id": {"type": "string", "minLength": 1},
             "figshare_file_id": {"type": "string", "minLength": 1},
-            "dataverse_file_id": {"type": "string", "minLength": 1},
+            "dataverse_file_id": {
+              "oneOf": [
+                {"type": "string", "minLength": 1},
+                {"type": "integer", "minimum": 1}
+              ]
+            },
             "file_doi": {"type": "string", "minLength": 1},
             "file_id": {"type": "string", "minLength": 1},
             "metadata_uuid": {"type": "string", "minLength": 1},
@@ -158,6 +172,7 @@
                 "open_site_terms_product_review",
                 "open_with_privacy_and_aggregation_conditions",
                 "citation_and_copyright_terms",
+                "public_domain_with_acknowledgement",
                 "unresolved",
                 "restricted"
               ]

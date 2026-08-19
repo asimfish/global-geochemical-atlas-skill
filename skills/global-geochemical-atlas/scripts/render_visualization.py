@@ -100,6 +100,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise VisualizationError(
             "unsupported_scope", "--max-points must be between 1 and 200000"
         )
+    if args.max_embedded_records < 1 or args.max_embedded_records > args.max_points:
+        raise VisualizationError(
+            "unsupported_scope",
+            "--max-embedded-records must be between 1 and --max-points",
+        )
     inputs = {name: args.input_dir / name for name in REQUIRED_INPUTS}
     missing = [name for name, path in inputs.items() if not path.is_file()]
     if missing:
@@ -144,6 +149,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             output_html=args.output_dir / "interactive_map.html",
             output_geojson=args.output_dir / "samples.geojson",
             max_points=args.max_points,
+            max_embedded_records=args.max_embedded_records,
             qc_report_path=inputs["qc_report.json"],
             confidence_report_path=inputs["confidence_report.json"],
             source_manifest_path=inputs["source_manifest.json"],
@@ -331,8 +337,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--max-points",
         type=int,
-        default=50_000,
-        help="Fail closed above this mappable record count",
+        default=200_000,
+        help="Hard safety ceiling for mappable records read from the canonical CSV",
+    )
+    parser.add_argument(
+        "--max-embedded-records",
+        type=int,
+        default=map_builder.DEFAULT_MAX_EMBEDDED_RECORDS,
+        help="Coverage-preserving browser preview ceiling; complete CSV is unchanged",
     )
     parser.add_argument(
         "--coordinate-mode",

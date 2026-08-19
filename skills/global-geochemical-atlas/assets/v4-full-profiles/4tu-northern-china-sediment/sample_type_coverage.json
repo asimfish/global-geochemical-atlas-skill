@@ -1,0 +1,26 @@
+{
+  "as_of": "2026-08-15T07:00:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "4TU-Figshare-v1-2020-07-28",
+  "media": {
+    "sediment": 6069
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "sediment_last_glacial_loess": 455,
+    "sediment_present_interglacial_paleosol": 455,
+    "sediment_surface_catchment_fluvial_alluvial": 5159
+  },
+  "sediment_environments": {
+    "catchment_fluvial_alluvial": 5159,
+    "loess": 455,
+    "paleosol_sediment": 455
+  },
+  "source_id": "4tu-northern-china-sediment",
+  "water_body_types": {
+    "not_applicable": 6069
+  },
+  "water_fractions": {
+    "not_applicable": 6069
+  }
+}

@@ -545,6 +545,18 @@ def _profile_country_applicability(
             ),
             "profile_evidence": evidence,
         }
+    if index_status == "positive_evidence_only" and country_code in country_codes:
+        return {
+            "status": "compatible_reported_only",
+            "reason_code": "profile_country_positive_evidence",
+            "note": (
+                f"audited publisher-member evidence explicitly establishes relevance to "
+                f"{country_code}; the index is intentionally incomplete, record-level "
+                "scope filtering still runs, and reported coordinates are not promoted "
+                "to WGS84"
+            ),
+            "profile_evidence": evidence,
+        }
     return None
 
 

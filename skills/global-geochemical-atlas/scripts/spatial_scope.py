@@ -59,6 +59,16 @@ COUNTRY_ALIAS_OVERRIDES = {
     "russia": "RUS",
 }
 
+# Scientific analysis bundles are explicit data-admission sets, not sovereignty
+# or legal-boundary assertions.  Natural Earth stores Taiwan separately from
+# mainland China; a public request for "China" would otherwise silently crop
+# real Taiwanese observations and even omit the island from the regional view.
+# The mainland-only alias remains available when that narrower scope is asked.
+ANALYSIS_COUNTRY_BUNDLES: dict[str, tuple[str, ...]] = {
+    "CHN": ("CHN", "TWN"),
+}
+CHINA_MAINLAND_ONLY_ALIASES = frozenset({"中国大陆"})
+
 
 class SpatialScopeError(ValueError):
     """Raised when a region cannot be resolved against frozen spatial evidence."""
@@ -330,6 +340,47 @@ def country_bbox(country: Mapping[str, Any]) -> list[float]:
         east,
         max(point[1] for point in points),
     ]
+
+
+def country_union_bbox(countries: Sequence[Mapping[str, Any]]) -> list[float]:
+    """Return the smallest circular bbox containing an analysis-country set."""
+
+    points = [
+        point
+        for country in countries
+        for point in _geometry_points(country.get("geometry") or {})
+    ]
+    if not points:
+        raise SpatialScopeError("analysis country bundle has no polygon coordinates")
+    west, east = _minimum_longitude_interval([point[0] for point in points])
+    return [
+        west,
+        min(point[1] for point in points),
+        east,
+        max(point[1] for point in points),
+    ]
+
+
+def analysis_country_codes(region: Mapping[str, Any]) -> tuple[str, ...]:
+    raw = region.get("analysis_country_codes")
+    if isinstance(raw, list) and raw:
+        return tuple(str(item) for item in raw)
+    code = region.get("country_code")
+    return (str(code),) if code else ()
+
+
+def analysis_countries(
+    region: Mapping[str, Any], boundaries_path: Path = DEFAULT_BOUNDARIES
+) -> tuple[Mapping[str, Any], ...]:
+    registry = load_country_registry(str(boundaries_path.resolve()))
+    codes = analysis_country_codes(region)
+    countries: list[Mapping[str, Any]] = []
+    for code in codes:
+        country = registry["by_code"].get(code)
+        if country is None:
+            raise SpatialScopeError(f"country boundary is unavailable: {code}")
+        countries.append(country)
+    return tuple(countries)
 
 
 def _validate_bbox(raw: Sequence[Any]) -> list[float]:
@@ -658,12 +709,44 @@ def resolve_region(
             f"named region is absent from the frozen country/region registry: {value!r}; use a WGS84 bbox"
         )
     country = registry["by_code"][code]
+    bundle_codes = (
+        (code,)
+        if alias in CHINA_MAINLAND_ONLY_ALIASES
+        else ANALYSIS_COUNTRY_BUNDLES.get(code, (code,))
+    )
+    bundle_countries = [registry["by_code"][item] for item in bundle_codes]
+    bbox = country_union_bbox(bundle_countries)
     return {
         "key": f"country:{code}",
         "label": str(country.get("name_zh") or country["name"]),
-        "bbox": list(country["bbox"]),
+        "bbox": bbox,
         "country_code": code,
-        "clip_method": "country_polygon_and_bbox",
+        "analysis_country_codes": list(bundle_codes),
+        "clip_method": (
+            "analysis_country_union_and_bbox"
+            if len(bundle_codes) > 1
+            else "country_polygon_and_bbox"
+        ),
+        "boundary_semantics": (
+            "scientific_analysis_bundle_not_legal_or_sovereignty_boundary"
+            if len(bundle_codes) > 1
+            else "frozen_natural_earth_analysis_boundary"
+        ),
+        "cartographic_reference": (
+            {
+                "publisher": "中华人民共和国自然资源部标准地图服务",
+                "map_name": "中国地图 1∶740万 对开 界线版 无邻国 线划一",
+                "review_number": "GS(2023)2767号",
+                "landing_page": "https://bzdt.tianditu.gov.cn/",
+                "usage_note": (
+                    "Natural Earth geometry is used only for scientific point filtering. "
+                    "Public cartographic presentation must retain this official standard-map "
+                    "reference and must not describe the analysis geometry as a legal boundary."
+                ),
+            }
+            if code == "CHN" and len(bundle_codes) > 1
+            else None
+        ),
     }
 
 
@@ -676,14 +759,13 @@ def coordinate_in_region(
     bbox = region.get("bbox")
     if not isinstance(bbox, list) or not coordinate_in_bbox(longitude, latitude, bbox):
         return False
-    country_code = region.get("country_code")
-    if not country_code:
+    country_codes = analysis_country_codes(region)
+    if not country_codes:
         return True
-    registry = load_country_registry(str(boundaries_path.resolve()))
-    country = registry["by_code"].get(str(country_code))
-    if country is None:
-        raise SpatialScopeError(f"country boundary is unavailable: {country_code}")
-    return point_in_country(longitude, latitude, country)
+    return any(
+        point_in_country(longitude, latitude, country)
+        for country in analysis_countries(region, boundaries_path)
+    )
 
 
 def coordinate_in_request_scope(
@@ -709,23 +791,16 @@ def coordinate_in_request_scope(
     requested = {str(item) for item in spatial_domains}
     if spatial_domain not in requested:
         return False
-    country_code = region.get("country_code")
-    if not country_code:
+    country_codes = analysis_country_codes(region)
+    if not country_codes:
         bbox = region.get("bbox")
         return bool(
             isinstance(bbox, list) and coordinate_in_bbox(longitude, latitude, bbox)
         )
-    registry = load_country_registry(str(boundaries_path.resolve()))
-    country = registry["by_code"].get(str(country_code))
-    if country is None:
-        raise SpatialScopeError(f"country boundary is unavailable: {country_code}")
+    countries = analysis_countries(region, boundaries_path)
     if spatial_domain != "marine":
-        return coordinate_in_bbox(
-            longitude, latitude, region["bbox"]
-        ) and point_in_country(
-            longitude,
-            latitude,
-            country,
+        return coordinate_in_bbox(longitude, latitude, region["bbox"]) and any(
+            point_in_country(longitude, latitude, country) for country in countries
         )
     if adjacent_marine_distance_km <= 0:
         return False
@@ -736,6 +811,7 @@ def coordinate_in_request_scope(
         return False
     # A source-labelled marine observation inside a coarse land polygon is
     # admitted; otherwise it must be within the declared proximity budget.
-    return distance_to_country_boundary_km(longitude, latitude, country) <= float(
-        adjacent_marine_distance_km
-    )
+    return min(
+        distance_to_country_boundary_km(longitude, latitude, country)
+        for country in countries
+    ) <= float(adjacent_marine_distance_km)

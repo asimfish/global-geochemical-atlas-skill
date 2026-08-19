@@ -1,0 +1,65 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-15T07:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 75,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 116220,
+      "path": "demo_input.csv",
+      "sha256": "0759fff9f1943e234da5d609872b09de853189c31cb8a017d0cb65399a1c813b"
+    },
+    {
+      "bytes": 121245,
+      "path": "sources.jsonl",
+      "sha256": "981ae8ab78d2a8967fafe6782767d0536fdaf475a76d64f2482681f42d20d098"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 75,
+    "raw_source_rows": 15,
+    "selected_source_rows": 15
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.60520/IEDA/113338",
+    "dataset_version": "EarthChem Library dataset 3338 version 1.0 (2024)",
+    "license": "CC-BY-SA-4.0",
+    "source_id": "earthchem-dehailonggang-rock",
+    "title": "The bulk-rock composition of the Dehailonggang volcanic-plutonic complex of the East Kunlun Orogen, northern Tibet Plateau"
+  },
+  "source_files": [
+    {
+      "bytes": 33004,
+      "filename": "3338-1_Bulk-rockmajorandtraceelementcomposition.xlsx",
+      "retrieved_at": "2026-08-15T09:21:28Z",
+      "sha256": "ccdc26ee169919144f7d1c8726eb8075c99b4d9cba30d249906f79c045a12ca7",
+      "source_url": "https://ecl.earthchem.org/dl_multi.php"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "EarthChem dataset 3338 contains 15 whole-rock samples at two reported locations and is not regional or national coverage.",
+    "The workbook does not declare a coordinate CRS or positional accuracy; coordinates remain reported-only and are never silently promoted to WGS84.",
+    "ICP-MS technique, Agilent 7700e instrument and laboratory are publisher-reported; digestion, detection limits and row-level QC remain explicitly unreported."
+  ]
+}

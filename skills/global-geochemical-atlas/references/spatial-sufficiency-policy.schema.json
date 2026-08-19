@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:spatial-sufficiency-policy:v3",
+  "$id": "urn:global-geochemical-atlas:spatial-sufficiency-policy:v6",
   "title": "Spatial sufficiency policy",
   "type": "object",
   "additionalProperties": false,
@@ -13,7 +13,7 @@
   ],
   "properties": {
     "policy_version": {
-      "const": "atlas-spatial-sufficiency-policy-v3"
+      "const": "atlas-spatial-sufficiency-policy-v6"
     },
     "global_scope": {
       "type": "object",
@@ -31,7 +31,11 @@
         "minimum_macroregion_occupied_cells",
         "minimum_macroregion_grid_coverage_rate",
         "minimum_land_grid_coverage_rate",
-        "breadth_mode_minimum_land_macroregions"
+        "breadth_mode_minimum_land_macroregions",
+        "core_country_longitude_band_count",
+        "minimum_core_country_longitude_span_degrees",
+        "minimum_overall_core_country_longitude_band_rate",
+        "minimum_cells_per_core_country_longitude_band"
       ],
       "properties": {
         "grid_cell_degrees": {"type": "number", "exclusiveMinimum": 0},
@@ -50,7 +54,11 @@
         "minimum_macroregion_occupied_cells": {"type": "integer", "minimum": 1},
         "minimum_macroregion_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
         "minimum_land_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
-        "breadth_mode_minimum_land_macroregions": {"type": "integer", "minimum": 1, "maximum": 6}
+        "breadth_mode_minimum_land_macroregions": {"type": "integer", "minimum": 1, "maximum": 6},
+        "core_country_longitude_band_count": {"type": "integer", "minimum": 2, "maximum": 12},
+        "minimum_core_country_longitude_span_degrees": {"type": "number", "exclusiveMinimum": 0, "maximum": 360},
+        "minimum_overall_core_country_longitude_band_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "minimum_cells_per_core_country_longitude_band": {"type": "integer", "minimum": 1}
       }
     },
     "regional_scope": {
@@ -61,7 +69,10 @@
         "target_cells_across_long_axis",
         "minimum_assessable_coverage_cells",
         "minimum_canonical_samples",
-        "minimum_grid_coverage_rate"
+        "minimum_grid_coverage_rate",
+        "longitude_band_count",
+        "latitude_band_count",
+        "minimum_overall_coverage_zone_rate"
       ],
       "properties": {
         "allowed_grid_cell_degrees": {
@@ -73,7 +84,10 @@
         "target_cells_across_long_axis": {"type": "integer", "minimum": 2},
         "minimum_assessable_coverage_cells": {"type": "integer", "minimum": 1},
         "minimum_canonical_samples": {"type": "integer", "minimum": 1},
-        "minimum_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+        "minimum_grid_coverage_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "longitude_band_count": {"type": "integer", "minimum": 2, "maximum": 12},
+        "latitude_band_count": {"type": "integer", "minimum": 2, "maximum": 12},
+        "minimum_overall_coverage_zone_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
       }
     },
     "dimension_views": {
@@ -98,7 +112,9 @@
         "overall_cell_target_fraction",
         "minimum_global_coverage_zones",
         "minimum_cells_per_global_coverage_zone",
-        "maximum_country_targets"
+        "minimum_regional_coverage_zone_rate",
+        "maximum_country_targets",
+        "minimum_core_country_longitude_band_rate"
       ],
       "properties": {
         "minimum_canonical_samples": {"type": "integer", "minimum": 1},
@@ -106,7 +122,9 @@
         "overall_cell_target_fraction": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
         "minimum_global_coverage_zones": {"type": "integer", "minimum": 1},
         "minimum_cells_per_global_coverage_zone": {"type": "integer", "minimum": 1},
-        "maximum_country_targets": {"type": "integer", "minimum": 1}
+        "minimum_regional_coverage_zone_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "maximum_country_targets": {"type": "integer", "minimum": 1},
+        "minimum_core_country_longitude_band_rate": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
       }
     }
   }

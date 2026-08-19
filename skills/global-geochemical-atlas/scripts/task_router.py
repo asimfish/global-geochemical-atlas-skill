@@ -151,14 +151,10 @@ def validate_contract(raw: Mapping[str, Any]) -> dict[str, Any]:
         "four_media_demo",
     }:
         raise TaskRoutingError("acquisition_mode is unsupported")
-    # Online full-atlas work gets the 12-hour controller ceiling; each child
-    # round is still capped at 30 minutes.  Provided-input and narrow tasks need
-    # only the single-round default unless the caller declares another limit.
-    default_deadline = (
-        execution_budget.MAX_INTERNAL_BUDGET_SECONDS
-        if acquisition_mode == "online_auto" and task_type == "full_atlas"
-        else execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS
-    )
+    # An omitted deadline means the official competition harness envelope.
+    # Operator-authorized extended research must opt in explicitly rather than
+    # allowing a 12-hour default to be killed by a 900-second evaluator.
+    default_deadline = execution_budget.OFFICIAL_TASK_LIMIT_SECONDS
     deadline = raw.get("deadline_seconds", default_deadline)
     if (
         isinstance(deadline, bool)
@@ -298,8 +294,14 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
         mode = contract["acquisition_mode"]
         deadline = float(contract["deadline_seconds"])
         if mode == "online_auto" and deadline >= 120:
+            internal_deadline = deadline
+            if deadline <= execution_budget.OFFICIAL_TASK_LIMIT_SECONDS:
+                internal_deadline = max(
+                    120.0,
+                    deadline - execution_budget.OFFICIAL_HARNESS_RESERVE_SECONDS,
+                )
             round_timeout = min(
-                execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS, deadline
+                execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS, internal_deadline
             )
             run_timeout = max(60.0, round_timeout - min(60.0, round_timeout / 4))
             command = [
@@ -312,7 +314,7 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
                 "--online-source",
                 "auto",
                 "--time-budget-seconds",
-                str(deadline),
+                str(internal_deadline),
                 "--round-timeout-seconds",
                 str(round_timeout),
                 "--run-timeout-seconds",
@@ -320,7 +322,7 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
                 "--source-timeout-seconds",
                 str(min(600.0, run_timeout)),
             ]
-            if deadline < execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:
+            if internal_deadline < execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:
                 command.append("--checkpoint-only")
         else:
             command = [

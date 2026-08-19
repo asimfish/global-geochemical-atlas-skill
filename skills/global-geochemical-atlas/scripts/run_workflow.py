@@ -313,6 +313,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             map_path,
             samples_path,
             max_points=args.max_records,
+            max_embedded_records=min(
+                map_builder.DEFAULT_MAX_EMBEDDED_RECORDS, args.max_records
+            ),
             qc_report_path=outputs["qc_report"],
             confidence_report_path=outputs["confidence_report"],
             source_manifest_path=source_manifest_path,

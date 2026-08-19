@@ -1,0 +1,63 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-15T07:00:00Z",
+  "cache_hit_count": 1,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "EarthChem Library dataset 3338 version 1.0 (2024)",
+  "expected_target_observation_count": 75,
+  "files": [
+    {
+      "bytes": 33004,
+      "cache_status": "cache_hit",
+      "file_id": "bulk-rock-workbook",
+      "filename": "3338-1_Bulk-rockmajorandtraceelementcomposition.xlsx",
+      "sha256": "ccdc26ee169919144f7d1c8726eb8075c99b4d9cba30d249906f79c045a12ca7"
+    }
+  ],
+  "last_successful_fetch_at": null,
+  "last_successful_parse_at": "2026-08-15T07:00:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 15,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_field_count": 22,
+  "raw_schema_fields": [
+    "",
+    "ELEVATION",
+    "IGSN",
+    "LATITUDE",
+    "LITHOLOGY",
+    "LOCATION KEYWORDS",
+    "LONGITUDE",
+    "SAMPLE NAME",
+    "_dataset_version",
+    "_grain_fraction",
+    "_medium",
+    "_official_source_url",
+    "_sample_type",
+    "_source_crs",
+    "_source_file",
+    "_target_observations",
+    "age",
+    "collection date",
+    "collector",
+    "cruise",
+    "depth in core",
+    "texture"
+  ],
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "earthchem-dehailonggang-rock",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 75,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

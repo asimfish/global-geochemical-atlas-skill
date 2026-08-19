@@ -19,6 +19,7 @@ import sys
 import tempfile
 import urllib.error
 import urllib.parse
+import urllib.request
 import zipfile
 import zlib
 from collections import Counter
@@ -203,11 +204,60 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
 
+    distinct_url_canonical = [
+        {
+            "record_id": "distinct-url-record",
+            "source_record_id": "source-row-1",
+            "source_id": "earthchem-dehailonggang-rock",
+            "source_locator": "workbook.xlsx#sheet3-row=7",
+            "license": "CC-BY-SA-4.0",
+            "analyte_reported": "Cr",
+            "official_source_url": "https://ecl.earthchem.org/view.php?id=3338",
+            "file_sha256": "0" * 64,
+        }
+    ]
+    distinct_url_evidence = [
+        {
+            "record_id": "distinct-url-record",
+            "source_record_id": "source-row-1",
+            "source_id": "earthchem-dehailonggang-rock",
+            "source_locator": "workbook.xlsx#sheet3-row=7",
+            "license": "CC-BY-SA-4.0",
+            "analyte_reported": "Cr",
+            "source_file_sha256": "0" * 64,
+            "source_file_url": "https://ecl.earthchem.org/dl_multi.php",
+            "official_source_url": "https://ecl.earthchem.org/view.php?id=3338",
+        }
+    ]
+    evidence_builder.validate_record_linkage(
+        distinct_url_canonical, distinct_url_evidence
+    )
+    tampered_distinct_url = copy.deepcopy(distinct_url_evidence)
+    tampered_distinct_url[0]["official_source_url"] = (
+        "https://example.invalid/unbound-source"
+    )
+    try:
+        evidence_builder.validate_record_linkage(
+            distinct_url_canonical, tampered_distinct_url
+        )
+    except evidence_builder.EvidenceError as exc:
+        distinct_url_rejected = "does not bind canonical official_source_url" in str(
+            exc
+        )
+    else:
+        distinct_url_rejected = False
+    require(
+        distinct_url_rejected,
+        "D1 evidence keeps acquisition and official URLs distinct while rejecting an unbound official URL",
+        checks,
+    )
+
     registry = source_contracts.load_source_registry()
     require(
         set(registry["sources"])
         == {
             "georoc-archaean",
+            "georoc-convergent-margins",
             "usgs-conus-soil",
             "norway-marchem",
             "geotraces-idp2025",
@@ -238,10 +288,253 @@ def check_d1(output_dir: Path) -> list[str]:
             "eidc-ningbo-soil",
             "pangaea-brasol-ne-brazil-soil",
             "figshare-yangtze-basin-soil-heavy-metals",
+            "earthchem-dehailonggang-rock",
+            "4tu-northern-china-sediment",
         },
-        "D1 registry freezes thirty-one executable datasets across the four required media",
+        "D1 registry freezes thirty-four executable datasets across the four required media",
         checks,
     )
+    with tempfile.TemporaryDirectory(prefix="georoc-member-fallback-") as temporary:
+        fallback_root = Path(temporary)
+        fallback_registry = fallback_root / "source-registry.json"
+        member_payload = b"CITATIONS,SAMPLE NAME\nreference,sample-1\n"
+        member_md5 = hashlib.md5(member_payload, usedforsecurity=False).hexdigest()
+        fallback_registry.write_text(
+            json.dumps(
+                {
+                    "registry_version": "geochemical-source-registry-v1",
+                    "verified_at": "2026-08-15T00:00:00Z",
+                    "sources": {
+                        "georoc-archaean": {
+                            "adapter": "georoc_dataverse",
+                            "title": "GEOROC fallback contract fixture",
+                            "dataset_doi": "10.1234/georoc-test",
+                            "dataset_version": "test-v1",
+                            "landing_page": "https://example.invalid/georoc",
+                            "media": ["rock"],
+                            "download": {
+                                "mode": "versioned-dataverse-zip",
+                                "url": "https://example.invalid/georoc.zip",
+                                "accepted_content_types": ["application/zip"],
+                                "max_bytes": 1000,
+                                "expected_member_count": 1,
+                                "expected_uncompressed_bytes": len(member_payload),
+                                "bundle_sha256": None,
+                                "members": [
+                                    {
+                                        "filename": "member.csv",
+                                        "bytes": len(member_payload),
+                                        "persistent_id": "doi:10.1234/georoc-test/FILE1",
+                                        "publisher_checksum": {
+                                            "algorithm": "md5",
+                                            "value": member_md5,
+                                        },
+                                    }
+                                ],
+                            },
+                            "required_fields": ["CITATIONS", "SAMPLE NAME"],
+                            "license": {
+                                "spdx": "CC-BY-SA-4.0",
+                                "name": "CC BY-SA 4.0",
+                                "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+                            },
+                            "citation": "Synthetic fallback contract fixture",
+                            "redistribution": "test fixture",
+                            "scientific_notes": [],
+                        }
+                    },
+                },
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
+        fallback_adapter = source_contracts.GeorocArchaeanAdapter(fallback_registry)
+        original_download_run = source_contracts.downloader.run
+        fallback_calls: list[str] = []
+
+        def fake_georoc_download(args: argparse.Namespace) -> dict[str, Any]:
+            fallback_calls.append(args.url)
+            if args.output.suffix == ".zip":
+                raise downloader.DownloadError("HTTP 500 from dataset archive")
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(member_payload)
+            return {
+                "status": "downloaded",
+                "content_type": "text/csv",
+                "bytes": len(member_payload),
+                "accessed_at": "2026-08-15T00:00:00Z",
+            }
+
+        source_contracts.downloader.run = fake_georoc_download
+        try:
+            fallback_files = fallback_adapter.download(
+                fallback_adapter.candidate, fallback_root / "cache", "online"
+            )
+        finally:
+            source_contracts.downloader.run = original_download_run
+        require(
+            len(fallback_files) == 1
+            and fallback_files[0].path.read_bytes() == member_payload
+            and fallback_files[0].file_id == "FILE1"
+            and len(fallback_calls) == 2
+            and "api/access/datafile/:persistentId/" in fallback_calls[1]
+            and "persistentId=doi%3A10.1234%2Fgeoroc-test%2FFILE1" in fallback_calls[1],
+            "D1 GEOROC falls back from the failing dataset ZIP to the same publisher-pinned member persistent IDs",
+            checks,
+        )
+
+        bad_cache = fallback_root / "bad-cache"
+
+        def fake_bad_georoc_download(args: argparse.Namespace) -> dict[str, Any]:
+            if args.output.suffix == ".zip":
+                raise downloader.DownloadError("HTTP 500 from dataset archive")
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(member_payload.replace(b"sample-1", b"sample-X"))
+            return {
+                "status": "downloaded",
+                "content_type": "text/csv",
+                "bytes": len(member_payload),
+                "accessed_at": "2026-08-15T00:00:00Z",
+            }
+
+        source_contracts.downloader.run = fake_bad_georoc_download
+        try:
+            try:
+                fallback_adapter.download(
+                    fallback_adapter.candidate, bad_cache, "online"
+                )
+            except source_contracts.SourceAdapterError as exc:
+                checksum_failed_closed = "checksum mismatch" in str(exc)
+            else:
+                checksum_failed_closed = False
+        finally:
+            source_contracts.downloader.run = original_download_run
+        require(
+            checksum_failed_closed and not list(bad_cache.rglob(".members.*.part")),
+            "D1 GEOROC member fallback publishes nothing when publisher checksum verification fails",
+            checks,
+        )
+
+        synthetic_files: dict[str, source_contracts.DownloadedFile] = {}
+        synthetic_records: list[source_contracts.RawRecord] = []
+        for member_index, member_name in enumerate(("member-a.csv", "member-b.csv")):
+            member_path = fallback_root / member_name
+            member_path.write_text("fixture\n", encoding="utf-8")
+            synthetic_files[member_name] = source_contracts.DownloadedFile(
+                source_id="georoc-archaean",
+                file_id=f"FILE-{member_index}",
+                path=member_path,
+                source_url=f"https://example.invalid/{member_name}",
+                bytes=member_path.stat().st_size,
+                cache_status="fixture",
+                retrieved_at=None,
+            )
+            for row_index in range(2):
+                locator = f"{member_name}#row={row_index + 2}"
+                synthetic_records.append(
+                    source_contracts.RawRecord(
+                        source_id="georoc-archaean",
+                        source_record_id=source_contracts.stable_source_record_id(
+                            "georoc-archaean",
+                            f"sample-{member_index}-{row_index}",
+                            locator,
+                        ),
+                        source_locator=locator,
+                        fields={
+                            "_source_file": member_name,
+                            "CITATIONS": "fixture reference",
+                            "SAMPLE NAME": f"sample-{member_index}-{row_index}",
+                            "MATERIAL": "WR",
+                            "LATITUDE MIN": str(10 + member_index),
+                            "LATITUDE MAX": str(10 + member_index),
+                            "LONGITUDE MIN": str(20 + member_index),
+                            "LONGITUDE MAX": str(20 + member_index),
+                            "AS(PPM)": str(1 + row_index),
+                            "CU(PPM)": str(2 + row_index),
+                            "NI(PPM)": str(3 + row_index),
+                            "ZN(PPM)": str(4 + row_index),
+                            "ROCK NAME": "granite",
+                        },
+                    )
+                )
+        balanced_rows, balanced_evidence, _, _ = demo_generator.georoc_demo(
+            synthetic_records,
+            synthetic_files,
+            {name: {} for name in synthetic_files},
+            fallback_adapter.candidate,
+            8,
+            ("As", "Cu", "Ni", "Zn"),
+            None,
+            "research",
+        )
+        require(
+            len(balanced_rows) == len(balanced_evidence) == 8
+            and {row["source_file"] for row in balanced_rows}
+            == {"member-a.csv", "member-b.csv"}
+            and {item["selection_rule"] for item in balanced_evidence}
+            == {
+                "whole-rock; exact reported point coordinates; balanced "
+                "As,Cu,Ni,Zn; round-robin publisher craton members"
+            },
+            "D1 GEOROC research slices interleave publisher craton members instead of taking a geographically biased archive prefix",
+            checks,
+        )
+        bbox_rows, bbox_evidence, _, _ = demo_generator.georoc_demo(
+            synthetic_records,
+            synthetic_files,
+            {name: {} for name in synthetic_files},
+            fallback_adapter.candidate,
+            4,
+            ("As", "Cu", "Ni", "Zn"),
+            (19.5, 9.5, 20.5, 10.5),
+            "research",
+        )
+        require(
+            len(bbox_rows) == len(bbox_evidence) == 4
+            and {row["source_file"] for row in bbox_rows} == {"member-a.csv"}
+            and all(not row["latitude"] and not row["longitude"] for row in bbox_rows)
+            and {
+                item["coordinate_evidence"]["canonicalization_status"]
+                for item in bbox_evidence
+            }
+            == {"withheld_pending_datum_verification"}
+            and all(
+                "reported-coordinate retrieval filter" in item["selection_rule"]
+                for item in bbox_evidence
+            ),
+            "D1 may use exact source-reported GEOROC coordinates for an auditable retrieval filter without relabeling them as canonical WGS84",
+            checks,
+        )
+        sparse_records: list[source_contracts.RawRecord] = []
+        for index, record in enumerate(synthetic_records[:2]):
+            fields = dict(record.fields)
+            if index == 1:
+                fields["AS(PPM)"] = ""
+            sparse_records.append(
+                source_contracts.RawRecord(
+                    source_id=record.source_id,
+                    source_record_id=record.source_record_id,
+                    source_locator=record.source_locator,
+                    fields=fields,
+                )
+            )
+        sparse_rows, sparse_evidence, _, _ = demo_generator.georoc_demo(
+            sparse_records,
+            synthetic_files,
+            {name: {} for name in synthetic_files},
+            fallback_adapter.candidate,
+            4,
+            ("As", "Cu"),
+            None,
+            "research",
+        )
+        require(
+            len(sparse_rows) == len(sparse_evidence) == 3
+            and Counter(row["element_or_analyte"] for row in sparse_rows)
+            == {"As": 1, "Cu": 2},
+            "D1 GEOROC keeps all verified observations up to each analyte quota instead of dropping the source when one requested element is naturally sparse",
+            checks,
+        )
     require(
         set(registry["sources"]["pangaea-amazonas-soil"]["target_analytes"])
         == {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"}
@@ -399,8 +692,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "pangaea-south-china-sea-sediment",
             "eidc-ningbo-soil",
             "figshare-yangtze-basin-soil-heavy-metals",
+            "4tu-northern-china-sediment",
         },
-        "D1 router gives an online China soil+sediment request six independent lineages",
+        "D1 router gives an online China soil+sediment request seven independent lineages including the western/northern source",
         checks,
     )
     china_water_route = source_router.route_sources(
@@ -465,8 +759,43 @@ def check_d1(output_dir: Path) -> list[str]:
     )
     georoc = source_contracts.registry_candidate("georoc-archaean")
     require(
-        georoc.version == "12.0" and georoc.license_id == "CC-BY-SA-4.0",
-        "D1 GEOROC candidate binds the verified version and license",
+        georoc.version == "12.0"
+        and georoc.license_id == "CC-BY-SA-4.0"
+        and georoc.registry_entry["region_applicability"]["country_index_status"]
+        == "positive_evidence_only"
+        and georoc.registry_entry["region_applicability"]["country_iso_a3_codes"]
+        == ["CHN"],
+        "D1 GEOROC candidate binds the verified version, license and publisher-member China evidence",
+        checks,
+    )
+    china_rock_route = source_router.route_sources(
+        {
+            "elements": ["As", "Cu", "Ni", "Zn"],
+            "region": "China",
+            "media": ["rock"],
+            "sources": "auto",
+            "license_policy": "open_only",
+            "research_use_policy": "permitted_research",
+            "minimum_evidence_tier": "D",
+            "minimum_use_mode": "normalized_analysis",
+            "max_records": 200000,
+            "offline": False,
+        }
+    )
+    china_rock_selected = {
+        entry["source_id"]: entry for entry in china_rock_route["selected_sources"]
+    }
+    require(
+        {"earthchem-dehailonggang-rock", "georoc-archaean"} <= set(china_rock_selected)
+        and china_rock_selected["georoc-archaean"]["request_compatibility"]["region"][
+            "reason_code"
+        ]
+        == "profile_country_positive_evidence"
+        and china_rock_selected["georoc-archaean"]["request_compatibility"]["region"][
+            "status"
+        ]
+        == "compatible_reported_only",
+        "D1 China rock routing consumes positive immutable-member evidence without relabeling GEOROC coordinates as WGS84",
         checks,
     )
     gemstat = source_contracts.registry_candidate("gemstat-open-archive")
@@ -712,8 +1041,30 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     china_scope = spatial_scope.resolve_region("China")
+    china_mainland_scope = spatial_scope.resolve_region("中国大陆")
     require(
-        spatial_scope.record_spatial_domain(
+        china_scope["country_code"] == "CHN"
+        and china_scope["analysis_country_codes"] == ["CHN", "TWN"]
+        and china_scope["clip_method"] == "analysis_country_union_and_bbox"
+        and china_scope["cartographic_reference"]["review_number"] == "GS(2023)2767号"
+        and china_mainland_scope["analysis_country_codes"] == ["CHN"]
+        and spatial_scope.coordinate_in_request_scope(
+            121.0,
+            23.7,
+            china_scope,
+            spatial_domain="land",
+            spatial_domains=["land"],
+            adjacent_marine_distance_km=0,
+        )
+        and not spatial_scope.coordinate_in_request_scope(
+            121.0,
+            23.7,
+            china_mainland_scope,
+            spatial_domain="land",
+            spatial_domains=["land"],
+            adjacent_marine_distance_km=0,
+        )
+        and spatial_scope.record_spatial_domain(
             {"medium": "sediment", "sediment_environment": "marine"}
         )
         == "marine"
@@ -745,7 +1096,7 @@ def check_d1(output_dir: Path) -> list[str]:
             spatial_domains=["land", "inland_water", "marine"],
             adjacent_marine_distance_km=600,
         ),
-        "D1 domain-aware country scope admits bounded adjacent marine samples without turning a country into a broad bbox",
+        "D1 China analysis scope includes the separately encoded Taiwan geometry, preserves a mainland-only alias and admits only bounded adjacent marine samples",
         checks,
     )
     frozen_china_marine_counts: dict[str, int] = {}
@@ -805,10 +1156,12 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
     require(
-        execution_budget.OFFICIAL_TASK_LIMIT_SECONDS == 43200.0
+        execution_budget.OFFICIAL_TASK_LIMIT_SECONDS == 900.0
+        and execution_budget.OFFICIAL_HARNESS_RESERVE_SECONDS == 180.0
         and execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS == 1800.0
+        and execution_budget.EXTENDED_RESEARCH_LIMIT_SECONDS == 43200.0
         and execution_budget.MAX_INTERNAL_BUDGET_SECONDS == 43200.0,
-        "D1 defaults to a 30-minute evidence round inside the 12-hour task ceiling",
+        "D1 distinguishes the official 900-second envelope from explicit extended research",
         checks,
     )
     with tempfile.TemporaryDirectory(prefix="request-scope-contract-") as scope_temp:
@@ -968,8 +1321,14 @@ def check_d1(output_dir: Path) -> list[str]:
         == ["rock", "soil", "sediment", "water"]
         and breadth_route["breadth_audit"]["media"]["minimum_required"] == 2
         and breadth_route["breadth_audit"]["media"]["items"]["rock"]["status"]
-        != "selected",
-        "D1 breadth audit preserves every at-least candidate and exposes unsupported dimensions instead of trimming them",
+        == "selected"
+        and breadth_route["breadth_audit"]["media"]["items"]["rock"]["selected_sources"]
+        == [
+            "earthchem-dehailonggang-rock",
+            "georoc-archaean",
+            "georoc-convergent-margins",
+        ],
+        "D1 breadth audit preserves every at-least candidate and exposes both local and compilation-backed China-rock evidence",
         checks,
     )
     breadth_grid = spatial_sufficiency.build_scope_coverage_grid(
@@ -1033,6 +1392,62 @@ def check_d1(output_dir: Path) -> list[str]:
         ]
         == breadth_soil_view["missing_land_macroregions"],
         "D1 global repair ranking routes one country from every declared missing land macroregion before filling lower-priority holes",
+        checks,
+    )
+    core_country = breadth_grid["core_country_codes"][0]
+    core_bands = breadth_grid["country_longitude_bands"][core_country]
+    retained_band = core_bands[-1]
+    globally_broad_samples = []
+    for index, cell_id in enumerate(breadth_grid["reference_land_cell_ids"]):
+        band_id = breadth_grid["country_longitude_band_by_cell"].get(cell_id)
+        if band_id in set(core_bands) - {retained_band}:
+            continue
+        point = list(
+            spatial_scope.coverage_grid_cell_center(
+                cell_id, breadth_grid["cell_degrees"]
+            )
+        )
+        globally_broad_samples.append(
+            {
+                "source_id": "source-a",
+                "sample_identity": f"global-{index}",
+                "canonical_point": point,
+                "display_point": point,
+                "elements": ["As"],
+                "media": ["soil"],
+                "spatial_domains": ["land"],
+                "element_medium": ["As|soil"],
+            }
+        )
+    country_concentrated_audit = spatial_sufficiency.audit_spatial_views(
+        globally_broad_samples,
+        {
+            "elements": ["As"],
+            "media": ["soil"],
+            "region": "global",
+            "coverage_mode": "maximize_evidence_breadth",
+        },
+    )
+    country_concentrated_view = next(
+        view
+        for view in country_concentrated_audit["views"]
+        if view["view_id"] == "overall"
+    )
+    require(
+        country_concentrated_view["status"] == "gap"
+        and "core_country_longitude_band_coverage_debt"
+        in country_concentrated_view["reason_codes"]
+        and {
+            target["band_id"]
+            for target in country_concentrated_view["country_longitude_band_targets"]
+            if target["country_iso_a3"] == core_country
+        }
+        == set(core_bands) - {retained_band}
+        and spatial_sufficiency.rank_global_country_targets(country_concentrated_view)[
+            0
+        ]
+        == core_country,
+        "D1 global audit rejects a large-country one-sided cluster and emits exact generic longitude-band repair bboxes",
         checks,
     )
     offline_route = source_router.route_sources(
@@ -1154,6 +1569,7 @@ def check_d1(output_dir: Path) -> list[str]:
         {entry["source_id"] for entry in route["selected_sources"]}
         == {
             "georoc-archaean",
+            "georoc-convergent-margins",
             "usgs-conus-soil",
             "norway-marchem",
             "geotraces-idp2025",
@@ -1183,8 +1599,10 @@ def check_d1(output_dir: Path) -> list[str]:
             "eidc-ningbo-soil",
             "pangaea-brasol-ne-brazil-soil",
             "figshare-yangtze-basin-soil-heavy-metals",
+            "earthchem-dehailonggang-rock",
+            "4tu-northern-china-sediment",
         },
-        "D1 V4 router selects the thirty analyte-compatible normalized-analysis datasets across all media",
+        "D1 V4 router selects the thirty-three analyte-compatible normalized-analysis datasets across all media",
         checks,
     )
     require(
@@ -1322,8 +1740,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "pangaea-east-china-sea-clay",
             "pangaea-south-china-sea-sediment",
             "zenodo-yangtze-yellow-river-sediment",
+            "4tu-northern-china-sediment",
         },
-        "D1 V4 router selects all ten analyte-compatible normalized sediment sources for a raw-observation request",
+        "D1 V4 router selects all eleven analyte-compatible normalized sediment sources for a raw-observation request",
         checks,
     )
     benchmark_route = source_router.route_sources(
@@ -1356,17 +1775,17 @@ def check_d1(output_dir: Path) -> list[str]:
         evidence["summary"]
         == {
             "evidence_tiers": {
-                "A": 30,
+                "A": 33,
                 "B": 1,
                 "C": 0,
-                "D": len(catalog["sources"]) - 31,
+                "D": len(catalog["sources"]) - 34,
                 "U": 0,
             },
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 31,
+                "normalized_analysis": 34,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 31,
+                "discovery": len(catalog["sources"]) - 34,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -2284,12 +2703,12 @@ def check_d1(output_dir: Path) -> list[str]:
         == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
         and completeness_profile["summary"]
         == {
-            "executable_source_count": 31,
-            "sources_with_full_audit": 20,
-            "sources_with_target_observation_denominator": 31,
+            "executable_source_count": 34,
+            "sources_with_full_audit": 23,
+            "sources_with_target_observation_denominator": 34,
             "sources_without_full_audit": 11,
-            "demo_record_count": 1593,
-            "uniform_full_field_profiles": 31,
+            "demo_record_count": 1772,
+            "uniform_full_field_profiles": 34,
         }
         and completeness_profile["sources"]["georoc-archaean"]["full_population"][
             "audit_status"
@@ -2318,14 +2737,14 @@ def check_d1(output_dir: Path) -> list[str]:
         full_profile_root / "norway-marchem" / "automation_health.json"
     )
     require(
-        full_manifest["source_count"] == full_manifest["registered_source_count"] == 31
-        and full_manifest["observation_count"] == 4110852
-        and full_manifest["distinct_sample_count"] == 781965
-        and full_manifest["reported_coordinate_sample_count"] == 776952
+        full_manifest["source_count"] == full_manifest["registered_source_count"] == 34
+        and full_manifest["observation_count"] == 4294213
+        and full_manifest["distinct_sample_count"] == 861738
+        and full_manifest["reported_coordinate_sample_count"] == 843125
         and full_manifest["valid_coordinate_sample_count"] == 737757
         and full_manifest["comparable_observation_count"] == 424267
-        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 12986
-        and sum(int(row["observation_count"]) for row in cube_rows) == 4110852
+        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 26163
+        and sum(int(row["observation_count"]) for row in cube_rows) == 4294213
         and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 424267
         and all(
             profile["profile_scope"] == "full_population"
@@ -2338,15 +2757,15 @@ def check_d1(output_dir: Path) -> list[str]:
             )
             for profile in source_field_profiles.values()
         )
-        and marchem_health["version_drift"]["outer_archive_drift"] is True
-        and marchem_health["version_drift"]["data_and_method_member_hashes_match"]
-        is True
+        and marchem_health["version_drift"]["outer_archive_drift"] is False
+        and marchem_health["version_drift"]["status"] == "matches_registered_snapshot"
         and set(coverage_balance["media"]) == {"rock", "soil", "sediment", "water"}
         and coverage_balance["media"]["water"]["observation_count"] == 3783544
         and coverage_balance["media"]["water"]["independent_lineage_count"] == 4
-        and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 10
+        and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 11
         and coverage_balance["media"]["rock"]["reported_coordinate_sample_count"]
-        == 21178
+        == 86484
+        and coverage_balance["media"]["rock"]["independent_lineage_count"] == 2
         and coverage_balance["media"]["rock"]["valid_coordinate_sample_count"] == 0
         and coverage_balance["media"]["soil"]["valid_coordinate_sample_count"] == 21673
         and coverage_balance["media"]["sediment"]["valid_coordinate_sample_count"]
@@ -2377,7 +2796,7 @@ def check_d1(output_dir: Path) -> list[str]:
                 "covered_spatial_cells"
             ]
             == 0
-            for element in ("As", "Cu", "Ni", "Zn")
+            for element in ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
         )
         and all(
             int(row["valid_coordinate_sample_count"]) == 0
@@ -2386,6 +2805,7 @@ def check_d1(output_dir: Path) -> list[str]:
             if row["source_id"]
             in {
                 "georoc-archaean",
+                "georoc-convergent-margins",
                 "georoc-antarctica-intraplate",
                 "afsis-phase-i-wet-chemistry",
                 "japan-gsj-geochemical-map",
@@ -2394,6 +2814,18 @@ def check_d1(output_dir: Path) -> list[str]:
                 "us-wqp-sacramento-river-arsenic",
                 "zenodo-yangtze-yellow-river-sediment",
                 "figshare-yangtze-basin-soil-heavy-metals",
+                "earthchem-dehailonggang-rock",
+                "4tu-northern-china-sediment",
+            }
+        )
+        and all(
+            json_value(full_profile_root / source_id / "spatial_coverage.json")[
+                "coordinate_canonicalization_status"
+            ]
+            == "not_canonicalized"
+            for source_id in {
+                "figshare-yangtze-basin-soil-heavy-metals",
+                "zenodo-yangtze-yellow-river-sediment",
             }
         )
         and all(
@@ -2406,7 +2838,7 @@ def check_d1(output_dir: Path) -> list[str]:
             and sha256_file(SKILL_DIR / item["path"]) == item["sha256"]
             for item in full_manifest["artifacts"]
         ),
-        "D1 V4 full profiles prove thirty-one full-cache denominators and all coverage-cube metrics",
+        "D1 V4 full profiles prove thirty-four full-cache denominators and all coverage-cube metrics",
         checks,
     )
     require(
@@ -2428,7 +2860,17 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"]
-        == "multiple_datasets_single_upstream_lineage"
+        == "multiple_sources_but_single_source_per_analyte"
+        and matrix["cells"]["rock"]["independent_lineage_count"] == 2
+        and matrix["cells"]["rock"]["selected_sources"]
+        == [
+            "earthchem-dehailonggang-rock",
+            "georoc-antarctica-intraplate",
+            "georoc-archaean",
+            "georoc-convergent-margins",
+        ]
+        and matrix["cells"]["rock"]["analyte_source_counts"]
+        == {"As": 3, "Cr": 2, "Cu": 4, "Hg": 1, "Ni": 4, "Pb": 2, "Zn": 4}
         and matrix["cells"]["rock"]["analyte_coverage"]
         == "complete_for_registered_targets"
         and matrix["cells"]["soil"]["selected_sources"]
@@ -2452,6 +2894,7 @@ def check_d1(output_dir: Path) -> list[str]:
         == {"As": 11, "Cr": 10, "Cu": 14, "Hg": 6, "Ni": 12, "Pb": 13, "Zn": 14}
         and matrix["cells"]["sediment"]["selected_sources"]
         == [
+            "4tu-northern-china-sediment",
             "australia-ngsa",
             "australia-ngsa-mercury",
             "foregs-floodplain-sediment",
@@ -2465,7 +2908,7 @@ def check_d1(output_dir: Path) -> list[str]:
             "zenodo-yangtze-yellow-river-sediment",
         ]
         and matrix["cells"]["sediment"]["analyte_source_counts"]
-        == {"As": 8, "Cr": 8, "Cu": 10, "Hg": 5, "Ni": 8, "Pb": 9, "Zn": 10}
+        == {"As": 9, "Cr": 9, "Cu": 11, "Hg": 6, "Ni": 9, "Pb": 10, "Zn": 11}
         and matrix["cells"]["water"]["analyte_coverage"]
         == "complete_for_registered_targets"
         and matrix["cells"]["water"]["missing_analytes"] == []
@@ -3157,6 +3600,19 @@ def check_d1(output_dir: Path) -> list[str]:
             "D1 later rounds rotate the complete source queue without dropping evidence",
             checks,
         )
+        priority_candidates = [balanced_ids[-1], balanced_ids[2], balanced_ids[-1]]
+        prioritized_ids, missing_priority_ids = request_runner.prioritize_source_order(
+            rotated_once,
+            [*priority_candidates, "not-in-this-frozen-route"],
+        )
+        require(
+            prioritized_ids[:2] == [balanced_ids[-1], balanced_ids[2]]
+            and set(prioritized_ids) == set(balanced_ids)
+            and len(prioritized_ids) == len(balanced_ids)
+            and missing_priority_ids == ["not-in-this-frozen-route"],
+            "D1 machine-audited gap priorities move routed sources forward without changing route membership",
+            checks,
+        )
         constrained_ids, constrained_skipped = request_runner.plan_auto_sources(
             routed_global["selected_sources"], 128, 4
         )
@@ -3500,10 +3956,138 @@ def check_d1(output_dir: Path) -> list[str]:
         checks,
     )
 
+    earthchem_rows = csv_rows(
+        SOURCE_DEMOS / "earthchem-dehailonggang-rock" / "demo_input.csv"
+    )
+    earthchem_evidence = [
+        json.loads(line)
+        for line in (SOURCE_DEMOS / "earthchem-dehailonggang-rock" / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    require(
+        len(earthchem_rows) == len(earthchem_evidence) == 75
+        and len({row["sample_id"] for row in earthchem_rows}) == 15
+        and Counter(row["element_or_analyte"] for row in earthchem_rows)
+        == {element: 15 for element in ("Cr", "Cu", "Ni", "Pb", "Zn")}
+        and all(
+            row["medium"] == "rock"
+            and row["sample_type"] == "rock_whole_rock"
+            and row["analytical_method"] == "ICPMS"
+            and row["instrument"] == "Agilent 7700e"
+            and row["laboratory"]
+            and row["official_source_url"]
+            == "https://ecl.earthchem.org/view.php?id=3338"
+            and not row["source_crs"]
+            and not row["coordinate_uncertainty_m"]
+            for row in earthchem_rows
+        )
+        and source_contracts._RejectRedirects().redirect_request(
+            urllib.request.Request("https://ecl.earthchem.org/dl_multi.php"),
+            None,
+            302,
+            "Found",
+            {},
+            "https://example.org/unregistered.zip",
+        )
+        is None
+        and all(
+            item["evidence_status"] == "verified_source_file_and_row"
+            and item["dataset_doi"] == "10.60520/IEDA/113338"
+            and item["source_file_sha256"]
+            == "ccdc26ee169919144f7d1c8726eb8075c99b4d9cba30d249906f79c045a12ca7"
+            for item in earthchem_evidence
+        ),
+        "D1 EarthChem China-rock slice preserves publisher methods and fails closed on unreported CRS and precision",
+        checks,
+    )
+
+    four_tu_demo = SOURCE_DEMOS / "4tu-northern-china-sediment"
+    four_tu_rows = csv_rows(four_tu_demo / "demo_input.csv")
+    four_tu_evidence = [
+        json.loads(line)
+        for line in (four_tu_demo / "sources.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ]
+    four_tu_manifest = json_value(four_tu_demo / "run_manifest.json")
+    four_tu_profile = json_value(
+        full_profile_root / "4tu-northern-china-sediment" / "field_completeness.json"
+    )
+    four_tu_population = next(
+        item
+        for item in full_manifest["sources"]
+        if item["source_id"] == "4tu-northern-china-sediment"
+    )
+    require(
+        len(four_tu_rows) == len(four_tu_evidence) == 56
+        and len({row["sample_id"] for row in four_tu_rows}) == 8
+        and Counter(row["element_or_analyte"] for row in four_tu_rows)
+        == {element: 8 for element in ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")}
+        and len({row["survey_area"] for row in four_tu_rows}) == 8
+        and all(
+            row["medium"] == "sediment"
+            and row["dataset_doi"]
+            == "10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0"
+            and row["license"] == "CC0-1.0"
+            and row["source_locator"]
+            and row["official_source_url"].startswith("https://data.4tu.nl/")
+            and not row["source_crs"]
+            and not row["coordinate_uncertainty_m"]
+            for row in four_tu_rows
+        )
+        and all(
+            bool(row["analytical_method"]) == (row["element_or_analyte"] != "Hg")
+            and (
+                row["method_missing_reason"] == "not_reported"
+                if row["element_or_analyte"] == "Hg"
+                else bool(row["method_source_locator"])
+            )
+            for row in four_tu_rows
+        )
+        and {
+            (item["filename"], item["sha256"], item["bytes"])
+            for item in four_tu_manifest["source_files"]
+        }
+        == {
+            (
+                "Dataset of Geochemical Compositions of Surface Sediments in northern China.xlsx",
+                "6b06695e359986bf0a50c6d0febda08ffa25a61028c00cdadd60cc8426001232",
+                693878,
+            ),
+            (
+                "README.pdf",
+                "ef1bfdf082c86529682bfbc0446b1f571db16935c4ea16ee3a2813726778fd76",
+                95467,
+            ),
+            (
+                "Observed regions in 'Raw data of Geochemical Compositions of Surface Sediments in Northern China'.kml",
+                "3633ceb7c8ddc639c1a646c0c5acc0f6264daa09f58f4c4121b8c5a64950678c",
+                2479,
+            ),
+        }
+        and all(
+            item["source_file_sha256"]
+            == "6b06695e359986bf0a50c6d0febda08ffa25a61028c00cdadd60cc8426001232"
+            and item["method_evidence_file"]["filename"] == "README.pdf"
+            and item["method_evidence_file"]["sha256"]
+            == "ef1bfdf082c86529682bfbc0446b1f571db16935c4ea16ee3a2813726778fd76"
+            and item["region_evidence_file"]["filename"].endswith(".kml")
+            and item["region_evidence_file"]["sha256"]
+            == "3633ceb7c8ddc639c1a646c0c5acc0f6264daa09f58f4c4121b8c5a64950678c"
+            for item in four_tu_evidence
+        )
+        and four_tu_profile["observation_count"] == 6069
+        and four_tu_population["distinct_sample_count"] == 867
+        and four_tu_profile["fields"]["analytical_method"]["rate"] == 0.857143,
+        "D1 4TU northern-China source binds seven elements, eight western/northern regions, methods, QC and three-file provenance",
+        checks,
+    )
+
     migration_check = migrate_v4_source_demos.migrate(SOURCE_DEMOS, check=True)
     require(
-        migration_check["status"] == "PASS" and migration_check["source_count"] == 31,
-        "D1 V4 source-demo migration is byte-stable across all thirty-one sources",
+        migration_check["status"] == "PASS" and migration_check["source_count"] == 34,
+        "D1 V4 source-demo migration is byte-stable across all thirty-four sources",
         checks,
     )
 
@@ -3804,6 +4388,10 @@ def check_d1(output_dir: Path) -> list[str]:
     combined_qc = json_value(combined_output / "qc_report.json")
     combined_anomaly = json_value(combined_output / "anomaly_report.json")
     combined_database = csv_rows(combined_output / "geochemistry.csv")
+    combined_output_manifest = json_value(combined_output / "source_manifest.json")
+    combined_evidence_index = output_validator.database_evidence_index(
+        combined_output / "geochemistry.csv"
+    )
     combined_pangaea = [
         row
         for row in combined_database
@@ -3836,6 +4424,63 @@ def check_d1(output_dir: Path) -> list[str]:
             for sources in grouped_sources.values()
         ),
         "D1 combined workflow standardizes and maps all records without crossing independent source lineages",
+        checks,
+    )
+    source_binding_errors: list[str] = []
+    output_validator.validate_database_source_bindings(
+        combined_evidence_index, combined_output_manifest, source_binding_errors
+    )
+    tampered_binding_index = copy.deepcopy(combined_evidence_index)
+    first_record_id = sorted(tampered_binding_index)[0]
+    tampered_binding_index[first_record_id]["dataset_title"] = "wrong dataset"
+    tampered_binding_errors: list[str] = []
+    output_validator.validate_database_source_bindings(
+        tampered_binding_index,
+        combined_output_manifest,
+        tampered_binding_errors,
+    )
+    tampered_file_binding_index = copy.deepcopy(combined_evidence_index)
+    tampered_file_binding_index[first_record_id]["file_sha256"] = "f" * 64
+    tampered_file_binding_errors: list[str] = []
+    output_validator.validate_database_source_bindings(
+        tampered_file_binding_index,
+        combined_output_manifest,
+        tampered_file_binding_errors,
+    )
+    tampered_url_binding_index = copy.deepcopy(combined_evidence_index)
+    tampered_url_binding_index[first_record_id]["official_source_url"] = (
+        "https://example.invalid/unbound-source"
+    )
+    tampered_url_binding_errors: list[str] = []
+    output_validator.validate_database_source_bindings(
+        tampered_url_binding_index,
+        combined_output_manifest,
+        tampered_url_binding_errors,
+    )
+    require(
+        not source_binding_errors
+        and any("dataset_title_mismatch" in error for error in tampered_binding_errors)
+        and any(
+            "source_file_sha256_mismatch" in error
+            for error in tampered_file_binding_errors
+        )
+        and any(
+            "official_source_url_mismatch" in error
+            for error in tampered_url_binding_errors
+        ),
+        "D1/D2 validator rejects record metadata, file hashes and official URLs that do not match the source manifest",
+        checks,
+    )
+    require(
+        output_validator.canonical_binding_url(
+            "https://doi.org/10.1130/0091-7613(1987)15<1147:UFGKFT>2.0.CO;2"
+        )
+        == output_validator.canonical_binding_url(
+            "https://doi.org/10.1130/0091-7613(1987)15%3C1147:UFGKFT%3E2.0.CO;2"
+        )
+        and output_validator.canonical_binding_url("https://example.org/a%2Fb")
+        != output_validator.canonical_binding_url("https://example.org/a/b"),
+        "D1/D2 treats percent-encoded and literal DOI paths as the same bound identifier without weakening non-DOI URL matching",
         checks,
     )
     require(
@@ -3975,31 +4620,6 @@ def check_d1(output_dir: Path) -> list[str]:
             "D1 evidence packaging uses the bounded 200k-record runtime ceiling, not the 250 MB repository limit",
             checks,
         )
-        bbox_result = run_command(
-            [
-                sys.executable,
-                str(GENERATOR),
-                "--source",
-                "georoc-archaean",
-                "--cache-dir",
-                str(Path(evidence_temp) / "unused-cache"),
-                "--output-dir",
-                str(Path(evidence_temp) / "must-not-filter-georoc"),
-                "--mode",
-                "cached",
-                "--bbox",
-                "100,-10,120,10",
-                "--generated-at",
-                "2026-08-05T06:25:00Z",
-            ],
-            expected_code=2,
-        )
-        require(
-            "does not declare a datum" in bbox_result.stderr,
-            "D1 refuses WGS84 bbox filtering for GEOROC without datum evidence",
-            checks,
-        )
-
         standalone = Path(evidence_temp) / "source_manifest.json"
         evidence_builder.package_evidence(
             DEMO_INPUT, output_dir / "geochemistry.csv", confidence_path, standalone
@@ -4890,12 +5510,19 @@ def check_d2(output_dir: Path) -> list[str]:
         all(
             marker in template_html
             for marker in (
-                "发布方证据缺口",
-                "科学限值 / 删失",
-                "已核验规范",
-                "处理 / 人工复核",
-                "QC / 证据边界标记",
+                "发布方元数据未报告",
+                "删失值与科学限制",
+                "已应用可追溯规则",
+                "需处理或人工复核",
+                "数据缺口与处理状态",
+                "数据缺口与处理标记（保留原始代码）",
+                "工作流 QC 状态",
                 "不是 D2 处理失败",
+                "MISSING_SOURCE_CRS",
+                'id="evidenceLayer"',
+                "严格科学可用",
+                "完整，可定位到官方文件与记录",
+                "已执行，存在已分类的证据缺口或复核项",
             )
         ),
         "D3 classifies publisher metadata gaps separately from processing failures while preserving raw QC codes",
@@ -5379,19 +6006,26 @@ def check_d2(output_dir: Path) -> list[str]:
         set(production_execution) == set(execution_schema["properties"])
         and set(execution_schema["required"]) <= set(production_execution)
         and production_execution["route_resolution"] == "offline_fixture_hash_verified"
-        and production_execution["execution_coverage_status"] == "partial",
+        and production_execution["execution_coverage_status"] == "partial"
+        and production_execution["acquisition_scheduler"]
+        == {
+            "policy": "gap-priority-then-coverage-balanced-round-robin-v2",
+            "source_order_offset": 0,
+            "priority_source_ids": [],
+            "effective_source_ids": [],
+        },
         "D1-to-D3 request execution explains offline hash verification without overstating coverage",
         checks,
     )
     require(
-        production_execution["execution_version"] == "geochemical-request-execution-v5"
-        and production_execution["timing"]["official_task_limit_seconds"] == 43200.0
-        and production_execution["timing"]["internal_budget_seconds"] == 1800.0
+        production_execution["execution_version"] == "geochemical-request-execution-v6"
+        and production_execution["timing"]["official_task_limit_seconds"] == 900.0
+        and production_execution["timing"]["internal_budget_seconds"] == 900.0
         and production_execution["timing"]["workflow_reserve_seconds"] == 180.0
         and production_execution["timing"]["completed_within_internal_budget"] is True
         and production_execution["timing"]["elapsed_seconds"]
         < production_execution["timing"]["internal_budget_seconds"],
-        "D1-to-D3 execution evidence records the 12-hour task ceiling and 30-minute round budget",
+        "D1-to-D3 execution evidence records the official 900-second default budget",
         checks,
     )
     require(
@@ -5622,6 +6256,72 @@ def check_d2(output_dir: Path) -> list[str]:
 
 def check_d3(output_dir: Path) -> list[str]:
     checks: list[str] = []
+    geological_context = map_builder.geological_context_display(
+        {
+            "geographic_context_raw": "Upper Yangtze catchment",
+            "soil_horizon": "0-20 cm topsoil",
+            "lithology_raw": "carbonate-bearing parent material",
+            "geology_missing_reason": "invalid_or_missing_canonical_coordinate",
+        },
+        spatial_domain="land",
+    )
+    require(
+        geological_context["formal_geologic_unit"] is None
+        and geological_context["geological_context_status"]
+        == "publisher_context_reported"
+        and "Upper Yangtze catchment"
+        in geological_context["publisher_geological_background"]
+        and "0-20 cm topsoil" in geological_context["publisher_geological_background"],
+        "D3 distinguishes a formal spatially matched geologic unit from source-reported geological and depositional background",
+        checks,
+    )
+    publisher_gap_row = {
+        "source_id": "figshare-yangtze-basin-soil-heavy-metals",
+        "source_record_id": "src-" + "a" * 64,
+        "source_file": "Records.xlsx",
+        "source_locator": "Records.xlsx#sheet=Records&row=3754",
+        "dataset_title": "A dataset of heavy metal concentrations in soils across the Yangtze River basin",
+        "dataset_version": "figshare-file-2023-05-31",
+        "official_source_url": "https://ndownloader.figshare.com/files/40503701",
+        "file_sha256": "b" * 64,
+        "license": "CC-BY-4.0",
+        "normalized_value": "3715",
+        "normalized_unit": "mg/kg",
+        "analytical_method": "",
+        "method_family": "",
+        "geology_missing_reason": "invalid_or_missing_canonical_coordinate",
+        "qc_flags": (
+            '["MISSING_ANALYTICAL_METHOD","MISSING_DIGESTION_OR_EXTRACTION",'
+            '"MISSING_SOURCE_CRS","COORDINATE_NOT_CANONICALIZED"]'
+        ),
+    }
+    publisher_gap_classification = map_builder.record_evidence_classification(
+        publisher_gap_row,
+        coordinate_basis=map_builder.COORDINATE_BASIS_REPORTED,
+        spatial_domain="land",
+        qc_flags=[
+            "MISSING_ANALYTICAL_METHOD",
+            "MISSING_DIGESTION_OR_EXTRACTION",
+            "MISSING_SOURCE_CRS",
+            "COORDINATE_NOT_CANONICALIZED",
+        ],
+    )
+    require(
+        publisher_gap_classification["evidence_layer"] == "traceable_screening_only"
+        and publisher_gap_classification["provenance_status"] == "strict_complete"
+        and publisher_gap_classification["quality_control_status"]
+        == "completed_with_flags"
+        and publisher_gap_classification["missing_provenance_fields"] == []
+        and publisher_gap_classification["blocking_qc_flags"] == []
+        and set(publisher_gap_classification["scientific_readiness_reasons"])
+        == {
+            "canonical_wgs84_coordinate_missing",
+            "analytical_method_missing",
+            "geological_context_missing",
+        },
+        "D3 distinguishes complete provenance and executed QC from publisher metadata gaps on the reported Figshare row",
+        checks,
+    )
     with tempfile.TemporaryDirectory(prefix="d3-map-availability-") as summary_temp:
         summary_input = Path(summary_temp) / "geochemistry.csv"
         summary_input.write_text(
@@ -5666,6 +6366,9 @@ def check_d3(output_dir: Path) -> list[str]:
             "output_dir": "OUTPUT",
         }
     )
+    task_contract_schema = json_value(
+        SKILL_DIR / "references" / "task-contract.schema.json"
+    )
     full_plan = task_router.plan_task(
         {
             "contract_version": "atlas-task-contract-v1",
@@ -5682,6 +6385,15 @@ def check_d3(output_dir: Path) -> list[str]:
             "task_type": "full_atlas",
             "request": "REQUEST.json",
             "output_dir": "OUTPUT",
+        }
+    )
+    extended_online_plan = task_router.plan_task(
+        {
+            "contract_version": "atlas-task-contract-v1",
+            "task_type": "full_atlas",
+            "request": "REQUEST.json",
+            "output_dir": "OUTPUT",
+            "deadline_seconds": 43200,
         }
     )
     short_online_plan = task_router.plan_task(
@@ -5729,13 +6441,25 @@ def check_d3(output_dir: Path) -> list[str]:
         == "run_self_correction_loop.py"
         and "--online-source" in online_full_plan["commands"][0]
         and "--time-budget-seconds" in online_full_plan["commands"][0]
-        and online_full_plan["deadline_seconds"] == 43200.0
-        and "--checkpoint-only" not in online_full_plan["commands"][0]
+        and online_full_plan["deadline_seconds"] == 900.0
+        and online_full_plan["commands"][0][
+            online_full_plan["commands"][0].index("--time-budget-seconds") + 1
+        ]
+        == "720.0"
+        and "--checkpoint-only" in online_full_plan["commands"][0]
+        and extended_online_plan["deadline_seconds"] == 43200.0
+        and "--checkpoint-only" not in extended_online_plan["commands"][0]
         and "--checkpoint-only" not in short_online_plan["commands"][0]
         and "--checkpoint-only" in checkpoint_online_plan["commands"][0]
+        and execution_budget.OFFICIAL_TASK_LIMIT_SECONDS == 900.0
         and full_plan["validators"]
         and mismatched_task_output_rejected,
         "D3 deterministic TaskContract selects the minimum stable entry point and exact acceptance outputs",
+        checks,
+    )
+    require(
+        task_contract_schema["properties"]["deadline_seconds"]["default"] == 900,
+        "D3 task contract defaults to the official 900-second external sandbox envelope",
         checks,
     )
     skill_dirs = [
@@ -5746,6 +6470,31 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         len(skill_dirs) == 1 and skill_dirs[0] == SKILL_DIR,
         "D3 keeps exactly one production Skill",
+        checks,
+    )
+    activation = json_value(SKILL_DIR / "evals" / "activation.json")
+    activation_cases = activation.get("cases", [])
+    openai_contract = (SKILL_DIR / "agents" / "openai.yaml").read_text(encoding="utf-8")
+    skill_card = (SKILL_DIR / "skill-card.md").read_text(encoding="utf-8")
+    require(
+        (SKILL_DIR / "SKILL.md").is_file()
+        and (SKILL_DIR / "BENCHMARK.md").is_file()
+        and activation.get("schema_version") == "skill-activation-eval-v1"
+        and activation.get("skill") == "global-geochemical-atlas"
+        and sum(case.get("should_activate") is True for case in activation_cases) >= 2
+        and sum(case.get("should_activate") is False for case in activation_cases) >= 2
+        and {
+            "discoverability",
+            "correctness",
+            "security",
+            "effectiveness",
+            "efficiency",
+        }.issubset(activation.get("rubrics", {}))
+        and "allow_implicit_invocation: true" in openai_contract
+        and "## Effective capabilities" in skill_card
+        and "## Trust boundaries and controls" in skill_card
+        and "## Static scanner verification" in skill_card,
+        "D3 publishes governed Skill metadata, capability controls and balanced activation cases",
         checks,
     )
     required_outputs = set(output_validator.REQUIRED_FILES.values())
@@ -5787,7 +6536,7 @@ def check_d3(output_dir: Path) -> list[str]:
             "stability_verification": "path-and-stat-identity-v1",
         }
         execution = {
-            "execution_version": "geochemical-request-execution-v5",
+            "execution_version": "geochemical-request-execution-v6",
             "mode": "online_multi_source",
             "skill_snapshot": execution_snapshot,
         }
@@ -5797,7 +6546,7 @@ def check_d3(output_dir: Path) -> list[str]:
             json.dumps(execution, sort_keys=True) + "\n", encoding="utf-8"
         )
         loop = {
-            "schema_version": "self-correction-loop-report-v5",
+            "schema_version": "self-correction-loop-report-v7",
             "request_sha256": request_hash,
             "checkpoint_only": True,
             "stop_reason": "insufficient_data",
@@ -5812,11 +6561,20 @@ def check_d3(output_dir: Path) -> list[str]:
             ],
         }
         queue = {
-            "queue_version": "d1-repair-queue-v1",
+            "queue_version": "d1-repair-queue-v3",
             "request_sha256": request_hash,
             "status": "pending",
             "task_count": 1,
+            "action_group_count": 1,
+            "unattempted_action_group_count": 1,
+            "operator_continuation_required": True,
             "tasks": [{"task_id": "pending-test"}],
+            "action_groups": [
+                {
+                    "action_group_id": "pending-group",
+                    "member_task_ids": ["pending-test"],
+                }
+            ],
         }
         loop_path = checkpoint_dir / "loop_report.json"
         queue_path = checkpoint_dir / "d1_repair_queue.json"
@@ -6011,9 +6769,39 @@ def check_d3(output_dir: Path) -> list[str]:
                 "该结果比较同类样品的统计背景",
                 "renderPoints(true)",
                 'id="modeExplainer"',
+                "map_preview_sampling",
+                "覆盖保持预览",
+                'id="admin1-boundaries-data"',
+                "中国省级参考线",
+                "Natural Earth 1:50m Admin‑1",
+                "renderAdmin1Boundaries",
+                "zoom-aware-pixel-lod-v1",
+                "数据缺口与处理状态",
+                "标准化样品类型（Skill 控制词）",
+                "发布方样品描述",
+                "record ID（点击展开）",
+                "综合工作流可用性（非概率）",
+                "空间匹配地质单元",
+                "发布方地质 / 沉积背景",
+                "地质 / 环境背景",
             )
         ),
         "D3 implements element combinations, density heatmap and zoom-adaptive clickable anomaly regions",
+        checks,
+    )
+    require(
+        all(
+            marker in html
+            for marker in (
+                'const PLANAR_WORLD_POLICY="single-world-no-repeat-v1"',
+                "function clampPlanarView()",
+                "clampPlanarView();renderBasemap()",
+                "world_wrap_policy:REGIONAL_SCOPE?null:PLANAR_WORLD_POLICY",
+                'activeRegionKey==="global"?0',
+            )
+        )
+        and "current*factor>maxSpan?1:factor" in html,
+        "D3 planar world map clamps zoom and pan to one non-repeating world",
         checks,
     )
     require(
@@ -6125,8 +6913,9 @@ def check_d3(output_dir: Path) -> list[str]:
         "Natural Earth 1:110m" in html
         and "ai4s-natural-earth-land-v1" in html
         and "ai4s-natural-earth-admin0-v1" in html
+        and "ai4s-natural-earth-admin1-china-visual-v1" in html
         and "public domain" in html,
-        "D3 embeds pinned offline land and country boundaries with visible provenance",
+        "D3 embeds pinned offline land, country and optional China Admin-1 visual boundaries with visible provenance",
         checks,
     )
     require(
@@ -6147,8 +6936,49 @@ def check_d3(output_dir: Path) -> list[str]:
         checks,
     )
     map_report = summary.get("map_report", {})
+    preview_input = [
+        {
+            "record_id": f"preview-{sample_index}-{element}",
+            "sample_id": f"preview-sample-{sample_index}",
+            "source_id": f"source-{sample_index % 3}",
+            "medium": "soil" if sample_index % 2 == 0 else "sediment",
+            "element": element,
+            "longitude": -175.0 + (sample_index % 70) * 5.0,
+            "latitude": -70.0 + (sample_index % 28) * 5.0,
+        }
+        for sample_index in range(120)
+        for element in ("As", "Cu")
+    ]
+    preview_anomalies = {"preview-7-As", "preview-83-Cu"}
+    preview_rows, preview_report = map_builder.coverage_preserving_map_preview(
+        preview_input, preview_anomalies, 60
+    )
+    repeated_preview_rows, repeated_preview_report = (
+        map_builder.coverage_preserving_map_preview(
+            preview_input, preview_anomalies, 60
+        )
+    )
+    preview_ids = {str(row["record_id"]) for row in preview_rows}
+    preview_sample_counts = Counter(row["sample_id"] for row in preview_rows)
+    require(
+        preview_report["applied"] is True
+        and len(preview_rows) <= 60
+        and preview_report == repeated_preview_report
+        and [row["record_id"] for row in preview_rows]
+        == [row["record_id"] for row in repeated_preview_rows]
+        and preview_anomalies.issubset(preview_ids)
+        and set(preview_sample_counts.values()) == {2}
+        and {(row["source_id"], row["medium"], row["element"]) for row in preview_rows}
+        == {(row["source_id"], row["medium"], row["element"]) for row in preview_input},
+        "D3 large-atlas preview is deterministic, bounded, anomaly-preserving, dimension-stratified and never splits a physical sample",
+        checks,
+    )
     require(
         map_report.get("map_version") == "d3-interactive-atlas-v3"
+        and map_report.get("map_preview_sampling", {}).get("policy_version")
+        == "d3-coverage-preserving-preview-v1"
+        and map_report.get("scope_mappable_record_count")
+        == map_report.get("mapped_record_count")
         and map_report.get("default_view") == "all_data_sample_deduplicated"
         and map_report.get("embedded_payload_schema") == "d3-compact-payload-v1"
         and map_report.get("anomaly_region_render_mode")
@@ -6174,6 +7004,12 @@ def check_d3(output_dir: Path) -> list[str]:
         }.issubset(set(map_report.get("visualization_modes", [])))
         and map_report.get("external_assets") == 0
         and map_report.get("interpolation") is False
+        and map_builder.DEFAULT_MAX_EMBEDDED_RECORDS == 200_000
+        and map_report.get("admin1_boundary_asset", {}).get("asset_version")
+        == "ai4s-natural-earth-admin1-china-visual-v1"
+        and map_report.get("admin1_boundary_asset", {}).get("boundary_count") == 31
+        and map_report.get("admin1_boundary_asset", {}).get("license")
+        == "public domain"
         and all(
             map_report.get("capability_matrix", {})
             .get("filter_dimensions", {})
@@ -6226,6 +7062,10 @@ def check_d3(output_dir: Path) -> list[str]:
         is True
         and map_report.get("capability_matrix", {})
         .get("interaction_design", {})
+        .get("single_world_no_repeat_planar_navigation")
+        is True
+        and map_report.get("capability_matrix", {})
+        .get("interaction_design", {})
         .get("advanced_filters_progressive_disclosure")
         is True
         and map_report.get("capability_matrix", {})
@@ -6237,7 +7077,13 @@ def check_d3(output_dir: Path) -> list[str]:
         .get("heatmap_interpolates_concentration")
         is False
         and map_report.get("data_coverage_diagnostics", {}).get("sample_type_field")
-        == "medium",
+        == "medium"
+        and sum(
+            map_report.get("data_coverage_diagnostics", {})
+            .get("evidence_layer_counts", {})
+            .values()
+        )
+        == map_report.get("scope_mappable_record_count"),
         "D3 run summary declares the reusable map contract and default view",
         checks,
     )
@@ -6487,6 +7333,7 @@ def check_d3(output_dir: Path) -> list[str]:
             generated_report = json_value(bundle / "visualization_report.json")
             require(
                 generated_profile.get("story") == expected_story
+                and generated_profile.get("title", "").endswith("地球化学元素图谱")
                 and generated_report.get("profile") == generated_profile
                 and visualization_status_ok(
                     visualization_validator.validate_dir(bundle)
@@ -6934,6 +7781,12 @@ def check_d3(output_dir: Path) -> list[str]:
                 and reported_smoke["status"] == "pass"
                 and reported_smoke["dom"]["banner_present"] is True
                 and not reported_smoke["console_uncaught_errors"]
+                and reported_smoke["dom"]["render_attest"].get("spatial_scope")
+                == "regional"
+                and reported_smoke["dom"]["render_attest"].get(
+                    "planar_navigation_policy"
+                )
+                == "regional-bounded-antimeridian-v1"
                 and (
                     reported_smoke["dom"]["svg_graphic_elements"] > 0
                     or (

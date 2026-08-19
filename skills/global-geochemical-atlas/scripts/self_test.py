@@ -989,6 +989,7 @@ def run_suite() -> dict[str, Any]:
                     sample_id="geo-sample-water",
                     medium="water",
                     unit="ug/L",
+                    geologic_unit="",
                     latitude="35.25",
                     longitude="103.25",
                 ),
@@ -1016,12 +1017,19 @@ def run_suite() -> dict[str, Any]:
                 "D2 GLiM point-in-cell did not populate versioned spatial geology evidence",
             )
             require(
-                geology_database["geo-water"]["matched_geologic_unit"] == ""
-                and geology_database["geo-water"]["geology_missing_reason"]
-                == "not_applicable_water"
-                and geology_qc["water_records_with_assigned_land_unit"] == 0
+                geology_database["geo-water"]["geologic_unit"] == ""
+                and geology_database["geo-water"]["matched_geologic_unit"]
+                == "GLiM:1:su"
+                and geology_database["geo-water"]["geology_map_source"]
+                == standardizer.GLIM_SOURCE
+                and geology_database["geo-water"]["geology_missing_reason"] == ""
+                and geology_qc[
+                    "inland_water_records_with_point_surface_geology_context"
+                ]
+                == 1
                 and geology_qc["grid"]["sha256"] == geology_hash,
-                "D2 GLiM join assigned land geology to water or lost the grid hash",
+                "D2 GLiM join failed to keep source geology separate from the "
+                "inland-water point surface-geology context or lost the grid hash",
             )
             try:
                 standardizer.run_pipeline(

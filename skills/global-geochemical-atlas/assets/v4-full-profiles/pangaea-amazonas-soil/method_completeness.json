@@ -3,7 +3,7 @@
     "Cold vapour atomic absorption spectrometry (CV-AAS)": 174,
     "Inductively coupled plasma mass spectrometry (ICP-MS)": 1007
   },
-  "as_of": "2026-08-14T20:30:00Z",
+  "as_of": "2026-08-15T07:00:00Z",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "2024-04-10",
   "method_scope_counts": {

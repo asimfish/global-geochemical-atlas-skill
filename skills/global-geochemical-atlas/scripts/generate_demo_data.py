@@ -196,7 +196,7 @@ class DemoError(RuntimeError):
 
 def demo_version(source_id: str) -> str:
     """Return the checked-in generator contract for a source fixture."""
-    if source_id in {"georoc-archaean", "usgs-conus-soil"}:
+    if source_id in {"georoc-archaean", "georoc-convergent-margins", "usgs-conus-soil"}:
         return DEMO_VERSION
     return LEGACY_EXPANDED_SOURCE_VERSION
 
@@ -306,6 +306,9 @@ def _provenance_fields(
     analyte: str,
 ) -> dict[str, str]:
     source_file, source_row = _source_row(record)
+    official_source_url = str(
+        record.fields.get("_official_source_url") or downloaded.source_url
+    ).strip()
     return {
         "analyte_reported": analyte,
         "source_id": record.source_id,
@@ -315,7 +318,7 @@ def _provenance_fields(
         "source_file": source_file,
         "source_row": source_row,
         "source_locator": record.source_locator,
-        "official_source_url": downloaded.source_url,
+        "official_source_url": official_source_url,
         "file_sha256": downloaded.sha256,
         "license": candidate.license_id,
     }
@@ -402,6 +405,9 @@ def _base_evidence(
         "source_file_bytes": downloaded.bytes,
         "source_file_sha256": downloaded.sha256,
         "source_file_url": downloaded.source_url,
+        "official_source_url": str(
+            record.fields.get("_official_source_url") or downloaded.source_url
+        ).strip(),
         "dataset_title": candidate.title,
         "dataset_doi": candidate.dataset_doi,
         "dataset_version": candidate.version,
@@ -422,6 +428,7 @@ def georoc_demo(
     observation_limit: int,
     analytes: Sequence[str],
     bbox: tuple[float, float, float, float] | None,
+    purpose: str = "demo",
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int, int]:
     if observation_limit % len(analytes) != 0:
         raise DemoError(
@@ -432,9 +439,46 @@ def georoc_demo(
     rows: list[dict[str, str]] = []
     evidence: list[dict[str, Any]] = []
     selected_source_rows: set[str] = set()
-    raw_source_rows = 0
-    for record in records:
-        raw_source_rows += 1
+    source_order_records = list(records)
+    raw_source_rows = len(source_order_records)
+    if purpose == "demo":
+        ordered_records = source_order_records
+        selection_order = "source order"
+    else:
+        # The publisher archive is ordered by craton member. Taking a prefix
+        # therefore produces a geographic bias even when the complete verified
+        # archive is available. Interleave members before applying per-analyte
+        # quotas so a bounded research slice samples the archive breadth rather
+        # than whichever craton happens to sort first. Reported coordinates are
+        # still not canonicalized or used for country-boundary claims.
+        member_records: dict[str, list[RawRecord]] = {}
+        for record in source_order_records:
+            member_records.setdefault(
+                str(record.fields.get("_source_file") or "unknown"), []
+            ).append(record)
+        iterators = [iter(items) for items in member_records.values()]
+        ordered_records: list[RawRecord] = []
+        while iterators:
+            remaining = []
+            for iterator in iterators:
+                try:
+                    ordered_records.append(next(iterator))
+                    remaining.append(iterator)
+                except StopIteration:
+                    continue
+            iterators = remaining
+        selection_order = (
+            "round-robin publisher craton members"
+            if candidate.source_id == "georoc-archaean"
+            else "round-robin publisher compilation members"
+        )
+    selection_scope = (
+        "; reported-coordinate retrieval filter only "
+        "(datum unresolved; no canonical WGS84 claim)"
+        if bbox is not None
+        else ""
+    )
+    for record in ordered_records:
         if all(selected_per_analyte[item] >= per_analyte_limit for item in analytes):
             continue
         material = _strip_citation_suffix(record.fields.get("MATERIAL")).upper()
@@ -543,7 +587,8 @@ def georoc_demo(
                     "article_citations": article_citations,
                     "article_dois": article_dois,
                     "selection_rule": (
-                        f"whole-rock; exact reported point coordinates; balanced {','.join(analytes)}; source order"
+                        "whole-rock; exact reported point coordinates; balanced "
+                        f"{','.join(analytes)}; {selection_order}{selection_scope}"
                     ),
                     "material_raw": str(record.fields.get("MATERIAL") or "").strip(),
                     "lithology_raw": str(record.fields.get("ROCK NAME") or "").strip(),
@@ -564,10 +609,12 @@ def georoc_demo(
             evidence.append(entry)
             selected_source_rows.add(record.source_record_id)
             selected_per_analyte[analyte] += 1
-    if len(rows) != observation_limit:
+    if len(rows) != observation_limit and purpose == "demo":
         raise DemoError(
             f"GEOROC produced {len(rows)} observations, expected {observation_limit}"
         )
+    if not rows:
+        raise DemoError("GEOROC has no usable observations inside the requested scope")
     return rows, evidence, len(selected_source_rows), raw_source_rows
 
 
@@ -2034,6 +2081,7 @@ def foregs_demo(
                     "coordinate_uncertainty_m": "",
                     "geologic_unit": "",
                     "analytical_method": str(values.get("analytical_method") or ""),
+                    "instrument": str(values.get("instrument") or ""),
                     "digestion_or_extraction": str(
                         values.get("digestion_or_extraction") or ""
                     ),
@@ -3497,13 +3545,240 @@ def evidence_breadth_soil_demo(
     return rows, evidence_rows, len(selected_source_rows)
 
 
+def northern_china_sediment_demo(
+    records: Sequence[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+    analytes: Sequence[str],
+    bbox: tuple[float, float, float, float] | None,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    """Build a region- and element-balanced slice from the pinned 4TU workbook."""
+
+    publisher_region_order = {
+        name: index
+        for index, name in enumerate(
+            (
+                "Junggar Basin",
+                "Tarim Basin",
+                "eastern Tibetan Plateau",
+                "Qaidam Basin",
+                "South Alxa Plateau",
+                "North Alxa Plateau",
+                "Hetao Graben",
+                "northeastern sandy deserts",
+                "Chinese Loess Plateau",
+            )
+        )
+    }
+
+    requested = tuple(
+        item for item in analytes if item in candidate.registry_entry["target_analytes"]
+    )
+    if not requested:
+        raise DemoError("4TU northern-China source has no requested analytes")
+    buckets: dict[tuple[str, str, int, int], list[RawRecord]] = {}
+    for record in records:
+        latitude = _reported_float(record.fields.get("Latitude"))
+        longitude = _reported_float(record.fields.get("Longitude"))
+        if latitude is None or longitude is None:
+            continue
+        if bbox is not None and not _inside_bbox(str(latitude), str(longitude), bbox):
+            continue
+        region = str(record.fields.get("_survey_area") or "unreported-region")
+        observations = record.fields.get("_target_observations")
+        if not isinstance(observations, Mapping):
+            continue
+        for analyte in requested:
+            if analyte not in observations:
+                continue
+            key = (
+                analyte,
+                region,
+                int(math.floor(latitude / 2.0)),
+                int(math.floor(longitude / 2.0)),
+            )
+            buckets.setdefault(key, []).append(record)
+
+    analyte_queues: dict[str, list[RawRecord]] = {}
+    for analyte in requested:
+        region_cells: dict[str, list[tuple[str, str, int, int]]] = {}
+        for key in buckets:
+            if key[0] == analyte:
+                region_cells.setdefault(key[1], []).append(key)
+        region_queues: dict[str, list[RawRecord]] = {}
+        for region, keys in region_cells.items():
+            ordered_keys = sorted(keys, key=lambda key: (key[2], key[3]))
+            cell_offsets = {key: 0 for key in ordered_keys}
+            region_queue: list[RawRecord] = []
+            while True:
+                advanced = False
+                for key in ordered_keys:
+                    index = cell_offsets[key]
+                    if index >= len(buckets[key]):
+                        continue
+                    region_queue.append(buckets[key][index])
+                    cell_offsets[key] = index + 1
+                    advanced = True
+                if not advanced:
+                    break
+            region_queues[region] = region_queue
+        regions = sorted(
+            region_queues,
+            key=lambda region: (publisher_region_order.get(region, 999), region),
+        )
+        region_offsets = {region: 0 for region in regions}
+        queue: list[RawRecord] = []
+        while True:
+            advanced = False
+            for region in regions:
+                index = region_offsets[region]
+                if index >= len(region_queues[region]):
+                    continue
+                queue.append(region_queues[region][index])
+                region_offsets[region] = index + 1
+                advanced = True
+            if not advanced:
+                break
+        analyte_queues[analyte] = queue
+
+    ordered: list[tuple[RawRecord, str]] = []
+    offsets = {analyte: 0 for analyte in requested}
+    while len(ordered) < sum(len(queue) for queue in analyte_queues.values()):
+        advanced = False
+        for analyte in requested:
+            index = offsets[analyte]
+            queue = analyte_queues[analyte]
+            if index >= len(queue):
+                continue
+            ordered.append((queue[index], analyte))
+            offsets[analyte] = index + 1
+            advanced = True
+        if not advanced:
+            break
+    selected = ordered[:observation_limit]
+    if not selected:
+        raise DemoError("4TU northern-China source has no usable in-scope records")
+
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    selected_source_rows: set[str] = set()
+    for record, analyte in selected:
+        observation = record.fields["_target_observations"][analyte]
+        raw_value = str(observation["value"])
+        unit = str(observation["unit"])
+        record_id = stable_record_id(
+            record.source_id,
+            record.source_record_id,
+            analyte,
+            raw_value,
+            unit,
+        )
+        downloaded = files.get(str(record.fields.get("_source_file") or ""))
+        if downloaded is None:
+            raise DemoError("4TU record references an unknown source file")
+        rows.append(
+            {
+                "record_id": record_id,
+                "source_record_id": record.source_record_id,
+                "sample_id": str(record.fields.get("_physical_sample_id") or ""),
+                "element_or_analyte": analyte,
+                "analyte_reported": analyte,
+                "value": raw_value,
+                "unit": unit,
+                "medium": "sediment",
+                "measurement_basis": str(observation.get("measurement_basis") or ""),
+                "original_latitude_raw": str(record.fields.get("Latitude") or ""),
+                "original_longitude_raw": str(record.fields.get("Longitude") or ""),
+                "latitude": "",
+                "longitude": "",
+                "source_crs": "",
+                "coordinate_uncertainty_m": "",
+                "sample_type_raw": str(record.fields.get("_sample_type") or ""),
+                "sediment_environment": str(
+                    record.fields.get("_sediment_environment") or ""
+                ),
+                "grain_fraction": str(record.fields.get("_grain_fraction") or ""),
+                "geographic_context_raw": str(record.fields.get("_survey_area") or ""),
+                "survey_area": str(record.fields.get("_survey_area") or ""),
+                "analytical_method": str(observation.get("analytical_method") or ""),
+                "digestion_or_extraction": str(
+                    observation.get("digestion_or_extraction") or ""
+                ),
+                "preparation": str(record.fields.get("_preparation") or ""),
+                "reference_materials": str(
+                    record.fields.get("_reference_materials") or ""
+                ),
+                "method_source_locator": str(
+                    observation.get("variable_metadata_locator") or ""
+                ),
+                "method_missing_reason": str(
+                    observation.get("method_missing_reason") or ""
+                ),
+                "license": candidate.license_id,
+                "source_tier": "official_curated",
+                "source_id": record.source_id,
+                "source_locator": record.source_locator,
+                "official_source_url": candidate.landing_page,
+            }
+        )
+        entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+        entry.update(
+            {
+                "article_citations": [candidate.registry_entry["citation"]],
+                "article_dois": [candidate.dataset_doi]
+                if candidate.dataset_doi
+                else [],
+                "selection_rule": (
+                    "requested analyte × publisher region × two-degree reported-coordinate "
+                    "cell round-robin; coordinates are not canonicalized"
+                ),
+                "sample_type": str(record.fields.get("_sample_type") or ""),
+                "sediment_environment": str(
+                    record.fields.get("_sediment_environment") or ""
+                ),
+                "survey_area": str(record.fields.get("_survey_area") or ""),
+                "method_source_locator": str(
+                    observation.get("variable_metadata_locator") or ""
+                ),
+                "method_missing_reason": str(
+                    observation.get("method_missing_reason") or ""
+                ),
+                "method_evidence_file": {
+                    "filename": str(record.fields.get("_method_evidence_file") or ""),
+                    "url": str(record.fields.get("_method_evidence_url") or ""),
+                    "sha256": str(record.fields.get("_method_evidence_sha256") or ""),
+                    "locator": str(observation.get("variable_metadata_locator") or ""),
+                },
+                "region_evidence_file": {
+                    "filename": str(record.fields.get("_region_evidence_file") or ""),
+                    "url": str(record.fields.get("_region_evidence_url") or ""),
+                    "sha256": str(record.fields.get("_region_evidence_sha256") or ""),
+                },
+                "coordinate_evidence": {
+                    "source_crs": "not reported",
+                    "coordinate_accuracy": "not reported",
+                },
+                "dataset_qc_scope": str(record.fields.get("_dataset_qc_scope") or ""),
+                "scientific_note": (
+                    "Publisher-reported coordinate retained without CRS inference. "
+                    "Dataset-level field-duplicate, laboratory-replicate and SRM evidence "
+                    "is preserved, but row-level QC acceptance is not published."
+                ),
+            }
+        )
+        evidence_rows.append(entry)
+        selected_source_rows.add(record.source_record_id)
+    return rows, evidence_rows, len(selected_source_rows)
+
+
 def v4_m6_demo(
     records: Sequence[RawRecord],
     files: Mapping[str, DownloadedFile],
     candidate: Any,
     observation_limit: int,
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
-    """Build deterministic balanced slices for the three V4 M6 adapters."""
+    """Build deterministic balanced slices for the evidence-rich V4 adapters."""
 
     source_id = candidate.source_id
     analytes = (
@@ -3512,7 +3787,7 @@ def v4_m6_demo(
         else ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
         if source_id == "eidc-ningbo-soil"
         else ("Cr", "Cu", "Ni", "Pb", "Zn")
-        if source_id == "tpdc-china-mountain-soil"
+        if source_id in {"tpdc-china-mountain-soil", "earthchem-dehailonggang-rock"}
         else ("As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn")
     )
     keys = (
@@ -3567,6 +3842,13 @@ def v4_m6_demo(
             medium = "soil"
             sample_depth_min, sample_depth_max = ("0", "0.20")
             grain = "freeze-dried, sieved and milled topsoil"
+        elif source_id == "earthchem-dehailonggang-rock":
+            latitude = str(record.fields.get("LATITUDE") or "")
+            longitude = str(record.fields.get("LONGITUDE") or "")
+            sample_id = str(record.fields.get("SAMPLE NAME") or "")
+            medium = "rock"
+            sample_depth_min = sample_depth_max = ""
+            grain = ""
         else:
             latitude = str(record.fields.get("YCOO") or "")
             longitude = str(record.fields.get("XCOO") or "")
@@ -3621,18 +3903,27 @@ def v4_m6_demo(
                     else longitude,
                     "source_crs": "EPSG:4326" if source_id == "gemas-europe" else "",
                     "coordinate_uncertainty_m": "",
-                    "geologic_unit": str(record.fields.get("LOCATION") or "")
+                    "geologic_unit": str(
+                        record.fields.get("LOCATION")
+                        or record.fields.get("LOCATION KEYWORDS")
+                        or ""
+                    )
                     if medium == "rock"
                     else "",
                     "analytical_method": str(values.get("analytical_method") or ""),
+                    "instrument": str(values.get("instrument") or ""),
                     "digestion_or_extraction": str(
                         values.get("digestion_or_extraction") or ""
                     ),
-                    "laboratory": "",
+                    "laboratory": str(values.get("laboratory") or ""),
                     "license": candidate.license_id,
                     "source_tier": "official_curated",
                     "source_id": record.source_id,
                     "source_locator": record.source_locator,
+                    "official_source_url": str(
+                        record.fields.get("_official_source_url")
+                        or downloaded.source_url
+                    ),
                     "sampled_at": "",
                     "sample_depth_min_m": sample_depth_min,
                     "sample_depth_max_m": sample_depth_max,
@@ -3640,6 +3931,7 @@ def v4_m6_demo(
                     "lithology_raw": str(
                         record.fields.get("ROCK NAME")
                         or record.fields.get("Rock Group")
+                        or record.fields.get("LITHOLOGY")
                         or ""
                     ),
                     "geologic_age_raw": str(record.fields.get("AGE") or ""),
@@ -3730,12 +4022,9 @@ def _jsonl_text(rows: Sequence[Mapping[str, Any]]) -> str:
 
 
 def generate(args: argparse.Namespace) -> dict[str, Any]:
-    if args.source == "georoc-archaean" and args.bbox is not None:
-        raise DemoError(
-            "GEOROC bbox filtering is disabled because the reviewed public metadata does not declare a datum"
-        )
     parameterized_sources = {
         "georoc-archaean",
+        "georoc-convergent-margins",
         "usgs-conus-soil",
         "foregs-topsoil",
         "foregs-subsoil",
@@ -3753,6 +4042,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         "pangaea-batagay-soil",
         "pangaea-brasol-ne-brazil-soil",
         "figshare-yangtze-basin-soil-heavy-metals",
+        "4tu-northern-china-sediment",
     }
     bbox_parameterized_sources = parameterized_sources - {"japan-gsj-marine-sediment"}
     if args.source not in bbox_parameterized_sources and args.bbox is not None:
@@ -3786,7 +4076,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             else list(adapter.parse(downloaded))
         )
         files = {item.path.name: item for item in downloaded}
-        if args.source == "georoc-archaean":
+        if args.source in {"georoc-archaean", "georoc-convergent-margins"}:
             references = {
                 item.path.name: _georoc_reference_map(item.path) for item in downloaded
             }
@@ -3798,6 +4088,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 args.observations,
                 args.elements,
                 args.bbox,
+                args.purpose,
             )
         elif args.source == "usgs-conus-soil":
             rows, evidence, selected_source_rows, raw_source_rows = usgs_demo(
@@ -3952,10 +4243,21 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 args.bbox,
             )
             raw_source_rows = len(raw_records)
+        elif args.source == "4tu-northern-china-sediment":
+            rows, evidence, selected_source_rows = northern_china_sediment_demo(
+                raw_records,
+                files,
+                candidate,
+                args.observations,
+                args.elements,
+                args.bbox,
+            )
+            raw_source_rows = len(raw_records)
         elif args.source in {
             "georoc-antarctica-intraplate",
             "eidc-ningbo-soil",
             "tpdc-china-mountain-soil",
+            "earthchem-dehailonggang-rock",
             "gemas-europe",
         }:
             rows, evidence, selected_source_rows = v4_m6_demo(
@@ -4000,7 +4302,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         warnings.append(
             f"The verified source yielded {len(rows)} usable observations within this request, below the target {args.observations}; the shortfall remains explicit for the sufficiency loop."
         )
-    if args.source == "georoc-archaean":
+    if args.source in {"georoc-archaean", "georoc-convergent-margins"}:
         warnings.append(
             "GEOROC coordinates remain non-canonical until their datum is verified."
         )
@@ -4158,6 +4460,15 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 "The linked article describes mixed georeferencing workflows without one declared datum/CRS, so coordinates remain reported-only.",
             ]
         )
+    elif args.source == "4tu-northern-china-sediment":
+        warnings.extend(
+            [
+                "The 4TU source is a continental-scale northern and western China sediment survey, not a complete national probability grid.",
+                "Publisher-reported coordinates cover Junggar, Tarim, Qaidam, eastern Tibetan Plateau, Alxa, Hetao, northeastern deserts and the Loess Plateau, but no datum/CRS or positional uncertainty is declared; coordinates remain reported-only.",
+                "As, Cr, Cu, Ni, Pb and Zn have element-specific publisher method mappings; the README does not map Hg to a method, so Hg remains explicitly method-missing.",
+                "Dataset-level field duplicates, blind laboratory replicates and reference materials are traceable, but row-level QC assignments and acceptance results are not published.",
+            ]
+        )
     elif args.source == "eidc-ningbo-soil":
         warnings.extend(
             [
@@ -4178,6 +4489,14 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             [
                 "TPDC samples cover selected mountain ecosystems rather than a uniform China soil grid.",
                 "O, A and C horizons remain separate; an undeclared source CRS remains unverified.",
+            ]
+        )
+    elif args.source == "earthchem-dehailonggang-rock":
+        warnings.extend(
+            [
+                "EarthChem dataset 3338 contains 15 whole-rock samples at two reported locations and is not regional or national coverage.",
+                "The workbook does not declare a coordinate CRS or positional accuracy; coordinates remain reported-only and are never silently promoted to WGS84.",
+                "ICP-MS technique, Agilent 7700e instrument and laboratory are publisher-reported; digestion, detection limits and row-level QC remain explicitly unreported.",
             ]
         )
     elif args.source == "zenodo-yangtze-yellow-river-sediment":
@@ -4262,7 +4581,8 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 else ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
                 if args.source == "georoc-antarctica-intraplate"
                 else ("Cr", "Cu", "Ni", "Pb", "Zn")
-                if args.source == "tpdc-china-mountain-soil"
+                if args.source
+                in {"tpdc-china-mountain-soil", "earthchem-dehailonggang-rock"}
                 else ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
                 if args.source == "eidc-ningbo-soil"
                 else ("As", "Cr", "Cu", "Ni", "Pb", "Zn")
@@ -4308,6 +4628,7 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         choices=(
             "georoc-archaean",
+            "georoc-convergent-margins",
             "usgs-conus-soil",
             "norway-marchem",
             "geotraces-idp2025",
@@ -4333,11 +4654,13 @@ def build_parser() -> argparse.ArgumentParser:
             "pangaea-batagay-soil",
             "georoc-antarctica-intraplate",
             "tpdc-china-mountain-soil",
+            "earthchem-dehailonggang-rock",
             "eidc-ningbo-soil",
             "gemas-europe",
             "zenodo-yangtze-yellow-river-sediment",
             "pangaea-brasol-ne-brazil-soil",
             "figshare-yangtze-basin-soil-heavy-metals",
+            "4tu-northern-china-sediment",
         ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)

@@ -1,0 +1,120 @@
+{
+  "acquisition": {
+    "mode": "fixed-official-figshare-files",
+    "observed_at": "2026-08-16T00:00:00Z",
+    "metadata_url": "https://api.figshare.com/v2/articles/12703148",
+    "landing_page": "https://data.4tu.nl/articles/dataset/Raw_data_of_Geochemical_Compositions_of_Surface_Sediments_in_Northern_China/12703148"
+  },
+  "files": [
+    {
+      "bytes": 693878,
+      "file_id": "northern-china-workbook",
+      "figshare_file_id": "24056474",
+      "name": "Dataset of Geochemical Compositions of Surface Sediments in northern China.xlsx",
+      "publisher_md5": "03bbe1abbcb9f0bdcc3ce3bede5ea1a0",
+      "sha256": "6b06695e359986bf0a50c6d0febda08ffa25a61028c00cdadd60cc8426001232",
+      "source_url": "https://ndownloader.figshare.com/files/24056474"
+    },
+    {
+      "bytes": 95467,
+      "file_id": "methods-and-qc-readme",
+      "figshare_file_id": "24056480",
+      "name": "README.pdf",
+      "publisher_md5": "c5b46e309a31507a93cfc2f2bf6edac7",
+      "sha256": "ef1bfdf082c86529682bfbc0446b1f571db16935c4ea16ee3a2813726778fd76",
+      "source_url": "https://ndownloader.figshare.com/files/24056480"
+    },
+    {
+      "bytes": 2479,
+      "file_id": "observed-regions-kml",
+      "figshare_file_id": "24056477",
+      "name": "Observed regions in 'Raw data of Geochemical Compositions of Surface Sediments in Northern China'.kml",
+      "publisher_md5": "f473cdd9c7c73041b2ab02a7af706eea",
+      "sha256": "3633ceb7c8ddc639c1a646c0c5acc0f6264daa09f58f4c4121b8c5a64950678c",
+      "source_url": "https://ndownloader.figshare.com/files/24056477"
+    }
+  ],
+  "claim_boundary": "This audit binds the 4TU/Figshare version-1 dataset to three official files, exact hashes, workbook rows, publisher method/QC prose and region labels. It does not infer a datum, CRS, positional uncertainty, row-level QC result, Hg method or matched geologic unit.",
+  "observed_data": {
+    "counts": {
+      "physical_rows": 867,
+      "distinct_coordinate_pairs": 799,
+      "target_observations": 6069,
+      "target_value_counts": {
+        "As": 867,
+        "Cr": 867,
+        "Cu": 867,
+        "Hg": 867,
+        "Ni": 867,
+        "Pb": 867,
+        "Zn": 867
+      }
+    },
+    "surface_region_counts": {
+      "Hetao Graben": 51,
+      "Junggar Basin": 222,
+      "North Alxa Plateau": 89,
+      "Qaidam Basin": 63,
+      "South Alxa Plateau": 50,
+      "Tarim Basin": 170,
+      "eastern Tibetan Plateau": 39,
+      "northeastern sandy deserts": 53
+    },
+    "additional_loess_and_paleosol_rows": {
+      "last_glacial_loess": 65,
+      "present_interglacial_sediment": 65
+    },
+    "bbox_reported_not_canonical": [
+      75.398611,
+      33.518139,
+      123.080639,
+      48.570222
+    ],
+    "workbook_vs_prose_reconciliation": "The eight explicit surface-region counts and the actual workbook both total 737, while one nearby README sentence says 738; the adapter uses the actual row population and reports the discrepancy."
+  },
+  "observed_metadata": {
+    "dataset_doi": "10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0",
+    "dataset_version": "4TU-Figshare-v1-2020-07-28",
+    "license": {
+      "name": "CC0 1.0 Universal",
+      "spdx": "CC0-1.0",
+      "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "method_evidence": {
+      "As": "HG-AFS after aqua-regia digestion",
+      "Cr": "XRF with fused-pellet preparation",
+      "Cu_Ni_Pb_Zn": "ICP-MS after four-acid digestion",
+      "Hg": "publisher README lists Hg but does not map it to a technique",
+      "locator": "README.pdf#multi-method-analytical-scheme-and-quality-control",
+      "scope": "dataset_parameter"
+    },
+    "method_qc_audit": {
+      "status": "verified",
+      "observation_denominator": 6069,
+      "method_present_observations": 5202,
+      "explicit_method_missing_observations": 867,
+      "explicit_method_missing_reason": "publisher_readme_does_not_map_hg_method",
+      "method_evidence_file_sha256": "ef1bfdf082c86529682bfbc0446b1f571db16935c4ea16ee3a2813726778fd76",
+      "qc_scope": "dataset",
+      "qc_evidence_present": true
+    },
+    "quality_control_evidence": {
+      "scope": "dataset",
+      "reported_controls": [
+        "3% field duplicates",
+        "blind laboratory replicates",
+        "soil, gold and platinum-group-element standard reference materials"
+      ],
+      "missing_boundary": "row-level QC assignment and acceptance results are not published"
+    },
+    "coordinate_evidence": {
+      "numeric_rows": 867,
+      "original_coordinate_crs": "not_reported",
+      "coordinate_accuracy": "not_reported",
+      "canonicalization_status": "reported_only"
+    }
+  },
+  "source_id": "4tu-northern-china-sediment",
+  "status": "verified_content_addressed_official_or_doi_dataset",
+  "verification_version": "d1-4tu-fixed-figshare-bundle-v1"
+}

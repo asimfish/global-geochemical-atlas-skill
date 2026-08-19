@@ -9,10 +9,11 @@ import hashlib
 import json
 import math
 import re
+from collections import Counter
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 REQUIRED_FILES = {
     "database": "geochemistry.csv",
@@ -132,6 +133,31 @@ def valid_web_url(value: Any) -> bool:
     except ValueError:
         return False
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
+def canonical_binding_url(value: Any) -> str:
+    """Return the comparison key used by provenance URL binding gates.
+
+    DOI paths are identifiers rather than ordinary web paths.  Publishers and
+    serializers may represent reserved characters such as ``<`` and ``>``
+    either literally or percent-encoded.  Decode and case-fold *only* DOI
+    identifiers; every non-DOI URL keeps exact string semantics so this helper
+    cannot turn a permissive URL normalizer into a provenance bypass.
+    """
+
+    text = str(value or "").strip()
+    try:
+        parsed = urlsplit(text)
+    except ValueError:
+        return text
+    if parsed.scheme.casefold() not in {"http", "https"}:
+        return text
+    if (parsed.hostname or "").casefold() not in {"doi.org", "dx.doi.org"}:
+        return text
+    identifier = unquote(parsed.path.lstrip("/")).strip().casefold()
+    if not re.fullmatch(r"10\.\d{4,9}/\S+", identifier, flags=re.IGNORECASE):
+        return text
+    return f"https://doi.org/{identifier}"
 
 
 def validate_database(
@@ -483,23 +509,10 @@ def validate_record_evidence(
             "source_file": "source_file",
             "source_row": "source_row",
             "source_file_sha256": "file_sha256",
-            "source_file_url": "official_source_url",
         }
         for evidence_field, canonical_field in comparable.items():
             evidence_value = value.get(evidence_field)
             canonical_value = canonical.get(record_id, {}).get(canonical_field)
-            if (
-                evidence_field == "source_file_url"
-                and canonical_value
-                and (
-                    evidence_value in (None, "")
-                    or str(evidence_value).strip() != canonical_value
-                )
-            ):
-                errors.append(
-                    f"record_evidence.jsonl:{line_number} does not bind geochemistry.csv official_source_url"
-                )
-                continue
             if (
                 evidence_value not in (None, "")
                 and canonical_value
@@ -508,6 +521,17 @@ def validate_record_evidence(
                 errors.append(
                     f"record_evidence.jsonl:{line_number} conflicts with geochemistry.csv on {evidence_field}"
                 )
+        canonical_official_url = canonical.get(record_id, {}).get("official_source_url")
+        evidence_official_url = value.get("official_source_url") or value.get(
+            "source_file_url"
+        )
+        if canonical_official_url and (
+            evidence_official_url in (None, "")
+            or str(evidence_official_url).strip() != canonical_official_url
+        ):
+            errors.append(
+                f"record_evidence.jsonl:{line_number} does not bind geochemistry.csv official_source_url"
+            )
         file_hash = value.get("source_file_sha256")
         if file_hash is not None and (
             not isinstance(file_hash, str)
@@ -534,6 +558,115 @@ def validate_record_evidence(
             "record_evidence.jsonl record IDs do not exactly match geochemistry.csv"
         )
     return len(record_ids)
+
+
+def validate_database_source_bindings(
+    canonical: Mapping[str, Mapping[str, str]],
+    manifest: Mapping[str, Any],
+    errors: list[str],
+) -> None:
+    """Cross-check every canonical row against its declared source aggregate.
+
+    The record sidecar proves row identity, while this gate independently
+    prevents a valid row from being attached to the wrong dataset title,
+    version, licence, file hash, or official URL in ``source_manifest.json``.
+    Report aggregate counts so a large bad import cannot create an unbounded
+    in-memory error list.
+    """
+
+    raw_sources = manifest.get("sources")
+    if not isinstance(raw_sources, list):
+        return
+    sources = {
+        str(item.get("source_id")): item
+        for item in raw_sources
+        if isinstance(item, Mapping) and item.get("source_id")
+    }
+    mismatch_counts: Counter[tuple[str, str]] = Counter()
+
+    def allowed_doi_urls(source: Mapping[str, Any]) -> set[str]:
+        urls: set[str] = set()
+        for raw_doi in list(source.get("dataset_dois") or []) + list(
+            source.get("article_dois") or []
+        ):
+            doi = str(raw_doi or "").strip()
+            if doi.casefold().startswith("https://doi.org/"):
+                urls.add(doi)
+            elif doi.casefold().startswith("doi:"):
+                urls.add(f"https://doi.org/{doi[4:].strip()}")
+            elif re.fullmatch(r"10\.\d{4,9}/\S+", doi, flags=re.IGNORECASE):
+                urls.add(f"https://doi.org/{doi}")
+        return urls
+
+    for row in canonical.values():
+        source_id = str(row.get("source_id") or "")
+        source = sources.get(source_id)
+        if source is None:
+            mismatch_counts[("unknown_source_id", source_id or "<empty>")] += 1
+            continue
+        synthetic_source = (
+            manifest.get("synthetic_data_present") is True
+            and source.get("evidence_type") == "synthetic_demo"
+        )
+        scalar_lists = {
+            "dataset_title": "dataset_titles",
+            "dataset_doi": "dataset_dois",
+            "dataset_version": "dataset_versions",
+            "license": "licenses",
+        }
+        for row_field, manifest_field in scalar_lists.items():
+            value = str(row.get(row_field) or "").strip()
+            allowed = {
+                str(item).strip()
+                for item in source.get(manifest_field) or []
+                if str(item).strip()
+            }
+            optional_blank = (
+                not value
+                and not allowed
+                and (row_field == "dataset_doi" or synthetic_source)
+            )
+            if not optional_blank and (not value or value not in allowed):
+                mismatch_counts[(f"{row_field}_mismatch", source_id)] += 1
+
+        source_file = str(row.get("source_file") or "").strip()
+        file_hash = str(row.get("file_sha256") or "").strip()
+        source_files = {
+            str(item.get("filename") or "").strip(): item
+            for item in source.get("source_files") or []
+            if isinstance(item, Mapping) and str(item.get("filename") or "").strip()
+        }
+        file_entry = source_files.get(source_file)
+        if not source_file and not source_files and synthetic_source:
+            pass
+        elif file_entry is None:
+            mismatch_counts[("source_file_mismatch", source_id)] += 1
+        elif file_hash != str(file_entry.get("sha256") or "").strip():
+            mismatch_counts[("source_file_sha256_mismatch", source_id)] += 1
+
+        official_url = str(row.get("official_source_url") or "").strip()
+        if official_url:
+            allowed_urls = {
+                str(url)
+                for url in source.get("official_source_urls") or []
+                if valid_web_url(url)
+            }
+            allowed_urls.update(
+                str(item.get("url"))
+                for item in source.get("source_files") or []
+                if isinstance(item, Mapping) and valid_web_url(item.get("url"))
+            )
+            allowed_urls.update(allowed_doi_urls(source))
+            if canonical_binding_url(official_url) not in {
+                canonical_binding_url(url) for url in allowed_urls
+            }:
+                mismatch_counts[("official_source_url_mismatch", source_id)] += 1
+
+    for (kind, source_id), count in sorted(mismatch_counts.items()):
+        errors.append(
+            f"{count} geochemistry record(s) have {kind} against source_manifest.json "
+            f"for {source_id}"
+        )
 
 
 def validate_feature_collection(
@@ -911,6 +1044,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
     if not isinstance(manifest, dict) or not isinstance(manifest.get("sources"), list):
         errors.append("source_manifest.json must contain a sources array")
     else:
+        validate_database_source_bindings(canonical_evidence, manifest, errors)
         enforce_research_evidence_contract(
             manifest.get("data_mode"),
             database_metrics,
@@ -1377,7 +1511,9 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                     for link in item.get("official_links", [])
                     if isinstance(link, dict) and valid_web_url(link.get("url"))
                 }
-                if not confidence_urls.issubset(allowed_urls):
+                if not {canonical_binding_url(url) for url in confidence_urls}.issubset(
+                    {canonical_binding_url(url) for url in allowed_urls}
+                ):
                     errors.append(
                         "sources_and_confidence.json contains official links not bound "
                         f"by source_manifest.json for {source_id}"

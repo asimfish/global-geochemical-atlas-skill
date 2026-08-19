@@ -1,0 +1,82 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-16T00:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Hg",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "online",
+    "observations": 56,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 109750,
+      "path": "demo_input.csv",
+      "sha256": "25e6d45149fe7fd879b65f54d9c44cfd110887ed9ff98127d79957951d12313b"
+    },
+    {
+      "bytes": 162796,
+      "path": "sources.jsonl",
+      "sha256": "6e5e5876820f7fdca33773f53d9bac60bc31b395f8b7ae86053db2d561f76eb0"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 56,
+    "raw_source_rows": 867,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0",
+    "dataset_version": "4TU-Figshare-v1-2020-07-28",
+    "license": "CC0-1.0",
+    "source_id": "4tu-northern-china-sediment",
+    "title": "Raw data of Geochemical Compositions of Surface Sediments in Northern China"
+  },
+  "source_files": [
+    {
+      "bytes": 693878,
+      "filename": "Dataset of Geochemical Compositions of Surface Sediments in northern China.xlsx",
+      "retrieved_at": "2026-08-15T21:56:08Z",
+      "sha256": "6b06695e359986bf0a50c6d0febda08ffa25a61028c00cdadd60cc8426001232",
+      "source_url": "https://ndownloader.figshare.com/files/24056474"
+    },
+    {
+      "bytes": 95467,
+      "filename": "README.pdf",
+      "retrieved_at": "2026-08-15T21:56:09Z",
+      "sha256": "ef1bfdf082c86529682bfbc0446b1f571db16935c4ea16ee3a2813726778fd76",
+      "source_url": "https://ndownloader.figshare.com/files/24056480"
+    },
+    {
+      "bytes": 2479,
+      "filename": "Observed regions in 'Raw data of Geochemical Compositions of Surface Sediments in Northern China'.kml",
+      "retrieved_at": "2026-08-15T21:56:10Z",
+      "sha256": "3633ceb7c8ddc639c1a646c0c5acc0f6264daa09f58f4c4121b8c5a64950678c",
+      "source_url": "https://ndownloader.figshare.com/files/24056477"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The 4TU source is a continental-scale northern and western China sediment survey, not a complete national probability grid.",
+    "Publisher-reported coordinates cover Junggar, Tarim, Qaidam, eastern Tibetan Plateau, Alxa, Hetao, northeastern deserts and the Loess Plateau, but no datum/CRS or positional uncertainty is declared; coordinates remain reported-only.",
+    "As, Cr, Cu, Ni, Pb and Zn have element-specific publisher method mappings; the README does not map Hg to a method, so Hg remains explicitly method-missing.",
+    "Dataset-level field duplicates, blind laboratory replicates and reference materials are traceable, but row-level QC assignments and acceptance results are not published."
+  ]
+}

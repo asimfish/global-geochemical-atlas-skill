@@ -31,7 +31,7 @@ on the same output directory appends rounds (agent-in-the-loop manual
 repairs between invocations), refuses to continue if the frozen request
 changed, and runs at most one explicit probe round when the caller resumes
 after a manual-repair stop (``no_autonomous_repair``, ``no_progress`` or
-``insufficient_data``), so an out-of-loop source repair is observed instead
+``repair_queue_pending``), so an out-of-loop source repair is observed instead
 of restating the stale verdict.
 
 Exit codes: 0 success/partial_success, 1 needs_human_review, 2 failed/usage.
@@ -44,6 +44,7 @@ import csv
 import hashlib
 import json
 import math
+import re
 import shutil
 import subprocess
 import sys
@@ -51,6 +52,7 @@ import tempfile
 import time
 from collections import Counter
 from collections.abc import Mapping, Sequence
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -65,8 +67,8 @@ import v4_semantics
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
-REPORT_VERSION = "self-correction-loop-report-v5"
-SUFFICIENCY_VERSION = "atlas-data-sufficiency-v6"
+REPORT_VERSION = "self-correction-loop-report-v7"
+SUFFICIENCY_VERSION = "atlas-data-sufficiency-v9"
 REPORT_FILENAME = "loop_report.json"
 RESEARCH_RECEIPT_FILENAME = "research_delivery_receipt.json"
 D1_REPAIR_QUEUE_FILENAME = "d1_repair_queue.json"
@@ -81,6 +83,9 @@ D1_QUEUE_CANDIDATE_FACT_KEYS = frozenset(
 SOURCE_CATALOG_PATH = SKILL_DIR / "assets" / "source_catalog.json"
 SOURCE_MANIFEST_PATH = SKILL_DIR / "assets" / "source_manifest.json"
 FULL_PROFILE_ROOT = SKILL_DIR / "assets" / "v4-full-profiles"
+ADMIN1_SEARCH_GAZETTEER_PATH = (
+    SKILL_DIR / "assets" / "natural-earth-50m-admin1-search.json"
+)
 DEFAULT_MAX_ROUNDS = 24
 MAX_ROUNDS_CAP = 24
 MAX_TIME_BUDGET_SECONDS = 12 * 60 * 60.0
@@ -90,10 +95,10 @@ DEFAULT_RUN_TIMEOUT_SECONDS = 29 * 60.0
 DEFAULT_SOURCE_TIMEOUT_SECONDS = 10 * 60.0
 MINIMUM_DELIVERY_TIME_BUDGET_SECONDS = DEFAULT_ROUND_TIMEOUT_SECONDS
 DEFAULT_PER_ANALYTE_OBSERVATIONS = 512
-# Four requested elements can now consume the complete 200k research ceiling.
-# The former 10k default silently stopped a four-element run near 40k rows even
-# after the request/generator ceiling had been raised.
-DEFAULT_MAX_PER_ANALYTE_OBSERVATIONS = 50_000
+# One requested element may now use the complete 200k research ceiling.  The
+# former 50k per-analyte cap could stop a sparse-dimension repair even while the
+# frozen request still had capacity; the total request ceiling remains binding.
+DEFAULT_MAX_PER_ANALYTE_OBSERVATIONS = 200_000
 DEFAULT_ACQUISITION_GROWTH = 2.0
 DEFAULT_MINIMUM_RECORDS = 5_000
 DEFAULT_MINIMUM_UNIQUE_SAMPLES = 2_000
@@ -101,7 +106,36 @@ DEFAULT_MINIMUM_PROVENANCE_RATE = 1.0
 DEFAULT_MINIMUM_GLOBAL_MACROREGIONS = 4
 DEFAULT_MINIMUM_MACROREGION_SAMPLES = 100
 DEFAULT_MAXIMUM_GLOBAL_MACROREGION_SHARE = 0.60
-MINIMUM_ANALYTICAL_METHOD_RATE_BY_MEDIUM = 0.80
+MINIMUM_ANALYTICAL_METHOD_RATE_BY_MEDIUM = 0.20
+MINIMUM_METHOD_READY_SAMPLES_BY_MEDIUM = 20
+MINIMUM_METHOD_READY_LINEAGES_BY_MEDIUM = 1
+# A source/medium lineage that contributes a material share of the archive must
+# not be hidden by method-ready rows from another lineage.  The broad archive
+# may retain its real, traceable observations, but a dominant method-unknown
+# compilation remains an explicit acquisition/evidence-repair debt.
+MINIMUM_MATERIAL_SOURCE_RECORDS = 50
+MINIMUM_MATERIAL_SOURCE_SHARE_BY_MEDIUM = 0.10
+MINIMUM_ANALYTICAL_METHOD_RATE_BY_MATERIAL_SOURCE = 0.20
+PUBLISHER_ABSENT_METHOD_REASON_CODES = frozenset(
+    {
+        "publisher_compilation_omits_row_method",
+        "not_reported",
+        "source_not_reported",
+        "not_reported_in_concentration_csv",
+        "workbook_reports_no_analytical_method",
+    }
+)
+# A requested medium must not pass merely because one small dataset happened to
+# contribute a handful of rows.  This is a coverage-capacity diagnostic, not a
+# demand that natural archives contain equal numbers of rock, soil, sediment
+# and water samples.  The target is bounded by the dominant observed medium,
+# the request record ceiling and a deliberately modest absolute/relative floor.
+MINIMUM_DIMENSION_BALANCE_SAMPLES = 100
+MINIMUM_DIMENSION_BALANCE_SHARE = 0.20
+MAXIMUM_DIMENSION_BALANCE_SAMPLES = 2_000
+MINIMUM_ELEMENT_MEDIUM_BALANCE_SAMPLES = 20
+MINIMUM_ELEMENT_MEDIUM_BALANCE_SHARE = 0.10
+MAXIMUM_ELEMENT_MEDIUM_BALANCE_SAMPLES = 500
 SPATIAL_SUFFICIENCY_POLICY = spatial_sufficiency.load_policy()
 GLOBAL_SPATIAL_POLICY = SPATIAL_SUFFICIENCY_POLICY["global_scope"]
 REGIONAL_SPATIAL_POLICY = SPATIAL_SUFFICIENCY_POLICY["regional_scope"]
@@ -204,6 +238,29 @@ CLAIM_BOUNDARY = (
     "获取失败及在冻结请求内扩大已路由来源的采集量；scientific_limit（如删失观测）"
     "不是缺陷。来源、许可、CRS 或方法证据不能由循环猜测。任何轮次都不修改冻结请求"
     "或既有证据。"
+)
+
+SCIENTIFIC_BLOCKING_QC_FLAGS = frozenset(
+    {
+        "MISSING_VALUE",
+        "INVALID_NUMERIC_VALUE",
+        "INVALID_MISSING_REASON",
+        "INVALID_DETECTION_LIMIT",
+        "INVALID_QUANTITATION_LIMIT",
+        "NEGATIVE_CONCENTRATION",
+        "UNSUPPORTED_UNIT",
+        "UNSUPPORTED_MOLAR_MASS",
+        "UNSUPPORTED_MOLAR_SPECIES",
+        "UNSUPPORTED_SPECIES_CONVERSION",
+        "OXIDE_ELEMENT_MISMATCH",
+        "AMBIGUOUS_AQUEOUS_RATIO_UNIT",
+        "INVALID_COORDINATE",
+        "UNSUPPORTED_SOURCE_CRS",
+        "INVALID_COORDINATE_POLICY",
+        "DEPTH_RANGE_INVALID",
+        "INVALID_GEOLOGIC_DISTANCE",
+        "BATCH_QC_FAILED",
+    }
 )
 
 
@@ -386,6 +443,8 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
     lineage_media: dict[str, set[str]] = {}
     lineage_spatial_domains: dict[str, set[str]] = {}
     element_media: Counter[tuple[str, str]] = Counter()
+    element_samples: dict[str, set[tuple[str, str]]] = {}
+    element_medium_samples: dict[tuple[str, str], set[tuple[str, str]]] = {}
     dimension_bands: dict[str, Counter[str]] = {
         key: Counter()
         for key in (
@@ -397,8 +456,25 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
     }
     metadata_counts: Counter[str] = Counter()
     metadata_by_medium: dict[str, Counter[str]] = {}
+    metadata_by_source_medium: dict[tuple[str, str], Counter[str]] = {}
+    method_missing_reasons_by_source_medium: dict[tuple[str, str], Counter[str]] = {}
+    medium_samples: dict[str, set[tuple[str, str]]] = {}
+    method_ready_samples_by_medium: dict[str, set[tuple[str, str]]] = {}
+    method_ready_lineages_by_medium: dict[str, set[str]] = {}
+    source_medium_samples: dict[tuple[str, str], set[tuple[str, str]]] = {}
+    method_ready_samples_by_source_medium: dict[
+        tuple[str, str], set[tuple[str, str]]
+    ] = {}
     official_source_url_counts: Counter[str] = Counter()
     traceable = 0
+    strict_provenance = 0
+    geology_accounted = 0
+    geology_present = 0
+    strict_provenance_by_medium: Counter[str] = Counter()
+    geology_accounted_by_medium: Counter[str] = Counter()
+    geology_present_by_medium: Counter[str] = Counter()
+    scientific_ready_samples_by_medium: dict[str, set[tuple[str, str]]] = {}
+    scientific_ready_lineages_by_medium: dict[str, set[str]] = {}
     canonical = 0
     reported = 0
     unique_samples: set[tuple[str, str]] = set()
@@ -434,10 +510,24 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
             "lineages_by_medium": {},
             "lineages_by_spatial_domain": {},
             "element_medium_cells": {},
+            "element_unique_samples": {},
+            "element_medium_unique_samples": {},
             "dimension_band_counts": {},
             "metadata_counts": {},
             "metadata_by_medium": {},
+            "metadata_by_source_medium": [],
+            "medium_unique_samples": {},
+            "method_ready_unique_samples_by_medium": {},
+            "method_ready_lineages_by_medium": {},
             "traceable_records": 0,
+            "strict_provenance_records": 0,
+            "strict_provenance_records_by_medium": {},
+            "geology_accounted_records": 0,
+            "geology_accounted_records_by_medium": {},
+            "geology_present_records": 0,
+            "geology_present_records_by_medium": {},
+            "scientific_ready_unique_samples_by_medium": {},
+            "scientific_ready_lineages_by_medium": {},
             "canonical_coordinate_records": 0,
             "reported_coordinate_records": 0,
             "unique_samples": 0,
@@ -499,10 +589,14 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
                 spatial_entry = None
             if element:
                 elements[element] += 1
+                if sample_key is not None:
+                    element_samples.setdefault(element, set()).add(sample_key)
                 if spatial_entry is not None:
                     spatial_entry["elements"].add(element)
             if medium:
                 media[medium] += 1
+                if sample_key is not None:
+                    medium_samples.setdefault(medium, set()).add(sample_key)
                 if spatial_entry is not None:
                     spatial_entry["media"].add(medium)
             spatial_domains[spatial_domain] += 1
@@ -510,6 +604,10 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
                 spatial_entry["spatial_domains"].add(spatial_domain)
             if element and medium:
                 element_media[(element, medium)] += 1
+                if sample_key is not None:
+                    element_medium_samples.setdefault((element, medium), set()).add(
+                        sample_key
+                    )
                 if spatial_entry is not None:
                     spatial_entry["element_medium"].add(f"{element}|{medium}")
             if source:
@@ -525,6 +623,47 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
                     official_source_url_counts[source] += 1
             if source and str(row.get("source_locator") or "").strip():
                 traceable += 1
+            strict_provenance_present = bool(
+                source
+                and str(row.get("source_record_id") or "").strip()
+                and str(row.get("source_file") or "").strip()
+                and str(row.get("source_locator") or "").strip()
+                and _valid_web_url(row.get("official_source_url"))
+                and re.fullmatch(
+                    r"[0-9a-f]{64}",
+                    str(row.get("file_sha256") or "").strip().casefold(),
+                )
+                and str(row.get("dataset_title") or "").strip()
+                and str(row.get("dataset_version") or "").strip()
+                and str(row.get("license") or "").strip()
+            )
+            if strict_provenance_present:
+                strict_provenance += 1
+                strict_provenance_by_medium[medium] += 1
+            geologic_context_present = any(
+                str(row.get(field) or "").strip()
+                for field in (
+                    "matched_geologic_unit",
+                    "geologic_unit",
+                    "geologic_unit_raw",
+                    "lithology",
+                    "lithology_raw",
+                    "soil_horizon",
+                    "sediment_environment",
+                    "water_body_type",
+                    "tectonic_setting_raw",
+                )
+            )
+            geology_disposition_present = bool(
+                geologic_context_present
+                or str(row.get("geology_missing_reason") or "").strip()
+            )
+            if geology_disposition_present:
+                geology_accounted += 1
+                geology_accounted_by_medium[medium] += 1
+            if geologic_context_present:
+                geology_present += 1
+                geology_present_by_medium[medium] += 1
             metadata_presence = {
                 "analytical_method": bool(
                     str(row.get("analytical_method") or "").strip()
@@ -556,10 +695,83 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
             }
             medium_metadata = metadata_by_medium.setdefault(medium, Counter())
             medium_metadata["records"] += 1
+            source_medium_key = (source, medium)
+            source_medium_metadata = None
+            if source and medium:
+                source_medium_metadata = metadata_by_source_medium.setdefault(
+                    source_medium_key, Counter()
+                )
+                source_medium_metadata["records"] += 1
+                if sample_key is not None:
+                    source_medium_samples.setdefault(source_medium_key, set()).add(
+                        sample_key
+                    )
+                if not metadata_presence["analytical_method"]:
+                    reason = str(row.get("method_missing_reason") or "").strip()
+                    method_missing_reasons_by_source_medium.setdefault(
+                        source_medium_key, Counter()
+                    )[reason or "unaccounted_in_input"] += 1
             for field, present in metadata_presence.items():
                 if present:
                     metadata_counts[field] += 1
                     medium_metadata[field] += 1
+                    if source_medium_metadata is not None:
+                        source_medium_metadata[field] += 1
+            if metadata_presence["analytical_method"] and medium:
+                if sample_key is not None:
+                    method_ready_samples_by_medium.setdefault(medium, set()).add(
+                        sample_key
+                    )
+                if source:
+                    method_ready_lineages_by_medium.setdefault(medium, set()).add(
+                        source_adapters.source_lineage_id(source)
+                    )
+                    if sample_key is not None:
+                        method_ready_samples_by_source_medium.setdefault(
+                            source_medium_key, set()
+                        ).add(sample_key)
+            geology_scientifically_ready = bool(
+                geologic_context_present
+                or (
+                    spatial_domain == "marine"
+                    and medium in {"water", "sediment"}
+                    and str(row.get("geology_missing_reason") or "").strip()
+                    in {
+                        "not_applicable_marine_water",
+                        "not_applicable_marine_sediment",
+                    }
+                )
+            )
+            raw_qc_flags = str(row.get("qc_flags") or "").strip()
+            try:
+                parsed_qc_flags = json.loads(raw_qc_flags)
+            except json.JSONDecodeError:
+                parsed_qc_flags = None
+            qc_disposition_present = isinstance(parsed_qc_flags, list)
+            qc_blocks_scientific_use = bool(
+                qc_disposition_present
+                and SCIENTIFIC_BLOCKING_QC_FLAGS.intersection(
+                    str(item) for item in parsed_qc_flags
+                )
+            )
+            scientific_ready = bool(
+                strict_provenance_present
+                and geology_scientifically_ready
+                and metadata_presence["analytical_method"]
+                and str(row.get("latitude") or "").strip()
+                and str(row.get("longitude") or "").strip()
+                and str(row.get("normalized_value") or "").strip()
+                and str(row.get("normalized_unit") or "").strip()
+                and qc_disposition_present
+                and not qc_blocks_scientific_use
+            )
+            if scientific_ready and sample_key is not None and medium:
+                scientific_ready_samples_by_medium.setdefault(medium, set()).add(
+                    sample_key
+                )
+                scientific_ready_lineages_by_medium.setdefault(medium, set()).add(
+                    source_adapters.source_lineage_id(source)
+                )
             canonical_point: tuple[float, float] | None = None
             if spatial_entry is not None and isinstance(
                 spatial_entry.get("canonical_point"), list
@@ -711,6 +923,14 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
             f"{element}|{medium}": count
             for (element, medium), count in sorted(element_media.items())
         },
+        "element_unique_samples": {
+            element: len(samples)
+            for element, samples in sorted(element_samples.items())
+        },
+        "element_medium_unique_samples": {
+            f"{element}|{medium}": len(samples)
+            for (element, medium), samples in sorted(element_medium_samples.items())
+        },
         "dimension_band_counts": {
             dimension: dict(sorted(counts.items()))
             for dimension, counts in dimension_bands.items()
@@ -720,7 +940,62 @@ def read_database_coverage(path: Path) -> dict[str, Any]:
             medium: dict(sorted(counts.items()))
             for medium, counts in sorted(metadata_by_medium.items())
         },
+        "metadata_by_source_medium": [
+            {
+                "source_id": source,
+                "source_lineage_id": source_adapters.source_lineage_id(source),
+                "medium": medium,
+                "record_count": int(counts.get("records", 0)),
+                "analytical_method_count": int(counts.get("analytical_method", 0)),
+                "method_accounted_count": int(counts.get("method_accounted", 0)),
+                "unique_samples": len(
+                    source_medium_samples.get((source, medium), set())
+                ),
+                "method_ready_unique_samples": len(
+                    method_ready_samples_by_source_medium.get((source, medium), set())
+                ),
+                "method_missing_reason_counts": dict(
+                    sorted(
+                        method_missing_reasons_by_source_medium.get(
+                            (source, medium), Counter()
+                        ).items()
+                    )
+                ),
+            }
+            for (source, medium), counts in sorted(metadata_by_source_medium.items())
+        ],
+        "medium_unique_samples": {
+            medium: len(samples) for medium, samples in sorted(medium_samples.items())
+        },
+        "method_ready_unique_samples_by_medium": {
+            medium: len(samples)
+            for medium, samples in sorted(method_ready_samples_by_medium.items())
+        },
+        "method_ready_lineages_by_medium": {
+            medium: sorted(lineages)
+            for medium, lineages in sorted(method_ready_lineages_by_medium.items())
+        },
         "traceable_records": traceable,
+        "strict_provenance_records": strict_provenance,
+        "strict_provenance_records_by_medium": dict(
+            sorted(strict_provenance_by_medium.items())
+        ),
+        "geology_accounted_records": geology_accounted,
+        "geology_accounted_records_by_medium": dict(
+            sorted(geology_accounted_by_medium.items())
+        ),
+        "geology_present_records": geology_present,
+        "geology_present_records_by_medium": dict(
+            sorted(geology_present_by_medium.items())
+        ),
+        "scientific_ready_unique_samples_by_medium": {
+            medium: len(samples)
+            for medium, samples in sorted(scientific_ready_samples_by_medium.items())
+        },
+        "scientific_ready_lineages_by_medium": {
+            medium: sorted(lineages)
+            for medium, lineages in sorted(scientific_ready_lineages_by_medium.items())
+        },
         "canonical_coordinate_records": canonical,
         "reported_coordinate_records": reported,
         "unique_samples": len(unique_samples),
@@ -1016,19 +1291,86 @@ def _country_source_candidates(
     }
 
 
-def _profile_bbox(source_id: str) -> list[float] | None:
-    profile = _json_object(FULL_PROFILE_ROOT / source_id / "spatial_coverage.json")
-    raw_bbox = profile.get("bbox")
+def _valid_bbox(value: Any) -> list[float] | None:
     if (
-        not isinstance(raw_bbox, list)
-        or len(raw_bbox) != 4
+        not isinstance(value, list)
+        or len(value) != 4
         or any(
             isinstance(item, bool) or not isinstance(item, (int, float))
-            for item in raw_bbox
+            for item in value
         )
     ):
         return None
-    return [float(item) for item in raw_bbox]
+    return [float(item) for item in value]
+
+
+def _profile_bbox(source_id: str) -> list[float] | None:
+    """Return an audited source envelope for scheduling, never for acceptance.
+
+    Canonical profile bboxes are preferred.  A reported-coordinate envelope is
+    reconstructed only when canonical coordinates are unavailable; callers use
+    it to avoid retrying a demonstrably disjoint source, not to pass a WGS84
+    coverage gate.
+    """
+
+    profile = _json_object(FULL_PROFILE_ROOT / source_id / "spatial_coverage.json")
+    canonical_bbox = _valid_bbox(profile.get("bbox"))
+    if canonical_bbox is not None:
+        return canonical_bbox
+    reported_cells = profile.get("reported_spatial_cell_ids")
+    if not isinstance(reported_cells, list):
+        return None
+    points: list[tuple[float, float]] = []
+    for raw_cell in reported_cells:
+        try:
+            cell_text = str(raw_cell)
+            signed = re.fullmatch(r"(?P<lat>[+-]\d+):(?P<lon>[+-]\d+)", cell_text)
+            if signed is not None:
+                points.append(
+                    (
+                        float(int(signed["lon"])) + 0.5,
+                        float(int(signed["lat"])) + 0.5,
+                    )
+                )
+            else:
+                points.append(spatial_scope.coverage_grid_cell_center(cell_text, 1.0))
+        except (ValueError, spatial_scope.SpatialScopeError):
+            continue
+    if not points:
+        return None
+    longitudes = [point[0] for point in points]
+    latitudes = [point[1] for point in points]
+    return [
+        min(longitudes) - 0.5,
+        min(latitudes) - 0.5,
+        max(longitudes) + 0.5,
+        max(latitudes) + 0.5,
+    ]
+
+
+def _bbox_compatible_source_ids(
+    source_ids: Sequence[str],
+    target_bbox: Sequence[Any] | None,
+    *,
+    require_spatial_evidence: bool = False,
+) -> list[str]:
+    bbox = _valid_bbox(list(target_bbox or []))
+    if bbox is None:
+        return sorted({str(item) for item in source_ids})
+    compatible: list[str] = []
+    for raw_source_id in source_ids:
+        source_id = str(raw_source_id)
+        source_bbox = _profile_bbox(source_id)
+        profile_path = FULL_PROFILE_ROOT / source_id / "spatial_coverage.json"
+        if require_spatial_evidence and profile_path.is_file() and source_bbox is None:
+            # A completed full-population profile with no canonical or reported
+            # coordinate envelope cannot repair a spatial hole by requerying.
+            continue
+        # Unknown coverage remains a discovery possibility. A known disjoint
+        # profile is the only case that can be safely removed from this target.
+        if source_bbox is None or spatial_scope.bbox_intersects(source_bbox, bbox):
+            compatible.append(source_id)
+    return sorted(set(compatible))
 
 
 def _source_matches_scope(
@@ -1086,6 +1428,9 @@ def _source_candidate_layers(
     request: Mapping[str, Any],
     elements: Sequence[str],
     media: Sequence[str],
+    target_bbox: Sequence[Any] | None = None,
+    target_spatial_domains: Sequence[str] | None = None,
+    require_spatial_evidence: bool = False,
     excluded_lineages: set[str] | None = None,
 ) -> dict[str, list[str]]:
     """Resolve selected → registered → catalog candidates for a D1 task.
@@ -1098,7 +1443,9 @@ def _source_candidate_layers(
 
     narrowed_request = {
         "region": request.get("region"),
-        "spatial_domains": list(request.get("spatial_domains") or []),
+        "spatial_domains": list(target_spatial_domains)
+        if target_spatial_domains is not None
+        else list(request.get("spatial_domains") or []),
         "adjacent_marine_distance_km": request.get("adjacent_marine_distance_km", 0),
         "elements": list(elements)
         or [str(item) for item in request.get("elements") or []],
@@ -1123,7 +1470,11 @@ def _source_candidate_layers(
             country_code, selected_source_ids, narrowed_request
         )
         return {
-            key: [source_id for source_id in values if lineage_allowed(source_id)]
+            key: _bbox_compatible_source_ids(
+                [source_id for source_id in values if lineage_allowed(source_id)],
+                target_bbox,
+                require_spatial_evidence=require_spatial_evidence,
+            )
             for key, values in layered.items()
         }
 
@@ -1156,9 +1507,161 @@ def _source_candidate_layers(
             continue
         catalog.append(source_id)
     return {
-        "selected": sorted(selected),
-        "registered": sorted(registered),
-        "catalog": sorted(catalog),
+        "selected": _bbox_compatible_source_ids(
+            selected,
+            target_bbox,
+            require_spatial_evidence=require_spatial_evidence,
+        ),
+        "registered": _bbox_compatible_source_ids(
+            registered,
+            target_bbox,
+            require_spatial_evidence=require_spatial_evidence,
+        ),
+        "catalog": _bbox_compatible_source_ids(catalog, target_bbox),
+    }
+
+
+@lru_cache(maxsize=1)
+def _admin1_search_regions() -> tuple[dict[str, Any], ...]:
+    asset = _json_object(ADMIN1_SEARCH_GAZETTEER_PATH)
+    if asset.get("asset_version") != "ai4s-natural-earth-admin1-search-gazetteer-v1":
+        return ()
+    regions = asset.get("regions")
+    if not isinstance(regions, list):
+        return ()
+    return tuple(item for item in regions if isinstance(item, dict))
+
+
+def _bbox_overlap_area(left: Sequence[float], right: Sequence[float]) -> float:
+    def longitude_segments(bbox: Sequence[float]) -> tuple[tuple[float, float], ...]:
+        west = float(bbox[0])
+        east = float(bbox[2])
+        if west <= east:
+            return ((west, east),)
+        return ((west, 180.0), (-180.0, east))
+
+    south = max(float(left[1]), float(right[1]))
+    north = min(float(left[3]), float(right[3]))
+    latitude_overlap = max(0.0, north - south)
+    longitude_overlap = sum(
+        max(0.0, min(left_east, right_east) - max(left_west, right_west))
+        for left_west, left_east in longitude_segments(left)
+        for right_west, right_east in longitude_segments(right)
+    )
+    return longitude_overlap * latitude_overlap
+
+
+def _longitude_fraction(bbox: Sequence[float], longitude: float) -> float:
+    """Locate a longitude inside a possibly antimeridian-wrapped bbox."""
+
+    west = float(bbox[0])
+    east = float(bbox[2])
+    span = east - west if west <= east else east + 360.0 - west
+    offset = (float(longitude) - west) % 360.0
+    return min(1.0, max(0.0, offset / max(span, 1e-9)))
+
+
+def _longitude_midpoint(bbox: Sequence[float]) -> float:
+    west = float(bbox[0])
+    east = float(bbox[2])
+    span = east - west if west <= east else east + 360.0 - west
+    midpoint = west + span / 2.0
+    return midpoint - 360.0 if midpoint > 180.0 else midpoint
+
+
+def regional_search_target(
+    *,
+    scope_label: str,
+    scope_bbox: Sequence[Any],
+    target_bbox: Sequence[Any],
+    country_iso_a3: str | None,
+    coverage_zone_id: str | None,
+) -> dict[str, Any]:
+    """Name one grid debt with directional and Admin-1 search hints.
+
+    Gazetteer matches are deliberately annotations.  They improve discovery
+    queries but never become point membership, canonical coordinates, or
+    evidence that a named subdivision has been sampled.
+    """
+
+    target = _valid_bbox(list(target_bbox))
+    scope = _valid_bbox(list(scope_bbox))
+    aliases: list[str] = []
+    direction = ""
+    direction_zh = ""
+    match = re.search(r"r([1-9])of([1-9]):c([1-9])of([1-9])", coverage_zone_id or "")
+    if match:
+        row, rows, column, columns = (int(item) for item in match.groups())
+        # Regional rows are numbered south-to-north by the coverage engine.
+        vertical = "south" if row <= rows / 2 else "north"
+        horizontal = (
+            "west"
+            if column <= columns / 3
+            else "east"
+            if column > columns * 2 / 3
+            else "central"
+        )
+        direction = f"{vertical}{horizontal}" if horizontal != "central" else vertical
+    elif target is not None and scope is not None:
+        x_fraction = _longitude_fraction(scope, _longitude_midpoint(target))
+        y_fraction = ((target[1] + target[3]) / 2 - scope[1]) / max(
+            1e-9, scope[3] - scope[1]
+        )
+        vertical = (
+            "north" if y_fraction >= 0.6 else "south" if y_fraction <= 0.4 else ""
+        )
+        horizontal = (
+            "west" if x_fraction <= 0.4 else "east" if x_fraction >= 0.6 else "central"
+        )
+        direction = f"{vertical}{horizontal}" if vertical else horizontal
+    direction_zh = {
+        "northwest": "西北",
+        "northeast": "东北",
+        "southwest": "西南",
+        "southeast": "东南",
+        "north": "北部",
+        "south": "南部",
+        "west": "西部",
+        "east": "东部",
+        "central": "中部",
+    }.get(direction, "")
+    if direction:
+        aliases.extend((f"{direction} {scope_label}", f"{scope_label} {direction}"))
+    if direction_zh:
+        aliases.append(f"{scope_label}{direction_zh}")
+
+    admin_matches: list[tuple[float, dict[str, Any]]] = []
+    if target is not None and country_iso_a3:
+        for region in _admin1_search_regions():
+            if region.get("adm0_a3") != country_iso_a3:
+                continue
+            region_bbox = _valid_bbox(region.get("bbox"))
+            if region_bbox is None:
+                continue
+            overlap = _bbox_overlap_area(target, region_bbox)
+            if overlap > 0:
+                admin_matches.append((overlap, region))
+    admin_matches.sort(key=lambda item: (-item[0], str(item[1].get("name") or "")))
+    admin1_names: list[str] = []
+    for _, region in admin_matches[:8]:
+        for key in ("name_en", "name", "name_zh", "gn_name"):
+            value = str(region.get(key) or "").strip()
+            if value and value not in aliases and value not in admin1_names:
+                admin1_names.append(value)
+    aliases.extend(admin1_names)
+    aliases = list(dict.fromkeys(item for item in aliases if item))
+    label_parts = [scope_label]
+    if direction:
+        label_parts.append(direction)
+    if admin1_names:
+        label_parts.append(", ".join(admin1_names[:4]))
+    return {
+        "target_label": " · ".join(label_parts),
+        "search_aliases": aliases,
+        "admin1_search_hints": admin1_names,
+        "gazetteer_semantics": (
+            "search hints only; bbox overlap is not point membership or coverage evidence"
+        ),
     }
 
 
@@ -1545,6 +2048,15 @@ def assess_regional_spatial_coverage(
             else 0.0,
             6,
         ),
+        "target_coverage_zones": list(overall.get("target_coverage_zones") or []),
+        "qualifying_coverage_zones": list(
+            overall.get("qualifying_coverage_zones") or []
+        ),
+        "missing_coverage_zones": list(overall.get("missing_coverage_zones") or []),
+        "coverage_zone_targets": list(overall.get("coverage_zone_targets") or []),
+        "minimum_qualifying_coverage_zones": int(
+            overall.get("minimum_qualifying_coverage_zones") or 0
+        ),
         "reason_codes": reasons,
         "repair_mode": repair_mode,
         "assessable": audit["assessable"],
@@ -1609,6 +2121,11 @@ def build_spatial_dimension_gaps(
             else regional_country_codes
         )
         country_targets: list[dict[str, Any]] = []
+        longitude_band_targets = [
+            dict(target)
+            for target in view.get("country_longitude_band_targets") or []
+            if isinstance(target, Mapping)
+        ]
         for code in country_codes:
             candidates = _country_source_candidates(
                 code, selected_source_ids, narrowed_request
@@ -1624,6 +2141,14 @@ def build_spatial_dimension_gaps(
             else:
                 repair_mode = "targeted_source_discovery"
             country = country_registry["by_code"][code]
+            target_bboxes = [
+                list(target.get("bbox") or [])
+                for target in longitude_band_targets
+                if target.get("country_iso_a3") == code
+                and len(target.get("bbox") or []) == 4
+            ]
+            if not target_bboxes and len(country.get("bbox") or []) == 4:
+                target_bboxes = [list(country["bbox"])]
             country_targets.append(
                 {
                     "country_iso_a3": code,
@@ -1634,6 +2159,7 @@ def build_spatial_dimension_gaps(
                     "selected_source_candidates": candidates["selected"],
                     "registered_source_candidates": candidates["registered"],
                     "catalog_candidate_source_ids": candidates["catalog"],
+                    "target_bboxes": target_bboxes,
                 }
             )
         if "reported_only_coordinate_evidence" in view.get("reason_codes", []):
@@ -1673,6 +2199,12 @@ def build_spatial_dimension_gaps(
                 "qualifying_coverage_zones": list(
                     view.get("qualifying_coverage_zones") or []
                 ),
+                "target_coverage_zones": list(view.get("target_coverage_zones") or []),
+                "missing_coverage_zones": list(
+                    view.get("missing_coverage_zones") or []
+                ),
+                "coverage_zone_targets": list(view.get("coverage_zone_targets") or []),
+                "country_longitude_band_targets": longitude_band_targets,
                 "covered_land_macroregions": list(
                     view.get("covered_land_macroregions") or []
                 ),
@@ -1938,6 +2470,11 @@ def assess_sufficiency(
         if database["records"]
         else 0.0
     )
+    strict_provenance_rate = (
+        database["strict_provenance_records"] / database["records"]
+        if database["records"]
+        else 0.0
+    )
     analyzed, insufficient, candidates = read_anomaly_groups(
         round_dir / "anomaly_report.json"
     )
@@ -2068,6 +2605,160 @@ def assess_sufficiency(
         "Each requested medium needs two independent upstream lineages; a sparse route becomes an explicit D1 discovery gap rather than a lowered target.",
         required=mode != "demo",
     )
+
+    def balance_shortfalls(
+        counts: Mapping[str, int],
+        *,
+        capacity_per_dimension: int,
+        absolute_floor: int,
+        minimum_share: float,
+        maximum_target: int,
+    ) -> tuple[int, dict[str, dict[str, int]]]:
+        largest = max((int(value) for value in counts.values()), default=0)
+        target = min(
+            largest,
+            max(1, int(capacity_per_dimension)),
+            maximum_target,
+            max(absolute_floor, math.ceil(largest * minimum_share)),
+        )
+        return target, {
+            dimension: {
+                "observed_unique_samples": int(count),
+                "target_unique_samples": target,
+                "deficit_unique_samples": max(0, target - int(count)),
+            }
+            for dimension, count in counts.items()
+            if int(count) < target
+        }
+
+    medium_sample_counts = {
+        medium: int((database.get("medium_unique_samples") or {}).get(medium, 0))
+        for medium in request["media"]
+    }
+    largest_medium_sample_count = max(medium_sample_counts.values(), default=0)
+    per_medium_request_capacity = max(
+        1,
+        int(request["max_records"])
+        // max(1, len(request["media"]) * len(request["elements"])),
+    )
+    medium_balance_target, medium_sample_shortfalls = balance_shortfalls(
+        medium_sample_counts,
+        capacity_per_dimension=per_medium_request_capacity,
+        absolute_floor=MINIMUM_DIMENSION_BALANCE_SAMPLES,
+        minimum_share=MINIMUM_DIMENSION_BALANCE_SHARE,
+        maximum_target=MAXIMUM_DIMENSION_BALANCE_SAMPLES,
+    )
+    medium_balance_required = mode != "demo" and len(request["media"]) > 1
+    criteria["medium_sample_balance"] = _criterion(
+        not medium_sample_shortfalls,
+        {
+            "unique_samples_by_medium": medium_sample_counts,
+            "largest_medium_unique_samples": largest_medium_sample_count,
+            "shortfalls": medium_sample_shortfalls,
+        },
+        {
+            "minimum_unique_samples_per_requested_medium": medium_balance_target,
+            "absolute_floor_before_caps": MINIMUM_DIMENSION_BALANCE_SAMPLES,
+            "minimum_share_of_largest_medium": MINIMUM_DIMENSION_BALANCE_SHARE,
+            "maximum_target_per_medium": MAXIMUM_DIMENSION_BALANCE_SAMPLES,
+            "request_capacity_cap_per_medium": per_medium_request_capacity,
+        },
+        (
+            "Counts source-scoped physical samples, not measurement rows. The "
+            "bounded target detects severe medium imbalance without claiming that "
+            "natural source populations should be equal or statistically representative."
+        ),
+        required=medium_balance_required,
+    )
+    element_sample_counts = {
+        element: int((database.get("element_unique_samples") or {}).get(element, 0))
+        for element in request["elements"]
+    }
+    per_element_request_capacity = max(
+        1, int(request["max_records"]) // max(1, len(request["elements"]))
+    )
+    element_balance_target, element_sample_shortfalls = balance_shortfalls(
+        element_sample_counts,
+        capacity_per_dimension=per_element_request_capacity,
+        absolute_floor=MINIMUM_DIMENSION_BALANCE_SAMPLES,
+        minimum_share=MINIMUM_DIMENSION_BALANCE_SHARE,
+        maximum_target=MAXIMUM_DIMENSION_BALANCE_SAMPLES,
+    )
+    element_balance_required = mode != "demo" and len(request["elements"]) > 1
+    criteria["element_sample_balance"] = _criterion(
+        not element_sample_shortfalls,
+        {
+            "unique_samples_by_element": element_sample_counts,
+            "largest_element_unique_samples": max(
+                element_sample_counts.values(), default=0
+            ),
+            "shortfalls": element_sample_shortfalls,
+        },
+        {
+            "minimum_unique_samples_per_requested_element": element_balance_target,
+            "absolute_floor_before_caps": MINIMUM_DIMENSION_BALANCE_SAMPLES,
+            "minimum_share_of_largest_element": MINIMUM_DIMENSION_BALANCE_SHARE,
+            "maximum_target_per_element": MAXIMUM_DIMENSION_BALANCE_SAMPLES,
+            "request_capacity_cap_per_element": per_element_request_capacity,
+        },
+        (
+            "Counts source-scoped physical samples for every requested element. "
+            "A high-volume element cannot hide a thin requested element; the bounded "
+            "target triggers acquisition without claiming equal natural abundance."
+        ),
+        required=element_balance_required,
+    )
+    requested_element_medium_cells = [
+        f"{element}|{medium}"
+        for element in request["elements"]
+        for medium in request["media"]
+    ]
+    element_medium_sample_counts = {
+        cell: int((database.get("element_medium_unique_samples") or {}).get(cell, 0))
+        for cell in requested_element_medium_cells
+    }
+    per_element_medium_capacity = max(
+        1,
+        int(request["max_records"]) // max(1, len(requested_element_medium_cells)),
+    )
+    (
+        element_medium_balance_target,
+        element_medium_sample_shortfalls,
+    ) = balance_shortfalls(
+        element_medium_sample_counts,
+        capacity_per_dimension=per_element_medium_capacity,
+        absolute_floor=MINIMUM_ELEMENT_MEDIUM_BALANCE_SAMPLES,
+        minimum_share=MINIMUM_ELEMENT_MEDIUM_BALANCE_SHARE,
+        maximum_target=MAXIMUM_ELEMENT_MEDIUM_BALANCE_SAMPLES,
+    )
+    element_medium_balance_required = (
+        mode != "demo" and len(request["elements"]) > 1 and len(request["media"]) > 1
+    )
+    criteria["element_medium_sample_balance"] = _criterion(
+        not element_medium_sample_shortfalls,
+        {
+            "unique_samples_by_element_medium": element_medium_sample_counts,
+            "largest_element_medium_unique_samples": max(
+                element_medium_sample_counts.values(), default=0
+            ),
+            "shortfalls": element_medium_sample_shortfalls,
+        },
+        {
+            "minimum_unique_samples_per_requested_cell": (
+                element_medium_balance_target
+            ),
+            "absolute_floor_before_caps": MINIMUM_ELEMENT_MEDIUM_BALANCE_SAMPLES,
+            "minimum_share_of_largest_cell": (MINIMUM_ELEMENT_MEDIUM_BALANCE_SHARE),
+            "maximum_target_per_cell": MAXIMUM_ELEMENT_MEDIUM_BALANCE_SAMPLES,
+            "request_capacity_cap_per_cell": per_element_medium_capacity,
+        },
+        (
+            "Every requested element × medium filter cell receives an independent-sample "
+            "capacity audit. Empty or thin cells remain repair debt instead of being hidden "
+            "by another element or medium."
+        ),
+        required=element_medium_balance_required,
+    )
     top_source_count = max(database["source_unique_samples"].values(), default=0)
     top_source_share = (
         top_source_count / database["unique_samples"]
@@ -2088,10 +2779,19 @@ def assess_sufficiency(
         required=mode != "demo",
     )
     criteria["record_provenance"] = _criterion(
-        trace_rate >= args.minimum_provenance_rate,
-        round(trace_rate, 6),
-        args.minimum_provenance_rate,
-        "A traceable record has both source_id and source_locator; manifest/hash checks remain separate gates.",
+        trace_rate >= args.minimum_provenance_rate
+        and (mode != "online" or strict_provenance_rate == 1.0),
+        {
+            "traceable_rate": round(trace_rate, 6),
+            "strict_provenance_rate": round(strict_provenance_rate, 6),
+            "strict_provenance_records": database["strict_provenance_records"],
+            "records": database["records"],
+        },
+        {
+            "minimum_traceable_rate": args.minimum_provenance_rate,
+            "online_strict_provenance_rate": 1.0,
+        },
+        "Online strict provenance requires source_id, source_record_id, source file, exact locator, official URL/DOI, 64-hex file SHA-256, dataset title and license on every row. The independent output validator still verifies row-to-manifest/hash consistency.",
     )
     source_link_gaps: list[dict[str, Any]] = []
     official_linked_records = 0
@@ -2208,15 +2908,6 @@ def assess_sufficiency(
         {"minimum_non_low_rate": 0.95},
         "Source evidence is assessed separately from coordinates and method comparability.",
     )
-    criteria["analytical_readiness"] = _criterion(
-        analytical_rate >= 0.60,
-        {
-            "non_low_rate": round(analytical_rate, 6),
-            "bands": dimension_counts.get("analytical_readiness", {}),
-        },
-        {"minimum_non_low_rate": 0.60},
-        "At least 60% of records need non-low method/QC readiness for a comparison-oriented atlas.",
-    )
     metadata_counts = database.get("metadata_counts") or {}
     metadata_by_medium = database.get("metadata_by_medium") or {}
     metadata_accounting_pass = bool(database["records"]) and all(
@@ -2247,31 +2938,235 @@ def assess_sufficiency(
         "Every record must explicitly distinguish present evidence from source-not-reported evidence. Decimal-place resolution is recorded separately and never substitutes for positional accuracy.",
         required=mode != "demo",
     )
+    geology_accounting_rate = (
+        database["geology_accounted_records"] / database["records"]
+        if database["records"]
+        else 0.0
+    )
+    criteria["geology_evidence_accounting"] = _criterion(
+        geology_accounting_rate == 1.0,
+        {
+            "records": database["records"],
+            "accounted_records": database["geology_accounted_records"],
+            "context_present_records": database["geology_present_records"],
+            "accounted_by_medium": database["geology_accounted_records_by_medium"],
+            "context_present_by_medium": database["geology_present_records_by_medium"],
+        },
+        {"accounted_rate": 1.0},
+        "Every record must carry publisher/matched geological context or an explicit scientific not-applicable/not-available reason. Missing context is never silently interpreted as a processing success.",
+        required=mode != "demo",
+    )
     minimum_method_rate = MINIMUM_ANALYTICAL_METHOD_RATE_BY_MEDIUM
-    method_rates_by_medium: dict[str, float] = {}
-    method_evidence_gaps: list[dict[str, Any]] = []
+    method_readiness_by_medium: dict[str, dict[str, Any]] = {}
+    medium_method_evidence_gaps: list[dict[str, Any]] = []
     for medium in request["media"]:
         counts = metadata_by_medium.get(medium) or {}
         total = int(counts.get("records", 0))
         method_count = int(counts.get("analytical_method", 0))
         rate = method_count / total if total else 0.0
-        method_rates_by_medium[medium] = round(rate, 6)
-        if total and rate < minimum_method_rate:
-            method_evidence_gaps.append(
+        unique_samples = int(
+            (database.get("medium_unique_samples") or {}).get(medium, 0)
+        )
+        method_ready_samples = int(
+            (database.get("method_ready_unique_samples_by_medium") or {}).get(medium, 0)
+        )
+        method_ready_lineages = list(
+            (database.get("method_ready_lineages_by_medium") or {}).get(medium, [])
+        )
+        minimum_method_ready_samples = (
+            min(unique_samples, MINIMUM_METHOD_READY_SAMPLES_BY_MEDIUM)
+            if unique_samples
+            else 0
+        )
+        medium_passes = not total or (
+            rate >= minimum_method_rate
+            and method_ready_samples >= minimum_method_ready_samples
+            and len(method_ready_lineages) >= MINIMUM_METHOD_READY_LINEAGES_BY_MEDIUM
+        )
+        method_readiness_by_medium[medium] = {
+            "record_count": total,
+            "analytical_method_count": method_count,
+            "analytical_method_rate": round(rate, 6),
+            "unique_samples": unique_samples,
+            "method_ready_unique_samples": method_ready_samples,
+            "minimum_method_ready_unique_samples": minimum_method_ready_samples,
+            "method_ready_lineage_count": len(method_ready_lineages),
+            "method_ready_lineage_ids": method_ready_lineages,
+            "minimum_method_ready_lineages": (MINIMUM_METHOD_READY_LINEAGES_BY_MEDIUM),
+            "status": "pass" if medium_passes else "gap",
+        }
+        if total and not medium_passes:
+            medium_method_evidence_gaps.append(
                 {
                     "medium": medium,
                     "record_count": total,
                     "analytical_method_count": method_count,
                     "analytical_method_rate": round(rate, 6),
                     "minimum_analytical_method_rate": minimum_method_rate,
+                    "unique_samples": unique_samples,
+                    "method_ready_unique_samples": method_ready_samples,
+                    "minimum_method_ready_unique_samples": (
+                        minimum_method_ready_samples
+                    ),
+                    "method_ready_lineage_count": len(method_ready_lineages),
+                    "minimum_method_ready_lineages": (
+                        MINIMUM_METHOD_READY_LINEAGES_BY_MEDIUM
+                    ),
                     "reason_codes": ["analytical_method_evidence_shortfall"],
                 }
             )
+    analytical_subset_pass = not medium_method_evidence_gaps
+    criteria["analytical_readiness"] = _criterion(
+        analytical_subset_pass,
+        {
+            "record_weighted_non_low_rate": round(analytical_rate, 6),
+            "bands": dimension_counts.get("analytical_readiness", {}),
+            "comparison_ready_subsets_by_medium": method_readiness_by_medium,
+        },
+        {
+            "minimum_method_record_rate_by_observed_medium": minimum_method_rate,
+            "minimum_method_ready_unique_samples_by_observed_medium": (
+                MINIMUM_METHOD_READY_SAMPLES_BY_MEDIUM
+            ),
+            "minimum_method_ready_lineages_by_observed_medium": (
+                MINIMUM_METHOD_READY_LINEAGES_BY_MEDIUM
+            ),
+        },
+        "A broad archive may retain publisher-accounted method-unknown records, but every observed requested medium must also contain a declared comparison-ready subset. The gate combines a 20% record floor, up to 20 independent samples and at least one method-bearing lineage; method-unknown rows remain screening-only and are never assigned an inferred method.",
+    )
     criteria["analytical_method_evidence_by_medium"] = _criterion(
-        not method_evidence_gaps,
-        method_rates_by_medium,
-        {medium: minimum_method_rate for medium in request["media"]},
-        "An overall method-ready majority cannot hide a requested medium whose method evidence is mostly absent. At least 80% of each requested medium needs an explicitly documented method; missing methods remain null and trigger D1 evidence repair, never inference.",
+        analytical_subset_pass,
+        method_readiness_by_medium,
+        {
+            "minimum_record_rate": minimum_method_rate,
+            "minimum_unique_samples": MINIMUM_METHOD_READY_SAMPLES_BY_MEDIUM,
+            "minimum_lineages": MINIMUM_METHOD_READY_LINEAGES_BY_MEDIUM,
+        },
+        "An overall majority cannot hide a requested medium with no comparison-ready method subset. Missing methods remain explicit and trigger evidence repair; they are not guessed, discarded, or allowed to lower source-truth confidence.",
+        required=mode != "demo",
+    )
+    material_source_readiness: list[dict[str, Any]] = []
+    source_method_evidence_gaps: list[dict[str, Any]] = []
+    for raw_item in database.get("metadata_by_source_medium") or []:
+        if not isinstance(raw_item, Mapping):
+            continue
+        source_id = str(raw_item.get("source_id") or "")
+        medium = str(raw_item.get("medium") or "")
+        record_count = int(raw_item.get("record_count") or 0)
+        method_count = int(raw_item.get("analytical_method_count") or 0)
+        medium_total = int((metadata_by_medium.get(medium) or {}).get("records", 0))
+        share = record_count / medium_total if medium_total else 0.0
+        method_rate = method_count / record_count if record_count else 0.0
+        material = bool(
+            source_id
+            and medium
+            and record_count >= MINIMUM_MATERIAL_SOURCE_RECORDS
+            and share >= MINIMUM_MATERIAL_SOURCE_SHARE_BY_MEDIUM
+        )
+        passes = not material or (
+            method_rate >= MINIMUM_ANALYTICAL_METHOD_RATE_BY_MATERIAL_SOURCE
+        )
+        item = {
+            "source_id": source_id,
+            "source_lineage_id": str(raw_item.get("source_lineage_id") or source_id),
+            "medium": medium,
+            "record_count": record_count,
+            "medium_record_share": round(share, 6),
+            "analytical_method_count": method_count,
+            "analytical_method_rate": round(method_rate, 6),
+            "unique_samples": int(raw_item.get("unique_samples") or 0),
+            "method_ready_unique_samples": int(
+                raw_item.get("method_ready_unique_samples") or 0
+            ),
+            "method_missing_reason_counts": dict(
+                raw_item.get("method_missing_reason_counts") or {}
+            ),
+            "material": material,
+            "status": "pass" if passes else "gap",
+        }
+        material_source_readiness.append(item)
+        if material and not passes:
+            source_method_evidence_gaps.append(
+                {
+                    **item,
+                    "minimum_analytical_method_rate": (
+                        MINIMUM_ANALYTICAL_METHOD_RATE_BY_MATERIAL_SOURCE
+                    ),
+                    "minimum_material_source_records": MINIMUM_MATERIAL_SOURCE_RECORDS,
+                    "minimum_material_source_share_by_medium": (
+                        MINIMUM_MATERIAL_SOURCE_SHARE_BY_MEDIUM
+                    ),
+                    "reason_codes": [
+                        "material_source_analytical_method_evidence_shortfall"
+                    ],
+                }
+            )
+    material_source_method_pass = not source_method_evidence_gaps
+    criteria["analytical_method_evidence_by_material_source"] = _criterion(
+        material_source_method_pass,
+        material_source_readiness,
+        {
+            "minimum_source_records": MINIMUM_MATERIAL_SOURCE_RECORDS,
+            "minimum_source_share_by_medium": (MINIMUM_MATERIAL_SOURCE_SHARE_BY_MEDIUM),
+            "minimum_method_record_rate": (
+                MINIMUM_ANALYTICAL_METHOD_RATE_BY_MATERIAL_SOURCE
+            ),
+        },
+        "A material source-medium lineage cannot be masked by method-ready records from another lineage. Real method-unknown rows remain in the traceable screening archive, while the dominant lineage triggers source-specific evidence repair or replacement acquisition; methods are never inferred.",
+        required=mode != "demo",
+    )
+    method_evidence_gaps = medium_method_evidence_gaps + source_method_evidence_gaps
+    scientific_readiness_by_medium: dict[str, dict[str, Any]] = {}
+    scientific_evidence_gaps: list[dict[str, Any]] = []
+    for medium in request["media"]:
+        unique_samples = int(
+            (database.get("medium_unique_samples") or {}).get(medium, 0)
+        )
+        ready_samples = int(
+            (database.get("scientific_ready_unique_samples_by_medium") or {}).get(
+                medium, 0
+            )
+        )
+        ready_lineages = list(
+            (database.get("scientific_ready_lineages_by_medium") or {}).get(medium, [])
+        )
+        minimum_ready_samples = 20
+        medium_passes = unique_samples >= minimum_ready_samples and (
+            ready_samples >= minimum_ready_samples and len(ready_lineages) >= 1
+        )
+        scientific_readiness_by_medium[medium] = {
+            "unique_samples": unique_samples,
+            "scientific_ready_unique_samples": ready_samples,
+            "minimum_scientific_ready_unique_samples": minimum_ready_samples,
+            "scientific_ready_lineage_ids": ready_lineages,
+            "minimum_scientific_ready_lineages": 1,
+            "status": "pass" if medium_passes else "gap",
+        }
+        if not medium_passes:
+            scientific_evidence_gaps.append(
+                {
+                    "medium": medium,
+                    "unique_samples": unique_samples,
+                    "scientific_ready_unique_samples": ready_samples,
+                    "minimum_scientific_ready_unique_samples": minimum_ready_samples,
+                    "scientific_ready_lineage_count": len(ready_lineages),
+                    "minimum_scientific_ready_lineages": 1,
+                    "reason_codes": ["strict_scientific_evidence_subset_shortfall"],
+                }
+            )
+    criteria["scientific_evidence_subset_by_medium"] = _criterion(
+        not scientific_evidence_gaps,
+        scientific_readiness_by_medium,
+        {
+            "minimum_unique_samples_per_requested_medium": 20,
+            "minimum_independent_lineages_per_observed_medium": 1,
+            "row_contract": (
+                "normalized quantitative value + canonical coordinate + analytical "
+                "method + geological/depositional context (or justified marine "
+                "not-applicable disposition) + strict provenance + QC disposition"
+            ),
+        },
+        "The archive may retain source-accounted incomplete rows, but every requested medium needs a non-empty strict research subset. This prevents a large screening-only population from masquerading as fully comparable evidence without fabricating publisher metadata.",
         required=mode != "demo",
     )
     criteria["anomaly_background"] = _criterion(
@@ -2574,7 +3469,11 @@ def assess_sufficiency(
         "anomaly_background",
         "source_balance",
         "analytical_readiness",
+        "analytical_method_evidence_by_material_source",
         "mappable_records",
+        "medium_sample_balance",
+        "element_sample_balance",
+        "element_medium_sample_balance",
     }
     expansion_targets = set(unmet).intersection(independently_repairable)
     geographic_search_targets = (
@@ -2631,6 +3530,9 @@ def assess_sufficiency(
             for medium in request["media"]
             if per_medium_observed[medium] < 2
         },
+        "medium_sample_balance": medium_sample_shortfalls,
+        "element_sample_balance": element_sample_shortfalls,
+        "element_medium_sample_balance": element_medium_sample_shortfalls,
         "macroregions_below_minimum": (
             sorted(
                 key
@@ -2659,6 +3561,7 @@ def assess_sufficiency(
         "spatial_dimension_gaps": spatial_dimension_gaps,
         "spatial_requery_source_ids": spatial_requery_ids,
         "metadata_evidence_gaps": method_evidence_gaps,
+        "scientific_evidence_gaps": scientific_evidence_gaps,
         "source_link_gaps": source_link_gaps,
     }
     # Do not abandon an independently repairable volume/background improvement
@@ -2671,6 +3574,7 @@ def assess_sufficiency(
         "record_provenance",
         "source_evidence_readiness",
         "metadata_evidence_accounting",
+        "geology_evidence_accounting",
         "official_source_links",
     }.intersection(non_expandable_unmet)
     can_expand = (
@@ -2937,10 +3841,17 @@ def build_repair_plan(record: dict[str, Any]) -> dict[str, Any]:
                 "minimum_coverage_zones": item.get("minimum_qualifying_coverage_zones"),
                 "repair_mode": item.get("repair_mode"),
                 "country_targets": [
-                    target.get("country_iso_a3")
+                    {
+                        "country_iso_a3": target.get("country_iso_a3"),
+                        "target_bboxes": target.get("target_bboxes") or [],
+                    }
                     for target in item.get("country_targets") or []
                     if isinstance(target, Mapping)
                 ],
+                "country_longitude_band_targets": item.get(
+                    "country_longitude_band_targets"
+                )
+                or [],
             }
             for item in spatial_dimension_gaps
         ]
@@ -2988,6 +3899,18 @@ def build_repair_plan(record: dict[str, Any]) -> dict[str, Any]:
             "SOURCE_EVIDENCE_READINESS_GAP",
             "先补齐来源定位、许可、版本与哈希证据；空间或方法分数不能代替来源证据。",
         ),
+        "metadata_evidence_accounting": (
+            "METADATA_EVIDENCE_ACCOUNTING_GAP",
+            "逐记录补齐方法、坐标精度和记录定位的 present / publisher-not-reported 责任状态；不得用空字符串冒充已说明。",
+        ),
+        "geology_evidence_accounting": (
+            "GEOLOGY_EVIDENCE_ACCOUNTING_GAP",
+            "逐记录补齐发布方地质背景、带边界不确定度的点匹配背景，或明确的不可适用/不可获得原因；不得把空值当成已完成空间匹配。",
+        ),
+        "scientific_evidence_subset_by_medium": (
+            "STRICT_SCIENTIFIC_SUBSET_GAP",
+            "为每个请求介质补充同时具备定量值、canonical 坐标、分析方法、地质背景、严格来源链和 QC 的独立样品子集；保留不完整归档行但不得把它们用于严格比较。",
+        ),
         "analytical_readiness": (
             "ANALYTICAL_READINESS_GAP",
             "方法/QC 就绪记录比例不足；补充方法证据或增加具备可比方法语义的来源，不得推测分析方法。",
@@ -2999,6 +3922,18 @@ def build_repair_plan(record: dict[str, Any]) -> dict[str, Any]:
         "element_medium_coverage": (
             "ELEMENT_MEDIUM_MATRIX_GAP",
             "元素×介质覆盖矩阵过稀；按缺失单元补充相符来源，不能只满足元素和介质的集合并集。",
+        ),
+        "medium_sample_balance": (
+            "MEDIUM_SAMPLE_BALANCE_GAP",
+            "请求介质之间的独立物理样点容量严重失衡；按短缺介质补充新样品和独立来源，不能用同一样品的多元素记录行抬高数量。",
+        ),
+        "element_sample_balance": (
+            "ELEMENT_SAMPLE_BALANCE_GAP",
+            "请求元素之间的独立物理样点容量严重失衡；按短缺元素补充新样品和独立来源，不能让优势元素的记录量掩盖薄弱元素。",
+        ),
+        "element_medium_sample_balance": (
+            "ELEMENT_MEDIUM_SAMPLE_BALANCE_GAP",
+            "元素×介质单元的独立物理样点容量严重失衡；只补精确短缺单元，不能用同元素其他介质或同介质其他元素代替。",
         ),
         "record_volume": (
             "RECORD_VOLUME_GAP",
@@ -3078,6 +4013,134 @@ def build_repair_plan(record: dict[str, Any]) -> dict[str, Any]:
     return {"autonomous": autonomous, "manual": manual[:MANUAL_PLAN_GROUP_CAP]}
 
 
+def next_round_priority_source_ids(record: Mapping[str, Any] | None) -> list[str]:
+    """Extract the last round's machine-authorized source scheduling priorities.
+
+    Only source IDs attached to autonomous repair actions are eligible. Manual
+    discovery or adapter work therefore cannot cross the immutable-Skill
+    boundary merely because the spatial audit found an empty region.
+    """
+
+    if not isinstance(record, Mapping):
+        return []
+    plan = build_repair_plan(dict(record))
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for action in plan.get("autonomous") or []:
+        if not isinstance(action, Mapping):
+            continue
+        for raw_source_id in action.get("source_ids") or []:
+            source_id = str(raw_source_id)
+            if source_id and source_id not in seen:
+                seen.add(source_id)
+                ordered.append(source_id)
+    return ordered
+
+
+def build_d1_action_groups(tasks: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """Collapse repeated view debts into bounded, receipt-driven field actions.
+
+    A single empty northwest zone can fail overall, element, medium and every
+    element×medium view. Those remain separate scientific assertions, but an
+    operator should search or audit the zone once, then recompute all affected
+    views. Grouping prevents hundreds of near-identical bbox queries from
+    exhausting an Agent's context without producing a new source.
+    """
+
+    grouped: dict[str, list[Mapping[str, Any]]] = {}
+    for task in tasks:
+        identity = json.dumps(
+            {
+                "bbox": task.get("bbox") or [],
+                "country_iso_a3": task.get("country_iso_a3"),
+                "scope_key": task.get("scope_key"),
+                "required_spatial_domains": task.get("required_spatial_domains") or [],
+                "preferred_repair_mode": task.get("preferred_repair_mode"),
+                "execution_class": task.get("execution_class"),
+                "selected": task.get("selected_source_candidates") or [],
+                "registered": task.get("registered_source_candidates") or [],
+                "catalog": task.get("catalog_candidate_source_ids") or [],
+                "continuation_strategy": task.get("continuation_strategy"),
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        grouped.setdefault(identity, []).append(task)
+
+    action_groups: list[dict[str, Any]] = []
+    for identity, members in grouped.items():
+        members = sorted(
+            members,
+            key=lambda item: (int(item.get("priority") or 0), str(item.get("task_id"))),
+        )
+        first = members[0]
+
+        def merged_strings(field: str) -> list[str]:
+            return list(
+                dict.fromkeys(
+                    str(value)
+                    for member in members
+                    for value in member.get(field) or []
+                    if str(value)
+                )
+            )
+
+        group_id = hashlib.sha256(identity.encode("utf-8")).hexdigest()[:16]
+        action_groups.append(
+            {
+                "action_group_id": group_id,
+                "priority": min(int(item.get("priority") or 0) for item in members),
+                "status": "pending",
+                "target_label": str(
+                    first.get("target_label") or first.get("scope_key") or "target"
+                ),
+                "search_aliases": merged_strings("search_aliases"),
+                "admin1_search_hints": merged_strings("admin1_search_hints"),
+                "gazetteer_semantics": str(first.get("gazetteer_semantics") or ""),
+                "scope_key": str(first.get("scope_key") or ""),
+                "country_iso_a3": first.get("country_iso_a3"),
+                "country_name": first.get("country_name"),
+                "macroregion": first.get("macroregion"),
+                "bbox": list(first.get("bbox") or []),
+                "member_task_ids": [str(item.get("task_id")) for item in members],
+                "view_ids": list(
+                    dict.fromkeys(str(item.get("view_id") or "") for item in members)
+                ),
+                "task_kinds": list(
+                    dict.fromkeys(str(item.get("task_kind") or "") for item in members)
+                ),
+                "required_elements": merged_strings("required_elements"),
+                "required_media": merged_strings("required_media"),
+                "required_spatial_domains": merged_strings("required_spatial_domains"),
+                "reason_codes": merged_strings("reason_codes"),
+                "preferred_repair_mode": first.get("preferred_repair_mode"),
+                "execution_class": first.get("execution_class"),
+                "fallback_action_chain": list(first.get("fallback_action_chain") or []),
+                "selected_source_candidates": list(
+                    first.get("selected_source_candidates") or []
+                ),
+                "registered_source_candidates": list(
+                    first.get("registered_source_candidates") or []
+                ),
+                "catalog_candidate_source_ids": list(
+                    first.get("catalog_candidate_source_ids") or []
+                ),
+                "discovery_queries": merged_strings("discovery_queries")[:24],
+                "discovery_platform_sequence": merged_strings(
+                    "discovery_platform_sequence"
+                ),
+                "completion_evidence_required": merged_strings(
+                    "completion_evidence_required"
+                ),
+                "continuation_strategy": first.get("continuation_strategy"),
+                "attempt_receipt_required": True,
+                "attempt_receipt_status": "unattempted",
+            }
+        )
+    action_groups.sort(key=lambda item: (item["priority"], item["action_group_id"]))
+    return action_groups
+
+
 def build_d1_repair_queue(
     report: Mapping[str, Any], request: Mapping[str, Any]
 ) -> dict[str, Any]:
@@ -3149,6 +4212,9 @@ def build_d1_repair_queue(
         elements: Sequence[str],
         media: Sequence[str],
         *,
+        bbox: Sequence[Any] | None = None,
+        spatial_domains: Sequence[str] | None = None,
+        require_spatial_evidence: bool = False,
         excluded_lineages: set[str] | None = None,
     ) -> dict[str, list[str]]:
         return _source_candidate_layers(
@@ -3156,6 +4222,9 @@ def build_d1_repair_queue(
             request=request,
             elements=elements,
             media=media,
+            target_bbox=bbox,
+            target_spatial_domains=spatial_domains,
+            require_spatial_evidence=require_spatial_evidence,
             excluded_lineages=excluded_lineages,
         )
 
@@ -3183,6 +4252,7 @@ def build_d1_repair_queue(
         reason_codes: Sequence[str],
         observed: Mapping[str, Any],
         target: Mapping[str, Any],
+        required_spatial_domains: Sequence[str] | None = None,
         completion_evidence_required: Sequence[str] | None = None,
     ) -> None:
         country_code = str((country or {}).get("country_iso_a3") or "")
@@ -3193,7 +4263,9 @@ def build_d1_repair_queue(
                 view_id,
                 ",".join(elements),
                 ",".join(media),
+                ",".join(required_spatial_domains or []),
                 country_code,
+                ",".join(str(item) for item in bbox),
             )
         )
         task_id = hashlib.sha256(identity.encode("utf-8")).hexdigest()[:16]
@@ -3202,6 +4274,25 @@ def build_d1_repair_queue(
         seen.add(task_id)
         location = country or {}
         candidates = source_candidates or location
+        base_scope_label = str(
+            location.get("country_name")
+            or location.get("macroregion")
+            or scope_key
+            or "requested region"
+        )
+        target_descriptor = regional_search_target(
+            scope_label=base_scope_label,
+            scope_bbox=(
+                spatial_scope.load_country_registry()["by_code"]
+                .get(country_code, {})
+                .get("bbox", scope_bbox)
+                if country_code
+                else scope_bbox
+            ),
+            target_bbox=bbox,
+            country_iso_a3=country_code or None,
+            coverage_zone_id=str(observed.get("coverage_zone_id") or "") or None,
+        )
         if repair_mode == "rerun_current_controller":
             normalized_repair_mode = repair_mode
             fallback_action_chain = [repair_mode]
@@ -3216,12 +4307,6 @@ def build_d1_repair_queue(
             )
             start_index = action_chain.index(normalized_repair_mode)
             fallback_action_chain = action_chain[start_index:]
-            scope_label = str(
-                location.get("country_name")
-                or location.get("macroregion")
-                or scope_key
-                or "requested region"
-            )
             query_elements = list(elements) or [
                 str(item) for item in request.get("elements") or []
             ]
@@ -3230,13 +4315,22 @@ def build_d1_repair_queue(
             ]
             element_terms = " ".join(query_elements) or "elements"
             medium_terms = " ".join(query_media) or "rock soil sediment water"
-            discovery_queries = [
-                f'"{scope_label}" geochemical open dataset {element_terms} {medium_terms} latitude longitude',
-                f'"{scope_label}" geological survey geochemistry data download {element_terms}',
-                f'site:pangaea.de "{scope_label}" geochemistry {element_terms}',
-                f'site:earthchem.org "{scope_label}" {element_terms} {medium_terms}',
-                f'(site:zenodo.org OR site:figshare.com) "{scope_label}" geochemical {element_terms}',
+            query_labels = list(target_descriptor["search_aliases"][:4]) or [
+                target_descriptor["target_label"]
             ]
+            discovery_queries = [
+                f'"{label}" geochemical open dataset {element_terms} {medium_terms} latitude longitude'
+                for label in query_labels
+            ]
+            discovery_queries.extend(
+                [
+                    f'"{target_descriptor["target_label"]}" geological survey geochemistry data download {element_terms}',
+                    f'site:pangaea.de "{target_descriptor["target_label"]}" geochemistry {element_terms}',
+                    f'site:earthchem.org "{target_descriptor["target_label"]}" {element_terms} {medium_terms}',
+                    f'(site:zenodo.org OR site:figshare.com) "{target_descriptor["target_label"]}" geochemical {element_terms}',
+                ]
+            )
+            discovery_queries = list(dict.fromkeys(discovery_queries))
             discovery_platform_sequence = [
                 "registered_source_catalog",
                 "national_geological_or_environmental_survey",
@@ -3271,6 +4365,14 @@ def build_d1_repair_queue(
             or candidates.get("catalog")
             or []
         )
+        execution_class = {
+            "rerun_current_controller": "controller_rerun_current_skill",
+            "requery_selected_source": "data_action_current_skill",
+            "route_registered_source": "data_action_current_skill",
+            "repair_coordinate_evidence": "evidence_audit_current_skill",
+            "implement_catalog_candidate": "skill_maintenance_new_run",
+            "targeted_source_discovery": "skill_maintenance_new_run",
+        }[normalized_repair_mode]
         evidence_requirements = list(
             completion_evidence_required
             or (
@@ -3296,14 +4398,20 @@ def build_d1_repair_queue(
                 "view_id": view_id,
                 "required_elements": list(elements),
                 "required_media": list(media),
+                "required_spatial_domains": list(required_spatial_domains or []),
                 "bbox": list(bbox),
                 "country_iso_a3": country_code or None,
                 "country_name": str(location.get("country_name") or "") or None,
                 "macroregion": str(location.get("macroregion") or "") or None,
+                "target_label": target_descriptor["target_label"],
+                "search_aliases": target_descriptor["search_aliases"],
+                "admin1_search_hints": target_descriptor["admin1_search_hints"],
+                "gazetteer_semantics": target_descriptor["gazetteer_semantics"],
                 "reason_codes": list(reason_codes),
                 "observed": dict(observed),
                 "target": dict(target),
                 "preferred_repair_mode": normalized_repair_mode,
+                "execution_class": execution_class,
                 "fallback_action_chain": fallback_action_chain,
                 "selected_source_candidates": selected_source_candidates,
                 "registered_source_candidates": registered_source_candidates,
@@ -3388,55 +4496,268 @@ def build_d1_repair_queue(
             for item in gap.get("country_targets") or []
             if isinstance(item, Mapping)
         ] or [None]
+        coverage_zone_targets = [
+            item
+            for item in gap.get("coverage_zone_targets") or []
+            if isinstance(item, Mapping)
+        ]
+        country_band_targets = [
+            item
+            for item in gap.get("country_longitude_band_targets") or []
+            if isinstance(item, Mapping)
+        ]
         for country_rank, country in enumerate(countries):
-            mode = str(
-                (country or {}).get("repair_mode")
-                or gap.get("repair_mode")
-                or "targeted_source_discovery"
+            matching_band_targets = [
+                item
+                for item in country_band_targets
+                if country is not None
+                and item.get("country_iso_a3") == country.get("country_iso_a3")
+            ]
+            country_bbox_targets = (
+                [
+                    {
+                        "zone_id": f"country:{country.get('country_iso_a3')}:bbox:{index}",
+                        "bbox": list(bbox),
+                    }
+                    for index, bbox in enumerate(country.get("target_bboxes") or [])
+                    if isinstance(bbox, Sequence)
+                    and not isinstance(bbox, (str, bytes))
+                    and len(bbox) == 4
+                ]
+                if country is not None
+                else []
             )
-            add_task(
-                priority=1000 + view_rank * 20 + country_rank,
-                task_kind="spatial_dimension_gap",
-                scope_key=str(gap.get("scope_key") or ""),
-                view_id=str(gap.get("view_id") or ""),
-                elements=[str(item) for item in gap.get("required_elements") or []],
-                media=[str(item) for item in gap.get("required_media") or []],
-                bbox=gap.get("bbox") or [],
-                country=country,
-                repair_mode=mode,
-                reason_codes=[str(item) for item in gap.get("reason_codes") or []],
-                observed={
-                    "canonical_unique_samples": int(
-                        gap.get("canonical_unique_samples") or 0
-                    ),
-                    "canonical_occupied_grid_cells": int(
-                        gap.get("canonical_occupied_grid_cells") or 0
-                    ),
-                    "qualifying_coverage_zones": list(
-                        gap.get("qualifying_coverage_zones") or []
-                    ),
-                    "covered_land_macroregions": list(
-                        gap.get("covered_land_macroregions") or []
-                    ),
-                    "missing_land_macroregions": list(
-                        gap.get("missing_land_macroregions") or []
-                    ),
-                },
-                target={
-                    "minimum_canonical_unique_samples": int(
-                        gap.get("minimum_canonical_unique_samples") or 0
-                    ),
-                    "minimum_canonical_occupied_grid_cells": int(
-                        gap.get("minimum_canonical_occupied_grid_cells") or 0
-                    ),
-                    "minimum_qualifying_coverage_zones": int(
-                        gap.get("minimum_qualifying_coverage_zones") or 0
-                    ),
-                    "minimum_land_macroregions": int(
-                        gap.get("minimum_land_macroregions") or 0
-                    ),
-                },
+            zone_targets = (
+                matching_band_targets
+                or country_bbox_targets
+                or coverage_zone_targets
+                or [None]
             )
+            for zone_rank, zone in enumerate(zone_targets):
+                zone_bbox = list((zone or {}).get("bbox") or gap.get("bbox") or [])
+                required_elements = [
+                    str(item) for item in gap.get("required_elements") or []
+                ]
+                required_media = [str(item) for item in gap.get("required_media") or []]
+                if str(gap.get("view_id") or "").startswith("spatial_domain:"):
+                    target_domains = [str(gap.get("view_id")).split(":", 1)[1]]
+                else:
+                    target_domains = []
+                    media_for_domain = required_media or [
+                        str(item) for item in request.get("media") or []
+                    ]
+                    if {"rock", "soil"}.intersection(media_for_domain):
+                        target_domains.append("land")
+                    if {"sediment", "water"}.intersection(media_for_domain):
+                        target_domains.append("inland_water")
+                    target_domains = list(dict.fromkeys(target_domains)) or ["land"]
+                candidates = task_candidates(
+                    required_elements,
+                    required_media,
+                    bbox=zone_bbox,
+                    spatial_domains=target_domains,
+                    require_spatial_evidence=True,
+                )
+                if "reported_only_coordinate_evidence" in set(
+                    str(item) for item in gap.get("reason_codes") or []
+                ) and candidates.get("selected"):
+                    mode = "repair_coordinate_evidence"
+                else:
+                    mode = candidate_repair_mode(candidates)
+                add_task(
+                    priority=1000 + view_rank * 100 + country_rank * 10 + zone_rank,
+                    task_kind="spatial_dimension_gap",
+                    scope_key=str(gap.get("scope_key") or ""),
+                    view_id=str(gap.get("view_id") or ""),
+                    elements=required_elements,
+                    media=required_media,
+                    bbox=zone_bbox,
+                    country=country,
+                    source_candidates=candidates,
+                    repair_mode=mode,
+                    reason_codes=[str(item) for item in gap.get("reason_codes") or []],
+                    observed={
+                        "coverage_zone_id": (zone or {}).get("zone_id")
+                        or (zone or {}).get("band_id"),
+                        "canonical_unique_samples": int(
+                            gap.get("canonical_unique_samples") or 0
+                        ),
+                        "canonical_occupied_grid_cells": int(
+                            (
+                                (zone or {}).get("canonical_occupied_grid_cells")
+                                if zone is not None
+                                else gap.get("canonical_occupied_grid_cells")
+                            )
+                            or 0
+                        ),
+                        "reported_display_occupied_grid_cells": int(
+                            (
+                                (zone or {}).get("reported_display_occupied_grid_cells")
+                                if zone is not None
+                                else gap.get("reported_display_occupied_grid_cells")
+                            )
+                            or 0
+                        ),
+                        "qualifying_coverage_zones": list(
+                            gap.get("qualifying_coverage_zones") or []
+                        ),
+                        "covered_land_macroregions": list(
+                            gap.get("covered_land_macroregions") or []
+                        ),
+                        "missing_land_macroregions": list(
+                            gap.get("missing_land_macroregions") or []
+                        ),
+                    },
+                    target={
+                        "coverage_zone_id": (zone or {}).get("zone_id")
+                        or (zone or {}).get("band_id"),
+                        "minimum_zone_occupied_grid_cells": 1
+                        if zone is not None
+                        else 0,
+                        "minimum_canonical_unique_samples": int(
+                            gap.get("minimum_canonical_unique_samples") or 0
+                        ),
+                        "minimum_canonical_occupied_grid_cells": int(
+                            gap.get("minimum_canonical_occupied_grid_cells") or 0
+                        ),
+                        "minimum_qualifying_coverage_zones": int(
+                            gap.get("minimum_qualifying_coverage_zones") or 0
+                        ),
+                        "minimum_land_macroregions": int(
+                            gap.get("minimum_land_macroregions") or 0
+                        ),
+                    },
+                    required_spatial_domains=target_domains,
+                )
+
+    medium_balance_gaps = gaps.get("medium_sample_balance")
+    medium_balance_gaps = (
+        medium_balance_gaps if isinstance(medium_balance_gaps, Mapping) else {}
+    )
+    for rank, (medium, raw_gap) in enumerate(sorted(medium_balance_gaps.items())):
+        gap = raw_gap if isinstance(raw_gap, Mapping) else {}
+        candidates = task_candidates(
+            [str(item) for item in request.get("elements") or []],
+            [str(medium)],
+        )
+        add_task(
+            priority=1200 + rank,
+            task_kind="medium_sample_balance_gap",
+            scope_key=scope_key,
+            view_id=f"medium:{medium}",
+            elements=[str(item) for item in request.get("elements") or []],
+            media=[str(medium)],
+            bbox=scope_bbox,
+            country={
+                "country_iso_a3": scope_country,
+                "country_name": scope_country_name,
+                "macroregion": scope_macroregion,
+            },
+            source_candidates=candidates,
+            repair_mode=candidate_repair_mode(candidates),
+            reason_codes=["medium_independent_sample_capacity_shortfall"],
+            observed={
+                "unique_samples": int(gap.get("observed_unique_samples") or 0),
+            },
+            target={
+                "minimum_unique_samples": int(gap.get("target_unique_samples") or 0),
+                "additional_unique_samples": int(
+                    gap.get("deficit_unique_samples") or 0
+                ),
+            },
+            completion_evidence_required=[
+                "positive source-scoped physical-sample delta for the requested medium",
+                "new measurement rows must not be counted as new samples when sample identity is unchanged",
+                "source URL/DOI, license, immutable version or acquisition hash and exact record locators",
+                "same frozen request re-evaluated after the verified marginal data are integrated",
+            ],
+        )
+
+    element_balance_gaps = gaps.get("element_sample_balance")
+    element_balance_gaps = (
+        element_balance_gaps if isinstance(element_balance_gaps, Mapping) else {}
+    )
+    for rank, (element, raw_gap) in enumerate(sorted(element_balance_gaps.items())):
+        gap = raw_gap if isinstance(raw_gap, Mapping) else {}
+        candidates = task_candidates(
+            [str(element)],
+            [str(item) for item in request.get("media") or []],
+        )
+        add_task(
+            priority=1250 + rank,
+            task_kind="element_sample_balance_gap",
+            scope_key=scope_key,
+            view_id=f"element:{element}",
+            elements=[str(element)],
+            media=[str(item) for item in request.get("media") or []],
+            bbox=scope_bbox,
+            country={
+                "country_iso_a3": scope_country,
+                "country_name": scope_country_name,
+                "macroregion": scope_macroregion,
+            },
+            source_candidates=candidates,
+            repair_mode=candidate_repair_mode(candidates),
+            reason_codes=["element_independent_sample_capacity_shortfall"],
+            observed={
+                "unique_samples": int(gap.get("observed_unique_samples") or 0),
+            },
+            target={
+                "minimum_unique_samples": int(gap.get("target_unique_samples") or 0),
+                "additional_unique_samples": int(
+                    gap.get("deficit_unique_samples") or 0
+                ),
+            },
+            completion_evidence_required=[
+                "positive source-scoped physical-sample delta for the requested element",
+                "additional measurement rows from an existing physical sample do not count as new samples",
+                "source URL/DOI, license, immutable version or acquisition hash and exact record locators",
+                "same frozen request re-evaluated after the verified marginal data are integrated",
+            ],
+        )
+
+    cell_balance_gaps = gaps.get("element_medium_sample_balance")
+    cell_balance_gaps = (
+        cell_balance_gaps if isinstance(cell_balance_gaps, Mapping) else {}
+    )
+    for rank, (cell, raw_gap) in enumerate(sorted(cell_balance_gaps.items())):
+        if "|" not in str(cell):
+            continue
+        element, medium = str(cell).split("|", 1)
+        gap = raw_gap if isinstance(raw_gap, Mapping) else {}
+        candidates = task_candidates([element], [medium])
+        add_task(
+            priority=1300 + rank,
+            task_kind="element_medium_sample_balance_gap",
+            scope_key=scope_key,
+            view_id=f"element_medium:{element}|{medium}",
+            elements=[element],
+            media=[medium],
+            bbox=scope_bbox,
+            country={
+                "country_iso_a3": scope_country,
+                "country_name": scope_country_name,
+                "macroregion": scope_macroregion,
+            },
+            source_candidates=candidates,
+            repair_mode=candidate_repair_mode(candidates),
+            reason_codes=["element_medium_independent_sample_capacity_shortfall"],
+            observed={
+                "unique_samples": int(gap.get("observed_unique_samples") or 0),
+            },
+            target={
+                "minimum_unique_samples": int(gap.get("target_unique_samples") or 0),
+                "additional_unique_samples": int(
+                    gap.get("deficit_unique_samples") or 0
+                ),
+            },
+            completion_evidence_required=[
+                "positive source-scoped physical-sample delta for this exact element and medium",
+                "another element or medium cannot satisfy this filter-cell target",
+                "source URL/DOI, license, immutable version or acquisition hash and exact record locators",
+                "same frozen request re-evaluated after the verified marginal data are integrated",
+            ],
+        )
 
     metadata_gaps = [
         item
@@ -3445,13 +4766,119 @@ def build_d1_repair_queue(
     ]
     for rank, gap in enumerate(metadata_gaps):
         medium = str(gap.get("medium") or "")
+        source_id = str(gap.get("source_id") or "")
+        missing_reason_counts = {
+            str(code): int(count)
+            for code, count in (gap.get("method_missing_reason_counts") or {}).items()
+            if int(count) > 0
+        }
+        publisher_absent_only = bool(missing_reason_counts) and set(
+            missing_reason_counts
+        ).issubset(PUBLISHER_ABSENT_METHOD_REASON_CODES)
+        source_lineage_id = str(gap.get("source_lineage_id") or source_id)
+        if (
+            source_id
+            and source_id in viable_selected_source_ids
+            and not publisher_absent_only
+        ):
+            candidates = {"selected": [source_id], "registered": [], "catalog": []}
+        else:
+            candidates = task_candidates(
+                [str(item) for item in request.get("elements") or []],
+                [medium] if medium else [],
+                excluded_lineages={source_lineage_id}
+                if publisher_absent_only and source_lineage_id
+                else None,
+            )
+        add_task(
+            priority=1500 + rank,
+            task_kind="metadata_evidence_gap",
+            scope_key=scope_key,
+            view_id=(
+                f"source:{source_id}|medium:{medium}"
+                if source_id and medium
+                else f"medium:{medium}"
+                if medium
+                else "overall"
+            ),
+            elements=[str(item) for item in request.get("elements") or []],
+            media=[medium] if medium else [],
+            bbox=scope_bbox,
+            country={
+                "country_iso_a3": scope_country,
+                "country_name": scope_country_name,
+                "macroregion": scope_macroregion,
+            },
+            source_candidates=candidates,
+            repair_mode=candidate_repair_mode(candidates),
+            reason_codes=[
+                *[str(item) for item in gap.get("reason_codes") or []],
+                *(
+                    ["publisher_method_absence_requires_replacement_source"]
+                    if publisher_absent_only
+                    else []
+                ),
+            ],
+            observed={
+                "source_id": source_id or None,
+                "source_lineage_id": gap.get("source_lineage_id"),
+                "record_count": int(gap.get("record_count") or 0),
+                "analytical_method_count": int(gap.get("analytical_method_count") or 0),
+                "analytical_method_rate": float(
+                    gap.get("analytical_method_rate") or 0.0
+                ),
+                "medium_record_share": float(gap.get("medium_record_share") or 0.0),
+                "unique_samples": int(gap.get("unique_samples") or 0),
+                "method_ready_unique_samples": int(
+                    gap.get("method_ready_unique_samples") or 0
+                ),
+                "method_ready_lineage_count": int(
+                    gap.get("method_ready_lineage_count") or 0
+                ),
+                "method_missing_reason_counts": missing_reason_counts,
+                "publisher_absent_only": publisher_absent_only,
+            },
+            target={
+                "minimum_analytical_method_rate": float(
+                    gap.get("minimum_analytical_method_rate") or 0.0
+                ),
+                "minimum_method_ready_unique_samples": int(
+                    gap.get("minimum_method_ready_unique_samples") or 0
+                ),
+                "minimum_method_ready_lineages": int(
+                    gap.get("minimum_method_ready_lineages") or 0
+                ),
+            },
+            completion_evidence_required=[
+                (
+                    "replacement lineage with observation-bound method evidence; the publisher-absent source remains in the screening archive and is never relabelled"
+                    if publisher_absent_only
+                    else "verified method documentation linked to each repaired observation or an explicit source-not-reported finding"
+                ),
+                (
+                    "positive method-ready independent-sample delta from a different lineage or complete multi-family no-hit evidence"
+                    if publisher_absent_only
+                    else "positive method-evidence record delta or complete no-hit evidence for the attempted source"
+                ),
+                "no inferred analytical method, digestion or coordinate accuracy",
+                "same frozen scientific request resumed under an auditable continuation strategy",
+            ],
+        )
+
+    scientific_gaps = [
+        item
+        for item in gaps.get("scientific_evidence_gaps") or []
+        if isinstance(item, Mapping)
+    ]
+    for rank, gap in enumerate(scientific_gaps):
+        medium = str(gap.get("medium") or "")
         candidates = task_candidates(
             [str(item) for item in request.get("elements") or []],
             [medium] if medium else [],
         )
         add_task(
-            priority=1500 + rank,
-            task_kind="metadata_evidence_gap",
+            priority=1600 + rank,
+            task_kind="scientific_evidence_subset_gap",
             scope_key=scope_key,
             view_id=f"medium:{medium}" if medium else "overall",
             elements=[str(item) for item in request.get("elements") or []],
@@ -3466,22 +4893,29 @@ def build_d1_repair_queue(
             repair_mode=candidate_repair_mode(candidates),
             reason_codes=[str(item) for item in gap.get("reason_codes") or []],
             observed={
-                "record_count": int(gap.get("record_count") or 0),
-                "analytical_method_count": int(gap.get("analytical_method_count") or 0),
-                "analytical_method_rate": float(
-                    gap.get("analytical_method_rate") or 0.0
+                "unique_samples": int(gap.get("unique_samples") or 0),
+                "scientific_ready_unique_samples": int(
+                    gap.get("scientific_ready_unique_samples") or 0
+                ),
+                "scientific_ready_lineage_count": int(
+                    gap.get("scientific_ready_lineage_count") or 0
                 ),
             },
             target={
-                "minimum_analytical_method_rate": float(
-                    gap.get("minimum_analytical_method_rate") or 0.0
-                )
+                "minimum_scientific_ready_unique_samples": int(
+                    gap.get("minimum_scientific_ready_unique_samples") or 0
+                ),
+                "minimum_scientific_ready_lineages": int(
+                    gap.get("minimum_scientific_ready_lineages") or 0
+                ),
             },
             completion_evidence_required=[
-                "verified method documentation linked to each repaired observation or an explicit source-not-reported finding",
-                "positive method-evidence record delta or complete no-hit evidence for the attempted source",
-                "no inferred analytical method, digestion or coordinate accuracy",
-                "same frozen scientific request resumed under an auditable continuation strategy",
+                "quantitative standardized value and retained original value/unit",
+                "canonical coordinate evidence with explicit accuracy disposition",
+                "publisher-linked analytical method without inference",
+                "publisher or labeled point-matched geological context",
+                "record-to-file SHA-256 and official-source provenance validation",
+                "QC disposition and a positive independent-sample delta for the requested medium",
             ],
         )
 
@@ -3709,25 +5143,50 @@ def build_d1_repair_queue(
         )
 
     tasks.sort(key=lambda item: (item["priority"], item["task_id"]))
+    action_groups = build_d1_action_groups(tasks)
+    execution_class_counts = {
+        name: sum(1 for item in tasks if item["execution_class"] == name)
+        for name in (
+            "controller_rerun_current_skill",
+            "data_action_current_skill",
+            "evidence_audit_current_skill",
+            "skill_maintenance_new_run",
+        )
+    }
     return {
-        "queue_version": "d1-repair-queue-v1",
+        "queue_version": "d1-repair-queue-v3",
         "request_sha256": report.get("request_sha256"),
         "generated_from_round": last.get("round")
         if isinstance(last, Mapping)
         else None,
         "status": "pending" if tasks else "clear",
         "task_count": len(tasks),
+        "action_group_count": len(action_groups),
+        "unattempted_action_group_count": len(action_groups),
+        "operator_continuation_required": bool(action_groups),
+        "final_response_permitted": not bool(action_groups),
+        "control_state": "continue_research" if action_groups else "queue_clear",
+        "required_next_action": (
+            "consume_next_action_group_and_resume_frozen_request"
+            if action_groups
+            else "validate_research_delivery"
+        ),
+        "execution_class_counts": execution_class_counts,
         "tasks": tasks,
+        "action_groups": action_groups,
         "execution_rule": (
-            "Process pending tasks in priority order while the total budget remains. "
-            "For each task, try preferred_repair_mode then the remaining fallback chain; "
+            "Process pending action_groups in priority order while the total budget remains. "
+            "One action group may close many view-level tasks; write one attempt receipt with "
+            "queries/platforms, source URL/DOI, licence/version decision and measured deltas before "
+            "recomputing all member views. Try preferred_repair_mode then the remaining fallback chain; "
             "record real no-hit/license/access evidence before advancing. Accept and preserve "
             "every verified positive marginal delta even when one source cannot close the whole task; "
             "recompute the remaining debt after integration instead of rejecting a useful dataset for "
             "being individually insufficient. Data-only repairs "
             "resume the same output directory. If a task requires source discovery, catalog "
-            "registration or adapter code, that work is explicitly authorized: finish and "
-            "validate the Skill change outside the active run, preserve the prior checkpoint, "
+            "registration or adapter code, the queue does not itself authorize repository mutation: "
+            "only when the original user scope authorizes Skill maintenance, finish and validate the "
+            "change outside the active run, preserve the prior checkpoint, "
             "then restart the byte-identical scientific request in a new output directory with "
             "a continuation record linking both Skill hashes and checkpoint paths."
         ),
@@ -3743,6 +5202,7 @@ def write_d1_repair_queue(
 ) -> dict[str, Any]:
     queue = build_d1_repair_queue(report, request)
     tasks = queue.get("tasks")
+    action_groups = queue.get("action_groups")
     inconsistent_candidates = [
         item.get("task_id")
         for item in tasks or []
@@ -3761,11 +5221,34 @@ def write_d1_repair_queue(
     ]
     if (
         not isinstance(tasks, list)
+        or not isinstance(action_groups, list)
         or queue.get("task_count") != len(tasks)
+        or queue.get("action_group_count") != len(action_groups)
+        or queue.get("unattempted_action_group_count") != len(action_groups)
+        or queue.get("operator_continuation_required") != bool(action_groups)
+        or queue.get("final_response_permitted") != (not bool(action_groups))
+        or queue.get("control_state")
+        != ("continue_research" if action_groups else "queue_clear")
+        or queue.get("required_next_action")
+        != (
+            "consume_next_action_group_and_resume_frozen_request"
+            if action_groups
+            else "validate_research_delivery"
+        )
         or queue.get("status") != ("pending" if tasks else "clear")
         or len({str(item.get("task_id")) for item in tasks}) != len(tasks)
+        or sum(int(value) for value in queue.get("execution_class_counts", {}).values())
+        != len(tasks)
         or [int(item.get("priority") or 0) for item in tasks]
         != sorted(int(item.get("priority") or 0) for item in tasks)
+        or [int(item.get("priority") or 0) for item in action_groups]
+        != sorted(int(item.get("priority") or 0) for item in action_groups)
+        or set(
+            str(task_id)
+            for group in action_groups
+            for task_id in group.get("member_task_ids") or []
+        )
+        != {str(item.get("task_id")) for item in tasks}
         or inconsistent_candidates
     ):
         raise LoopUsageError(
@@ -3807,7 +5290,7 @@ def decide_next(
         return "stop", "converged"
     if not has_autonomous:
         if not sufficient:
-            return "stop", "insufficient_data"
+            return "stop", "repair_queue_pending"
         return "stop", "no_autonomous_repair"
     previous = rounds[-2] if len(rounds) >= 2 else None
     if previous is not None:
@@ -3838,7 +5321,11 @@ def decide_next(
     return "continue", ""
 
 
-PROBE_STOP_REASONS = ("no_autonomous_repair", "no_progress", "insufficient_data")
+PROBE_STOP_REASONS = (
+    "no_autonomous_repair",
+    "no_progress",
+    "repair_queue_pending",
+)
 
 
 def allow_probe_round(
@@ -3853,7 +5340,7 @@ def allow_probe_round(
     Pure function, unit-tested. Every reason in ``PROBE_STOP_REASONS`` tells
     the operator to repair sources or evidence outside the loop and re-run in
     the same directory; the probe round is how the controller observes that
-    repair instead of restating the stale verdict. ``insufficient_data`` is
+    repair instead of restating the stale verdict. ``repair_queue_pending`` is
     included so a newly adapted or newly cached source (for example a
     previously failed lineage) can be retried; a fresh invocation still fails
     closed because ``resumed`` is False, and one probe per invocation keeps a
@@ -3878,7 +5365,7 @@ def final_status(stop_reason: str, last: dict[str, Any] | None) -> str:
     if stop_reason in (
         "round_budget_exhausted",
         "time_budget_exhausted",
-        "insufficient_data",
+        "repair_queue_pending",
     ):
         # A schema-valid checkpoint is still not a completed research result
         # when the explicit sufficiency gate failed. Returning exit 0 here was
@@ -3935,10 +5422,11 @@ def next_step_text(
             "非 D1 项再按 repair_plan.manual 补 schema map 或人工复核。"
         ),
         "no_progress": f"连续两轮问题签名相同；停止无目标重试。{queue_instruction}",
-        "insufficient_data": (
-            "数据充分性门禁未通过，且当前已路由来源不能靠增加同源记录补足；"
+        "repair_queue_pending": (
+            "数据充分性门禁未通过，且存在尚未执行的结构化 D1 修复动作；"
             f"{queue_instruction}"
-            "续跑会先执行一轮探测轮验证修复；当前目录仅为 needs_human_review 检查点，"
+            "禁止把控制器返回当作任务结束；Agent 必须在剩余任务预算内消费 action_groups，"
+            "每组写尝试回执并续跑。当前目录仅为 needs_human_review 检查点，"
             "不是正式研究交付。"
         ),
         "round_budget_exhausted": "轮次预算用尽；如任务预算允许，提高 --max-rounds 在同一目录续跑。",
@@ -3961,7 +5449,10 @@ def next_step_text(
 
 
 def build_run_command(
-    args: argparse.Namespace, round_dir: Path, round_index: int
+    args: argparse.Namespace,
+    round_dir: Path,
+    round_index: int,
+    priority_source_ids: Sequence[str] = (),
 ) -> list[str]:
     command = [
         sys.executable,
@@ -3998,6 +5489,8 @@ def build_run_command(
                 str(source_order_offset(round_index)),
             ]
         )
+        for source_id in priority_source_ids:
+            command.extend(["--priority-source-id", str(source_id)])
     else:
         command.extend(["--demo", args.demo])
     if args.generated_at:
@@ -4097,10 +5590,15 @@ def gate_input_header(input_path: Path) -> tuple[bool, str]:
 
 
 def execute_round(
-    args: argparse.Namespace, round_index: int, loop_root: Path
+    args: argparse.Namespace,
+    round_index: int,
+    loop_root: Path,
+    priority_source_ids: Sequence[str] = (),
 ) -> dict[str, Any]:
     round_dir = loop_root / "rounds" / f"round-{round_index:02d}"
-    command = build_run_command(args, round_dir, round_index)
+    command = build_run_command(
+        args, round_dir, round_index, priority_source_ids=priority_source_ids
+    )
     gate_events: list[dict[str, str]] = []
     started = time.monotonic()
     try:
@@ -4767,7 +6265,13 @@ def run_loop(args: argparse.Namespace) -> dict[str, Any]:
                     or selected_target
                 )
         args.active_per_analyte_observations = selected_target
-        record = execute_round(args, len(rounds) + 1, loop_root)
+        priority_source_ids = next_round_priority_source_ids(previous_executed)
+        record = execute_round(
+            args,
+            len(rounds) + 1,
+            loop_root,
+            priority_source_ids=priority_source_ids,
+        )
         rounds.append(record)
         compute_delta(rounds)
         interim_report = assemble_report(args, rounds, "in_progress")
@@ -4826,7 +6330,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--max-per-analyte-observations",
         type=int,
         default=DEFAULT_MAX_PER_ANALYTE_OBSERVATIONS,
-        help="Largest per-analyte target reached by the sufficiency loop (default: 50000)",
+        help="Largest per-analyte target reached by the sufficiency loop (default: 200000)",
     )
     parser.add_argument(
         "--acquisition-growth-factor",
@@ -4911,7 +6415,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_TIME_BUDGET_SECONDS,
         help=(
             "Total wall-clock ceiling across adaptive 30-minute rounds "
-            "(default and maximum: 43200 seconds / 12 hours)"
+            "for explicitly authorized extended research "
+            "(direct-controller default and maximum: 43200 seconds / 12 hours; "
+            "official tasks must enter through task_router.py)"
         ),
     )
     parser.add_argument(
@@ -5243,8 +6749,8 @@ def _self_test() -> int:
         },
     }
     check(
-        decide_next([uncovered], 3, 0.0, 100.0) == ("stop", "insufficient_data"),
-        "uncovered source dimensions stop honestly",
+        decide_next([uncovered], 3, 0.0, 100.0) == ("stop", "repair_queue_pending"),
+        "uncovered source dimensions expose a mandatory repair queue",
     )
     uncovered_plan = build_repair_plan(uncovered)
     check(
@@ -5252,23 +6758,23 @@ def _self_test() -> int:
         "coverage gap routes to D1 discovery",
     )
     check(
-        final_status("insufficient_data", uncovered) == "needs_human_review",
+        final_status("repair_queue_pending", uncovered) == "needs_human_review",
         "insufficient output cannot masquerade as completed research",
     )
     check(
-        allow_probe_round(True, False, "insufficient_data", [uncovered], 3),
-        "resumed controller probes once after an insufficient_data repair",
+        allow_probe_round(True, False, "repair_queue_pending", [uncovered], 3),
+        "resumed controller probes once after a queued repair",
     )
     check(
-        not allow_probe_round(False, False, "insufficient_data", [uncovered], 3),
-        "fresh invocation never probes past insufficient_data",
+        not allow_probe_round(False, False, "repair_queue_pending", [uncovered], 3),
+        "fresh invocation never probes past an unconsumed repair queue",
     )
     check(
-        not allow_probe_round(True, True, "insufficient_data", [uncovered], 3),
+        not allow_probe_round(True, True, "repair_queue_pending", [uncovered], 3),
         "a no-op resume gets exactly one probe round",
     )
     check(
-        not allow_probe_round(True, False, "insufficient_data", [uncovered], 1),
+        not allow_probe_round(True, False, "repair_queue_pending", [uncovered], 1),
         "probe round respects the round budget",
     )
     check(
@@ -5334,7 +6840,7 @@ def _self_test() -> int:
         write_json(
             tmp_path / REPORT_FILENAME,
             {
-                "schema_version": "self-correction-loop-report-v4",
+                "schema_version": "self-correction-loop-report-v5",
                 "request_sha256": digest,
                 "mode": "online",
                 "rounds": [gate_public],
@@ -5354,8 +6860,14 @@ def _self_test() -> int:
             "element_or_analyte",
             "medium",
             "source_id",
+            "source_record_id",
+            "source_file",
             "source_locator",
             "official_source_url",
+            "file_sha256",
+            "dataset_title",
+            "dataset_version",
+            "license",
             "analytical_method",
             "method_missing_reason",
             "latitude",
@@ -5363,6 +6875,11 @@ def _self_test() -> int:
             "original_latitude_raw",
             "original_longitude_raw",
             "coordinate_accuracy_evidence_status",
+            "normalized_value",
+            "normalized_unit",
+            "geologic_unit",
+            "geology_missing_reason",
+            "qc_flags",
             "operational_confidence",
         )
         with (round_dir / "geochemistry.csv").open(
@@ -5377,8 +6894,14 @@ def _self_test() -> int:
                         "element_or_analyte": "As",
                         "medium": "soil",
                         "source_id": "source-a",
+                        "source_record_id": f"source-record-{index}",
+                        "source_file": "fixture.csv",
                         "source_locator": f"https://example.test/record/{index}",
                         "official_source_url": "https://example.test/source-a",
+                        "file_sha256": "a" * 64,
+                        "dataset_title": "Self-test source A",
+                        "dataset_version": "self-test-v1",
+                        "license": "CC0-1.0",
                         "analytical_method": "fixture method",
                         "method_missing_reason": "",
                         "latitude": "50",
@@ -5386,6 +6909,11 @@ def _self_test() -> int:
                         "original_latitude_raw": "50",
                         "original_longitude_raw": "10",
                         "coordinate_accuracy_evidence_status": "not_reported",
+                        "normalized_value": "1.0",
+                        "normalized_unit": "mg/kg",
+                        "geologic_unit": "Self-test unit",
+                        "geology_missing_reason": "",
+                        "qc_flags": "[]",
                         "operational_confidence": json.dumps(
                             {
                                 "band": "high",
@@ -5468,12 +6996,13 @@ def _self_test() -> int:
                 "global_spatial_coverage",
                 "independent_sample_volume",
                 "record_volume",
+                "scientific_evidence_subset_by_medium",
                 "source_balance",
                 "source_diversity",
                 "source_diversity_by_medium",
                 "spatial_dimension_coverage",
             ],
-            "thin online result separates independent samples, geography, rows, balance and lineage gaps",
+            "thin online result separates independent samples, strict per-medium evidence, geography, rows, balance and lineage gaps",
         )
         database_coverage = read_database_coverage(round_dir / "geochemistry.csv")
         check(
@@ -5599,6 +7128,52 @@ def _self_test() -> int:
             == {"minimum_coverage_rate": 1.0},
             "an explicit element-medium matrix requires 100 percent coverage",
         )
+        medium_balance = structural_gap["criteria"]["medium_sample_balance"]
+        check(
+            medium_balance["status"] == "fail"
+            and medium_balance["observed"]["unique_samples_by_medium"]
+            == {"soil": 10, "water": 0}
+            and medium_balance["target"]["minimum_unique_samples_per_requested_medium"]
+            == 10
+            and structural_gap["discovery_gaps"]["medium_sample_balance"]["water"][
+                "deficit_unique_samples"
+            ]
+            == 10,
+            "severe requested-medium imbalance is measured on independent samples and becomes explicit D1 debt",
+        )
+        multidimensional_gap = assess_sufficiency(
+            round_dir,
+            {
+                "elements": ["As", "Cu"],
+                "media": ["soil", "water"],
+                "max_records": 10_000,
+                "region": "China",
+            },
+            {
+                "mode": "online_sources:auto",
+                "source_outcomes": [{"source_id": "source-a", "status": "success"}],
+            },
+            "online",
+            512,
+            assess_args,
+        )
+        element_balance = multidimensional_gap["criteria"]["element_sample_balance"]
+        cell_balance = multidimensional_gap["criteria"]["element_medium_sample_balance"]
+        check(
+            element_balance["status"] == "fail"
+            and element_balance["observed"]["shortfalls"]["Cu"][
+                "deficit_unique_samples"
+            ]
+            == 10
+            and cell_balance["status"] == "fail"
+            and set(cell_balance["observed"]["shortfalls"])
+            == {"As|water", "Cu|soil", "Cu|water"}
+            and multidimensional_gap["discovery_gaps"]["element_sample_balance"]["Cu"][
+                "target_unique_samples"
+            ]
+            == 10,
+            "element and element×medium sample imbalance become separate machine-actionable debts",
+        )
         check(
             structural_gap["criteria"]["regional_spatial_coverage"]["status"] == "fail"
             and regional_gap["country_iso_a3"] == "CHN"
@@ -5624,6 +7199,13 @@ def _self_test() -> int:
             "coverage grid cell IDs round-trip through their frozen centres",
         )
         policy = spatial_sufficiency.load_policy()
+        invalid_zone_policy = json.loads(json.dumps(policy))
+        invalid_zone_policy["regional_scope"]["longitude_band_count"] = 1
+        try:
+            spatial_sufficiency.validate_policy(invalid_zone_policy)
+            check(False, "regional zone policy bounds must fail closed")
+        except spatial_sufficiency.SpatialSufficiencyPolicyError:
+            check(True, "regional zone policy bounds match the published schema")
         shanghai_grid = spatial_sufficiency.build_scope_coverage_grid(
             spatial_scope.resolve_region("Shanghai"), policy
         )
@@ -5642,9 +7224,9 @@ def _self_test() -> int:
             "coverage cell IDs support every policy-approved adaptive resolution",
         )
         scale_cases = [
-            ({"bbox": [-30.0, -10.0, 30.0, 10.0]}, 5.0),
-            ({"bbox": [-10.0, -5.0, 10.0, 5.0]}, 2.0),
-            ({"bbox": [-4.0, -2.0, 4.0, 2.0]}, 1.0),
+            ({"bbox": [-30.0, -10.0, 30.0, 10.0]}, 2.0),
+            ({"bbox": [-10.0, -5.0, 10.0, 5.0]}, 1.0),
+            ({"bbox": [-4.0, -2.0, 4.0, 2.0]}, 0.5),
             ({"bbox": [-1.5, -1.0, 1.5, 1.0]}, 0.25),
         ]
         check(
@@ -5707,7 +7289,26 @@ def _self_test() -> int:
         china_grid = spatial_sufficiency.build_scope_coverage_grid(
             spatial_scope.resolve_region("China"), policy
         )
-        broad_cells = china_grid["target_cell_ids"][:20]
+        zone_cells = [
+            list(cells)
+            for _, cells in sorted(china_grid["coverage_zone_cells"].items())
+        ]
+        broad_target = max(
+            20,
+            math.ceil(
+                len(china_grid["target_cell_ids"])
+                * float(policy["regional_scope"]["minimum_grid_coverage_rate"])
+            ),
+        )
+        broad_cells: list[str] = []
+        for offset in range(max(len(cells) for cells in zone_cells)):
+            for cells in zone_cells:
+                if offset < len(cells):
+                    broad_cells.append(cells[offset])
+                if len(broad_cells) == broad_target:
+                    break
+            if len(broad_cells) == broad_target:
+                break
         view_samples: list[dict[str, Any]] = []
         for index, cell_id in enumerate(broad_cells):
             point = list(
@@ -5765,6 +7366,52 @@ def _self_test() -> int:
             and view_status["element_medium:Cu|water"] == "gap",
             "broad overall or As coverage cannot hide a clustered Cu/water filter view",
         )
+        east_cells = [
+            cell_id
+            for cell_id in china_grid["target_cell_ids"]
+            if spatial_scope.coverage_grid_cell_center(
+                cell_id, china_grid["cell_degrees"]
+            )[0]
+            >= 112.0
+        ]
+        east_only_samples: list[dict[str, Any]] = []
+        for index in range(24):
+            cell_id = east_cells[index % len(east_cells)]
+            point = list(
+                spatial_scope.coverage_grid_cell_center(
+                    cell_id, china_grid["cell_degrees"]
+                )
+            )
+            east_only_samples.append(
+                {
+                    "source_id": "east-only",
+                    "sample_identity": f"east-{index}",
+                    "canonical_point": point,
+                    "display_point": point,
+                    "elements": ["As"],
+                    "media": ["soil"],
+                    "element_medium": ["As|soil"],
+                }
+            )
+        east_only_audit = spatial_sufficiency.audit_spatial_views(
+            east_only_samples,
+            {"region": "China", "elements": ["As"], "media": ["soil"]},
+            policy,
+        )
+        east_only_overall = next(
+            item for item in east_only_audit["views"] if item["view_id"] == "overall"
+        )
+        check(
+            not east_only_audit["passes"]
+            and "canonical_coverage_zone_shortfall" in east_only_overall["reason_codes"]
+            and east_only_overall["missing_coverage_zones"]
+            and east_only_overall["coverage_zone_targets"]
+            and all(
+                len(item["bbox"]) == 4
+                for item in east_only_overall["coverage_zone_targets"]
+            ),
+            "regional east-only density cannot hide western or subregional observation holes",
+        )
         dimension_gaps = build_spatial_dimension_gaps(
             dimension_audit,
             set(),
@@ -5781,6 +7428,30 @@ def _self_test() -> int:
             cu_gap["required_elements"] == ["Cu"]
             and cu_gap["country_targets"][0]["country_iso_a3"] == "CHN",
             "a failed view becomes a machine-readable where-plus-dimension D1 target",
+        )
+        russia_bbox = spatial_scope.load_country_registry()["by_code"]["RUS"]["bbox"]
+        west_russia = regional_search_target(
+            scope_label="Russia",
+            scope_bbox=russia_bbox,
+            target_bbox=[25.0, 40.0, 80.0, 75.0],
+            country_iso_a3="RUS",
+            coverage_zone_id=None,
+        )
+        east_russia = regional_search_target(
+            scope_label="Russia",
+            scope_bbox=russia_bbox,
+            target_bbox=[135.0, 45.0, -175.0, 75.0],
+            country_iso_a3="RUS",
+            coverage_zone_id=None,
+        )
+        check(
+            "west" in west_russia["target_label"].casefold()
+            and "east" in east_russia["target_label"].casefold()
+            and _bbox_overlap_area(
+                [135.0, 45.0, -175.0, 75.0], [-180.0, 60.0, -160.0, 75.0]
+            )
+            > 0,
+            "wrapped Russian targets retain correct east/west labels and antimeridian Admin-1 overlap",
         )
         queue_request = {
             "elements": ["As", "Cu"],
@@ -5812,12 +7483,28 @@ def _self_test() -> int:
             item for item in d1_queue["tasks"] if item["view_id"] == "element:Cu"
         )
         check(
-            d1_queue["status"] == "pending"
+            d1_queue["queue_version"] == "d1-repair-queue-v3"
+            and d1_queue["status"] == "pending"
             and d1_queue["task_count"] == len(d1_queue["tasks"])
+            and d1_queue["action_group_count"] == len(d1_queue["action_groups"])
+            and d1_queue["action_group_count"] < d1_queue["task_count"]
+            and d1_queue["unattempted_action_group_count"]
+            == d1_queue["action_group_count"]
+            and d1_queue["operator_continuation_required"] is True
+            and d1_queue["final_response_permitted"] is False
+            and d1_queue["control_state"] == "continue_research"
+            and d1_queue["required_next_action"]
+            == "consume_next_action_group_and_resume_frozen_request"
+            and sum(d1_queue["execution_class_counts"].values())
+            == d1_queue["task_count"]
             and queued_cu["required_elements"] == ["Cu"]
+            and queued_cu["required_spatial_domains"] == ["land", "inland_water"]
             and queued_cu["country_iso_a3"] == "CHN"
             and queued_cu["fallback_action_chain"][-1] == "targeted_source_discovery"
             and queued_cu["continuation_strategy"] == "new_output_after_skill_change"
+            and queued_cu["execution_class"] == "data_action_current_skill"
+            and queued_cu["target_label"]
+            and queued_cu["gazetteer_semantics"].startswith("search hints only")
             and any(
                 "China" in query and "Cu" in query
                 for query in queued_cu["discovery_queries"]
@@ -5826,12 +7513,72 @@ def _self_test() -> int:
             in queued_cu["discovery_platform_sequence"]
             and queued_cu["minimum_distinct_discovery_families"] >= 3
             and any(
+                group["required_spatial_domains"] == ["land", "inland_water"]
+                for group in d1_queue["action_groups"]
+                if queued_cu["task_id"] in group["member_task_ids"]
+            )
+            and any(
                 "distinct discovery families" in item
                 for item in queued_cu["completion_evidence_required"]
             )
             and [item["priority"] for item in d1_queue["tasks"]]
             == sorted(item["priority"] for item in d1_queue["tasks"]),
-            "the loop materializes deterministic region-by-view gaps as an executable D1 queue",
+            "the loop groups repeated region-by-view gaps into named receipt-driven D1 actions",
+        )
+        global_russia_queue = build_d1_repair_queue(
+            {
+                "request_sha256": "f" * 64,
+                "rounds": [
+                    {
+                        "round": 1,
+                        "sufficiency": {
+                            "assessment_version": SUFFICIENCY_VERSION,
+                            "status": "insufficient",
+                            "discovery_gaps": {
+                                "viable_selected_source_ids": [],
+                                "observed_source_ids": [],
+                                "observed_lineage_ids": [],
+                                "observed_lineage_ids_by_medium": {},
+                                "spatial_dimension_gaps": [
+                                    {
+                                        "view_id": "overall",
+                                        "view_kind": "overall",
+                                        "scope_key": "global",
+                                        "scope_label": "Global",
+                                        "bbox": [-180.0, -90.0, 180.0, 90.0],
+                                        "required_elements": ["As"],
+                                        "required_media": ["soil"],
+                                        "reason_codes": [
+                                            "priority_country_coverage_shortfall"
+                                        ],
+                                        "country_targets": [
+                                            {
+                                                "country_iso_a3": "RUS",
+                                                "country_name": "Russia",
+                                                "macroregion": "Europe and Northern Asia",
+                                                "target_bboxes": [russia_bbox],
+                                            }
+                                        ],
+                                    }
+                                ],
+                                "geographic_search_targets": [],
+                            },
+                        },
+                    }
+                ],
+            },
+            {"region": "global", "elements": ["As"], "media": ["soil"]},
+        )
+        russia_task = next(
+            item
+            for item in global_russia_queue["tasks"]
+            if item["country_iso_a3"] == "RUS"
+        )
+        check(
+            russia_task["bbox"] == russia_bbox
+            and russia_task["bbox"] != [-180.0, -90.0, 180.0, 90.0]
+            and "Russia" in russia_task["target_label"],
+            "a country-specific Russian repair never falls back to the whole-world bbox",
         )
         structural_queue_request = {
             "elements": ["As", "Cu"],
@@ -5901,12 +7648,14 @@ def _self_test() -> int:
         )
         check(
             pb_task["preferred_repair_mode"] == "requery_selected_source"
+            and pb_task["execution_class"] == "data_action_current_skill"
             and set(pb_task["selected_source_candidates"])
             == {
                 "pangaea-east-china-sea-clay",
                 "tpdc-china-mountain-soil",
             }
             and lineage_task["preferred_repair_mode"] == "requery_selected_source"
+            and lineage_task["execution_class"] == "data_action_current_skill"
             and lineage_task["selected_source_candidates"]
             == ["pangaea-east-china-sea-clay"]
             and "tpdc-china-mountain-soil"
@@ -5939,6 +7688,15 @@ def _self_test() -> int:
         check(
             clear_queue["status"] == "clear"
             and clear_queue["task_count"] == 0
+            and clear_queue["action_group_count"] == 0
+            and clear_queue["unattempted_action_group_count"] == 0
+            and clear_queue["operator_continuation_required"] is False
+            and clear_queue["final_response_permitted"] is True
+            and clear_queue["control_state"] == "queue_clear"
+            and clear_queue["required_next_action"] == "validate_research_delivery"
+            and all(
+                value == 0 for value in clear_queue["execution_class_counts"].values()
+            )
             and clear_queue["tasks"] == [],
             "the D1 repair queue clears only after observed structural gaps disappear",
         )
@@ -5963,6 +7721,8 @@ def _self_test() -> int:
             and stale_assessment_queue["task_count"] == 1
             and stale_assessment_queue["tasks"][0]["task_kind"]
             == "sufficiency_assessment_gap"
+            and stale_assessment_queue["tasks"][0]["execution_class"]
+            == "controller_rerun_current_skill"
             and stale_assessment_queue["tasks"][0]["preferred_repair_mode"]
             == "rerun_current_controller"
             and stale_assessment_queue["tasks"][0]["fallback_action_chain"]
@@ -6000,13 +7760,19 @@ def _self_test() -> int:
                 ),
                 "elements": ["As"],
                 "media": ["water"],
+                "spatial_domains": ["marine"],
                 "element_medium": ["As|water"],
             }
             for index, cell_id in enumerate(marine_cells)
         ]
         marine_audit = spatial_sufficiency.audit_spatial_views(
             marine_samples,
-            {"region": "global", "elements": ["As"], "media": ["water"]},
+            {
+                "region": "global",
+                "elements": ["As"],
+                "media": ["water"],
+                "spatial_domains": ["marine"],
+            },
             policy,
         )
         marine_status = {
@@ -6100,8 +7866,9 @@ def _self_test() -> int:
                 "SPATIAL_DIMENSION_COVERAGE_GAP",
                 "SOURCE_DIVERSITY_GAP",
                 "MEDIUM_LINEAGE_GAP",
+                "STRICT_SCIENTIFIC_SUBSET_GAP",
             },
-            "expansion retains separate D1 lineage and geographic work",
+            "expansion retains separate D1 lineage, strict-evidence and geographic work",
         )
         saturated_a = stub_round(input_sha="a" * 64)
         saturated_a["counts"]["records"] = 100
@@ -6134,6 +7901,23 @@ def _self_test() -> int:
         ) as handle:
             rows = list(csv.DictReader(handle))
         complete_rows = [dict(row) for row in rows]
+        qc_blocked_rows = [dict(row) for row in complete_rows]
+        for row in qc_blocked_rows:
+            if row["sample_identity_group"] == "sample-0":
+                row["qc_flags"] = '["BATCH_QC_FAILED"]'
+        with (round_dir / "geochemistry.csv").open(
+            "w", encoding="utf-8", newline=""
+        ) as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(qc_blocked_rows)
+        qc_blocked_coverage = read_database_coverage(round_dir / "geochemistry.csv")
+        check(
+            qc_blocked_coverage["scientific_ready_unique_samples_by_medium"]["soil"]
+            == 9,
+            "D2 error-severity QC flags exclude a sample from the strict scientific subset",
+        )
+        rows = [dict(row) for row in complete_rows]
         for row in rows:
             row["analytical_method"] = ""
             row["method_missing_reason"] = "source_not_reported"
@@ -6201,6 +7985,91 @@ def _self_test() -> int:
             and source_link_task["task_kind"] == "metadata_evidence_gap"
             and source_link_task["target"]["official_linked_record_rate"] == 1.0,
             "method and official-link evidence debts become separate executable D1 repair tasks",
+        )
+        partial_method_rows = [dict(row) for row in complete_rows]
+        for row in partial_method_rows[50:]:
+            row["analytical_method"] = ""
+            row["method_missing_reason"] = "source_not_reported"
+        with (round_dir / "geochemistry.csv").open(
+            "w", encoding="utf-8", newline=""
+        ) as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(partial_method_rows)
+        comparison_subset = assess_sufficiency(
+            round_dir,
+            request,
+            {
+                "mode": "online_sources:auto",
+                "source_outcomes": [{"source_id": "source-a", "status": "success"}],
+            },
+            "online",
+            512,
+            assess_args,
+        )
+        check(
+            comparison_subset["criteria"]["analytical_method_evidence_by_medium"][
+                "status"
+            ]
+            == "pass"
+            and comparison_subset["criteria"]["analytical_readiness"]["status"]
+            == "pass",
+            "a transparent broad archive passes method readiness when every observed medium retains a sufficiently large method-bearing comparison subset",
+        )
+        source_masked_rows = [dict(row) for row in complete_rows]
+        for index, row in enumerate(source_masked_rows):
+            if index >= 50:
+                row["source_id"] = "source-method-unknown"
+                row["source_record_id"] = f"unknown-{index}"
+                row["analytical_method"] = ""
+                row["method_missing_reason"] = "publisher_compilation_omits_row_method"
+        with (round_dir / "geochemistry.csv").open(
+            "w", encoding="utf-8", newline=""
+        ) as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(source_masked_rows)
+        source_masked = assess_sufficiency(
+            round_dir,
+            request,
+            {
+                "mode": "online_sources:auto",
+                "source_outcomes": [
+                    {"source_id": "source-a", "status": "success"},
+                    {"source_id": "source-method-unknown", "status": "success"},
+                ],
+            },
+            "online",
+            512,
+            assess_args,
+        )
+        source_masked_queue = build_d1_repair_queue(
+            {
+                "request_sha256": "1" * 64,
+                "rounds": [{"round": 1, "sufficiency": source_masked}],
+            },
+            request,
+        )
+        source_method_task = next(
+            item
+            for item in source_masked_queue["tasks"]
+            if item["view_id"] == "source:source-method-unknown|medium:soil"
+        )
+        check(
+            source_masked["criteria"]["analytical_method_evidence_by_material_source"][
+                "status"
+            ]
+            == "fail"
+            and source_method_task["observed"]["source_id"] == "source-method-unknown"
+            and source_method_task["observed"]["publisher_absent_only"] is True
+            and set(source_method_task["reason_codes"])
+            == {
+                "material_source_analytical_method_evidence_shortfall",
+                "publisher_method_absence_requires_replacement_source",
+            }
+            and "source-method-unknown"
+            not in source_method_task["selected_source_candidates"],
+            "a large publisher-method-absent source triggers replacement-lineage acquisition instead of an impossible same-source retry",
         )
         rows = [dict(row) for row in complete_rows]
         write_json(
@@ -6344,7 +8213,7 @@ def _self_test() -> int:
     )
     check(
         requires_checkpoint_only(checkpoint_args),
-        "runs shorter than the official internal budget require an explicit checkpoint-only declaration",
+        "runs shorter than one complete research round require an explicit checkpoint-only declaration",
     )
     checkpoint_args.max_rounds = DEFAULT_MAX_ROUNDS
     checkpoint_args.time_budget_seconds = DEFAULT_TIME_BUDGET_SECONDS
@@ -6357,9 +8226,33 @@ def _self_test() -> int:
         == list(range(24)),
         "successive research rounds advance every queue start instead of starving one tail",
     )
+    priority_record = {
+        "manual_groups": [],
+        "failed_sources": [
+            {"source_id": "retry-source", "retryable": True, "error": "timeout"}
+        ],
+        "run_failure_retryable": False,
+        "sufficiency": {
+            "status": "insufficient",
+            "can_expand_acquisition": True,
+            "next_per_analyte_observations": 2048,
+            "unmet_required_criteria": ["global_spatial_coverage"],
+            "acquisition_blocking_criteria": [],
+            "discovery_gaps": {
+                "spatial_requery_source_ids": ["russia-source", "xinjiang-source"],
+                "geographic_search_targets": [],
+                "spatial_dimension_gaps": [],
+            },
+        },
+    }
     check(
-        DEFAULT_MAX_PER_ANALYTE_OBSERVATIONS * 4 == 200_000,
-        "the default four-element expansion target can use the complete research record ceiling",
+        next_round_priority_source_ids(priority_record)
+        == ["retry-source", "russia-source", "xinjiang-source"],
+        "the next acquisition round consumes retry and spatial-requery source IDs from the audited repair plan",
+    )
+    check(
+        DEFAULT_MAX_PER_ANALYTE_OBSERVATIONS == 200_000,
+        "the default per-element expansion target cannot silently truncate a still-open research request",
     )
     print(json.dumps({"status": "PASS", "tests": checks}, ensure_ascii=False))
     return 0

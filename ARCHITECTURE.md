@@ -10,10 +10,14 @@ uses four explicit boundaries:
    anomalies within declared comparable groups;
 4. D3 renders only D1/D2 outputs and never invents scientific evidence.
 
-The public orchestration entry point is `scripts/run_atlas_request.py`.
-Stage scripts remain independently reusable, but they do not own cross-stage
-policy. Canonical interchange remains UTF-8 CSV plus versioned JSON/GeoJSON
-sidecars so the complete runtime works without installing third-party packages.
+The public planning entry point is `scripts/task_router.py`; it freezes the task
+contract, applies the official deadline, and selects the minimum stable executor.
+`scripts/run_atlas_request.py` is the single-round D1–D3 executor, while
+`scripts/run_self_correction_loop.py` owns explicitly authorized multi-round
+research. Stage scripts remain independently reusable, but they do not own
+cross-stage policy. Canonical interchange remains UTF-8 CSV plus versioned
+JSON/GeoJSON sidecars so the complete runtime works without installing
+third-party packages.
 
 Research completion is governed by a separate, versioned sufficiency boundary:
 `run_self_correction_loop.py` de-duplicates physical samples and delegates

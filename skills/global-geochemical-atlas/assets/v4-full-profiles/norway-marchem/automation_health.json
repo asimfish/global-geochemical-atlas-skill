@@ -1,6 +1,6 @@
 {
   "adapter_registered": true,
-  "as_of": "2026-08-14T20:30:00Z",
+  "as_of": "2026-08-15T07:00:00Z",
   "cache_hit_count": 3,
   "cached_parse_status": "pass",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -9,30 +9,30 @@
   "files": [
     {
       "bytes": 295287,
-      "cache_status": "payload_equivalent_dynamic_export",
+      "cache_status": "cache_hit",
       "file_id": "data",
-      "filename": "MarChem_Inorganic_Data_20260811T195920Z.csv",
+      "filename": "MarChem_Inorganic_Data_20260818T181648Z.csv",
       "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
     },
     {
       "bytes": 3383,
-      "cache_status": "payload_equivalent_dynamic_export",
+      "cache_status": "cache_hit",
       "file_id": "info",
-      "filename": "MarChem_Info_20260811T195920Z",
-      "sha256": "da0ec1d289a9821ce84c1b37e5eddc93ed6c3f940a22ac98a8ff2fa3460aa5c6"
+      "filename": "MarChem_Info_20260818T181648Z",
+      "sha256": "9a31734d831fb1911fc28d82a95bc3bbed1e1a06e2063b344900a3602b42c5cf"
     },
     {
       "bytes": 320402,
-      "cache_status": "payload_equivalent_dynamic_export",
+      "cache_status": "cache_hit",
       "file_id": "metadata",
-      "filename": "MarChem_Inorganic_LabParameter_20260811T195920Z.csv",
+      "filename": "MarChem_Inorganic_LabParameter_20260818T181648Z.csv",
       "sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d"
     }
   ],
   "last_successful_fetch_at": null,
-  "last_successful_parse_at": "2026-08-14T20:30:00Z",
+  "last_successful_parse_at": "2026-08-15T07:00:00Z",
   "offline_replay_status": "pass",
-  "online_fetch_health": "drift_detected_payload_equivalent",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
   "parsed_source_record_count": 1070,
   "profile_version": "d1-v4-full-population-profile-v1",
   "raw_schema_field_count": 55,
@@ -104,10 +104,7 @@
   ],
   "target_observation_count": 3520,
   "version_drift": {
-    "current_archive_bytes": 81597,
-    "data_and_method_member_hashes_match": true,
-    "non_scientific_info_member_changed": true,
-    "outer_archive_drift": true,
-    "status": "scientific_payload_structure_equivalent_outer_archive_drift"
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
   }
 }

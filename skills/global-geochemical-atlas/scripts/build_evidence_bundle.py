@@ -284,7 +284,6 @@ def validate_record_linkage(
         "source_file": "source_file",
         "source_row": "source_row",
         "source_file_sha256": "file_sha256",
-        "source_file_url": "official_source_url",
     }
     required_comparable = {"source_id", "source_locator", "license", "analyte_reported"}
     for record_id, item in evidence_by_id.items():
@@ -309,29 +308,31 @@ def validate_record_linkage(
                         f"{evidence_value!r} != {canonical_value!r}"
                     )
                 continue
-            # A canonical official URL must be backed by the row sidecar.  It is
-            # not an optional presentation field: otherwise an arbitrary URL
-            # could appear in the CSV/map without entering the hash-bound
-            # evidence chain.  Input-only mode creates the sidecar from that
-            # same canonical value and labels it source-declared, not verified.
-            if evidence_field == "source_file_url" and canonical_value not in (
-                None,
-                "",
-            ):
-                if (
-                    evidence_value in (None, "")
-                    or str(evidence_value).strip() != str(canonical_value).strip()
-                ):
-                    raise EvidenceError(
-                        f"record evidence {record_id} does not bind canonical official_source_url"
-                    )
-                continue
             if evidence_value in (None, "") or canonical_value in (None, ""):
                 continue
             if str(evidence_value).strip() != str(canonical_value).strip():
                 raise EvidenceError(
                     f"record evidence {record_id} conflicts on {evidence_field}: "
                     f"{evidence_value!r} != {canonical_value!r}"
+                )
+        # Acquisition endpoints and clickable official landing pages are
+        # distinct for POST-backed sources. Bind both roles independently.
+        canonical_official_url = canonical_row.get("official_source_url")
+        evidence_official_url = item.get("official_source_url") or source_file_url
+        if canonical_official_url not in (None, ""):
+            if (
+                evidence_official_url in (None, "")
+                or str(evidence_official_url).strip()
+                != str(canonical_official_url).strip()
+            ):
+                raise EvidenceError(
+                    f"record evidence {record_id} does not bind canonical official_source_url"
+                )
+            if not source_url_is_evidence_safe(
+                evidence_official_url, item.get("source_file_sha256")
+            ):
+                raise EvidenceError(
+                    f"record evidence {record_id} has an unsafe official source URL"
                 )
     return evidence_by_id
 
@@ -535,9 +536,9 @@ def build_source_manifest(
         )
         official_source_urls = sorted(
             {
-                str(item.get("source_file_url"))
+                str(item.get("official_source_url") or item.get("source_file_url"))
                 for item in source_evidence
-                if item.get("source_file_url")
+                if item.get("official_source_url") or item.get("source_file_url")
             }
         )
         article_citations = sorted(

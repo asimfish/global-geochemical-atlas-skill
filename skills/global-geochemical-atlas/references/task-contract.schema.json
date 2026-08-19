@@ -45,7 +45,13 @@
         ]
       }
     },
-    "deadline_seconds": {"type": "number", "minimum": 1, "maximum": 43200, "default": 43200}
+    "deadline_seconds": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 43200,
+      "default": 900,
+      "description": "External task deadline. Omitted means the official 900-second competition envelope; extended research up to 43200 seconds requires explicit operator authorization."
+    }
   },
   "allOf": [
     {

@@ -13,9 +13,106 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-14T20:30:00Z",
-  "source_count": 63,
+  "scored_at": "2026-08-16T00:00:00Z",
+  "source_count": 66,
   "sources": {
+    "4tu-northern-china-sediment": {
+      "access_status": "open",
+      "attribution_note": "The official Figshare API declares CC0. Dataset DOI, author and repository identity are retained as scientific attribution.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/4tu-northern-china-sediment-20260816T000000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://data.4tu.nl/articles/dataset/Raw_data_of_Geochemical_Compositions_of_Surface_Sediments_in_Northern_China/12703148",
+            "https://api.figshare.com/v2/articles/12703148",
+            "https://ndownloader.figshare.com/files/24056474",
+            "https://ndownloader.figshare.com/files/24056480",
+            "https://ndownloader.figshare.com/files/24056477",
+            "https://doi.org/10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/4tu-northern-china-sediment-20260816T000000Z.json"
+          ],
+          "note": "The complete observation denominator is reconciled to documented methods or one explicit publisher-level missing reason, and QC scope is bound to a content-addressed evidence file.",
+          "status": "verified",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://data.4tu.nl/articles/dataset/Raw_data_of_Geochemical_Compositions_of_Surface_Sediments_in_Northern_China/12703148",
+            "https://api.figshare.com/v2/articles/12703148",
+            "https://ndownloader.figshare.com/files/24056474",
+            "https://ndownloader.figshare.com/files/24056480",
+            "https://ndownloader.figshare.com/files/24056477",
+            "https://doi.org/10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0",
+            "doi:10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/4tu-northern-china-sediment-20260816T000000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 4TU-Figshare-v1-2020-07-28",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 90.0,
+      "source_id": "4tu-northern-china-sediment",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
       "attribution_note": "Version 2.0 terms specify CC BY 4.0; retain dataset and article citations.",
@@ -1006,6 +1103,99 @@
       "use_mode": "discovery",
       "use_mode_limitations": [
         "research_use_status=unknown"
+      ]
+    },
+    "earthchem-dehailonggang-rock": {
+      "access_status": "open",
+      "attribution_note": "EarthChem dataset page declares CC BY-SA 4.0; retain author, DOI and share-alike terms for redistributed derivatives.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://ecl.earthchem.org/view.php?id=3338",
+            "https://doi.org/10.60520/IEDA/113338",
+            "https://creativecommons.org/licenses/by-sa/4.0/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://ecl.earthchem.org/view.php?id=3338",
+            "https://doi.org/10.60520/IEDA/113338",
+            "https://creativecommons.org/licenses/by-sa/4.0/",
+            "doi:10.60520/IEDA/113338"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: EarthChem Library dataset 3338 version 1.0 (2024)",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "earthchem-dehailonggang-rock",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
       ]
     },
     "earthchem-library": {
@@ -2630,6 +2820,99 @@
       },
       "source_evidence_score": 85.0,
       "source_id": "georoc-archaean",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "georoc-convergent-margins": {
+      "access_status": "open",
+      "attribution_note": "Retain GEOROC and original publication citations.",
+      "conflicts": [
+        "human_review"
+      ],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "Human review source_id does not match the source being scored.",
+          "status": "conflict",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FPVFZCE",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FPVFZCE",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp",
+            "doi:10.25625/PVFZCE"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 12.0",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "georoc-convergent-margins",
       "use_mode": "normalized_analysis",
       "use_mode_limitations": [
         "30-record human review is incomplete"
@@ -5657,7 +5940,7 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 30,
+      "A": 33,
       "B": 1,
       "C": 0,
       "D": 32,
@@ -5666,7 +5949,7 @@
     "use_modes": {
       "benchmark_ready": 0,
       "discovery": 32,
-      "normalized_analysis": 31,
+      "normalized_analysis": 34,
       "raw_observation": 0
     }
   }

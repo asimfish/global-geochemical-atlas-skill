@@ -6,18 +6,21 @@
     "rock": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 25972,
-      "independent_lineage_count": 1,
+      "distinct_sample_count": 104878,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
-      "observation_count": 67171,
+      "observation_count": 244463,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 21178,
-      "reported_covered_spatial_cells": 413,
+      "reported_coordinate_sample_count": 86484,
+      "reported_covered_spatial_cells": 1857,
       "source_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "georoc-convergent-margins"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -25,9 +28,10 @@
     "sediment": {
       "comparable_observation_count": 36340,
       "covered_spatial_cells": 1260,
-      "distinct_sample_count": 15689,
-      "independent_lineage_count": 10,
+      "distinct_sample_count": 16556,
+      "independent_lineage_count": 11,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-geochemical-atlas-europe-2005",
@@ -39,11 +43,12 @@
         "pangaea-south-china-sea-sediment",
         "zenodo-yangtze-yellow-river-sediment"
       ],
-      "observation_count": 93944,
+      "observation_count": 100013,
       "reported_comparable_observation_count": 36340,
-      "reported_coordinate_sample_count": 15596,
-      "reported_covered_spatial_cells": 1377,
+      "reported_coordinate_sample_count": 16463,
+      "reported_covered_spatial_cells": 1632,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-floodplain-sediment",
@@ -130,20 +135,21 @@
     "rock|As": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 4503,
+      "distinct_sample_count": 10103,
       "element": "As",
       "independent_lineage_count": 1,
       "lineage_ids": [
         "georoc-compilation"
       ],
       "medium": "rock",
-      "observation_count": 4780,
+      "observation_count": 10461,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 4221,
-      "reported_covered_spatial_cells": 97,
+      "reported_coordinate_sample_count": 9292,
+      "reported_covered_spatial_cells": 386,
       "source_ids": [
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "georoc-convergent-margins"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -151,18 +157,20 @@
     "rock|Cr": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 241,
+      "distinct_sample_count": 256,
       "element": "Cr",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
       "medium": "rock",
-      "observation_count": 241,
+      "observation_count": 256,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 240,
-      "reported_covered_spatial_cells": 14,
+      "reported_coordinate_sample_count": 255,
+      "reported_covered_spatial_cells": 15,
       "source_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
@@ -171,20 +179,23 @@
     "rock|Cu": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 17630,
+      "distinct_sample_count": 60698,
       "element": "Cu",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
       "medium": "rock",
-      "observation_count": 18077,
+      "observation_count": 62684,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 14405,
-      "reported_covered_spatial_cells": 329,
+      "reported_coordinate_sample_count": 51126,
+      "reported_covered_spatial_cells": 1438,
       "source_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "georoc-convergent-margins"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -192,20 +203,23 @@
     "rock|Ni": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 25405,
+      "distinct_sample_count": 99147,
       "element": "Ni",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
       "medium": "rock",
-      "observation_count": 25955,
+      "observation_count": 101655,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 20746,
-      "reported_covered_spatial_cells": 404,
+      "reported_coordinate_sample_count": 81709,
+      "reported_covered_spatial_cells": 1808,
       "source_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "georoc-convergent-margins"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -213,18 +227,20 @@
     "rock|Pb": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 276,
+      "distinct_sample_count": 291,
       "element": "Pb",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
       "medium": "rock",
-      "observation_count": 276,
+      "observation_count": 291,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 276,
-      "reported_covered_spatial_cells": 17,
+      "reported_coordinate_sample_count": 291,
+      "reported_covered_spatial_cells": 18,
       "source_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
@@ -233,20 +249,23 @@
     "rock|Zn": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 17412,
+      "distinct_sample_count": 67668,
       "element": "Zn",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
       "medium": "rock",
-      "observation_count": 17842,
+      "observation_count": 69116,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 14234,
-      "reported_covered_spatial_cells": 328,
+      "reported_coordinate_sample_count": 57235,
+      "reported_covered_spatial_cells": 1478,
       "source_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "georoc-convergent-margins"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -254,10 +273,11 @@
     "sediment|As": {
       "comparable_observation_count": 6723,
       "covered_spatial_cells": 1202,
-      "distinct_sample_count": 13151,
+      "distinct_sample_count": 14018,
       "element": "As",
-      "independent_lineage_count": 7,
+      "independent_lineage_count": 8,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
@@ -267,11 +287,12 @@
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 14745,
+      "observation_count": 15612,
       "reported_comparable_observation_count": 6723,
-      "reported_coordinate_sample_count": 13058,
-      "reported_covered_spatial_cells": 1319,
+      "reported_coordinate_sample_count": 13925,
+      "reported_covered_spatial_cells": 1574,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
@@ -287,10 +308,11 @@
     "sediment|Cr": {
       "comparable_observation_count": 3362,
       "covered_spatial_cells": 633,
-      "distinct_sample_count": 9790,
+      "distinct_sample_count": 10657,
       "element": "Cr",
-      "independent_lineage_count": 7,
+      "independent_lineage_count": 8,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
@@ -300,11 +322,12 @@
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 11384,
+      "observation_count": 12251,
       "reported_comparable_observation_count": 3362,
-      "reported_coordinate_sample_count": 9697,
-      "reported_covered_spatial_cells": 750,
+      "reported_coordinate_sample_count": 10564,
+      "reported_covered_spatial_cells": 1005,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -320,10 +343,11 @@
     "sediment|Cu": {
       "comparable_observation_count": 6865,
       "covered_spatial_cells": 1259,
-      "distinct_sample_count": 13293,
+      "distinct_sample_count": 14160,
       "element": "Cu",
-      "independent_lineage_count": 9,
+      "independent_lineage_count": 10,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
@@ -335,11 +359,12 @@
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 14887,
+      "observation_count": 15754,
       "reported_comparable_observation_count": 6865,
-      "reported_coordinate_sample_count": 13200,
-      "reported_covered_spatial_cells": 1376,
+      "reported_coordinate_sample_count": 14067,
+      "reported_covered_spatial_cells": 1631,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
@@ -357,21 +382,23 @@
     "sediment|Hg": {
       "comparable_observation_count": 2396,
       "covered_spatial_cells": 545,
-      "distinct_sample_count": 10323,
+      "distinct_sample_count": 11190,
       "element": "Hg",
-      "independent_lineage_count": 4,
+      "independent_lineage_count": 5,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa-mercury",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 11868,
+      "observation_count": 12735,
       "reported_comparable_observation_count": 2396,
-      "reported_coordinate_sample_count": 10323,
-      "reported_covered_spatial_cells": 662,
+      "reported_coordinate_sample_count": 11190,
+      "reported_covered_spatial_cells": 917,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa-mercury",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
@@ -384,10 +411,11 @@
     "sediment|Ni": {
       "comparable_observation_count": 4144,
       "covered_spatial_cells": 691,
-      "distinct_sample_count": 10572,
+      "distinct_sample_count": 11439,
       "element": "Ni",
-      "independent_lineage_count": 7,
+      "independent_lineage_count": 8,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
@@ -397,11 +425,12 @@
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 12166,
+      "observation_count": 13033,
       "reported_comparable_observation_count": 4144,
-      "reported_coordinate_sample_count": 10479,
-      "reported_covered_spatial_cells": 808,
+      "reported_coordinate_sample_count": 11346,
+      "reported_covered_spatial_cells": 1063,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
         "japan-gsj-geochemical-map",
@@ -417,10 +446,11 @@
     "sediment|Pb": {
       "comparable_observation_count": 5985,
       "covered_spatial_cells": 1184,
-      "distinct_sample_count": 12413,
+      "distinct_sample_count": 13280,
       "element": "Pb",
-      "independent_lineage_count": 8,
+      "independent_lineage_count": 9,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
@@ -431,11 +461,12 @@
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 14007,
+      "observation_count": 14874,
       "reported_comparable_observation_count": 5985,
-      "reported_coordinate_sample_count": 12320,
-      "reported_covered_spatial_cells": 1301,
+      "reported_coordinate_sample_count": 13187,
+      "reported_covered_spatial_cells": 1556,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",
@@ -452,10 +483,11 @@
     "sediment|Zn": {
       "comparable_observation_count": 6865,
       "covered_spatial_cells": 1259,
-      "distinct_sample_count": 13293,
+      "distinct_sample_count": 14160,
       "element": "Zn",
-      "independent_lineage_count": 9,
+      "independent_lineage_count": 10,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-geochemical-atlas-europe-2005",
         "japan-gsj-geochemical-map",
@@ -467,11 +499,12 @@
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "medium": "sediment",
-      "observation_count": 14887,
+      "observation_count": 15754,
       "reported_comparable_observation_count": 6865,
-      "reported_coordinate_sample_count": 13200,
-      "reported_covered_spatial_cells": 1376,
+      "reported_coordinate_sample_count": 14067,
+      "reported_covered_spatial_cells": 1631,
       "source_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "foregs-floodplain-sediment",
         "foregs-stream-sediment",

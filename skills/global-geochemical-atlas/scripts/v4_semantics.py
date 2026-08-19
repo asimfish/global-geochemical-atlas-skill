@@ -19,6 +19,13 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_missing_reason": "not_reported",
         "citation_scope": "observation",
     },
+    "georoc-convergent-margins": {
+        "sample_type_raw": "WR",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_missing_reason": "winning_method_not_encoded_in_precompiled_member",
+        "citation_scope": "observation",
+    },
     "georoc-antarctica-intraplate": {
         "sample_type_raw": "WR",
         "sample_type": "rock_whole_rock",
@@ -171,6 +178,19 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
     "tpdc-china-mountain-soil": {
         "method_scope": "publication",
         "method_assignment_basis": "article_element_method_mapping",
+        "citation_scope": "dataset",
+    },
+    "earthchem-dehailonggang-rock": {
+        "sample_type_raw": "whole rock",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "exact",
+        "method_scope": "dataset_parameter",
+        "method_assignment_basis": "workbook_method_code_to_parameter_join",
+        "citation_scope": "dataset",
+    },
+    "4tu-northern-china-sediment": {
+        "method_scope": "dataset_parameter",
+        "method_assignment_basis": "publisher_readme_element_method_mapping",
         "citation_scope": "dataset",
     },
     "pangaea-brasol-ne-brazil-soil": {
@@ -368,6 +388,21 @@ def _sample_semantics(
             sample_type=mapped,
             sample_type_mapping_status="exact",
         )
+    elif source_id == "4tu-northern-china-sediment":
+        raw = _text(evidence.get("sample_type"))
+        mapped = {
+            "surface catchment, fluvial and/or alluvial sediment at approximately 25 cm depth": "sediment_surface_catchment_fluvial_alluvial",
+            "last glacial loess, upper L1 Quaternary loess layer": "sediment_last_glacial_loess",
+            "present interglacial sediment, S0 Quaternary paleosol layer": "sediment_present_interglacial_paleosol",
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped 4TU sediment type: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped,
+            sample_type_mapping_status="exact",
+            sediment_environment=_text(evidence.get("sediment_environment")),
+        )
     elif source_id == "tpdc-china-mountain-soil":
         raw = _text(evidence.get("reported_horizon"))
         mapped = {
@@ -489,7 +524,11 @@ def _geographic_semantics(
         "map_sheet": _text(row.get("map_sheet")),
         "cruise_track": _text(row.get("cruise_track")),
     }
-    if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
+    if source_id in {
+        "georoc-archaean",
+        "georoc-convergent-margins",
+        "georoc-antarctica-intraplate",
+    }:
         result["geographic_context_raw"] = result["geographic_context_raw"] or legacy
     elif source_id == "geotraces-idp2025":
         result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
@@ -498,6 +537,12 @@ def _geographic_semantics(
             for part in (_text(evidence.get("cruise")), _text(evidence.get("station")))
             if part
         )
+    elif source_id == "earthchem-dehailonggang-rock":
+        result["survey_area"] = "Dehailonggang complex, East Kunlun Orogen"
+        result["geographic_context_raw"] = legacy or result["survey_area"]
+    elif source_id == "4tu-northern-china-sediment":
+        result["survey_area"] = _text(evidence.get("survey_area"))
+        result["geographic_context_raw"] = result["survey_area"]
     elif source_id == "japan-gsj-geochemical-map":
         result["map_sheet"] = (
             _text(evidence.get("map_sheet")) or result["map_sheet"] or legacy
@@ -667,7 +712,7 @@ def enrich_row(
         file_sha256=_text(row.get("file_sha256"))
         or _text(evidence.get("source_file_sha256")),
     )
-    if source_id == "georoc-archaean":
+    if source_id in {"georoc-archaean", "georoc-convergent-margins"}:
         coordinate_evidence = evidence.get("coordinate_evidence")
         coordinate_evidence = (
             coordinate_evidence if isinstance(coordinate_evidence, Mapping) else {}

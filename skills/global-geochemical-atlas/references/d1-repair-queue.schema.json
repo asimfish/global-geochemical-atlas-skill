@@ -1,22 +1,55 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:d1-repair-queue:v1",
-  "title": "Machine-actionable D1 structural repair queue",
+  "$id": "urn:global-geochemical-atlas:d1-repair-queue:v3",
+  "title": "Machine-actionable and action-grouped D1 structural repair queue",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "queue_version", "request_sha256", "generated_from_round", "status",
-    "task_count", "tasks", "execution_rule", "claim_boundary"
+    "task_count", "action_group_count", "unattempted_action_group_count",
+    "operator_continuation_required", "final_response_permitted", "control_state",
+    "required_next_action", "execution_class_counts", "tasks",
+    "action_groups", "execution_rule", "claim_boundary"
   ],
   "properties": {
-    "queue_version": {"const": "d1-repair-queue-v1"},
+    "queue_version": {"const": "d1-repair-queue-v3"},
     "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "generated_from_round": {"type": ["integer", "null"], "minimum": 1},
     "status": {"type": "string", "enum": ["clear", "pending"]},
     "task_count": {"type": "integer", "minimum": 0},
+    "action_group_count": {"type": "integer", "minimum": 0},
+    "unattempted_action_group_count": {"type": "integer", "minimum": 0},
+    "operator_continuation_required": {"type": "boolean"},
+    "final_response_permitted": {"type": "boolean"},
+    "control_state": {"type": "string", "enum": ["continue_research", "queue_clear"]},
+    "required_next_action": {
+      "type": "string",
+      "enum": [
+        "consume_next_action_group_and_resume_frozen_request",
+        "validate_research_delivery"
+      ]
+    },
+    "execution_class_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controller_rerun_current_skill", "data_action_current_skill",
+        "evidence_audit_current_skill", "skill_maintenance_new_run"
+      ],
+      "properties": {
+        "controller_rerun_current_skill": {"type": "integer", "minimum": 0},
+        "data_action_current_skill": {"type": "integer", "minimum": 0},
+        "evidence_audit_current_skill": {"type": "integer", "minimum": 0},
+        "skill_maintenance_new_run": {"type": "integer", "minimum": 0}
+      }
+    },
     "tasks": {
       "type": "array",
       "items": {"$ref": "#/$defs/task"}
+    },
+    "action_groups": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/actionGroup"}
     },
     "execution_rule": {"type": "string", "minLength": 1},
     "claim_boundary": {"type": "string", "minLength": 1}
@@ -36,8 +69,10 @@
       "required": [
         "task_id", "priority", "status", "task_kind", "scope_key", "view_id",
         "required_elements", "required_media", "bbox", "country_iso_a3",
-        "country_name", "macroregion", "reason_codes", "observed", "target",
-        "preferred_repair_mode", "fallback_action_chain",
+        "required_spatial_domains",
+        "country_name", "macroregion", "target_label", "search_aliases",
+        "admin1_search_hints", "gazetteer_semantics", "reason_codes", "observed", "target",
+        "preferred_repair_mode", "execution_class", "fallback_action_chain",
         "selected_source_candidates", "registered_source_candidates",
         "catalog_candidate_source_ids", "discovery_queries",
         "discovery_platform_sequence", "minimum_distinct_discovery_families",
@@ -53,7 +88,9 @@
           "enum": [
             "spatial_dimension_gap", "global_geographic_gap",
             "source_dimension_gap", "source_lineage_gap", "medium_lineage_gap",
-            "metadata_evidence_gap",
+            "medium_sample_balance_gap", "element_sample_balance_gap",
+            "element_medium_sample_balance_gap",
+            "metadata_evidence_gap", "scientific_evidence_subset_gap",
             "sufficiency_assessment_gap"
           ]
         },
@@ -61,14 +98,35 @@
         "view_id": {"type": "string"},
         "required_elements": {"$ref": "#/$defs/stringArray"},
         "required_media": {"$ref": "#/$defs/stringArray"},
-        "bbox": {"type": "array", "items": {"type": "number"}, "maxItems": 4},
+        "required_spatial_domains": {"$ref": "#/$defs/stringArray"},
+        "bbox": {
+          "type": "array",
+          "items": {"type": "number"},
+          "oneOf": [
+            {"maxItems": 0},
+            {"minItems": 4, "maxItems": 4}
+          ]
+        },
         "country_iso_a3": {"type": ["string", "null"], "pattern": "^[A-Z]{3}$"},
         "country_name": {"type": ["string", "null"]},
         "macroregion": {"type": ["string", "null"]},
+        "target_label": {"type": "string", "minLength": 1},
+        "search_aliases": {"$ref": "#/$defs/stringArray"},
+        "admin1_search_hints": {"$ref": "#/$defs/stringArray"},
+        "gazetteer_semantics": {"type": "string", "minLength": 1},
         "reason_codes": {"$ref": "#/$defs/stringArray"},
         "observed": {"$ref": "#/$defs/facts"},
         "target": {"$ref": "#/$defs/facts"},
         "preferred_repair_mode": {"$ref": "#/$defs/repairMode"},
+        "execution_class": {
+          "type": "string",
+          "enum": [
+            "controller_rerun_current_skill",
+            "data_action_current_skill",
+            "evidence_audit_current_skill",
+            "skill_maintenance_new_run"
+          ]
+        },
         "fallback_action_chain": {
           "type": "array", "minItems": 1, "uniqueItems": true,
           "items": {"$ref": "#/$defs/repairMode"}
@@ -91,6 +149,76 @@
         }
       }
     },
+    "actionGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action_group_id", "priority", "status", "target_label",
+        "search_aliases", "admin1_search_hints", "gazetteer_semantics",
+        "scope_key", "country_iso_a3", "country_name", "macroregion", "bbox",
+        "member_task_ids", "view_ids", "task_kinds", "required_elements",
+        "required_media", "required_spatial_domains", "reason_codes", "preferred_repair_mode",
+        "execution_class", "fallback_action_chain", "selected_source_candidates",
+        "registered_source_candidates", "catalog_candidate_source_ids",
+        "discovery_queries", "discovery_platform_sequence",
+        "completion_evidence_required", "continuation_strategy",
+        "attempt_receipt_required", "attempt_receipt_status"
+      ],
+      "properties": {
+        "action_group_id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+        "priority": {"type": "integer", "minimum": 1},
+        "status": {"const": "pending"},
+        "target_label": {"type": "string", "minLength": 1},
+        "search_aliases": {"$ref": "#/$defs/stringArray"},
+        "admin1_search_hints": {"$ref": "#/$defs/stringArray"},
+        "gazetteer_semantics": {"type": "string", "minLength": 1},
+        "scope_key": {"type": "string"},
+        "country_iso_a3": {"type": ["string", "null"], "pattern": "^[A-Z]{3}$"},
+        "country_name": {"type": ["string", "null"]},
+        "macroregion": {"type": ["string", "null"]},
+        "bbox": {
+          "type": "array", "items": {"type": "number"},
+          "oneOf": [{"maxItems": 0}, {"minItems": 4, "maxItems": 4}]
+        },
+        "member_task_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9a-f]{16}$"}
+        },
+        "view_ids": {"$ref": "#/$defs/stringArray"},
+        "task_kinds": {"$ref": "#/$defs/stringArray"},
+        "required_elements": {"$ref": "#/$defs/stringArray"},
+        "required_media": {"$ref": "#/$defs/stringArray"},
+        "required_spatial_domains": {"$ref": "#/$defs/stringArray"},
+        "reason_codes": {"$ref": "#/$defs/stringArray"},
+        "preferred_repair_mode": {"$ref": "#/$defs/repairMode"},
+        "execution_class": {
+          "type": "string",
+          "enum": [
+            "controller_rerun_current_skill", "data_action_current_skill",
+            "evidence_audit_current_skill", "skill_maintenance_new_run"
+          ]
+        },
+        "fallback_action_chain": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/repairMode"}
+        },
+        "selected_source_candidates": {"$ref": "#/$defs/stringArray"},
+        "registered_source_candidates": {"$ref": "#/$defs/stringArray"},
+        "catalog_candidate_source_ids": {"$ref": "#/$defs/stringArray"},
+        "discovery_queries": {"$ref": "#/$defs/stringArray"},
+        "discovery_platform_sequence": {"$ref": "#/$defs/stringArray"},
+        "completion_evidence_required": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "continuation_strategy": {
+          "type": "string",
+          "enum": ["same_output_data_only", "new_output_after_skill_change"]
+        },
+        "attempt_receipt_required": {"const": true},
+        "attempt_receipt_status": {"const": "unattempted"}
+      }
+    },
     "repairMode": {
       "type": "string",
       "enum": [
@@ -104,11 +232,27 @@
   "allOf": [
     {
       "if": {"properties": {"status": {"const": "clear"}}},
-      "then": {"properties": {"task_count": {"const": 0}, "tasks": {"maxItems": 0}}}
+      "then": {"properties": {
+        "task_count": {"const": 0}, "tasks": {"maxItems": 0},
+        "action_group_count": {"const": 0}, "unattempted_action_group_count": {"const": 0},
+        "operator_continuation_required": {"const": false},
+        "final_response_permitted": {"const": true},
+        "control_state": {"const": "queue_clear"},
+        "required_next_action": {"const": "validate_research_delivery"},
+        "action_groups": {"maxItems": 0}
+      }}
     },
     {
       "if": {"properties": {"status": {"const": "pending"}}},
-      "then": {"properties": {"task_count": {"minimum": 1}, "tasks": {"minItems": 1}}}
+      "then": {"properties": {
+        "task_count": {"minimum": 1}, "tasks": {"minItems": 1},
+        "action_group_count": {"minimum": 1}, "unattempted_action_group_count": {"minimum": 1},
+        "operator_continuation_required": {"const": true},
+        "final_response_permitted": {"const": false},
+        "control_state": {"const": "continue_research"},
+        "required_next_action": {"const": "consume_next_action_group_and_resume_frozen_request"},
+        "action_groups": {"minItems": 1}
+      }}
     },
     {
       "if": {

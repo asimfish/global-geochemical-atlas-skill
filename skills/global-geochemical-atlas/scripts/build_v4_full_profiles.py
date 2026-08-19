@@ -172,10 +172,17 @@ def _sample_and_place(
 ) -> tuple[str, str, str, str, str]:
     """Return sample_id, region, latitude, longitude and source CRS."""
 
-    if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
+    if source_id in {
+        "georoc-archaean",
+        "georoc-convergent-margins",
+        "georoc-antarctica-intraplate",
+    }:
+        # GEOROC LOCATION values can embed literal CRLF line breaks (for
+        # example the Kohistan-Ladakh members); collapse internal whitespace
+        # so region labels stay single-line in profiles and the coverage cube.
         return (
             _text(fields.get("SAMPLE NAME")) or _text(fields.get("UNIQUE_ID")),
-            _text(fields.get("LOCATION")),
+            " ".join(_text(fields.get("LOCATION")).split()),
             _exact_midpoint(fields, "LATITUDE MIN", "LATITUDE MAX"),
             _exact_midpoint(fields, "LONGITUDE MIN", "LONGITUDE MAX"),
             "",
@@ -384,6 +391,14 @@ def _sample_and_place(
             _text(fields.get("Longitude")),
             "",
         )
+    if source_id == "4tu-northern-china-sediment":
+        return (
+            _text(fields.get("_physical_sample_id")),
+            _text(fields.get("_survey_area")) or "northern and western China",
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            "",
+        )
     if source_id == "pangaea-batagay-soil":
         return (
             "|".join(
@@ -405,6 +420,14 @@ def _sample_and_place(
             _text(fields.get("Mountain")),
             _text(fields.get("Latitude")),
             _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")),
+        )
+    if source_id == "earthchem-dehailonggang-rock":
+        return (
+            _text(fields.get("SAMPLE NAME")),
+            _text(fields.get("LOCATION KEYWORDS")),
+            _text(fields.get("LATITUDE")),
+            _text(fields.get("LONGITUDE")),
             _text(fields.get("_source_crs")),
         )
     if source_id == "eidc-ningbo-soil":
@@ -522,7 +545,10 @@ def _target_values(
             units = fields.get("_units")
             if isinstance(units, Mapping):
                 unit = _text(units.get(candidate))
-            elif source_id == "georoc-archaean" and candidate.endswith("(PPM)"):
+            elif source_id in {
+                "georoc-archaean",
+                "georoc-convergent-margins",
+            } and candidate.endswith("(PPM)"):
                 unit = "ppm"
             elif source_id == "japan-gsj-geochemical-map":
                 target_units = fields.get("_target_units")
@@ -544,7 +570,7 @@ def _target_values(
                 values["measurement_basis"] = (
                     "HF-HNO3_digested_deflatable_surface_soil_fraction"
                 )
-            elif source_id == "georoc-archaean":
+            elif source_id in {"georoc-archaean", "georoc-convergent-margins"}:
                 values["measurement_basis"] = "reported_whole_rock_concentration"
             yield _text(analyte), candidate, raw, values
             break
@@ -620,6 +646,15 @@ def _semantic_evidence(
             )
             if value
         ]
+    elif source_id == "4tu-northern-china-sediment":
+        evidence["sample_type"] = _text(fields.get("_sample_type"))
+        evidence["sediment_environment"] = _text(fields.get("_sediment_environment"))
+        evidence["survey_area"] = _text(fields.get("_survey_area"))
+        evidence["method_evidence_file"] = {
+            "filename": _text(fields.get("_method_evidence_file")),
+            "url": _text(fields.get("_method_evidence_url")),
+            "sha256": _text(fields.get("_method_evidence_sha256")),
+        }
     elif source_id == "pangaea-batagay-soil":
         evidence["sample_id"] = _text(fields.get("Sample ID"))
         evidence["sampling_site"] = _text(fields.get("Sample comment (Sampling site)"))
@@ -725,6 +760,8 @@ def _observation(
         or (
             _text(raw.fields.get("Rock Group"))
             if source_id == "tpdc-china-mountain-soil"
+            else _text(raw.fields.get("LITHOLOGY"))
+            if source_id == "earthchem-dehailonggang-rock"
             else _text(raw.fields.get("Lithol_IBGE_EN"))
             if source_id == "pangaea-brasol-ne-brazil-soil"
             else ""

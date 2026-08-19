@@ -68,8 +68,8 @@ def validate_delivery(
         if message not in target:
             target.append(message)
 
-    if loop and loop.get("schema_version") != "self-correction-loop-report-v5":
-        errors.append("formal research delivery requires loop report v5")
+    if loop and loop.get("schema_version") != "self-correction-loop-report-v7":
+        errors.append("formal research delivery requires loop report v7")
     if (
         receipt
         and receipt.get("schema_version") != "atlas-research-delivery-receipt-v3"
@@ -152,9 +152,9 @@ def validate_delivery(
         errors.append("receipt execution_mode does not match execution evidence")
     if (
         execution
-        and execution.get("execution_version") != "geochemical-request-execution-v5"
+        and execution.get("execution_version") != "geochemical-request-execution-v6"
     ):
-        errors.append("formal research delivery requires request execution evidence v5")
+        errors.append("formal research delivery requires request execution evidence v6")
     if receipt and not execution_mode.startswith("online_"):
         errors.append(
             "formal research delivery must use online acquisition, not fixture/input mode"
@@ -162,7 +162,7 @@ def validate_delivery(
 
     if repair_queue:
         queue_tasks = repair_queue.get("tasks")
-        if repair_queue.get("queue_version") != "d1-repair-queue-v1":
+        if repair_queue.get("queue_version") != "d1-repair-queue-v3":
             errors.append("unsupported D1 repair queue version")
         if repair_queue.get("request_sha256") != loop.get("request_sha256"):
             errors.append("D1 repair queue request hash does not match loop report")
@@ -171,6 +171,22 @@ def validate_delivery(
             queue_tasks = []
         if repair_queue.get("task_count") != len(queue_tasks):
             errors.append("D1 repair queue task_count does not match tasks")
+        queue_action_groups = repair_queue.get("action_groups")
+        if not isinstance(queue_action_groups, list):
+            errors.append("D1 repair queue action_groups must be an array")
+            queue_action_groups = []
+        if repair_queue.get("action_group_count") != len(queue_action_groups):
+            errors.append(
+                "D1 repair queue action_group_count does not match action_groups"
+            )
+        if repair_queue.get("unattempted_action_group_count") != len(
+            queue_action_groups
+        ):
+            errors.append("D1 repair queue has unaccounted action-group receipts")
+        if repair_queue.get("operator_continuation_required") != bool(
+            queue_action_groups
+        ):
+            errors.append("D1 repair queue continuation flag is inconsistent")
         queue_status = repair_queue.get("status")
         if queue_status not in ("clear", "pending"):
             errors.append("D1 repair queue status is invalid")

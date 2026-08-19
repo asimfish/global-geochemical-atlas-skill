@@ -472,6 +472,103 @@ class GeorocArchaeanAdapter(RegistryAdapter):
 
     source_id = "georoc-archaean"
 
+    @staticmethod
+    def _member_download_url(persistent_id: str) -> str:
+        query = urllib.parse.urlencode(
+            {"persistentId": persistent_id, "format": "original"}
+        )
+        return (
+            "https://data.goettingen-research-online.de/api/access/"
+            f"datafile/:persistentId/?{query}"
+        )
+
+    def _download_verified_members(
+        self,
+        root: Path,
+        mode: DownloadMode,
+        archive_error: Exception,
+    ) -> list[DownloadedFile]:
+        """Fall back from the failing dataset ZIP to the same pinned members.
+
+        GRO.data exposes both a dataset-level archive endpoint and immutable
+        member persistent IDs.  The former can fail independently with HTTP
+        500 while every member endpoint remains healthy.  Download into a
+        private staging directory, then publish only after exact byte count,
+        publisher MD5 and required-field checks all pass.  This is an
+        availability fallback, not a weaker integrity policy.
+        """
+
+        if mode == "cached":
+            raise SourceAdapterError(
+                "GEOROC cached acquisition has neither a verified extracted member "
+                "set nor a reusable dataset archive; online mode is required to "
+                "repair the cache"
+            ) from archive_error
+        root.mkdir(parents=True, exist_ok=True)
+        destination = root / "members"
+        staging: Path | None = Path(
+            tempfile.mkdtemp(prefix=".members.", suffix=".part", dir=root)
+        )
+        retrieved_at: str | None = None
+        try:
+            for entry in self.candidate.registry_entry["download"]["members"]:
+                persistent_id = str(entry["persistent_id"])
+                file_id = persistent_id.rsplit("/", 1)[-1]
+                assert staging is not None
+                output = staging / str(entry["filename"])
+                manifest = staging / f"{file_id}.download.json"
+                url = self._member_download_url(persistent_id)
+                args = _download_args(
+                    url=url,
+                    output=output,
+                    manifest=manifest,
+                    license_id=self.candidate.license_id,
+                    expected_sha256=None,
+                    max_bytes=int(entry["bytes"]),
+                    dataset_doi=self.candidate.dataset_doi,
+                    dataset_version=self.candidate.version,
+                    offline=False,
+                    required_fields=self.candidate.registry_entry["required_fields"],
+                )
+                try:
+                    result = downloader.run(args)
+                except (downloader.DownloadError, OSError) as exc:
+                    raise SourceAdapterError(
+                        f"GEOROC member fallback failed for {file_id}: {exc}; "
+                        f"dataset archive failure was: {archive_error}"
+                    ) from exc
+                content_type = str(result.get("content_type") or "")
+                if content_type and content_type not in {
+                    "text/csv",
+                    "application/octet-stream",
+                }:
+                    raise SourceAdapterError(
+                        "GEOROC member fallback returned unexpected content type "
+                        f"for {file_id}: {content_type}"
+                    )
+                if output.stat().st_size != int(entry["bytes"]):
+                    raise SourceAdapterError(
+                        f"GEOROC member fallback size changed: {output.name}"
+                    )
+                checksum = entry["publisher_checksum"]
+                if checksum.get("algorithm") != "md5" or _md5_file(
+                    output
+                ) != checksum.get("value"):
+                    raise SourceAdapterError(
+                        f"GEOROC member fallback publisher checksum mismatch: {output.name}"
+                    )
+                retrieved_at = (
+                    result.get("accessed_at")
+                    or result.get("cache_verified_at")
+                    or retrieved_at
+                )
+            os.replace(staging, destination)
+            staging = None
+        finally:
+            if staging is not None and staging.exists():
+                shutil.rmtree(staging)
+        return self._verified_members(destination, "downloaded", retrieved_at)
+
     def _verified_members(
         self, extract_dir: Path, cache_status: str, retrieved_at: str | None
     ) -> list[DownloadedFile]:
@@ -528,7 +625,12 @@ class GeorocArchaeanAdapter(RegistryAdapter):
                 "source-specific fixture mode is not available until the demo slice is generated"
             )
         root = self._cache_root(cache_dir)
-        archive_path = root / "georoc-archaean-v12.zip"
+        extract_dir = root / "members"
+        if extract_dir.exists():
+            return self._verified_members(extract_dir, "cache_hit", None)
+        archive_path = root / (
+            f"{self.source_id}-v{candidate.version.split('.', 1)[0]}.zip"
+        )
         manifest_path = root / "dataset.download.json"
         download_entry = candidate.registry_entry["download"]
         args = _download_args(
@@ -545,15 +647,18 @@ class GeorocArchaeanAdapter(RegistryAdapter):
         try:
             result = downloader.run(args)
         except (downloader.DownloadError, OSError) as exc:
-            raise SourceAdapterError(f"GEOROC dataset download failed: {exc}") from exc
+            return self._download_verified_members(root, mode, exc)
         content_type = result.get("content_type")
         accepted = set(download_entry["accepted_content_types"])
         if content_type and content_type not in accepted:
-            raise SourceAdapterError(
-                f"GEOROC returned unexpected content type: {content_type}"
+            return self._download_verified_members(
+                root,
+                mode,
+                SourceAdapterError(
+                    f"GEOROC returned unexpected content type: {content_type}"
+                ),
             )
 
-        extract_dir = root / "members"
         if not extract_dir.exists():
             try:
                 downloader.safe_extract_zip(
@@ -624,6 +729,16 @@ class GeorocArchaeanAdapter(RegistryAdapter):
                         "_dataset_version": self.candidate.version,
                     },
                 )
+
+
+class GeorocConvergentMarginsAdapter(GeorocArchaeanAdapter):
+    """GEOROC Dataverse versioned ZIP containing one CSV per convergent margin.
+
+    The download, member-fallback, verification and parse logic is identical to
+    the Archaean compilation adapter; only the registered dataset differs.
+    """
+
+    source_id = "georoc-convergent-margins"
 
 
 class MarchemSnapshotAdapter(RegistryAdapter):
@@ -1377,16 +1492,25 @@ class GeotracesIdp2025Adapter(RegistryAdapter):
                 for item in members:
                     payload = archive.read(item)
                     payload = payload.replace(stem.encode("utf-8"), b"NORMALIZED_STEM")
-                    payload = re.sub(
-                        rb"//<CreateTime>[^\r\n]*",
-                        b"//<CreateTime>NORMALIZED</CreateTime>",
-                        payload,
-                    )
-                    payload = re.sub(
-                        rb"//<View>[^\r\n]*",
-                        b"//<View>NORMALIZED</View>",
-                        payload,
-                    )
+                    # CreateTime and View change per export session; Creator and
+                    # Software embed the webODV worker host and build, which
+                    # change per service deployment. All four are session or
+                    # deployment noise, not scientific payload.
+                    for volatile_tag in (
+                        b"CreateTime",
+                        b"View",
+                        b"Creator",
+                        b"Software",
+                    ):
+                        payload = re.sub(
+                            rb"//<" + volatile_tag + rb">[^\r\n]*",
+                            b"//<"
+                            + volatile_tag
+                            + b">NORMALIZED</"
+                            + volatile_tag
+                            + b">",
+                            payload,
+                        )
                     key = (
                         "DATA.txt"
                         if item is data_member
@@ -2121,7 +2245,7 @@ class PangaeaNorthAfricaSoilAdapter(RegistryAdapter):
 
 
 class _RejectRedirects(urllib.request.HTTPRedirectHandler):
-    """Keep the one legacy FOREGS HTTP exception on its registered host and URL."""
+    """Reject redirects before a pinned acquisition request reaches another URL."""
 
     def redirect_request(
         self,
@@ -4843,7 +4967,15 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
         return AfsisPhaseIWetChemistryAdapter._column_index(reference)
 
     @classmethod
-    def _xlsx_rows(cls, path: Path) -> list[tuple[int, list[str]]]:
+    def _xlsx_rows(
+        cls,
+        path: Path,
+        sheet_number: int = 1,
+        workbook_label: str = "TPDC",
+    ) -> list[tuple[int, list[str]]]:
+        if sheet_number < 1:
+            raise SourceAdapterError("worksheet number must be positive")
+        sheet_member = f"xl/worksheets/sheet{sheet_number}.xml"
         try:
             with zipfile.ZipFile(path) as archive:
                 members = archive.infolist()
@@ -4854,8 +4986,10 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
                     raise SourceAdapterError(
                         "TPDC workbook exceeds safe structural limits"
                     )
-                if "xl/worksheets/sheet1.xml" not in archive.namelist():
-                    raise SourceAdapterError("TPDC workbook lacks sheet1.xml")
+                if sheet_member not in archive.namelist():
+                    raise SourceAdapterError(
+                        f"{workbook_label} workbook lacks {sheet_member}"
+                    )
                 namespace = f"{{{cls._xlsx_namespace}}}"
                 shared_strings: list[str] = []
                 if "xl/sharedStrings.xml" in archive.namelist():
@@ -4864,10 +4998,10 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
                         "".join(node.text or "" for node in item.iter(f"{namespace}t"))
                         for item in root.findall(f"{namespace}si")
                     ]
-                sheet = ET.fromstring(archive.read("xl/worksheets/sheet1.xml"))
+                sheet = ET.fromstring(archive.read(sheet_member))
         except (OSError, zipfile.BadZipFile, ET.ParseError, KeyError) as exc:
             raise SourceAdapterError(
-                f"TPDC workbook is unreadable: {path.name}"
+                f"{workbook_label} workbook is unreadable: {path.name}"
             ) from exc
         rows: list[tuple[int, list[str]]] = []
         for row in sheet.findall(f".//{namespace}sheetData/{namespace}row"):
@@ -4881,7 +5015,7 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
                         value = shared_strings[int(value)]
                     except (ValueError, IndexError) as exc:
                         raise SourceAdapterError(
-                            "TPDC workbook shared-string index changed"
+                            f"{workbook_label} workbook shared-string index changed"
                         ) from exc
                 elif cell.get("t") == "inlineStr":
                     value = "".join(
@@ -5067,6 +5201,396 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
         if observed != expected:
             raise SourceAdapterError(
                 f"TPDC reconciliation changed: {observed!r} != {expected!r}"
+            )
+
+
+class EarthchemDehailonggangRockAdapter(RegistryAdapter):
+    """EarthChem Library whole-rock workbook acquired by its fixed public form."""
+
+    source_id = "earthchem-dehailonggang-rock"
+
+    @staticmethod
+    def _verify_archive(path: Path, download_entry: Mapping[str, Any]) -> None:
+        if path.stat().st_size != int(download_entry["archive_bytes"]):
+            raise SourceAdapterError("EarthChem archive byte count changed")
+        if downloader.sha256_file(path) != download_entry["archive_sha256"]:
+            raise SourceAdapterError("EarthChem archive SHA-256 changed")
+        expected = {
+            item["filename"]: item for item in download_entry["archive_members"]
+        }
+        try:
+            with zipfile.ZipFile(path) as archive:
+                members = archive.infolist()
+                actual_names = [item.filename for item in members]
+                if (
+                    len(actual_names) != len(set(actual_names))
+                    or set(actual_names) != set(expected)
+                    or any(
+                        item.is_dir()
+                        or PurePosixPath(item.filename).is_absolute()
+                        or ".." in PurePosixPath(item.filename).parts
+                        or "\\" in item.filename
+                        for item in members
+                    )
+                ):
+                    raise SourceAdapterError(
+                        "EarthChem archive member set or paths changed"
+                    )
+                for member in members:
+                    registered = expected[member.filename]
+                    payload = archive.read(member)
+                    if (
+                        len(payload) != int(registered["bytes"])
+                        or hashlib.sha256(payload).hexdigest() != registered["sha256"]
+                    ):
+                        raise SourceAdapterError(
+                            f"EarthChem archive member changed: {member.filename}"
+                        )
+        except (OSError, zipfile.BadZipFile, KeyError) as exc:
+            raise SourceAdapterError("EarthChem archive is unreadable") from exc
+
+    @classmethod
+    def _extract_registered_member(
+        cls,
+        archive_path: Path,
+        output: Path,
+        member_entry: Mapping[str, Any],
+    ) -> None:
+        temporary: Path | None = None
+        output.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            with zipfile.ZipFile(archive_path) as archive:
+                payload = archive.read(str(member_entry["filename"]))
+            if (
+                len(payload) != int(member_entry["bytes"])
+                or hashlib.sha256(payload).hexdigest() != member_entry["sha256"]
+            ):
+                raise SourceAdapterError("EarthChem selected workbook changed")
+            with tempfile.NamedTemporaryFile(
+                "wb",
+                prefix=f".{output.name}.",
+                suffix=".part",
+                dir=output.parent,
+                delete=False,
+            ) as handle:
+                temporary = Path(handle.name)
+                handle.write(payload)
+            os.replace(temporary, output)
+            temporary = None
+        except (OSError, zipfile.BadZipFile, KeyError) as exc:
+            raise SourceAdapterError(
+                "EarthChem selected workbook could not be extracted"
+            ) from exc
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
+
+    @staticmethod
+    def _download_form_archive(
+        output: Path,
+        download_entry: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        endpoint = str(download_entry["endpoint"])
+        downloader.validate_public_https_url(endpoint)
+        form = urllib.parse.urlencode(download_entry["form_fields"]).encode("ascii")
+        request = urllib.request.Request(
+            endpoint,
+            data=form,
+            headers={
+                "User-Agent": downloader.USER_AGENT,
+                "Accept": "application/zip, application/octet-stream",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            method="POST",
+        )
+        output.parent.mkdir(parents=True, exist_ok=True)
+        temporary: Path | None = None
+        try:
+            opener = urllib.request.build_opener(_RejectRedirects())
+            with opener.open(request, timeout=30.0) as response:
+                if response.geturl() != endpoint:
+                    raise SourceAdapterError(
+                        "EarthChem form download redirected away from the pinned endpoint"
+                    )
+                content_type = response.headers.get_content_type().casefold()
+                if content_type not in set(download_entry["accepted_content_types"]):
+                    raise SourceAdapterError(
+                        f"EarthChem returned unexpected content type: {content_type}"
+                    )
+                downloader.validate_response_metadata(
+                    content_type,
+                    response.headers.get("Content-Length"),
+                    int(download_entry["max_bytes"]),
+                )
+                with tempfile.NamedTemporaryFile(
+                    "wb",
+                    prefix=f".{output.name}.",
+                    suffix=".part",
+                    dir=output.parent,
+                    delete=False,
+                ) as handle:
+                    temporary = Path(handle.name)
+                    total, observed = downloader.copy_response_bounded(
+                        response, handle, int(download_entry["max_bytes"])
+                    )
+                if (
+                    total != int(download_entry["archive_bytes"])
+                    or observed != download_entry["archive_sha256"]
+                ):
+                    raise SourceAdapterError(
+                        "EarthChem form response does not match the pinned archive"
+                    )
+                os.replace(temporary, output)
+                temporary = None
+                return {
+                    "status": "downloaded",
+                    "source_url": endpoint,
+                    "resolved_url": endpoint,
+                    "content_type": content_type,
+                    "bytes": total,
+                    "sha256": observed,
+                    "sha256_basis": "expected",
+                    "accessed_at": downloader.utc_now(),
+                    "http_status": getattr(response, "status", 200),
+                    "content_disposition": response.headers.get("Content-Disposition"),
+                    "request_method": "POST",
+                    "form_field_names": sorted(download_entry["form_fields"]),
+                }
+        except (
+            downloader.DownloadError,
+            SourceAdapterError,
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            OSError,
+        ) as exc:
+            raise SourceAdapterError("EarthChem form download failed closed") from exc
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("EarthChem adapter received another source")
+        if mode == "fixture":
+            raise SourceAdapterError(
+                "use the checked-in EarthChem demo for fixture tests"
+            )
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        endpoint = str(download_entry["endpoint"])
+        archive_path = root / str(download_entry["archive_filename"])
+        manifest_path = root / "archive.download.json"
+        result: dict[str, Any]
+        try:
+            result = downloader.existing_verified_cache(
+                archive_path,
+                manifest_path,
+                endpoint,
+                str(download_entry["archive_sha256"]),
+                candidate.version,
+            )
+            self._verify_archive(archive_path, download_entry)
+        except (downloader.DownloadError, SourceAdapterError, OSError):
+            if mode == "cached":
+                raise SourceAdapterError(
+                    "EarthChem cached mode requires the verified POST archive"
+                )
+            result = self._download_form_archive(archive_path, download_entry)
+            self._verify_archive(archive_path, download_entry)
+            downloader.atomic_json(
+                manifest_path,
+                {
+                    **result,
+                    "manifest_version": "geochemical-download-v1",
+                    "license": candidate.license_id,
+                    "output_filename": archive_path.name,
+                    "offline": False,
+                    "dataset_doi": candidate.dataset_doi,
+                    "dataset_version": candidate.version,
+                },
+            )
+        member_entry = next(
+            item
+            for item in download_entry["archive_members"]
+            if item["file_id"] == "bulk-rock-workbook"
+        )
+        workbook_path = root / str(member_entry["filename"])
+        if (
+            not workbook_path.is_file()
+            or workbook_path.stat().st_size != int(member_entry["bytes"])
+            or downloader.sha256_file(workbook_path) != member_entry["sha256"]
+        ):
+            self._extract_registered_member(archive_path, workbook_path, member_entry)
+        return [
+            DownloadedFile(
+                source_id=self.source_id,
+                file_id="bulk-rock-workbook",
+                path=workbook_path,
+                source_url=endpoint,
+                bytes=workbook_path.stat().st_size,
+                cache_status=str(result["status"]),
+                retrieved_at=result.get("accessed_at")
+                or result.get("cache_verified_at"),
+            )
+        ]
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "bulk-rock-workbook":
+            raise SourceAdapterError(
+                "EarthChem adapter requires the registered bulk-rock workbook"
+            )
+        downloaded = files[0]
+        label = "EarthChem Dehailonggang"
+        sample_rows = TpdcChinaMountainSoilAdapter._xlsx_rows(downloaded.path, 2, label)
+        data_rows = TpdcChinaMountainSoilAdapter._xlsx_rows(downloaded.path, 3, label)
+        method_rows = TpdcChinaMountainSoilAdapter._xlsx_rows(downloaded.path, 4, label)
+        if len(sample_rows) < 8 or len(data_rows) < 6 or len(method_rows) < 7:
+            raise SourceAdapterError("EarthChem workbook structure changed")
+
+        sample_headers = sample_rows[4][1]
+        required_sample = {
+            "SAMPLE NAME",
+            "LATITUDE",
+            "LONGITUDE",
+            "ELEVATION",
+            "LOCATION KEYWORDS",
+            "LITHOLOGY",
+        }
+        if not required_sample.issubset(sample_headers):
+            raise SourceAdapterError(
+                "EarthChem sample worksheet schema changed; missing="
+                + repr(sorted(required_sample - set(sample_headers)))
+            )
+        samples: dict[str, dict[str, str]] = {}
+        for row_number, row in sample_rows[7:]:
+            padded = row + [""] * max(0, len(sample_headers) - len(row))
+            values = dict(zip(sample_headers, padded, strict=False))
+            sample_id = values["SAMPLE NAME"].strip()
+            if not sample_id or sample_id in samples:
+                raise SourceAdapterError(
+                    f"EarthChem sample identity changed at sheet2 row {row_number}"
+                )
+            samples[sample_id] = values
+
+        methods: dict[str, dict[str, str]] = {}
+        method_headers = method_rows[4][1]
+        for row_number, row in method_rows[6:]:
+            padded = row + [""] * max(0, len(method_headers) - len(row))
+            values = dict(zip(method_headers, padded, strict=False))
+            parameter = values.get("PARAMETER", "").strip()
+            if parameter:
+                methods[parameter] = {
+                    **values,
+                    "_row_number": str(row_number),
+                }
+
+        parameters = data_rows[1][1]
+        method_codes = data_rows[2][1]
+        units = data_rows[3][1]
+        index_by_parameter = {
+            parameter.strip(): index
+            for index, parameter in enumerate(parameters)
+            if parameter.strip()
+        }
+        target_analytes = self.candidate.registry_entry["target_analytes"]
+        missing_parameters = set(target_analytes.values()) - set(index_by_parameter)
+        if missing_parameters:
+            raise SourceAdapterError(
+                "EarthChem analytical worksheet schema changed; missing="
+                + repr(sorted(missing_parameters))
+            )
+
+        counts = Counter()
+        coordinate_pairs: set[tuple[str, str]] = set()
+        emitted_samples: set[str] = set()
+        for row_number, row in data_rows[6:]:
+            sample_id = row[0].strip() if row else ""
+            if (
+                not sample_id
+                or sample_id not in samples
+                or sample_id in emitted_samples
+            ):
+                raise SourceAdapterError(
+                    f"EarthChem analytical sample changed at sheet3 row {row_number}"
+                )
+            emitted_samples.add(sample_id)
+            sample = samples[sample_id]
+            coordinate_pairs.add((sample["LATITUDE"], sample["LONGITUDE"]))
+            observations: dict[str, dict[str, Any]] = {}
+            for analyte, parameter in target_analytes.items():
+                index = index_by_parameter[parameter]
+                raw_value = row[index].strip() if index < len(row) else ""
+                try:
+                    float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"EarthChem {parameter} is not numeric at sheet3 row {row_number}"
+                    ) from exc
+                method = methods.get(parameter)
+                if (
+                    not method
+                    or method_codes[index].strip()
+                    != method.get("METHOD CODE", "").strip()
+                ):
+                    raise SourceAdapterError(
+                        f"EarthChem method linkage changed for {parameter}"
+                    )
+                technique = method.get("TECHNIQUE", "").strip()
+                instrument = method.get("INSTRUMENT", "").strip()
+                laboratory = method.get("LABORATORY", "").strip()
+                if not technique or not instrument or not laboratory:
+                    raise SourceAdapterError(
+                        f"EarthChem method evidence is incomplete for {parameter}"
+                    )
+                counts[analyte] += 1
+                observations[analyte] = {
+                    "field": parameter,
+                    "value": raw_value,
+                    "unit": units[index].strip(),
+                    "measurement_basis": "whole_rock_bulk_trace_element",
+                    "analytical_method": technique,
+                    "instrument": instrument,
+                    "laboratory": laboratory,
+                    "digestion_or_extraction": "",
+                    "variable_metadata_locator": (
+                        f"{downloaded.path.name}#sheet4-row={method['_row_number']}"
+                    ),
+                }
+            source_locator = f"{downloaded.path.name}#sheet3-row={row_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, sample_id, source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    **sample,
+                    "_target_observations": observations,
+                    "_source_file": downloaded.path.name,
+                    "_source_crs": "",
+                    "_medium": "rock",
+                    "_sample_type": "whole rock",
+                    "_grain_fraction": "",
+                    "_dataset_version": self.candidate.version,
+                    "_official_source_url": self.candidate.landing_page,
+                },
+            )
+        observed = {
+            "physical_rows": len(emitted_samples),
+            "distinct_coordinate_pairs": len(coordinate_pairs),
+            "target_observations": sum(counts.values()),
+            "target_value_counts": dict(sorted(counts.items())),
+        }
+        expected = self.candidate.registry_entry["expected_counts"]
+        if observed != expected:
+            raise SourceAdapterError(
+                f"EarthChem reconciliation changed: {observed!r} != {expected!r}"
             )
 
 
@@ -5423,21 +5947,49 @@ class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
         cache_dir: Path,
         mode: DownloadMode = "online",
     ) -> list[DownloadedFile]:
-        """Fetch a fixed Figshare file without persisting its signed redirect."""
+        """Fetch fixed Figshare files without persisting signed redirects."""
 
         if candidate.source_id != self.source_id:
             raise SourceAdapterError(
-                "Yangtze basin adapter received a candidate for another source"
+                f"{self.source_id} adapter received a candidate for another source"
             )
         if mode == "fixture":
             raise SourceAdapterError(
-                "use the checked-in Yangtze basin demo directly for fixture tests"
+                f"use the checked-in {self.source_id} demo directly for fixture tests"
             )
         root = self._cache_root(cache_dir)
         download_entry = candidate.registry_entry["download"]
-        file_entry = download_entry["files"][0]
+        file_entries = download_entry["files"]
+        return [
+            self._download_registered_file(
+                candidate,
+                root,
+                mode,
+                download_entry,
+                file_entry,
+                single_file=len(file_entries) == 1,
+            )
+            for file_entry in file_entries
+        ]
+
+    def _download_registered_file(
+        self,
+        candidate: DatasetCandidate,
+        root: Path,
+        mode: DownloadMode,
+        download_entry: Mapping[str, Any],
+        file_entry: Mapping[str, Any],
+        *,
+        single_file: bool,
+    ) -> DownloadedFile:
+        """Download and verify one registered member of a Figshare bundle."""
+
         output = root / file_entry["filename"]
-        manifest_path = root / "dataset.download.json"
+        manifest_path = root / (
+            "dataset.download.json"
+            if single_file
+            else f"{file_entry['file_id']}.download.json"
+        )
         expected_sha256 = str(file_entry["expected_sha256"])
         public_url = str(file_entry["url"])
 
@@ -5498,8 +6050,18 @@ class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
                 temporary_path: Path | None = None
                 try:
                     with opener.open(request, timeout=30.0) as response:
-                        redacted_storage_url = validate_figshare_storage_redirect(
-                            response.geturl(), file_id, filename
+                        resolved_url = response.geturl()
+                        # Some controlled egress proxies consume Figshare's
+                        # signed S3 redirect and stream the response under the
+                        # original public URL. That path carries no ephemeral
+                        # capability and is safe to record. A visible redirect
+                        # must still satisfy the strict host/path/query policy.
+                        redacted_storage_url = (
+                            public_url
+                            if resolved_url == public_url
+                            else validate_figshare_storage_redirect(
+                                resolved_url, file_id, filename
+                            )
                         )
                         content_type = response.headers.get_content_type().casefold()
                         downloader.validate_response_metadata(
@@ -5520,7 +6082,7 @@ class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
                             )
                         if total == 0 or observed != expected_sha256:
                             raise SourceAdapterError(
-                                "Figshare workbook bytes do not match the pinned SHA-256"
+                                f"Figshare file {file_entry['file_id']} bytes do not match the pinned SHA-256"
                             )
                         os.replace(temporary_path, output)
                         temporary_path = None
@@ -5551,7 +6113,7 @@ class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
                     OSError,
                 ) as exc:
                     raise SourceAdapterError(
-                        "Yangtze basin Figshare download failed without persisting "
+                        f"{self.source_id} Figshare download failed without persisting "
                         "the ephemeral storage capability"
                     ) from exc
                 finally:
@@ -5560,6 +6122,7 @@ class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
                 result.update(
                     {
                         "manifest_version": "geochemical-download-v1",
+                        "file_id": file_entry["file_id"],
                         "license": candidate.license_id,
                         "output_filename": output.name,
                         "offline": False,
@@ -5574,22 +6137,21 @@ class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
             download_entry["accepted_content_types"]
         ):
             raise SourceAdapterError(
-                f"Yangtze basin returned unexpected content type: {content_type}"
+                f"{self.source_id} returned unexpected content type: {content_type}"
             )
         if output.stat().st_size != int(file_entry["bytes"]):
-            raise SourceAdapterError("Yangtze basin workbook byte count changed")
-        return [
-            DownloadedFile(
-                source_id=self.source_id,
-                file_id=file_entry["file_id"],
-                path=output,
-                source_url=public_url,
-                bytes=int(result["bytes"]),
-                cache_status=str(result["status"]),
-                retrieved_at=result.get("accessed_at")
-                or result.get("cache_verified_at"),
+            raise SourceAdapterError(
+                f"{self.source_id} file {file_entry['file_id']} byte count changed"
             )
-        ]
+        return DownloadedFile(
+            source_id=self.source_id,
+            file_id=str(file_entry["file_id"]),
+            path=output,
+            source_url=public_url,
+            bytes=int(result["bytes"]),
+            cache_status=str(result["status"]),
+            retrieved_at=result.get("accessed_at") or result.get("cache_verified_at"),
+        )
 
     def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
         if len(files) != 1 or files[0].file_id != "records-workbook":
@@ -5683,6 +6245,216 @@ class FigshareYangtzeBasinSoilHeavyMetalsAdapter(_PinnedSingleFileAdapter):
         if observed != self.candidate.registry_entry["expected_counts"]:
             raise SourceAdapterError(
                 f"Yangtze basin reconciliation changed: {observed!r}"
+            )
+
+
+class FourTuNorthernChinaSedimentAdapter(FigshareYangtzeBasinSoilHeavyMetalsAdapter):
+    """Pinned 4TU workbook covering northern/western China sediments."""
+
+    source_id = "4tu-northern-china-sediment"
+
+    _METHODS: Mapping[str, Mapping[str, str]] = {
+        "As": {
+            "analytical_method": "hydride generation atomic fluorescence spectrometry (HG-AFS)",
+            "digestion_or_extraction": "aqua regia digestion",
+        },
+        "Cr": {
+            "analytical_method": "X-ray fluorescence spectrometry (XRF)",
+            "digestion_or_extraction": "fused pellet preparation",
+        },
+        "Cu": {
+            "analytical_method": "inductively coupled plasma mass spectrometry (ICP-MS)",
+            "digestion_or_extraction": "four-acid digestion (HF+HNO3+HClO4+aqua regia)",
+        },
+        "Ni": {
+            "analytical_method": "inductively coupled plasma mass spectrometry (ICP-MS)",
+            "digestion_or_extraction": "four-acid digestion (HF+HNO3+HClO4+aqua regia)",
+        },
+        "Pb": {
+            "analytical_method": "inductively coupled plasma mass spectrometry (ICP-MS)",
+            "digestion_or_extraction": "four-acid digestion (HF+HNO3+HClO4+aqua regia)",
+        },
+        "Zn": {
+            "analytical_method": "inductively coupled plasma mass spectrometry (ICP-MS)",
+            "digestion_or_extraction": "four-acid digestion (HF+HNO3+HClO4+aqua regia)",
+        },
+        "Hg": {
+            "analytical_method": "",
+            "digestion_or_extraction": "",
+            "method_missing_reason": "publisher_readme_does_not_map_hg_method",
+        },
+    }
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        required_files = {
+            "northern-china-workbook",
+            "methods-and-qc-readme",
+            "observed-regions-kml",
+        }
+        if set(by_id) != required_files:
+            raise SourceAdapterError(
+                "4TU northern-China adapter requires the registered workbook, "
+                "methods/QC README and observed-regions KML"
+            )
+        downloaded = by_id["northern-china-workbook"]
+        method_evidence = by_id["methods-and-qc-readme"]
+        region_evidence = by_id["observed-regions-kml"]
+        registry = self.candidate.registry_entry
+        expected_units = registry["target_units"]
+        sample_keys: set[str] = set()
+        coordinate_pairs: set[tuple[str, str]] = set()
+        sheet_counts: Counter[str] = Counter()
+        region_counts: Counter[str] = Counter()
+        target_counts: Counter[str] = Counter()
+
+        for contract in registry["sheet_contracts"]:
+            sheet_number = int(contract["sheet_number"])
+            sheet_label = str(contract["sheet_label"])
+            rows = TpdcChinaMountainSoilAdapter._xlsx_rows(
+                downloaded.path, sheet_number, "4TU northern China"
+            )
+            if len(rows) < 3:
+                raise SourceAdapterError(
+                    f"4TU worksheet {sheet_label} has no data population"
+                )
+            headers = rows[0][1]
+            units = rows[1][1]
+            required = set(registry["required_fields"])
+            if not required.issubset(headers):
+                raise SourceAdapterError(
+                    f"4TU worksheet {sheet_label} schema changed; "
+                    f"missing={sorted(required - set(headers))}"
+                )
+            unit_by_field = dict(
+                zip(
+                    headers,
+                    units + [""] * max(0, len(headers) - len(units)),
+                    strict=False,
+                )
+            )
+            if any(
+                unit_by_field.get(field) != expected_units[analyte]
+                for analyte, field in registry["target_analytes"].items()
+            ):
+                raise SourceAdapterError(
+                    f"4TU worksheet {sheet_label} target units changed"
+                )
+            for row_number, row in rows[2:]:
+                padded = row + [""] * max(0, len(headers) - len(row))
+                values = dict(zip(headers, padded, strict=False))
+                native_id = values["No."].strip()
+                sample_key = f"{sheet_label}|{native_id}"
+                if not native_id or sample_key in sample_keys:
+                    raise SourceAdapterError(
+                        f"4TU sample identity invalid at {sheet_label} row {row_number}"
+                    )
+                try:
+                    longitude = float(values["Longitude"])
+                    latitude = float(values["Latitude"])
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"4TU coordinate is not numeric at {sheet_label} row {row_number}"
+                    ) from exc
+                if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+                    raise SourceAdapterError(
+                        f"4TU coordinate is outside valid bounds at {sheet_label} row {row_number}"
+                    )
+                category = (
+                    values.get("Category", "").strip()
+                    if sheet_number == 1
+                    else "Chinese Loess Plateau"
+                )
+                if not category:
+                    raise SourceAdapterError(
+                        f"4TU surface-sediment region is missing at row {row_number}"
+                    )
+                observations: dict[str, dict[str, Any]] = {}
+                for analyte, field in registry["target_analytes"].items():
+                    raw_value = values[field].strip()
+                    try:
+                        float(raw_value)
+                    except ValueError as exc:
+                        raise SourceAdapterError(
+                            f"4TU {analyte} is not numeric at {sheet_label} row {row_number}"
+                        ) from exc
+                    method = self._METHODS[analyte]
+                    observations[analyte] = {
+                        "field": field,
+                        "value": raw_value,
+                        "unit": expected_units[analyte],
+                        "measurement_basis": "air_dried_homogenized_<75um_sediment_multi_method",
+                        "analytical_method": method.get("analytical_method", ""),
+                        "digestion_or_extraction": method.get(
+                            "digestion_or_extraction", ""
+                        ),
+                        "method_missing_reason": method.get(
+                            "method_missing_reason", ""
+                        ),
+                        "variable_metadata_locator": (
+                            "README.pdf#multi-method-analytical-scheme-and-quality-control"
+                        ),
+                    }
+                    target_counts[analyte] += 1
+                source_locator = (
+                    f"{downloaded.path.name}#sheet={sheet_label}&row={row_number}"
+                )
+                sample_keys.add(sample_key)
+                coordinate_pairs.add((values["Longitude"], values["Latitude"]))
+                sheet_counts[sheet_label] += 1
+                if sheet_number == 1:
+                    region_counts[category] += 1
+                yield RawRecord(
+                    source_id=self.source_id,
+                    source_record_id=stable_source_record_id(
+                        self.source_id, sample_key, source_locator
+                    ),
+                    source_locator=source_locator,
+                    fields={
+                        **values,
+                        "Latitude": format(latitude, ".12g"),
+                        "Longitude": format(longitude, ".12g"),
+                        "_physical_sample_id": sample_key,
+                        "_target_observations": observations,
+                        "_source_file": downloaded.path.name,
+                        "_official_source_url": self.candidate.landing_page,
+                        "_source_crs": "",
+                        "_medium": "sediment",
+                        "_sample_type": str(contract["sample_type"]),
+                        "_sediment_environment": str(contract["sediment_environment"]),
+                        "_survey_area": category,
+                        "_grain_fraction": "<75 µm",
+                        "_preparation": "air-dried, homogenized and sieved through a stainless-steel screen",
+                        "_reference_materials": (
+                            "GSS-1; GSS-2; GSS-17; GSS-19; GSS-25; GSS-26; GSS-27; "
+                            "GAu2a; GAu2b; GAu9a; GAu9b; GAu10a; GAu10b; "
+                            "GAu11a; GAu11b; GPt-1; GPt-2; GPt-7; GPt-8"
+                        ),
+                        "_dataset_qc_scope": (
+                            "3% field duplicates, blind laboratory replicates and SRMs; "
+                            "row-level QC assignments and acceptance results not published"
+                        ),
+                        "_method_evidence_file": method_evidence.path.name,
+                        "_method_evidence_url": method_evidence.source_url,
+                        "_method_evidence_sha256": method_evidence.sha256,
+                        "_region_evidence_file": region_evidence.path.name,
+                        "_region_evidence_url": region_evidence.source_url,
+                        "_region_evidence_sha256": region_evidence.sha256,
+                        "_dataset_version": self.candidate.version,
+                    },
+                )
+
+        observed = {
+            "physical_rows": len(sample_keys),
+            "sheet_row_counts": dict(sorted(sheet_counts.items())),
+            "surface_region_counts": dict(sorted(region_counts.items())),
+            "distinct_coordinate_pairs": len(coordinate_pairs),
+            "target_observations": sum(target_counts.values()),
+            "target_value_counts": dict(sorted(target_counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"4TU northern-China reconciliation changed: {observed!r}"
             )
 
 
@@ -6102,6 +6874,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
         ZenodoYangtzeYellowRiverSedimentAdapter
     ),
     GeorocArchaeanAdapter.source_id: GeorocArchaeanAdapter,
+    GeorocConvergentMarginsAdapter.source_id: GeorocConvergentMarginsAdapter,
     UsgsSoilAdapter.source_id: UsgsSoilAdapter,
     MarchemSnapshotAdapter.source_id: MarchemSnapshotAdapter,
     GemstatOpenArchiveAdapter.source_id: GemstatOpenArchiveAdapter,
@@ -6130,6 +6903,8 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocAntarcticaIntraplateAdapter.source_id: GeorocAntarcticaIntraplateAdapter,
     EidcNingboSoilAdapter.source_id: EidcNingboSoilAdapter,
     TpdcChinaMountainSoilAdapter.source_id: TpdcChinaMountainSoilAdapter,
+    EarthchemDehailonggangRockAdapter.source_id: EarthchemDehailonggangRockAdapter,
+    FourTuNorthernChinaSedimentAdapter.source_id: FourTuNorthernChinaSedimentAdapter,
     PangaeaBrasolNeBrazilSoilAdapter.source_id: PangaeaBrasolNeBrazilSoilAdapter,
     FigshareYangtzeBasinSoilHeavyMetalsAdapter.source_id: (
         FigshareYangtzeBasinSoilHeavyMetalsAdapter

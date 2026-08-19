@@ -28,6 +28,11 @@
       "pattern": "^https?://",
       "description": "HTTPS is preferred. The evidence builder accepts the legacy FOREGS HTTP publisher only when source_file_sha256 is pinned."
     },
+    "official_source_url": {
+      "type": ["string", "null"],
+      "pattern": "^https?://",
+      "description": "Clickable official dataset page, download URL or DOI bound to the canonical record. This may differ from source_file_url when acquisition uses a POST endpoint."
+    },
     "evidence_version": {"type": ["string", "null"]},
     "evidence_status": {"type": ["string", "null"]},
     "source_metadata_record_id": {

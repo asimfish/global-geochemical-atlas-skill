@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:request-execution:v5",
+  "$id": "urn:global-geochemical-atlas:request-execution:v6",
   "title": "Request-driven atlas execution evidence",
   "type": "object",
   "additionalProperties": false,
@@ -15,6 +15,7 @@
     "geology_grid",
     "record_counts",
     "source_outcomes",
+    "acquisition_scheduler",
     "acquisition_manifests",
     "route_status",
     "coverage_status",
@@ -24,7 +25,7 @@
     "warnings"
   ],
   "properties": {
-    "execution_version": {"const": "geochemical-request-execution-v5"},
+    "execution_version": {"const": "geochemical-request-execution-v6"},
     "status": {"type": "string", "enum": ["success", "partial_success"]},
     "mode": {"type": "string", "minLength": 1},
     "analysis_profile": {"type": "string", "enum": ["demo", "production"]},
@@ -49,7 +50,7 @@
         "deadline_policy"
       ],
       "properties": {
-        "official_task_limit_seconds": {"const": 43200.0},
+        "official_task_limit_seconds": {"const": 900.0},
         "internal_budget_seconds": {"type": "number", "minimum": 1, "maximum": 43200},
         "workflow_reserve_seconds": {"type": "number", "minimum": 5},
         "elapsed_seconds": {"type": "number", "minimum": 0},
@@ -141,6 +142,27 @@
             }
           }
         ]
+      }
+    },
+    "acquisition_scheduler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy", "source_order_offset", "priority_source_ids", "effective_source_ids"
+      ],
+      "properties": {
+        "policy": {"const": "gap-priority-then-coverage-balanced-round-robin-v2"},
+        "source_order_offset": {"type": "integer", "minimum": 0},
+        "priority_source_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}
+        },
+        "effective_source_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}
+        }
       }
     },
     "acquisition_manifests": {

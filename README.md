@@ -9,14 +9,14 @@
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#-90-秒快速开始)
 [![Runtime Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-%E9%9B%B6%E7%AC%AC%E4%B8%89%E6%96%B9-brightgreen)](#-90-秒快速开始)
-[![Tests](https://img.shields.io/badge/tests-418%20%2B%2075%20%2B%2081%20passing-brightgreen)](#-开发与验证)
+[![Tests](https://img.shields.io/badge/tests-504%20%2B%2075%20%2B%20105%20passing-brightgreen)](#-开发与验证)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-在你的-ai-agent-中使用)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 [🌐 在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
 [🚀 快速开始](#-90-秒快速开始) ·
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
-[🧭 数据来源](#-数据来源22-个已冻结来源) ·
+[🧭 数据来源](#-数据来源33-个已冻结可执行来源--65-条审计目录记录) ·
 [📦 输出产物](#-十六个输出产物) ·
 [❓ FAQ](#-faq)
 
@@ -40,7 +40,7 @@
 
 | 你关心的 | 它给你的 |
 |---|---|
-| 数据从哪来 | 31 个已冻结、可执行的公开来源与 63 个审计候选（岩石/土壤/沉积物/水体）；正式记录逐条绑定 DOI/URL、版本、许可、定位与文件 SHA-256 |
+| 数据从哪来 | 65 条审计目录记录，其中 33 个已冻结、可执行公开来源、32 个 discovery-only 候选（岩石/土壤/沉积物/水体）；正式记录逐条绑定 DOI/URL、版本、许可、定位与文件 SHA-256 |
 | 数值和证据能不能用 | 原值永不覆盖、删失值不插补、批次 QC 逐条重算；来源证据/分析就绪度/空间可用性/工作流可用性分开报告 |
 | 结论敢不敢用 | 异常只作筛查候选并列出竞争解释；跑不齐的范围诚实报告缺口，绝不冒充全量覆盖 |
 | 能不能复用 | 40+ JSON Schema、十六文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接 |
@@ -97,7 +97,7 @@ cp -r skills/global-geochemical-atlas ~/.codex/skills/
 
 挂载后直接向 Agent 提出诉求即可触发，例如：*「用公开数据做一张西欧土壤砷分布图，标出候选富集区并给出来源和置信度」*。
 
-- 激活边界与示例：[`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json)（含 4 条应激活/不应激活样例）
+- 激活边界与示例：[`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json)（含 3 条应激活与 3 条相邻不应激活样例）
 - 平台元数据：[`agents/openai.yaml`](skills/global-geochemical-atlas/agents/openai.yaml) · 能力卡片：[`skill-card.md`](skills/global-geochemical-atlas/skill-card.md)
 - Agent 的完整执行合同（状态机、门禁、失败状态）：[`SKILL.md`](skills/global-geochemical-atlas/SKILL.md)
 
@@ -116,7 +116,11 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
 
 D2 最低分析字段是 `element_or_analyte,value,unit,medium`；完整证据工作流还要求 `source_id,source_locator,license`。非标准列名必须通过显式 schema map 映射，不能靠语义猜测。正式科学运行还应提供样品标识、measurement basis、WGS84/原 CRS、分析与消解方法、检出限、来源层级及文件 SHA-256。
 
-### ② 在线采集与数据充分性循环（正式研究默认）
+### ② 在线采集与数据充分性循环
+
+官方自动评审未另给时限时，先生成任务合同并保留 `deadline_seconds=900`；`task_router.py` 会生成 720 秒内部在线检查点，给 Agent 启动、验证和回复预留 180 秒。检查点仍生成可评分的核心产物并如实报告缺口，但不能冒充完整全球研究。
+
+以下直接命令只用于用户或平台明确授权的小时级扩展研究：
 
 ```bash
 python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
@@ -127,7 +131,7 @@ python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
   --output-dir /tmp/geochemical-online
 ```
 
-`auto` 先审计哪些平台真正包含请求的元素、介质与区域，再按“新增空间区 × 介质证据 + 独立血缘”顺序在线尝试并验证 manifest/SHA-256。默认研究上限为 12 小时，以 30 分钟为一轮；轮后审计总体、每个元素、每种介质及每个元素 × 介质地图视图，不足且仍有真实扩采空间时继续下一轮。全球使用陆地国家/大区和海洋扇区，国家或 bbox 按范围选择 5° 至 0.25° 网格。缺口写入 `d1_repair_queue.json`，给出范围、维度、候选来源和 fallback chain。时间只是安全停机线，不替代数据充分性门禁；规则由请求和实际观测派生，不按示例国家逐条打补丁，也不靠重复同源空转。
+`auto` 先审计哪些平台真正包含请求的元素、介质与区域，再按“新增空间区 × 介质证据 + 独立血缘”顺序在线尝试并验证 manifest/SHA-256。官方任务合同未给时限时使用 900 秒外部上限并产出可复核检查点；操作者明确授权的扩展研究才使用最长 12 小时、每轮 30 分钟的循环。轮后审计总体、每个元素、每种介质及每个元素 × 介质地图视图，不足且仍有真实扩采空间时继续下一轮。全球使用陆地国家/大区和海洋扇区，国家或 bbox 按范围选择 5° 至 0.25° 网格。缺口写入 `d1_repair_queue.json`，给出范围、维度、候选来源和 fallback chain。时间只是安全停机线，不替代数据充分性门禁；规则由请求和实际观测派生，不按示例国家逐条打补丁，也不靠重复同源空转。
 
 正式研究交付还需通过：
 
@@ -190,16 +194,16 @@ flowchart LR
 
 第五项赛题交付「可复用 Skill 文档」即 [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) 本体与其 schema、脚本和 fixture。
 
-## 🧭 数据来源（31 个已冻结、可执行来源 · 63 个审计候选）
+## 🧭 数据来源（33 个已冻结可执行来源 · 65 条审计目录记录）
 
 | 介质 | 已冻结来源 |
 |---|---|
-| 🪨 岩石 | GEOROC（太古宙克拉通汇编 · 南极板内火山岩） |
+| 🪨 岩石 | GEOROC（太古宙克拉通汇编 · 南极板内火山岩）· EarthChem Library 3338（中国东昆仑德海龙岗岩石，方法完整的局地来源） |
 | 🌱 土壤 | USGS DS801（美国本土）· GEMAS（欧洲）· FOREGS 表土/底土/腐殖质 · AfSIS Phase I（撒哈拉以南非洲）· PANGAEA 北非/巴伦支海沿岸/Amazonas/Batagay · TPDC 中国山地 · EIDC 宁波 |
-| 🏞️ 沉积物 | FOREGS 河流/洪泛平原沉积物 · GSJ 日本地球化学图/日本海洋沉积物 · 澳大利亚 NGSA（多元素与 Hg 产品）· 挪威 MarChem · PANGAEA 阿拉伯海/东海/南海 · Zenodo 长江/黄河沉积物（在线适配 + 中国区域 fixture） |
+| 🏞️ 沉积物 | FOREGS 河流/洪泛平原沉积物 · GSJ 日本地球化学图/日本海洋沉积物 · 澳大利亚 NGSA（多元素与 Hg 产品）· 挪威 MarChem · PANGAEA 阿拉伯海/东海/南海 · Zenodo 长江/黄河沉积物 · 4TU 中国北方/西北沉积物（准噶尔、塔里木、柴达木、河套、阿拉善与青藏高原东部） |
 | 💧 水体 | FOREGS 河水 · GEMStat 全球内陆水 · GEOTRACES IDP2025 海水 · 美国 WQP 萨克拉门托河（As） |
 
-31 个 executable source 是已经完成下载、解析与契约实现的来源；63 个 catalog candidate 是完整发现组合，其中仍包括许可、接口、区域或字段证据待核验的候选，不能与正式入库来源相加。每个 executable source 的 DOI、版本、许可、科研使用条件、字段边界与八维证据评分记录在[来源目录](skills/global-geochemical-atlas/references/data-sources.md)、[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[许可引用说明](skills/global-geochemical-atlas/references/licenses-and-citations.md)；中国区域 fixture 的登记与重建见[中国区域 fixture](skills/global-geochemical-atlas/references/china-fixture.md)。EarthChem 等联邦检索站作为**发现层**使用：只有追溯到原始记录后才能作测量证据。
+33 个 executable source 已完成版本冻结、下载/解析契约与证据评分；65 条 catalog 记录是总目录，其中另外 32 条仍为 discovery-only，不能与正式入库来源重复相加。每个 executable source 的 DOI、版本、许可、科研使用条件、字段边界与八维证据评分记录在[来源目录](skills/global-geochemical-atlas/references/data-sources.md)、[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[许可引用说明](skills/global-geochemical-atlas/references/licenses-and-citations.md)；中国区域 fixture 的登记与重建见[中国区域 fixture](skills/global-geochemical-atlas/references/china-fixture.md)。EarthChem Portal/Library 总入口仍只作发现层；只有像已固定到 DOI、文件、成员 hash 与原始行的 dataset 3338 才能作为测量证据。
 
 ## 🛡️ 科学护栏
 
@@ -296,7 +300,7 @@ python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
   --output-dir /tmp/atlas-loop
 ```
 
-控制器先做早期门禁，每轮独立产出并校验十六文件，再评估元素 × 介质、来源血缘与集中度、在线成功率、测定行/独立样品、溯源、四维可用性、异常背景及各筛选视图的空间广度。空间失败会生成精确修复队列，要求 Agent 尝试已注册候选或留下定向发现证据，不能用其他区域数据掩盖。默认最多 24 个 30 分钟轮次、累计不超过 12 小时；短于一个完整轮次的在线运行必须标记 `--checkpoint-only`。只有队列清空、Skill 快照一致且 `validate_research_delivery.py` 通过才是正式完成。协议详见[迭代闭环](skills/global-geochemical-atlas/references/iteration-loop.md)与[空间覆盖门禁](skills/global-geochemical-atlas/references/global-spatial-coverage.md)。
+控制器先做早期门禁，每轮独立产出并校验十六文件，再评估元素 × 介质、来源血缘与集中度、在线成功率、测定行/独立样品、溯源、四维可用性、异常背景及各筛选视图的空间广度。空间失败会生成精确修复队列，要求 Agent 尝试已注册候选或留下定向发现证据，不能用其他区域数据掩盖。显式扩展研究最多 24 个 30 分钟轮次、累计不超过 12 小时；官方 900 秒任务由 `task_router.py` 预留交接时间并标记检查点。短于一个完整轮次的在线运行必须标记 `--checkpoint-only`。只有队列清空、Skill 快照一致且 `validate_research_delivery.py` 通过才是正式完成。协议详见[迭代闭环](skills/global-geochemical-atlas/references/iteration-loop.md)与[空间覆盖门禁](skills/global-geochemical-atlas/references/global-spatial-coverage.md)。
 
 </details>
 

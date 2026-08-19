@@ -37,6 +37,8 @@ BROWSER_CANDIDATES = (
     "msedge",
 )
 RENDER_ATTEST_MARKER = "data-gca-render-attest"
+PLANAR_WORLD_POLICY = "single-world-no-repeat-v1"
+REGIONAL_PLANAR_POLICY = "regional-bounded-antimeridian-v1"
 BANNER_MARKER = f'id="{map_builder.REPORTED_BANNER_ID}"'
 REPORTED_MODE_MARKER = '"coordinate_mode":"reported"'
 SVG_GRAPHIC_PATTERN = re.compile(
@@ -265,6 +267,38 @@ def render_smoke(html_path: Path) -> dict[str, Any]:
         and screenshot.get("distinct_quantized_colors", 0) >= MIN_DISTINCT_COLORS
     )
     attest_symbols = int(attest.get("symbols", 0)) if isinstance(attest, dict) else 0
+    if isinstance(attest, dict) and attest.get("view") == "map2d":
+        spatial_scope = attest.get("spatial_scope")
+        expected_policy = (
+            REGIONAL_PLANAR_POLICY
+            if spatial_scope == "regional"
+            else PLANAR_WORLD_POLICY
+        )
+        if attest.get("planar_navigation_policy") != expected_policy:
+            reasons.append(
+                "2D map does not attest the expected planar navigation policy"
+            )
+        bounds = attest.get("view_bounds")
+        if not isinstance(bounds, dict):
+            reasons.append("2D world map render attestation lacks view_bounds")
+        else:
+            try:
+                west = float(bounds["w"])
+                east = float(bounds["e"])
+            except (KeyError, TypeError, ValueError):
+                reasons.append(
+                    "2D world map render attestation has invalid longitude bounds"
+                )
+            else:
+                if spatial_scope == "global" and (
+                    attest.get("world_wrap_policy") != PLANAR_WORLD_POLICY
+                    or west < -180.000001
+                    or east > 180.000001
+                    or east - west > 360.000001
+                ):
+                    reasons.append(
+                        "2D world map longitude bounds permit an adjacent repeated world"
+                    )
     banner_present = BANNER_MARKER in dom
     if dom_rc != 0:
         reasons.append(f"headless DOM dump failed (rc={dom_rc})")
@@ -627,6 +661,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
                 "regional_combination_scope_lock_supported",
                 "comparison_profile_export",
                 "formal_comparison_requires_profile_rerender",
+                "single_world_no_repeat_planar_navigation",
             )
             for capability in required_interactions:
                 if interaction_design.get(capability) is not True:

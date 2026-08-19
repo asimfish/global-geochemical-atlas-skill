@@ -42,6 +42,7 @@ DEFAULT_GEOLOGY_SHA256 = (
 )
 PARAMETERIZED_SOURCES = {
     "georoc-archaean",
+    "georoc-convergent-margins",
     "usgs-conus-soil",
     "foregs-topsoil",
     "foregs-subsoil",
@@ -58,6 +59,7 @@ PARAMETERIZED_SOURCES = {
     "pangaea-batagay-soil",
     "pangaea-brasol-ne-brazil-soil",
     "figshare-yangtze-basin-soil-heavy-metals",
+    "4tu-northern-china-sediment",
 }
 # These sources support request-element filtering but deliberately do not
 # accept a bbox.  In particular, the GSJ marine table keeps its reported
@@ -74,6 +76,7 @@ SCALABLE_BALANCED_SOURCES = {
     "japan-gsj-geochemical-map",
     "pangaea-amazonas-soil",
     "pangaea-batagay-soil",
+    "4tu-northern-china-sediment",
 }
 # These long-form sources have verified but intentionally unequal per-analyte
 # populations.  Their capacity is the sum of requested analyte counts, not the
@@ -105,6 +108,7 @@ SLICE_DIVISORS = {
     "pangaea-barents-c-horizon-soil": 4,
     "georoc-antarctica-intraplate": 6,
     "tpdc-china-mountain-soil": 5,
+    "earthchem-dehailonggang-rock": 5,
     "gemas-europe": 13,
     "zenodo-yangtze-yellow-river-sediment": 6,
     "eidc-ningbo-soil": 4,
@@ -217,6 +221,7 @@ def write_execution_progress(
     acquisition_warnings: Sequence[str],
     *,
     source_order_offset: int = 0,
+    priority_source_ids: Sequence[str] = (),
     complete: bool = False,
 ) -> None:
     """Checkpoint D1 attempts so a controller timeout cannot erase their evidence."""
@@ -224,11 +229,12 @@ def write_execution_progress(
     write_json(
         output_dir / "request_evidence" / "execution_progress.json",
         {
-            "progress_version": "geochemical-request-progress-v1",
+            "progress_version": "geochemical-request-progress-v2",
             "stage": "source_acquisition",
             "requested_source_ids": list(requested_source_ids),
             "source_order_offset": source_order_offset,
-            "source_order_policy": "coverage-balanced-then-round-robin-v1",
+            "priority_source_ids": list(priority_source_ids),
+            "source_order_policy": "gap-priority-then-coverage-balanced-round-robin-v2",
             "source_outcomes": [dict(item) for item in source_outcomes],
             "acquisition_warnings": list(acquisition_warnings),
             "complete": complete,
@@ -388,7 +394,11 @@ def _geology_labels(
                 str(row.get(field) or "")
                 for field in ("material", "sediment_environment")
             ).casefold()
-            if medium != "water" and not (
+            water_is_marine = (
+                medium == "water"
+                and spatial_scope.record_spatial_domain(row) == "marine"
+            )
+            if not water_is_marine and not (
                 medium == "sediment" and "marine" in sediment_context
             ):
                 try:
@@ -997,7 +1007,7 @@ def planned_slice_observations(
     elif source_id == "usgs-conus-soil":
         balance_size = 3 * analyte_count
         observations = balance_size * per_analyte_observations
-    elif source_id == "georoc-archaean":
+    elif source_id in {"georoc-archaean", "georoc-convergent-margins"}:
         balance_size = analyte_count
         observations = balance_size * per_analyte_observations
     elif source_id in SLICE_DIVISORS:
@@ -1125,7 +1135,7 @@ def acquire_online_source(
 
 
 def minimum_source_records(source_id: str, analyte_count: int) -> int:
-    if source_id == "georoc-archaean":
+    if source_id in {"georoc-archaean", "georoc-convergent-margins"}:
         return analyte_count
     if source_id == "usgs-conus-soil":
         return 3 * analyte_count
@@ -1466,6 +1476,30 @@ def rotate_source_order(source_ids: Sequence[str], offset: int) -> list[str]:
     return ordered[normalized_offset:] + ordered[:normalized_offset]
 
 
+def prioritize_source_order(
+    source_ids: Sequence[str], priority_source_ids: Sequence[str]
+) -> tuple[list[str], list[str]]:
+    """Move routed gap-repair sources to the front without changing membership.
+
+    The self-correction controller derives ``priority_source_ids`` from the
+    preceding round's machine-audited repair plan.  Keeping this operation
+    separate from routing is important: a gap target may change scheduling,
+    but it cannot make an incompatible or unregistered source executable.
+    Missing priority IDs are returned for explicit audit rather than silently
+    ignored.
+    """
+
+    ordered = list(dict.fromkeys(str(source_id) for source_id in source_ids))
+    priorities = list(
+        dict.fromkeys(str(source_id) for source_id in priority_source_ids if source_id)
+    )
+    available = set(ordered)
+    applied = [source_id for source_id in priorities if source_id in available]
+    missing = [source_id for source_id in priorities if source_id not in available]
+    applied_set = set(applied)
+    return applied + [item for item in ordered if item not in applied_set], missing
+
+
 def request_visualization_profile(
     request: Mapping[str, Any], resolved_region: Mapping[str, Any]
 ) -> dict[str, Any]:
@@ -1486,6 +1520,10 @@ def request_visualization_profile(
         adjacent_marine = bool(
             resolved_region.get("country_code") and "marine" in spatial_domains
         )
+        analysis_country_codes = list(
+            resolved_region.get("analysis_country_codes") or []
+        )
+        multi_country_analysis = len(analysis_country_codes) > 1
         profile["spatial_scope"] = "regional"
         profile["default_region"] = "custom"
         profile["custom_region"] = {
@@ -1498,16 +1536,25 @@ def request_visualization_profile(
             # D1 already performed the domain-aware polygon/distance gate. A
             # second strict Admin-0 clip in D3 would erase accepted sea rows.
             "country_code": (
-                None if adjacent_marine else resolved_region.get("country_code")
+                None
+                if adjacent_marine or multi_country_analysis
+                else resolved_region.get("country_code")
             ),
         }
-        profile["title"] = f"{resolved_region['label']}地球化学分布与证据"
+        profile["title"] = f"{resolved_region['label']}地球化学元素图谱"
         if adjacent_marine:
             profile["subtitle"] = (
                 f"范围 = 冻结 Admin-0 陆地边界 + 距其边界不超过 "
                 f"{request.get('adjacent_marine_distance_km')} km 的来源明确标注海洋观测；"
                 "该分析缓冲区不表示领海、EEZ 或主权边界。"
             )
+        if resolved_region.get("cartographic_reference"):
+            reference = resolved_region["cartographic_reference"]
+            profile["subtitle"] = (
+                f"{profile.get('subtitle', '')} 科学点位筛选包含 "
+                f"{','.join(analysis_country_codes)} 分析单元；这不是法定或主权边界。"
+                f"中国完整制图以自然资源部标准地图 {reference['review_number']} 为准。"
+            ).strip()
     if len(request["elements"]) == 1:
         profile["filters"]["element"] = request["elements"][0]
     if len(request["media"]) == 1:
@@ -1855,6 +1902,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         "normalization so deferred tail sources receive an early "
                         "attempt in later controller rounds"
                     )
+                requested_ids, missing_priority_ids = prioritize_source_order(
+                    requested_ids, args.priority_source_id
+                )
+                if args.priority_source_id:
+                    acquisition_warnings.append(
+                        "previous-round gap repair moved routed sources to the front: "
+                        + ", ".join(
+                            source_id
+                            for source_id in args.priority_source_id
+                            if source_id in set(requested_ids)
+                        )
+                    )
+                if missing_priority_ids:
+                    acquisition_warnings.append(
+                        "gap-priority sources were not executable in this frozen route or "
+                        "were omitted by its record ceiling: "
+                        + ", ".join(missing_priority_ids)
+                    )
             else:
                 requested_ids = [args.online_source]
             unknown = sorted(set(requested_ids) - set(selected_ids))
@@ -1968,6 +2033,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         requested_ids,
                         acquisition_warnings,
                         source_order_offset=args.source_order_offset,
+                        priority_source_ids=args.priority_source_id,
                     )
                 except (
                     OSError,
@@ -1992,6 +2058,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         requested_ids,
                         acquisition_warnings,
                         source_order_offset=args.source_order_offset,
+                        priority_source_ids=args.priority_source_id,
                     )
             failed_ids = [
                 item["source_id"]
@@ -2270,7 +2337,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             },
         )
     execution = {
-        "execution_version": "geochemical-request-execution-v5",
+        "execution_version": "geochemical-request-execution-v6",
         "status": "partial_success" if execution_partial else "success",
         "mode": mode,
         "analysis_profile": args.analysis_profile,
@@ -2306,6 +2373,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "after_request_filters": selected_count,
         },
         "source_outcomes": source_outcomes,
+        "acquisition_scheduler": {
+            "policy": "gap-priority-then-coverage-balanced-round-robin-v2",
+            "source_order_offset": args.source_order_offset,
+            "priority_source_ids": list(args.priority_source_id),
+            "effective_source_ids": requested_ids,
+        },
         "acquisition_manifests": retained_acquisition_manifests,
         "route_status": route["status"],
         "coverage_status": matrix["overall_status"],
@@ -2338,6 +2411,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             requested_ids,
             acquisition_warnings,
             source_order_offset=args.source_order_offset,
+            priority_source_ids=args.priority_source_id,
             complete=True,
         )
     return execution
@@ -2400,12 +2474,23 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--priority-source-id",
+        action="append",
+        default=[],
+        help=(
+            "Move one routed source to the front of this round's acquisition queue; "
+            "repeat for multiple machine-audited gap-repair candidates. This changes "
+            "scheduling only and never bypasses source routing or the record ceiling."
+        ),
+    )
+    parser.add_argument(
         "--total-timeout-seconds",
         type=float,
-        default=execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS,
+        default=execution_budget.OFFICIAL_TASK_LIMIT_SECONDS,
         help=(
             "Monotonic budget for one acquisition/workflow round "
-            "(default 1800; maximum 43200)"
+            "(default 900 competition envelope; maximum 43200 only when "
+            "explicitly authorized)"
         ),
     )
     parser.add_argument(

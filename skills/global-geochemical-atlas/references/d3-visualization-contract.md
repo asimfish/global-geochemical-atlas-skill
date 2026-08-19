@@ -49,7 +49,7 @@ anomaly_report.json
 若存在 `record_evidence.jsonl`，渲染包一并保留。全球产物选择 `global_globe`，区域产物选择
 `regional_focus`；两者共用同一模板契约而不是两份漂移的 HTML。`geochemistry.csv` 至少包含记录 ID、元素、介质、
 标准值/单位、坐标、QC、置信度、来源 ID 和来源定位。坐标为空、非有限或超出 WGS84 的记录不进入
-地图，但继续保留在数据库和 QC 报告。超过 `--max-points` 时失败关闭，不抽样冒充完整结果。
+地图，但继续保留在数据库和 QC 报告。`--max-points` 是输入安全上限（默认 200,000）；`--max-embedded-records` 默认同为 200,000，因此请求上限内的可绘记录默认全部内嵌。二者不得混用：前者约束输入，后者仅在操作者显式调低时启用浏览器预览。预览必须写抽取证明，不能冒充完整结果。全量内嵌不等于每帧绘制全部点；二维和地球仪按当前视图采用像素级 LOD，只合并过密视觉符号，筛选、搜索、聚合统计和 CSV 仍全量。
 
 核心十六产物目录还包含 `sources_and_confidence.json`、`batch_acceptance.csv`、`batch_qc_report.json`、`anomaly_regions.geojson`、
 `spatial_anomaly_report.json`。D3 在它们存在时必须原样嵌入/复制并展示；独立兼容模式要求上方七个最小输入，缺少统计区域时只能显示记录级候选和显示聚合，不能补造 FDR 结果。
@@ -91,12 +91,15 @@ anomaly_report.json
 
 | 调研范围 | `spatial_scope` | `default_region` | D3 输出行为 |
 |---|---|---|---|
-| 全球分布、跨洲总览 | `global` | 必须为 `global` | `global_globe`：二维世界地图 + 三维地球仪，嵌入全部可上图记录 |
+| 全球分布、跨洲总览 | `global` | 必须为 `global` | `global_globe`：二维世界地图 + 三维地球仪；小数据嵌入全部可上图记录，大数据嵌入可审计的覆盖保持预览 |
 | 国家、城市、流域、矿区 | `regional` | 非 `global` 预设或 `custom` | `regional_focus`：只嵌入严格范围内记录，锁定区域入口且不显示地球仪 |
 
 区域参数接受 `usa48`、`shanghai`、`europe` 三个研究预设，以及随 Skill 冻结的 Natural Earth
 Admin‑0 国家名称、常用中英文别名或 ISO-3。国家范围使用固定多边形与最小圆周 bbox 联合判定，
 避免普通 bbox 误纳邻国样点，并正确支持 Fiji 等跨日期变更线国家；研究预设仍按其冻结边界执行。
+全球二维地图使用 `single-world-no-repeat-v1` 导航策略：初始范围和缩放上限均不超过 360°，横向拖动与键盘平移在
+`[-180°, 180°]` 停止，不在画布旁复制第二个世界。需要连续跨日期变更线旋转时切换三维地球仪；区域产物使用
+`regional-bounded-antimeridian-v1` 策略，仍按冻结区域范围约束并保留 `w > e` 的跨日期变更线语义。
 非国家研究范围使用 `default_region=custom`，并填写 WGS84 `custom_region.label` 与
 `bounds={w,s,e,n}`；`w>e` 表示跨日期变更线。区域模式下：
 
@@ -120,6 +123,8 @@ Admin‑0 国家名称、常用中英文别名或 ISO-3。国家范围使用固�
 只把用户明确指定的元素、介质、地质单元等写入 `filters`。不要为了让地图“看起来有数据”而取消
 无匹配筛选；保留该值，使页面显示覆盖缺口，并在 `profile_warnings` 中报告。自定义区域必须写明
 WGS84 `W,S,E,N`；国家预设与 bbox 预设必须在报告中明确 `clip_method`。
+
+逐记录详情必须把“空间匹配地质单元”与“发布方地质 / 沉积背景”分开。后者可来自发布方直报的岩性、土层、沉积环境、水体类型、构造背景或调查区描述；它用于说明背景证据并避免把“未完成 polygon join”误写成“没有任何背景”，但不得升级为正式地质单元或空间匹配成功。区域字段完整度同时显示地质 / 环境背景覆盖率，正式单元覆盖率仍可单独审计。
 
 ## 5. 单命令生成
 
@@ -172,7 +177,7 @@ python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 核心 D3 输出：
 
 - `interactive_map.html`：任务配置驱动、离线、自包含的交互地图；
-- `samples.geojson`：一条 feature 对应一条当前空间产物内的合格坐标测定记录；区域模式只含 bbox 内记录。为避免十万级地图重复整张标准库，feature properties 采用 `d3-map-sample-properties-v3` 最小空间交换字段（元素、介质、值、单位、来源、坐标口径、整体工作流档位与异常标记），并以 `record_id` 无损连接 `geochemistry.csv` 中的完整置信度维度、QC、原值、方法、证据定位和来源链接；记录不抽样、不聚合；
+- `samples.geojson`：一条 feature 对应一条当前空间产物内的合格坐标测定记录；区域模式先严格按 bbox/国家多边形裁剪。可上图记录不超过 `--max-embedded-records` 时全量嵌入；超过时使用 `d3-coverage-preserving-preview-v1` 确定性选择，保留全部异常记录、任何入选物理样品的全部元素测定，并优先覆盖来源 × 介质 × 元素 × 5°空间格，再以稳定 hash 补足。feature properties 采用 `d3-map-sample-properties-v3` 最小空间交换字段，并以 `record_id` 无损连接完整 `geochemistry.csv`。GeoJSON 和报告必须写 input/output 记录数、物理样品数、阈值、分层粒度与声明边界；这是一种浏览器性能预览，不是完整库、随机样本或统计代表性样本；
 - `visualization_profile.json`：本次可复现任务配置；
 - `visualization_report.json`：输入哈希、配置、警告、地图计数和失败边界，结构见
   [visualization-report.schema.json](visualization-report.schema.json)；
@@ -219,8 +224,8 @@ profile 触发的结构化研究产物：
 每个视图都声明 `question`、`comparison_baseline`、`encoding` 和 `boundary`；页面标题与图形必须能回到这四项，
 不能先选图再事后编造解释。
 
-页面数据库预览只浏览 HTML 内嵌的可上图记录，完整数据库始终以原样保留的 `geochemistry.csv` 为准。
-全球页面须分别报告完整记录、可上图记录和坐标失败记录；区域页面还须报告范围外未嵌入记录，不能让用户误以为
+页面数据库预览只浏览 HTML/GeoJSON 内嵌的可上图记录，完整数据库始终以原样保留的 `geochemistry.csv` 为准。
+全球页面须分别报告完整记录、全库可上图记录、实际内嵌预览记录和坐标失败记录；区域页面还须报告范围外未嵌入记录，不能让用户误以为
 全球数据库被裁成了区域数据库。置信度等级和分量汇总来自完整 D2 `confidence_report.json`，不随地图筛选变化；
 区域页面的来源卡片和记录预览则只统计当前空间产物。两种统计口径必须在页面中并列说明。
 
@@ -233,7 +238,7 @@ profile 触发的结构化研究产物：
 - 元素、区域、地质单元、介质、来源和置信度筛选是否真实生效；
 - 分布、密度、元素组合和异常四类视图是否仍可切换；
 - 四项交付物是否在首屏形成一级入口，数据库和置信度是否能在页面内直接核验，而不只是下载文件；
-- 数据库完整记录、内嵌可上图记录、区域排除记录与坐标失败记录是否对账；
+- 数据库完整记录、全库可上图记录、覆盖保持预览记录、区域排除记录与坐标失败记录是否对账；抽样证明是否保留全部异常候选和入选物理样品的元素组合；
 - 数据库含量直方图、元素×介质矩阵和字段完整率是否由当前输入生成并随检索更新；
 - 数据库工作台是否支持查、排序、分页、地图定位及增/改/逻辑删除提案，且导出修订包不改写 canonical CSV；
 - 置信度五分量、权重、均值、等级分布、门控和“不是概率”边界是否清楚；

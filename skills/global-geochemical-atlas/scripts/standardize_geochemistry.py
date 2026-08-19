@@ -2136,9 +2136,17 @@ def apply_spatial_geology(
             str(record.get(field) or "")
             for field in ("material", "sediment_environment")
         ).casefold()
-        if medium == "water":
-            statuses["not_applicable_water"] += 1
-            record["geology_missing_reason"] = "not_applicable_water"
+        water_context = " ".join(
+            str(record.get(field) or "")
+            for field in ("material", "water_body_type", "water_fraction")
+        ).casefold()
+        marine_water = medium == "water" and any(
+            token in water_context
+            for token in ("marine", "ocean", "seawater", "sea water")
+        )
+        if marine_water:
+            statuses["not_applicable_marine_water"] += 1
+            record["geology_missing_reason"] = "not_applicable_marine_water"
         elif medium == "sediment" and "marine" in sediment_context:
             statuses["not_applicable_marine_sediment"] += 1
             record["geology_missing_reason"] = "not_applicable_marine_sediment"
@@ -2179,7 +2187,8 @@ def apply_spatial_geology(
     eligible = sum(
         count
         for status, count in statuses.items()
-        if status not in {"not_applicable_water", "not_applicable_marine_sediment"}
+        if status
+        not in {"not_applicable_marine_water", "not_applicable_marine_sediment"}
     )
     matched = sum(
         count for status, count in statuses.items() if status.startswith("matched")
@@ -2202,14 +2211,16 @@ def apply_spatial_geology(
         "eligible_record_count": eligible,
         "matched_record_count": matched,
         "eligible_match_rate": round(matched / eligible, 6) if eligible else 0.0,
-        "water_records_with_assigned_land_unit": sum(
+        "inland_water_records_with_point_surface_geology_context": sum(
             record["medium"] == "water"
             and record.get("matched_geologic_unit") is not None
             for record in records
         ),
         "scientific_limit": (
             "GLiM dominant 0.5 degree surface lithology is screening context, not a site-scale "
-            "formation, stratigraphic assignment, or causal interpretation."
+            "formation, stratigraphic assignment, or causal interpretation. For inland-water "
+            "points it describes surface geology at the sampling coordinate, not dissolved or "
+            "suspended material provenance; marine water and marine sediment remain not applicable."
         ),
     }
 

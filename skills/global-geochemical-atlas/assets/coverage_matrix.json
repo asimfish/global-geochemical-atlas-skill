@@ -1,27 +1,27 @@
 {
-  "as_of": "2026-08-14T20:30:00Z",
+  "as_of": "2026-08-16T00:00:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 2,
-        "Cr": 1,
-        "Cu": 2,
+        "As": 3,
+        "Cr": 2,
+        "Cu": 4,
         "Hg": 1,
-        "Ni": 2,
-        "Pb": 1,
-        "Zn": 2
+        "Ni": 4,
+        "Pb": 2,
+        "Zn": 4
       },
       "analytes_with_multiple_sources": [
         "As",
+        "Cr",
         "Cu",
         "Ni",
+        "Pb",
         "Zn"
       ],
       "analytes_with_single_source": [
-        "Cr",
-        "Hg",
-        "Pb"
+        "Hg"
       ],
       "audited_analytes": [
         "As",
@@ -49,8 +49,9 @@
         "petdb",
         "usgs-ngdb"
       ],
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
+        "earthchem-dehailonggang-rock",
         "georoc-compilation"
       ],
       "method_metadata_coverage": "not_yet_audited",
@@ -66,18 +67,22 @@
         "Zn"
       ],
       "selected_sources": [
+        "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
-        "georoc-archaean"
+        "georoc-archaean",
+        "georoc-convergent-margins"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
         "australia-ozchem": "D",
         "brazil-sgb-geochemistry": "D",
+        "earthchem-dehailonggang-rock": "A",
         "earthchem-library": "D",
         "earthchem-portal": "D",
         "finland-gtk-geochemistry": "D",
         "georoc-antarctica-intraplate": "A",
         "georoc-archaean": "A",
+        "georoc-convergent-margins": "A",
         "georoc-database": "D",
         "iodp-data-systems": "D",
         "jamstec-darwin": "D",
@@ -88,16 +93,18 @@
         "petdb": "D",
         "usgs-ngdb": "D"
       },
-      "source_independence": "multiple_datasets_single_upstream_lineage",
+      "source_independence": "multiple_sources_but_single_source_per_analyte",
       "source_scopes": {
         "alaska-dggs-webgeochem": "regional_partial",
         "australia-ozchem": "national_partial",
         "brazil-sgb-geochemistry": "national_partial",
+        "earthchem-dehailonggang-rock": "local_complex",
         "earthchem-library": "global_collection",
         "earthchem-portal": "global_partial",
         "finland-gtk-geochemistry": "national_partial",
         "georoc-antarctica-intraplate": "continental_partial",
         "georoc-archaean": "global_partial",
+        "georoc-convergent-margins": "global_partial",
         "georoc-database": "global_partial",
         "iodp-data-systems": "global_partial",
         "jamstec-darwin": "national_plus_selected_global",
@@ -109,6 +116,13 @@
         "usgs-ngdb": "national_partial"
       },
       "source_target_analytes": {
+        "earthchem-dehailonggang-rock": [
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "georoc-antarctica-intraplate": [
           "As",
           "Cr",
@@ -123,17 +137,25 @@
           "Cu",
           "Ni",
           "Zn"
+        ],
+        "georoc-convergent-margins": [
+          "As",
+          "Cu",
+          "Ni",
+          "Zn"
         ]
       },
       "source_use_modes": {
         "alaska-dggs-webgeochem": "discovery",
         "australia-ozchem": "discovery",
         "brazil-sgb-geochemistry": "discovery",
+        "earthchem-dehailonggang-rock": "normalized_analysis",
         "earthchem-library": "discovery",
         "earthchem-portal": "discovery",
         "finland-gtk-geochemistry": "discovery",
         "georoc-antarctica-intraplate": "normalized_analysis",
         "georoc-archaean": "normalized_analysis",
+        "georoc-convergent-margins": "normalized_analysis",
         "georoc-database": "discovery",
         "iodp-data-systems": "discovery",
         "jamstec-darwin": "discovery",
@@ -151,13 +173,13 @@
     "sediment": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 8,
-        "Cr": 8,
-        "Cu": 10,
-        "Hg": 5,
-        "Ni": 8,
-        "Pb": 9,
-        "Zn": 10
+        "As": 9,
+        "Cr": 9,
+        "Cu": 11,
+        "Hg": 6,
+        "Ni": 9,
+        "Pb": 10,
+        "Zn": 11
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -206,8 +228,9 @@
         "us-water-quality-portal",
         "usgs-ngdb"
       ],
-      "independent_lineage_count": 10,
+      "independent_lineage_count": 11,
       "lineage_ids": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-geochemical-atlas-europe-2005",
@@ -232,6 +255,7 @@
         "Zn"
       ],
       "selected_sources": [
+        "4tu-northern-china-sediment",
         "australia-ngsa",
         "australia-ngsa-mercury",
         "foregs-floodplain-sediment",
@@ -245,6 +269,7 @@
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "source_evidence_tiers": {
+        "4tu-northern-china-sediment": "A",
         "alaska-dggs-webgeochem": "D",
         "argentina-segemar-geochemistry": "D",
         "australia-ngsa": "A",
@@ -285,6 +310,7 @@
       },
       "source_independence": "multiple_independent_lineages",
       "source_scopes": {
+        "4tu-northern-china-sediment": "continental_partial",
         "alaska-dggs-webgeochem": "regional_partial",
         "argentina-segemar-geochemistry": "national_partial",
         "australia-ngsa": "national_partial",
@@ -324,6 +350,15 @@
         "zenodo-yangtze-yellow-river-sediment": "regional_discrete_samples"
       },
       "source_target_analytes": {
+        "4tu-northern-china-sediment": [
+          "As",
+          "Cr",
+          "Cu",
+          "Hg",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "australia-ngsa": [
           "As",
           "Cu",
@@ -406,6 +441,7 @@
         ]
       },
       "source_use_modes": {
+        "4tu-northern-china-sediment": "normalized_analysis",
         "alaska-dggs-webgeochem": "discovery",
         "argentina-segemar-geochemistry": "discovery",
         "australia-ngsa": "normalized_analysis",
@@ -910,7 +946,8 @@
       "publication_linked_datasets",
       "institutional_doi_dataset_download_verification",
       "targeted_south_america_and_russia_doi_dataset_verification",
-      "targeted_china_and_brazil_primary_repository_verification"
+      "targeted_china_and_brazil_primary_repository_verification",
+      "targeted_northern_western_china_sediment_repository_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -918,7 +955,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 11,
+    "round": 14,
     "saturated": false,
     "status": "in_progress"
   },
