@@ -746,6 +746,136 @@ def test_discovery_duel(tmp: Path, out_dir: Path) -> None:
     )
 
 
+def test_discovery_duel_rounds(tmp: Path, out_dir: Path) -> None:
+    """Round 1 revise -> objections answered -> round 2 admit -> spec draft."""
+    duel_dir = tmp / "duel_rounds"
+    base = {
+        "gap_id": "manual-0",
+        "title": "Mongolia soil geochemistry portal",
+        "source_url": "https://portal.example.mn/soil.csv",
+        "dataset_doi": "10.5281/zenodo.999",
+        "medium": "soil",
+        "region_hint": "Mongolia",
+    }
+    round1_candidates = tmp / "duel_r1_cand.json"
+    round1_candidates.write_text(json.dumps({"candidates": [base]}), encoding="utf-8")
+    round1_objections = tmp / "duel_r1_obj.json"
+    round1_objections.write_text(
+        json.dumps(
+            {
+                "objections": [
+                    {
+                        "candidate_index": 0,
+                        "class": "license_unclear",
+                        "detail": "portal page does not state a license",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    gap = "medium=soil;country=Mongolia"
+    round1 = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "discovery_duel.py"),
+            "--output-dir",
+            str(out_dir),
+            "--duel-dir",
+            str(duel_dir),
+            "--mode",
+            "adjudicate",
+            "--candidates",
+            str(round1_candidates),
+            "--objections",
+            str(round1_objections),
+            "--gap",
+            gap,
+        ]
+    )
+    verdict1 = json.loads(
+        (duel_dir / "duel_verdict_round1.json").read_text(encoding="utf-8")
+    )
+    check(
+        "duel.round1_revise",
+        round1.returncode == 1
+        and verdict1["results"][0]["verdict"] == "revise"
+        and verdict1["results"][0]["action_items"],
+        json.dumps(verdict1["results"][0]),
+    )
+    revised = dict(base)
+    revised["license_hint"] = "CC0 1.0 (stated on data page)"
+    revised["resolved_objections"] = ["license_unclear"]
+    round2_candidates = tmp / "duel_r2_cand.json"
+    round2_candidates.write_text(json.dumps({"candidates": [revised]}), encoding="utf-8")
+    round2 = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "discovery_duel.py"),
+            "--output-dir",
+            str(out_dir),
+            "--duel-dir",
+            str(duel_dir),
+            "--mode",
+            "adjudicate",
+            "--candidates",
+            str(round2_candidates),
+            "--gap",
+            gap,
+        ]
+    )
+    verdict2 = json.loads(
+        (duel_dir / "duel_verdict_round2.json").read_text(encoding="utf-8")
+    )
+    check(
+        "duel.round2_admit",
+        round2.returncode == 0
+        and verdict2["results"][0]["verdict"] == "admit_to_spec_draft"
+        and verdict2["stop_reason"] == "threshold_met",
+        json.dumps(verdict2["results"][0]),
+    )
+    state = json.loads((duel_dir / "duel_state.json").read_text(encoding="utf-8"))
+    check(
+        "duel.state_two_rounds",
+        [r["round"] for r in state["rounds"]] == [1, 2],
+        json.dumps(state),
+    )
+    check(
+        "duel.handoff_command",
+        "propose_adapter_spec.py" in verdict2["results"][0].get("next_command", ""),
+        verdict2["results"][0].get("next_command", ""),
+    )
+    sample = tmp / "duel_sample.csv"
+    sample.write_text(
+        "element,value,unit,medium,latitude,longitude\n"
+        "As,5.2,mg/kg,soil,47.9,106.9\n",
+        encoding="utf-8",
+    )
+    spec_out = tmp / "duel_spec.json"
+    drafted = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "propose_adapter_spec.py"),
+            "--candidate-url",
+            "https://portal.example.mn/soil.csv",
+            "--title",
+            "Mongolia soil geochemistry portal",
+            "--medium",
+            "soil",
+            "--local-file",
+            str(sample),
+            "--output",
+            str(spec_out),
+        ]
+    )
+    spec = json.loads(spec_out.read_text(encoding="utf-8")) if spec_out.is_file() else {}
+    check(
+        "duel.spec_drafted_not_approved",
+        drafted.returncode == 0 and spec.get("approval_state") == "draft",
+        json.dumps({"rc": drafted.returncode, "approval_state": spec.get("approval_state")}),
+    )
+
+
 def test_graded_verdict_schema() -> None:
     schema = json.loads(
         (SKILL_DIR / "references" / "audit-receipt.schema.json").read_text(
@@ -773,6 +903,7 @@ def main() -> int:
             test_claim_ledger(tmp, out_dir)
             test_acquisition_memory(tmp, out_dir)
             test_discovery_duel(tmp, out_dir)
+            test_discovery_duel_rounds(tmp, out_dir)
         test_graded_verdict_schema()
         test_autopilot_fixture(tmp)
         test_declarative_gates(tmp)
