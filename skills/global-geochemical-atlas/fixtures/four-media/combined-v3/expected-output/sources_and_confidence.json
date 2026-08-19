@@ -116,6 +116,16 @@
     "score_mean": 0.737155
   },
   "report_version": "sources-and-confidence-v3",
+  "sampling_time_coverage": {
+    "contract": "atlas-sampling-time-v1",
+    "dated_record_count": 468,
+    "dated_record_share": 0.409091,
+    "meaning": "sampling_time records when the sample was physically collected -- the moment whose element content the measurement describes. Publication years never substitute for sampling times; sources without collection dates stay publisher_not_reported.",
+    "status_record_counts": {
+      "publisher_not_reported": 676,
+      "publisher_reported": 468
+    }
+  },
   "single_quality_label_prohibited": true,
   "source_portfolio": {
     "claim_boundary": "Formal included sources produced admitted records in this output. Routed selected sources passed request-level catalog checks but may still fail acquisition or record filtering. Review/blocked sources are discovery leads only. Counts must never be added together as admitted data sources.",
@@ -284,6 +294,13 @@
         "official_linked_record_count": 48,
         "verified_record_count": 48
       },
+      "sampling_time": {
+        "earliest": "2009/2013",
+        "latest": "2009/2013",
+        "status_record_counts": {
+          "publisher_reported": 48
+        }
+      },
       "source_id": "afsis-phase-i-wet-chemistry",
       "source_urls": [
         "https://data.worldagroforestry.org/api/access/datafile/11218?format=original"
@@ -418,6 +435,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": "2007-03-07",
+        "latest": "2009-12-09",
+        "status_record_counts": {
+          "publisher_reported": 48
+        }
       },
       "source_id": "australia-ngsa-mercury",
       "source_urls": [
@@ -559,6 +583,13 @@
         "official_linked_record_count": 48,
         "verified_record_count": 48
       },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
+      },
       "source_id": "foregs-floodplain-sediment",
       "source_urls": [
         "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_AR_data_2v6_7Aug07.csv",
@@ -686,6 +717,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
       },
       "source_id": "foregs-humus",
       "source_urls": [
@@ -827,6 +865,13 @@
         "official_linked_record_count": 48,
         "verified_record_count": 48
       },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
+      },
       "source_id": "foregs-stream-sediment",
       "source_urls": [
         "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_AR_data_2v5_30Nov2006.csv",
@@ -955,6 +1000,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
       },
       "source_id": "foregs-stream-water",
       "source_urls": [
@@ -1119,6 +1171,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
       },
       "source_id": "foregs-subsoil",
       "source_urls": [
@@ -1287,6 +1346,13 @@
         "official_linked_record_count": 48,
         "verified_record_count": 48
       },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
+      },
       "source_id": "foregs-topsoil",
       "source_urls": [
         "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_AR_data_2v4_8Feb06.csv",
@@ -1420,6 +1486,13 @@
         "located_record_count": 52,
         "official_linked_record_count": 52,
         "verified_record_count": 52
+      },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 52
+        }
       },
       "source_id": "gemas-europe",
       "source_urls": [
@@ -1588,6 +1661,13 @@
         "official_linked_record_count": 56,
         "verified_record_count": 56
       },
+      "sampling_time": {
+        "earliest": "1976-02-18T11:00",
+        "latest": "2013-07-09T11:00",
+        "status_record_counts": {
+          "publisher_reported": 56
+        }
+      },
       "source_id": "gemstat-open-archive",
       "source_urls": [
         "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
@@ -1729,6 +1809,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
       },
       "source_id": "georoc-antarctica-intraplate",
       "source_urls": [
@@ -1890,6 +1977,13 @@
         "official_linked_record_count": 48,
         "verified_record_count": 48
       },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
+      },
       "source_id": "georoc-archaean",
       "source_urls": [
         "https://doi.org/10.25625/1KRR1P/0YSJJR",
@@ -2030,6 +2124,13 @@
         "official_linked_record_count": 48,
         "verified_record_count": 48
       },
+      "sampling_time": {
+        "earliest": "2011-11-20T17:06:54",
+        "latest": "2014-05-24T23:03:50",
+        "status_record_counts": {
+          "publisher_reported": 48
+        }
+      },
       "source_id": "geotraces-idp2025",
       "source_urls": [
         "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
@@ -2159,6 +2260,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
       },
       "source_id": "japan-gsj-geochemical-map",
       "source_urls": [
@@ -2297,6 +2405,13 @@
         "official_linked_record_count": 56,
         "verified_record_count": 56
       },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 56
+        }
+      },
       "source_id": "japan-gsj-marine-sediment",
       "source_urls": [
         "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
@@ -2424,6 +2539,13 @@
         "located_record_count": 112,
         "official_linked_record_count": 112,
         "verified_record_count": 112
+      },
+      "sampling_time": {
+        "earliest": "2015",
+        "latest": "2024",
+        "status_record_counts": {
+          "publisher_reported": 112
+        }
       },
       "source_id": "norway-marchem",
       "source_urls": [
@@ -2565,6 +2687,13 @@
         "official_linked_record_count": 48,
         "verified_record_count": 48
       },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
+      },
       "source_id": "pangaea-arabian-sea-sediment",
       "source_urls": [
         "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
@@ -2702,6 +2831,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 48
+        }
       },
       "source_id": "pangaea-north-africa-soil",
       "source_urls": [
@@ -2842,6 +2978,13 @@
         "official_linked_record_count": 40,
         "verified_record_count": 40
       },
+      "sampling_time": {
+        "earliest": null,
+        "latest": null,
+        "status_record_counts": {
+          "publisher_not_reported": 40
+        }
+      },
       "source_id": "tpdc-china-mountain-soil",
       "source_urls": [
         "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
@@ -2966,6 +3109,13 @@
         "located_record_count": 48,
         "official_linked_record_count": 48,
         "verified_record_count": 48
+      },
+      "sampling_time": {
+        "earliest": "2010-01-14T11:50:00",
+        "latest": "2023-01-31T09:30:00",
+        "status_record_counts": {
+          "publisher_reported": 48
+        }
       },
       "source_id": "us-wqp-sacramento-river-arsenic",
       "source_urls": [
@@ -3128,6 +3278,13 @@
         "located_record_count": 108,
         "official_linked_record_count": 108,
         "verified_record_count": 108
+      },
+      "sampling_time": {
+        "earliest": "2009-02-16",
+        "latest": "2009-02-26",
+        "status_record_counts": {
+          "publisher_reported": 108
+        }
       },
       "source_id": "usgs-conus-soil",
       "source_urls": [

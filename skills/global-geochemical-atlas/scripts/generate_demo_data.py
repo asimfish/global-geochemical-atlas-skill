@@ -2586,7 +2586,7 @@ def ngsa_mercury_demo(
                 "source_tier": "government",
                 "source_id": record.source_id,
                 "source_locator": record.source_locator,
-                "sampled_at": "",
+                "sampled_at": str(record.fields.get("DATE_SAMPLED") or ""),
                 "sample_depth_min_m": "",
                 "sample_depth_max_m": "",
                 "grain_fraction": "<75 µm",
@@ -3465,6 +3465,9 @@ def evidence_breadth_soil_demo(
                 "source_locator": record.source_locator,
                 "sample_depth_min_m": depth_min,
                 "sample_depth_max_m": depth_max,
+                # BraSol stores the sampling day as an Excel serial number;
+                # keep the publisher value raw here and normalize in D2.
+                "sampled_at": str(record.fields.get("Date") or "") if brasol else "",
                 "sample_type_raw": str(record.fields.get("_sample_type") or ""),
                 "lithology_raw": str(record.fields.get("Lithol_IBGE_EN") or ""),
                 "soil_horizon_raw": str(record.fields.get("Lyr_name") or ""),

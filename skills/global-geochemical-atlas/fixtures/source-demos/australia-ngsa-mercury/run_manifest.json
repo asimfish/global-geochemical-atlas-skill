@@ -17,14 +17,14 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 75455,
+      "bytes": 75904,
       "path": "demo_input.csv",
-      "sha256": "e1d275b6c625989d84b558d75c4cc7f1ce078ce4757a1fb457e6feb37865abec"
+      "sha256": "e60c26b31bd412f50cc4246216b3716a52a085088d5337ce98ac06f89a0c840a"
     },
     {
-      "bytes": 85324,
+      "bytes": 89404,
       "path": "sources.jsonl",
-      "sha256": "1c23e213ab496a19bb3034385b836393871ad2b88da461c99a29604d08e3c6e8"
+      "sha256": "473eec3118ed64847a749e47b52cc77a81e55999b241d42c264ee12d1c9141d6"
     }
   ],
   "record_counts": {
@@ -44,7 +44,7 @@
     {
       "bytes": 208089,
       "filename": "150328_00_1.CSV",
-      "retrieved_at": "2026-08-10T20:57:41Z",
+      "retrieved_at": "2026-08-18T18:16:47Z",
       "sha256": "3089b02331e8aff7e78ec8b972fa6ff9acfe85c9b49ae67462605cef3fbb247c",
       "source_url": "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
     }

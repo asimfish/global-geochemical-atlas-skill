@@ -33,6 +33,7 @@ import build_china_demo
 import build_evidence_bundle as evidence_builder
 import build_four_media_demo
 import build_interactive_map as map_builder
+import build_temporal_map as temporal_map_builder
 import build_element_comparison as comparison_builder
 import build_index as index_builder
 import benchmark_index
@@ -58,6 +59,8 @@ import migrate_v4_source_demos
 import profile_source_completeness
 import reconcile_v4_coordinate_claims
 import run_atlas_request as request_runner
+import sampling_time
+import classify_anomaly_provenance as provenance_classifier
 import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
 import validate_human_review as human_review_validator
@@ -5466,6 +5469,214 @@ def check_d2(output_dir: Path) -> list[str]:
         "D2 publishes point, spatial and laboratory-QC analytical artifacts",
         checks,
     )
+    require(
+        set(sampling_time.SOURCE_SAMPLING_TIME)
+        == set(json_value(SKILL_DIR / "assets" / "source_manifest.json")["sources"])
+        | {"synthetic-demo-v1"}
+        and all(
+            ("raw_format" in entry) != ("reason" in entry)
+            and (
+                entry["raw_format"] in sampling_time._PARSERS
+                if "raw_format" in entry
+                else entry["reason"]
+                in {
+                    sampling_time.REASON_PUBLICATION_YEAR,
+                    sampling_time.REASON_NOT_IN_ARCHIVE,
+                }
+            )
+            for entry in sampling_time.SOURCE_SAMPLING_TIME.values()
+        ),
+        "D2 sampling-time contract covers every executable source with a declared format or a controlled missing reason",
+        checks,
+    )
+    sampling_parse_cases = (
+        ("geotraces-idp2025", "2011-11-20T17:06:54", "2011-11-20T17:06:54", "second"),
+        ("gemstat-open-archive", "1976-02-18T11:00", "1976-02-18T11:00", "minute"),
+        ("australia-ngsa", "2/04/2008", "2008-04-02", "day"),
+        ("australia-ngsa-mercury", "8/09/2008", "2008-09-08", "day"),
+        ("usgs-conus-soil", "02/16/09", "2009-02-16", "day"),
+        ("pangaea-brasol-ne-brazil-soil", "25.07.08", "2008-07-25", "day"),
+        ("pangaea-brasol-ne-brazil-soil", "39650", "2008-07-21", "day"),
+        ("norway-marchem", "2015", "2015", "year"),
+        ("afsis-phase-i-wet-chemistry", "2009/2013", "2009/2013", "year_range"),
+        ("pangaea-amazonas-soil", "2016-03-01", "2016-03-01", "day"),
+    )
+    require(
+        all(
+            sampling_time.normalize_sampling_time(source_id, raw)
+            == {
+                "sampling_time": normalized,
+                "sampling_time_precision": precision,
+                "sampling_time_status": "publisher_reported",
+            }
+            for source_id, raw, normalized, precision in sampling_parse_cases
+        )
+        and sampling_time.normalize_sampling_time("georoc-archaean", "")[
+            "sampling_time_status"
+        ]
+        == "publisher_not_reported"
+        and sampling_time.normalize_sampling_time("australia-ngsa", "99/99/2008")[
+            "sampling_time_status"
+        ]
+        == "unparseable_raw_value"
+        and sampling_time.normalize_sampling_time("georoc-archaean", "1987")[
+            "sampling_time_status"
+        ]
+        == "unparseable_raw_value",
+        "D2 normalizes sampling dates per declared source format and never lets publication years pose as sampling times",
+        checks,
+    )
+    require(
+        standardizer.SCHEMA_COLUMNS[
+            standardizer.SCHEMA_COLUMNS.index(
+                "sampled_at"
+            ) : standardizer.SCHEMA_COLUMNS.index("sampled_at") + 4
+        ]
+        == (
+            "sampled_at",
+            "sampling_time",
+            "sampling_time_precision",
+            "sampling_time_status",
+        ),
+        "D2 database schema keeps the normalized sampling-time columns beside the raw publisher value",
+        checks,
+    )
+    with (
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "combined-v3"
+        / "expected-output"
+        / "geochemistry.csv"
+    ).open(newline="", encoding="utf-8") as handle:
+        combined_time_rows = list(csv.DictReader(handle))
+    require(
+        {row["sampling_time_status"] for row in combined_time_rows}
+        == {"publisher_reported", "publisher_not_reported"}
+        and {
+            row["source_id"]
+            for row in combined_time_rows
+            if row["sampling_time_status"] == "publisher_reported"
+        }
+        == {
+            "afsis-phase-i-wet-chemistry",
+            "australia-ngsa-mercury",
+            "gemstat-open-archive",
+            "geotraces-idp2025",
+            "norway-marchem",
+            "us-wqp-sacramento-river-arsenic",
+            "usgs-conus-soil",
+        }
+        and all(
+            (row["sampling_time"] != "")
+            == (row["sampling_time_status"] == "publisher_reported")
+            for row in combined_time_rows
+        )
+        and {
+            row["sampling_time_precision"]
+            for row in combined_time_rows
+            if row["sampling_time"]
+        }
+        == {"second", "minute", "day", "year", "year_range"},
+        "D2 combined fixture dates the seven sampling-time sources without any unparseable values",
+        checks,
+    )
+    combined_confidence = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "combined-v3"
+        / "expected-output"
+        / "sources_and_confidence.json"
+    )
+    combined_time_coverage = combined_confidence.get("sampling_time_coverage") or {}
+    geotraces_confidence = next(
+        item
+        for item in combined_confidence["sources"]
+        if item["source_id"] == "geotraces-idp2025"
+    )
+    require(
+        combined_time_coverage.get("contract") == "atlas-sampling-time-v1"
+        and combined_time_coverage.get("dated_record_count") == 468
+        and combined_time_coverage.get("status_record_counts", {}).get(
+            "publisher_not_reported"
+        )
+        == 676
+        and geotraces_confidence["sampling_time"]["earliest"] == "2011-11-20T17:06:54"
+        and geotraces_confidence["sampling_time"]["latest"] == "2014-05-24T23:03:50",
+        "D2 confidence report accounts for sampling-time coverage per source and in total",
+        checks,
+    )
+    combined_provenance = json_value(
+        SKILL_DIR
+        / "fixtures"
+        / "four-media"
+        / "combined-v3"
+        / "expected-output"
+        / "anomaly_provenance.json"
+    )
+    require(
+        combined_provenance["contract"] == "anomaly-provenance-v1"
+        and combined_provenance["candidate_count"] == 27
+        and combined_provenance["classification_counts"]
+        == {"insufficient_evidence": 10, "not_applicable_depletion": 17}
+        and output_validator.REQUIRED_FILES["anomaly_provenance"]
+        == "anomaly_provenance.json"
+        and all(
+            item["plain_language"]
+            and item["classification"] in provenance_classifier.CLASS_LABELS_ZH
+            and item["classification_label_zh"]
+            == provenance_classifier.CLASS_LABELS_ZH[item["classification"]]
+            for item in combined_provenance["anomalies"]
+        )
+        and all(
+            set(item["evidence_lines"])
+            == {"lithology", "spatial", "association", "temporal"}
+            for item in combined_provenance["anomalies"]
+            if item["direction"] == "high"
+        ),
+        "D2 anomaly provenance report classifies every candidate with plain-language evidence lines",
+        checks,
+    )
+    rising_series = [(2000.0, 10.0), (2005.0, 18.0), (2010.0, 30.0)]
+    flat_series = [(2000.0, 10.0), (2005.0, 10.4), (2010.0, 9.8)]
+    require(
+        provenance_classifier._temporal_line(rising_series)[0]
+        == provenance_classifier.SUPPORTS_ANTHROPOGENIC
+        and provenance_classifier._temporal_line(flat_series)[0]
+        == provenance_classifier.SUPPORTS_GEOGENIC
+        and provenance_classifier._temporal_line(rising_series[:2])[0]
+        == provenance_classifier.UNAVAILABLE
+        and provenance_classifier._classify(
+            {
+                "lithology": (provenance_classifier.SUPPORTS_GEOGENIC, ""),
+                "spatial": (provenance_classifier.SUPPORTS_GEOGENIC, ""),
+                "association": (provenance_classifier.NEUTRAL, ""),
+                "temporal": (provenance_classifier.UNAVAILABLE, ""),
+            }
+        )[0]
+        == provenance_classifier.CLASS_GEOGENIC
+        and provenance_classifier._classify(
+            {
+                "lithology": (provenance_classifier.SUPPORTS_GEOGENIC, ""),
+                "spatial": (provenance_classifier.SUPPORTS_ANTHROPOGENIC, ""),
+                "association": (provenance_classifier.NEUTRAL, ""),
+                "temporal": (provenance_classifier.UNAVAILABLE, ""),
+            }
+        )[0]
+        == provenance_classifier.CLASS_MIXED
+        and provenance_classifier._classify(
+            {
+                "lithology": (provenance_classifier.UNAVAILABLE, ""),
+                "spatial": (provenance_classifier.SUPPORTS_ANTHROPOGENIC, ""),
+                "association": (provenance_classifier.UNAVAILABLE, ""),
+                "temporal": (provenance_classifier.UNAVAILABLE, ""),
+            }
+        )[0]
+        == provenance_classifier.CLASS_INSUFFICIENT,
+        "D2 provenance rules need two agreeing evidence lines and degrade honestly to insufficient evidence",
+        checks,
+    )
     source_confidence = json_value(output_dir / "sources_and_confidence.json")
     require(
         source_confidence.get("report_version") == "sources-and-confidence-v3"
@@ -6495,6 +6706,83 @@ def check_d3(output_dir: Path) -> list[str]:
         and "## Trust boundaries and controls" in skill_card
         and "## Static scanner verification" in skill_card,
         "D3 publishes governed Skill metadata, capability controls and balanced activation cases",
+        checks,
+    )
+    temporal_html = (output_dir / "temporal_map.html").read_text(encoding="utf-8")
+    combined_expected_dir = (
+        SKILL_DIR / "fixtures" / "four-media" / "combined-v3" / "expected-output"
+    )
+    temporal_payload = temporal_map_builder.build_payload(
+        combined_expected_dir / "geochemistry.csv"
+    )
+    temporal_stats = temporal_payload["stats"]
+    require(
+        output_validator.REQUIRED_FILES["temporal_map"] == "temporal_map.html"
+        and '<script id="temporal-payload" type="application/json">' in temporal_html
+        and '"schema_version":"temporal-atlas-payload-v1"' in temporal_html
+        and '<script id="basemap-data" type="application/json">' in temporal_html
+        and "\u91c7\u6837\u53f2\u56de\u653e" in temporal_html
+        and "\u7ad9\u70b9\u6f14\u53d8" in temporal_html
+        and "<script src=" not in temporal_html
+        and "https://" not in temporal_html.split("<style>")[0],
+        "D3 temporal map ships both replay and station modes as one offline HTML",
+        checks,
+    )
+    require(
+        temporal_stats["total_records"] == 1144
+        and temporal_stats["dated_records"] == 468
+        and temporal_stats["status_counts"]
+        == {"publisher_not_reported": 676, "publisher_reported": 468}
+        and temporal_stats["time_parse_failed"] == 0
+        and temporal_stats["stations_mode_b"] == 6
+        and temporal_stats["year_min"] == 1976
+        and temporal_stats["year_max"] == 2024
+        and temporal_stats["precision_counts"]
+        == {"day": 156, "minute": 56, "second": 96, "year": 112, "year_range": 48}
+        and any(
+            station["label"] == "nwisca.01" and station["timepoints"] == 48
+            for station in temporal_payload["stations"]
+        )
+        and all(
+            station["timepoints"] >= temporal_map_builder.STATION_MIN_TIMEPOINTS
+            for station in temporal_payload["stations"]
+        ),
+        "D3 temporal map payload keeps honest dated/undated accounting on the combined fixture",
+        checks,
+    )
+    require(
+        temporal_map_builder.parse_sampling_time("2009/2013", "year_range")
+        == (2011.5, 2009.0, 2014.0)
+        and temporal_map_builder.parse_sampling_time("2011-11-20T17:06:54", "second")
+        is not None
+        and temporal_map_builder.parse_sampling_time("not-a-date", "day") is None
+        and temporal_map_builder.classify_trend(2.0, 10.0, [10.0, 12.0, 30.0])
+        == "rising"
+        and temporal_map_builder.classify_trend(-2.0, 10.0, [30.0, 12.0, 10.0])
+        == "falling"
+        and temporal_map_builder.classify_trend(0.01, 2.0, [100.0, 101.0]) == "stable",
+        "D3 temporal parser keeps year ranges as intervals and trend classes need a material relative slope",
+        checks,
+    )
+    good_temporal_errors: list[str] = []
+    output_validator.validate_temporal_html(
+        output_dir / "temporal_map.html", good_temporal_errors
+    )
+    with tempfile.TemporaryDirectory() as temporal_temp:
+        bad_temporal_path = Path(temporal_temp) / "temporal_map.html"
+        bad_temporal_path.write_text(
+            temporal_html.replace("publisher_not_reported", "redacted"),
+            encoding="utf-8",
+        )
+        bad_temporal_errors: list[str] = []
+        output_validator.validate_temporal_html(bad_temporal_path, bad_temporal_errors)
+    require(
+        not good_temporal_errors
+        and any(
+            "honest sampling-time coverage" in message
+            for message in bad_temporal_errors
+        ),
+        "D3 temporal map validator rejects copies that hide the honest time-coverage statement",
         checks,
     )
     required_outputs = set(output_validator.REQUIRED_FILES.values())

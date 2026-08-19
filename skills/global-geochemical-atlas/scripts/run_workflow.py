@@ -16,7 +16,9 @@ from typing import Any
 
 import build_evidence_bundle as evidence_builder
 import build_interactive_map as map_builder
+import build_temporal_map as temporal_map_builder
 import build_sources_and_confidence as source_confidence_builder
+import classify_anomaly_provenance as provenance_classifier
 import build_iteration_backlog as backlog_builder
 import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
@@ -135,12 +137,14 @@ def summary_outputs() -> dict[str, str]:
         "sources_and_confidence": "sources_and_confidence.json",
         "anomalies": "anomalies.geojson",
         "anomaly_report": "anomaly_report.json",
+        "anomaly_provenance": "anomaly_provenance.json",
         "batch_acceptance": "batch_acceptance.csv",
         "batch_qc_report": "batch_qc_report.json",
         "anomaly_regions": "anomaly_regions.geojson",
         "spatial_anomaly_report": "spatial_anomaly_report.json",
         "samples": "samples.geojson",
         "interactive_map": "interactive_map.html",
+        "temporal_map": "temporal_map.html",
         "iteration_backlog": "iteration_backlog.csv",
     }
 
@@ -302,6 +306,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             f"source/confidence explanation failed: {exc}",
         ) from exc
 
+    try:
+        provenance_report = provenance_classifier.build(
+            outputs["database"], outputs["anomalies"]
+        )
+        atomic_json(args.output_dir / "anomaly_provenance.json", provenance_report)
+    except (provenance_classifier.ProvenanceError, OSError) as exc:
+        raise WorkflowError(
+            "conflicting_evidence",
+            f"anomaly provenance classification failed: {exc}",
+        ) from exc
+
     samples_path = args.output_dir / "samples.geojson"
     map_path = args.output_dir / "interactive_map.html"
     backlog_path = args.output_dir / "iteration_backlog.csv"
@@ -333,6 +348,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         raise WorkflowError(
             "incomplete_retrieval", f"map generation failed: {exc}"
         ) from exc
+
+    try:
+        temporal_payload = temporal_map_builder.build_payload(outputs["database"])
+        temporal_html = temporal_map_builder.build_html(
+            temporal_payload,
+            temporal_map_builder.DEFAULT_TEMPLATE,
+            temporal_map_builder.DEFAULT_BASEMAP,
+        )
+    except (temporal_map_builder.TemporalMapBuildError, OSError) as exc:
+        raise WorkflowError(
+            "incomplete_retrieval", f"temporal map generation failed: {exc}"
+        ) from exc
+    (args.output_dir / "temporal_map.html").write_bytes(temporal_html.encode("utf-8"))
 
     qc_report = json_file(outputs["qc_report"])
     anomaly_report = json_file(outputs["anomaly_report"])

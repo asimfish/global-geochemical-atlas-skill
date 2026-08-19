@@ -24,12 +24,14 @@ REQUIRED_FILES = {
     "sources_and_confidence": "sources_and_confidence.json",
     "anomalies": "anomalies.geojson",
     "anomaly_report": "anomaly_report.json",
+    "anomaly_provenance": "anomaly_provenance.json",
     "batch_acceptance": "batch_acceptance.csv",
     "batch_qc_report": "batch_qc_report.json",
     "anomaly_regions": "anomaly_regions.geojson",
     "spatial_anomaly_report": "spatial_anomaly_report.json",
     "samples": "samples.geojson",
     "interactive_map": "interactive_map.html",
+    "temporal_map": "temporal_map.html",
     "iteration_backlog": "iteration_backlog.csv",
     "run_summary": "run_summary.json",
 }
@@ -761,6 +763,26 @@ def validate_anomaly_regions(value: Any, errors: list[str]) -> int:
                 f"anomaly_regions.geojson feature {index} overstates or omits screening status"
             )
     return len(features)
+
+
+def validate_temporal_html(path: Path, errors: list[str]) -> None:
+    text = path.read_text(encoding="utf-8")
+    if '<script id="temporal-payload" type="application/json">' not in text:
+        errors.append("temporal_map.html does not embed the temporal payload block")
+    if '"temporal-atlas-payload-v1"' not in text:
+        errors.append("temporal_map.html omits the temporal payload schema version")
+    if '<script id="basemap-data" type="application/json">' not in text:
+        errors.append("temporal_map.html does not embed the offline basemap block")
+    if re.search(r"<script\b[^>]*\bsrc\s*=", text, re.IGNORECASE):
+        errors.append("temporal_map.html contains an external script dependency")
+    if re.search(r"<link\b[^>]*\bhref\s*=\s*['\"]https?://", text, re.IGNORECASE):
+        errors.append("temporal_map.html contains an external stylesheet dependency")
+    if "publisher_reported" not in text or "publisher_not_reported" not in text:
+        errors.append(
+            "temporal_map.html omits the honest sampling-time coverage statement"
+        )
+    if "Natural Earth" not in text:
+        errors.append("temporal_map.html omits offline basemap provenance")
 
 
 def validate_html(path: Path, errors: list[str]) -> None:
@@ -1600,6 +1622,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
             errors.append("run_summary batch count does not match batch QC artifacts")
 
     validate_html(paths["interactive_map"], errors)
+    validate_temporal_html(paths["temporal_map"], errors)
     return {
         "status": "valid" if not errors else "invalid",
         "errors": errors,
