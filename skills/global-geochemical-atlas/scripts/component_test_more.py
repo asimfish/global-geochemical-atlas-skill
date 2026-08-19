@@ -639,6 +639,113 @@ def test_acquisition_memory(tmp: Path, out_dir: Path) -> None:
     )
 
 
+def test_discovery_duel(tmp: Path, out_dir: Path) -> None:
+    duel_dir = tmp / "duel"
+    brief = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "discovery_duel.py"),
+            "--output-dir",
+            str(out_dir),
+            "--duel-dir",
+            str(duel_dir),
+            "--mode",
+            "brief",
+            "--gap",
+            "medium=soil;country=Mongolia;elements=As,Cd",
+        ]
+    )
+    check("duel.briefs", brief.returncode == 0, brief.stdout[-200:])
+    check(
+        "duel.brief_files",
+        (duel_dir / "scout_brief.json").is_file()
+        and (duel_dir / "skeptic_brief.json").is_file(),
+    )
+    candidates = tmp / "duel_candidates.json"
+    candidates.write_text(
+        json.dumps(
+            {
+                "candidates": [
+                    {
+                        "gap_id": "manual-0",
+                        "title": "Open national soil geochemistry",
+                        "source_url": "https://data.example.gov/soil.csv",
+                        "license_hint": "CC-BY 4.0",
+                        "dataset_doi": "10.5281/zenodo.111",
+                        "medium": "soil",
+                        "region_hint": "Mongolia",
+                    },
+                    {
+                        "gap_id": "manual-0",
+                        "title": "Paywalled supplement",
+                        "source_url": "https://pub.example.com/supp.xlsx",
+                        "license_hint": "all rights reserved",
+                        "medium": "soil",
+                        "region_hint": "Mongolia",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    objections = tmp / "duel_objections.json"
+    objections.write_text(
+        json.dumps(
+            {
+                "objections": [
+                    {
+                        "candidate_index": 1,
+                        "class": "paywalled",
+                        "detail": "requires subscription",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    adjudicated = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "discovery_duel.py"),
+            "--output-dir",
+            str(out_dir),
+            "--duel-dir",
+            str(duel_dir),
+            "--mode",
+            "adjudicate",
+            "--candidates",
+            str(candidates),
+            "--objections",
+            str(objections),
+            "--gap",
+            "medium=soil;country=Mongolia;elements=As,Cd",
+        ]
+    )
+    check("duel.adjudicates", adjudicated.returncode == 0, adjudicated.stdout[-200:])
+    verdict = json.loads(
+        (duel_dir / "duel_verdict_round1.json").read_text(encoding="utf-8")
+    )
+    by_title = {r["title"]: r for r in verdict["results"]}
+    good = by_title["Open national soil geochemistry"]
+    bad = by_title["Paywalled supplement"]
+    check(
+        "duel.good_admitted",
+        good["verdict"] == "admit_to_spec_draft"
+        and "propose_adapter_spec" in good.get("next_command", ""),
+        json.dumps(good),
+    )
+    check(
+        "duel.bad_blocked",
+        bad["verdict"] in ("revise", "reject") and bad["action_items"],
+        json.dumps(bad),
+    )
+    check(
+        "duel.stop_reason",
+        verdict["stop_reason"] == "threshold_met",
+        str(verdict["stop_reason"]),
+    )
+
+
 def test_graded_verdict_schema() -> None:
     schema = json.loads(
         (SKILL_DIR / "references" / "audit-receipt.schema.json").read_text(
@@ -665,6 +772,7 @@ def main() -> int:
             test_audit_tampered(tmp, out_dir)
             test_claim_ledger(tmp, out_dir)
             test_acquisition_memory(tmp, out_dir)
+            test_discovery_duel(tmp, out_dir)
         test_graded_verdict_schema()
         test_autopilot_fixture(tmp)
         test_declarative_gates(tmp)

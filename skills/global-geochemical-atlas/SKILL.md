@@ -132,6 +132,8 @@ python scripts/run_self_correction_loop.py \
 
 `controller_rerun_current_skill` 与 `data_action_current_skill` 在现有不可变 Skill 下续跑；`evidence_audit_current_skill` 只读核验 CRS/许可/方法并记录正证据或 no-hit。`skill_maintenance_new_run` 只有原任务明确授权维护仓库时才可执行：先停止控制器，保存当前轮和队列回执；再复制/分叉 Skill，在隔离目录按优先级只实现可审计的候选来源（官方 URL/DOI、许可、版本、hash、字段 crosswalk、最小真实 fixture 和组件测试缺一不可）；冻结新 Skill hash 后，以字节一致的请求和新输出目录重启，并用 continuation receipt 连接前后运行。不得在活动输出目录或活动 Skill 快照中热修改。若任务已授权而唯一剩余修复路径属于此类，Agent 不得连续空跑相同来源后直接结束，必须实施最高优先级可准入候选，或留下许可、访问、证据不足等可审计硬阻断。数据动作只能改变当前研究输出/缓存；队列本身不构成接受未知许可或扩大权限的授权。当所有组均有可审计回执且仍不足，才能将剩余缺口作为结构性边界交付。
 
+缺口的候选来源不足时，先跑来源发现对决拓宽漏斗：`discovery_duel.py --mode brief` 从修复队列缺口生成 Scout（鼓励过度提名）与 Skeptic（跨族质疑）两份 brief，确定性 Referee 按开放许可/DOI/介质/区域轴打分，`admit_to_spec_draft` 附可执行的 spec 起草命令，`revise` 附逐条行动项，打满轮次如实停下。对决只能起草、永远不能批准——门禁不因互搏而放松。见 [discovery-duel.md](references/discovery-duel.md)。
+
 `skill_maintenance_new_run` 候选若是可直接下载的表格来源，优先走声明式运行内适配器通道，避免缺口停在报告里：`propose_adapter_spec.py` 从修复队列缺口与候选表头机器生成 spec 草案，人工（或已授权策略）补全许可、版本与 CRS 证据并批准后，`declarative_adapter.py` 在许可白名单、HTTPS、哈希固定、逐行拒绝门禁下生成补充采集包，再经 `run_atlas_request.py --input` 走既有 provided-input 契约交付。spec 是哈希绑定的运行输入而非 Skill 代码，来源强制 `spec-*` 命名空间且不抬升证据层级；完整教义见 [declarative-adapter.md](references/declarative-adapter.md)。
 
 ## 3. D1：来源与证据链
