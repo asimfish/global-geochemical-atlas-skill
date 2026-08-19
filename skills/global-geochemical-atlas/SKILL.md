@@ -15,6 +15,17 @@ description: 构建全球或区域地球化学元素图谱；用于从公开来�
 
 完整任务先读取 [请求与输出契约](references/request-output-contract.md)；涉及科学处理时读取 [科学规则](references/scientific-rules.md)；涉及自适应扩采时读取 [迭代闭环](references/iteration-loop.md)；涉及地图/比较时读取 [D3 契约](references/d3-visualization-contract.md)。只加载当前阶段需要的其他 schema。
 
+## 受限执行器快速路径（autopilot）
+
+自动评审、时间或上下文受限的执行器不要手工串联各阶段，使用单命令入口：
+
+```bash
+python scripts/autopilot.py --prompt-file TASK_PROMPT.txt --output-dir OUT
+# 已有冻结请求时：python scripts/autopilot.py --request REQUEST.json --output-dir OUT
+```
+
+autopilot 确定性完成：冻结请求（抽取证据写 `freeze_report.json`，题面候选全集进入请求、最低线只作验收）→ `task_router.py` 规划 → 执行与全部验证 → 对抗审计 → 写 `executor_compliance_report.json`。终态机读：`AUTOPILOT_STATE=DONE|CONTINUE_REQUIRED|NEEDS_HUMAN_REVIEW|FAILED`。`CONTINUE_REQUIRED` 时唯一正确动作是执行报告中的 `next_command`（`--continue` 消费修复队列），不得改写为总结交差；最终回复的数字必须逐字取自报告的 `final_answer_facts`。autopilot 不豁免任何门禁，手工路径与它执行同一套契约。
+
 ## 执行状态机
 
 严格按顺序执行：
@@ -119,6 +130,8 @@ python scripts/run_self_correction_loop.py \
 
 `controller_rerun_current_skill` 与 `data_action_current_skill` 在现有不可变 Skill 下续跑；`evidence_audit_current_skill` 只读核验 CRS/许可/方法并记录正证据或 no-hit。`skill_maintenance_new_run` 只有原任务明确授权维护仓库时才可执行：先停止控制器，保存当前轮和队列回执；再复制/分叉 Skill，在隔离目录按优先级只实现可审计的候选来源（官方 URL/DOI、许可、版本、hash、字段 crosswalk、最小真实 fixture 和组件测试缺一不可）；冻结新 Skill hash 后，以字节一致的请求和新输出目录重启，并用 continuation receipt 连接前后运行。不得在活动输出目录或活动 Skill 快照中热修改。若任务已授权而唯一剩余修复路径属于此类，Agent 不得连续空跑相同来源后直接结束，必须实施最高优先级可准入候选，或留下许可、访问、证据不足等可审计硬阻断。数据动作只能改变当前研究输出/缓存；队列本身不构成接受未知许可或扩大权限的授权。当所有组均有可审计回执且仍不足，才能将剩余缺口作为结构性边界交付。
 
+`skill_maintenance_new_run` 候选若是可直接下载的表格来源，优先走声明式运行内适配器通道，避免缺口停在报告里：`propose_adapter_spec.py` 从修复队列缺口与候选表头机器生成 spec 草案，人工（或已授权策略）补全许可、版本与 CRS 证据并批准后，`declarative_adapter.py` 在许可白名单、HTTPS、哈希固定、逐行拒绝门禁下生成补充采集包，再经 `run_atlas_request.py --input` 走既有 provided-input 契约交付。spec 是哈希绑定的运行输入而非 Skill 代码，来源强制 `spec-*` 命名空间且不抬升证据层级；完整教义见 [declarative-adapter.md](references/declarative-adapter.md)。
+
 ## 3. D1：来源与证据链
 
 来源目录是候选，不是当前请求可执行证明。使用 `source_router.py`、`source_audit.py`、`score_source_evidence.py` 和 `coverage_report.py`；准入规则见 [source-acceptance-standard.md](references/source-acceptance-standard.md)，逐源接口边界见 [source-interface-cards.md](references/source-interface-cards.md)。
@@ -220,9 +233,12 @@ D3 文件的主工作流目录误用此命令并把预期的契约差异当成�
 ```bash
 python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 python scripts/validate_research_delivery.py --output-dir OUTPUT_DIR
+python scripts/adversarial_audit.py --output-dir OUTPUT_DIR
 ```
 
 第一个核验十六文件和 hash 链；第二个仅用于完整在线研究，要求 sufficiency 通过、修复队列清空、根目录与最后合法轮次逐字节一致、Skill 快照稳定。fixture、直接单轮或 `checkpoint-only` 不得产生 delivery-ready 收据。任一门禁失败，不交付“看起来正常”的局部地图。
+
+第三个是内容真实性裁判（Builder/Skeptic/Referee 互搏协议的单 Agent 形态）：先在影子副本植入 10 类金丝雀缺陷校准审计能力，全部抓到后才对真实目录出具可采信裁决；再做单位换算重推、异常 z 重算、证据链与坐标一致性等确定性复核。执行者可以驱动修复，但永远不能自我豁免——最终回复必须引用 `audit_receipt.json` 的 verdict 与 calibration recall。双 Agent 深度互搏（`--mode brief` 独立审计考试 + `--adjudicate` 裁决并回流修复队列）见 [adversarial-audit.md](references/adversarial-audit.md)。
 
 显式 demo/回归才使用随包 fixture；它们是真实、hash 固定的工程切片，不代表区域完整性。命令与重建说明见 [demo-guide.md](references/demo-guide.md)、[production-demo.md](references/production-demo.md) 和 [china-fixture.md](references/china-fixture.md)。中国 demo 为 2,400 条 TPDC 土壤加 558 条 Zenodo 河流沉积物；完整 TPDC 6,570 条能力仍通过注册来源和全量 profile 保留。
 
@@ -273,6 +289,7 @@ python scripts/build_discovery_candidates.py --research-dir OUTPUT_DIR/research
 ## 按需资源
 
 - 输入输出与闭环：[request-output-contract.md](references/request-output-contract.md)、[iteration-loop.md](references/iteration-loop.md)、[research-delivery-receipt.schema.json](references/research-delivery-receipt.schema.json)。
+- 受限执行器与互搏：[adversarial-audit.md](references/adversarial-audit.md)、[audit-receipt.schema.json](references/audit-receipt.schema.json)、[declarative-adapter.md](references/declarative-adapter.md)、[declarative-adapter.schema.json](references/declarative-adapter.schema.json)。
 - 来源与证据：[data-sources.md](references/data-sources.md)、[source-acceptance-standard.md](references/source-acceptance-standard.md)、[source-evidence-standard-v3.md](references/source-evidence-standard-v3.md)、[coordinate-policy-registry.json](references/coordinate-policy-registry.json)。
 - D2 科学：[scientific-rules.md](references/scientific-rules.md)、[data-model.md](references/data-model.md)、[schema-mapping.md](references/schema-mapping.md)、[platform-field-crosswalk.md](references/platform-field-crosswalk.md)。
 - D3 与空间：[d3-visualization-contract.md](references/d3-visualization-contract.md)、[render-gate.md](references/render-gate.md)、[global-spatial-coverage.md](references/global-spatial-coverage.md)。
