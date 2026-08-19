@@ -6713,7 +6713,8 @@ def check_d3(output_dir: Path) -> list[str]:
         SKILL_DIR / "fixtures" / "four-media" / "combined-v3" / "expected-output"
     )
     temporal_payload = temporal_map_builder.build_payload(
-        combined_expected_dir / "geochemistry.csv"
+        combined_expected_dir / "geochemistry.csv",
+        combined_expected_dir / "anomaly_provenance.json",
     )
     temporal_stats = temporal_payload["stats"]
     require(
@@ -6724,7 +6725,9 @@ def check_d3(output_dir: Path) -> list[str]:
         and "\u533a\u57df\u5bf9\u6bd4" in temporal_html
         and "\u91c7\u6837\u53f2\u56de\u653e" in temporal_html
         and "\u7ad9\u70b9\u6f14\u53d8" in temporal_html
+        and "异常成因" in temporal_html
         and 'id="modeCompare"' in temporal_html
+        and 'id="modeProvenance"' in temporal_html
         and 'id="colorConc"' in temporal_html
         and "<script src=" not in temporal_html
         and "https://" not in temporal_html.split("<style>")[0],
@@ -6751,6 +6754,26 @@ def check_d3(output_dir: Path) -> list[str]:
             for station in temporal_payload["stations"]
         ),
         "D3 temporal map payload keeps honest dated/undated accounting on the combined fixture",
+        checks,
+    )
+    temporal_prov = temporal_payload["anomaly_provenance"]
+    combined_prov_report = json_value(combined_expected_dir / "anomaly_provenance.json")
+    require(
+        temporal_prov is not None
+        and temporal_prov["contract"] == "anomaly-provenance-v1"
+        and temporal_prov["candidate_count"] == 27
+        and temporal_prov["mapped"] + temporal_prov["unmapped"] == 27
+        and temporal_prov["class_counts"] == combined_prov_report["classification_counts"]
+        and all(
+            entry["classification"] in temporal_prov["labels_zh"]
+            and len(entry["lines"]) in (0, 4)
+            for entry in temporal_prov["entries"]
+        )
+        and temporal_map_builder.build_payload(
+            combined_expected_dir / "geochemistry.csv"
+        )["anomaly_provenance"]
+        is None,
+        "D3 temporal map embeds geogenic-vs-anthropogenic verdicts with evidence lines and stays optional",
         checks,
     )
     require(

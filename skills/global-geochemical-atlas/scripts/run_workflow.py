@@ -350,7 +350,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         ) from exc
 
     try:
-        temporal_payload = temporal_map_builder.build_payload(outputs["database"])
+        temporal_payload = temporal_map_builder.build_payload(
+            outputs["database"], args.output_dir / "anomaly_provenance.json"
+        )
         temporal_html = temporal_map_builder.build_html(
             temporal_payload,
             temporal_map_builder.DEFAULT_TEMPLATE,

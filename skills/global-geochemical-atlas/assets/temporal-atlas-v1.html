@@ -123,7 +123,7 @@ button,select,input{font:inherit}
 <header class="hero">
   <div class="eyebrow">GLOBAL GEOCHEMICAL ATLAS · TEMPORAL EVOLUTION</div>
   <h1>全球地球化学 <em>时间演变</em> 可交互地图</h1>
-  <p id="heroSub">看同一个地区的元素含量随时间怎么变：<b>区域对比</b>把带采样时刻的观测按 5° 网格分成早晚两期，直接标出同一格子的中位含量是升是降；<b>站点演变</b>给出单个监测点的浓度—时间序列；<b>采样史回放</b>按含量着色回放逐条观测。仅 <b>publisher_reported</b> 的采样时刻参与时间分析；无采样时刻的记录绝不假装有时间，只作为可选的灰色底衬并计入统计。</p>
+  <p id="heroSub">看同一个地区的元素含量随时间怎么变：<b>区域对比</b>把带采样时刻的观测按 5° 网格分成早晚两期，直接标出同一格子的中位含量是升是降；<b>异常成因</b>沿岩性 / 空间 / 伴生元素 / 时序四条证据线判断富集是母质高背景还是疑似人为输入；<b>站点演变</b>给出单个监测点的浓度—时间序列；<b>采样史回放</b>按含量着色回放逐条观测。仅 <b>publisher_reported</b> 的采样时刻参与时间分析；无采样时刻的记录绝不假装有时间，只作为可选的灰色底衬并计入统计。</p>
 </header>
 <main class="shell" data-template-contract="temporal-atlas-v1">
   <section class="kpis">
@@ -137,6 +137,7 @@ button,select,input{font:inherit}
       <div class="head-row">
         <div class="seg" role="tablist" aria-label="模式切换">
           <button id="modeCompare" class="active" role="tab" aria-selected="true">区域对比</button>
+          <button id="modeProvenance" role="tab" aria-selected="false">异常成因</button>
           <button id="modeReplay" role="tab" aria-selected="false">采样史回放</button>
           <button id="modeStation" role="tab" aria-selected="false">站点演变</button>
         </div>
@@ -215,6 +216,30 @@ const PRECISIONS = PAYLOAD.precisions;
 const REC = PAYLOAD.records;
 const UNDATED = PAYLOAD.undated_points; /* [lon,lat,elIdx,medIdx] */
 const STATIONS = PAYLOAD.stations;
+
+/* ====== 异常成因归因（anomaly-provenance-v1，可选嵌入） ====== */
+const PROV = PAYLOAD.anomaly_provenance || null;
+const CLASS_COLOR = {
+  geogenic_background: "#3ddc97",
+  suspected_anthropogenic_input: "#ff5c6a",
+  mixed_or_undistinguished: "#c792ea",
+  insufficient_evidence: "#9db0bd",
+  not_applicable_depletion: "#54a7ff"
+};
+const CLASS_ORDER = ["geogenic_background", "suspected_anthropogenic_input", "mixed_or_undistinguished", "insufficient_evidence", "not_applicable_depletion"];
+const VERDICT_LABEL = {
+  supports_geogenic: "指向母质",
+  supports_anthropogenic: "指向人为输入",
+  available_but_neutral: "中性",
+  unavailable: "证据缺失"
+};
+const VERDICT_COLOR = {
+  supports_geogenic: "#3ddc97",
+  supports_anthropogenic: "#ff5c6a",
+  available_but_neutral: "#9fc6c4",
+  unavailable: "#6e8391"
+};
+const LINE_LABEL = { lithology: "岩性", spatial: "空间", association: "伴生元素", temporal: "时序" };
 
 const MEDIUM_LABEL = { soil: "土壤", sediment: "沉积物", water: "水体", rock: "岩石" };
 const PRECISION_LABEL = { second: "秒", minute: "分", day: "日", month: "月", year: "年", year_range: "年段" };
@@ -346,6 +371,8 @@ const state = {
   hoverRec: null,
   hoverCell: null,
   activeCell: null,
+  hoverAnom: null,
+  activeAnom: null,
   activeStation: -1,
   popupElement: null,
   filterFadeStart: 0
@@ -444,6 +471,7 @@ let drawQueued = false;
 let hitPoints = [];   /* {x,y,rec} */
 let hitStations = []; /* {x,y,r,st,idx} */
 let hitCells = [];    /* {x0,y0,x1,y1,cell} */
+let hitAnoms = [];    /* {x,y,r,anom} */
 const enteredAt = new Map(); /* 记录数组引用 -> 进入窗口时刻，用于新点脉冲 */
 let windowCount = 0;
 
@@ -535,6 +563,45 @@ function drawCompare(fade) {
   ctx.globalAlpha = 1;
 }
 
+function anomMatches(a) {
+  if (state.element !== "ALL" && a.element !== state.element) return false;
+  if (state.medium !== "ALL" && a.medium !== state.medium) return false;
+  return true;
+}
+function drawProvenance(fade) {
+  hitAnoms = [];
+  if (!PROV) return;
+  for (const a of PROV.entries) {
+    if (!anomMatches(a)) continue;
+    const p = project(a.lon, a.lat);
+    if (p[0] < -24 || p[0] > W + 24 || p[1] < -24 || p[1] > H + 24) continue;
+    const color = CLASS_COLOR[a.classification] || "#9db0bd";
+    const big = a.direction === "high";
+    const rOut = big ? 9 : 5.5;
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = (big ? 0.9 : 0.5) * fade;
+    ctx.drawImage(glowSprite(color), p[0] - rOut * 1.7, p[1] - rOut * 1.7, rOut * 3.4, rOut * 3.4);
+    ctx.restore();
+    ctx.globalAlpha = fade;
+    ctx.beginPath(); ctx.arc(p[0], p[1], rOut, 0, Math.PI * 2);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = state.activeAnom === a ? 2.6 : (state.hoverAnom === a ? 2 : 1.4);
+    ctx.stroke();
+    if (big) {
+      /* 富集候选：环内加向上箭头示意「偏高」 */
+      ctx.beginPath(); ctx.arc(p[0], p[1], 3, 0, Math.PI * 2);
+      ctx.fillStyle = color; ctx.fill();
+    } else {
+      /* 亏损候选：细环小标记 */
+      ctx.beginPath(); ctx.arc(p[0], p[1], 1.6, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(234,255,251,.6)"; ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    hitAnoms.push({ x: p[0], y: p[1], r: rOut + 5, anom: a });
+  }
+}
+
 function drawMap(now) {
   if (!W || !H) return;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -563,6 +630,12 @@ function drawMap(now) {
     drawCompare(fade);
     updateCounter();
     if (needMore || state.playing) scheduleDraw();
+    return;
+  }
+  if (state.mode === "provenance") {
+    drawProvenance(fade);
+    updateCounter();
+    if (needMore) scheduleDraw();
     return;
   }
   if (state.mode === "replay") {
@@ -647,6 +720,14 @@ function fmtYear(t) {
 }
 function updateCounter() {
   const el = $("winCounter");
+  if (state.mode === "provenance") {
+    if (!PROV) { el.innerHTML = "未嵌入归因结果"; return; }
+    const visible = PROV.entries.filter(anomMatches).length;
+    const cc = PROV.class_counts;
+    const bits = CLASS_ORDER.filter(k => cc[k]).map(k => `${(PROV.labels_zh[k] || k).slice(0, 5)} ${cc[k]}`).join(" · ");
+    el.innerHTML = `异常候选 <b>${visible}</b> / ${PROV.candidate_count}（当前筛选可见）<br>${bits}`;
+    return;
+  }
   if (state.mode === "compare") {
     const s = compareSummary;
     el.innerHTML = `分割年 <span class="win">${state.splitYear}</span> · 元素 ${state.element === "ALL" ? "未选定" : state.element}<br>` +
@@ -668,7 +749,13 @@ function updateKpis() {
   $("kDatedBar").style.width = pct + "%";
   $("kStations").textContent = STATS.stations_mode_b;
   $("kStationsSub").textContent = `同一位置 ≥3 采样时相 · 共识别站点 ${STATS.station_total} 个`;
-  if (state.mode === "compare") {
+  if (state.mode === "provenance") {
+    $("kWinLabel").textContent = "异常候选（成因归因）";
+    $("kWindow").textContent = PROV ? String(PROV.candidate_count) : "—";
+    $("kWindowSub").textContent = PROV
+      ? `母质 ${PROV.class_counts.geogenic_background || 0} · 人为 ${PROV.class_counts.suspected_anthropogenic_input || 0} · 混合 ${PROV.class_counts.mixed_or_undistinguished || 0} · 证据不足 ${PROV.class_counts.insufficient_evidence || 0}`
+      : "本次构建未嵌入归因结果";
+  } else if (state.mode === "compare") {
     $("kWinLabel").textContent = "可比区域格子（早晚两期）";
     $("kWindow").textContent = String(compareSummary.comparable);
     $("kWindowSub").textContent = HAS_DATED
@@ -690,6 +777,14 @@ function updateKpisWindowOnly() {
 }
 function updateLegend() {
   const el = $("mapLegend");
+  if (state.mode === "provenance") {
+    el.innerHTML = CLASS_ORDER
+      .map(k => `<div class="row"><i class="dot" style="background:${CLASS_COLOR[k]};box-shadow:0 0 8px ${CLASS_COLOR[k]}"></i>${(PROV && PROV.labels_zh[k]) || k}</div>`)
+      .join("") +
+      `<div class="row" style="margin-top:4px;opacity:.75">大标记 = 富集候选 · 小标记 = 亏损候选</div>` +
+      `<div class="row" style="opacity:.75">四条证据线：岩性 / 空间 / 伴生元素 / 时序</div>`;
+    return;
+  }
   if (state.mode === "compare") {
     el.innerHTML = ["up", "down", "flat"]
       .map(k => `<div class="row"><i class="dot" style="background:${DELTA_COLOR[k]};box-shadow:0 0 8px ${DELTA_COLOR[k]}"></i>${DELTA_LABEL[k]}</div>`)
@@ -727,6 +822,16 @@ function updateLegend() {
 /* ====== 空状态 ====== */
 function updateEmptyState() {
   const empty = $("mapEmpty");
+  if (state.mode === "provenance") {
+    if (!PROV) {
+      empty.innerHTML = `<strong>本次构建未嵌入异常成因归因结果</strong><span>用技能构建时传入 <b>--provenance anomaly_provenance.json</b>（run_workflow 会自动传入）即可在图上看到「母质高背景 / 疑似人为输入 / 混合 / 证据不足」的判定与四条证据线解释。</span>`;
+      empty.style.display = "block";
+    } else if (PROV.entries.filter(anomMatches).length === 0) {
+      empty.innerHTML = `<strong>当前筛选下没有异常候选</strong><span>共 ${PROV.candidate_count} 个候选（其中 ${PROV.unmapped} 个无可用坐标未上图）。试试切换元素或介质。</span>`;
+      empty.style.display = "block";
+    } else empty.style.display = "none";
+    return;
+  }
   if (state.mode === "compare") {
     if (!HAS_DATED) {
       empty.innerHTML = `<strong>本数据集无带采样时刻的记录</strong><span>区域对比、采样史回放与站点演变都依赖发布方报告的采样时刻——这是时间元数据缺口，不代表没有观测。可开启「显示无时间记录」查看空间分布。</span>`;
@@ -984,8 +1089,22 @@ mapCanvas.addEventListener("pointerup", e => {
     const hit = pickCell(mx, my);
     if (hit) openCell(hit.cell);
     else { state.activeCell = null; closeStation(); }
+  } else if (state.mode === "provenance") {
+    const rect = mapCanvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const hit = pickAnom(mx, my);
+    if (hit) openAnomaly(hit.anom);
+    else closeStation();
   }
 });
+function pickAnom(mx, my) {
+  let best = null, bd = 1e9;
+  for (const h of hitAnoms) {
+    const d = Math.hypot(h.x - mx, h.y - my);
+    if (d < h.r + 4 && d < bd) { bd = d; best = h; }
+  }
+  return best;
+}
 function pickCell(mx, my) {
   /* 可比格子排在数组尾部（后画在上层），倒序拾取保证优先命中可比格子 */
   for (let i = hitCells.length - 1; i >= 0; i--) {
@@ -1017,6 +1136,16 @@ $("zoomOut").addEventListener("click", () => { state.view.zoom = Math.max(0.85, 
 $("zoomReset").addEventListener("click", () => { state.view = { lon: 12, lat: 12, zoom: 1 }; scheduleDraw(); });
 
 function handleHover(mx, my, cx, cy) {
+  if (state.mode === "provenance") {
+    const hit = pickAnom(mx, my);
+    const prev = state.hoverAnom;
+    state.hoverAnom = hit ? hit.anom : null;
+    if (hit) showAnomTooltip(hit.anom, cx, cy);
+    else tooltip.style.display = "none";
+    mapCanvas.style.cursor = hit ? "pointer" : "grab";
+    if (prev !== state.hoverAnom) scheduleDraw();
+    return;
+  }
   if (state.mode === "compare") {
     const hit = pickCell(mx, my);
     const prev = state.hoverCell;
@@ -1094,6 +1223,18 @@ function showCellTooltip(cell, cx, cy) {
     `<div class="t-muted">点击查看该区域的含量—时间散点</div>`;
   positionTooltip(cx, cy);
 }
+function showAnomTooltip(a, cx, cy) {
+  const color = CLASS_COLOR[a.classification] || "#9db0bd";
+  const supporting = a.lines
+    .filter(l => l[1] === "supports_geogenic" || l[1] === "supports_anthropogenic")
+    .map(l => `${LINE_LABEL[l[0]] || l[0]}${VERDICT_LABEL[l[1]]}`)
+    .join("、");
+  tooltip.innerHTML =
+    `<div class="t-el" style="color:${color}">${a.element} · ${mediumLabel(a.medium)} · ${a.label_zh}</div>` +
+    `<div>${a.direction === "high" ? "富集候选" : "亏损候选"}${supporting ? " · " + supporting : ""}</div>` +
+    `<div class="t-muted">点击查看四条证据线的通俗解释</div>`;
+  positionTooltip(cx, cy);
+}
 function showStationTooltip(st, cx, cy) {
   const els = Object.keys(st.series).sort();
   tooltip.innerHTML =
@@ -1104,7 +1245,13 @@ function showStationTooltip(st, cx, cy) {
 }
 
 /* ====== 模式 B：站点弹窗与迷你折线图 ====== */
+function resetPopupChrome() {
+  chartCanvas.style.display = "";
+  const trendEl = $("popupTrend");
+  trendEl.style.background = ""; trendEl.style.borderColor = ""; trendEl.style.color = "";
+}
 function openStation(idx) {
+  resetPopupChrome();
   state.activeStation = idx;
   const st = STATIONS[idx];
   const els = Object.keys(st.series).sort();
@@ -1135,13 +1282,54 @@ function openStation(idx) {
 function closeStation() {
   state.activeStation = -1;
   state.activeCell = null;
+  state.activeAnom = null;
+  chartCanvas.style.display = "";
   $("stationPopup").style.display = "none";
   scheduleDraw();
 }
 $("popupClose").addEventListener("click", closeStation);
 
+/* ====== 异常成因：证据线弹窗 ====== */
+function openAnomaly(a) {
+  state.activeAnom = a;
+  state.activeStation = -1;
+  state.activeCell = null;
+  const color = CLASS_COLOR[a.classification] || "#9db0bd";
+  $("popupTitle").textContent = `${a.element} · ${mediumLabel(a.medium)} · ${a.direction === "high" ? "富集候选" : "亏损候选"}`;
+  $("popupCoords").textContent = `${a.lat.toFixed(3)}°, ${a.lon.toFixed(3)}°`;
+  $("popupMeta").textContent = a.summary + (a.coord_fallback ? "（坐标为发布方原始值回退）" : "");
+  $("popupTabs").innerHTML = "";
+  const trendEl = $("popupTrend");
+  trendEl.style.display = "";
+  trendEl.className = "p-trend";
+  trendEl.style.background = "rgba(255,255,255,.04)";
+  trendEl.style.borderColor = color;
+  trendEl.style.color = color;
+  trendEl.textContent = `判定：${a.label_zh}`;
+  chartCanvas.style.display = "none"; /* 该弹窗展示证据线文字，不画图 */
+  $("popupNote").innerHTML = a.lines.length
+    ? a.lines.map(l =>
+        `<div style="margin-bottom:6px"><b style="color:${VERDICT_COLOR[l[1]] || "#9fc6c4"}">` +
+        `${LINE_LABEL[l[0]] || l[0]} · ${VERDICT_LABEL[l[1]] || l[1]}</b><br>${l[2]}</div>`
+      ).join("") +
+      `<div style="opacity:.75">规则：至少两条证据线同向才下「母质 / 人为」结论，否则如实标注不判定。</div>`
+    : "亏损候选：本契约的成因归因只覆盖富集方向，该点保留为筛查线索。";
+  const popup = $("stationPopup");
+  popup.style.display = "block";
+  const p = project(a.lon, a.lat);
+  const wrapRect = mapWrap.getBoundingClientRect();
+  const pw = Math.min(392, wrapRect.width * 0.86);
+  let x = p[0] + 20, y = p[1] - 50;
+  if (x + pw > wrapRect.width - 10) x = p[0] - pw - 20;
+  if (x < 10) x = 10;
+  y = Math.max(10, Math.min(y, wrapRect.height - 300));
+  popup.style.left = x + "px"; popup.style.top = y + "px";
+  scheduleDraw();
+}
+
 /* ====== 区域对比：格子弹窗（同一区域的含量—时间散点） ====== */
 function openCell(cell) {
+  resetPopupChrome();
   state.activeCell = cell;
   state.activeStation = -1;
   $("popupTitle").textContent = `${state.element} · ${mediumLabel(MEDIA[cell.med])} · ${CELL_DEG}° 格子`;
@@ -1352,13 +1540,13 @@ function renderStationList() {
 }
 
 /* ====== 模式与过滤控件 ====== */
-const MODE_BADGE = { compare: "区域对比", replay: "采样史回放", station: "站点演变" };
+const MODE_BADGE = { compare: "区域对比", provenance: "异常成因", replay: "采样史回放", station: "站点演变" };
 function setMode(m) {
   state.mode = m;
   stopPlay();
   closeStation();
   state.activeCell = null;
-  for (const [btn, key] of [["modeCompare", "compare"], ["modeReplay", "replay"], ["modeStation", "station"]]) {
+  for (const [btn, key] of [["modeCompare", "compare"], ["modeProvenance", "provenance"], ["modeReplay", "replay"], ["modeStation", "station"]]) {
     $(btn).classList.toggle("active", m === key);
     $(btn).setAttribute("aria-selected", String(m === key));
   }
@@ -1376,6 +1564,12 @@ function setMode(m) {
     $("modeNote").innerHTML =
       `同一个 ${CELL_DEG}° 格子（同介质、同单位）里早晚两期都有 ≥2 条数值观测时，直接对比两期<b>中位含量</b>：` +
       `<b style="color:${DELTA_COLOR.up}">红=上升</b> / <b style="color:${DELTA_COLOR.down}">蓝=下降</b> / 灰=持平；虚线暗格 = 只有单期观测，无法比较。点击格子看该区域的含量—时间散点。`;
+  } else if (m === "provenance") {
+    $("modeNote").innerHTML = PROV
+      ? `每个异常候选沿<b>岩性 / 空间 / 伴生元素 / 时序</b>四条证据线判断富集成因：` +
+        `<b style="color:${CLASS_COLOR.geogenic_background}">绿=母质高背景</b> / <b style="color:${CLASS_COLOR.suspected_anthropogenic_input}">红=疑似人为输入</b> / ` +
+        `<b style="color:${CLASS_COLOR.mixed_or_undistinguished}">紫=混合叠加</b> / 灰=证据不足不硬判。至少两条证据线同向才下结论；点击标记看每条证据线的人话解释。`
+      : `本次构建未嵌入异常成因归因结果。`;
   } else {
     $("modeNote").innerHTML = m === "replay"
       ? `拖动或播放时间轴回放采样史，点色默认表示<b>该元素同介质同单位层内的含量高低</b>；<b>金色柱段</b>为年段记录（按区间中点计年）。仅 ${STATS.dated_records} 条（${(STATS.dated_share * 100).toFixed(1)}%）带采样时刻的记录参与回放。`
@@ -1390,6 +1584,7 @@ function setMode(m) {
   scheduleDraw();
 }
 $("modeCompare").addEventListener("click", () => setMode("compare"));
+$("modeProvenance").addEventListener("click", () => setMode("provenance"));
 $("modeReplay").addEventListener("click", () => setMode("replay"));
 $("modeStation").addEventListener("click", () => setMode("station"));
 
@@ -1467,6 +1662,7 @@ function renderFooter() {
     `（${STATS.dated_records}/${STATS.total_records} · ${(STATS.dated_share * 100).toFixed(1)}%）。精度构成：${precBits}。` +
     `年段记录显示为区间并置于中点参与排序。${unmapped}` +
     `区域对比在同元素 · 同介质 · 同单位层内按 ${CELL_DEG}° 网格对比早晚两期实测中位数（删失点不参与统计），只描述观测变化，不外推、不代表成因。` +
+    (PROV ? `异常成因按 anomaly-provenance-v1 契约嵌入：${PROV.candidate_count} 个候选，${PROV.mapped} 个上图，${PROV.unmapped} 个无可用坐标未上图；至少两条证据线同向才判母质 / 人为，否则如实标注证据不足。` : "本次构建未嵌入异常成因归因结果（可选 --provenance）。") +
     `其中 ${STATS.coordinate_fallback_used} 条使用发布方原始坐标回退（original_latitude_raw / original_longitude_raw，未规范化，图上有标注）。<br>` +
     `<b>制图</b>：海岸线 Natural Earth 1:110m Land（公有领域）· WGS84 等经纬投影 · 仅科学示意，不作法定边界依据。` +
     `数据集：${PAYLOAD.source_dataset} · 模板 temporal-atlas-v1。`;

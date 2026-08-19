@@ -267,7 +267,58 @@ def load_basemap(path: Path) -> dict[str, Any]:
     }
 
 
-def build_payload(input_path: Path) -> dict[str, Any]:
+def load_provenance(
+    path: Path, coord_by_record: dict[str, tuple[float, float, bool] | None]
+) -> dict[str, Any]:
+    """Embed anomaly-provenance-v1 results so the map can show, per anomaly,
+    whether enrichment looks geogenic (parent material) or anthropogenic."""
+    with path.open(encoding="utf-8") as handle:
+        raw = json.load(handle)
+    if raw.get("contract") != "anomaly-provenance-v1":
+        raise TemporalMapBuildError("unsupported anomaly provenance contract")
+    entries: list[dict[str, Any]] = []
+    unmapped = 0
+    class_counts: dict[str, int] = {}
+    for item in sorted(raw["anomalies"], key=lambda a: str(a["record_id"])):
+        cls = item["classification"]
+        class_counts[cls] = class_counts.get(cls, 0) + 1
+        coords = coord_by_record.get(item["record_id"])
+        if coords is None:
+            unmapped += 1
+            continue
+        lon, lat, fallback = coords
+        lines = [
+            [name, line["verdict"], line["plain_language"]]
+            for name, line in sorted(item.get("evidence_lines", {}).items())
+        ]
+        entries.append(
+            {
+                "lon": lon,
+                "lat": lat,
+                "element": item["element"],
+                "medium": item["medium"],
+                "classification": cls,
+                "label_zh": item["classification_label_zh"],
+                "direction": item["direction"],
+                "summary": item["plain_language"],
+                "lines": lines,
+                "coord_fallback": fallback,
+            }
+        )
+    return {
+        "contract": raw["contract"],
+        "candidate_count": raw["candidate_count"],
+        "mapped": len(entries),
+        "unmapped": unmapped,
+        "class_counts": class_counts,
+        "labels_zh": raw["classification_labels_zh"],
+        "entries": entries,
+    }
+
+
+def build_payload(
+    input_path: Path, provenance_path: Path | None = None
+) -> dict[str, Any]:
     with input_path.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
     if not rows:
@@ -301,6 +352,7 @@ def build_payload(input_path: Path) -> dict[str, Any]:
     precision_counts: dict[str, int] = {}
     dated: list[dict[str, Any]] = []
     undated: list[dict[str, Any]] = []
+    coord_by_record: dict[str, tuple[float, float, bool] | None] = {}
     time_parse_failed = 0
     for row in rows:
         status = row["sampling_time_status"] or "missing_status"
@@ -313,6 +365,7 @@ def build_payload(input_path: Path) -> dict[str, Any]:
             if parsed is None:
                 time_parse_failed += 1
         entry: dict[str, Any] = {"row": row, "coords": resolve_coordinates(row)}
+        coord_by_record[row["record_id"]] = entry["coords"]
         if parsed is None:
             undated.append(entry)
             continue
@@ -468,6 +521,11 @@ def build_payload(input_path: Path) -> dict[str, Any]:
         "station_total": len(station_groups),
         "stations_mode_b": len(stations),
     }
+    provenance = (
+        load_provenance(provenance_path, coord_by_record)
+        if provenance_path is not None
+        else None
+    )
     return {
         "schema_version": PAYLOAD_SCHEMA_VERSION,
         "source_dataset": input_path.name,
@@ -479,6 +537,7 @@ def build_payload(input_path: Path) -> dict[str, Any]:
         "records": records,
         "undated_points": undated_points,
         "stations": stations,
+        "anomaly_provenance": provenance,
     }
 
 
@@ -504,9 +563,16 @@ def main() -> int:
     parser.add_argument("--output", required=True, type=Path, help="output HTML path")
     parser.add_argument("--template", type=Path, default=DEFAULT_TEMPLATE)
     parser.add_argument("--basemap", type=Path, default=DEFAULT_BASEMAP)
+    parser.add_argument(
+        "--provenance",
+        type=Path,
+        default=None,
+        help="optional anomaly_provenance.json to show geogenic-vs-anthropogenic "
+        "verdicts on the map",
+    )
     args = parser.parse_args()
     try:
-        payload = build_payload(args.input)
+        payload = build_payload(args.input, args.provenance)
         html = build_html(payload, args.template, args.basemap)
     except (TemporalMapBuildError, OSError) as error:
         print(f"build_temporal_map: {error}", file=sys.stderr)

@@ -82,9 +82,9 @@
         "sha256": "0bdb2c92476c7b19de6f0d6c55c58a76954664489adf87d8bc372e3fe2fd634f"
       },
       "temporal_map": {
-        "bytes": 250059,
+        "bytes": 274390,
         "filename": "temporal_map.html",
-        "sha256": "f0e9c6b9040fb4c4e0488d0bb28a248947b5a9918b7bb018e0ee7a9e95b78bcf"
+        "sha256": "1e6012fcff5c1a32e2d917d82bb8a310d33031ff83d02340af7a433b83443041"
       }
     },
     "commit_marker": "run_summary.json",
