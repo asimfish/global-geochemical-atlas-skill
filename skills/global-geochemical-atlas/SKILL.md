@@ -1,6 +1,6 @@
 ---
 name: global-geochemical-atlas
-description: 构建全球或区域地球化学元素图谱；用于从公开来源采集岩石、土壤、沉积物或水体元素测定，统一单位和坐标，执行 QC、来源追溯、置信度拆分、异常筛查、元素组合比较并生成离线交互地图与标准数据库。 Use for traceable geochemical atlas, normalization, provenance, anomaly-screening, comparison, and mapping tasks; do not use for general chemistry, generic maps, or causal pollution/mineral-deposit claims.
+description: 构建全球或区域地球化学元素图谱；用于从公开来源采集岩石、土壤、沉积物或水体元素测定，统一单位和坐标，执行 QC、来源追溯、置信度拆分、异常筛查、元素组合比较，记录采样时间并沿岩性/空间/伴生/时序证据线区分富集是母质高背景还是疑似人为输入，生成离线交互地图（含时间演变四模式）与标准数据库；支持 900 秒快速档与小时级完整档。 Use for traceable geochemical atlas, normalization, provenance, anomaly-screening, temporal-evolution, enrichment-attribution, comparison, and mapping tasks; do not use for general chemistry, generic maps, or definitive pollution/mineral-deposit claims.
 ---
 
 # 全球地球化学元素分布图谱
@@ -74,6 +74,28 @@ python scripts/task_router.py --contract TASK.json --output TASK_PLAN.json
 ## 2. 在线采集与充分性循环
 
 真实研究默认在线尝试，不得因为 fixture 更快而跳过。官方评审或任何有限时任务必须先执行上一节的 `task_router.py`，让外部 deadline 进入命令计划；不要在 900 秒沙箱中直接启动下方 12 小时默认控制器。
+
+### 运行模式分层
+
+同一个控制器按预算分三档，档位只改时间与轮数，不改科学与证据门禁：
+
+| 模式 | 预算 | 关键参数 | 交付语义 |
+|---|---|---|---|
+| 快速 quick | ≤900 秒 | `--time-budget-seconds 900 --max-rounds 1 --checkpoint-only` | 轻量真实在线采集，约 15 分钟产出全部十八文件；只算 checkpoint 收据，如实标注非全量覆盖 |
+| 标准 standard | ≤3,600 秒 | `--time-budget-seconds 3600 --max-rounds 2` | 两个完整轮次，覆盖显著扩大；未过全部门禁时如实返回 `continue_research`/`needs_human_review` |
+| 完整 full | ≤43,200 秒 | 下方默认控制器命令 | 唯一能产生正式交付的模式，须收敛并通过 `validate_research_delivery.py` |
+
+用户说「简单模式 / 快速看看效果 / 轻量跑一次」时用 quick 档：
+
+```bash
+python scripts/run_self_correction_loop.py \
+  --request REQUEST.json --online-source auto \
+  --cache-dir .cache/data --analysis-profile production \
+  --time-budget-seconds 900 --max-rounds 1 --checkpoint-only \
+  --output-dir OUTPUT_DIR
+```
+
+quick/standard 服务官方 900 秒沙箱评审与用户轻量试跑两类场景；其产物永远是 checkpoint，不得冒充完整研究结论。
 
 只有用户明确授权小时级研究时，运行：
 

@@ -9,15 +9,16 @@
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#-90-秒快速开始)
 [![Runtime Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-%E9%9B%B6%E7%AC%AC%E4%B8%89%E6%96%B9-brightgreen)](#-90-秒快速开始)
-[![Tests](https://img.shields.io/badge/tests-504%20%2B%2075%20%2B%20105%20passing-brightgreen)](#-开发与验证)
+[![Tests](https://img.shields.io/badge/tests-520%20%2B%2075%20%2B%20110%20passing-brightgreen)](#-开发与验证)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-在你的-ai-agent-中使用)
+[![Works with](https://img.shields.io/badge/Works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Copilot%20CLI-6E56CF)](#-在你的-ai-agent-中使用)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 [🌐 在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
 [🚀 快速开始](#-90-秒快速开始) ·
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
 [🧭 数据来源](#-数据来源33-个已冻结可执行来源--65-条审计目录记录) ·
-[📦 输出产物](#-十六个输出产物) ·
+[📦 输出产物](#-十八个输出产物) ·
 [❓ FAQ](#-faq)
 
 <img src="skills/global-geochemical-atlas/assets/readme-atlas-map.png" alt="全球地球化学元素图谱交互界面：44,510 条测定的全球分布、采样密度热力、候选异常标记与四介质覆盖侧栏" width="100%">
@@ -43,7 +44,8 @@
 | 数据从哪来 | 65 条审计目录记录，其中 33 个已冻结、可执行公开来源、32 个 discovery-only 候选（岩石/土壤/沉积物/水体）；正式记录逐条绑定 DOI/URL、版本、许可、定位与文件 SHA-256 |
 | 数值和证据能不能用 | 原值永不覆盖、删失值不插补、批次 QC 逐条重算；来源证据/分析就绪度/空间可用性/工作流可用性分开报告 |
 | 结论敢不敢用 | 异常只作筛查候选并列出竞争解释；跑不齐的范围诚实报告缺口，绝不冒充全量覆盖 |
-| 能不能复用 | 40+ JSON Schema、十六文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接 |
+| 能不能复用 | 40+ JSON Schema、十八文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接；纯 Markdown + 标准库，Claude Code / Codex / Cursor 等运行时零改动挂载 |
+| 时间维度呢 | 每条记录带采样时刻三列（`atlas-sampling-time-v1`，发表年不算数）；时间演变四模式交互地图；异常富集沿岩性/空间/伴生/时序四条证据线归因「母质高背景 / 疑似人为输入」，证据不足如实不判 |
 
 ## 🚀 90 秒快速开始
 
@@ -58,12 +60,12 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
   --generated-at 2026-08-07T00:00:00Z \
   --output-dir /tmp/geochemical-production-demo
 
-# 2. 校验十六文件产物契约
+# 2. 校验十八文件产物契约
 python skills/global-geochemical-atlas/scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-两个命令应分别返回 `"status": "partial_success"` 和 `"status": "valid"`。前者是**刻意的科学状态**：hash 固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十六项产物契约全部有效。
+两个命令应分别返回 `"status": "partial_success"` 和 `"status": "valid"`。前者是**刻意的科学状态**：hash 固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十八项产物契约全部有效。
 
 然后用浏览器打开 `/tmp/geochemical-production-demo/interactive_map.html` —— 一个完全自包含、无 CDN 依赖的交互图谱。
 
@@ -79,11 +81,11 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 
 </details>
 
-本地重复基准采用 3 次预热和 10 次独立测量，每次都创建新输出目录并验证全部 16 项产物；记录结果与适用边界见[工作流性能基准](skills/global-geochemical-atlas/BENCHMARK.md)。它不是官方模型得分或 2 CPU 容器成绩。
+本地重复基准采用 3 次预热和 10 次独立测量，每次都创建新输出目录并验证全部 18 项产物；记录结果与适用边界见[工作流性能基准](skills/global-geochemical-atlas/BENCHMARK.md)。它不是官方模型得分或 2 CPU 容器成绩。
 
 ## 🤖 在你的 AI Agent 中使用
 
-本 Skill 按 [Agent Skills](https://agentskills.io) 公共子集编写（`SKILL.md` + `references/` + `scripts/` + `assets/`，一层引用、相对路径、纯标准库），可直接挂载到任何兼容运行时：
+本 Skill 按 [Agent Skills](https://agentskills.io) 公共子集编写（`SKILL.md` + `references/` + `scripts/` + `assets/`，一层引用、相对路径、纯标准库）。**整个 Skill 就是 Markdown + Python 标准库脚本——没有框架、没有守护进程、没有第三方依赖**，任何能读 `SKILL.md` 的 LLM Agent 都能直接用；换运行时不需要改一行代码：
 
 ```bash
 # Claude Code（个人技能目录）
@@ -92,10 +94,20 @@ cp -r skills/global-geochemical-atlas ~/.claude/skills/
 # Codex CLI
 cp -r skills/global-geochemical-atlas ~/.codex/skills/
 
-# OpenCode 及其他兼容运行时：将 skill 目录复制/挂载到其技能目录即可
+# Cursor（项目级技能目录）
+cp -r skills/global-geochemical-atlas /path/to/your-project/.cursor/skills/
+
+# GitHub Copilot CLI（原生 SKILL.md 支持）
+cp -r skills/global-geochemical-atlas ~/.copilot/skills/
+
+# OpenCode / Trae / OpenClaw 及其他兼容运行时：将 skill 目录复制/挂载到其技能目录即可
 ```
 
-挂载后直接向 Agent 提出诉求即可触发，例如：*「用公开数据做一张西欧土壤砷分布图，标出候选富集区并给出来源和置信度」*。
+挂载后直接向 Agent 提出诉求即可触发，例如：
+
+- *「用公开数据做一张西欧土壤砷分布图，标出候选富集区并给出来源和置信度」*
+- *「快速模式跑一张全球铅分布图，我先看看效果」*（走 900 秒轻量档）
+- *「这些沉积物铜异常是母质决定的还是人为排放？给我证据线」*（走成因归因）
 
 - 激活边界与示例：[`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json)（含 3 条应激活与 3 条相邻不应激活样例）
 - 平台元数据：[`agents/openai.yaml`](skills/global-geochemical-atlas/agents/openai.yaml) · 能力卡片：[`skill-card.md`](skills/global-geochemical-atlas/skill-card.md)
@@ -117,6 +129,25 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
 D2 最低分析字段是 `element_or_analyte,value,unit,medium`；完整证据工作流还要求 `source_id,source_locator,license`。非标准列名必须通过显式 schema map 映射，不能靠语义猜测。正式科学运行还应提供样品标识、measurement basis、WGS84/原 CRS、分析与消解方法、检出限、来源层级及文件 SHA-256。
 
 ### ② 在线采集与数据充分性循环
+
+同一个控制器按预算分三档，档位只改时间与轮数，科学与证据门禁完全一致：
+
+| 模式 | 预算 | 适用场景 | 交付语义 |
+|---|---|---|---|
+| ⚡ 快速 quick | ≤900 秒（约 15 分钟） | 想先看效果的轻量试跑、官方沙箱评审 | 真实在线采集，产出全部 18 文件；checkpoint 收据，如实标注非全量覆盖 |
+| 🚶 标准 standard | ≤3,600 秒 | 单区域/少元素的日常研究 | 两个完整扩采轮次，未收敛时如实返回待继续状态 |
+| 🔬 完整 full | ≤43,200 秒 | 显式授权的全球全介质研究（约 2–12 小时） | 唯一能通过 `validate_research_delivery.py` 的正式交付 |
+
+**简单模式一条命令**（全球地图不用等 2–3 小时，先拿一版轻量真实结果）：
+
+```bash
+python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
+  --request /path/to/request.json \
+  --online-source auto \
+  --analysis-profile production \
+  --time-budget-seconds 900 --max-rounds 1 --checkpoint-only \
+  --output-dir /tmp/atlas-quick
+```
 
 官方自动评审未另给时限时，先生成任务合同并保留 `deadline_seconds=900`；`task_router.py` 会生成 720 秒内部在线检查点，给 Agent 启动、验证和回复预留 180 秒。检查点仍生成可评分的核心产物并如实报告缺口，但不能冒充完整全球研究。
 
@@ -180,16 +211,35 @@ flowchart LR
 - **D3** 只消费公共产物，通过版本化 profile 生成全球、国家或 WGS84 bbox 研究视图；不重算 D2 科学结果。
 - **多轮迭代**：每次运行产出 `iteration_backlog.csv`、`loop_report.json` 和 `d1_repair_queue.json`。每个预算约束轮次后审计一次：通用数量/背景缺口扩采，空间缺口按 `元素 + 介质 + 动态区域` 定向采集，来源/许可/CRS/方法缺口转 D1 准入；每轮生成新版本，canonical 数据与原始证据不在原地改写。
 
-## 📦 十六个输出产物
+## ⏳ 时间维度：演变地图与成因归因
 
-每次完整运行固定生成 16 个文件，逐文件 schema 与状态定义见[输入输出契约](skills/global-geochemical-atlas/references/request-output-contract.md)：
+环境监测最大的争议是「超标还是高背景」——比如某地土壤砷本底天然就高，按通用阈值筛就是假异常。本 Skill 从三个层面回答这个问题：
+
+<img src="skills/global-geochemical-atlas/assets/readme-temporal-map.jpg" alt="时间演变交互地图·区域对比模式：5° 网格早晚两期中位含量对比，红=上升、蓝=下降，可拖动分割年，虚线暗格如实标注仅单期观测" width="100%">
+
+<sub>时间演变地图默认模式「区域对比」：同一个 5° 格子早晚两期实测中位含量直接对比（红升 / 蓝降 / 灰平），拖动分割年实时重算；点击格子看该区域的含量—时间散点。只有单期观测的格子如实画成虚线暗格。</sub>
+
+<br><br>
+
+<img src="skills/global-geochemical-atlas/assets/readme-anomaly-provenance.jpg" alt="异常成因模式弹窗：四条证据线（岩性/空间/伴生元素/时序）各给通俗解释，两条同向才下母质或人为结论，否则如实标注证据不足" width="88%">
+
+<sub>「异常成因」模式：每个富集候选沿岩性 / 空间 / 伴生元素 / 时序四条证据线归因，每条给一句通俗解释；至少两条同向才判「母质高背景」或「疑似人为输入」，证据不够就明说不判——不会把高背景硬扣成污染。</sub>
+
+- **采样时刻契约**（`atlas-sampling-time-v1`）：`sampling_time` 记录样品被采集那一刻，发表年一律不算；逐源声明取值字段与格式，发布方没报就如实标 `publisher_not_reported`。
+- **时间演变地图**（`temporal_map.html`）：区域对比 / 异常成因 / 含量着色采样史回放 / 站点演变四模式，单文件离线可开。
+- **成因归因**（`anomaly_provenance.json`）：时序证据线的规则很直白——同一点位含量随时间明显上升支持「人为输入」，长期平稳支持「母质决定」；与岩性、空间、伴生元素三条线合议。
+
+## 📦 十八个输出产物
+
+每次完整运行固定生成 18 个文件，逐文件 schema 与状态定义见[输入输出契约](skills/global-geochemical-atlas/references/request-output-contract.md)：
 
 | 赛题交付物 | 运行产物 | 核心保证 |
 |---|---|---|
 | **可交互元素分布地图** | `interactive_map.html` · `samples.geojson` | 自包含无 CDN；按元素、介质、区域、方法与工作流可用性筛选；样点、热力与异常候选视图 |
-| **标准化地球化学数据库** | `geochemistry.csv` · `batch_acceptance.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法、分析批次与 QC 字段 |
+| **时间演变交互地图** | `temporal_map.html` | 同一份自包含 HTML 四个模式：区域对比（同一 5° 格子早晚两期中位含量升降）、异常成因、含量着色采样史回放、站点演变；无采样时刻的记录绝不假装有时间 |
+| **标准化地球化学数据库** | `geochemistry.csv` · `batch_acceptance.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法、分析批次与 QC 字段；含 `atlas-sampling-time-v1` 采样时刻三列（采样那一刻的含量，发表年不算），支持时序查询 |
 | **数据来源与置信度说明** | `sources_and_confidence.json` · `source_manifest.json` · `record_evidence.jsonl` · `confidence_report.json` | URL/DOI、许可、版本、获取时间、哈希、源记录定位；按来源给出测定行/独立样品数，并把来源证据、分析就绪度、空间可用性与工作流可用性分开报告 |
-| **异常区域识别结果** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` | 记录级 robust-MAD 候选 + 精确超几何富集/BH-FDR 空间筛查；完整报告失败边界 |
+| **异常区域识别结果** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` · `anomaly_provenance.json` | 记录级 robust-MAD 候选 + 精确超几何富集/BH-FDR 空间筛查；每个富集候选沿岩性/空间/伴生/时序四条证据线归因「母质高背景 / 疑似人为输入 / 混合 / 证据不足」，每条证据线给通俗解释 |
 | **质量与运行证据** | `qc_report.json` · `batch_qc_report.json` · `iteration_backlog.csv` · `run_summary.json` | 逐项 QC 留证、失败批次不静默删除、迭代待办与全运行摘要（含各产物 hash） |
 
 第五项赛题交付「可复用 Skill 文档」即 [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) 本体与其 schema、脚本和 fixture。
@@ -300,7 +350,7 @@ python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
   --output-dir /tmp/atlas-loop
 ```
 
-控制器先做早期门禁，每轮独立产出并校验十六文件，再评估元素 × 介质、来源血缘与集中度、在线成功率、测定行/独立样品、溯源、四维可用性、异常背景及各筛选视图的空间广度。空间失败会生成精确修复队列，要求 Agent 尝试已注册候选或留下定向发现证据，不能用其他区域数据掩盖。显式扩展研究最多 24 个 30 分钟轮次、累计不超过 12 小时；官方 900 秒任务由 `task_router.py` 预留交接时间并标记检查点。短于一个完整轮次的在线运行必须标记 `--checkpoint-only`。只有队列清空、Skill 快照一致且 `validate_research_delivery.py` 通过才是正式完成。协议详见[迭代闭环](skills/global-geochemical-atlas/references/iteration-loop.md)与[空间覆盖门禁](skills/global-geochemical-atlas/references/global-spatial-coverage.md)。
+控制器先做早期门禁，每轮独立产出并校验十八文件，再评估元素 × 介质、来源血缘与集中度、在线成功率、测定行/独立样品、溯源、四维可用性、异常背景及各筛选视图的空间广度。空间失败会生成精确修复队列，要求 Agent 尝试已注册候选或留下定向发现证据，不能用其他区域数据掩盖。显式扩展研究最多 24 个 30 分钟轮次、累计不超过 12 小时；官方 900 秒任务由 `task_router.py` 预留交接时间并标记检查点。短于一个完整轮次的在线运行必须标记 `--checkpoint-only`。只有队列清空、Skill 快照一致且 `validate_research_delivery.py` 通过才是正式完成。协议详见[迭代闭环](skills/global-geochemical-atlas/references/iteration-loop.md)与[空间覆盖门禁](skills/global-geochemical-atlas/references/global-spatial-coverage.md)。
 
 </details>
 
