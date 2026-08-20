@@ -1064,6 +1064,17 @@ def supported_request_analytes(source_id: str, elements: Sequence[str]) -> list[
     return [str(item) for item in elements if str(item) in registered]
 
 
+def generator_bbox_argument(region_bbox: Sequence[float]) -> str:
+    """Return the generator --bbox flag as a single --bbox=value token.
+
+    A west-negative scope such as the United States (-171.79...) or the Europe
+    frame (-25.0...) starts the value with a dash. Passed as a separate argv
+    token, argparse reads it as an option name and aborts with 'expected one
+    argument', which kills every parameterized online source for that request.
+    """
+    return "--bbox=" + ",".join(str(item) for item in region_bbox)
+
+
 def acquire_online_source(
     source_id: str,
     request: Mapping[str, Any],
@@ -1113,7 +1124,7 @@ def acquire_online_source(
     if element_parameterized:
         command.extend(["--elements", ",".join(analytes)])
     if source_id in PARAMETERIZED_SOURCES and region_bbox is not None:
-        command.extend(["--bbox", ",".join(str(item) for item in region_bbox)])
+        command.append(generator_bbox_argument(region_bbox))
     try:
         result = subprocess.run(
             command,

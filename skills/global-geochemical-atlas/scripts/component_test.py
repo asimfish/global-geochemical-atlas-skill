@@ -5270,6 +5270,43 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 China fixture builder passes the current generator purpose contract in a clean rebuild",
         checks,
     )
+    west_negative_usa = [-171.7911, 18.9162, -66.9647, 71.3578]
+    west_negative_europe = [-25.0, 34.0, 45.0, 72.0]
+    bbox_probe_common = [
+        "--source",
+        "usgs-conus-soil",
+        "--cache-dir",
+        "CACHE",
+        "--output-dir",
+        "OUTPUT",
+        "--generated-at",
+        "2026-08-21T00:00:00Z",
+    ]
+    require(
+        request_runner.generator_bbox_argument(west_negative_usa)
+        == "--bbox=-171.7911,18.9162,-66.9647,71.3578"
+        and demo_generator.build_parser()
+        .parse_args(
+            [
+                *bbox_probe_common,
+                request_runner.generator_bbox_argument(west_negative_usa),
+            ]
+        )
+        .bbox
+        == tuple(west_negative_usa)
+        and demo_generator.build_parser()
+        .parse_args(
+            [
+                *bbox_probe_common,
+                request_runner.generator_bbox_argument(west_negative_europe),
+            ]
+        )
+        .bbox
+        == tuple(west_negative_europe),
+        "D1 generator bbox flag stays one --bbox=value token so west-negative"
+        " scopes (United States, Europe frame) survive argparse",
+        checks,
+    )
     require(
         request_runner.planned_slice_observations("gemstat-open-archive", 4, 50000)
         == 2048
@@ -6763,7 +6800,8 @@ def check_d3(output_dir: Path) -> list[str]:
         and temporal_prov["contract"] == "anomaly-provenance-v1"
         and temporal_prov["candidate_count"] == 27
         and temporal_prov["mapped"] + temporal_prov["unmapped"] == 27
-        and temporal_prov["class_counts"] == combined_prov_report["classification_counts"]
+        and temporal_prov["class_counts"]
+        == combined_prov_report["classification_counts"]
         and all(
             entry["classification"] in temporal_prov["labels_zh"]
             and len(entry["lines"]) in (0, 4)
