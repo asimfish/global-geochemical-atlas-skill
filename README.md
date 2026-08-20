@@ -16,7 +16,7 @@
 [🌐 在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
 [🚀 快速开始](#-90-秒快速开始) ·
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
-[🧭 数据来源](#-数据来源21-个已冻结来源) ·
+[🧭 数据来源](#-数据来源22-个已冻结来源) ·
 [📦 输出产物](#-十五个输出产物) ·
 [❓ FAQ](#-faq)
 
@@ -44,6 +44,8 @@
 | 数值可不可信 | 原值永不覆盖、删失值不插补、批次 QC 逐条重算、五分量置信度 + 明确的「不是正确概率」声明 |
 | 结论敢不敢用 | 异常只作筛查候选并列出竞争解释；跑不齐的范围诚实报告缺口，绝不冒充全量覆盖 |
 | 能不能复用 | 40+ JSON Schema、十五文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接 |
+
+最新一次全球在线生产运行（2026-08-19，全程自主）：**199,730** 条确定性入库记录 · **45,753** 个独立物理样本 · **35** 个已接入公开来源（另有 31 个候选经审计后拒绝入库）· **100%** 记录级来源定位链 · **3,721** 个异常筛查候选 · **393** 条未过标准化门禁的记录如实保留、不静默丢弃。结构化运行证据与逐项解读见[在线演示站](https://asimfish.github.io/global-geochemical-atlas-demo/)。
 
 ## 🚀 90 秒快速开始
 
@@ -202,6 +204,30 @@ flowchart LR
 - 背景组样本不足时诚实返回 `insufficient_background`，绝不降低阈值硬算（上方 demo 中 72 组只分析达标的 12 组）。
 - 异常点和 FDR 网格都只表示筛查候选；网格不是地质/行政/污染边界，不等于污染、矿床或成因结论。
 - demo 与真实来源切片只用于工程复现，不支持全球或区域代表性科学结论。
+
+## 🧾 三重真实运行验证
+
+除仓库内的离线回归外，本 Skill 经过三组相互独立的真实运行检验，覆盖不同风险面（证据文件均可在[演示站](https://asimfish.github.io/global-geochemical-atlas-demo/)在线核查）：
+
+| 运行 | 验证内容 | 关键结果 |
+|---|---|---|
+| 全球在线生产运行（2026-08-15） | 真实网络条件下的自主采集、失败处置与缺口报告 | 33 分钟全自主：63 个来源候选审计 → 31 正式接入 → 29 实际入库；两个 GEOROC 端点持续 HTTP 500，如实记录；238 项待修复项全部登记进修复队列 |
+| 确定性回归（`main@ed8249e`） | 全新克隆环境中产物能否逐字节复现 | 0.714 秒完成回归：996/996 条地质匹配、6 个异常候选逐字节一致；hash-bound 快照防止跨环境漂移 |
+| 对抗审计（2026-08-20） | 红队向产物影子副本植入 10 类缺陷（数值篡改、单位翻转、伪造声明等），校准审计层检出能力 | 10/10 全部捕获；幻觉数字「25000」被判 `answer_unbound`——没有证据绑定的数字不允许出场 |
+
+三组结果使用各自独立口径，不作混合统计。证据入口：[`run_summary.json`](https://asimfish.github.io/global-geochemical-atlas-demo/finals/real-run/run_summary.json) · [`audit_receipt.json`](https://asimfish.github.io/global-geochemical-atlas-demo/finals/audit-run/audit_receipt.json) · [`claim_ledger.json`](https://asimfish.github.io/global-geochemical-atlas-demo/finals/audit-run/claim_ledger.json)。
+
+## 🔭 从图谱到论文：科学发现层
+
+统一底座的价值不止于制图。在同一份冻结快照（191,715 条 / 29 源）上，下游科学发现工作流自动完成选题、统计试点、文献核验、写作与排版，五篇论文全部成稿（合计 46 页 · 24 图 9 表），每个数字都可由快照 + 固定种子脚本确定性重放：
+
+1. [欧洲土壤剖面 Hg/Pb 遗留富集的方法分层筛查](https://asimfish.github.io/global-geochemical-atlas-demo/research/P1-comparability-aware-screening-europe.pdf)
+2. [表层遗留富集并非全球常态：澳大利亚土壤的检验](https://asimfish.github.io/global-geochemical-atlas-demo/research/P2-hemispheric-contrast-australia.pdf)
+3. [同一份土样、两种方法可差三倍：跨方法偏移的量化与换算](https://asimfish.github.io/global-geochemical-atlas-demo/research/P3-method-transfer-models.pdf)
+4. [两个独立调查是否一致：全球砷图的地面验证](https://asimfish.github.io/global-geochemical-atlas-demo/research/P4-arsenic-validation.pdf)
+5. [零调参能否恢复已知海洋学结构：GEOTRACES 剖面提取与方法审计](https://asimfish.github.io/global-geochemical-atlas-demo/research/P5-geotraces-audit.pdf)
+
+五篇均为筛查级（screening-level）结论：富集 ≠ 污染定论，剖面形态 ≠ 机制证明，正式投稿前需领域专家复核。路线图见[五篇论文规划](https://asimfish.github.io/global-geochemical-atlas-demo/research/five-paper-roadmap.md)；GGA 与 GEOROC / EarthChem / USGS NGDB / GEOTRACES 等同类库的定位对照（含全部数字出处）见[数据库对比](https://asimfish.github.io/global-geochemical-atlas-demo/research/database-comparison.md)。
 
 ## 📚 文档导航
 
