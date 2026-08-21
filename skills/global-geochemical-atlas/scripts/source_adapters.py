@@ -8,6 +8,7 @@ import csv
 import hashlib
 import html
 import ipaddress
+import io
 import json
 import os
 import re
@@ -6656,6 +6657,180 @@ class ZenodoYangtzeYellowRiverSedimentAdapter(_PinnedSingleFileAdapter):
             )
 
 
+class ZenodoGardWholeRockAdapter(RegistryAdapter):
+    """Pinned Gard/Hasterok/Halpin 2019 global whole-rock compilation.
+
+    The Zenodo v1.1.0 record is immutable, so both files are exact-pinned.
+    ``complete.zip`` carries the joined analysis table (1,022,092 rows) and
+    ``reference.csv`` resolves ``ref_id`` to the original article citation.
+    Roughly 68 percent of the citations come from GEOROC, so this source is
+    a literature compilation overlapping the georoc-* lineage and never
+    counts as an independent replication of those archives.
+    """
+
+    source_id = "zenodo-gard-whole-rock"
+
+    _KEPT_FIELDS = (
+        "sample_id",
+        "sample_name",
+        "latitude",
+        "longitude",
+        "loc_prec",
+        "rock_name",
+        "rock_type",
+        "rock_group",
+        "rock_origin",
+        "rock_facies",
+        "sample_description",
+        "country",
+        "ref_id",
+        "method",
+        "age",
+        "as_ppm",
+        "cr_ppm",
+        "cu_ppm",
+        "ni_ppm",
+        "pb_ppm",
+        "zn_ppm",
+    )
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError(
+                f"{self.source_id} adapter received a candidate for another source"
+            )
+        if mode == "fixture":
+            raise SourceAdapterError(
+                f"use the checked-in {self.source_id} demo directly for fixture tests"
+            )
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        results: list[DownloadedFile] = []
+        for file_entry in download_entry["files"]:
+            output = root / file_entry["filename"]
+            args = _download_args(
+                url=file_entry["url"],
+                output=output,
+                manifest=root / f"{file_entry['file_id']}.download.json",
+                license_id=candidate.license_id,
+                expected_sha256=file_entry.get("expected_sha256"),
+                max_bytes=int(download_entry["max_bytes"]),
+                dataset_doi=candidate.dataset_doi,
+                dataset_version=candidate.version,
+                offline=mode == "cached",
+                required_fields=(),
+            )
+            try:
+                result = downloader.run(args)
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(
+                    f"{self.source_id} download failed: {exc}"
+                ) from exc
+            content_type = result.get("content_type")
+            if content_type and content_type not in set(
+                download_entry["accepted_content_types"]
+            ):
+                raise SourceAdapterError(
+                    f"{self.source_id} returned unexpected content type: {content_type}"
+                )
+            if output.stat().st_size != file_entry["bytes"]:
+                raise SourceAdapterError(f"{self.source_id} file size changed")
+            results.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=file_entry["file_id"],
+                    path=output,
+                    source_url=file_entry["url"],
+                    bytes=result["bytes"],
+                    cache_status=result["status"],
+                    retrieved_at=result.get("accessed_at")
+                    or result.get("cache_verified_at"),
+                )
+            )
+        return results
+
+    def reference_map(
+        self, files: Sequence[DownloadedFile]
+    ) -> dict[str, dict[str, str]]:
+        """Return ref_id -> citation fields from the pinned reference table."""
+        by_id = {item.file_id: item for item in files}
+        reference_file = by_id.get("reference-csv")
+        if reference_file is None:
+            raise SourceAdapterError(
+                f"{self.source_id} requires the pinned reference.csv"
+            )
+        references: dict[str, dict[str, str]] = {}
+        with reference_file.path.open(encoding="utf-8", errors="replace") as handle:
+            for row in csv.DictReader(handle):
+                ref_id = str(row.get("ref_id") or "").strip()
+                if ref_id:
+                    references[ref_id] = {
+                        "author": str(row.get("author") or "").strip(),
+                        "title": str(row.get("title") or "").strip(),
+                        "journal": str(row.get("journal") or "").strip(),
+                        "year": str(row.get("year") or "").strip(),
+                        "doi": str(row.get("doi") or "").strip(),
+                        "data_source": str(row.get("data_source") or "").strip(),
+                    }
+        return references
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        archive = by_id.get("complete-zip")
+        if archive is None or "reference-csv" not in by_id:
+            raise SourceAdapterError(
+                f"{self.source_id} requires complete.zip and reference.csv"
+            )
+        expected = self.candidate.registry_entry["expected_counts"]
+        total = 0
+        with zipfile.ZipFile(archive.path) as bundle:
+            with bundle.open("complete.csv") as raw:
+                text_stream = io.TextIOWrapper(
+                    raw, encoding="utf-8", errors="replace"
+                )
+                reader = csv.DictReader(text_stream)
+                fieldnames = set(reader.fieldnames or [])
+                missing = [
+                    field for field in self._KEPT_FIELDS if field not in fieldnames
+                ]
+                if missing:
+                    raise SourceAdapterError(
+                        f"{self.source_id} table structure changed; missing: {missing}"
+                    )
+                for row in reader:
+                    total += 1
+                    line = reader.line_num
+                    fields = {
+                        field: str(row.get(field) or "").strip()
+                        for field in self._KEPT_FIELDS
+                    }
+                    fields["_source_file"] = archive.path.name
+                    sample_id = fields["sample_id"]
+                    if not sample_id:
+                        raise SourceAdapterError(
+                            f"{self.source_id} row {line} lacks the sample_id key"
+                        )
+                    source_locator = f"complete.csv#row={line}"
+                    yield RawRecord(
+                        source_id=self.source_id,
+                        source_record_id=stable_source_record_id(
+                            self.source_id, sample_id, source_locator
+                        ),
+                        source_locator=source_locator,
+                        fields=fields,
+                    )
+        if total != int(expected["total_rows"]):
+            raise SourceAdapterError(
+                f"{self.source_id} row count changed: expected "
+                f"{expected['total_rows']}, found {total}"
+            )
+
+
 class GemasEuropeAdapter(RegistryAdapter):
     """GSI's official GEMAS Ap/Gr DBF republication with method-separated analyses."""
 
@@ -6910,6 +7085,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
         FigshareYangtzeBasinSoilHeavyMetalsAdapter
     ),
     GemasEuropeAdapter.source_id: GemasEuropeAdapter,
+    ZenodoGardWholeRockAdapter.source_id: ZenodoGardWholeRockAdapter,
 }
 
 

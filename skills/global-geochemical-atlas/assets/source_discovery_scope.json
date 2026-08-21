@@ -16,8 +16,8 @@
     "asia": {
       "catalogued_sources": [
         "4tu-northern-china-sediment",
-        "eidc-ningbo-soil",
         "earthchem-dehailonggang-rock",
+        "eidc-ningbo-soil",
         "figshare-yangtze-basin-soil-heavy-metals",
         "india-gsi-ngcm",
         "jamstec-darwin",
@@ -28,6 +28,7 @@
         "pangaea-east-china-sea-clay",
         "pangaea-south-china-sea-sediment",
         "tpdc-china-mountain-soil",
+        "zenodo-gard-whole-rock",
         "zenodo-yangtze-yellow-river-sediment"
       ],
       "remaining_work": [
@@ -157,7 +158,7 @@
   "as_of": "2026-08-16T00:00:00Z",
   "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
   "completion_rule": "Discovery can only become saturated after every area has documented searches across official agency, disciplinary repository, program archive and publication-linked channels, followed by two consecutive rounds with no new high-relevance source.",
-  "round": 14,
+  "round": 15,
   "saturated": false,
   "scope_version": "geochemical-source-discovery-scope-v1",
   "status": "in_progress"

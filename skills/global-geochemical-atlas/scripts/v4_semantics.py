@@ -12,6 +12,15 @@ from typing import Any
 SEMANTICS_VERSION = "d1-v4-source-semantics-v1"
 
 SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
+    "zenodo-gard-whole-rock": {
+        "sample_type_raw": "whole rock",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_scope": "observation",
+        "method_assignment_basis": "publisher_method_table_join_where_reported",
+        "method_missing_reason": "not_reported",
+        "citation_scope": "observation",
+    },
     "georoc-archaean": {
         "sample_type_raw": "WR",
         "sample_type": "rock_whole_rock",

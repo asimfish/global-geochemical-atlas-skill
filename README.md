@@ -17,7 +17,7 @@
 [🌐 在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
 [🚀 快速开始](#-90-秒快速开始) ·
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
-[🧭 数据来源](#-数据来源33-个已冻结可执行来源--65-条审计目录记录) ·
+[🧭 数据来源](#-数据来源35-个已冻结可执行来源--67-条审计目录记录) ·
 [📦 输出产物](#-十八个输出产物) ·
 [❓ FAQ](#-faq)
 
@@ -244,7 +244,7 @@ flowchart LR
 
 第五项赛题交付「可复用 Skill 文档」即 [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) 本体与其 schema、脚本和 fixture。
 
-## 🧭 数据来源（33 个已冻结可执行来源 · 65 条审计目录记录）
+## 🧭 数据来源（35 个已冻结可执行来源 · 67 条审计目录记录）
 
 | 介质 | 已冻结来源 |
 |---|---|
@@ -253,7 +253,7 @@ flowchart LR
 | 🏞️ 沉积物 | FOREGS 河流/洪泛平原沉积物 · GSJ 日本地球化学图/日本海洋沉积物 · 澳大利亚 NGSA（多元素与 Hg 产品）· 挪威 MarChem · PANGAEA 阿拉伯海/东海/南海 · Zenodo 长江/黄河沉积物 · 4TU 中国北方/西北沉积物（准噶尔、塔里木、柴达木、河套、阿拉善与青藏高原东部） |
 | 💧 水体 | FOREGS 河水 · GEMStat 全球内陆水 · GEOTRACES IDP2025 海水 · 美国 WQP 萨克拉门托河（As） |
 
-33 个 executable source 已完成版本冻结、下载/解析契约与证据评分；65 条 catalog 记录是总目录，其中另外 32 条仍为 discovery-only，不能与正式入库来源重复相加。每个 executable source 的 DOI、版本、许可、科研使用条件、字段边界与八维证据评分记录在[来源目录](skills/global-geochemical-atlas/references/data-sources.md)、[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[许可引用说明](skills/global-geochemical-atlas/references/licenses-and-citations.md)；中国区域 fixture 的登记与重建见[中国区域 fixture](skills/global-geochemical-atlas/references/china-fixture.md)。EarthChem Portal/Library 总入口仍只作发现层；只有像已固定到 DOI、文件、成员 hash 与原始行的 dataset 3338 才能作为测量证据。
+35 个 executable source 已完成版本冻结、下载/解析契约与证据评分；67 条 catalog 记录是总目录，其中另外 32 条仍为 discovery-only，不能与正式入库来源重复相加。每个 executable source 的 DOI、版本、许可、科研使用条件、字段边界与八维证据评分记录在[来源目录](skills/global-geochemical-atlas/references/data-sources.md)、[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[许可引用说明](skills/global-geochemical-atlas/references/licenses-and-citations.md)；中国区域 fixture 的登记与重建见[中国区域 fixture](skills/global-geochemical-atlas/references/china-fixture.md)。EarthChem Portal/Library 总入口仍只作发现层；只有像已固定到 DOI、文件、成员 hash 与原始行的 dataset 3338 才能作为测量证据。
 
 ## 🛡️ 科学护栏
 

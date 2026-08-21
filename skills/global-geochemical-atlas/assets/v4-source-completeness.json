@@ -10,7 +10,7 @@
       "source_ids": []
     },
     {
-      "affected_sources": 11,
+      "affected_sources": 12,
       "code": "FULL_AUDIT_MISSING",
       "detail": "These executable sources have no checked-in candidate full-population audit.",
       "next_action": "Add immutable full-source audits without substituting demo rows.",
@@ -26,6 +26,7 @@
         "pangaea-east-china-sea-clay",
         "pangaea-south-china-sea-sediment",
         "usgs-conus-soil",
+        "zenodo-gard-whole-rock",
         "zenodo-yangtze-yellow-river-sediment"
       ]
     }
@@ -10578,8 +10579,8 @@
             "bytes": 28760915,
             "cache_status": "payload_verified_archive_container_variant",
             "file_id": "seawater-depth-cu-ni-zn",
-            "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_YXZcAbEg.txt",
-            "sha256": "dcf7ece87a189b4dffff006004edf2daadfa9718126641ba9fbd92d0ce58473e"
+            "filename": "IDP2025_seawater_GEOTRACES_IDP2025_Seawater_3vU87MJL.txt",
+            "sha256": "7e9ee0e331f7ac0fdb50841ecea1551fc22962d32627ca176250e80de6da39a8"
           }
         ],
         "last_successful_fetch_at": "2026-08-18T22:39:09Z",
@@ -12109,21 +12110,21 @@
             "bytes": 295287,
             "cache_status": "cache_hit",
             "file_id": "data",
-            "filename": "MarChem_Inorganic_Data_20260818T181648Z.csv",
+            "filename": "MarChem_Inorganic_Data_20260820T193508Z.csv",
             "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
           },
           {
             "bytes": 3383,
             "cache_status": "cache_hit",
             "file_id": "info",
-            "filename": "MarChem_Info_20260818T181648Z",
-            "sha256": "9a31734d831fb1911fc28d82a95bc3bbed1e1a06e2063b344900a3602b42c5cf"
+            "filename": "MarChem_Info_20260820T193508Z",
+            "sha256": "2d5f5bb286e21d7fcdef6e3430c189ce652aa82031d4d99077227ab42caa72ed"
           },
           {
             "bytes": 320402,
             "cache_status": "cache_hit",
             "file_id": "metadata",
-            "filename": "MarChem_Inorganic_LabParameter_20260818T181648Z.csv",
+            "filename": "MarChem_Inorganic_LabParameter_20260820T193508Z.csv",
             "sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d"
           }
         ],
@@ -18660,6 +18661,487 @@
         "source_id": "usgs-conus-soil"
       }
     },
+    "zenodo-gard-whole-rock": {
+      "automation_health": {
+        "adapter_registered": true,
+        "as_of": "2026-08-15T07:00:00Z",
+        "cache_hit_count": 2,
+        "cached_parse_status": "pass",
+        "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+        "dataset_version": "zenodo-record-3359791-v1.1.0",
+        "expected_target_observation_count": 2695045,
+        "files": [
+          {
+            "bytes": 192615473,
+            "cache_status": "cache_hit",
+            "file_id": "complete-zip",
+            "filename": "complete.zip",
+            "sha256": "c9054b2f87ec51589d1974aa35e00ce2efb696e5db7f265ef279e8c67beb61ba"
+          },
+          {
+            "bytes": 3339065,
+            "cache_status": "cache_hit",
+            "file_id": "reference-csv",
+            "filename": "reference.csv",
+            "sha256": "a36aaf931456d4cb28e42e43e3700eec78823b252974c5399f7d37159386ba6a"
+          }
+        ],
+        "last_successful_fetch_at": "2026-08-21T00:00:00Z",
+        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "offline_replay_status": "pass",
+        "online_fetch_health": "not_probed_by_reproducible_offline_run",
+        "parsed_source_record_count": 1022092,
+        "profile_version": "d1-v4-full-population-profile-v1",
+        "raw_schema_field_count": 22,
+        "raw_schema_fields": [
+          "_source_file",
+          "age",
+          "as_ppm",
+          "country",
+          "cr_ppm",
+          "cu_ppm",
+          "latitude",
+          "loc_prec",
+          "longitude",
+          "method",
+          "ni_ppm",
+          "pb_ppm",
+          "ref_id",
+          "rock_facies",
+          "rock_group",
+          "rock_name",
+          "rock_origin",
+          "rock_type",
+          "sample_description",
+          "sample_id",
+          "sample_name",
+          "zn_ppm"
+        ],
+        "retry_health": "not_measured_in_offline_profile",
+        "row_count_drift_status": "matches_registered_expected_count",
+        "schema_drift_detection": "checked-in profile exact comparison",
+        "source_id": "zenodo-gard-whole-rock",
+        "supported_modes": [
+          "online",
+          "cached",
+          "offline_fixture"
+        ],
+        "target_observation_count": 2695045,
+        "version_drift": {
+          "outer_archive_drift": false,
+          "status": "matches_registered_snapshot"
+        }
+      },
+      "candidate_audit": {
+        "audit_path": null,
+        "audit_status": "not_measured",
+        "denominator_status": "not_available",
+        "distinct_sample_count": null,
+        "physical_row_count": null,
+        "target_observation_count": null,
+        "warning": "No checked-in full-population audit; demo counts must not be substituted."
+      },
+      "dataset_version": "zenodo-record-3359791-v1.1.0",
+      "demo_fixture": {
+        "analytes": {
+          "As": 8,
+          "Cr": 8,
+          "Cu": 8,
+          "Ni": 8,
+          "Pb": 8,
+          "Zn": 8
+        },
+        "field_completeness": {
+          "analytical_method": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 33,
+            "rate": 0.6875
+          },
+          "citation_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "coordinate_pair": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "element_or_analyte": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "geologic_unit_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "grain_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "license": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "matched_geologic_unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "medium": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "method_assignment_basis": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 33,
+            "rate": 0.6875
+          },
+          "method_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 33,
+            "rate": 0.6875
+          },
+          "sample_id": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_mapping_status": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sediment_environment": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "soil_horizon_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_locator": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "value": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "water_body_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "water_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          }
+        },
+        "file_sha256": "0cc8b63d89ffe8f53382eba653f857e146f7166c084e32e6fa8f24e1586fa4b5",
+        "header_sha256": "a13ca6b5a39c3e09c271413b27a4375204f670a5f3b5d5e5f2363971772d128a",
+        "manifest_sha256": "af6c3215d3f75af9a5e3d324979225016eac881c7f738ed7a31be9b99fafac11",
+        "media": {
+          "rock": 48
+        },
+        "record_count": 48,
+        "status": "deterministic_demo_only",
+        "warning": "This profile describes a deliberately selected fixture, not the full source population."
+      },
+      "full_population": {
+        "audit_path": "assets/v4-full-profiles/zenodo-gard-whole-rock/field_completeness.json",
+        "audit_sha256": "6fbb2ec8d44e8b230d47e899ef714f8d4f460659b83b3b2949f0ed8ad9b6ce77",
+        "audit_status": "uniform_full_profile",
+        "denominator_status": "available",
+        "distinct_sample_count": null,
+        "field_completeness": {
+          "access_status": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "analytical_method": {
+            "denominator": 2695045,
+            "missing": 2011385,
+            "non_empty": 683660,
+            "rate": 0.253673
+          },
+          "citation_resolution_status": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "citation_scope": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "citation_text_raw": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "coordinate_pair": {
+            "denominator": 2695045,
+            "missing": 41309,
+            "non_empty": 2653736,
+            "rate": 0.984672
+          },
+          "coordinate_uncertainty_m": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "detection_limit": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "element_or_analyte": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "geologic_age_raw": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "geologic_unit_raw": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "grain_fraction": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "license": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "license_url": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "lithology_raw": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "matched_geologic_unit": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "measurement_basis": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "method_assignment_basis": {
+            "denominator": 2695045,
+            "missing": 2011385,
+            "non_empty": 683660,
+            "rate": 0.253673
+          },
+          "method_or_missing_reason": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "method_scope": {
+            "denominator": 2695045,
+            "missing": 2011385,
+            "non_empty": 683660,
+            "rate": 0.253673
+          },
+          "research_use_status": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "sample_id": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "sample_type": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "sample_type_mapping_status": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "sample_type_raw": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "sediment_environment": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "soil_horizon": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_crs": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_locator": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "tectonic_setting_raw": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "unit": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "value": {
+            "denominator": 2695045,
+            "missing": 0,
+            "non_empty": 2695045,
+            "rate": 1.0
+          },
+          "water_body_type": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "water_fraction": {
+            "denominator": 2695045,
+            "missing": 2695045,
+            "non_empty": 0,
+            "rate": 0.0
+          }
+        },
+        "field_completeness_status": "measured_uniformly",
+        "physical_row_count": 1022092,
+        "profile_scope": "full_population",
+        "snapshot_id": "zenodo-record-3359791-v1.1.0",
+        "target_observation_count": 2695045,
+        "target_observation_count_basis": "all non-empty target-analyte observations emitted by the verified source adapter",
+        "warning": "The full profile covers every target-bearing adapter observation in the verified cache. It does not imply spatial representativeness or that unreported source fields are complete."
+      },
+      "media": [
+        "rock"
+      ],
+      "source_id": "zenodo-gard-whole-rock",
+      "usage_rights": {
+        "access_status_counts": {
+          "public_download": 2695045
+        },
+        "as_of": "2026-08-15T07:00:00Z",
+        "attribution_required_counts": {
+          "true": 2695045
+        },
+        "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+        "dataset_version": "zenodo-record-3359791-v1.1.0",
+        "license_id": "CC-BY-4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "profile_version": "d1-v4-full-population-profile-v1",
+        "redistribution_is_not_a_research_use_gate": true,
+        "redistribution_status_counts": {
+          "not_evaluated_for_project_output": 2695045
+        },
+        "research_use_status_counts": {
+          "permitted_research": 2695045
+        },
+        "source_id": "zenodo-gard-whole-rock"
+      }
+    },
     "zenodo-yangtze-yellow-river-sediment": {
       "automation_health": {
         "adapter_registered": true,
@@ -19122,11 +19604,11 @@
     }
   },
   "summary": {
-    "demo_record_count": 1772,
-    "executable_source_count": 34,
+    "demo_record_count": 1820,
+    "executable_source_count": 35,
     "sources_with_full_audit": 23,
-    "sources_with_target_observation_denominator": 34,
-    "sources_without_full_audit": 11,
-    "uniform_full_field_profiles": 34
+    "sources_with_target_observation_denominator": 35,
+    "sources_without_full_audit": 12,
+    "uniform_full_field_profiles": 35
   }
 }

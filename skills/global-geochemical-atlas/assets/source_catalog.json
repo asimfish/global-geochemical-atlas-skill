@@ -27,7 +27,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 14,
+    "round": 15,
     "saturated": false,
     "status": "in_progress"
   },
@@ -4138,6 +4138,81 @@
         "release_date": "2024-09-02",
         "status": "snapshot_available",
         "value": "2023-12 snapshot"
+      }
+    },
+    "zenodo-gard-whole-rock": {
+      "adapter": {
+        "name": "zenodo_gard_whole_rock",
+        "status": "implemented"
+      },
+      "coverage": {
+        "extent_class": "global_literature_compilation",
+        "notes": "1,022,092 whole-rock analyses (1,006,397 with reported coordinates); measured 2026-08-21: country=cn 26,551 rows with 74,384 As/Cr/Cu/Ni/Pb/Zn values, southern-Tibet window (88-99E, 27-31.5N) 1,301 rows, Russia 24,671 rows. About 68 percent of citations resolve to GEOROC, so coverage overlaps the georoc-* lineage and is not an independent replication.",
+        "regions": [
+          "global"
+        ]
+      },
+      "evidence_urls": [
+        "https://zenodo.org/records/3359791",
+        "https://doi.org/10.5281/zenodo.3359791",
+        "https://doi.org/10.5194/essd-11-1553-2019"
+      ],
+      "identifiers": {
+        "dataset_doi": "10.5281/zenodo.3359791",
+        "resource_id": "3359791"
+      },
+      "interfaces": [
+        {
+          "access": "open",
+          "format": "zip",
+          "kind": "official_file_download",
+          "method": "GET",
+          "server_filters": [],
+          "url": "https://zenodo.org/api/records/3359791/files/complete.zip/content"
+        },
+        {
+          "access": "open",
+          "format": "csv",
+          "kind": "official_file_download",
+          "method": "GET",
+          "server_filters": [],
+          "url": "https://zenodo.org/api/records/3359791/files/reference.csv/content"
+        },
+        {
+          "access": "open",
+          "format": "json",
+          "kind": "official_metadata_api",
+          "method": "GET",
+          "server_filters": [],
+          "url": "https://zenodo.org/api/records/3359791"
+        }
+      ],
+      "landing_page": "https://zenodo.org/records/3359791",
+      "license": {
+        "id": "CC-BY-4.0",
+        "notes": "Zenodo record metadata declares license id cc-by-4.0. Retain the dataset DOI and cite Gard, Hasterok & Halpin (2019, ESSD).",
+        "status": "open",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "limitations": [
+        "Sampling dates are not published; the age columns are geological rock ages in Ma and must never be read as collection times.",
+        "Coordinates are retained as reported without a declared datum and are not asserted to be WGS 84.",
+        "About 68 percent of resolved citations come from GEOROC; records overlapping georoc-* compilations are the same literature lineage, not independent replication.",
+        "Analytical method metadata is sparse (frequently 'not given'); method fields stay empty rather than being guessed.",
+        "The compilation snapshot ends in 2019 and adds no post-2019 literature."
+      ],
+      "media": [
+        "rock"
+      ],
+      "production_eligible": false,
+      "publisher": "Zenodo deposit by Matthew Gard, Derrick Hasterok and Jacqueline A. Halpin, University of Adelaide / University of Tasmania",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "approved",
+      "title": "Global whole-rock geochemical database compilation (v1.1.0)",
+      "version": {
+        "release_date": "2019-08-02",
+        "status": "pinned",
+        "value": "zenodo-record-3359791-v1.1.0"
       }
     },
     "zenodo-yangtze-yellow-river-sediment": {

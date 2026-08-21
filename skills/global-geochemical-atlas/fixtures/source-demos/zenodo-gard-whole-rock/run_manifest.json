@@ -1,0 +1,74 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-21T06:30:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 57378,
+      "path": "demo_input.csv",
+      "sha256": "0cc8b63d89ffe8f53382eba653f857e146f7166c084e32e6fa8f24e1586fa4b5"
+    },
+    {
+      "bytes": 93538,
+      "path": "sources.jsonl",
+      "sha256": "68e0aaf78d214e8ef5f03f6be3644b3ed55686881d6a4d528d904752fc7b15de"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 1022092,
+    "selected_source_rows": 21
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.5281/zenodo.3359791",
+    "dataset_version": "zenodo-record-3359791-v1.1.0",
+    "license": "CC-BY-4.0",
+    "source_id": "zenodo-gard-whole-rock",
+    "title": "Global whole-rock geochemical database compilation (v1.1.0)"
+  },
+  "source_files": [
+    {
+      "bytes": 192615473,
+      "filename": "complete.zip",
+      "retrieved_at": "2026-08-21T06:06:23Z",
+      "sha256": "c9054b2f87ec51589d1974aa35e00ce2efb696e5db7f265ef279e8c67beb61ba",
+      "source_url": "https://zenodo.org/api/records/3359791/files/complete.zip/content"
+    },
+    {
+      "bytes": 3339065,
+      "filename": "reference.csv",
+      "retrieved_at": "2026-08-21T06:06:23Z",
+      "sha256": "a36aaf931456d4cb28e42e43e3700eec78823b252974c5399f7d37159386ba6a",
+      "source_url": "https://zenodo.org/api/records/3359791/files/reference.csv/content"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "Gard 2019 is a literature compilation; about 68 percent of citations resolve to GEOROC, so rows overlap the georoc-* lineage and are not independent replication.",
+    "Sampling dates are not published; the age columns are geological rock ages in Ma, never collection times.",
+    "Coordinates are retained as reported without a declared datum and are not asserted to be WGS 84.",
+    "The compilation snapshot ends in 2019 and analytical method metadata is sparse."
+  ]
+}

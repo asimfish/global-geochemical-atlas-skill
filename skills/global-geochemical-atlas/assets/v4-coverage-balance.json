@@ -6,21 +6,23 @@
     "rock": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 104878,
-      "independent_lineage_count": 2,
+      "distinct_sample_count": 794310,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
-      "observation_count": 244463,
+      "observation_count": 2939508,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 86484,
-      "reported_covered_spatial_cells": 1857,
+      "reported_coordinate_sample_count": 765644,
+      "reported_covered_spatial_cells": 9740,
       "source_ids": [
         "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
         "georoc-archaean",
-        "georoc-convergent-margins"
+        "georoc-convergent-margins",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -135,21 +137,23 @@
     "rock|As": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 10103,
+      "distinct_sample_count": 152971,
       "element": "As",
-      "independent_lineage_count": 1,
+      "independent_lineage_count": 2,
       "lineage_ids": [
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 10461,
+      "observation_count": 153329,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 9292,
-      "reported_covered_spatial_cells": 386,
+      "reported_coordinate_sample_count": 149776,
+      "reported_covered_spatial_cells": 3053,
       "source_ids": [
         "georoc-antarctica-intraplate",
         "georoc-archaean",
-        "georoc-convergent-margins"
+        "georoc-convergent-margins",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -157,21 +161,23 @@
     "rock|Cr": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 256,
+      "distinct_sample_count": 565618,
       "element": "Cr",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 256,
+      "observation_count": 565618,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 255,
-      "reported_covered_spatial_cells": 15,
+      "reported_coordinate_sample_count": 557135,
+      "reported_covered_spatial_cells": 8823,
       "source_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-antarctica-intraplate"
+        "georoc-antarctica-intraplate",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -179,23 +185,25 @@
     "rock|Cu": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 60698,
+      "distinct_sample_count": 551473,
       "element": "Cu",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 62684,
+      "observation_count": 553459,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 51126,
-      "reported_covered_spatial_cells": 1438,
+      "reported_coordinate_sample_count": 535113,
+      "reported_covered_spatial_cells": 7818,
       "source_ids": [
         "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
         "georoc-archaean",
-        "georoc-convergent-margins"
+        "georoc-convergent-margins",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -203,23 +211,25 @@
     "rock|Ni": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 99147,
+      "distinct_sample_count": 675802,
       "element": "Ni",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 101655,
+      "observation_count": 678310,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 81709,
-      "reported_covered_spatial_cells": 1808,
+      "reported_coordinate_sample_count": 649667,
+      "reported_covered_spatial_cells": 9139,
       "source_ids": [
         "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
         "georoc-archaean",
-        "georoc-convergent-margins"
+        "georoc-convergent-margins",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -227,21 +237,23 @@
     "rock|Pb": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 291,
+      "distinct_sample_count": 452401,
       "element": "Pb",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 291,
+      "observation_count": 452401,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 291,
-      "reported_covered_spatial_cells": 18,
+      "reported_coordinate_sample_count": 444962,
+      "reported_covered_spatial_cells": 7931,
       "source_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-antarctica-intraplate"
+        "georoc-antarctica-intraplate",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -249,23 +261,25 @@
     "rock|Zn": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 67668,
+      "distinct_sample_count": 534943,
       "element": "Zn",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
       "medium": "rock",
-      "observation_count": 69116,
+      "observation_count": 536391,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 57235,
-      "reported_covered_spatial_cells": 1478,
+      "reported_coordinate_sample_count": 516991,
+      "reported_covered_spatial_cells": 7899,
       "source_ids": [
         "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
         "georoc-archaean",
-        "georoc-convergent-margins"
+        "georoc-convergent-margins",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0

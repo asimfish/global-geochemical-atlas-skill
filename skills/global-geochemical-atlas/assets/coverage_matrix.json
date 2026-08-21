@@ -4,13 +4,13 @@
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 3,
-        "Cr": 2,
-        "Cu": 4,
+        "As": 4,
+        "Cr": 3,
+        "Cu": 5,
         "Hg": 1,
-        "Ni": 4,
-        "Pb": 2,
-        "Zn": 4
+        "Ni": 5,
+        "Pb": 3,
+        "Zn": 5
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -49,10 +49,11 @@
         "petdb",
         "usgs-ngdb"
       ],
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
       "method_metadata_coverage": "not_yet_audited",
       "missing_analytes": [],
@@ -70,7 +71,8 @@
         "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
         "georoc-archaean",
-        "georoc-convergent-margins"
+        "georoc-convergent-margins",
+        "zenodo-gard-whole-rock"
       ],
       "source_evidence_tiers": {
         "alaska-dggs-webgeochem": "D",
@@ -91,7 +93,8 @@
         "nz-petlab": "D",
         "pangaea-repository": "D",
         "petdb": "D",
-        "usgs-ngdb": "D"
+        "usgs-ngdb": "D",
+        "zenodo-gard-whole-rock": "A"
       },
       "source_independence": "multiple_sources_but_single_source_per_analyte",
       "source_scopes": {
@@ -113,7 +116,8 @@
         "nz-petlab": "national_plus_selected_global",
         "pangaea-repository": "global_collection",
         "petdb": "global_partial",
-        "usgs-ngdb": "national_partial"
+        "usgs-ngdb": "national_partial",
+        "zenodo-gard-whole-rock": "global_literature_compilation"
       },
       "source_target_analytes": {
         "earthchem-dehailonggang-rock": [
@@ -143,6 +147,14 @@
           "Cu",
           "Ni",
           "Zn"
+        ],
+        "zenodo-gard-whole-rock": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
         ]
       },
       "source_use_modes": {
@@ -164,7 +176,8 @@
         "nz-petlab": "discovery",
         "pangaea-repository": "discovery",
         "petdb": "discovery",
-        "usgs-ngdb": "discovery"
+        "usgs-ngdb": "discovery",
+        "zenodo-gard-whole-rock": "normalized_analysis"
       },
       "spatial_density_coverage": "not_yet_audited",
       "status": "partial",
@@ -955,7 +968,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 14,
+    "round": 15,
     "saturated": false,
     "status": "in_progress"
   },

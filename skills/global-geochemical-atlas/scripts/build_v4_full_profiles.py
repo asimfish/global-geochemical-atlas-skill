@@ -446,6 +446,14 @@ def _sample_and_place(
             _text(fields.get("XCOO")),
             _text(fields.get("_source_crs")) or "EPSG:4326",
         )
+    if source_id == "zenodo-gard-whole-rock":
+        return (
+            _text(fields.get("sample_id")),
+            _text(fields.get("country")),
+            _text(fields.get("latitude")),
+            _text(fields.get("longitude")),
+            "",
+        )
     if source_id == "zenodo-yangtze-yellow-river-sediment":
         # Data Set S2 publishes no sampling coordinates (fail closed).
         return (
@@ -487,6 +495,10 @@ def _method(
             locator = _text(item.get("_metadata_source_locator"))
     elif source_id == "pangaea-north-africa-soil":
         method = _text(fields.get("_analytical_method"))
+    elif source_id == "zenodo-gard-whole-rock":
+        reported = _text(fields.get("method"))
+        if reported and reported != "not given":
+            method = reported
     return method, locator
 
 
@@ -572,6 +584,12 @@ def _target_values(
                 )
             elif source_id in {"georoc-archaean", "georoc-convergent-margins"}:
                 values["measurement_basis"] = "reported_whole_rock_concentration"
+            elif source_id == "zenodo-gard-whole-rock":
+                unit = "ppm" if candidate.endswith("_ppm") else unit
+                values["unit"] = unit
+                values["measurement_basis"] = (
+                    "compilation_reported_whole_rock_concentration"
+                )
             yield _text(analyte), candidate, raw, values
             break
 

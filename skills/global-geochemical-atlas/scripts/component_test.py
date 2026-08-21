@@ -293,8 +293,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "figshare-yangtze-basin-soil-heavy-metals",
             "earthchem-dehailonggang-rock",
             "4tu-northern-china-sediment",
+            "zenodo-gard-whole-rock",
         },
-        "D1 registry freezes thirty-four executable datasets across the four required media",
+        "D1 registry freezes thirty-five executable datasets across the four required media",
         checks,
     )
     with tempfile.TemporaryDirectory(prefix="georoc-member-fallback-") as temporary:
@@ -1604,8 +1605,9 @@ def check_d1(output_dir: Path) -> list[str]:
             "figshare-yangtze-basin-soil-heavy-metals",
             "earthchem-dehailonggang-rock",
             "4tu-northern-china-sediment",
+            "zenodo-gard-whole-rock",
         },
-        "D1 V4 router selects the thirty-three analyte-compatible normalized-analysis datasets across all media",
+        "D1 V4 router selects the thirty-four analyte-compatible normalized-analysis datasets across all media",
         checks,
     )
     require(
@@ -1778,17 +1780,17 @@ def check_d1(output_dir: Path) -> list[str]:
         evidence["summary"]
         == {
             "evidence_tiers": {
-                "A": 33,
+                "A": 34,
                 "B": 1,
                 "C": 0,
-                "D": len(catalog["sources"]) - 34,
+                "D": len(catalog["sources"]) - 35,
                 "U": 0,
             },
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 34,
+                "normalized_analysis": 35,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 34,
+                "discovery": len(catalog["sources"]) - 35,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -2706,12 +2708,12 @@ def check_d1(output_dir: Path) -> list[str]:
         == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
         and completeness_profile["summary"]
         == {
-            "executable_source_count": 34,
+            "executable_source_count": 35,
             "sources_with_full_audit": 23,
-            "sources_with_target_observation_denominator": 34,
-            "sources_without_full_audit": 11,
-            "demo_record_count": 1772,
-            "uniform_full_field_profiles": 34,
+            "sources_with_target_observation_denominator": 35,
+            "sources_without_full_audit": 12,
+            "demo_record_count": 1820,
+            "uniform_full_field_profiles": 35,
         }
         and completeness_profile["sources"]["georoc-archaean"]["full_population"][
             "audit_status"
@@ -2740,14 +2742,14 @@ def check_d1(output_dir: Path) -> list[str]:
         full_profile_root / "norway-marchem" / "automation_health.json"
     )
     require(
-        full_manifest["source_count"] == full_manifest["registered_source_count"] == 34
-        and full_manifest["observation_count"] == 4294213
-        and full_manifest["distinct_sample_count"] == 861738
-        and full_manifest["reported_coordinate_sample_count"] == 843125
+        full_manifest["source_count"] == full_manifest["registered_source_count"] == 35
+        and full_manifest["observation_count"] == 6989258
+        and full_manifest["distinct_sample_count"] == 1551170
+        and full_manifest["reported_coordinate_sample_count"] == 1522285
         and full_manifest["valid_coordinate_sample_count"] == 737757
         and full_manifest["comparable_observation_count"] == 424267
-        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 26163
-        and sum(int(row["observation_count"]) for row in cube_rows) == 4294213
+        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 28304
+        and sum(int(row["observation_count"]) for row in cube_rows) == 6989258
         and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 424267
         and all(
             profile["profile_scope"] == "full_population"
@@ -2767,8 +2769,8 @@ def check_d1(output_dir: Path) -> list[str]:
         and coverage_balance["media"]["water"]["independent_lineage_count"] == 4
         and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 11
         and coverage_balance["media"]["rock"]["reported_coordinate_sample_count"]
-        == 86484
-        and coverage_balance["media"]["rock"]["independent_lineage_count"] == 2
+        == 765644
+        and coverage_balance["media"]["rock"]["independent_lineage_count"] == 3
         and coverage_balance["media"]["rock"]["valid_coordinate_sample_count"] == 0
         and coverage_balance["media"]["soil"]["valid_coordinate_sample_count"] == 21673
         and coverage_balance["media"]["sediment"]["valid_coordinate_sample_count"]
@@ -2841,7 +2843,7 @@ def check_d1(output_dir: Path) -> list[str]:
             and sha256_file(SKILL_DIR / item["path"]) == item["sha256"]
             for item in full_manifest["artifacts"]
         ),
-        "D1 V4 full profiles prove thirty-four full-cache denominators and all coverage-cube metrics",
+        "D1 V4 full profiles prove thirty-five full-cache denominators and all coverage-cube metrics",
         checks,
     )
     require(
@@ -2864,16 +2866,17 @@ def check_d1(output_dir: Path) -> list[str]:
         matrix["overall_status"] == "partial"
         and matrix["cells"]["rock"]["source_independence"]
         == "multiple_sources_but_single_source_per_analyte"
-        and matrix["cells"]["rock"]["independent_lineage_count"] == 2
+        and matrix["cells"]["rock"]["independent_lineage_count"] == 3
         and matrix["cells"]["rock"]["selected_sources"]
         == [
             "earthchem-dehailonggang-rock",
             "georoc-antarctica-intraplate",
             "georoc-archaean",
             "georoc-convergent-margins",
+            "zenodo-gard-whole-rock",
         ]
         and matrix["cells"]["rock"]["analyte_source_counts"]
-        == {"As": 3, "Cr": 2, "Cu": 4, "Hg": 1, "Ni": 4, "Pb": 2, "Zn": 4}
+        == {"As": 4, "Cr": 3, "Cu": 5, "Hg": 1, "Ni": 5, "Pb": 3, "Zn": 5}
         and matrix["cells"]["rock"]["analyte_coverage"]
         == "complete_for_registered_targets"
         and matrix["cells"]["soil"]["selected_sources"]
@@ -4089,8 +4092,8 @@ def check_d1(output_dir: Path) -> list[str]:
 
     migration_check = migrate_v4_source_demos.migrate(SOURCE_DEMOS, check=True)
     require(
-        migration_check["status"] == "PASS" and migration_check["source_count"] == 34,
-        "D1 V4 source-demo migration is byte-stable across all thirty-four sources",
+        migration_check["status"] == "PASS" and migration_check["source_count"] == 35,
+        "D1 V4 source-demo migration is byte-stable across all thirty-five sources",
         checks,
     )
 

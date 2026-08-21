@@ -1,14 +1,14 @@
 {
   "artifacts": [
     {
-      "bytes": 33277,
+      "bytes": 33790,
       "path": "assets/v4-coverage-balance.json",
-      "sha256": "682e2e13574dc588eec5ab03416b263ad368d58f152786920543a4cf7b716a1d"
+      "sha256": "f506af4390b440c65b85772fad9df4b2eb85faba97162284dda89df5759f6900"
     },
     {
-      "bytes": 6844749,
+      "bytes": 7303992,
       "path": "assets/v4-coverage-cube.csv",
-      "sha256": "1714d5ca5656f62825522b3ac6fabee5447cf640ac770c6136340ec06f32bc1e"
+      "sha256": "72b0d59fd714d07c039cb75602b49d6f57ea7e3d8dc4eaa17b843e00eed868ce"
     },
     {
       "bytes": 3636,
@@ -733,7 +733,7 @@
     {
       "bytes": 2232,
       "path": "assets/v4-full-profiles/geotraces-idp2025/automation_health.json",
-      "sha256": "4dd68f041560cbcd453e3ae53c6cc7ea78734b766ab89d758827d3f46a02f21d"
+      "sha256": "c2d709afac2d9485c57a3d72ebe0f7d756d4bed076e7f74cddb9e785d9bcbb71"
     },
     {
       "bytes": 809,
@@ -853,7 +853,7 @@
     {
       "bytes": 3325,
       "path": "assets/v4-full-profiles/norway-marchem/automation_health.json",
-      "sha256": "63787a600d163b3b6e8e33db3362c5c8725999d86ce58527815da1b489c3819b"
+      "sha256": "5bc9eabc079d9c9f796d84f691b6173fe997b3aa68abbaa32fcf1abd02b1e01a"
     },
     {
       "bytes": 803,
@@ -1331,6 +1331,46 @@
       "sha256": "a70c31082dca81424c37b6707880aa50af685345f19ef6a5ca8429c272fe3645"
     },
     {
+      "bytes": 2201,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/automation_health.json",
+      "sha256": "08c93b2d7f5aa5bdfc543ef32cdbd7b53348f06118e60771eff6d65b647f5816"
+    },
+    {
+      "bytes": 823,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/citation_coverage.json",
+      "sha256": "011bb747021645e3dc6c4db211ea403e9f7da4174f198e2ea7f509389bab5a47"
+    },
+    {
+      "bytes": 5133,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/field_completeness.json",
+      "sha256": "6fbb2ec8d44e8b230d47e899ef714f8d4f460659b83b3b2949f0ed8ad9b6ce77"
+    },
+    {
+      "bytes": 756,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/geology_coverage.json",
+      "sha256": "f845f52d9d0ca630a80c23ad615ffb97d0f52676419739dca1ad6eaac6f81df8"
+    },
+    {
+      "bytes": 187091,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/method_completeness.json",
+      "sha256": "4eba8e5349cff4114d8a1d31925cbcd85ca71b218c8c606d7e3750c5487f0ac0"
+    },
+    {
+      "bytes": 799,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/sample_type_coverage.json",
+      "sha256": "3a462f4e278e95e8684b4100f0f9899d9d9d38f5b5fccf46048184b89324efea"
+    },
+    {
+      "bytes": 157118,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/spatial_coverage.json",
+      "sha256": "2e9fe600b2d089b195b7e383a54d9cd380eeefccc05bf418ab021469f44777d1"
+    },
+    {
+      "bytes": 957,
+      "path": "assets/v4-full-profiles/zenodo-gard-whole-rock/usage_rights_coverage.json",
+      "sha256": "cf8f32175dfb6391ffa5ff4ac2346c23dd7c6c1be89ed0ba1238203e25ed5739"
+    },
+    {
       "bytes": 1800,
       "path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/automation_health.json",
       "sha256": "2775eeec93387501a7042fa252bdbf9614bf6f89cbc0d23d54c038099b4b09e3"
@@ -1371,37 +1411,39 @@
       "sha256": "84f966de52a917c7d5ad5b15c523b72e9b1ac4fbe3cb8947c26be909b5a73454"
     },
     {
-      "bytes": 4665,
+      "bytes": 4760,
       "path": "references/v4-full-population-profile.md",
-      "sha256": "3ce74f34dd182f6282be97db2d6e7d64b71aa1495182c3941796698d842bd14d"
+      "sha256": "3b1b3911e718b9418a0e6a6f2994f3b333152aa210ca74b44d278e58ab2521c6"
     }
   ],
   "as_of": "2026-08-15T07:00:00Z",
   "comparable_observation_count": 424267,
-  "coverage_cube_rows": 26163,
+  "coverage_cube_rows": 28304,
   "coverage_cube_version": "d1-v4-coverage-cube-v1",
   "covered_spatial_cells_source_sum": 8169,
   "denominator_definition": "all non-empty registered target observations parsed from verified full caches",
-  "distinct_sample_count": 861738,
+  "distinct_sample_count": 1551170,
   "media": {
     "rock": {
       "comparable_observation_count": 0,
       "covered_spatial_cells": 0,
-      "distinct_sample_count": 104878,
-      "independent_lineage_count": 2,
+      "distinct_sample_count": 794310,
+      "independent_lineage_count": 3,
       "lineage_ids": [
         "earthchem-dehailonggang-rock",
-        "georoc-compilation"
+        "georoc-compilation",
+        "zenodo-gard-whole-rock"
       ],
-      "observation_count": 244463,
+      "observation_count": 2939508,
       "reported_comparable_observation_count": 0,
-      "reported_coordinate_sample_count": 86484,
-      "reported_covered_spatial_cells": 1857,
+      "reported_coordinate_sample_count": 765644,
+      "reported_covered_spatial_cells": 9740,
       "source_ids": [
         "earthchem-dehailonggang-rock",
         "georoc-antarctica-intraplate",
         "georoc-archaean",
-        "georoc-convergent-margins"
+        "georoc-convergent-margins",
+        "zenodo-gard-whole-rock"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 0
@@ -1512,11 +1554,11 @@
       "valid_coordinate_sample_count": 708416
     }
   },
-  "observation_count": 4294213,
+  "observation_count": 6989258,
   "profile_version": "d1-v4-full-population-profile-v1",
-  "registered_source_count": 34,
-  "reported_coordinate_sample_count": 843125,
-  "source_count": 34,
+  "registered_source_count": 35,
+  "reported_coordinate_sample_count": 1522285,
+  "source_count": 35,
   "sources": [
     {
       "comparable_observation_count": 0,
@@ -1880,6 +1922,17 @@
       "reported_coordinate_sample_count": 14380,
       "source_id": "usgs-conus-soil",
       "valid_coordinate_sample_count": 14380
+    },
+    {
+      "comparable_observation_count": 0,
+      "covered_spatial_cells": 0,
+      "distinct_sample_count": 689432,
+      "medium": "rock",
+      "method_rate": 0.253673,
+      "observation_count": 2695045,
+      "reported_coordinate_sample_count": 679160,
+      "source_id": "zenodo-gard-whole-rock",
+      "valid_coordinate_sample_count": 0
     },
     {
       "comparable_observation_count": 0,

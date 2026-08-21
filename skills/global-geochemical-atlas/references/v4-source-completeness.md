@@ -4,12 +4,12 @@
 
 ## 摘要
 
-- 可执行来源：34
+- 可执行来源：35
 - 有全量候选审计：23
-- 有明确目标测定分母：34
-- 缺少全量候选审计：11
-- 演示样板记录：1772（仅工程测试）
-- 已完成统一全量逐字段 profile：34
+- 有明确目标测定分母：35
+- 缺少全量候选审计：12
+- 演示样板记录：1820（仅工程测试）
+- 已完成统一全量逐字段 profile：35
 
 ## 来源口径
 
@@ -48,11 +48,12 @@
 | `tpdc-china-mountain-soil` | uniform_full_profile | 6570 | 40 | 100.0% | 100.0% |
 | `us-wqp-sacramento-river-arsenic` | uniform_full_profile | 189 | 48 | 100.0% | 100.0% |
 | `usgs-conus-soil` | uniform_full_profile | 58284 | 108 | 100.0% | 100.0% |
+| `zenodo-gard-whole-rock` | uniform_full_profile | 2695045 | 48 | 100.0% | 68.8% |
 | `zenodo-yangtze-yellow-river-sediment` | uniform_full_profile | 558 | 48 | 100.0% | 0.0% |
 
 ## 当前阻塞
 
-1. 统一全量逐字段 profile 已完成 34/34；任何缺口仍显示 `not_measured`。
+1. 统一全量逐字段 profile 已完成 35/35；任何缺口仍显示 `not_measured`。
 2. 候选来源审计与全量 adapter profile 分开保留，缺候选审计不再用 demo 补位。
 3. 在线实时可用性仍需独立探测；固定缓存的 hash、schema、row-count 与离线重放已纳入 profile。
 

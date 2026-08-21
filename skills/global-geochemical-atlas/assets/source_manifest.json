@@ -4797,6 +4797,117 @@
       },
       "title": "Geochemical and mineralogical data for soils of the conterminous United States"
     },
+    "zenodo-gard-whole-rock": {
+      "adapter": "zenodo_gard_whole_rock",
+      "citation": "Gard, M., Hasterok, D., & Halpin, J. A. (2019). Global whole-rock geochemical database compilation (v1.1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.3359791; description paper: Earth Syst. Sci. Data 11, 1553-1566, https://doi.org/10.5194/essd-11-1553-2019",
+      "coordinate_reference": {
+        "canonicalization_policy": "retain original coordinates; withhold canonical WGS84 coordinates until datum evidence is available",
+        "datum_status": "not_declared_in_reviewed_public_metadata",
+        "reported_format": "decimal latitude and longitude"
+      },
+      "data_generated_at": "2019-08-02",
+      "dataset_doi": "10.5281/zenodo.3359791",
+      "dataset_version": "zenodo-record-3359791-v1.1.0",
+      "download": {
+        "accepted_content_types": [
+          "application/octet-stream",
+          "application/zip",
+          "text/csv"
+        ],
+        "files": [
+          {
+            "bytes": 192615473,
+            "expected_sha256": "c9054b2f87ec51589d1974aa35e00ce2efb696e5db7f265ef279e8c67beb61ba",
+            "file_id": "complete-zip",
+            "filename": "complete.zip",
+            "publisher_checksum": "md5:9b97b54887ee7184c6650c845b4e92d4",
+            "sha256_basis": "live_download_2026-08-21_publisher_md5_match",
+            "url": "https://zenodo.org/api/records/3359791/files/complete.zip/content"
+          },
+          {
+            "bytes": 3339065,
+            "expected_sha256": "a36aaf931456d4cb28e42e43e3700eec78823b252974c5399f7d37159386ba6a",
+            "file_id": "reference-csv",
+            "filename": "reference.csv",
+            "publisher_checksum": "md5:7eace8e7bfe7f3d9758e6bc3f4c9aaad",
+            "sha256_basis": "live_download_2026-08-21_publisher_md5_match",
+            "url": "https://zenodo.org/api/records/3359791/files/reference.csv/content"
+          }
+        ],
+        "max_bytes": 250000000,
+        "mode": "pinned-zenodo-record-files",
+        "observed_at": "2026-08-21T00:00:00Z"
+      },
+      "expected_counts": {
+        "rows_with_coordinates": 1006397,
+        "target_observations": 2695045,
+        "target_value_counts": {
+          "As": 142868,
+          "Cr": 565362,
+          "Cu": 490775,
+          "Ni": 576655,
+          "Pb": 452110,
+          "Zn": 467275
+        },
+        "total_rows": 1022092
+      },
+      "geographic_scope": "global-whole-rock-literature-compilation",
+      "landing_page": "https://zenodo.org/records/3359791",
+      "license": {
+        "name": "Creative Commons Attribution 4.0 International",
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "media": [
+        "rock"
+      ],
+      "metadata_url": "https://zenodo.org/api/records/3359791",
+      "publisher": "Zenodo deposit by Matthew Gard, Derrick Hasterok and Jacqueline A. Halpin, University of Adelaide / University of Tasmania",
+      "redistribution": "Research analysis with attribution under CC BY 4.0; the archive stays outside Git and deterministic rows retain DOI, hash and table-row locators.",
+      "required_fields": [
+        "sample_id",
+        "sample_name",
+        "latitude",
+        "longitude",
+        "country",
+        "rock_name",
+        "rock_type",
+        "rock_group",
+        "rock_origin",
+        "rock_facies",
+        "sample_description",
+        "loc_prec",
+        "method",
+        "age",
+        "ref_id",
+        "as_ppm",
+        "cr_ppm",
+        "cu_ppm",
+        "ni_ppm",
+        "pb_ppm",
+        "zn_ppm"
+      ],
+      "research_slice_capacity": {
+        "basis": "full-table streaming count of non-empty numeric *_ppm cells, 2026-08-21",
+        "per_analyte_observation_count": {
+          "As": 142868,
+          "Cr": 565362,
+          "Cu": 490775,
+          "Ni": 576655,
+          "Pb": 452110,
+          "Zn": 467275
+        }
+      },
+      "target_analytes": {
+        "As": "as_ppm",
+        "Cr": "cr_ppm",
+        "Cu": "cu_ppm",
+        "Ni": "ni_ppm",
+        "Pb": "pb_ppm",
+        "Zn": "zn_ppm"
+      },
+      "title": "Global whole-rock geochemical database compilation (v1.1.0)"
+    },
     "zenodo-yangtze-yellow-river-sediment": {
       "adapter": "zenodo_yangtze_yellow_river_sediment",
       "citation": "Wu, Chao (2022). Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7098563",

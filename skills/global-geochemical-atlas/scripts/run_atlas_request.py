@@ -70,6 +70,7 @@ ELEMENT_ONLY_PARAMETERIZED_SOURCES = {
     "japan-gsj-marine-sediment",
 }
 SCALABLE_BALANCED_SOURCES = {
+    "zenodo-gard-whole-rock",
     "gemstat-open-archive",
     "geotraces-idp2025",
     "afsis-phase-i-wet-chemistry",

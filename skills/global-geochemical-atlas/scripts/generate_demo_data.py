@@ -618,6 +618,225 @@ def georoc_demo(
     return rows, evidence, len(selected_source_rows), raw_source_rows
 
 
+def gard_demo(
+    records: Iterable[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    references: Mapping[str, Mapping[str, str]],
+    candidate: Any,
+    observation_limit: int,
+    requested_analytes: Sequence[str],
+    bbox: tuple[float, float, float, float] | None,
+    purpose: str = "demo",
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int, int]:
+    """Balanced streaming slice of the Gard 2019 whole-rock compilation.
+
+    The archive is a single table of 1,022,092 rows dominated by a few
+    countries (the US alone holds 35 percent), so candidates are bucketed by
+    country per analyte and drawn round-robin.  The stream is always consumed
+    to exhaustion so the adapter row-count reconciliation runs every time.
+    """
+    supported = {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
+    selected_analytes = tuple(
+        item for item in requested_analytes if item in supported
+    )
+    if not selected_analytes:
+        raise DemoError("Gard compilation registers none of the requested analytes")
+    if observation_limit % len(selected_analytes) != 0:
+        raise DemoError(
+            "Gard observation limit must be divisible by the requested analyte count"
+        )
+    per_analyte_limit = observation_limit // len(selected_analytes)
+    cell_cap = max(2, math.ceil(per_analyte_limit / 48))
+    candidates: dict[str, dict[str, list[RawRecord]]] = {
+        item: {} for item in selected_analytes
+    }
+    overflow: dict[str, list[RawRecord]] = {item: [] for item in selected_analytes}
+    raw_source_rows = 0
+    for record in records:
+        raw_source_rows += 1
+        fields = record.fields
+        reported_latitude = str(fields.get("latitude") or "")
+        reported_longitude = str(fields.get("longitude") or "")
+        if not reported_latitude or not reported_longitude:
+            continue
+        if not _inside_bbox(reported_latitude, reported_longitude, bbox):
+            continue
+        country = str(fields.get("country") or "unspecified")
+        for analyte in selected_analytes:
+            value = _reported_float(fields.get(f"{analyte.lower()}_ppm"))
+            if value is None or value < 0:
+                continue
+            bucket = candidates[analyte].setdefault(country, [])
+            if len(bucket) < cell_cap:
+                bucket.append(record)
+            elif len(overflow[analyte]) < per_analyte_limit:
+                overflow[analyte].append(record)
+
+    selected: list[tuple[str, RawRecord]] = []
+    for analyte in selected_analytes:
+        cells = candidates[analyte]
+        offsets = {key: 0 for key in cells}
+        analyte_selected: list[RawRecord] = []
+        while len(analyte_selected) < per_analyte_limit:
+            advanced = False
+            for key in sorted(cells):
+                index = offsets[key]
+                if index >= len(cells[key]):
+                    continue
+                analyte_selected.append(cells[key][index])
+                offsets[key] = index + 1
+                advanced = True
+                if len(analyte_selected) >= per_analyte_limit:
+                    break
+            if not advanced:
+                break
+        seen = {item.source_record_id for item in analyte_selected}
+        for record in overflow[analyte]:
+            if len(analyte_selected) >= per_analyte_limit:
+                break
+            if record.source_record_id in seen:
+                continue
+            analyte_selected.append(record)
+            seen.add(record.source_record_id)
+        selected.extend((analyte, record) for record in analyte_selected)
+    if not selected:
+        raise DemoError(
+            "Gard compilation has no usable observations inside the requested scope"
+        )
+    analyte_order = {item: index for index, item in enumerate(selected_analytes)}
+    selected.sort(
+        key=lambda pair: (
+            analyte_order[pair[0]],
+            int(pair[1].source_locator.partition("#row=")[2]),
+        )
+    )
+
+    rows: list[dict[str, str]] = []
+    evidence: list[dict[str, Any]] = []
+    selected_source_rows: set[str] = set()
+    for analyte, record in selected:
+        fields = record.fields
+        downloaded = files.get("complete.zip")
+        if downloaded is None:
+            raise DemoError("Gard record references a missing archive file")
+        original_value = str(fields.get(f"{analyte.lower()}_ppm") or "").strip()
+        reported_latitude = str(fields.get("latitude") or "")
+        reported_longitude = str(fields.get("longitude") or "")
+        rock_name = str(fields.get("rock_name") or "").strip()
+        rock_type = str(fields.get("rock_type") or "").strip()
+        lithology = (
+            rock_name if rock_name and rock_name != "not given" else rock_type
+        )
+        method = str(fields.get("method") or "").strip()
+        record_id = stable_record_id(
+            record.source_id,
+            record.source_record_id,
+            analyte,
+            original_value,
+            "ppm",
+        )
+        rows.append(
+            {
+                "record_id": record_id,
+                "source_record_id": record.source_record_id,
+                "sample_id": str(fields.get("sample_id") or ""),
+                "element_or_analyte": analyte,
+                "analyte_reported": analyte,
+                "value": original_value,
+                "unit": "ppm",
+                "medium": "rock",
+                "material": "whole rock",
+                "measurement_basis": "GARD2019_compilation_reported_value",
+                "value_qualifier": "",
+                "missing_reason": "",
+                "detection_limit": "",
+                "detection_limit_unit": "",
+                "original_latitude_raw": reported_latitude,
+                "original_longitude_raw": reported_longitude,
+                "latitude": "",
+                "longitude": "",
+                "source_crs": "",
+                "coordinate_transform_method": "",
+                "coordinate_uncertainty_m": "",
+                "geologic_unit": "",
+                "analytical_method": "" if method in ("", "not given") else method,
+                "method_family": "",
+                "digestion_or_extraction": "",
+                "laboratory": "",
+                "source_tier": "official_curated",
+                "sampled_at": "",
+                "sample_depth_min_m": "",
+                "sample_depth_max_m": "",
+                "grain_fraction": "",
+                "material_raw": str(fields.get("sample_description") or "").strip(),
+                "lithology_raw": lithology,
+                "geologic_age_raw": str(fields.get("age") or "").strip(),
+                "tectonic_setting_raw": "",
+                **_provenance_fields(record, downloaded, candidate, analyte),
+            }
+        )
+        entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+        ref_id = str(fields.get("ref_id") or "").strip()
+        reference = references.get(ref_id, {})
+        citation_parts = [
+            part
+            for part in (
+                reference.get("author"),
+                f"({reference.get('year')})" if reference.get("year") else "",
+                reference.get("title"),
+                reference.get("journal"),
+                f"doi:{reference.get('doi')}" if reference.get("doi") else "",
+            )
+            if part
+        ]
+        entry.update(
+            {
+                "ref_id": ref_id,
+                "article_citations": (
+                    [". ".join(citation_parts)] if citation_parts else []
+                ),
+                "article_dois": (
+                    [reference["doi"]] if reference.get("doi") else []
+                ),
+                "compilation_upstream": reference.get("data_source", ""),
+                "selection_rule": (
+                    "whole-rock compilation; reported point coordinates; "
+                    f"balanced {','.join(selected_analytes)}; round-robin "
+                    "publisher country groups"
+                    + (
+                        "; reported-coordinate retrieval filter only "
+                        "(datum unresolved; no canonical WGS84 claim)"
+                        if bbox is not None
+                        else ""
+                    )
+                ),
+                "material_raw": str(fields.get("sample_description") or "").strip(),
+                "lithology_raw": lithology,
+                "rock_group_raw": str(fields.get("rock_group") or "").strip(),
+                "rock_origin_raw": str(fields.get("rock_origin") or "").strip(),
+                "geologic_age_raw": str(fields.get("age") or "").strip(),
+                "scientific_note": (
+                    "Gard 2019 literature compilation value; about 68 percent "
+                    "of citations resolve to GEOROC, so rows are not "
+                    "independent of the georoc-* lineage."
+                ),
+                "coordinate_evidence": {
+                    "reported_latitude": reported_latitude,
+                    "reported_longitude": reported_longitude,
+                    "datum_status": "not_declared_in_reviewed_public_metadata",
+                    "canonicalization_status": "withheld_pending_datum_verification",
+                    "claim_boundary": (
+                        "Coordinates are retained as reported and are not "
+                        "asserted to be WGS 84."
+                    ),
+                },
+            }
+        )
+        evidence.append(entry)
+        selected_source_rows.add(record.source_record_id)
+    return rows, evidence, len(selected_source_rows), raw_source_rows
+
+
 def _depth_m(record: RawRecord) -> tuple[str, str]:
     layer = str(record.fields.get("_soil_layer") or "")
     if layer == "top-0-5cm":
@@ -4038,6 +4257,7 @@ def _jsonl_text(rows: Sequence[Mapping[str, Any]]) -> str:
 
 def generate(args: argparse.Namespace) -> dict[str, Any]:
     parameterized_sources = {
+        "zenodo-gard-whole-rock",
         "georoc-archaean",
         "georoc-convergent-margins",
         "usgs-conus-soil",
@@ -4087,7 +4307,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         raw_records: Sequence[RawRecord] | Iterable[RawRecord]
         raw_records = (
             adapter.parse(downloaded)
-            if args.source == "gemstat-open-archive"
+            if args.source in {"gemstat-open-archive", "zenodo-gard-whole-rock"}
             else list(adapter.parse(downloaded))
         )
         files = {item.path.name: item for item in downloaded}
@@ -4135,6 +4355,18 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 args.purpose,
             )
             raw_source_rows = len(raw_records)
+        elif args.source == "zenodo-gard-whole-rock":
+            gard_adapter = get_adapter(args.source)
+            rows, evidence, selected_source_rows, raw_source_rows = gard_demo(
+                raw_records,
+                files,
+                gard_adapter.reference_map(downloaded),
+                candidate,
+                args.observations,
+                args.elements,
+                args.bbox,
+                args.purpose,
+            )
         elif args.source == "gemstat-open-archive":
             rows, evidence, selected_source_rows = gemstat_demo(
                 raw_records,
@@ -4339,6 +4571,15 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             [
                 "MarChem values are dry-weight partial nitric-acid extractions, not total concentrations.",
                 "Accreditation status varies by batch and remains attached to observation evidence.",
+            ]
+        )
+    elif args.source == "zenodo-gard-whole-rock":
+        warnings.extend(
+            [
+                "Gard 2019 is a literature compilation; about 68 percent of citations resolve to GEOROC, so rows overlap the georoc-* lineage and are not independent replication.",
+                "Sampling dates are not published; the age columns are geological rock ages in Ma, never collection times.",
+                "Coordinates are retained as reported without a declared datum and are not asserted to be WGS 84.",
+                "The compilation snapshot ends in 2019 and analytical method metadata is sparse.",
             ]
         )
     elif args.source == "gemstat-open-archive":
@@ -4642,6 +4883,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--source",
         required=True,
         choices=(
+            "zenodo-gard-whole-rock",
             "georoc-archaean",
             "georoc-convergent-margins",
             "usgs-conus-soil",

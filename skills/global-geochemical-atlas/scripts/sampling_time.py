@@ -167,6 +167,9 @@ SOURCE_SAMPLING_TIME: dict[str, dict[str, str]] = {
     "pangaea-south-china-sea-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
     "tpdc-china-mountain-soil": {"reason": REASON_NOT_IN_ARCHIVE},
     "zenodo-yangtze-yellow-river-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
+    # Gard 2019 compilation: the archive publishes geological rock ages
+    # (Ma), never collection dates, so no sampling time exists to parse.
+    "zenodo-gard-whole-rock": {"reason": REASON_NOT_IN_ARCHIVE},
     # Bundled synthetic regression fixture (not a registered manifest source);
     # its sampled_at column carries literal ISO dates by construction.
     "synthetic-demo-v1": {"raw_field": "sampled_at", "raw_format": "iso8601"},

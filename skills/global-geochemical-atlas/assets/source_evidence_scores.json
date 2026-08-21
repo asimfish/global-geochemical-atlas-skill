@@ -14,7 +14,7 @@
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
   "scored_at": "2026-08-16T00:00:00Z",
-  "source_count": 66,
+  "source_count": 67,
   "sources": {
     "4tu-northern-china-sediment": {
       "access_status": "open",
@@ -5854,6 +5854,91 @@
         "research_use_status=permission_required"
       ]
     },
+    "zenodo-gard-whole-rock": {
+      "access_status": "open",
+      "attribution_note": "Zenodo record metadata declares license id cc-by-4.0. Retain the dataset DOI and cite Gard, Hasterok & Halpin (2019, ESSD).",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://zenodo.org/records/3359791",
+            "https://doi.org/10.5281/zenodo.3359791",
+            "https://doi.org/10.5194/essd-11-1553-2019"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://zenodo.org/records/3359791",
+            "https://doi.org/10.5281/zenodo.3359791",
+            "https://doi.org/10.5194/essd-11-1553-2019",
+            "doi:10.5281/zenodo.3359791"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: zenodo-record-3359791-v1.1.0",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "zenodo-gard-whole-rock",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "zenodo-yangtze-yellow-river-sediment": {
       "access_status": "open",
       "attribution_note": "Zenodo record metadata declares license id cc-by-4.0. Retain the dataset DOI and author attribution.",
@@ -5940,7 +6025,7 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 33,
+      "A": 34,
       "B": 1,
       "C": 0,
       "D": 32,
@@ -5949,7 +6034,7 @@
     "use_modes": {
       "benchmark_ready": 0,
       "discovery": 32,
-      "normalized_analysis": 34,
+      "normalized_analysis": 35,
       "raw_observation": 0
     }
   }

@@ -16,7 +16,7 @@
 | `sampling_time_precision` | 精度 | second / minute / day / month / year / year_range |
 | `sampling_time_status` | 状态 | publisher_reported / publisher_not_reported / unparseable_raw_value |
 
-**逐源声明摘要**（34 个可执行来源全覆盖）：10 个来源带发布方采样时间（GEOTRACES 秒级、GEMStat 分钟级、us-wqp 秒级、USGS/NGSA/NGSA-Hg/BraSol/Amazonas 日级、MarChem 年级、AfSIS 年段）；GEOROC 三源与 EarthChem 为文献汇编（仅发表年，不算）；其余 20 源在已注册档案内未见可提取采样时刻。两位年份用固定轴心：00-49 归 2000 年代，50-99 归 1900 年代。
+**逐源声明摘要**（35 个可执行来源全覆盖）：17 个来源带发布方采样时间（GEOTRACES 秒级、GEMStat 分钟级、us-wqp 秒级、USGS/NGSA/NGSA-Hg/BraSol/Amazonas 日级、MarChem 年级、AfSIS 年段；FOREGS 六源与 GEMAS 用发布方声明的采样战役年段：FOREGS 五源 1997/2001、河流沉积物 1997/2004（瑞典补采）、GEMAS 2008/2009）；GEOROC 三源、EarthChem 与 Gard 2019 全岩汇编为文献汇编（仅发表年或地质年龄 Ma，均不算采样时间）；其余 13 源在已注册档案内未见可提取采样时刻。两位年份用固定轴心：00-49 归 2000 年代，50-99 归 1900 年代。
 
 **时序查询口径**：同一站点的多时相序列用 `sample_id` 识别——GEMStat 的 `sample_id` 形如 `站号|时间|深度`（竖线分隔，前缀是站号）；其余来源用坐标圆整 0.01° 聚合。置信度说明 `sources_and_confidence.json` 新增 `sampling_time_coverage` 节（总体与逐源的时间覆盖、最早/最晚采样时刻）。
 
