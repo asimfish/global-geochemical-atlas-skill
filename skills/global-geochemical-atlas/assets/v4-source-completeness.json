@@ -18755,8 +18755,8 @@
           "analytical_method": {
             "column_present": true,
             "denominator": 48,
-            "non_empty": 33,
-            "rate": 0.6875
+            "non_empty": 20,
+            "rate": 0.416667
           },
           "citation_scope": {
             "column_present": true,
@@ -18809,14 +18809,14 @@
           "method_assignment_basis": {
             "column_present": true,
             "denominator": 48,
-            "non_empty": 33,
-            "rate": 0.6875
+            "non_empty": 20,
+            "rate": 0.416667
           },
           "method_scope": {
             "column_present": true,
             "denominator": 48,
-            "non_empty": 33,
-            "rate": 0.6875
+            "non_empty": 20,
+            "rate": 0.416667
           },
           "sample_id": {
             "column_present": true,
@@ -18885,9 +18885,9 @@
             "rate": 0.0
           }
         },
-        "file_sha256": "0cc8b63d89ffe8f53382eba653f857e146f7166c084e32e6fa8f24e1586fa4b5",
+        "file_sha256": "53c315e54e023d8127a226a2710282d9b31c8979b0c77f3404ec36f36e18a94b",
         "header_sha256": "a13ca6b5a39c3e09c271413b27a4375204f670a5f3b5d5e5f2363971772d128a",
-        "manifest_sha256": "af6c3215d3f75af9a5e3d324979225016eac881c7f738ed7a31be9b99fafac11",
+        "manifest_sha256": "263f2c827e6347d9d1f518b8146e034d8c2c58e655f500ba9f576c31d412385a",
         "media": {
           "rock": 48
         },

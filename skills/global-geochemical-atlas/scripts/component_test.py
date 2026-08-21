@@ -1331,6 +1331,7 @@ def check_d1(output_dir: Path) -> list[str]:
             "earthchem-dehailonggang-rock",
             "georoc-archaean",
             "georoc-convergent-margins",
+            "zenodo-gard-whole-rock",
         ],
         "D1 breadth audit preserves every at-least candidate and exposes both local and compilation-backed China-rock evidence",
         checks,

@@ -60,6 +60,7 @@ PARAMETERIZED_SOURCES = {
     "pangaea-brasol-ne-brazil-soil",
     "figshare-yangtze-basin-soil-heavy-metals",
     "4tu-northern-china-sediment",
+    "zenodo-gard-whole-rock",
 }
 # These sources support request-element filtering but deliberately do not
 # accept a bbox.  In particular, the GSJ marine table keeps its reported

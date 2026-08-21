@@ -48,7 +48,7 @@
 | `tpdc-china-mountain-soil` | uniform_full_profile | 6570 | 40 | 100.0% | 100.0% |
 | `us-wqp-sacramento-river-arsenic` | uniform_full_profile | 189 | 48 | 100.0% | 100.0% |
 | `usgs-conus-soil` | uniform_full_profile | 58284 | 108 | 100.0% | 100.0% |
-| `zenodo-gard-whole-rock` | uniform_full_profile | 2695045 | 48 | 100.0% | 68.8% |
+| `zenodo-gard-whole-rock` | uniform_full_profile | 2695045 | 48 | 100.0% | 41.7% |
 | `zenodo-yangtze-yellow-river-sediment` | uniform_full_profile | 558 | 48 | 100.0% | 0.0% |
 
 ## 当前阻塞

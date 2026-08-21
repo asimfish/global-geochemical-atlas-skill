@@ -662,11 +662,20 @@ def gard_demo(
         if not _inside_bbox(reported_latitude, reported_longitude, bbox):
             continue
         country = str(fields.get("country") or "unspecified")
+        # Bucket by country plus a coarse 5-degree reported-coordinate cell so
+        # a single-country request still spreads across space instead of
+        # replaying file order (which starved southern Tibet).
+        try:
+            cell_lon = math.floor(float(reported_longitude) / 5.0) * 5
+            cell_lat = math.floor(float(reported_latitude) / 5.0) * 5
+        except ValueError:
+            continue
+        bucket_key = f"{country}|{cell_lon:+04d}{cell_lat:+03d}"
         for analyte in selected_analytes:
             value = _reported_float(fields.get(f"{analyte.lower()}_ppm"))
             if value is None or value < 0:
                 continue
-            bucket = candidates[analyte].setdefault(country, [])
+            bucket = candidates[analyte].setdefault(bucket_key, [])
             if len(bucket) < cell_cap:
                 bucket.append(record)
             elif len(overflow[analyte]) < per_analyte_limit:
@@ -776,6 +785,16 @@ def gard_demo(
             }
         )
         entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+        # Rows locate values inside the decoded complete.csv member, so the
+        # evidence must cite that member (pinned in registry archive_members)
+        # instead of the outer archive, or packaging reconciliation fails.
+        member = candidate.registry_entry["download"]["archive_members"][0]
+        member_file, member_row = _source_row(record)
+        if member_file == str(member["member"]):
+            entry["source_file"] = member_file
+            entry["source_row"] = int(member_row)
+            entry["source_file_bytes"] = int(member["bytes"])
+            entry["source_file_sha256"] = str(member["sha256"])
         ref_id = str(fields.get("ref_id") or "").strip()
         reference = references.get(ref_id, {})
         citation_parts = [
@@ -4302,6 +4321,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             f"output files already exist; use --overwrite after review: {existing}"
         )
 
+    archive_member_files: list[dict[str, Any]] = []
     with acquired_source(args) as (candidate, downloaded):
         adapter = get_adapter(args.source)
         raw_records: Sequence[RawRecord] | Iterable[RawRecord]
@@ -4357,6 +4377,23 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
             raw_source_rows = len(raw_records)
         elif args.source == "zenodo-gard-whole-rock":
             gard_adapter = get_adapter(args.source)
+            zip_file = next(
+                item for item in downloaded if item.path.name == "complete.zip"
+            )
+            # The rows cite the decoded complete.csv member, so the manifest
+            # must list it beside the pinned archive it came from.
+            archive_member_files = [
+                {
+                    "filename": str(member["member"]),
+                    "source_url": zip_file.source_url,
+                    "bytes": int(member["bytes"]),
+                    "sha256": str(member["sha256"]),
+                    "retrieved_at": zip_file.retrieved_at,
+                }
+                for member in candidate.registry_entry["download"][
+                    "archive_members"
+                ]
+            ]
             rows, evidence, selected_source_rows, raw_source_rows = gard_demo(
                 raw_records,
                 files,
@@ -4863,7 +4900,8 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 "retrieved_at": item.retrieved_at,
             }
             for item in downloaded
-        ],
+        ]
+        + archive_member_files,
         "record_counts": {
             "raw_source_rows": raw_source_rows,
             "selected_source_rows": selected_source_rows,
