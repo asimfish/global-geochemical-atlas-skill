@@ -364,6 +364,119 @@ def _inside_bbox(row: Mapping[str, str], bbox: Sequence[float]) -> bool:
     return spatial_scope.coordinate_in_bbox(longitude, latitude, bbox)
 
 
+_DECLARED_SOURCE_COUNTRIES: dict[str, tuple[str, ...]] | None = None
+
+
+def _declared_source_countries() -> dict[str, tuple[str, ...]]:
+    """Publisher-declared ISO country coverage per source (coverage.countries).
+
+    Only sources whose publisher states that every sample lies inside a known
+    country set carry this field; it is the sole evidence that lets a
+    coordinate-less record stay in a regional standardized database.
+    """
+    global _DECLARED_SOURCE_COUNTRIES
+    if _DECLARED_SOURCE_COUNTRIES is None:
+        declared: dict[str, tuple[str, ...]] = {}
+        catalog_path = SKILL_DIR / "assets" / "source_catalog.json"
+        try:
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            catalog = {}
+        raw_sources = catalog.get("sources") if isinstance(catalog, dict) else None
+        if isinstance(raw_sources, dict):
+            for source_id, entry in raw_sources.items():
+                if not isinstance(entry, dict):
+                    continue
+                countries = (entry.get("coverage") or {}).get("countries")
+                if isinstance(countries, list) and countries:
+                    declared[str(source_id)] = tuple(str(code) for code in countries)
+        _DECLARED_SOURCE_COUNTRIES = declared
+    return _DECLARED_SOURCE_COUNTRIES
+
+
+def _declared_coverage_inside_region(
+    source_id: str, resolved_region: dict[str, Any]
+) -> bool:
+    """True when the publisher-declared country coverage of a source is
+    provably inside the requested region.
+
+    Named regions compare ISO country-code sets.  Bbox regions require every
+    declared country's registry bounds to sit inside the requested bbox within
+    the boundary-registry resolution tolerance (Natural Earth 1:110m is only
+    accurate to a few tens of kilometres).  Wrapped bboxes fail closed.
+    """
+    declared = _declared_source_countries().get(source_id)
+    if not declared:
+        return False
+    region_codes = set(spatial_scope.analysis_country_codes(resolved_region))
+    if region_codes:
+        return set(declared) <= region_codes
+    request_bbox = resolved_region.get("bbox")
+    if (
+        not isinstance(request_bbox, list)
+        or len(request_bbox) != 4
+        or float(request_bbox[0]) > float(request_bbox[2])
+    ):
+        return False
+    tolerance = 0.5
+    try:
+        countries = spatial_scope.analysis_countries(
+            {"analysis_country_codes": list(declared)}
+        )
+    except spatial_scope.SpatialScopeError:
+        return False
+    for country in countries:
+        west, south, east, north = spatial_scope.country_bbox(country)
+        if west > east:
+            return False
+        if (
+            west < float(request_bbox[0]) - tolerance
+            or south < float(request_bbox[1]) - tolerance
+            or east > float(request_bbox[2]) + tolerance
+            or north > float(request_bbox[3]) + tolerance
+        ):
+            return False
+    return True
+
+
+def _capacity_truncate_balanced(
+    selected: list[dict[str, str]], cap: int
+) -> list[dict[str, str]]:
+    """Deterministic per-medium balanced truncation for the record cap.
+
+    Plain head-truncation evicts whichever media happen to be routed last
+    (observed: a full world run capped at 200k kept only 173 rock rows).
+    Instead, capacity is water-filled across media in equal shares; input
+    order is preserved inside each medium and in the final output.
+    """
+    if len(selected) <= cap:
+        return selected
+    if cap <= 0:
+        return []
+    groups: dict[str, list[int]] = {}
+    for index, row in enumerate(selected):
+        groups.setdefault(str(row.get("medium") or ""), []).append(index)
+    quota = {medium: 0 for medium in groups}
+    remaining = cap
+    active = sorted(medium for medium in groups if groups[medium])
+    while remaining > 0 and active:
+        share = max(1, remaining // len(active))
+        still_active: list[str] = []
+        for medium in active:
+            if remaining <= 0:
+                break
+            take = min(share, len(groups[medium]) - quota[medium], remaining)
+            quota[medium] += take
+            remaining -= take
+            if quota[medium] < len(groups[medium]):
+                still_active.append(medium)
+        active = still_active
+    keep: set[int] = set()
+    for medium, indices in groups.items():
+        keep.update(indices[: quota[medium]])
+    return [row for index, row in enumerate(selected) if index in keep]
+
+
 def _basis_matches(requested: Sequence[str], actual: str) -> bool:
     return any(source_router.basis_matches(item, actual) for item in requested)
 
@@ -574,6 +687,7 @@ def filter_bundle(
     selected: list[dict[str, str]] = []
     exclusion_counts: dict[str, int] = {}
     unlocated_kept = 0
+    unlocated_keep_by_source: dict[str, bool] = {}
     for row in rows:
         reason = None
         if row.get("element_or_analyte") not in request["elements"]:
@@ -600,9 +714,24 @@ def filter_bundle(
                     row.get("original_longitude_raw") or ""
                 ).strip()
                 if not reported_latitude and not reported_longitude:
-                    # No coordinates at all: keep for the standardized database;
-                    # the map and spatial screening exclude it downstream.
-                    unlocated_kept += 1
+                    # No coordinates at all.  Keep the record for the
+                    # standardized database only when the source catalog
+                    # carries a publisher coverage declaration that lies
+                    # fully inside the requested region; map layers and
+                    # spatial screening still exclude it downstream.
+                    # Anything else fails closed so foreign arc samples
+                    # cannot leak into a regional dataset.
+                    source_key = str(row.get("source_id") or "")
+                    if source_key not in unlocated_keep_by_source:
+                        unlocated_keep_by_source[source_key] = (
+                            _declared_coverage_inside_region(
+                                source_key, resolved_region
+                            )
+                        )
+                    if unlocated_keep_by_source[source_key]:
+                        unlocated_kept += 1
+                    else:
+                        reason = "region_unlocatable_no_coordinates"
                 else:
                     try:
                         latitude = float(reported_latitude)
@@ -679,7 +808,7 @@ def filter_bundle(
             f"no records remain after deterministic request filters; exclusions={exclusion_counts}",
         )
     original_selected = len(selected)
-    selected = selected[: int(request["max_records"])]
+    selected = _capacity_truncate_balanced(selected, int(request["max_records"]))
     warnings: list[str] = []
     if unlocated_kept:
         warnings.append(
@@ -689,7 +818,10 @@ def filter_bundle(
         )
     if len(selected) < original_selected:
         warnings.append(
-            f"request max_records truncated {original_selected} matching records to {len(selected)}; coverage is incomplete"
+            f"request max_records truncated {original_selected} matching records "
+            f"to {len(selected)} with per-medium balanced quotas so late-routed "
+            "media (e.g. rock) are not evicted by earlier bulk sources; "
+            "coverage is incomplete"
         )
 
     output_input.parent.mkdir(parents=True, exist_ok=True)

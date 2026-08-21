@@ -4146,6 +4146,9 @@
         "status": "implemented"
       },
       "coverage": {
+        "countries": [
+          "CHN"
+        ],
         "extent_class": "regional_discrete_samples",
         "notes": "Ninety-three leach-residual size-fraction analyses of Yellow River (HH) and Yangtze River (CJ / CJ Sand) sediments; an author supplement without published sampling coordinates, not a basin survey grid.",
         "regions": [

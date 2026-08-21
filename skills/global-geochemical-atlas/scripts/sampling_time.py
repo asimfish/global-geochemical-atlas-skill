@@ -123,13 +123,40 @@ SOURCE_SAMPLING_TIME: dict[str, dict[str, str]] = {
     "4tu-northern-china-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
     "eidc-ningbo-soil": {"reason": REASON_NOT_IN_ARCHIVE},
     "figshare-yangtze-basin-soil-heavy-metals": {"reason": REASON_NOT_IN_ARCHIVE},
-    "foregs-floodplain-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
-    "foregs-humus": {"reason": REASON_NOT_IN_ARCHIVE},
-    "foregs-stream-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
-    "foregs-stream-water": {"reason": REASON_NOT_IN_ARCHIVE},
-    "foregs-subsoil": {"reason": REASON_NOT_IN_ARCHIVE},
-    "foregs-topsoil": {"reason": REASON_NOT_IN_ARCHIVE},
-    "gemas-europe": {"reason": REASON_NOT_IN_ARCHIVE},
+    # FOREGS atlas documents the national field seasons (1997-2001;
+    # Sweden re-sampled stream sediments in 2004) without row-level
+    # dates.  The campaign period is the publisher's own claim:
+    # http://weppi.gtk.fi/publ/foregsatlas/article.php?id=10
+    "foregs-floodplain-sediment": {
+        "raw_field": "sampling campaign (atlas documentation)",
+        "raw_format": "year_range_slash",
+    },
+    "foregs-humus": {
+        "raw_field": "sampling campaign (atlas documentation)",
+        "raw_format": "year_range_slash",
+    },
+    "foregs-stream-sediment": {
+        "raw_field": "sampling campaign (atlas documentation)",
+        "raw_format": "year_range_slash",
+    },
+    "foregs-stream-water": {
+        "raw_field": "sampling campaign (atlas documentation)",
+        "raw_format": "year_range_slash",
+    },
+    "foregs-subsoil": {
+        "raw_field": "sampling campaign (atlas documentation)",
+        "raw_format": "year_range_slash",
+    },
+    "foregs-topsoil": {
+        "raw_field": "sampling campaign (atlas documentation)",
+        "raw_format": "year_range_slash",
+    },
+    # GEMAS project documentation: joint field campaign in 2008 and
+    # early 2009 (EGDI metadata record 399663a7; BGS project page).
+    "gemas-europe": {
+        "raw_field": "sampling campaign (project documentation)",
+        "raw_format": "year_range_slash",
+    },
     "japan-gsj-geochemical-map": {"reason": REASON_NOT_IN_ARCHIVE},
     "japan-gsj-marine-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
     "pangaea-arabian-sea-sediment": {"reason": REASON_NOT_IN_ARCHIVE},

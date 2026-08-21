@@ -122,7 +122,7 @@ button,select,input{font:inherit}
 <body>
 <header class="hero">
   <div class="eyebrow">GLOBAL GEOCHEMICAL ATLAS · TEMPORAL EVOLUTION</div>
-  <h1>全球地球化学 <em>时间演变</em> 可交互地图</h1>
+  <h1 id="pageTitle">全球地球化学 <em>时间演变</em> 可交互地图</h1>
   <p id="heroSub">看同一个地区的元素含量随时间怎么变：<b>区域对比</b>把带采样时刻的观测按 5° 网格分成早晚两期，直接标出同一格子的中位含量是升是降；<b>异常成因</b>沿岩性 / 空间 / 伴生元素 / 时序四条证据线判断富集是母质高背景还是疑似人为输入；<b>站点演变</b>给出单个监测点的浓度—时间序列；<b>采样史回放</b>按含量着色回放逐条观测。仅 <b>publisher_reported</b> 的采样时刻参与时间分析；无采样时刻的记录绝不假装有时间，只作为可选的灰色底衬并计入统计。</p>
 </header>
 <main class="shell" data-template-contract="temporal-atlas-v1">
@@ -202,6 +202,7 @@ button,select,input{font:inherit}
 "use strict";
 /* ====== 数据载入与契约校验 ====== */
 const PAYLOAD = JSON.parse(document.getElementById("temporal-payload").textContent);
+const REGION = PAYLOAD.region || null;
 const BASE = JSON.parse(document.getElementById("basemap-data").textContent);
 if (PAYLOAD.schema_version !== "temporal-atlas-payload-v1") throw new Error("unsupported temporal payload");
 if (!BASE || !Array.isArray(BASE.rings)) throw new Error("unsupported basemap payload");
@@ -421,6 +422,20 @@ function clampView() {
   const halfLon = W / 2 / s;
   state.view.lon = Math.max(-180 + halfLon * 0.2, Math.min(180 - halfLon * 0.2, state.view.lon));
   state.view.lat = Math.max(-88, Math.min(88, state.view.lat));
+}
+function fitRegionView() {
+  /* 初始视野对齐请求冻结区域；无区域信息时保持全球视野。 */
+  if (!REGION || !W || !H) return;
+  const b = REGION.bounds;
+  const spanLon = Math.max(1e-6, b.e - b.w), spanLat = Math.max(1e-6, b.n - b.s);
+  const zoomW = W / (baseScale() * spanLon * 1.12);
+  const zoomH = H / (baseScale() * spanLat * 1.12);
+  state.view = {
+    lon: (b.w + b.e) / 2,
+    lat: (b.s + b.n) / 2,
+    zoom: Math.max(0.85, Math.min(45, Math.min(zoomW, zoomH)))
+  };
+  clampView();
 }
 
 /* ====== 星空底图（固定种子，确定性） ====== */
@@ -1133,7 +1148,7 @@ mapCanvas.addEventListener("wheel", e => {
 }, { passive: false });
 $("zoomIn").addEventListener("click", () => { state.view.zoom = Math.min(45, state.view.zoom * 1.5); clampView(); scheduleDraw(); });
 $("zoomOut").addEventListener("click", () => { state.view.zoom = Math.max(0.85, state.view.zoom / 1.5); clampView(); scheduleDraw(); });
-$("zoomReset").addEventListener("click", () => { state.view = { lon: 12, lat: 12, zoom: 1 }; scheduleDraw(); });
+$("zoomReset").addEventListener("click", () => { state.view = { lon: 12, lat: 12, zoom: 1 }; fitRegionView(); scheduleDraw(); });
 
 function handleHover(mx, my, cx, cy) {
   if (state.mode === "provenance") {
@@ -1664,17 +1679,25 @@ function renderFooter() {
     `区域对比在同元素 · 同介质 · 同单位层内按 ${CELL_DEG}° 网格对比早晚两期实测中位数（删失点不参与统计），只描述观测变化，不外推、不代表成因。` +
     (PROV ? `异常成因按 anomaly-provenance-v1 契约嵌入：${PROV.candidate_count} 个候选，${PROV.mapped} 个上图，${PROV.unmapped} 个无可用坐标未上图；至少两条证据线同向才判母质 / 人为，否则如实标注证据不足。` : "本次构建未嵌入异常成因归因结果（可选 --provenance）。") +
     `其中 ${STATS.coordinate_fallback_used} 条使用发布方原始坐标回退（original_latitude_raw / original_longitude_raw，未规范化，图上有标注）。<br>` +
+    (REGION ? `<b>研究区域</b>：${REGION.label}（初始视野按请求冻结区域取景，可缩放查看周边）。` : "") +
     `<b>制图</b>：海岸线 Natural Earth 1:110m Land（公有领域）· WGS84 等经纬投影 · 仅科学示意，不作法定边界依据。` +
     `数据集：${PAYLOAD.source_dataset} · 模板 temporal-atlas-v1。`;
 }
 
 /* ====== 启动 ====== */
+if (REGION && REGION.label && REGION.label !== "全球") {
+  const shortLabel = REGION.label.replace(/（[^）]*）/g, "").trim();
+  $("pageTitle").innerHTML = shortLabel + " 地球化学 <em>时间演变</em> 可交互地图";
+  document.title = shortLabel + "地球化学时间演变地图";
+}
 buildChips();
 renderFooter();
 updateLegend();
 refilter();
 setMode("compare");
 resize();
+fitRegionView();
+scheduleDraw();
 setWindow(T_LO, T_HI);
 </script>
 </body>

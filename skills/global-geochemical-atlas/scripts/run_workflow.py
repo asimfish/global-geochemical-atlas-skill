@@ -350,8 +350,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         ) from exc
 
     try:
+        temporal_region = (
+            temporal_map_builder.region_from_profile(args.visualization_profile)
+            if args.visualization_profile is not None
+            else None
+        )
         temporal_payload = temporal_map_builder.build_payload(
-            outputs["database"], args.output_dir / "anomaly_provenance.json"
+            outputs["database"],
+            args.output_dir / "anomaly_provenance.json",
+            region=temporal_region,
         )
         temporal_html = temporal_map_builder.build_html(
             temporal_payload,

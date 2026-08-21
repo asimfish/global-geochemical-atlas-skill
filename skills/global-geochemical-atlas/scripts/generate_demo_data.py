@@ -2090,7 +2090,14 @@ def foregs_demo(
                     "source_tier": "official_curated",
                     "source_id": record.source_id,
                     "source_locator": record.source_locator,
-                    "sampled_at": "",
+                    # Publisher-documented field campaign period (Atlas
+                    # "Sampling" chapter): national field seasons 1997-2001,
+                    # Sweden re-sampled stream sediments in 2004.
+                    "sampled_at": (
+                        "1997/2004"
+                        if record.source_id == "foregs-stream-sediment"
+                        else "1997/2001"
+                    ),
                     "sample_depth_min_m": str(
                         record.fields.get("_sample_depth_min_m") or ""
                     ),
@@ -3927,7 +3934,12 @@ def v4_m6_demo(
                         record.fields.get("_official_source_url")
                         or downloaded.source_url
                     ),
-                    "sampled_at": "",
+                    # GEMAS publisher-documented joint field campaign
+                    # (samples collected during 2008 and early 2009); other
+                    # sources served by this shared builder stay empty.
+                    "sampled_at": (
+                        "2008/2009" if record.source_id == "gemas-europe" else ""
+                    ),
                     "sample_depth_min_m": sample_depth_min,
                     "sample_depth_max_m": sample_depth_max,
                     "grain_fraction": grain,

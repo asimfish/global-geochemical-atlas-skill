@@ -316,8 +316,33 @@ def load_provenance(
     }
 
 
+def region_from_profile(profile_path: Path) -> dict[str, Any] | None:
+    """Resolve the frozen request region from a d3 visualization profile.
+
+    Returns the same label/bounds/clip_method structure the interactive map
+    uses so both deliverables always frame the identical study region.
+    """
+    import build_interactive_map as map_builder
+
+    try:
+        with profile_path.open(encoding="utf-8") as handle:
+            profile = json.load(handle)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise TemporalMapBuildError(
+            f"visualization profile is unreadable: {exc}"
+        ) from exc
+    try:
+        return map_builder.selected_region(profile)
+    except (KeyError, TypeError) as exc:
+        raise TemporalMapBuildError(
+            f"visualization profile has no resolvable region: {exc}"
+        ) from exc
+
+
 def build_payload(
-    input_path: Path, provenance_path: Path | None = None
+    input_path: Path,
+    provenance_path: Path | None = None,
+    region: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     with input_path.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -526,9 +551,23 @@ def build_payload(
         if provenance_path is not None
         else None
     )
+    region_payload: dict[str, Any] | None = None
+    if region is not None:
+        bounds = region["bounds"]
+        region_payload = {
+            "label": str(region["label"]),
+            "bounds": {
+                "w": float(bounds["w"]),
+                "s": float(bounds["s"]),
+                "e": float(bounds["e"]),
+                "n": float(bounds["n"]),
+            },
+            "clip_method": str(region.get("clip_method", "bbox")),
+        }
     return {
         "schema_version": PAYLOAD_SCHEMA_VERSION,
         "source_dataset": input_path.name,
+        "region": region_payload,
         "stats": stats,
         "elements": elements,
         "media": media,
@@ -570,9 +609,21 @@ def main() -> int:
         help="optional anomaly_provenance.json to show geogenic-vs-anthropogenic "
         "verdicts on the map",
     )
+    parser.add_argument(
+        "--visualization-profile",
+        type=Path,
+        default=None,
+        help="optional d3 visualization profile; frames the initial view on "
+        "the frozen request region instead of the whole world",
+    )
     args = parser.parse_args()
     try:
-        payload = build_payload(args.input, args.provenance)
+        region = (
+            region_from_profile(args.visualization_profile)
+            if args.visualization_profile is not None
+            else None
+        )
+        payload = build_payload(args.input, args.provenance, region=region)
         html = build_html(payload, args.template, args.basemap)
     except (TemporalMapBuildError, OSError) as error:
         print(f"build_temporal_map: {error}", file=sys.stderr)

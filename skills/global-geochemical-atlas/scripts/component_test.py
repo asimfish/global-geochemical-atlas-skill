@@ -5307,6 +5307,60 @@ def check_d1(output_dir: Path) -> list[str]:
         " scopes (United States, Europe frame) survive argparse",
         checks,
     )
+    china_bbox_region = spatial_scope.resolve_region(
+        {"bbox": [73.0, 18.0, 135.0, 54.0]}
+    )
+    china_named_region = spatial_scope.resolve_region("China")
+    europe_bbox_region = spatial_scope.resolve_region(
+        {"bbox": [-25.0, 34.0, 45.0, 72.0]}
+    )
+    require(
+        request_runner._declared_coverage_inside_region(
+            "zenodo-yangtze-yellow-river-sediment", china_bbox_region
+        )
+        and request_runner._declared_coverage_inside_region(
+            "zenodo-yangtze-yellow-river-sediment", china_named_region
+        )
+        and not request_runner._declared_coverage_inside_region(
+            "zenodo-yangtze-yellow-river-sediment", europe_bbox_region
+        )
+        and not request_runner._declared_coverage_inside_region(
+            "georoc-convergent-margins", china_bbox_region
+        )
+        and not request_runner._declared_coverage_inside_region(
+            "georoc-convergent-margins", china_named_region
+        ),
+        "D1 coordinate-less records survive a regional request only when the"
+        " publisher-declared country coverage is provably inside the region",
+        checks,
+    )
+    truncate_input = (
+        [{"medium": "soil", "row": f"s{i}"} for i in range(6)]
+        + [{"medium": "rock", "row": f"r{i}"} for i in range(2)]
+        + [{"medium": "water", "row": f"w{i}"} for i in range(4)]
+    )
+    truncate_balanced = request_runner._capacity_truncate_balanced(
+        list(truncate_input), 6
+    )
+    truncate_counts = Counter(row["medium"] for row in truncate_balanced)
+    require(
+        truncate_counts == {"soil": 2, "rock": 2, "water": 2}
+        and [row["row"] for row in truncate_balanced]
+        == ["s0", "s1", "r0", "r1", "w0", "w1"]
+        and request_runner._capacity_truncate_balanced(list(truncate_input), 12)
+        == truncate_input
+        and request_runner._capacity_truncate_balanced(list(truncate_input), 0) == []
+        and Counter(
+            row["medium"]
+            for row in request_runner._capacity_truncate_balanced(
+                list(truncate_input), 9
+            )
+        )
+        == {"soil": 4, "rock": 2, "water": 3},
+        "D1 record-cap truncation water-fills capacity across media so scarce"
+        " media are not evicted by routing order",
+        checks,
+    )
     require(
         request_runner.planned_slice_observations("gemstat-open-archive", 4, 50000)
         == 2048
@@ -6826,6 +6880,28 @@ def check_d3(output_dir: Path) -> list[str]:
         == "falling"
         and temporal_map_builder.classify_trend(0.01, 2.0, [100.0, 101.0]) == "stable",
         "D3 temporal parser keeps year ranges as intervals and trend classes need a material relative slope",
+        checks,
+    )
+    temporal_region_payload = temporal_map_builder.build_payload(
+        combined_expected_dir / "geochemistry.csv",
+        region={
+            "label": "中国（含台湾）",
+            "bounds": {"w": 73.0, "s": 18.0, "e": 135.0, "n": 54.0},
+            "clip_method": "country",
+        },
+    )
+    require(
+        temporal_region_payload["region"]
+        == {
+            "label": "中国（含台湾）",
+            "bounds": {"w": 73.0, "s": 18.0, "e": 135.0, "n": 54.0},
+            "clip_method": "country",
+        }
+        and temporal_payload["region"] is None
+        and "fitRegionView" in temporal_html
+        and 'id="pageTitle"' in temporal_html,
+        "D3 temporal map payload carries the frozen request region and the"
+        " template frames its initial view on it",
         checks,
     )
     good_temporal_errors: list[str] = []
