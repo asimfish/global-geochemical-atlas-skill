@@ -809,7 +809,7 @@ def validate_html(path: Path, errors: list[str]) -> None:
         )
     if "Natural Earth 1:110m" not in text or "public domain" not in text:
         errors.append("interactive_map.html omits offline basemap provenance")
-    if "ai4s-natural-earth-admin0-v1" not in text or "pointInCountry" not in text:
+    if "ai4s-natural-earth-admin0-v2" not in text or "pointInCountry" not in text:
         errors.append(
             "interactive_map.html omits strict offline country boundary support"
         )

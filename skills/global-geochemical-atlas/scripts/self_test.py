@@ -1318,7 +1318,7 @@ def run_suite() -> dict[str, Any]:
         require("ALL DATA" in html, "map does not default to the complete overview")
         require("Natural Earth 1:110m" in html, "map omits the offline land basemap")
         require(
-            "ai4s-natural-earth-admin0-v1" in html and "pointInCountry" in html,
+            "ai4s-natural-earth-admin0-v2" in html and "pointInCountry" in html,
             "map omits pinned country boundaries or strict country clipping",
         )
         require(

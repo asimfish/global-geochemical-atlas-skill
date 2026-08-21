@@ -7344,7 +7344,7 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         "Natural Earth 1:110m" in html
         and "ai4s-natural-earth-land-v1" in html
-        and "ai4s-natural-earth-admin0-v1" in html
+        and "ai4s-natural-earth-admin0-v2" in html
         and "ai4s-natural-earth-admin1-china-visual-v1" in html
         and "public domain" in html,
         "D3 embeds pinned offline land, country and optional China Admin-1 visual boundaries with visible provenance",
@@ -7553,12 +7553,12 @@ def check_d3(output_dir: Path) -> list[str]:
     )
     boundaries = json_value(COUNTRY_BOUNDARIES)
     require(
-        boundaries.get("asset_version") == "ai4s-natural-earth-admin0-v1"
+        boundaries.get("asset_version") == "ai4s-natural-earth-admin0-v2"
         and boundaries.get("license") == "public domain"
         and boundaries.get("source_sha256")
         == "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f"
         and boundaries.get("country_count") == 177
-        and boundaries.get("point_count") == 10_654,
+        and boundaries.get("point_count") == 11_523,
         "D3 country boundary provenance and geometry counts are pinned",
         checks,
     )
@@ -7570,6 +7570,34 @@ def check_d3(output_dir: Path) -> list[str]:
         map_builder.point_in_country(116.4074, 39.9042, country_index["CHN"])
         and not map_builder.point_in_country(139.6917, 35.6895, country_index["CHN"]),
         "D3 strict China polygon includes Beijing and excludes Tokyo",
+        checks,
+    )
+    require(
+        map_builder.point_in_country(94.5, 28.0, country_index["CHN"])
+        and map_builder.point_in_country(91.86, 27.59, country_index["CHN"])
+        and not map_builder.point_in_country(94.5, 28.0, country_index["IND"])
+        and map_builder.point_in_country(77.2, 28.6, country_index["IND"])
+        and map_builder.point_in_country(91.75, 26.18, country_index["IND"]),
+        "D3 v2 admission geometry places Southern Tibet inside CHN, outside IND, without touching Delhi or Assam",
+        checks,
+    )
+    require(
+        map_builder.point_in_country(120.3, 22.6, country_index["TWN"])
+        and map_builder.point_in_country(121.5, 25.0, country_index["TWN"])
+        and not map_builder.point_in_country(120.3, 22.6, country_index["CHN"]),
+        "D3 1:50m Taiwan geometry admits Kaohsiung and Taipei as TWN analysis-unit points",
+        checks,
+    )
+    china_preset = map_builder.REGION_PRESETS["china"]
+    require(
+        china_preset.get("analysis_country_codes") == ["CHN", "TWN"]
+        and map_builder.coordinate_in_region(121.5, 25.0, china_preset, country_index)
+        and map_builder.coordinate_in_region(94.5, 28.0, china_preset, country_index)
+        and map_builder.coordinate_in_region(120.3, 22.6, china_preset, country_index)
+        and not map_builder.coordinate_in_region(
+            77.2, 28.6, china_preset, country_index
+        ),
+        "D3 china preset clips on the CHN+TWN analysis bundle so Taiwan and Southern Tibet stay inside",
         checks,
     )
     profile = json_value(VISUALIZATION_PROFILE)

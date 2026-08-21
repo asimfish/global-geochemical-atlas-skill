@@ -38,7 +38,7 @@ TEMPLATE_CONTRACT_VERSION = "d3-domain-confidence-atlas-v5"
 VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
 TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
-BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
+BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v2"
 ADMIN1_BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin1-china-visual-v1"
 MISSING_METHOD_LABEL = "发布方未报告分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
@@ -100,6 +100,10 @@ REGION_PRESETS: dict[str, dict[str, Any]] = {
         "label": "中国（国家边界严格裁剪）",
         "bounds": {"w": 73.0, "e": 135.0, "s": 18.0, "n": 54.0},
         "country_code": "CHN",
+        # Scientific analysis-admission units: Natural Earth stores Taiwan as
+        # a separate Admin-0 feature, so a China preset that clips on the CHN
+        # polygon alone would silently drop real Taiwanese observations.
+        "analysis_country_codes": ["CHN", "TWN"],
     },
     "shanghai": {
         "label": "上海范围框",
@@ -443,13 +447,22 @@ def coordinate_in_region(
 ) -> bool:
     if not coordinate_in_bounds(longitude, latitude, region["bounds"]):
         return False
-    country_code = region.get("country_code")
-    if not country_code:
+    country_codes = [
+        str(code)
+        for code in (
+            region.get("analysis_country_codes")
+            or ([region["country_code"]] if region.get("country_code") else [])
+        )
+    ]
+    if not country_codes:
         return True
-    country = countries_by_code.get(str(country_code))
-    if country is None:
-        raise MapBuildError(f"country boundary is unavailable: {country_code}")
-    return point_in_country(longitude, latitude, country)
+    for code in country_codes:
+        country = countries_by_code.get(code)
+        if country is None:
+            raise MapBuildError(f"country boundary is unavailable: {code}")
+        if point_in_country(longitude, latitude, country):
+            return True
+    return False
 
 
 def parse_row_coordinates(
@@ -1088,6 +1101,10 @@ def selected_region(profile: Mapping[str, Any]) -> dict[str, Any]:
     selected = {"label": str(region["label"]), "bounds": dict(region["bounds"])}
     if region.get("country_code"):
         selected["country_code"] = str(region["country_code"])
+        if region.get("analysis_country_codes"):
+            selected["analysis_country_codes"] = [
+                str(code) for code in region["analysis_country_codes"]
+            ]
     selected["clip_method"] = (
         "country_polygon_and_bbox" if region.get("country_code") else "bbox"
     )

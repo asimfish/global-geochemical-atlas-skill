@@ -15,7 +15,7 @@ from typing import Any
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
 DEFAULT_MACROREGIONS = SKILL_DIR / "assets" / "natural-earth-110m-macroregions.json"
-BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
+BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v2"
 MACROREGION_ASSET_VERSION = "ai4s-natural-earth-macroregions-v1"
 GLOBAL_COVERAGE_GRID_DEGREES = 5.0
 VALID_SPATIAL_DOMAINS = ("land", "inland_water", "marine")

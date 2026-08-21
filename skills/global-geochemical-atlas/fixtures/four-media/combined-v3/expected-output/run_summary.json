@@ -42,9 +42,9 @@
         "sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839"
       },
       "interactive_map": {
-        "bytes": 1681503,
+        "bytes": 1697387,
         "filename": "interactive_map.html",
-        "sha256": "681e69576cbca960cce9794129d4b2282c721c47884b00eafc54df2ff25b9012"
+        "sha256": "277dde8c77b364e2c110148f085b0170802f4f7ee9735098886d9180e5412140"
       },
       "iteration_backlog": {
         "bytes": 703571,
@@ -154,7 +154,7 @@
     "artifact_bindings": {
       "anomalies_sha256": "9221a087e73e8cf794b15a29c86c1880cfc5ccf24da821723c381c8689f29702",
       "database_sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839",
-      "interactive_map_sha256": "681e69576cbca960cce9794129d4b2282c721c47884b00eafc54df2ff25b9012",
+      "interactive_map_sha256": "277dde8c77b364e2c110148f085b0170802f4f7ee9735098886d9180e5412140",
       "samples_geojson_sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82"
     },
     "basemap": {
@@ -246,13 +246,13 @@
       "total_records": 1144
     },
     "country_boundaries": {
-      "asset_version": "ai4s-natural-earth-admin0-v1",
+      "asset_version": "ai4s-natural-earth-admin0-v2",
       "country_count": 177,
       "embedded": true,
       "license": "public domain",
-      "point_count": 10654,
+      "point_count": 11523,
       "scale": "1:110m",
-      "semantics": "Natural Earth de facto Admin-0 cartographic boundaries",
+      "semantics": "Natural Earth de facto Admin-0 cartographic boundaries with pinned China analysis-admission edits (see analysis_modifications)",
       "source_sha256": "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f",
       "title": "Natural Earth 1:110m Admin 0 Countries"
     },
@@ -307,7 +307,7 @@
     "display_sample_count": 274,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1681503,
+    "html_bytes": 1697387,
     "interpolation": false,
     "map_preview_sampling": {
       "applied": false,
@@ -507,7 +507,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-domain-confidence-atlas-v5",
-    "template_sha256": "45b80655e0b23c10610a8a014df80d116976ec46d25df818f9ebba288743153c",
+    "template_sha256": "f3b1a065744732e4e1b027b4ff5f89a086d90601ed9f1ff216918cf48a9c39d6",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "atlas-progressive-disclosure-v2",
