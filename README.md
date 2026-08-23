@@ -25,7 +25,8 @@
 [🖼️ 决赛海报](https://asimfish.github.io/global-geochemical-atlas-demo/finals/Global-Geochemical-Atlas-Poster.pdf) ·
 [📕 小红书](https://xhslink.cn/o/7EMuFyOOsO5) ·
 [📘 知乎](https://zhuanlan.zhihu.com/p/2073539526404879853) ·
-[🧪 团队官网 ChemBot](https://chembot.zgca.com/)
+[🧪 团队官网 ChemBot](https://chembot.zgca.com/) ·
+[🏆 比赛官网](https://synmatai.cn/hackathon)
 
 [🚀 快速开始](#-90-秒快速开始) ·
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
