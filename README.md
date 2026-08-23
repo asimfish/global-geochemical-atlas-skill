@@ -6,9 +6,9 @@
 
 *Turn scattered public geochemistry into a traceable database, screened anomaly candidates, and self-contained interactive atlases.*
 
-<a href="https://synmatai.cn/hackathon/"><img src="docs/readme/synmatai-champion.png" alt="新研智材 SynMatAI · AI4S Future ScienceSkills Hackathon 总冠军 · 词元代理人队" width="680"></a>
+<a href="https://synmatai.cn/hackathon/"><img src="docs/readme/synmatai-champion.png" alt="新研智材 SynMatAI · AI4S Future ScienceSkills Hackathon 冠军 · 词元代理人队" width="680"></a>
 
-**🏆 [新研智材 SynMatAI · AI4S Future ScienceSkills Hackathon](https://synmatai.cn/hackathon/) 气候与地球科学赛道 · 总冠军**
+**🏆 [新研智材 SynMatAI · AI4S Future ScienceSkills Hackathon](https://synmatai.cn/hackathon/) 冠军**
 
 <img src="docs/readme/orgs-banner.png" alt="上海交通大学 · 北京中关村学院 × 中关村人工智能研究院 · 北京航空航天大学 · 浙江大学" width="780">
 
