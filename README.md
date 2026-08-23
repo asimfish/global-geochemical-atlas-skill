@@ -10,6 +10,8 @@
 
 **🏆 [新研智材 SynMatAI · AI4S Future ScienceSkills Hackathon](https://synmatai.cn/hackathon/) 气候与地球科学赛道 · 总冠军**
 
+<img src="docs/readme/orgs-banner.png" alt="上海交通大学 · 北京中关村学院 × 中关村人工智能研究院 · 北京航空航天大学 · 浙江大学" width="780">
+
 [![Champion](https://img.shields.io/badge/AI4S%20Hackathon-🏆%20Champion-f6c344)](https://synmatai.cn/hackathon/)
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](#-90-秒快速开始)
