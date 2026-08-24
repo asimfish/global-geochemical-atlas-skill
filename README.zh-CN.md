@@ -11,7 +11,7 @@
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](#-90-秒快速开始)
 [![Runtime Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-%E9%9B%B6%E7%AC%AC%E4%B8%89%E6%96%B9-brightgreen)](#-90-秒快速开始)
-[![Tests](https://img.shields.io/badge/tests-394%20%2B%2075%20passing-brightgreen)](#-开发与验证)
+[![Tests](https://img.shields.io/badge/tests-394%20%2B%2060%20%2B%2075%20passing-brightgreen)](#-开发与验证)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-在你的-ai-agent-中使用)
 [![Champion](https://img.shields.io/badge/AI4S%20Hackathon-🏆%20Champion-f6c344)](#-荣誉与报道)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -25,7 +25,7 @@
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
 [🏗️ 工作原理](#️-工作原理) ·
 [🧭 数据来源](#-数据来源22-个已冻结来源) ·
-[📦 输出产物](#-十五个输出产物) ·
+[📦 输出产物](#-十六个输出产物) ·
 [❓ FAQ](#-faq)
 
 <a href="https://synmatai.cn/hackathon/"><img src="docs/readme/synmatai-champion.png" alt="新研智材 SynMatAI · AI4S Future ScienceSkills Hackathon 冠军 · 词元代理人队" width="640"></a>
@@ -48,12 +48,14 @@
 
 这是一个面向 AI Agent 的**完整科研 Skill**，而不是一张预制地图。给它一个「元素 × 区域 × 介质」请求，Agent 会按 **D1 → D2 → D3** 工作流发现并冻结公开数据源、执行单位与坐标质量控制、在可比背景组内筛查富集/亏损候选，最终交付可审计的标准数据库、证据报告和交互图谱。
 
+**能力一览**——基于公开文献与开源数据平台，自动采集岩石、土壤、沉积物、水体四介质中的元素含量、采样坐标、地质背景与分析方法信息；完成单位统一、空间匹配、质量控制与来源追溯；支持按元素、区域、地质单元和样品类型生成全球或区域分布图、热力图及元素组合对比；同时识别富集与亏损两类异常候选区域。
+
 | 你关心的 | 它保证的 |
 |---|---|
 | 数据从哪来 | 22 个已冻结公开来源（岩石/土壤/沉积物/水体），逐记录绑定 DOI、版本、许可与文件 SHA-256 |
 | 数值可不可信 | 原值永不覆盖、删失值不插补、批次 QC 逐条重算、五分量置信度并明确声明「不是正确概率」 |
 | 结论敢不敢引 | 异常仅作筛查候选并列出竞争解释；跑不齐的范围如实报告缺口，绝不冒充全量覆盖 |
-| 能不能复用 | 40+ JSON Schema、十五文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接 |
+| 能不能复用 | 40+ JSON Schema、十六文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接 |
 
 最近一次全球在线生产运行（2026-08-19，全程自主）：**199,730** 条确定性入库记录 · **45,753** 个独立物理样品 · **35** 个已接入公开来源（另有 31 个候选经审计后拒绝）· **100%** 记录级来源定位链 · **3,721** 个异常筛查候选 · **393** 条未过标准化门禁的记录如实保留、不静默丢弃。结构化运行证据与逐项解读见[项目主页](https://asimfish.github.io/global-geochemical-atlas-demo/)。
 
@@ -70,12 +72,27 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
   --generated-at 2026-08-07T00:00:00Z \
   --output-dir /tmp/geochemical-production-demo
 
-# 2. 校验十五文件产物契约
+# 2. 校验十六文件产物契约
 python skills/global-geochemical-atlas/scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-两个命令应分别返回 `"status": "partial_success"` 与 `"status": "valid"`。前者是**刻意设计的科学状态**：hash 固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十五项产物契约全部有效。
+两个命令应分别返回 `"status": "partial_success"` 与 `"status": "valid"`。前者是**刻意设计的科学状态**：hash 固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十六项产物契约全部有效。
+
+### 或者交给指挥官：一条命令跑完全程
+
+```bash
+# 冻结请求 → 任务路由 → 修复循环 → 全部校验 → 对抗审计 → 合规报告
+python skills/global-geochemical-atlas/scripts/autopilot.py \
+  --prompt-file TASK_PROMPT.txt \
+  --output-dir /tmp/atlas-run
+
+# 若运行因修复队列停下，恢复也只需一条命令
+python skills/global-geochemical-atlas/scripts/autopilot.py \
+  --output-dir /tmp/atlas-run --continue
+```
+
+`autopilot.py` 把整份 SKILL 合同压成一条确定性命令：把自然语言诉求冻结为 schema 合法的请求（附可审计的 `freeze_report.json`）、完成任务路由、在授权小时级预算时自动调用自纠错循环（`--time-budget-seconds`）、执行全部校验器与对抗审计，最终产出 `executor_compliance_report.json`——其中的 `final_answer_facts` 是最终回复唯一允许引用的数字。终态机器可读：`DONE | CONTINUE_REQUIRED | NEEDS_HUMAN_REVIEW | FAILED`。
 
 然后用浏览器打开 `/tmp/geochemical-production-demo/interactive_map.html`——一个完全自包含、零 CDN 依赖的交互图谱。
 
@@ -244,27 +261,59 @@ flowchart LR
 
 <img src="docs/readme/slide-11-loop.png" alt="Skill 的 Loop 状态机：九个步骤、三道门，验收不过走五步修复循环" width="100%">
 
-主线是九个研究步骤、三道门（来源准入、单位坐标 QC、逐项验收），一步不跳。第 09 步验收不过时进入修复循环：**列清问题 → 逐条记入 `iteration_backlog` → 按登记的方法对症修 → 重跑再验收 → 沉淀进跨轮记忆库**。每次修复另开新运行、原始证据不可变；修不动的缺口标记 `needs_human_review` 交人处理，绝不硬凑。小时级沙箱下的多轮运行遵循[迭代闭环协议](skills/global-geochemical-atlas/references/iteration-loop.md)。
+主线是九个研究步骤、三道门（来源准入、单位坐标 QC、逐项验收），一步不跳。第 09 步验收不过时进入修复循环：**列清问题 → 逐条记入 `iteration_backlog` → 按登记的方法对症修 → 重跑再验收 → 沉淀进跨轮记忆库**。每次修复另开新运行、原始证据不可变；修不动的缺口标记 `needs_human_review` 交人处理，绝不硬凑。可直接用 [`run_self_correction_loop.py`](skills/global-geochemical-atlas/scripts/run_self_correction_loop.py) 启动（见 FAQ），或交给 `autopilot.py` 自动调用；完整协议见[迭代闭环参考](skills/global-geochemical-atlas/references/iteration-loop.md)。
 
-### 对抗审计：一方提候选、一方挑问题、裁判只按规则打分
+**每一轮保持相对独立。**[跨次运行采集记忆](skills/global-geochemical-atlas/references/acquisition-memory.md)（`memory.json`）跨运行累积每个来源的成败账，但它被刻意设计得无力干预评测：记忆**只重排**技能已经路由的来源、永不新增；种子只影响第 1 轮调度，后续轮次的优先级全部由本次运行自己的修复动作推导；记忆文件是**运行输入**而非 Skill 代码——可审计、可删除、可重建。运行内的证据永远压过运行间的记忆，任何一轮都不会继承上一轮的结论。
+
+### 对抗机制：它可以驱动修复，但永远不能自我豁免
+
+两层对抗分别把守数据的入口与出口。
+
+**入口——来源发现对决。**新数据源入库前要过三个角色（[对决协议](skills/global-geochemical-atlas/references/discovery-duel.md)）：
 
 <img src="docs/readme/slide-13-adversarial.png" alt="对抗审计机制：侦察 Scout 提名候选来源，质疑 Skeptic 只挑问题，裁判 Referee 按明文计分" width="100%">
 
-新数据源入库前要过三层。**侦察员**（模型）面向空白区域提名候选来源——只提名，不审批；**质疑员**（独立模型）逐条检查许可、介质、区域——只提问题，不打分、不决定；**裁判**是确定性代码，不产生任何意见，只执行明文计分牌：**≥7 分**放行起草接入 spec，**4–6 分**打回重报，**<4 分**出局。评分通过也只取得起草资格，正式入库仍须具名负责人终审。
+**侦察员**（模型）面向空白区域提名候选来源——只提名，不审批；**质疑员**（独立模型）逐条检查许可、介质、区域——只提问题，不打分、不决定；**裁判**是确定性代码（`discovery_duel.py`），不产生任何意见，只执行明文计分牌：**≥7 分**放行起草接入 spec，**4–6 分**打回重报，**<4 分**出局。评分通过也只取得起草资格，正式入库仍须具名负责人终审。
 
-## 📦 十五个输出产物
+**出口——对抗性产物审计。**每次运行结束后，[`adversarial_audit.py`](skills/global-geochemical-atlas/scripts/adversarial_audit.py) 必须先证明自己称职才有资格裁决（[协议](skills/global-geochemical-atlas/references/adversarial-audit.md)）：它先把产物复制成影子副本，按种子确定性植入 **10 类已知缺陷**（数值篡改、单位翻转、删失填补、伪造来源、证据孤儿、哈希损坏、定位越界、URL 掉包、坐标交换、异常 z 值篡改），先审影子副本这场「考试」。只有**全部抓到（recall = 1.0）**，它对真实产物的裁决才可采信；有漏网则自动降级为 `inadmissible_calibration_failed`，不允许出具 PASS。裁决分三级——`pass` / `pass_scope_narrowed` / `fail`——warning 不杀稿，而是强制收窄引用口径：受影响数字只能连同范围句一起出现。
 
-每次完整运行固定生成 15 个文件，逐文件 schema 与状态定义见[请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md)：
+**审计独立性靠契约保证，不靠信任。**双 Agent 模式下，审计简报携带机读 `reviewer_contract`：质疑员必须来自与执行者**不同的模型家族**，必须在**全新线程**中工作（无共享记忆、不接收 Builder 的任何叙述）、只读产物字节、先通过同一场金丝雀考试，且当简报中任何路径或 SHA-256 校验不符时**必须拒审**。已确认的发现回流修复队列、驱动下一轮循环——对抗结果推动流水线前进，而不是停在报告里。
+
+### 证据链：每个数字都带指纹
+
+信任在四个环节锚定 SHA-256，让结果与证据一一对应：
+
+1. **请求冻结**——任务本身在执行前先被哈希，中途目标漂移可被发现；
+2. **来源文件**——每个下载文件入库前都要通过记录在案的哈希校验；
+3. **产物**——`run_summary.json` 记录 16 个产物各自的哈希，评审契约在哈希不符时直接拒审；
+4. **断言**——[`claim_ledger.py`](skills/global-geochemical-atlas/scripts/claim_ledger.py) 从产物推导全部可报告断言，每条绑定「文件 + JSON 指针 + SHA-256」证据指针，且每次调用都从证据重新计算——执行者可以构建台账，但永远改写不了完整性判定。回复草稿再经 `--check-answer` 交叉核对：追溯不到台账的承重数字判为幻数（phantom），引用了收窄口径的断言却缺范围关键词判为越界。
+
+### 图谱之后：可选择继续进入研究模式
+
+图谱是检查点，不是终点。在任何一次**已完成并通过校验**的运行之上，一条命令即可叠加可选的研究后处理层（[research mode 契约](skills/global-geochemical-atlas/references/research-mode.md)）：
+
+```bash
+python skills/global-geochemical-atlas/scripts/build_research_products.py \
+  --output-dir /tmp/atlas-run \
+  --research-dir /tmp/atlas-run/research \
+  --minimum-confidence medium
+```
+
+它不采集新数据、不修改任何核心产物，只把已有证据确定性地重组为三类研究者产品——**分析队列**（`analysis_cohorts.csv`：哪些记录可以相互比较、哪些不能、为什么）、**环境背景**（`research_context.csv`：逐样品的岩性、地质单元、沉积环境、深度、粒级与采样时间）、**采样优先级**（`sampling_priority.geojson`：把数据缺口排序成下一批采集队列）——外加一份 model-card 式收据（`research_products_receipt.json`，含输入哈希、参数与不可宣称事项）。同样的续跑在冻结快照上走得更远，就是下文[五篇论文初稿](#-从图谱到论文科学发现层)的来源。
+
+## 📦 十六个输出产物
+
+每次完整运行固定生成 16 个文件，逐文件 schema 与状态定义见[请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md)：
 
 | 交付类别 | 运行产物 | 核心保证 |
 |---|---|---|
-| **可交互元素分布地图** | `interactive_map.html` · `samples.geojson` | 自包含零 CDN；按元素、介质、区域、方法与置信度筛选；样点、热力与异常候选视图 |
+| **可交互元素分布地图** | `interactive_map.html` · `samples.geojson` | 自包含零 CDN；按元素、介质、区域、地质单元、样品类型、方法与置信度筛选；样点、热力图、元素组合对比与异常候选视图 |
 | **标准化地球化学数据库** | `geochemistry.csv` · `batch_acceptance.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法、分析批次与 QC 字段 |
-| **数据来源与置信度说明** | `source_manifest.json` · `record_evidence.jsonl` · `confidence_report.json` | URL/DOI、许可、版本、哈希、源记录定位与五分量置信度全程可追溯 |
-| **异常区域识别结果** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` | 记录级 robust-MAD 候选 + 精确超几何富集/BH-FDR 空间筛查；失败边界完整报告 |
+| **数据来源与置信度说明** | `source_manifest.json` · `record_evidence.jsonl` · `confidence_report.json` · `sources_and_confidence.json` | URL/DOI、许可、版本、哈希、源记录定位与五分量置信度全程可追溯，另附面向读者的合并摘要 |
+| **异常区域识别结果** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` | 记录级 robust-MAD 候选 + 精确超几何/BH-FDR 空间筛查，覆盖富集与亏损两向；失败边界完整报告 |
 | **质量与运行证据** | `qc_report.json` · `batch_qc_report.json` · `iteration_backlog.csv` · `run_summary.json` | 逐项 QC 留证、失败批次绝不静默删除、迭代待办与全运行摘要（含各产物哈希） |
 
-第五类交付「可复用 Skill 文档」即 [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) 本体及其 schema、脚本与 fixture。
+第五类交付「可复用 Skill 文档」即 [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) 本体及其 schema、脚本与 fixture。选择[继续进入研究模式](#图谱之后可选择继续进入研究模式)时，会在独立的 `research/` 目录追加 `analysis_cohorts.csv`、`research_context.csv`、`sampling_priority.geojson` 与收据，不触碰核心契约。
 
 ## 🧭 数据来源（22 个已冻结来源）
 
@@ -312,7 +361,7 @@ flowchart LR
 [美国图谱](https://asimfish.github.io/global-geochemical-atlas-demo/live/us-atlas.html) ·
 [时序演化图谱（1986–2024）](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-temporal.html)
 
-其中**时序演化图谱**把「高值是地质富集，还是工业活动」变成可检验的问题：当记录具备可靠采样时间时，联合方法分层、地质背景、剖面对照与多期观测，把稳定的地质高背景与随工业活动变化的人为富集信号分开检验。
+其中**时序演化视图**是图谱可视化的选项之一，而非独立交付物：它由同一份标准化数据库驱动，当记录具备可靠采样时间时，联合方法分层、地质背景、剖面对照与多期观测，把「高值是地质富集，还是工业活动」变成可检验的问题——把稳定的地质高背景与随工业活动变化的人为富集信号分开检验。
 
 ## 🔭 从图谱到论文：科学发现层
 
@@ -341,7 +390,7 @@ flowchart LR
 | 在浏览器里体验完整交互图谱 | [项目主页](https://asimfish.github.io/global-geochemical-atlas-demo/) |
 | 让 Agent 执行完整任务 | [Skill 入口](skills/global-geochemical-atlas/SKILL.md) |
 | 为单阶段或完整任务生成最小命令计划 | [任务合同 schema](skills/global-geochemical-atlas/references/task-contract.schema.json) |
-| 对接输入或消费 15 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
+| 对接输入或消费 16 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
 | 理解数据库字段与专业平台 crosswalk | [数据模型](skills/global-geochemical-atlas/references/data-model.md) |
 | 审查单位、删失值、置信度和异常规则 | [科学规则](skills/global-geochemical-atlas/references/scientific-rules.md) |
 | 复现真实数据生产阈值闭环 | [生产演示](skills/global-geochemical-atlas/references/production-demo.md) |
@@ -355,6 +404,7 @@ flowchart LR
 | 入口 | 验证内容 |
 |---|---|
 | `component_test.py --component all` | D1/D2/D3 公共接口与契约边界（394 项检查） |
+| `component_test_more.py` | autopilot、对抗审计、断言台账、跨次记忆、来源对决与声明式适配器（60 项检查） |
 | `self_test.py` | 科学边界、异常输入与两次运行字节级确定性（75 项检查） |
 | `benchmark_workflow.py` | 可重复的离线工作流性能基线 |
 
@@ -414,7 +464,7 @@ python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
   --output-dir /tmp/atlas-loop
 ```
 
-控制器先做早期门禁（路由可行性、最低输入列），每轮独立产出并校验十五文件契约，自动重试瞬态获取失败，把 schema/许可/坐标等需要证据的问题分组写入 `loop_report.json` 的修复计划；收敛、无进展或预算用尽时诚实停机。人工修复后在同一目录重新调用即可续跑。canonical 数据不可变，每轮生成新版本；删失值等 `scientific_limit` 不计入修复率——科学限制不能靠循环「修」掉。协议详见[迭代闭环](skills/global-geochemical-atlas/references/iteration-loop.md)。
+控制器先做早期门禁（路由可行性、最低输入列），每轮独立产出并校验十六文件契约，自动重试瞬态获取失败，把 schema/许可/坐标等需要证据的问题分组写入 `loop_report.json` 的修复计划；收敛、无进展或预算用尽时诚实停机。人工修复后在同一目录重新调用即可续跑。canonical 数据不可变，每轮生成新版本；删失值等 `scientific_limit` 不计入修复率——科学限制不能靠循环「修」掉。协议详见[迭代闭环](skills/global-geochemical-atlas/references/iteration-loop.md)。
 
 </details>
 
