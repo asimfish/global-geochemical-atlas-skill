@@ -143,7 +143,9 @@ def update_memory(memory_path: Path, run_dir: Path) -> dict[str, Any]:
     }
 
 
-def advise(memory_path: Path, request_path: Path, max_priorities: int) -> dict[str, Any]:
+def advise(
+    memory_path: Path, request_path: Path, max_priorities: int
+) -> dict[str, Any]:
     memory = load_json(memory_path) or _empty_memory()
     request = load_json(request_path) or {}
     requested_media = set(request.get("media") or [])

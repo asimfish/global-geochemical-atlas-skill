@@ -630,9 +630,7 @@ def test_acquisition_memory(tmp: Path, out_dir: Path) -> None:
         any(item["source_id"] == "dead-source" for item in advice["banlist"]),
         json.dumps(advice["banlist"]),
     )
-    seed_help = run(
-        [PYTHON, str(SCRIPT_DIR / "run_self_correction_loop.py"), "--help"]
-    )
+    seed_help = run([PYTHON, str(SCRIPT_DIR / "run_self_correction_loop.py"), "--help"])
     check(
         "memory.loop_seed_arg",
         "--seed-priority-source-id" in seed_help.stdout,
@@ -807,7 +805,9 @@ def test_discovery_duel_rounds(tmp: Path, out_dir: Path) -> None:
     revised["license_hint"] = "CC0 1.0 (stated on data page)"
     revised["resolved_objections"] = ["license_unclear"]
     round2_candidates = tmp / "duel_r2_cand.json"
-    round2_candidates.write_text(json.dumps({"candidates": [revised]}), encoding="utf-8")
+    round2_candidates.write_text(
+        json.dumps({"candidates": [revised]}), encoding="utf-8"
+    )
     round2 = run(
         [
             PYTHON,
@@ -847,8 +847,7 @@ def test_discovery_duel_rounds(tmp: Path, out_dir: Path) -> None:
     )
     sample = tmp / "duel_sample.csv"
     sample.write_text(
-        "element,value,unit,medium,latitude,longitude\n"
-        "As,5.2,mg/kg,soil,47.9,106.9\n",
+        "element,value,unit,medium,latitude,longitude\nAs,5.2,mg/kg,soil,47.9,106.9\n",
         encoding="utf-8",
     )
     spec_out = tmp / "duel_spec.json"
@@ -868,11 +867,15 @@ def test_discovery_duel_rounds(tmp: Path, out_dir: Path) -> None:
             str(spec_out),
         ]
     )
-    spec = json.loads(spec_out.read_text(encoding="utf-8")) if spec_out.is_file() else {}
+    spec = (
+        json.loads(spec_out.read_text(encoding="utf-8")) if spec_out.is_file() else {}
+    )
     check(
         "duel.spec_drafted_not_approved",
         drafted.returncode == 0 and spec.get("approval_state") == "draft",
-        json.dumps({"rc": drafted.returncode, "approval_state": spec.get("approval_state")}),
+        json.dumps(
+            {"rc": drafted.returncode, "approval_state": spec.get("approval_state")}
+        ),
     )
 
 

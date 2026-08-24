@@ -54,7 +54,16 @@ OPEN_LICENSE_HINTS = (
     "government open",
     "open government",
 )
-TABULAR_HINTS = (".csv", ".tsv", ".xlsx", ".parquet", "format=csv", "/api/", "wfs", "wcs")
+TABULAR_HINTS = (
+    ".csv",
+    ".tsv",
+    ".xlsx",
+    ".parquet",
+    "format=csv",
+    "/api/",
+    "wfs",
+    "wcs",
+)
 OBJECTION_CLASSES = (
     "license_unclear",
     "domain_untrusted",
@@ -110,18 +119,20 @@ def gaps_from_queue(queue: dict[str, Any]) -> list[dict[str, Any]]:
 def gaps_from_args(specs: list[str]) -> list[dict[str, Any]]:
     gaps = []
     for index, spec in enumerate(specs):
-        fields = dict(
-            part.split("=", 1) for part in spec.split(";") if "=" in part
-        )
+        fields = dict(part.split("=", 1) for part in spec.split(";") if "=" in part)
         gaps.append(
             {
                 "gap_id": f"manual-{index}",
                 "task_id": None,
                 "elements": [
-                    e.strip() for e in (fields.get("elements") or "").split(",") if e.strip()
+                    e.strip()
+                    for e in (fields.get("elements") or "").split(",")
+                    if e.strip()
                 ],
                 "media": [
-                    m.strip() for m in (fields.get("medium") or "").split(",") if m.strip()
+                    m.strip()
+                    for m in (fields.get("medium") or "").split(",")
+                    if m.strip()
                 ],
                 "bbox": None,
                 "country": fields.get("country"),
@@ -192,7 +203,9 @@ def write_briefs(duel_dir: Path, gaps: list[dict[str, Any]]) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def _gap_for(candidate: dict[str, Any], gaps: list[dict[str, Any]]) -> dict[str, Any] | None:
+def _gap_for(
+    candidate: dict[str, Any], gaps: list[dict[str, Any]]
+) -> dict[str, Any] | None:
     for gap in gaps:
         if gap["gap_id"] == candidate.get("gap_id"):
             return gap
@@ -231,11 +244,15 @@ def score_candidate(
             f"gap requires media {gap.get('media')}; candidate offers {candidate.get('medium')}"
         )
     region_hint = str(candidate.get("region_hint") or "").lower()
-    region_targets = [
-        str(gap.get("country") or ""),
-        str(gap.get("macroregion") or ""),
-        *(gap.get("search_aliases") or []),
-    ] if gap else []
+    region_targets = (
+        [
+            str(gap.get("country") or ""),
+            str(gap.get("macroregion") or ""),
+            *(gap.get("search_aliases") or []),
+        ]
+        if gap
+        else []
+    )
     if region_hint and any(
         target and target.lower() in region_hint for target in region_targets
     ):
@@ -255,7 +272,8 @@ def score_candidate(
     score -= 3 * len(unresolved)
     if unresolved:
         action_items.extend(
-            f"resolve objection [{o.get('class')}]: {o.get('detail')}" for o in unresolved
+            f"resolve objection [{o.get('class')}]: {o.get('detail')}"
+            for o in unresolved
         )
     if score >= ADMIT_THRESHOLD:
         verdict = "admit_to_spec_draft"
@@ -295,7 +313,7 @@ def adjudicate(
             argv = [
                 "python scripts/propose_adapter_spec.py",
                 f"--candidate-url {candidate.get('source_url')}",
-                f"--title \"{candidate.get('title')}\"",
+                f'--title "{candidate.get("title")}"',
                 f"--medium {candidate.get('medium')}",
                 "--sniff",
                 f"--output adapter_proposals/spec-{_slug(str(candidate.get('title')))}.json",
@@ -306,7 +324,9 @@ def adjudicate(
             entry["next_command"] = " ".join(argv)
         results.append(entry)
 
-    admitted_gaps = {r["gap_id"] for r in results if r["verdict"] == "admit_to_spec_draft"}
+    admitted_gaps = {
+        r["gap_id"] for r in results if r["verdict"] == "admit_to_spec_draft"
+    }
     targeted_gaps = {c.get("gap_id") for c in candidates}
     if targeted_gaps and targeted_gaps <= admitted_gaps:
         stop_reason = "threshold_met"

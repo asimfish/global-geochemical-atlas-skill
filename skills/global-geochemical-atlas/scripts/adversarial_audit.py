@@ -1177,9 +1177,7 @@ def main() -> int:
             verdict = "pass_scope_narrowed"
         else:
             verdict = "pass"
-        scope_notes = [
-            f"{f['defect_class']}: {f['detail']}" for f in warnings
-        ]
+        scope_notes = [f"{f['defect_class']}: {f['detail']}" for f in warnings]
         receipt = {
             "receipt_schema": RECEIPT_SCHEMA,
             "audit_version": AUDIT_VERSION,

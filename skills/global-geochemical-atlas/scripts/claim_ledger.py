@@ -144,7 +144,9 @@ def build_claims(run_dir: Path) -> list[dict[str, Any]]:
             "records",
             "standardized measurement records shipped in geochemistry.csv",
             claimed_records,
-            _evidence(run_dir, "run_summary.json", "/metrics/standardized_record_count"),
+            _evidence(
+                run_dir, "run_summary.json", "/metrics/standardized_record_count"
+            ),
             recompute={
                 "method": "row count of geochemistry.csv",
                 "value": recomputed_records,
@@ -191,7 +193,8 @@ def build_claims(run_dir: Path) -> list[dict[str, Any]]:
         located = sum(
             1
             for row in rows
-            if (row.get("latitude") or "").strip() and (row.get("longitude") or "").strip()
+            if (row.get("latitude") or "").strip()
+            and (row.get("longitude") or "").strip()
         )
         recomputed_rate = round(located / len(rows), 4)
     rate_match = (
@@ -428,9 +431,11 @@ def check_answer(ledger: dict[str, Any], answer_text: str) -> dict[str, Any]:
         if claim["integrity"] != "warn_scope":
             continue
         value = claim.get("value")
-        quoted = isinstance(value, (int, float)) and not isinstance(
-            value, bool
-        ) and _value_quoted(float(value), lowered)
+        quoted = (
+            isinstance(value, (int, float))
+            and not isinstance(value, bool)
+            and _value_quoted(float(value), lowered)
+        )
         if quoted and not any(
             keyword.lower() in lowered for keyword in claim.get("scope_keywords", ())
         ):
@@ -438,7 +443,9 @@ def check_answer(ledger: dict[str, Any], answer_text: str) -> dict[str, Any]:
                 {"claim_id": claim["claim_id"], "required_scope": claim["scope"] or ""}
             )
 
-    verdict = "answer_bound" if not phantom and not scope_violations else "answer_unbound"
+    verdict = (
+        "answer_bound" if not phantom and not scope_violations else "answer_unbound"
+    )
     return {
         "check_version": LEDGER_VERSION,
         "licensed_value_count": len(licensed),
