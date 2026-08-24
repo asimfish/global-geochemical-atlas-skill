@@ -1,0 +1,73 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-14T20:30:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 77244,
+      "path": "demo_input.csv",
+      "sha256": "8861d3748f6ac9e1c65852e9e49f30f93496222883b0189b2307bfad9da12c69"
+    },
+    {
+      "bytes": 96420,
+      "path": "sources.jsonl",
+      "sha256": "73529936f0457c2c8ee183c31394835a5fe710603d8c0541a580341f61598781"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 396,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.1594/PANGAEA.969055",
+    "dataset_version": "2024-07-01",
+    "license": "CC-BY-4.0",
+    "source_id": "pangaea-brasol-ne-brazil-soil",
+    "title": "Soil chemical database of the BraSol-2010 project"
+  },
+  "source_files": [
+    {
+      "bytes": 658886,
+      "filename": "Data_BraSol-2010_database.xlsx",
+      "retrieved_at": "2026-08-14T12:57:22Z",
+      "sha256": "0b1ade544b3b4faaade86eaed6378999e542d978ab0af9b7fa5ceb0dc6b3574d",
+      "source_url": "https://download.pangaea.de/dataset/969055/files/Data_BraSol-2010_database.xlsx"
+    },
+    {
+      "bytes": 17037,
+      "filename": "Metadata_BraSol-2010_database.txt",
+      "retrieved_at": "2026-08-14T12:57:22Z",
+      "sha256": "256a3e392f236205a0358f014b96fce1e4ced9657ba0f73f3c34b1196290dd40",
+      "source_url": "https://download.pangaea.de/dataset/969055/files/Metadata_BraSol-2010_database.txt"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "BraSol covers 142 northeastern Brazil transect sites and is not nationally representative.",
+    "Publisher WGS84 coordinates and handheld-GPS resolution are preserved; ORG, TOP and BOT layers remain distinct.",
+    "One preferred reported determination per sample and element is selected by the frozen ICP-MS→ICP-OES→GFD-XRF→PPP-XRF order; LOD markers remain censored."
+  ]
+}

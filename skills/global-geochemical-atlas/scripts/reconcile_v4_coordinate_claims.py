@@ -23,35 +23,54 @@ BALANCE_PATH = SKILL_DIR / "assets" / "v4-coverage-balance.json"
 REPORT_PATH = SKILL_DIR / "references" / "v4-full-population-profile.md"
 MANIFEST_PATH = PROFILE_ROOT / "manifest.json"
 
+# The two NGSA adapters leave this contract on 2026-08-12: their declared
+# GDA94 geographic datum is canonicalized under the registered
+# identity-tolerance policy gda94-geographic-wgs84-identity-v1
+# (coordinate-policy-registry.json). Full profiles therefore use EPSG:4326
+# only after that source-specific evidence gate; the raw GDA94 expressions
+# remain present in row-level exchange assets.
 NON_CANONICAL = {
     "georoc-archaean": "withheld_pending_datum_verification",
+    "georoc-convergent-margins": "withheld_pending_datum_verification",
     "georoc-antarctica-intraplate": "withheld_pending_datum_verification",
     "afsis-phase-i-wet-chemistry": "withheld_source_crs_not_reported",
     "japan-gsj-geochemical-map": "withheld_no_full_profile_coordinate_transform",
     "japan-gsj-marine-sediment": "withheld_source_crs_not_reported",
-    "australia-ngsa-mercury": "withheld_no_full_profile_coordinate_transform",
     "tpdc-china-mountain-soil": "withheld_source_crs_not_reported",
+    "eidc-ningbo-soil": "withheld_source_crs_not_reported",
     "us-wqp-sacramento-river-arsenic": "withheld_non_wgs84_source_datum",
+    "earthchem-dehailonggang-rock": "withheld_source_crs_not_reported",
+    "4tu-northern-china-sediment": "withheld_source_crs_not_reported",
+}
+REGISTERED_CANONICALIZATION = {
+    "australia-ngsa": "gda94-geographic-wgs84-identity-v1",
+    "australia-ngsa-mercury": "gda94-geographic-wgs84-identity-v1",
 }
 SOURCE_MEDIA = {
     "georoc-archaean": "rock",
+    "georoc-convergent-margins": "rock",
     "georoc-antarctica-intraplate": "rock",
     "afsis-phase-i-wet-chemistry": "soil",
     "japan-gsj-geochemical-map": "sediment",
     "japan-gsj-marine-sediment": "sediment",
-    "australia-ngsa-mercury": "sediment",
     "tpdc-china-mountain-soil": "soil",
+    "eidc-ningbo-soil": "soil",
     "us-wqp-sacramento-river-arsenic": "water",
+    "earthchem-dehailonggang-rock": "rock",
+    "4tu-northern-china-sediment": "sediment",
 }
 SOURCE_ELEMENTS = {
     "georoc-archaean": {"As", "Cu", "Ni", "Zn"},
+    "georoc-convergent-margins": {"As", "Cu", "Ni", "Zn"},
     "georoc-antarctica-intraplate": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
     "afsis-phase-i-wet-chemistry": {"As", "Cr", "Cu", "Ni", "Pb", "Zn"},
     "japan-gsj-geochemical-map": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
     "japan-gsj-marine-sediment": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
-    "australia-ngsa-mercury": {"Hg"},
     "tpdc-china-mountain-soil": {"Cr", "Cu", "Ni", "Pb", "Zn"},
+    "eidc-ningbo-soil": {"As", "Cr", "Cu", "Ni", "Pb", "Zn"},
     "us-wqp-sacramento-river-arsenic": {"As"},
+    "earthchem-dehailonggang-rock": {"Cr", "Cu", "Ni", "Pb", "Zn"},
+    "4tu-northern-china-sediment": {"As", "Cr", "Cu", "Hg", "Ni", "Pb", "Zn"},
 }
 CLAIM_BOUNDARY = (
     "Counts describe target observations in one verified source snapshot. Reported coordinates are kept "
@@ -121,7 +140,20 @@ def _spatial_outputs() -> tuple[dict[Path, str], dict[str, dict[str, Any]]]:
                     ),
                     spatial_grid="canonical EPSG:4326 1-degree floor cell; no interpolation",
                     coordinate_canonicalization_status=(
-                        NON_CANONICAL.get(source_id, "source_crs_declared_epsg4326")
+                        NON_CANONICAL.get(source_id)
+                        or (
+                            "registered_identity_tolerance_policy"
+                            if source_id in REGISTERED_CANONICALIZATION
+                            else (
+                                "source_crs_declared_epsg4326"
+                                if int(value.get("valid_coordinate_sample_count") or 0)
+                                > 0
+                                else "not_canonicalized"
+                            )
+                        )
+                    ),
+                    coordinate_canonicalization_policy_id=(
+                        REGISTERED_CANONICALIZATION.get(source_id)
                     ),
                 )
                 if source_id in NON_CANONICAL:
@@ -131,7 +163,7 @@ def _spatial_outputs() -> tuple[dict[Path, str], dict[str, dict[str, Any]]]:
                         spatial_cell_ids=[],
                         bbox=None,
                     )
-                if source_id == "georoc-archaean":
+                if source_id in {"georoc-archaean", "georoc-convergent-margins"}:
                     denominator = sum(
                         int(item)
                         for item in value["source_crs_observation_counts"].values()

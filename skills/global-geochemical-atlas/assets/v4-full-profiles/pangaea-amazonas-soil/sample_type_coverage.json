@@ -1,0 +1,23 @@
+{
+  "as_of": "2026-08-15T07:00:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "2024-04-10",
+  "media": {
+    "soil": 1181
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "soil_subsoil": 596,
+    "soil_topsoil": 585
+  },
+  "sediment_environments": {
+    "not_applicable": 1181
+  },
+  "source_id": "pangaea-amazonas-soil",
+  "water_body_types": {
+    "not_applicable": 1181
+  },
+  "water_fractions": {
+    "not_applicable": 1181
+  }
+}

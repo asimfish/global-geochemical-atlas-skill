@@ -20,19 +20,20 @@
   "flag_counts": {
     "AMBIGUOUS_AQUEOUS_RATIO_UNIT": 8,
     "CENSORED_VALUE": 60,
-    "COORDINATE_NOT_CANONICALIZED": 336,
+    "COORDINATE_NOT_CANONICALIZED": 288,
     "MISSING_ANALYTICAL_METHOD": 248,
-    "MISSING_COORDINATE_UNCERTAINTY": 1000,
+    "MISSING_COORDINATE_UNCERTAINTY": 808,
     "MISSING_DIGESTION_OR_EXTRACTION": 200,
     "MISSING_SOURCE_CRS": 240,
     "PLATFORM_CRS_POLICY_APPLIED": 48,
-    "UNSUPPORTED_SOURCE_CRS": 96
+    "REGISTERED_CRS_POLICY_APPLIED": 48,
+    "UNSUPPORTED_SOURCE_CRS": 48
   },
   "missing_reason_counts": {},
   "pipeline_version": "d2-pipeline-v2",
   "record_count": 1144,
   "record_counts": {
-    "error_flagged": 104,
+    "error_flagged": 56,
     "flagged": 1144,
     "parsed": 1144,
     "raw": 1144,
@@ -71,17 +72,17 @@
       "spatial_grid_degrees": 2.0
     },
     "input_row_count": 1144,
-    "input_sha256": "29d77ba24c231f36f32f80d681b67c415cf0bc0d5e0c286b8667f287fbd9e9a0",
+    "input_sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9",
     "missing_recommended_input_columns": [],
-    "run_id": "e19d155bf634af68",
+    "run_id": "1cf19df7e86db31e",
     "schema_map_sha256": null
   },
   "severity_counts": {
-    "error": 104,
-    "info": 108,
-    "warning": 2024
+    "error": 56,
+    "info": 156,
+    "warning": 1784
   },
   "standardization_rate": 0.993007,
   "standardized_record_count": 1136,
-  "valid_coordinate_count": 808
+  "valid_coordinate_count": 856
 }

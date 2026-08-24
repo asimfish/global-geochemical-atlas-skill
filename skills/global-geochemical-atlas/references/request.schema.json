@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:request:v4",
+  "$id": "urn:global-geochemical-atlas:request:v6",
   "title": "Global geochemical atlas evidence-aware request",
   "type": "object",
   "additionalProperties": false,
@@ -43,6 +43,34 @@
         "type": "string",
         "enum": ["rock", "soil", "sediment", "water", "mineral", "concentrate"]
       }
+    },
+    "coverage_mode": {
+      "type": "string",
+      "enum": ["fixed", "maximize_evidence_breadth"],
+      "description": "Use fixed only for an explicitly closed element/media set. Open atlas tasks with 'at least N' use maximize_evidence_breadth; N remains a lower bound."
+    },
+    "minimum_elements": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "User-stated lower bound; must not exceed the selected elements array length."
+    },
+    "minimum_media": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "User-stated lower bound; must not exceed the selected media array length."
+    },
+    "spatial_domains": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "enum": ["land", "inland_water", "marine"]},
+      "description": "First-class sampling domains. If omitted, they are conservatively derived from media: rock/soil imply land; sediment implies land + inland_water + marine; water implies inland_water + marine."
+    },
+    "adjacent_marine_distance_km": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000,
+      "description": "For a named-country request that includes marine, maximum distance from the frozen Admin-0 boundary for source-labelled marine observations. Runtime default is 600 km; this is an analysis buffer, never a territorial/EEZ claim. Otherwise it must be 0."
     },
     "measurement_basis": {
       "type": ["array", "null"],
@@ -102,7 +130,12 @@
       "enum": ["discovery", "raw_observation", "normalized_analysis", "benchmark_ready"],
       "default": "normalized_analysis"
     },
-    "max_records": {"type": "integer", "minimum": 1, "maximum": 200000, "default": 50000},
+    "max_records": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200000,
+      "description": "Optional explicit ceiling. Runtime default is 50000 for fixed requests and 200000 for maximize_evidence_breadth so an open atlas is not silently truncated at the fixed-request ceiling."
+    },
     "offline": {"type": "boolean", "default": false}
   }
 }

@@ -4,10 +4,10 @@
     "confidence_version": "d2-confidence-v3",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "29d77ba24c231f36f32f80d681b67c415cf0bc0d5e0c286b8667f287fbd9e9a0",
+    "input_sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9",
     "not_a_probability": true,
-    "run_id": "e19d155bf634af68",
-    "sha256": "282fc8813036a1b064056b6aef18784290c3788e18967a205a15c2219f469f7f"
+    "run_id": "1cf19df7e86db31e",
+    "sha256": "3592dbb51c664ea99e607aada8b781c9f6e8d0be8498e67464e796c7d277ed71"
   },
   "coverage": {
     "declared_license_rate": 1.0,
@@ -19,10 +19,10 @@
   },
   "data_mode": "fixture",
   "input": {
-    "bytes": 1489280,
+    "bytes": 1610986,
     "filename": "demo_input.csv",
     "record_count": 1144,
-    "sha256": "29d77ba24c231f36f32f80d681b67c415cf0bc0d5e0c286b8667f287fbd9e9a0"
+    "sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9"
   },
   "manifest_version": "geochemical-source-manifest-v2",
   "not_for_scientific_interpretation": true,
@@ -32,14 +32,14 @@
       "filename": "run_manifest.json",
       "generation_version": null,
       "not_for_scientific_interpretation": true,
-      "sha256": "02ad8585e2b3a3710ca831f8223d52cc7ba52d4c476632d929072d9144addcf1"
+      "sha256": "30e5707f9c03be8a4a2a8d68261f4d127ccf460bc10ec22c8e3d7e02dd885746"
     },
     "evidence_level": "verified_record_evidence",
     "exact_record_id_match": true,
     "filename": "record_evidence.jsonl",
     "record_count": 1144,
     "schema_version": "geochemical-record-evidence-v1",
-    "sha256": "b2cc9dd4c90bbcadccd34a1538fbff06f19e441d9ff5b7f1eafca8671d4bb46e"
+    "sha256": "84e2b2a558b52bcbb6fe20aafb99aecec6a20841224b55505e4a5ae6c2cb75ed"
   },
   "source_count": 21,
   "sources": [
@@ -75,6 +75,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 12,
+      "official_source_urls": [
+        "https://data.worldagroforestry.org/api/access/datafile/11218?format=original"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -121,6 +124,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 48,
+      "official_source_urls": [
+        "https://d28rz98at9flks.cloudfront.net/150328/150328_00_1.CSV"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -163,6 +169,10 @@
       ],
       "located_record_count": 48,
       "locator_count": 12,
+      "official_source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_AR_data_2v6_7Aug07.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Floodplain-Sediment.zip#member=F_XRF_data_2v6_7Aug07.csv"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -210,6 +220,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 16,
+      "official_source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Humus.zip#member=H_icp_data_2v2_11Mar04.csv"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -252,6 +265,10 @@
       ],
       "located_record_count": 48,
       "locator_count": 12,
+      "official_source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_AR_data_2v5_30Nov2006.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Stream-Sediment.zip#member=S_XRF_data_2v9_30Nov06.csv"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -299,6 +316,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 12,
+      "official_source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Stream-Water.zip#member=W_all_data_2v8_17Sep07.csv"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -341,6 +361,12 @@
       ],
       "located_record_count": 48,
       "locator_count": 24,
+      "official_source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_AR_data_2v5_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_XRF_data_2v6_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icp_data_2v6_9Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Subsoil.zip#member=C_icpadd_data_2v5_9Feb06.csv"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -398,6 +424,12 @@
       ],
       "located_record_count": 48,
       "locator_count": 24,
+      "official_source_urls": [
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_AR_data_2v4_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_XRF_data_2v6_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icp_data_2v3_8Feb06.csv",
+        "http://weppi.gtk.fi/publ/foregsatlas/Topsoil.zip#member=T_icpadd_data_2v3_8Feb06.csv"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -454,10 +486,13 @@
       ],
       "located_record_count": 52,
       "locator_count": 4,
+      "official_source_urls": [
+        "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
+      ],
       "record_count": 52,
       "source_files": [
         {
-          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip!IE_GSI_GEMAS_Agricultural_Soil_Ap_Samples_AR_XRF_EU_WGS84.dbf",
+          "filename": "IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip",
           "sha256": "5d12bc896f2899ed405d1f41bec7a6648febb5d5ffc5de9ab9da8db14786f9b4",
           "url": "https://gsi.geodata.gov.ie/downloads/Geochemistry/Data/IE_GSI_GEMAS_Geochemistry_Agricultural_Grazing_Land_Soil_EU_WGS84.zip"
         }
@@ -500,6 +535,9 @@
       ],
       "located_record_count": 56,
       "locator_count": 56,
+      "official_source_urls": [
+        "https://zenodo.org/records/18459694/files/GFQA_v3.zip?download=1"
+      ],
       "record_count": 56,
       "source_files": [
         {
@@ -576,6 +614,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 27,
+      "official_source_urls": [
+        "https://data.goettingen-research-online.de/api/access/datafile/:persistentId/?persistentId=doi:10.25625/RZZ9VM/UYO5XO&format=original"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -628,6 +669,10 @@
       ],
       "located_record_count": 48,
       "locator_count": 36,
+      "official_source_urls": [
+        "https://doi.org/10.25625/1KRR1P/0YSJJR",
+        "https://doi.org/10.25625/1KRR1P/OHZY0O"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -679,6 +724,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 33,
+      "official_source_urls": [
+        "https://geotraces.webodv.awi.de/IDP2025%3Eseawater%3EGEOTRACES_IDP2025_Seawater/service/DataExtraction/wsODV"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -721,10 +769,13 @@
       ],
       "located_record_count": 48,
       "locator_count": 12,
+      "official_source_urls": [
+        "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
+      ],
       "record_count": 48,
       "source_files": [
         {
-          "filename": "samplejoho.csv",
+          "filename": "noudo.csv",
           "sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671",
           "url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
         }
@@ -765,6 +816,9 @@
       ],
       "located_record_count": 56,
       "locator_count": 8,
+      "official_source_urls": [
+        "https://gbank.gsj.jp/geochemmap/ocean/data/ganyuryo/ocean-noudo.csv"
+      ],
       "record_count": 56,
       "source_files": [
         {
@@ -807,6 +861,9 @@
       ],
       "located_record_count": 112,
       "locator_count": 28,
+      "official_source_urls": [
+        "https://marchem-api.hi.no/export/published/dataByCriteria?fromYear=2003&toYear=2024&labParameterGroupIds=3,4&latitudeFrom=57&latitudeTo=85&longitudeFrom=-5&longitudeTo=38&asExcel=false#member=MarChem_Inorganic_Data_20260805T102709Z.csv"
+      ],
       "record_count": 112,
       "source_files": [
         {
@@ -853,6 +910,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 8,
+      "official_source_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.950139?format=textfile"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -899,6 +959,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 12,
+      "official_source_urls": [
+        "https://doi.pangaea.de/10.1594/PANGAEA.949903?format=textfile"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -945,6 +1008,9 @@
       ],
       "located_record_count": 40,
       "locator_count": 8,
+      "official_source_urls": [
+        "https://data.tpdc.ac.cn/file/file/batchDownloadByFileId?fileId=d4c22475-e614-42d2-b8ec-d768f1c26426"
+      ],
       "record_count": 40,
       "source_files": [
         {
@@ -987,6 +1053,9 @@
       ],
       "located_record_count": 48,
       "locator_count": 48,
+      "official_source_urls": [
+        "https://www.waterqualitydata.us/data/Result/search?siteid=USGS-11447650&sampleMedia=Water&characteristicName=Arsenic&characteristicName=Copper&characteristicName=Nickel&characteristicName=Zinc&startDateLo=01-01-2010&startDateHi=12-31-2025&providers=NWIS&mimeType=csv&zip=no&dataProfile=resultPhysChem"
+      ],
       "record_count": 48,
       "source_files": [
         {
@@ -1033,6 +1102,11 @@
       ],
       "located_record_count": 108,
       "locator_count": 27,
+      "official_source_urls": [
+        "https://pubs.usgs.gov/ds/801/downloads/Appendix_2b_Top5_18Sept2013.txt",
+        "https://pubs.usgs.gov/ds/801/downloads/Appendix_3b_Ahorizon_18Sept2013.txt",
+        "https://pubs.usgs.gov/ds/801/downloads/Appendix_4b_Chorizon_18Sept2013.txt"
+      ],
       "record_count": 108,
       "source_files": [
         {

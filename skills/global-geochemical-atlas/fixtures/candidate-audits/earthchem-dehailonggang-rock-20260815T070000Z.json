@@ -1,0 +1,76 @@
+{
+  "acquisition": {
+    "mode": "fixed-official-form-post-zip-member",
+    "observed_at": "2026-08-15T07:00:00Z",
+    "request_url": "https://ecl.earthchem.org/dl_multi.php",
+    "request_method": "POST",
+    "form_fields": {
+      "id": "3338",
+      "verifySubmit": "yes",
+      "system": "ec",
+      "dlFormat": "all_dataset_3338.zip"
+    }
+  },
+  "archive": {
+    "bytes": 374124,
+    "sha256": "38ac6ff1a0890dc6eb6fa92039c068ef8d46990953e1b83d7256572486898420",
+    "members": [
+      {
+        "bytes": 33004,
+        "file_id": "bulk-rock-workbook",
+        "name": "3338-1_Bulk-rockmajorandtraceelementcomposition.xlsx",
+        "sha256": "ccdc26ee169919144f7d1c8726eb8075c99b4d9cba30d249906f79c045a12ca7",
+        "publisher_sha1": "1b41c7f439e65bd5e0af0a3412c11910dfeeda32",
+        "source_url": "https://ecl.earthchem.org/dl_multi.php"
+      }
+    ]
+  },
+  "claim_boundary": "This audit binds EarthChem dataset 3338 version 1.0 to the official CC BY-SA landing page, fixed POST archive, member hashes, workbook rows and method-code linkage. It does not claim WGS84 coordinates, positional accuracy, regional representativeness, digestion details or row-level detection limits.",
+  "observed_data": {
+    "counts": {
+      "physical_rows": 15,
+      "distinct_coordinate_pairs": 2,
+      "target_observations": 75,
+      "target_value_counts": {
+        "Cr": 15,
+        "Cu": 15,
+        "Ni": 15,
+        "Pb": 15,
+        "Zn": 15
+      }
+    },
+    "coverage": {
+      "bbox_reported_not_canonical": [99.4205, 35.7641, 99.4602, 35.7883],
+      "country_iso_a3_codes": ["CHN"],
+      "reported_coordinate_rows": 15
+    },
+    "target_analytes": {
+      "Cr": "Cr",
+      "Cu": "Cu",
+      "Ni": "Ni",
+      "Pb": "Pb",
+      "Zn": "Zn"
+    }
+  },
+  "observed_metadata": {
+    "coordinate_accuracy_evidence_status": "not_reported_by_publisher",
+    "dataset_doi": "10.60520/IEDA/113338",
+    "dataset_version": "EarthChem Library dataset 3338 version 1.0 (2024)",
+    "license": {
+      "name": "Creative Commons Attribution-ShareAlike 4.0 International",
+      "spdx": "CC-BY-SA-4.0",
+      "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    "method_evidence": {
+      "analytical_method": "ICP-MS",
+      "instrument": "Agilent 7700e",
+      "laboratory": "Wuhan Samplesolution Analytical Technology Co., Ltd., Wuhan, China",
+      "locator": "3338-1_Bulk-rockmajorandtraceelementcomposition.xlsx#sheet4#method-code=2",
+      "scope": "dataset_parameter"
+    },
+    "original_coordinate_crs": "not_reported"
+  },
+  "source_id": "earthchem-dehailonggang-rock",
+  "status": "verified_content_addressed_official_or_doi_dataset",
+  "verification_version": "d1-earthchem-fixed-form-v1"
+}

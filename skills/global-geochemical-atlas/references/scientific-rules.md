@@ -148,7 +148,7 @@ Mendeley 或普通用户 CSV。
 
 未提供批次 policy 不表示批次通过：产物状态固定为 `not_supplied`，运行摘要说明这项证据未评估。
 
-## 5. 运行级置信度
+## 5. 分维度可用性与运行级置信度
 
 五个分量均为 0–1：
 
@@ -170,7 +170,14 @@ v3 使用可审计门控：任一 `error` 级 flag 或缺少 canonical WGS84 坐
 - medium：`0.60 <= overall < 0.80`
 - low：`overall < 0.60`
 
-该分数名称必须写作 `operational_confidence`。不得称为概率、统计置信水平或测量准确度。
+该兼容分数名称必须写作 `operational_confidence`，其 `overall/band` 只表示 `workflow_usability`。每条记录还必须在 `quality_dimensions` 中分别输出：
+
+- `source_evidence`：来源机构、定位、许可、版本/hash 的证据强度；
+- `analytical_readiness`：方法语义和 QC 对当前定量比较的就绪度；
+- `spatial_usability`：canonical WGS84、reported-only 或无坐标对当前空间工作流的可用性；
+- `workflow_usability`：五分量与门控合成的当前流程可用性。
+
+不得将任一维度称为概率、统计置信水平或测量准确度；不得把 low `workflow_usability` 简化为“低质量来源”。例如，政府来源可以有 high `source_evidence`，同时因 datum 未声明而只有 low `spatial_usability`。
 
 ## 6. 候选异常
 
@@ -219,7 +226,7 @@ v3 使用可审计门控：任一 `error` 级 flag 或缺少 canonical WGS84 坐
 
 提供 `--geology-grid` 与对应 `--geology-grid-sha256` 时，D2 读取 PANGAEA.788537 的官方 GLiM 0.5° Arc/ASCII ZIP，按 WGS84 点位执行确定性 cell join。结果写入 `matched_geologic_unit`、`geology_map_source/version`、`match_method/scale`、`boundary_distance_m`、`match_uncertainty` 和 `geology_missing_reason`；输入的 `geologic_unit` 与 `geologic_unit_raw` 不被覆盖。网格 hash 和 join 版本进入所有运行元数据，汇总进入 `qc_report.json.geology_matching`。
 
-GLiM 只表示 0.5° 主导表层岩性筛查背景，不是场地级地层或构造单元。水体和明确的海洋沉积物不赋陆地岩性；无 canonical WGS84 坐标、NODATA 和靠近 cell 边界的记录保留显式处置状态。没有同时提供网格与 SHA-256 时失败关闭，不从模型常识补地质单元。
+GLiM 只表示 0.5° 主导表层岩性筛查背景，不是场地级地层或构造单元。内陆水体可记录采样坐标处的地表地质筛查背景，但必须标明它不代表水体来源、含水层或溶质成因；海洋水体和明确的海洋沉积物不赋陆地岩性。无 canonical WGS84 坐标、NODATA 和靠近 cell 边界的记录保留显式处置状态。没有同时提供网格与 SHA-256 时失败关闭，不从模型常识补地质单元。
 
 ## 8. 科学依据与边界
 

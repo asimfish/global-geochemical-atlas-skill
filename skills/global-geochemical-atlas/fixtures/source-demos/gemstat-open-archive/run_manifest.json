@@ -20,9 +20,9 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 74428,
+      "bytes": 78088,
       "path": "demo_input.csv",
-      "sha256": "b8f9641b06e0abd84c0717881708c6a7ec30274581830137e747efaed5424c92"
+      "sha256": "6009dc0d0c833c911f20d0c9dc2acb32c648aa11684861fa056c2e5b4e92011e"
     },
     {
       "bytes": 106255,

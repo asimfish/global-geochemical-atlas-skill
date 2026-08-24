@@ -21,7 +21,13 @@ RECORD_EVIDENCE_VERSION = "geochemical-record-evidence-v1"
 RECORD_EVIDENCE_FILENAME = "record_evidence.jsonl"
 CONFIDENCE_COMPONENTS = {"source", "completeness", "method", "spatial", "qc", "overall"}
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-MAX_EVIDENCE_BYTES = 100_000_000
+# Research requests may contain up to 200k long-form measurements.  Filtered
+# acquisition deduplicates repeated source-file metadata, but a fully auditable
+# sidecar can still exceed the competition's *repository* size limit.  Runtime
+# products are bounded separately: keep this ceiling aligned with the public
+# output validators and never interpret it as permission to check generated
+# research products into the <=250 MB submission repository.
+MAX_EVIDENCE_BYTES = 600_000_000
 REQUIRED_EVIDENCE_FIELDS = {
     "record_id",
     "source_id",
@@ -128,6 +134,7 @@ def _declared_evidence(
             "source_file": row.get("source_file") or None,
             "source_row": row.get("source_row") or None,
             "source_file_sha256": row.get("file_sha256") or None,
+            "source_file_url": row.get("official_source_url") or None,
             "evidence_status": "source_declared_in_input",
             "evidence_version": RECORD_EVIDENCE_VERSION,
         }
@@ -211,6 +218,33 @@ def load_record_evidence(path: Path) -> tuple[list[dict[str, Any]], bytes]:
         rows.append(value)
     if not rows:
         raise EvidenceError("record evidence contains no records")
+    rows_by_id = {str(item["record_id"]): item for item in rows}
+    for item in rows:
+        anchor_id = item.get("source_metadata_record_id")
+        if anchor_id in (None, ""):
+            continue
+        if not isinstance(anchor_id, str):
+            raise EvidenceError(
+                "record evidence source_metadata_record_id must be a string"
+            )
+        anchor = rows_by_id.get(anchor_id)
+        shared_fields = anchor.get("shared_source_metadata_fields") if anchor else None
+        if (
+            anchor is None
+            or not isinstance(shared_fields, list)
+            or not shared_fields
+            or any(
+                not isinstance(field, str) or field not in anchor or field in item
+                for field in shared_fields
+            )
+            or any(
+                item.get(field) != anchor.get(field)
+                for field in ("source_id", "source_file", "source_file_sha256")
+            )
+        ):
+            raise EvidenceError(
+                f"record evidence {item.get('record_id')} has an invalid source metadata anchor"
+            )
     return rows, raw
 
 
@@ -254,6 +288,13 @@ def validate_record_linkage(
     required_comparable = {"source_id", "source_locator", "license", "analyte_reported"}
     for record_id, item in evidence_by_id.items():
         canonical_row = canonical_by_id[record_id]
+        source_file_url = item.get("source_file_url")
+        if source_file_url not in (None, "") and not source_url_is_evidence_safe(
+            source_file_url, item.get("source_file_sha256")
+        ):
+            raise EvidenceError(
+                f"record evidence {record_id} has an unsafe official source URL"
+            )
         for evidence_field, canonical_field in comparable_fields.items():
             evidence_value = item.get(evidence_field)
             canonical_value = canonical_row.get(canonical_field)
@@ -273,6 +314,25 @@ def validate_record_linkage(
                 raise EvidenceError(
                     f"record evidence {record_id} conflicts on {evidence_field}: "
                     f"{evidence_value!r} != {canonical_value!r}"
+                )
+        # Acquisition endpoints and clickable official landing pages are
+        # distinct for POST-backed sources. Bind both roles independently.
+        canonical_official_url = canonical_row.get("official_source_url")
+        evidence_official_url = item.get("official_source_url") or source_file_url
+        if canonical_official_url not in (None, ""):
+            if (
+                evidence_official_url in (None, "")
+                or str(evidence_official_url).strip()
+                != str(canonical_official_url).strip()
+            ):
+                raise EvidenceError(
+                    f"record evidence {record_id} does not bind canonical official_source_url"
+                )
+            if not source_url_is_evidence_safe(
+                evidence_official_url, item.get("source_file_sha256")
+            ):
+                raise EvidenceError(
+                    f"record evidence {record_id} has an unsafe official source URL"
                 )
     return evidence_by_id
 
@@ -474,6 +534,13 @@ def build_source_manifest(
                 if item.get("source_file")
             }
         )
+        official_source_urls = sorted(
+            {
+                str(item.get("official_source_url") or item.get("source_file_url"))
+                for item in source_evidence
+                if item.get("official_source_url") or item.get("source_file_url")
+            }
+        )
         article_citations = sorted(
             {
                 str(citation)
@@ -529,6 +596,7 @@ def build_source_manifest(
                     }
                     for filename, file_hash, url in source_files
                 ],
+                "official_source_urls": official_source_urls,
                 "article_citations": article_citations,
                 "article_dois": article_dois,
                 "evidence_type": "synthetic_demo" if is_synthetic else evidence_level,

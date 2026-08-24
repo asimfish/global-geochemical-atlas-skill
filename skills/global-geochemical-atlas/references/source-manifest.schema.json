@@ -115,7 +115,7 @@
         "source_id", "record_count", "source_tiers", "licenses", "located_record_count",
         "locator_count", "example_locators", "all_records_located",
         "all_records_license_declared", "verified_record_count", "dataset_titles", "dataset_dois",
-        "dataset_versions", "source_files", "article_citations", "article_dois",
+        "dataset_versions", "source_files", "official_source_urls", "article_citations", "article_dois",
         "evidence_type", "license_review"
       ],
       "properties": {
@@ -144,6 +144,11 @@
               "url": {"type": ["string", "null"]}
             }
           }
+        },
+        "official_source_urls": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^https?://"}
         },
         "article_citations": {"$ref": "#/$defs/stringList"},
         "article_dois": {"$ref": "#/$defs/stringList"},

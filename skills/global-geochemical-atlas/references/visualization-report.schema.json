@@ -34,7 +34,7 @@
       "properties": {
         "map_version": {"const": "d3-interactive-atlas-v3"},
         "ui_hierarchy_version": {"const": "atlas-progressive-disclosure-v2"},
-        "template_contract_version": {"const": "d3-dual-scope-atlas-v4"},
+        "template_contract_version": {"const": "d3-domain-confidence-atlas-v5"},
         "template_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "template_variant": {"enum": ["global_globe", "regional_focus"]},
         "database_visual_summary_schema": {"const": "d3-database-visual-summary-v1"},
@@ -82,7 +82,7 @@
                 "regional_combination_scope_lock_supported": {"const": true},
                 "comparison_profile_export": {"const": true},
                 "formal_comparison_requires_profile_rerender": {"const": true},
-                "template_contract_version": {"const": "d3-dual-scope-atlas-v4"}
+                "template_contract_version": {"const": "d3-domain-confidence-atlas-v5"}
               },
               "additionalProperties": true
             }

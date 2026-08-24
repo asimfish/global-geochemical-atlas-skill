@@ -1,0 +1,40 @@
+{
+  "as_of": "2026-08-15T07:00:00Z",
+  "bbox": null,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_policy_id": null,
+  "coordinate_canonicalization_status": "withheld_source_crs_not_reported",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
+  "coordinate_uncertainty_m_observation_counts": {
+    "not_reported": 480
+  },
+  "covered_spatial_cells": 0,
+  "dataset_version": "2019-09-02",
+  "distinct_sample_count": 80,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "region_applicability": {
+    "country_index_status": "complete_for_snapshot",
+    "country_iso_a3_codes": [
+      "CHN"
+    ],
+    "evidence_basis": "publisher dataset title, catchment description and all reported points are within Ningbo, China; coordinates remain reported-only because datum is absent",
+    "spatial_domain": "land"
+  },
+  "region_count": 1,
+  "region_observation_counts": {
+    "Ningbo Zhangxi catchment": 480
+  },
+  "reported_coordinate_sample_count": 80,
+  "reported_covered_spatial_cells": 1,
+  "reported_spatial_cell_ids": [
+    "+29:+121"
+  ],
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
+  "source_crs_observation_counts": {
+    "not_reported": 480
+  },
+  "source_id": "eidc-ningbo-soil",
+  "spatial_cell_ids": [],
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
+  "valid_coordinate_sample_count": 0
+}

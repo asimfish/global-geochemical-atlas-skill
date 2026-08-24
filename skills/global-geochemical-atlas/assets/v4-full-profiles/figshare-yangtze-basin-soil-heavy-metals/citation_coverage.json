@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-08-15T07:00:00Z",
+  "citation_scope_counts": {
+    "dataset": 6625
+  },
+  "citation_text_count": 6625,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_doi": "10.6084/m9.figshare.22785971.v1",
+  "dataset_doi_present": true,
+  "dataset_version": "figshare-v1-2023-05-10",
+  "observation_denominator": 6625,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "publication_doi_observation_count": 0,
+  "source_id": "figshare-yangtze-basin-soil-heavy-metals",
+  "upstream_primary_source_observation_count": 0
+}

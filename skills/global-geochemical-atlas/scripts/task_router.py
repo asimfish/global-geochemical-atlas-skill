@@ -47,6 +47,7 @@ FULL_OUTPUTS = [
     "record_evidence.jsonl",
     "qc_report.json",
     "confidence_report.json",
+    "sources_and_confidence.json",
     "anomalies.geojson",
     "anomaly_report.json",
     "batch_acceptance.csv",
@@ -139,7 +140,10 @@ def validate_contract(raw: Mapping[str, Any]) -> dict[str, Any]:
     profile = _path_text(raw, "profile")
     evidence = _path_text(raw, "evidence_jsonl")
     manifest = _path_text(raw, "acquisition_manifest")
-    acquisition_mode = raw.get("acquisition_mode", "provided_input")
+    acquisition_mode = raw.get(
+        "acquisition_mode",
+        "provided_input" if input_path is not None else "online_auto",
+    )
     if acquisition_mode not in {
         "provided_input",
         "online_auto",
@@ -147,16 +151,18 @@ def validate_contract(raw: Mapping[str, Any]) -> dict[str, Any]:
         "four_media_demo",
     }:
         raise TaskRoutingError("acquisition_mode is unsupported")
-    deadline = raw.get(
-        "deadline_seconds", execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS
-    )
+    # An omitted deadline means the official competition harness envelope.
+    # Operator-authorized extended research must opt in explicitly rather than
+    # allowing a 12-hour default to be killed by a 900-second evaluator.
+    default_deadline = execution_budget.OFFICIAL_TASK_LIMIT_SECONDS
+    deadline = raw.get("deadline_seconds", default_deadline)
     if (
         isinstance(deadline, bool)
         or not isinstance(deadline, (int, float))
         or not math.isfinite(float(deadline))
-        or not 1 <= float(deadline) <= execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS
+        or not 1 <= float(deadline) <= execution_budget.MAX_INTERNAL_BUDGET_SECONDS
     ):
-        raise TaskRoutingError("deadline_seconds must be between 1 and 840")
+        raise TaskRoutingError("deadline_seconds must be between 1 and 43200")
     required_outputs = raw.get("required_outputs")
     defaults = TASK_OUTPUTS[str(task_type)]
     if required_outputs is None:
@@ -285,28 +291,64 @@ def plan_task(raw: Mapping[str, Any]) -> dict[str, Any]:
             ]
         ]
     else:
-        command = [
-            PYTHON_COMMAND,
-            str(SCRIPT_DIR / "run_atlas_request.py"),
-            "--request",
-            str(contract["request"]),
-            "--output-dir",
-            output_dir,
-            "--total-timeout-seconds",
-            str(contract["deadline_seconds"]),
-        ]
         mode = contract["acquisition_mode"]
+        deadline = float(contract["deadline_seconds"])
+        if mode == "online_auto" and deadline >= 120:
+            internal_deadline = deadline
+            if deadline <= execution_budget.OFFICIAL_TASK_LIMIT_SECONDS:
+                internal_deadline = max(
+                    120.0,
+                    deadline - execution_budget.OFFICIAL_HARNESS_RESERVE_SECONDS,
+                )
+            round_timeout = min(
+                execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS, internal_deadline
+            )
+            run_timeout = max(60.0, round_timeout - min(60.0, round_timeout / 4))
+            command = [
+                PYTHON_COMMAND,
+                str(SCRIPT_DIR / "run_self_correction_loop.py"),
+                "--request",
+                str(contract["request"]),
+                "--output-dir",
+                output_dir,
+                "--online-source",
+                "auto",
+                "--time-budget-seconds",
+                str(internal_deadline),
+                "--round-timeout-seconds",
+                str(round_timeout),
+                "--run-timeout-seconds",
+                str(run_timeout),
+                "--source-timeout-seconds",
+                str(min(600.0, run_timeout)),
+            ]
+            if internal_deadline < execution_budget.DEFAULT_INTERNAL_BUDGET_SECONDS:
+                command.append("--checkpoint-only")
+        else:
+            command = [
+                PYTHON_COMMAND,
+                str(SCRIPT_DIR / "run_atlas_request.py"),
+                "--request",
+                str(contract["request"]),
+                "--output-dir",
+                output_dir,
+                "--total-timeout-seconds",
+                str(deadline),
+            ]
         if mode == "provided_input":
             command.extend(["--input", str(contract["input"])])
             _append_optional(command, "--evidence-jsonl", contract["evidence_jsonl"])
             _append_optional(
                 command, "--acquisition-manifest", contract["acquisition_manifest"]
             )
-        elif mode == "online_auto":
-            command.extend(["--online-source", "auto"])
+        elif mode == "online_auto" and deadline < 120:
+            # Very short, explicitly frozen tasks cannot host a safe research
+            # round; they still attempt online acquisition once and report the
+            # partial boundary rather than substituting a fixture.
+            command.extend(["--online-source", "auto", "--allow-single-round-partial"])
         elif mode == "production_demo":
             command.extend(["--demo", "production-usgs"])
-        else:
+        elif mode == "four_media_demo":
             command.extend(["--demo", "four-media"])
         commands = [command]
         validators = [

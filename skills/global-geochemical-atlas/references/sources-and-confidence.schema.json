@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:sources-and-confidence:v3",
+  "title": "Source evidence and multidimensional usability explanation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_version",
+    "data_mode",
+    "not_for_scientific_interpretation",
+    "single_quality_label_prohibited",
+    "interpretation",
+    "dimension_meaning",
+    "overall_dimension_score_means",
+    "overall_dimension_band_counts",
+    "overall_workflow_confidence",
+    "metadata_completeness",
+    "metadata_absence_accounting",
+    "source_portfolio",
+    "sources",
+    "claim_boundary"
+  ],
+  "properties": {
+    "report_version": {"const": "sources-and-confidence-v3"},
+    "data_mode": {
+      "enum": ["fixture", "online", "cached", "input", "synthetic_fixture", "not_evaluated"]
+    },
+    "not_for_scientific_interpretation": {"type": "boolean"},
+    "single_quality_label_prohibited": {"const": true},
+    "interpretation": {"type": "string", "minLength": 1},
+    "dimension_meaning": {
+      "$ref": "#/$defs/dimensions"
+    },
+    "overall_dimension_band_counts": {
+      "$ref": "#/$defs/dimensionBandCounts"
+    },
+    "overall_dimension_score_means": {
+      "$ref": "#/$defs/dimensionScoreMeans"
+    },
+    "overall_workflow_confidence": {
+      "$ref": "#/$defs/overallWorkflowConfidence"
+    },
+    "metadata_completeness": {
+      "$ref": "#/$defs/metadataCompleteness"
+    },
+    "metadata_absence_accounting": {
+      "$ref": "#/$defs/metadataAbsenceAccounting"
+    },
+    "source_portfolio": {
+      "$ref": "#/$defs/sourcePortfolio"
+    },
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_evidence",
+        "analytical_readiness",
+        "spatial_usability",
+        "workflow_usability"
+      ],
+      "properties": {
+        "source_evidence": {"type": "string", "minLength": 1},
+        "analytical_readiness": {"type": "string", "minLength": 1},
+        "spatial_usability": {"type": "string", "minLength": 1},
+        "workflow_usability": {"type": "string", "minLength": 1}
+      }
+    },
+    "bandCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "high": {"type": "integer", "minimum": 0},
+        "medium": {"type": "integer", "minimum": 0},
+        "low": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0}
+      }
+    },
+    "dimensionBandCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_evidence",
+        "analytical_readiness",
+        "spatial_usability",
+        "workflow_usability"
+      ],
+      "properties": {
+        "source_evidence": {"$ref": "#/$defs/bandCounts"},
+        "analytical_readiness": {"$ref": "#/$defs/bandCounts"},
+        "spatial_usability": {"$ref": "#/$defs/bandCounts"},
+        "workflow_usability": {"$ref": "#/$defs/bandCounts"}
+      }
+    },
+    "dimensionScoreMeans": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_evidence", "analytical_readiness", "spatial_usability", "workflow_usability"
+      ],
+      "properties": {
+        "source_evidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "analytical_readiness": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "spatial_usability": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "workflow_usability": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    },
+    "overallWorkflowConfidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "score_mean", "band_counts", "record_count", "not_a_probability", "interpretation"],
+      "properties": {
+        "label": {"type": "string", "minLength": 1},
+        "score_mean": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "band_counts": {"$ref": "#/$defs/bandCounts"},
+        "record_count": {"type": "integer", "minimum": 0},
+        "not_a_probability": {"const": true},
+        "interpretation": {"type": "string", "minLength": 1}
+      }
+    },
+    "routeSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id", "title", "route_status", "reason", "use_mode", "evidence_tier",
+        "research_use_status", "matching_elements", "matching_media", "region_status", "region_reason_code"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "title": {"type": "string"},
+        "route_status": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "use_mode": {"type": "string", "minLength": 1},
+        "evidence_tier": {"type": "string", "minLength": 1},
+        "research_use_status": {"type": "string", "minLength": 1},
+        "matching_elements": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "matching_media": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "region_status": {"type": "string", "minLength": 1},
+        "region_reason_code": {"type": "string", "minLength": 1}
+      }
+    },
+    "sourcePortfolio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "route_status", "formal_included_source_count", "formal_included_source_ids",
+        "routed_selected_source_count", "review_or_blocked_source_count",
+        "routed_but_not_included_source_ids", "selected_sources", "review_or_blocked_sources", "claim_boundary"
+      ],
+      "properties": {
+        "route_status": {"type": "string", "minLength": 1},
+        "formal_included_source_count": {"type": "integer", "minimum": 0},
+        "formal_included_source_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "routed_selected_source_count": {"type": "integer", "minimum": 0},
+        "review_or_blocked_source_count": {"type": "integer", "minimum": 0},
+        "routed_but_not_included_source_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "selected_sources": {"type": "array", "items": {"$ref": "#/$defs/routeSource"}},
+        "review_or_blocked_sources": {"type": "array", "items": {"$ref": "#/$defs/routeSource"}},
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    },
+    "sourceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "sha256"],
+      "properties": {
+        "filename": {"type": ["string", "null"]},
+        "sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "officialLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "url"],
+      "properties": {
+        "kind": {"enum": ["source_file", "dataset_doi", "publication_doi", "record_official_url"]},
+        "url": {"type": "string", "pattern": "^https?://"}
+      }
+    },
+    "metadataMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "rate"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "rate": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "metadataCompleteness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_count", "analytical_method", "method_source_locator",
+        "canonical_coordinate", "source_reported_coordinate_uncertainty",
+        "coordinate_representation_resolution", "exact_record_locator",
+        "official_source_link", "claim_boundary"
+      ],
+      "properties": {
+        "record_count": {"type": "integer", "minimum": 0},
+        "analytical_method": {"$ref": "#/$defs/metadataMetric"},
+        "method_source_locator": {"$ref": "#/$defs/metadataMetric"},
+        "canonical_coordinate": {"$ref": "#/$defs/metadataMetric"},
+        "source_reported_coordinate_uncertainty": {"$ref": "#/$defs/metadataMetric"},
+        "coordinate_representation_resolution": {"$ref": "#/$defs/metadataMetric"},
+        "exact_record_locator": {"$ref": "#/$defs/metadataMetric"},
+        "official_source_link": {"$ref": "#/$defs/metadataMetric"},
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "dataset_titles",
+        "dataset_dois",
+        "dataset_versions",
+        "licenses",
+        "source_urls",
+        "official_links",
+        "record_count",
+        "independent_sample_count",
+        "element_record_counts",
+        "medium_record_counts",
+        "record_provenance",
+        "dimension_band_counts",
+        "dimension_score_means",
+        "metadata_completeness",
+        "metadata_absence_accounting",
+        "acquisition_time",
+        "acquisition_times",
+        "acquisition_time_status"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "dataset_titles": {"type": "array", "items": {"type": "string"}},
+        "dataset_dois": {"type": "array", "items": {"type": "string"}},
+        "dataset_versions": {"type": "array", "items": {"type": "string"}},
+        "licenses": {"type": "array", "items": {"type": "string"}},
+        "source_urls": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^https?://"}
+        },
+        "official_links": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/officialLink"}
+        },
+        "record_count": {"type": "integer", "minimum": 0},
+        "independent_sample_count": {"type": "integer", "minimum": 0},
+        "element_record_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        },
+        "medium_record_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        },
+        "record_provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["located_record_count", "verified_record_count", "official_linked_record_count", "file_hashes"],
+          "properties": {
+            "located_record_count": {"type": "integer", "minimum": 0},
+            "verified_record_count": {"type": "integer", "minimum": 0},
+            "official_linked_record_count": {"type": "integer", "minimum": 0},
+            "file_hashes": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/sourceFile"}
+            }
+          }
+        },
+        "dimension_band_counts": {"$ref": "#/$defs/dimensionBandCounts"},
+        "dimension_score_means": {"$ref": "#/$defs/dimensionScoreMeans"},
+        "metadata_completeness": {"$ref": "#/$defs/metadataCompleteness"},
+        "metadata_absence_accounting": {"$ref": "#/$defs/metadataAbsenceAccounting"},
+        "acquisition_time": {"type": ["string", "null"]},
+        "acquisition_times": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "acquisition_time_status": {"type": "string", "minLength": 1}
+      }
+    },
+    "reasonSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_count", "counts", "accounted_count", "accounted_rate"],
+      "properties": {
+        "record_count": {"type": "integer", "minimum": 0},
+        "counts": {
+          "type": "object",
+          "propertyNames": {"type": "string", "minLength": 1},
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        },
+        "accounted_count": {"type": "integer", "minimum": 0},
+        "accounted_rate": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "metadataAbsenceAccounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["analytical_method", "coordinate_accuracy", "coordinate_reference", "claim_boundary"],
+      "properties": {
+        "analytical_method": {"$ref": "#/$defs/reasonSummary"},
+        "coordinate_accuracy": {"$ref": "#/$defs/reasonSummary"},
+        "coordinate_reference": {"$ref": "#/$defs/reasonSummary"},
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

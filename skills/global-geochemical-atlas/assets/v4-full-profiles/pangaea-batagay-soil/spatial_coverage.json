@@ -1,0 +1,47 @@
+{
+  "as_of": "2026-08-15T07:00:00Z",
+  "bbox": [
+    134.771944,
+    67.580278,
+    134.771944,
+    67.580278
+  ],
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_policy_id": null,
+  "coordinate_canonicalization_status": "source_crs_declared_epsg4326",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
+  "coordinate_uncertainty_m_observation_counts": {
+    "not_reported": 93
+  },
+  "covered_spatial_cells": 1,
+  "dataset_version": "2021-03-10",
+  "distinct_sample_count": 31,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "region_applicability": {
+    "country_index_status": "complete_for_snapshot",
+    "country_iso_a3_codes": [
+      "RUS"
+    ],
+    "evidence_basis": "publisher event metadata identifies the Batagay megaslump in North Yakutia, Russia",
+    "spatial_domain": "land"
+  },
+  "region_count": 1,
+  "region_observation_counts": {
+    "Batagay megaslump, North Yakutia, Russia": 93
+  },
+  "reported_coordinate_sample_count": 31,
+  "reported_covered_spatial_cells": 1,
+  "reported_spatial_cell_ids": [
+    "+67:+134"
+  ],
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
+  "source_crs_observation_counts": {
+    "EPSG:4326": 93
+  },
+  "source_id": "pangaea-batagay-soil",
+  "spatial_cell_ids": [
+    "+67:+134"
+  ],
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
+  "valid_coordinate_sample_count": 31
+}

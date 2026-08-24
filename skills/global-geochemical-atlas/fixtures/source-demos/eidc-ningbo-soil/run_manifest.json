@@ -1,0 +1,66 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-13T10:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 74943,
+      "path": "demo_input.csv",
+      "sha256": "605ea22247276f27c8b57b2b6a8db95c1b9de9b0a35e1fb4e61a05d12254a6b1"
+    },
+    {
+      "bytes": 71088,
+      "path": "sources.jsonl",
+      "sha256": "a7a782e61fad6479b0ead4acc2110b38a6c9b21451c8b7287f2d8644a72b6f1f"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 80,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+    "dataset_version": "2019-09-02",
+    "license": "OGL-UK-3.0",
+    "source_id": "eidc-ningbo-soil",
+    "title": "Elemental analysis of soil in the Ningbo watershed, China"
+  },
+  "source_files": [
+    {
+      "bytes": 20451,
+      "filename": "ElementalanalysisofsoilinNingboWatershed.csv",
+      "retrieved_at": "2026-08-13T08:41:21Z",
+      "sha256": "4143a29a74e590db081b8d832ff4e7861188e9fcd1675a52425643b5d113993a",
+      "source_url": "https://data-package.ceh.ac.uk/data/9c2e8b85-48ab-48c9-b69d-dd676a5d086f.zip"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "EIDC Ningbo contains 80 samples from one catchment and is not national coverage.",
+    "The publisher does not declare a coordinate datum/CRS; coordinates remain reported-only.",
+    "Publisher-assigned half-LOD values cannot be reversed to original qualifiers."
+  ]
+}

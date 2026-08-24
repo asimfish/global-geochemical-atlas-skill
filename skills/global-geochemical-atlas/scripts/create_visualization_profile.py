@@ -144,10 +144,7 @@ def build_profile(args: argparse.Namespace) -> dict[str, Any]:
     if comparison_values[0] is not None:
         filter_summary.append(f"组合={comparison_values[0]}×{comparison_values[1]}")
     scope_summary = "全球" if args.spatial_scope == "global" else region_label
-    title = (
-        optional_text(args.title)
-        or f"{scope_summary}地球化学{STORY_LABELS[args.story]}"
-    )
+    title = optional_text(args.title) or f"{scope_summary}地球化学元素图谱"
     subtitle = optional_text(args.subtitle) or (
         f"{scope_summary}范围的标准化地球化学观测"
         + ("；筛选：" + "，".join(filter_summary) if filter_summary else "")

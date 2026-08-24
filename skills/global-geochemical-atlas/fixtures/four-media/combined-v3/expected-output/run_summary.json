@@ -2,9 +2,9 @@
   "artifact_transaction": {
     "artifacts": {
       "anomalies": {
-        "bytes": 35009,
+        "bytes": 35116,
         "filename": "anomalies.geojson",
-        "sha256": "f7717d49b0f7cd8af8bf612d6a45eef4727bebe58f8b44286f6a02b8524c0da7"
+        "sha256": "9221a087e73e8cf794b15a29c86c1880cfc5ccf24da821723c381c8689f29702"
       },
       "anomaly_regions": {
         "bytes": 201,
@@ -14,7 +14,7 @@
       "anomaly_report": {
         "bytes": 170878,
         "filename": "anomaly_report.json",
-        "sha256": "224e9620343af32e2bedaf1b4e76b5b531219b254facb26dbf37f74e1a30c410"
+        "sha256": "61949503d0f3faa7aea5a682ba9f4aa3b41ee583f22327ef554c9fa447c66a82"
       },
       "batch_acceptance": {
         "bytes": 122,
@@ -27,53 +27,58 @@
         "sha256": "f55e30230eb432ce0802585db727a140d9fad209bde8786449571594248727b0"
       },
       "confidence_report": {
-        "bytes": 4123,
+        "bytes": 5192,
         "filename": "confidence_report.json",
-        "sha256": "282fc8813036a1b064056b6aef18784290c3788e18967a205a15c2219f469f7f"
+        "sha256": "3592dbb51c664ea99e607aada8b781c9f6e8d0be8498e67464e796c7d277ed71"
       },
       "database": {
-        "bytes": 2003010,
+        "bytes": 2534353,
         "filename": "geochemistry.csv",
-        "sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db"
+        "sha256": "4e9beaa87d6cba4a7313d8a5153f79ffd98d03ef978a333f59eec0799f2df4ae"
       },
       "interactive_map": {
-        "bytes": 1224459,
+        "bytes": 1677856,
         "filename": "interactive_map.html",
-        "sha256": "b79065ecfc15d0f827b536fe4bde61c22b086c62e2738499b95d37192982208b"
+        "sha256": "a254934c4c16108a39919afcc90fdc42c07114a9ec69cde681ea7ca6adc177e8"
       },
       "iteration_backlog": {
-        "bytes": 739091,
+        "bytes": 703571,
         "filename": "iteration_backlog.csv",
-        "sha256": "05c8d7802b9de25736e1cd1514d19146e69879b9ecace2442f33df73cdda417c"
+        "sha256": "223e8b7b394767343cfd606f4bfbde34dd8d3e659467913d49afa0b75498d19c"
       },
       "qc_report": {
-        "bytes": 2493,
+        "bytes": 2531,
         "filename": "qc_report.json",
-        "sha256": "2870fd02e2a08039d96d20b7660ac8f3cb2f1b3f6d4394963d55c5d2d8885c21"
+        "sha256": "451f65fa1c5136dcead31e6242f3da0b3833371852ea6ff9e4919c8c69f022fe"
       },
       "record_evidence": {
-        "bytes": 2058061,
+        "bytes": 2064965,
         "filename": "record_evidence.jsonl",
-        "sha256": "b2cc9dd4c90bbcadccd34a1538fbff06f19e441d9ff5b7f1eafca8671d4bb46e"
+        "sha256": "84e2b2a558b52bcbb6fe20aafb99aecec6a20841224b55505e4a5ae6c2cb75ed"
       },
       "samples": {
-        "bytes": 1205833,
+        "bytes": 327684,
         "filename": "samples.geojson",
-        "sha256": "aa49c417dba14011dd80cfb41f6ae2b3ec30150449f1c7dcd31e722a20b14a1f"
+        "sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82"
       },
       "source_manifest": {
-        "bytes": 39820,
+        "bytes": 43899,
         "filename": "source_manifest.json",
-        "sha256": "84fa5c6dbd12ed39a400a98784315221ac5e9ab275c96850b30f34555e3606c9"
+        "sha256": "ddcc2e0ac82f54a4d3c448a197452b9aafa6ae480d10cff7b8c5f177e078b7ce"
+      },
+      "sources_and_confidence": {
+        "bytes": 107001,
+        "filename": "sources_and_confidence.json",
+        "sha256": "385bfc60eab80c56bcf752a4dc94ddab09f8c7baf50dfd48fdcd91f20b8346a9"
       },
       "spatial_anomaly_report": {
-        "bytes": 11722,
+        "bytes": 12170,
         "filename": "spatial_anomaly_report.json",
-        "sha256": "610b384b2d51e9576ab6e9b39d91907f0e7f89cfc3d2100e3f22b3e33e983031"
+        "sha256": "737524c8ead9d1eb8a49434a705b0588b3d730a31b10170d706d0d63f7ba76b6"
       }
     },
     "commit_marker": "run_summary.json",
-    "input_sha256": "29d77ba24c231f36f32f80d681b67c415cf0bc0d5e0c286b8667f287fbd9e9a0",
+    "input_sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9",
     "mutation_rule": "Any change to D1, D2, confidence, evidence, backlog, anomaly or D3 artifacts requires regenerating every dependent artifact and writing a new commit marker.",
     "state": "committed",
     "transaction_version": "geochemical-workflow-artifact-transaction-v1"
@@ -81,11 +86,11 @@
   "coverage": {
     "bbox": [
       -137.97,
-      10.0345,
-      128.0647,
+      -42.4756,
+      153.0022,
       81.409639
     ],
-    "coordinate_rate": 0.706294,
+    "coordinate_rate": 0.748252,
     "coverage_claim": "Observed sample locations only; blank regions are not inferred as absence.",
     "elements": [
       "As",
@@ -110,7 +115,7 @@
     "filename": "demo_input.csv",
     "not_for_scientific_interpretation": true,
     "record_count": 1144,
-    "sha256": "29d77ba24c231f36f32f80d681b67c415cf0bc0d5e0c286b8667f287fbd9e9a0",
+    "sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9",
     "synthetic_demo": false
   },
   "limitations": [
@@ -122,12 +127,25 @@
     "Partial-success reasons: one_or_more_anomaly_background_groups_not_analyzed, one_or_more_records_not_map_eligible, spatial_candidate_region_background_insufficient."
   ],
   "map_report": {
+    "admin1_boundary_asset": {
+      "asset_version": "ai4s-natural-earth-admin1-china-visual-v1",
+      "boundary_count": 31,
+      "boundary_semantics": "Generalized Natural Earth Admin-1 linework for visual orientation only; not an authoritative or legal administrative boundary, spatial join, country-membership result, or scientific coverage evidence.",
+      "country_iso_a3": "CHN",
+      "license": "public domain",
+      "natural_earth_version": "5.1.1",
+      "point_count": 7868,
+      "source_commit": "ca96624a56bd078437bca8184e78163e5039ad19",
+      "source_geojson_url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_50m_admin_1_states_provinces.geojson",
+      "source_sha256": "69a0e06e640b2d505858ae1cb63034e4677f3000b35a98e16312932b98c426b9",
+      "title": "Natural Earth 1:50m China Admin-1 visual boundaries"
+    },
     "anomaly_region_render_mode": "zoom-adaptive-anomaly-bubbles-v1",
     "artifact_bindings": {
-      "anomalies_sha256": "f7717d49b0f7cd8af8bf612d6a45eef4727bebe58f8b44286f6a02b8524c0da7",
-      "database_sha256": "c5cf79050d27b5b234473bbb574fe92c98712379a1c09e6408412642b34a71db",
-      "interactive_map_sha256": "b79065ecfc15d0f827b536fe4bde61c22b086c62e2738499b95d37192982208b",
-      "samples_geojson_sha256": "aa49c417dba14011dd80cfb41f6ae2b3ec30150449f1c7dcd31e722a20b14a1f"
+      "anomalies_sha256": "9221a087e73e8cf794b15a29c86c1880cfc5ccf24da821723c381c8689f29702",
+      "database_sha256": "4e9beaa87d6cba4a7313d8a5153f79ffd98d03ef978a333f59eec0799f2df4ae",
+      "interactive_map_sha256": "a254934c4c16108a39919afcc90fdc42c07114a9ec69cde681ea7ca6adc177e8",
+      "samples_geojson_sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82"
     },
     "basemap": {
       "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
@@ -138,7 +156,7 @@
       "title": "Natural Earth 1:110m Land"
     },
     "candidate_anomaly_region_count": 0,
-    "candidate_record_count": 21,
+    "candidate_record_count": 22,
     "capability_matrix": {
       "deliverables": {
         "anomaly_results_first_class_ui": true,
@@ -167,13 +185,15 @@
         "hierarchy_version": "atlas-progressive-disclosure-v2",
         "keyboard_map_navigation": true,
         "localized_measurement_basis": true,
+        "optional_china_admin1_orientation_boundaries": true,
         "professional_navigation_labels": true,
         "recoverable_map_navigation": true,
         "regional_combination_scope_lock_supported": true,
         "regional_pan_without_scope_expansion": true,
         "research_patch_crud": "proposal_only_no_direct_mutation",
         "single_primary_navigation": true,
-        "template_contract_version": "d3-dual-scope-atlas-v4",
+        "single_world_no_repeat_planar_navigation": true,
+        "template_contract_version": "d3-domain-confidence-atlas-v5",
         "terminology_contract": "competition-geochemistry-v1"
       },
       "outputs": {
@@ -202,14 +222,17 @@
     },
     "coordinate_mode": "canonical",
     "coordinate_statistics": {
-      "canonical_coordinate_records": 808,
+      "canonical_coordinate_records": 856,
       "coordinate_mode": "canonical",
-      "mapped_canonical_records": 808,
-      "mapped_record_count": 808,
+      "embedded_canonical_records": 856,
+      "embedded_record_count": 856,
+      "embedded_reported_fallback_records": 0,
+      "mapped_canonical_records": 856,
+      "mapped_record_count": 856,
       "mapped_reported_fallback_records": 0,
       "records_without_plottable_coordinates": 0,
       "reported_fallback_records": 0,
-      "reported_only_records": 336,
+      "reported_only_records": 288,
       "total_records": 1144
     },
     "country_boundaries": {
@@ -230,10 +253,10 @@
       ],
       "by_medium": {
         "sediment": {
-          "method_completeness_rate": 0.842105,
+          "method_completeness_rate": 0.863636,
           "method_missing_record_count": 48,
-          "record_count": 304,
-          "sample_count": 59
+          "record_count": 352,
+          "sample_count": 107
         },
         "soil": {
           "method_completeness_rate": 1.0,
@@ -248,22 +271,49 @@
           "sample_count": 85
         }
       },
+      "evidence_layer_counts": {
+        "strict_scientific_ready": 693,
+        "traceable_screening_only": 163
+      },
       "geologic_unit_completeness_rate": 0.0,
-      "geologic_unit_missing_record_count": 808,
+      "geologic_unit_missing_record_count": 856,
+      "geological_background_completeness_rate": 1.0,
+      "geological_background_missing_record_count": 0,
       "interpretation": "Sample type and analytical method are independent fields; media count imbalance describes input coverage, not concentration or anomaly prevalence.",
-      "method_completeness_rate": 0.881188,
+      "method_completeness_rate": 0.88785,
       "method_missing_record_count": 96,
-      "sample_type_field": "medium"
+      "provenance_status_counts": {
+        "strict_complete": 856
+      },
+      "quality_control_status_counts": {
+        "completed_with_flags": 848,
+        "failed_or_excluded": 8
+      },
+      "sample_type_field": "medium",
+      "strict_scientific_ready_rate": 0.809579
     },
     "database_visual_summary_schema": "d3-database-visual-summary-v1",
     "default_view": "all_data_sample_deduplicated",
-    "display_sample_count": 226,
+    "display_sample_count": 274,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1224459,
+    "html_bytes": 1677856,
     "interpolation": false,
+    "map_preview_sampling": {
+      "applied": false,
+      "candidate_anomaly_records_preserved": true,
+      "complete_database_artifact": "geochemistry.csv",
+      "embedded_physical_sample_count": 274,
+      "embedded_record_count": 856,
+      "input_physical_sample_count": 274,
+      "input_record_count": 856,
+      "maximum_embedded_records": 50000,
+      "policy_version": "d3-coverage-preserving-preview-v1",
+      "stratification_cell_degrees": null,
+      "whole_physical_sample_groups_preserved": true
+    },
     "map_version": "d3-interactive-atlas-v3",
-    "mapped_record_count": 808,
+    "mapped_record_count": 856,
     "region_coverage": {
       "australia": {
         "administrative_clip": true,
@@ -274,11 +324,15 @@
           "w": 112.0
         },
         "clip_method": "country_polygon_and_bbox",
-        "elements": [],
+        "elements": [
+          "Hg"
+        ],
         "label": "澳大利亚（国家边界严格裁剪）",
-        "media": [],
-        "record_count": 0,
-        "sample_count": 0
+        "media": [
+          "sediment"
+        ],
+        "record_count": 47,
+        "sample_count": 47
       },
       "china": {
         "administrative_clip": true,
@@ -346,8 +400,8 @@
           "soil",
           "water"
         ],
-        "record_count": 808,
-        "sample_count": 226
+        "record_count": 856,
+        "sample_count": 274
       },
       "shanghai": {
         "administrative_clip": false,
@@ -424,9 +478,10 @@
       "custom_bbox"
     ],
     "reported_coordinate_banner": false,
-    "samples_geojson_bytes": 1205833,
+    "samples_geojson_bytes": 327684,
     "scope_excluded_mappable_record_count": 0,
-    "source_mappable_record_count": 808,
+    "scope_mappable_record_count": 856,
+    "source_mappable_record_count": 856,
     "spatial_scope": {
       "bounds": {
         "e": 180.0,
@@ -441,12 +496,12 @@
       "region_key": "global",
       "region_label": "全球"
     },
-    "template_contract_version": "d3-dual-scope-atlas-v4",
-    "template_sha256": "6e60a3aab15ee08b4d723aeefa433f42691de79cda89cd43dc0fe5b9c85ba1e4",
+    "template_contract_version": "d3-domain-confidence-atlas-v5",
+    "template_sha256": "8cf96dbfe5800c9e23b95961258f9c3f9e1ab3f6f729239e040a296fe86fd300",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "atlas-progressive-disclosure-v2",
-    "unmappable_record_count": 336,
+    "unmappable_record_count": 288,
     "visual_question_contract": {
       "schema_version": "d3-visual-question-contract-v1",
       "views": {
@@ -562,11 +617,11 @@
     "candidate_anomaly_count": 27,
     "candidate_anomaly_region_count": 0,
     "censored_record_count": 60,
-    "iteration_action_required_count": 688,
+    "iteration_action_required_count": 592,
     "iteration_review_required_count": 1144,
     "record_count": 1144,
     "standardized_record_count": 1136,
-    "valid_coordinate_count": 808
+    "valid_coordinate_count": 856
   },
   "next_actions": [
     "Inspect source_manifest.json and record-level source locators before scientific reuse.",
@@ -587,6 +642,7 @@
     "record_evidence": "record_evidence.jsonl",
     "samples": "samples.geojson",
     "source_manifest": "source_manifest.json",
+    "sources_and_confidence": "sources_and_confidence.json",
     "spatial_anomaly_report": "spatial_anomaly_report.json"
   },
   "quality_status": "issues_detected",

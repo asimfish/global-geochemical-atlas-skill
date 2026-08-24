@@ -1,0 +1,62 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-13T10:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "Cu",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 82180,
+      "path": "demo_input.csv",
+      "sha256": "a08edb58227ef9c0cf2e242527e5cd0c57c780a5b99ef46b24b4a286d460566e"
+    },
+    {
+      "bytes": 79272,
+      "path": "sources.jsonl",
+      "sha256": "71b6704209941fd83626aa595b59764c5482bdebcd4be411b7064f0b1410e8cf"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 31,
+    "selected_source_rows": 16
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.1594/PANGAEA.927867",
+    "dataset_version": "2021-03-10",
+    "license": "CC-BY-4.0",
+    "source_id": "pangaea-batagay-soil",
+    "title": "Trace elements content in soils and soil inclusions in Batagay ice wedges, North Yakutia, Russia"
+  },
+  "source_files": [
+    {
+      "bytes": 13089,
+      "filename": "PANGAEA.927867.tab",
+      "retrieved_at": "2026-08-13T12:08:51Z",
+      "sha256": "a5cb0f69973c7fb5e4fac29a7548fb7cbf10de1f291fe0070f4c9b8533f22d59",
+      "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.927867?format=textfile"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The PANGAEA source is one Batagay site in North Yakutia and cannot close the all-Russia coverage gap.",
+    "Soil, ice-wedge inclusions and thawed ground particles remain separate sample types; the source has Cu/Pb/Zn but no As."
+  ]
+}

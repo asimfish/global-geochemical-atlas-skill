@@ -1,0 +1,377 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v2",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-19T09:30:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cu",
+      "Ni",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 67341,
+      "path": "demo_input.csv",
+      "sha256": "885f7e075c53124734fb1ef78fc74e04a70c38d5515eb69023d97f0496a75859"
+    },
+    {
+      "bytes": 92829,
+      "path": "sources.jsonl",
+      "sha256": "5a0af264bb3dddcdb6f33aad488233c8789c1b929e9392a2ba31d853f9420141"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 155811,
+    "selected_source_rows": 24
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.25625/PVFZCE",
+    "dataset_version": "12.0",
+    "license": "CC-BY-SA-4.0",
+    "source_id": "georoc-convergent-margins",
+    "title": "GEOROC Compilation: Convergent Margins"
+  },
+  "source_files": [
+    {
+      "bytes": 69501,
+      "filename": "2026-06- PVFZCE_CHAGAI-RASKOH_BELT.csv",
+      "retrieved_at": null,
+      "sha256": "b689a48c826764a6cff34426ef82007e83e9ccd75da691169e88a1a69866d8b9",
+      "source_url": "https://doi.org/10.25625/PVFZCE/OHII0D"
+    },
+    {
+      "bytes": 3329487,
+      "filename": "2026-06-PVFZCE_AEGEAN_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "73a4aa9d51ff33d6b9a3d35ed5ad764e2dbe86629e0e6ca908a07353d3e3ffea",
+      "source_url": "https://doi.org/10.25625/PVFZCE/TRBXIG"
+    },
+    {
+      "bytes": 4967486,
+      "filename": "2026-06-PVFZCE_AEOLIAN_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "e7feeb1c59306e6d102dea02604467d9da68b5b9f96eae98c6476454e4208be9",
+      "source_url": "https://doi.org/10.25625/PVFZCE/A2HQVI"
+    },
+    {
+      "bytes": 3146849,
+      "filename": "2026-06-PVFZCE_ALEUTIAN_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "f2ecb2cfd6809f5504327dc6cb3828ee1d8597fd47275a6e5a1cc8c5dc27ebd4",
+      "source_url": "https://doi.org/10.25625/PVFZCE/ENHNNX"
+    },
+    {
+      "bytes": 53212,
+      "filename": "2026-06-PVFZCE_ALISITOS_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "0ab6b8c539f7180339e427970056252a351fffecfdc3ccc7feb809bdaa2625de",
+      "source_url": "https://doi.org/10.25625/PVFZCE/H5LOPR"
+    },
+    {
+      "bytes": 6805375,
+      "filename": "2026-06-PVFZCE_ANDEAN_ARC_part1.csv",
+      "retrieved_at": null,
+      "sha256": "1232024fb5585766f7e346e74287007c3f8b22cc5290a9008e80132a72a60022",
+      "source_url": "https://doi.org/10.25625/PVFZCE/PUX9OW"
+    },
+    {
+      "bytes": 9076200,
+      "filename": "2026-06-PVFZCE_ANDEAN_ARC_part2.csv",
+      "retrieved_at": null,
+      "sha256": "7c2fa47ea3e188711d6f1deb638b1d1699a9d7485311deadd6c4d428e5f15ef3",
+      "source_url": "https://doi.org/10.25625/PVFZCE/0C29MJ"
+    },
+    {
+      "bytes": 7529254,
+      "filename": "2026-06-PVFZCE_ANDEAN_ARC_part3.csv",
+      "retrieved_at": null,
+      "sha256": "a360f0b52788a64ad0fa90ca6a2bb8b8a445555cac91572c8a272bf85d5ffc4f",
+      "source_url": "https://doi.org/10.25625/PVFZCE/FZL3TH"
+    },
+    {
+      "bytes": 3341532,
+      "filename": "2026-06-PVFZCE_APENNINIC-MAGHREBIDES_CHAIN_part1.csv",
+      "retrieved_at": null,
+      "sha256": "1bf4ea31613c77021ab1adce18d2661d56a127d9eb431837d6472ab7562ca979",
+      "source_url": "https://doi.org/10.25625/PVFZCE/SLQBWP"
+    },
+    {
+      "bytes": 7545637,
+      "filename": "2026-06-PVFZCE_APENNINIC-MAGHREBIDES_CHAIN_part2.csv",
+      "retrieved_at": null,
+      "sha256": "037f7ce25562228cec6f25698739189dfb8482fb0529f72c43b803e3aade0271",
+      "source_url": "https://doi.org/10.25625/PVFZCE/F9KOKP"
+    },
+    {
+      "bytes": 374592,
+      "filename": "2026-06-PVFZCE_BANDA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "e4780a421b29d8aa32387aea5c7b2f085429e4c16d95851b00da47251003a887",
+      "source_url": "https://doi.org/10.25625/PVFZCE/AVAHVG"
+    },
+    {
+      "bytes": 915181,
+      "filename": "2026-06-PVFZCE_BETIC-RIF_OROGENIC_BELT_OR_GIBRALTAR_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "1fe4a41a797b79bc1a2f3dd22d84ebc0908ac364f20477edf43d50827737d366",
+      "source_url": "https://doi.org/10.25625/PVFZCE/R1SGCK"
+    },
+    {
+      "bytes": 1663332,
+      "filename": "2026-06-PVFZCE_BISMARCK_ARC_NEW_BRITAIN_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "f5a947ea9f16d0dd5625c643059a04cedd2babc263d98f655ac18ac5925ce359",
+      "source_url": "https://doi.org/10.25625/PVFZCE/UU4I5H"
+    },
+    {
+      "bytes": 6251274,
+      "filename": "2026-06-PVFZCE_CASCADES.csv",
+      "retrieved_at": null,
+      "sha256": "7422c63ecb0144935163d01c2da62efb75780de8dc0f1152fd22befd83a1cb18",
+      "source_url": "https://doi.org/10.25625/PVFZCE/6VHZJ3"
+    },
+    {
+      "bytes": 4971658,
+      "filename": "2026-06-PVFZCE_CENTRAL_AMERICAN_VOLCANIC_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "43b735cccd4b349b9c7ba50a5214e4d05d8237edc5640ea6b2bb26dff78596b3",
+      "source_url": "https://doi.org/10.25625/PVFZCE/8B9RSS"
+    },
+    {
+      "bytes": 1497738,
+      "filename": "2026-06-PVFZCE_GREATER_ANTILLES.csv",
+      "retrieved_at": null,
+      "sha256": "9c42fe77f7ae04295afae40b32e3869c2c95831687673be83e210fdfdd1072a3",
+      "source_url": "https://doi.org/10.25625/PVFZCE/UNNJPK"
+    },
+    {
+      "bytes": 51782,
+      "filename": "2026-06-PVFZCE_HALMAHERA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "e1896723e24e01e6ad40e2dbbc45034e5672f5943bce26b691b43a2d772a26c1",
+      "source_url": "https://doi.org/10.25625/PVFZCE/SZQQX7"
+    },
+    {
+      "bytes": 8773720,
+      "filename": "2026-06-PVFZCE_HONSHU_ARC_part1.csv",
+      "retrieved_at": null,
+      "sha256": "63aa2b3a549be5fa84bddb0aae1d4479bd6759e5b3c4be6f98c367b3d997baf9",
+      "source_url": "https://doi.org/10.25625/PVFZCE/2IQIEF"
+    },
+    {
+      "bytes": 7804857,
+      "filename": "2026-06-PVFZCE_HONSHU_ARC_part2.csv",
+      "retrieved_at": null,
+      "sha256": "f20022a24b2fd1a14f8dedee1816a3439f30838551ed9bf9fe51934b4f1b4b1a",
+      "source_url": "https://doi.org/10.25625/PVFZCE/NJTCKY"
+    },
+    {
+      "bytes": 4518033,
+      "filename": "2026-06-PVFZCE_IZU-BONIN-MARIANA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "ae38779166b5d5c88aa7dd501621c32713aaa45ae9e0605116921f8a3e1670f7",
+      "source_url": "https://doi.org/10.25625/PVFZCE/UZUTPT"
+    },
+    {
+      "bytes": 7094680,
+      "filename": "2026-06-PVFZCE_IZU-BONIN_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "6a66a8dbb4f788db33d7be19367217819a74e8f56df9bbb68ad61dab1cdf2654",
+      "source_url": "https://doi.org/10.25625/PVFZCE/AQODRO"
+    },
+    {
+      "bytes": 6172287,
+      "filename": "2026-06-PVFZCE_KAMCHATKA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "1f9b1b86ca6f0d86bb442820272fd42cdc41ac65fa0ee4a58a37634f4833298d",
+      "source_url": "https://doi.org/10.25625/PVFZCE/MIAX5V"
+    },
+    {
+      "bytes": 665076,
+      "filename": "2026-06-PVFZCE_KERMADEC_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "e32d80bbef941f4d69edd8de558aef35ff1e9b7668cc0e32d8791b1362b1ab97",
+      "source_url": "https://doi.org/10.25625/PVFZCE/JSJVD5"
+    },
+    {
+      "bytes": 1205789,
+      "filename": "2026-06-PVFZCE_KOHISTAN-LADAKH_TERRANE_OR_GANGDISE_BELT.csv",
+      "retrieved_at": null,
+      "sha256": "688a2e125b89732fb8ec70b91022d9d76a018d6e0e413254bbc1e9a982791ad5",
+      "source_url": "https://doi.org/10.25625/PVFZCE/YAD63M"
+    },
+    {
+      "bytes": 2979211,
+      "filename": "2026-06-PVFZCE_KURILE_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "f87b760a1cd4ada6995eed2edaca55636401781a64e7e6a20577c512701b64ef",
+      "source_url": "https://doi.org/10.25625/PVFZCE/DLEXAF"
+    },
+    {
+      "bytes": 3309523,
+      "filename": "2026-06-PVFZCE_LESSER_ANTILLES.csv",
+      "retrieved_at": null,
+      "sha256": "29744c60d6e3308c7d7dae7288b9f0e2f857f18b12436a1588e5d83af44439bf",
+      "source_url": "https://doi.org/10.25625/PVFZCE/BNOBOP"
+    },
+    {
+      "bytes": 1416706,
+      "filename": "2026-06-PVFZCE_LIGURIA-SARDO-TYRRHENIAN_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "82fc14383506795bcc6c919d82d814711e8665eb3de4fde128006b69e7e8c7e2",
+      "source_url": "https://doi.org/10.25625/PVFZCE/MYDZBA"
+    },
+    {
+      "bytes": 1781729,
+      "filename": "2026-06-PVFZCE_LUZON_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "69e87444ac8d59050d67b165662dea30d3e60b72f2d22ce3abba02b8f86ef996",
+      "source_url": "https://doi.org/10.25625/PVFZCE/KHIISN"
+    },
+    {
+      "bytes": 5596331,
+      "filename": "2026-06-PVFZCE_MEXICAN_VOLCANIC_BELTS.csv",
+      "retrieved_at": null,
+      "sha256": "5912f0d7cd2ca4be93187154fdad889f42d102f2a904c68049248658f1794eaf",
+      "source_url": "https://doi.org/10.25625/PVFZCE/TOIF4K"
+    },
+    {
+      "bytes": 117830,
+      "filename": "2026-06-PVFZCE_MIDDLE_AMERICA_TRENCH_GUATEMALA_TRENCH.csv",
+      "retrieved_at": null,
+      "sha256": "1992917f93f613ab567bbf9e8ba8de9fca8c4bf1d3f847ab82ddbc7bdd735e3d",
+      "source_url": "https://doi.org/10.25625/PVFZCE/JADM1D"
+    },
+    {
+      "bytes": 58421,
+      "filename": "2026-06-PVFZCE_NEW_CALEDONIA.csv",
+      "retrieved_at": null,
+      "sha256": "a0b127e25bc4fdac986b6f4b4a593262882ac910c5997061f3e8c3c410971f02",
+      "source_url": "https://doi.org/10.25625/PVFZCE/6MST3U"
+    },
+    {
+      "bytes": 1313249,
+      "filename": "2026-06-PVFZCE_NEW_HEBRIDES_ARC_VANUATU_ARCHIPELAGO.csv",
+      "retrieved_at": null,
+      "sha256": "396a855c601b7d5674813d4cc51528fda54e2ec79fb445bd4eb9a3c75258c5d5",
+      "source_url": "https://doi.org/10.25625/PVFZCE/43YFNW"
+    },
+    {
+      "bytes": 6496762,
+      "filename": "2026-06-PVFZCE_NEW_ZEALAND.csv",
+      "retrieved_at": null,
+      "sha256": "7688d1df8f6c69b58552c9da4337d59d16184905730e14534a038c059aedbdd3",
+      "source_url": "https://doi.org/10.25625/PVFZCE/EQHRHY"
+    },
+    {
+      "bytes": 323584,
+      "filename": "2026-06-PVFZCE_OKHOTSK-CHUKOTKA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "3d7b14249a8428a9797e17b71fa29074955fe38ba772eac43497f1cc3cb68aaf",
+      "source_url": "https://doi.org/10.25625/PVFZCE/9IUPKL"
+    },
+    {
+      "bytes": 3115635,
+      "filename": "2026-06-PVFZCE_RYUKYU_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "6c512f695d107c8883cc4dc3f322c6d3ad475ecec1c78fa79dfc676d1fbfea61",
+      "source_url": "https://doi.org/10.25625/PVFZCE/WMFWVI"
+    },
+    {
+      "bytes": 1536791,
+      "filename": "2026-06-PVFZCE_SCOTIA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "805af8812dc0ca2e51afdc9ef707129a82b86e23fe573e12cdd5e632c3e6f463",
+      "source_url": "https://doi.org/10.25625/PVFZCE/8EUVW7"
+    },
+    {
+      "bytes": 130127,
+      "filename": "2026-06-PVFZCE_SIERRA_NEVADA_MAGMATIC_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "80a6bee121a784bbd4432150bafc863d5b5c4311be0aa303fd04bf4dca6b61f9",
+      "source_url": "https://doi.org/10.25625/PVFZCE/XGPSEP"
+    },
+    {
+      "bytes": 702753,
+      "filename": "2026-06-PVFZCE_SIKHOTE-ALIN-SAKHALIN_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "d718ea3323853ed3bf01fdae65f09410fe2b956ef1917b5b9c0c762c9c519ea2",
+      "source_url": "https://doi.org/10.25625/PVFZCE/BDMM1J"
+    },
+    {
+      "bytes": 518168,
+      "filename": "2026-06-PVFZCE_SOLOMON_ISLAND_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "fd1897cc40cf4db4ba5277afcaa5e2205b4fece35144ad99e49be3269ad013d9",
+      "source_url": "https://doi.org/10.25625/PVFZCE/DTHCXT"
+    },
+    {
+      "bytes": 672825,
+      "filename": "2026-06-PVFZCE_SULAWESI_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "ff74de568e25369ea697a0efff379eb70dbc1500317dead2fe00c69f20a33c60",
+      "source_url": "https://doi.org/10.25625/PVFZCE/LF152F"
+    },
+    {
+      "bytes": 3156014,
+      "filename": "2026-06-PVFZCE_SUNDA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "17891b79489183243b198d7cba66b67896b9348c12825831fba72c16871eef90",
+      "source_url": "https://doi.org/10.25625/PVFZCE/1NM99I"
+    },
+    {
+      "bytes": 114340,
+      "filename": "2026-06-PVFZCE_TALKEETNA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "990f679f77c47d0469e6e3021532fb5655401bfa68a5429fe44131e15174d4e4",
+      "source_url": "https://doi.org/10.25625/PVFZCE/SAIGG1"
+    },
+    {
+      "bytes": 3390355,
+      "filename": "2026-06-PVFZCE_TONGA_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "2872918c31b1e7ac8c543339c946b1449231799521fea6fbd5076e601551338b",
+      "source_url": "https://doi.org/10.25625/PVFZCE/UVTRR7"
+    },
+    {
+      "bytes": 4960,
+      "filename": "2026-06-PVFZCE_UDA-MURGAL_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "fab37ec247d74fe5557f13952b6be15cc1c2148e6d5debdca5fc4ff32032800a",
+      "source_url": "https://doi.org/10.25625/PVFZCE/4QMWQY"
+    },
+    {
+      "bytes": 33413,
+      "filename": "2026-06-PVFZCE_WESTERN_ALPS.csv",
+      "retrieved_at": null,
+      "sha256": "cb64208414caac387561fce99854bc6b45e5aa12bb0c92c3bec861432cefa522",
+      "source_url": "https://doi.org/10.25625/PVFZCE/VODSIP"
+    },
+    {
+      "bytes": 137443,
+      "filename": "2026-06-PVFZCE_YAP_ARC.csv",
+      "retrieved_at": null,
+      "sha256": "11a5f9899eb560cfe523163910cdfb0dc9affdb622eaeef558be5105ad704ac8",
+      "source_url": "https://doi.org/10.25625/PVFZCE/QF5PBG"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "GEOROC coordinates remain non-canonical until their datum is verified."
+  ]
+}

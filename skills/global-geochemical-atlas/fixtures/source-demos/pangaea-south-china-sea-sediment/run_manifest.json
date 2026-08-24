@@ -1,0 +1,64 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-12T16:30:00Z",
+  "generation_request": {
+    "analytes": [
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "online",
+    "observations": 40,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 58688,
+      "path": "demo_input.csv",
+      "sha256": "c192058bd3342b46e2774ba00e7ca5f98a6e89d0fcdf210e590592cecc2184fa"
+    },
+    {
+      "bytes": 61180,
+      "path": "sources.jsonl",
+      "sha256": "0ae5098f4a7e72abd6592867b2907f5399ff4ce71634ad9532eafad377bf0db1"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 40,
+    "raw_source_rows": 44,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.1594/PANGAEA.855177",
+    "dataset_version": "2015-11-23",
+    "license": "CC-BY-3.0",
+    "source_id": "pangaea-south-china-sea-sediment",
+    "title": "(Table 2) Trace elements from different sediment cores in the southern China Sea"
+  },
+  "source_files": [
+    {
+      "bytes": 25021,
+      "filename": "PANGAEA.855177.tab",
+      "retrieved_at": "2026-08-12T08:39:17Z",
+      "sha256": "703995078eaa849014e5075d357adaba5f33c76f95e349dc2329e8656047ea5d",
+      "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.855177?format=textfile"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The PANGAEA DOI contains 44 discrete surface-sediment cores; it is not continuous southern China Sea coverage.",
+    "The publisher normalized ppm values to mg/kg; digestion details are not reported in the table and are not inferred."
+  ]
+}

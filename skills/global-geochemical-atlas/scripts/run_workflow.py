@@ -16,13 +16,18 @@ from typing import Any
 
 import build_evidence_bundle as evidence_builder
 import build_interactive_map as map_builder
+import build_sources_and_confidence as source_confidence_builder
 import build_iteration_backlog as backlog_builder
 import standardize_geochemistry as standardizer
 import validate_outputs as output_validator
 
 SUMMARY_VERSION = "global-geochemical-atlas-result-v1"
 TRANSACTION_VERSION = "geochemical-workflow-artifact-transaction-v1"
-MAX_INPUT_BYTES = 200_000_000
+# ``max_records`` is bounded at 200k. A fully evidenced multi-source exchange
+# can legitimately exceed the older 200 MB guard because it retains raw values,
+# methods and row-level provenance. This is generated runtime data, not content
+# checked into the <=250 MB submission repository.
+MAX_INPUT_BYTES = 500_000_000
 
 
 class WorkflowError(RuntimeError):
@@ -127,6 +132,7 @@ def summary_outputs() -> dict[str, str]:
         "record_evidence": "record_evidence.jsonl",
         "qc_report": "qc_report.json",
         "confidence_report": "confidence_report.json",
+        "sources_and_confidence": "sources_and_confidence.json",
         "anomalies": "anomalies.geojson",
         "anomaly_report": "anomaly_report.json",
         "batch_acceptance": "batch_acceptance.csv",
@@ -281,6 +287,21 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "conflicting_evidence", f"evidence packaging failed: {exc}"
         ) from exc
 
+    try:
+        source_confidence = source_confidence_builder.build(
+            outputs["database"],
+            source_manifest_path,
+            outputs["confidence_report"],
+            args.acquisition_manifest,
+            args.source_route,
+        )
+        atomic_json(args.output_dir / "sources_and_confidence.json", source_confidence)
+    except (source_confidence_builder.SourceConfidenceError, OSError) as exc:
+        raise WorkflowError(
+            "conflicting_evidence",
+            f"source/confidence explanation failed: {exc}",
+        ) from exc
+
     samples_path = args.output_dir / "samples.geojson"
     map_path = args.output_dir / "interactive_map.html"
     backlog_path = args.output_dir / "iteration_backlog.csv"
@@ -292,9 +313,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             map_path,
             samples_path,
             max_points=args.max_records,
+            max_embedded_records=min(
+                map_builder.DEFAULT_MAX_EMBEDDED_RECORDS, args.max_records
+            ),
             qc_report_path=outputs["qc_report"],
             confidence_report_path=outputs["confidence_report"],
             source_manifest_path=source_manifest_path,
+            sources_and_confidence_path=(
+                args.output_dir / "sources_and_confidence.json"
+            ),
             anomaly_report_path=outputs["anomaly_report"],
             anomaly_regions_path=outputs["anomaly_regions"],
             spatial_anomaly_report_path=outputs["spatial_anomaly_report"],
@@ -473,6 +500,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--acquisition-manifest",
         type=Path,
         help="Optional D1 run manifest that binds the input CSV and --evidence-jsonl hashes",
+    )
+    parser.add_argument(
+        "--source-route",
+        type=Path,
+        help="Optional request-specific D1 source_route.json for an admitted/routed/review portfolio",
     )
     parser.add_argument(
         "--batch-qc-input",

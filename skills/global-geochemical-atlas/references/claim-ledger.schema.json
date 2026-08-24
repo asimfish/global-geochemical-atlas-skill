@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:claim-ledger:v1",
+  "title": "Result-to-claim ledger",
+  "description": "Produced by scripts/claim_ledger.py. Every reportable number in the final answer must trace to a claim in this ledger. Integrity grades are recomputed from evidence on every invocation: pass (evidence re-verified), warn_scope (true only together with the scope sentence) or fail_unsupported (evidence missing or recompute mismatch). A scoped claim narrows; it must not silently widen.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ledger_schema", "ledger_version", "run_dir", "claims", "summary", "principle"],
+  "properties": {
+    "ledger_schema": {"const": "claim-ledger.schema.json"},
+    "ledger_version": {"type": "string", "minLength": 1},
+    "run_dir": {"type": "string", "minLength": 1},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id", "statement", "value", "evidence", "integrity"],
+        "properties": {
+          "claim_id": {"type": "string", "minLength": 1},
+          "statement": {"type": "string", "minLength": 1},
+          "value": {},
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "pointer"],
+            "properties": {
+              "file": {"type": "string", "minLength": 1},
+              "pointer": {"type": "string", "minLength": 1},
+              "sha256": {"type": ["string", "null"]}
+            }
+          },
+          "recompute": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["method", "value", "match"],
+            "properties": {
+              "method": {"type": "string", "minLength": 1},
+              "value": {},
+              "match": {"type": "boolean"}
+            }
+          },
+          "integrity": {"enum": ["pass", "warn_scope", "fail_unsupported"]},
+          "scope": {"type": ["string", "null"]},
+          "scope_keywords": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pass", "warn_scope", "fail_unsupported"],
+      "properties": {
+        "pass": {"type": "integer", "minimum": 0},
+        "warn_scope": {"type": "integer", "minimum": 0},
+        "fail_unsupported": {"type": "integer", "minimum": 0}
+      }
+    },
+    "principle": {"type": "string", "minLength": 1}
+  }
+}

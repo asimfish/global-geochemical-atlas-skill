@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Mapping
 from typing import Any
 
@@ -16,6 +17,13 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "sample_type": "rock_whole_rock",
         "sample_type_mapping_status": "dataset_constant",
         "method_missing_reason": "not_reported",
+        "citation_scope": "observation",
+    },
+    "georoc-convergent-margins": {
+        "sample_type_raw": "WR",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_missing_reason": "winning_method_not_encoded_in_precompiled_member",
         "citation_scope": "observation",
     },
     "georoc-antarctica-intraplate": {
@@ -138,6 +146,12 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "result_row_analytical_method_fields",
         "citation_scope": "observation",
     },
+    "australia-ngsa": {
+        "sediment_environment": "outlet_catchment",
+        "method_scope": "dataset_parameter",
+        "method_assignment_basis": "official_file_header_and_method_key",
+        "citation_scope": "dataset",
+    },
     "australia-ngsa-mercury": {
         "sediment_environment": "outlet_catchment",
         "method_scope": "dataset",
@@ -166,6 +180,40 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_assignment_basis": "article_element_method_mapping",
         "citation_scope": "dataset",
     },
+    "earthchem-dehailonggang-rock": {
+        "sample_type_raw": "whole rock",
+        "sample_type": "rock_whole_rock",
+        "sample_type_mapping_status": "exact",
+        "method_scope": "dataset_parameter",
+        "method_assignment_basis": "workbook_method_code_to_parameter_join",
+        "citation_scope": "dataset",
+    },
+    "4tu-northern-china-sediment": {
+        "method_scope": "dataset_parameter",
+        "method_assignment_basis": "publisher_readme_element_method_mapping",
+        "citation_scope": "dataset",
+    },
+    "pangaea-brasol-ne-brazil-soil": {
+        "method_scope": "dataset_parameter",
+        "method_assignment_basis": "publisher_metadata_and_selected_method_column",
+        "citation_scope": "dataset",
+    },
+    "figshare-yangtze-basin-soil-heavy-metals": {
+        "sample_type_raw": "literature-compiled soil occurrence",
+        "sample_type": "soil_literature_occurrence",
+        "sample_type_mapping_status": "dataset_constant",
+        "method_missing_reason": "publisher_compilation_omits_row_method",
+        "citation_scope": "dataset",
+    },
+    "eidc-ningbo-soil": {
+        "sample_type_raw": "composite topsoil 0-20 cm",
+        "sample_type": "soil_topsoil",
+        "sample_type_mapping_status": "dataset_constant",
+        "soil_horizon": "topsoil_0_20cm",
+        "method_scope": "dataset_analyte",
+        "method_assignment_basis": "publisher_supporting_document_and_csv_method_suffix",
+        "citation_scope": "dataset",
+    },
     "gemas-europe": {
         "method_scope": "dataset_analysis_group",
         "method_assignment_basis": "registered_AR_or_XRF_method_contract",
@@ -177,6 +225,39 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "sample_type_mapping_status": "dataset_constant",
         "sediment_environment": "river",
         "method_missing_reason": "workbook_reports_no_analytical_method",
+        "citation_scope": "dataset",
+    },
+    "pangaea-east-china-sea-clay": {
+        "method_scope": "parameter",
+        "method_assignment_basis": "pangaea_parameter_method_metadata",
+        "citation_scope": "dataset",
+    },
+    "pangaea-south-china-sea-sediment": {
+        "sample_type_raw": "marine surface sediment",
+        "sample_type": "sediment_marine_surface",
+        "sample_type_mapping_status": "dataset_constant",
+        "sediment_environment": "marine",
+        "method_scope": "parameter",
+        "method_assignment_basis": "pangaea_parameter_method_metadata",
+        "citation_scope": "dataset",
+    },
+    "pangaea-barents-c-horizon-soil": {
+        "sample_type_raw": "C-horizon soil",
+        "sample_type": "soil_c_horizon",
+        "sample_type_mapping_status": "dataset_constant",
+        "soil_horizon": "C",
+        "method_scope": "parameter",
+        "method_assignment_basis": "pangaea_parameter_method_metadata",
+        "citation_scope": "dataset",
+    },
+    "pangaea-amazonas-soil": {
+        "method_scope": "parameter",
+        "method_assignment_basis": "pangaea_parameter_method_metadata",
+        "citation_scope": "dataset",
+    },
+    "pangaea-batagay-soil": {
+        "method_scope": "parameter",
+        "method_assignment_basis": "pangaea_parameter_method_metadata",
         "citation_scope": "dataset",
     },
 }
@@ -204,6 +285,28 @@ class SemanticError(ValueError):
 
 def _text(value: Any) -> str:
     return str(value or "").strip()
+
+
+def _official_source_url(
+    row: Mapping[str, Any],
+    evidence: Mapping[str, Any],
+    registry_entry: Mapping[str, Any],
+) -> str:
+    """Choose an evidence-backed official URL without corrupting DOI URLs."""
+
+    for value in (row.get("official_source_url"), evidence.get("source_file_url")):
+        text = _text(value)
+        if text.startswith(("https://", "http://")):
+            return text
+    doi = _text(evidence.get("dataset_doi") or registry_entry.get("dataset_doi"))
+    if doi.casefold().startswith("https://doi.org/"):
+        return doi
+    if doi.casefold().startswith("doi:"):
+        doi = doi[4:].strip()
+    if re.fullmatch(r"10\.\d{4,9}/\S+", doi, flags=re.IGNORECASE):
+        return f"https://doi.org/{doi}"
+    landing_page = _text(registry_entry.get("landing_page"))
+    return landing_page if landing_page.startswith(("https://", "http://")) else ""
 
 
 def _first(values: Any) -> str:
@@ -272,7 +375,7 @@ def _sample_semantics(
             water_body_type=canonical.removeprefix("water_"),
             water_fraction=_text(evidence.get("water_fraction")),
         )
-    elif source_id == "australia-ngsa-mercury":
+    elif source_id in {"australia-ngsa", "australia-ngsa-mercury"}:
         raw = _text(evidence.get("reported_depth"))
         mapped = {
             "TOS": "sediment_outlet_top",
@@ -284,6 +387,21 @@ def _sample_semantics(
             sample_type_raw=raw,
             sample_type=mapped,
             sample_type_mapping_status="exact",
+        )
+    elif source_id == "4tu-northern-china-sediment":
+        raw = _text(evidence.get("sample_type"))
+        mapped = {
+            "surface catchment, fluvial and/or alluvial sediment at approximately 25 cm depth": "sediment_surface_catchment_fluvial_alluvial",
+            "last glacial loess, upper L1 Quaternary loess layer": "sediment_last_glacial_loess",
+            "present interglacial sediment, S0 Quaternary paleosol layer": "sediment_present_interglacial_paleosol",
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped 4TU sediment type: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped,
+            sample_type_mapping_status="exact",
+            sediment_environment=_text(evidence.get("sediment_environment")),
         )
     elif source_id == "tpdc-china-mountain-soil":
         raw = _text(evidence.get("reported_horizon"))
@@ -316,6 +434,79 @@ def _sample_semantics(
             soil_horizon_raw=raw,
             soil_horizon=mapped[1],
         )
+    elif source_id == "pangaea-east-china-sea-clay":
+        raw = _text(evidence.get("sample_fraction"))
+        mapped = {
+            "Bulk": "sediment_clay_fraction_bulk",
+            "Residue": "sediment_clay_fraction_leach_residue",
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped East China Sea clay fraction: {raw}")
+        event = _text(evidence.get("event"))
+        if event.startswith(("331-", "ECS-")):
+            sediment_environment = "marine"
+        elif event.startswith(("CJ-", "TWR-")):
+            sediment_environment = "river"
+        else:
+            raise SemanticError(
+                f"unmapped East China Sea clay event environment: {event}"
+            )
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped,
+            sample_type_mapping_status="exact",
+            sediment_environment=sediment_environment,
+        )
+    elif source_id == "pangaea-amazonas-soil":
+        raw = _text(evidence.get("depth_class"))
+        mapped = {
+            "TOP": ("soil_topsoil", "topsoil_0_20cm"),
+            "BOT": ("soil_subsoil", "subsoil_30_50cm"),
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped Amazonas depth class: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped[0],
+            sample_type_mapping_status="exact",
+            soil_horizon_raw=raw,
+            soil_horizon=mapped[1],
+        )
+    elif source_id == "pangaea-brasol-ne-brazil-soil":
+        raw = _text(evidence.get("layer"))
+        mapped = {
+            "ORG": ("soil_organic_litter", "organic_litter"),
+            "TOP": ("soil_topsoil", "topsoil_0_20cm"),
+            "BOT": ("soil_subsoil", "subsoil_30_50cm"),
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped BraSol layer: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped[0],
+            sample_type_mapping_status="exact",
+            soil_horizon_raw=raw,
+            soil_horizon=mapped[1],
+        )
+    elif source_id == "pangaea-batagay-soil":
+        raw = _text(evidence.get("sample_type")) or "not reported"
+        mapped = {
+            "Soil": "soil_profile",
+            "Inclusions in Ice Wedge": "soil_inclusion_in_ice_wedge",
+            "Ground particles included in ice, left after thawed ice water remove": "soil_ground_particles_from_thawed_ice",
+            "not reported": "soil_material_unspecified",
+        }.get(raw)
+        if mapped is None:
+            raise SemanticError(f"unmapped Batagay sample type: {raw}")
+        result.update(
+            sample_type_raw=raw,
+            sample_type=mapped,
+            sample_type_mapping_status="exact"
+            if raw != "not reported"
+            else "source_missing_mapped_to_unspecified",
+            soil_horizon_raw=_text(evidence.get("soil_horizon")),
+            soil_horizon=_text(evidence.get("soil_horizon")),
+        )
     return result
 
 
@@ -333,7 +524,11 @@ def _geographic_semantics(
         "map_sheet": _text(row.get("map_sheet")),
         "cruise_track": _text(row.get("cruise_track")),
     }
-    if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
+    if source_id in {
+        "georoc-archaean",
+        "georoc-convergent-margins",
+        "georoc-antarctica-intraplate",
+    }:
         result["geographic_context_raw"] = result["geographic_context_raw"] or legacy
     elif source_id == "geotraces-idp2025":
         result["cruise_track"] = _text(evidence.get("cruise")) or result["cruise_track"]
@@ -342,6 +537,12 @@ def _geographic_semantics(
             for part in (_text(evidence.get("cruise")), _text(evidence.get("station")))
             if part
         )
+    elif source_id == "earthchem-dehailonggang-rock":
+        result["survey_area"] = "Dehailonggang complex, East Kunlun Orogen"
+        result["geographic_context_raw"] = legacy or result["survey_area"]
+    elif source_id == "4tu-northern-china-sediment":
+        result["survey_area"] = _text(evidence.get("survey_area"))
+        result["geographic_context_raw"] = result["survey_area"]
     elif source_id == "japan-gsj-geochemical-map":
         result["map_sheet"] = (
             _text(evidence.get("map_sheet")) or result["map_sheet"] or legacy
@@ -355,6 +556,9 @@ def _geographic_semantics(
             )
             if part
         )
+    elif source_id == "eidc-ningbo-soil":
+        result["survey_area"] = "Ningbo Zhangxi catchment"
+        result["geographic_context_raw"] = result["survey_area"]
     elif source_id == "pangaea-north-africa-soil":
         result["survey_area"] = (
             _text(evidence.get("potential_source_area"))
@@ -364,7 +568,7 @@ def _geographic_semantics(
         result["geographic_context_raw"] = (
             _text(evidence.get("reported_location")) or result["geographic_context_raw"]
         )
-    elif source_id == "australia-ngsa-mercury":
+    elif source_id in {"australia-ngsa", "australia-ngsa-mercury"}:
         result["survey_area"] = _text(evidence.get("state")) or result["survey_area"]
         result["geographic_context_raw"] = " / ".join(
             part
@@ -397,6 +601,73 @@ def _geographic_semantics(
             for part in (
                 result["survey_area"],
                 _text(evidence.get("sample_label")),
+            )
+            if part
+        )
+    elif source_id == "pangaea-east-china-sea-clay":
+        result["cruise_track"] = _text(evidence.get("event")) or result["cruise_track"]
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                _text(evidence.get("event")),
+                _text(evidence.get("sample_description")),
+            )
+            if part
+        )
+    elif source_id == "pangaea-south-china-sea-sediment":
+        result["cruise_track"] = _text(evidence.get("event")) or result["cruise_track"]
+        result["geographic_context_raw"] = _text(evidence.get("event"))
+    elif source_id == "pangaea-barents-c-horizon-soil":
+        result["survey_area"] = "central Barents region"
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                "central Barents region",
+                _text(evidence.get("sample_label")),
+            )
+            if part
+        )
+    elif source_id == "pangaea-amazonas-soil":
+        result["survey_area"] = "Amazonas, Brazil"
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                _text(evidence.get("event")),
+                _text(evidence.get("region")),
+                _text(evidence.get("land_use")),
+            )
+            if part
+        )
+    elif source_id == "pangaea-brasol-ne-brazil-soil":
+        result["survey_area"] = "northeastern Brazil transects"
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                result["survey_area"],
+                _text(evidence.get("site_id")),
+                _text(evidence.get("biome")),
+                _text(evidence.get("land_use")),
+            )
+            if part
+        )
+    elif source_id == "figshare-yangtze-basin-soil-heavy-metals":
+        result["survey_area"] = "Yangtze River Basin, China"
+        hierarchy = evidence.get("location_hierarchy")
+        result["geographic_context_raw"] = " / ".join(
+            [result["survey_area"]]
+            + [
+                _text(item)
+                for item in (hierarchy if isinstance(hierarchy, list) else [])
+                if _text(item)
+            ]
+        )
+    elif source_id == "pangaea-batagay-soil":
+        result["survey_area"] = "Batagay megaslump, North Yakutia, Russia"
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                result["survey_area"],
+                _text(evidence.get("sampling_site")),
             )
             if part
         )
@@ -437,10 +708,11 @@ def enrich_row(
         or _text(evidence.get("dataset_version")),
         source_file=_text(row.get("source_file")) or _text(evidence.get("source_file")),
         source_row=_text(row.get("source_row")) or _text(evidence.get("source_row")),
+        official_source_url=_official_source_url(row, evidence, registry_entry),
         file_sha256=_text(row.get("file_sha256"))
         or _text(evidence.get("source_file_sha256")),
     )
-    if source_id == "georoc-archaean":
+    if source_id in {"georoc-archaean", "georoc-convergent-margins"}:
         coordinate_evidence = evidence.get("coordinate_evidence")
         coordinate_evidence = (
             coordinate_evidence if isinstance(coordinate_evidence, Mapping) else {}
@@ -545,7 +817,11 @@ def enrich_row(
             else "true"
         ),
         redistribution_status="not_evaluated_for_project_output",
-        terms_verified_at=registry_verified_at,
+        # The registry-wide timestamp advances whenever any source is
+        # reverified.  Preserve an already-bound row timestamp so adding an
+        # unrelated source does not rewrite every checked-in fixture and its
+        # record IDs; new rows receive the current registry timestamp.
+        terms_verified_at=_text(row.get("terms_verified_at")) or registry_verified_at,
     )
     result["upstream_primary_source_id"] = ""
     return result

@@ -1,0 +1,51 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-15T07:00:00Z",
+  "cache_hit_count": 1,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "1998-01-01",
+  "expected_target_observation_count": 2419,
+  "files": [
+    {
+      "bytes": 407662,
+      "cache_status": "cache_hit",
+      "file_id": "dataset-table",
+      "filename": "PANGAEA.56227.tab",
+      "sha256": "e22093a40b9c68d25398f2322b68ae7af9b00e331483ae8a3927fc2c13be3d30"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-12T16:30:00Z",
+  "last_successful_parse_at": "2026-08-15T07:00:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 606,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_field_count": 10,
+  "raw_schema_fields": [
+    "Depth sed [m]",
+    "Description",
+    "Latitude",
+    "Longitude",
+    "Sample label",
+    "_dataset_version",
+    "_sample_type",
+    "_source_crs",
+    "_source_file",
+    "_target_observations"
+  ],
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "pangaea-barents-c-horizon-soil",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 2419,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

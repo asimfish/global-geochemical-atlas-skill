@@ -1,0 +1,16 @@
+{
+  "as_of": "2026-08-15T07:00:00Z",
+  "citation_scope_counts": {
+    "dataset": 6069
+  },
+  "citation_text_count": 6069,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_doi": "10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0",
+  "dataset_doi_present": true,
+  "dataset_version": "4TU-Figshare-v1-2020-07-28",
+  "observation_denominator": 6069,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "publication_doi_observation_count": 0,
+  "source_id": "4tu-northern-china-sediment",
+  "upstream_primary_source_observation_count": 0
+}

@@ -1,0 +1,63 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-12T07:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "Cr",
+      "Cu",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "online",
+    "observations": 32,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 50963,
+      "path": "demo_input.csv",
+      "sha256": "ee1c1b47a41a2d6ec94b8d42c791bf959bffdc182f171a87fc3e0810e64ef34c"
+    },
+    {
+      "bytes": 54784,
+      "path": "sources.jsonl",
+      "sha256": "f877be1ac18daa685070998a9009b5225b9c1ee1f32d69ff5ac83ca3e6a4beab"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 32,
+    "raw_source_rows": 98,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.1594/PANGAEA.856762",
+    "dataset_version": "2016-01-11",
+    "license": "CC-BY-3.0",
+    "source_id": "pangaea-east-china-sea-clay",
+    "title": "(Appendix A) Concentrations of major oxides and trace elements in clay from different IODP Holes of 331-C0013, 331-C0017, East China sea shelf and different Taiwan rivers"
+  },
+  "source_files": [
+    {
+      "bytes": 36898,
+      "filename": "PANGAEA.856762.tab",
+      "retrieved_at": "2026-08-11T23:03:38Z",
+      "sha256": "b70b0d566d17d76c16e2bcad1f0ec176cca7c0efccf68243fb9ea28aac55d5e2",
+      "source_url": "https://doi.pangaea.de/10.1594/PANGAEA.856762?format=textfile"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The PANGAEA DOI mixes East China Sea shelf, Okinawa Trough, Yangtze River and Taiwan river events; it is not continuous regional coverage.",
+    "Bulk and leached-residue rows describe the same physical sample and keep separate measurement bases; the publisher XRD method label is preserved without inference."
+  ]
+}

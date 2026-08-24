@@ -214,7 +214,7 @@ def run_benchmark(
             "measured_runs": runs,
             "timeout_seconds_per_run": timeout_seconds,
             "clock": "time.perf_counter",
-            "validation": "fifteen-file validate_outputs contract after every run",
+            "validation": "sixteen-file validate_outputs contract after every run",
         },
         "timing_seconds": {
             "median": round(statistics.median(durations), 6),

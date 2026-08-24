@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:declarative-adapter-spec:v1",
+  "title": "Declarative in-run adapter specification",
+  "description": "A hash-bound, license-gated ingestion spec that turns a newly discovered tabular source into a provided-input package (input.csv + record_evidence.jsonl + acquisition manifest) without modifying the frozen skill snapshot. Specs are run inputs, not skill code; every acquisition is fail-closed on license, hash, unit and coordinate gates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version", "source_id", "title", "official_source_url",
+    "dataset_version", "license", "download", "format", "layout",
+    "medium", "mapping", "approval_state"
+  ],
+  "properties": {
+    "spec_version": {"const": "declarative-adapter-spec-v1"},
+    "source_id": {
+      "type": "string",
+      "pattern": "^spec-[a-z0-9][a-z0-9-]{2,62}$",
+      "description": "Namespaced so declarative-channel records can never impersonate a registered adapter."
+    },
+    "title": {"type": "string", "minLength": 3},
+    "official_source_url": {"type": "string", "pattern": "^https://"},
+    "dataset_doi": {"type": ["string", "null"]},
+    "dataset_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Publisher version or an explicit 'accessed YYYY-MM-DD' statement; required because versionless evidence chains fail closed."
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "evidence_url"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "SPDX id or LicenseRef-*; must be in the engine's frozen open-license allowlist or the acquisition fails closed."
+        },
+        "evidence_url": {"type": "string", "pattern": "^https://"}
+      }
+    },
+    "download": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "max_bytes"],
+      "properties": {
+        "url": {"type": "string", "pattern": "^https://"},
+        "max_bytes": {"type": "integer", "minimum": 1, "maximum": 2147483648},
+        "expected_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "When null the engine pins the first fetched hash into the receipt and evidence; a later mismatch fails closed."
+        }
+      }
+    },
+    "format": {"enum": ["csv", "tsv", "json_records"]},
+    "layout": {"enum": ["long", "wide"]},
+    "encoding": {"type": "string", "default": "utf-8"},
+    "medium": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "constant": {"enum": ["rock", "soil", "sediment", "water"]},
+        "column": {"type": "string"},
+        "value_map": {
+          "type": "object",
+          "additionalProperties": {"enum": ["rock", "soil", "sediment", "water"]}
+        }
+      }
+    },
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "long_format": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["analyte_column", "value_column"],
+          "properties": {
+            "analyte_column": {"type": "string"},
+            "value_column": {"type": "string"},
+            "unit_column": {"type": "string"},
+            "unit_constant": {"type": "string"}
+          }
+        },
+        "wide_observations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["analyte", "value_column", "unit_constant"],
+            "properties": {
+              "analyte": {"type": "string", "minLength": 1},
+              "value_column": {"type": "string", "minLength": 1},
+              "unit_constant": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "latitude_column": {"type": ["string", "null"]},
+        "longitude_column": {"type": ["string", "null"]},
+        "sample_id_column": {"type": ["string", "null"]},
+        "method_column": {"type": ["string", "null"]},
+        "method_constant": {"type": ["string", "null"]}
+      }
+    },
+    "coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "crs_declared": {
+          "type": ["string", "null"],
+          "description": "Only set when the publisher explicitly declares the CRS; the evidence_url below must show it. Null keeps coordinates reported-only."
+        },
+        "crs_evidence_url": {"type": ["string", "null"]}
+      }
+    },
+    "row_filters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["column", "op", "value"],
+        "properties": {
+          "column": {"type": "string"},
+          "op": {"enum": ["equals", "in", "not_null"]},
+          "value": {}
+        }
+      }
+    },
+    "target_gap": {
+      "type": ["object", "null"],
+      "description": "Optional linkage back to the d1_repair_queue task or action group this spec answers.",
+      "additionalProperties": true
+    },
+    "approval_state": {
+      "enum": ["draft", "approved_by_operator", "auto_candidate_open_license"],
+      "description": "The engine only executes approved_by_operator, or auto_candidate_open_license when invoked with --allow-auto-approved."
+    },
+    "notes": {"type": ["string", "null"]}
+  }
+}

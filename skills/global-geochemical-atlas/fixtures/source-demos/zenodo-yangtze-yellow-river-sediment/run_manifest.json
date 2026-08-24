@@ -1,0 +1,64 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-09T00:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 73213,
+      "path": "demo_input.csv",
+      "sha256": "50141549084ab6706452f6600590e6b9864934fb5b50f7cdeb5dbdf52a0647fa"
+    },
+    {
+      "bytes": 102348,
+      "path": "sources.jsonl",
+      "sha256": "22e8b5955ff05043936fc112979bb6eb26ef350d9be9f3b700739e9d474a32c1"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 93,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.5281/zenodo.7098563",
+    "dataset_version": "zenodo-record-7098563-rev2-2022-09-21",
+    "license": "CC-BY-4.0",
+    "source_id": "zenodo-yangtze-yellow-river-sediment",
+    "title": "Evaluation of Grain size, Amorphous Fe-Mn Oxides, and Chemical Weathering Effects on Geochemical Identification of the Yangtze River and Yellow River Sediments"
+  },
+  "source_files": [
+    {
+      "bytes": 76596,
+      "filename": "Data Set S2.xlsx",
+      "retrieved_at": "2026-08-09T18:07:27Z",
+      "sha256": "413f54f6544967d1d96b9eacfbeae41ba410a8c4b0375bdfaabc1293fd6fadd2",
+      "source_url": "https://zenodo.org/api/records/7098563/files/Data%20Set%20S2.xlsx/content"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "Data Set S2 publishes no sampling coordinates; records stay database-only and are excluded from every map layer.",
+    "Values are leach-residual size-fraction analyses of Yangtze and Yellow River sediments, not bulk-sediment survey coverage."
+  ]
+}

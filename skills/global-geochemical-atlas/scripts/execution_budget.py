@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Monotonic global execution budgets for the official 900-second task limit."""
+"""Monotonic execution budgets for evidence-first research runs.
+
+The competition harness limit is 900 seconds.  The task planner reserves
+three minutes of that envelope for Agent setup and result hand-off, while the
+direct research controller retains an explicitly selected 12-hour ceiling for
+operator-authorized studies.  Time is a safety boundary, not a substitute for
+the delivery gates.
+"""
 
 from __future__ import annotations
 
@@ -8,8 +15,11 @@ import time
 from collections.abc import Callable
 
 
-OFFICIAL_TASK_LIMIT_SECONDS = 900.0
-DEFAULT_INTERNAL_BUDGET_SECONDS = 840.0
+OFFICIAL_TASK_LIMIT_SECONDS = 15 * 60.0
+OFFICIAL_HARNESS_RESERVE_SECONDS = 3 * 60.0
+EXTENDED_RESEARCH_LIMIT_SECONDS = 12 * 60 * 60.0
+DEFAULT_INTERNAL_BUDGET_SECONDS = 30 * 60.0
+MAX_INTERNAL_BUDGET_SECONDS = EXTENDED_RESEARCH_LIMIT_SECONDS
 
 
 class ExecutionBudgetError(RuntimeError):
@@ -29,10 +39,10 @@ class ExecutionBudget:
             isinstance(total_seconds, bool)
             or not isinstance(total_seconds, (int, float))
             or not math.isfinite(float(total_seconds))
-            or not 1 <= float(total_seconds) <= DEFAULT_INTERNAL_BUDGET_SECONDS
+            or not 1 <= float(total_seconds) <= MAX_INTERNAL_BUDGET_SECONDS
         ):
             raise ExecutionBudgetError(
-                f"total execution budget must be between 1 and {DEFAULT_INTERNAL_BUDGET_SECONDS:g} seconds"
+                f"total execution budget must be between 1 and {MAX_INTERNAL_BUDGET_SECONDS:g} seconds"
             )
         self._clock = clock
         self.total_seconds = float(total_seconds)

@@ -13,9 +13,106 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-06T10:35:00Z",
-  "source_count": 54,
+  "scored_at": "2026-08-16T00:00:00Z",
+  "source_count": 66,
   "sources": {
+    "4tu-northern-china-sediment": {
+      "access_status": "open",
+      "attribution_note": "The official Figshare API declares CC0. Dataset DOI, author and repository identity are retained as scientific attribution.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/4tu-northern-china-sediment-20260816T000000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://data.4tu.nl/articles/dataset/Raw_data_of_Geochemical_Compositions_of_Surface_Sediments_in_Northern_China/12703148",
+            "https://api.figshare.com/v2/articles/12703148",
+            "https://ndownloader.figshare.com/files/24056474",
+            "https://ndownloader.figshare.com/files/24056480",
+            "https://ndownloader.figshare.com/files/24056477",
+            "https://doi.org/10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/4tu-northern-china-sediment-20260816T000000Z.json"
+          ],
+          "note": "The complete observation denominator is reconciled to documented methods or one explicit publisher-level missing reason, and QC scope is bound to a content-addressed evidence file.",
+          "status": "verified",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://data.4tu.nl/articles/dataset/Raw_data_of_Geochemical_Compositions_of_Surface_Sediments_in_Northern_China/12703148",
+            "https://api.figshare.com/v2/articles/12703148",
+            "https://ndownloader.figshare.com/files/24056474",
+            "https://ndownloader.figshare.com/files/24056480",
+            "https://ndownloader.figshare.com/files/24056477",
+            "https://doi.org/10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0",
+            "doi:10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/4tu-northern-china-sediment-20260816T000000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 4TU-Figshare-v1-2020-07-28",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 90.0,
+      "source_id": "4tu-northern-china-sediment",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "afsis-phase-i-wet-chemistry": {
       "access_status": "open",
       "attribution_note": "Version 2.0 terms specify CC BY 4.0; retain dataset and article citations.",
@@ -289,32 +386,30 @@
     },
     "australia-ngsa": {
       "access_status": "open",
-      "attribution_note": "Geoscience Australia material is generally CC BY 4.0, but each selected data product must be checked for third-party exceptions.",
+      "attribution_note": "The 2011 CSV itself states CC BY 3.0 Australia. The current portal displays CC BY 4.0 International; the registry conservatively retains the contemporaneous file-level licence and records the version difference.",
       "conflicts": [],
-      "evidence_tier": "D",
+      "evidence_tier": "A",
       "missing_dimensions": [
-        "file_record_integrity",
-        "schema_semantics",
-        "method_qc_metadata",
-        "adapter_reproducibility",
         "human_review"
       ],
-      "research_use_status": "unknown",
+      "research_use_status": "attribution_required",
       "score_denominator": 100,
       "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
       "source_evidence_dimensions": {
         "adapter_reproducibility": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No callable adapter and frozen parsing contract are registered.",
-          "status": "missing",
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-20260812T174523Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
           "weight": 10
         },
         "file_record_integrity": {
-          "awarded_points": 0.0,
+          "awarded_points": 15.0,
           "evidence": [],
-          "note": "No frozen file or archive inventory is registered.",
-          "status": "missing",
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
           "weight": 15
         },
         "human_review": {
@@ -327,52 +422,63 @@
         "identity_publisher": {
           "awarded_points": 10.0,
           "evidence": [
-            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
-            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
-            "https://www.ga.gov.au/copyright"
+            "https://pid.geoscience.gov.au/dataset/ga/82869",
+            "https://ecat.ga.gov.au/geonetwork/srv/api/records/0dc4a02b-21e9-9b28-e053-12a3070af396",
+            "https://doi.org/10.11636/Record.2011.020",
+            "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv",
+            "https://www.ga.gov.au/bigobj/GA10307.pdf",
+            "https://epsg.io/1150"
           ],
           "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
           "status": "verified",
           "weight": 10
         },
         "method_qc_metadata": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified record-level method or QC inventory is available.",
-          "status": "missing",
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-20260812T174523Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
           "weight": 10
         },
         "provenance": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [
-            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey",
-            "https://www.ga.gov.au/about/projects/resources/national-geochemical-survey/atlas",
-            "https://www.ga.gov.au/copyright"
+            "https://pid.geoscience.gov.au/dataset/ga/82869",
+            "https://ecat.ga.gov.au/geonetwork/srv/api/records/0dc4a02b-21e9-9b28-e053-12a3070af396",
+            "https://doi.org/10.11636/Record.2011.020",
+            "https://d28rz98at9flks.cloudfront.net/82869/Rec2011_020_110706.csv",
+            "https://www.ga.gov.au/bigobj/GA10307.pdf",
+            "https://epsg.io/1150",
+            "doi:10.11636/Record.2011.020"
           ],
-          "note": "Dataset-level provenance is known, but record-level locators have not been verified.",
-          "status": "partial",
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
           "weight": 15
         },
         "schema_semantics": {
-          "awarded_points": 0.0,
-          "evidence": [],
-          "note": "No verified field mapping to the canonical schema is recorded.",
-          "status": "missing",
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/australia-ngsa-20260812T174523Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
           "weight": 15
         },
         "version_snapshot": {
-          "awarded_points": 7.5,
+          "awarded_points": 15.0,
           "evidence": [],
-          "note": "A versioning route exists, but this catalog entry does not yet pin one concrete release.",
-          "status": "partial",
+          "note": "A concrete publisher version is pinned: 2011-07-06",
+          "status": "verified",
           "weight": 15
         }
       },
-      "source_evidence_score": 25.0,
+      "source_evidence_score": 85.0,
       "source_id": "australia-ngsa",
-      "use_mode": "discovery",
+      "use_mode": "normalized_analysis",
       "use_mode_limitations": [
-        "research_use_status=unknown"
+        "30-record human review is incomplete"
       ]
     },
     "australia-ngsa-mercury": {
@@ -999,6 +1105,99 @@
         "research_use_status=unknown"
       ]
     },
+    "earthchem-dehailonggang-rock": {
+      "access_status": "open",
+      "attribution_note": "EarthChem dataset page declares CC BY-SA 4.0; retain author, DOI and share-alike terms for redistributed derivatives.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://ecl.earthchem.org/view.php?id=3338",
+            "https://doi.org/10.60520/IEDA/113338",
+            "https://creativecommons.org/licenses/by-sa/4.0/"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://ecl.earthchem.org/view.php?id=3338",
+            "https://doi.org/10.60520/IEDA/113338",
+            "https://creativecommons.org/licenses/by-sa/4.0/",
+            "doi:10.60520/IEDA/113338"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/earthchem-dehailonggang-rock-20260815T070000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: EarthChem Library dataset 3338 version 1.0 (2024)",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "earthchem-dehailonggang-rock",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "earthchem-library": {
       "access_status": "open",
       "attribution_note": "Depositors choose among CC0, CC BY, CC BY-SA and non-commercial Creative Commons licences; filter at dataset level.",
@@ -1260,6 +1459,91 @@
         "record integrity or schema semantics are not sufficiently evidenced"
       ]
     },
+    "eidc-ningbo-soil": {
+      "access_status": "open",
+      "attribution_note": "Official RO-Crate metadata declares OGL-UK-3.0.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://catalogue.ceh.ac.uk/id/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+            "https://doi.org/10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+            "https://doi.org/10.1007/s12403-018-0290-1"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://catalogue.ceh.ac.uk/id/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+            "https://doi.org/10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+            "https://doi.org/10.1007/s12403-018-0290-1",
+            "doi:10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2019-09-02",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "eidc-ningbo-soil",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "emodnet-chemistry": {
       "access_status": "open",
       "attribution_note": "CDI records include both freely downloadable and restricted data; harmonised ERDDAP collections are compiled from unrestricted measurements but still require originator lineage.",
@@ -1345,6 +1629,89 @@
       "use_mode": "discovery",
       "use_mode_limitations": [
         "research_use_status=permission_required"
+      ]
+    },
+    "figshare-yangtze-basin-soil-heavy-metals": {
+      "access_status": "open",
+      "attribution_note": "Figshare declares CC BY 4.0; retain dataset DOI, authors and linked article.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://figshare.com/articles/dataset/22785971",
+            "https://doi.org/10.1002/gdj3.280"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://figshare.com/articles/dataset/22785971",
+            "https://doi.org/10.1002/gdj3.280",
+            "doi:10.6084/m9.figshare.22785971.v1"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: figshare-v1-2023-05-10",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "figshare-yangtze-basin-soil-heavy-metals",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
       ]
     },
     "finland-gtk-geochemistry": {
@@ -2453,6 +2820,99 @@
       },
       "source_evidence_score": 85.0,
       "source_id": "georoc-archaean",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "georoc-convergent-margins": {
+      "access_status": "open",
+      "attribution_note": "Retain GEOROC and original publication citations.",
+      "conflicts": [
+        "human_review"
+      ],
+      "evidence_tier": "A",
+      "missing_dimensions": [],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "The dynamic snapshot records archive hash and complete member hashes.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "Human review source_id does not match the source being scored.",
+          "status": "conflict",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FPVFZCE",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://georoc.eu/georoc/precompiled/metadata.php?doi=10.25625%2FPVFZCE",
+            "https://georoc.eu/georoc/precompiled/",
+            "https://georoc.eu/georoc/cite.asp",
+            "doi:10.25625/PVFZCE"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json"
+          ],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 12.0",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "georoc-convergent-margins",
       "use_mode": "normalized_analysis",
       "use_mode_limitations": [
         "30-record human review is incomplete"
@@ -3717,6 +4177,91 @@
         "research_use_status=unknown"
       ]
     },
+    "pangaea-amazonas-soil": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA records CC BY 4.0; retain dataset and related-publication citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.968463",
+            "https://doi.org/10.1594/PANGAEA.968463",
+            "https://doi.org/10.1016/j.gexplo.2019.106433"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.968463",
+            "https://doi.org/10.1594/PANGAEA.968463",
+            "https://doi.org/10.1016/j.gexplo.2019.106433",
+            "doi:10.1594/PANGAEA.968463"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2024-04-10",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-amazonas-soil",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
     "pangaea-arabian-sea-sediment": {
       "access_status": "open",
       "attribution_note": "PANGAEA records CC BY 4.0; retain dataset and bundled-publication citations.",
@@ -3808,6 +4353,344 @@
       },
       "source_evidence_score": 85.0,
       "source_id": "pangaea-arabian-sea-sediment",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "pangaea-barents-c-horizon-soil": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA records CC BY 3.0; retain dataset and atlas-project citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.56227",
+            "https://doi.org/10.1594/PANGAEA.56227",
+            "https://doi.org/10.1594/PANGAEA.686641"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.56227",
+            "https://doi.org/10.1594/PANGAEA.56227",
+            "https://doi.org/10.1594/PANGAEA.686641",
+            "doi:10.1594/PANGAEA.56227"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 1998-01-01",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-barents-c-horizon-soil",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "pangaea-batagay-soil": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA records CC BY 4.0; retain dataset, bundled-publication and article citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.927867",
+            "https://doi.org/10.1594/PANGAEA.927874",
+            "https://doi.org/10.1016/j.apgeochem.2020.104669"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.927867",
+            "https://doi.org/10.1594/PANGAEA.927874",
+            "https://doi.org/10.1016/j.apgeochem.2020.104669",
+            "doi:10.1594/PANGAEA.927867"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2021-03-10",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-batagay-soil",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "pangaea-brasol-ne-brazil-soil": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA declares CC BY 4.0; retain dataset and linked-publication attribution.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.969055",
+            "https://doi.org/10.1144/1467-7873/10-RA-046"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.969055",
+            "https://doi.org/10.1144/1467-7873/10-RA-046",
+            "doi:10.1594/PANGAEA.969055"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2024-07-01",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-brasol-ne-brazil-soil",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "pangaea-east-china-sea-clay": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA records CC BY 3.0; retain dataset and bundled-publication citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.856762",
+            "https://doi.org/10.1594/PANGAEA.856762",
+            "https://doi.org/10.1016/j.chemgeo.2015.02.001"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.856762",
+            "https://doi.org/10.1594/PANGAEA.856762",
+            "https://doi.org/10.1016/j.chemgeo.2015.02.001",
+            "doi:10.1594/PANGAEA.856762"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2016-01-11",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-east-china-sea-clay",
       "use_mode": "normalized_analysis",
       "use_mode_limitations": [
         "30-record human review is incomplete"
@@ -3992,6 +4875,91 @@
       "use_mode": "discovery",
       "use_mode_limitations": [
         "research_use_status=permission_required"
+      ]
+    },
+    "pangaea-south-china-sea-sediment": {
+      "access_status": "open",
+      "attribution_note": "PANGAEA records CC BY 3.0; retain dataset and bundled-publication citations.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.855177",
+            "https://doi.org/10.1594/PANGAEA.855177",
+            "https://doi.org/10.1594/PANGAEA.855179"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://doi.pangaea.de/10.1594/PANGAEA.855177",
+            "https://doi.org/10.1594/PANGAEA.855177",
+            "https://doi.org/10.1594/PANGAEA.855179",
+            "doi:10.1594/PANGAEA.855177"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: 2015-11-23",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "pangaea-south-china-sea-sediment",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
       ]
     },
     "petdb": {
@@ -4885,20 +5853,103 @@
       "use_mode_limitations": [
         "research_use_status=permission_required"
       ]
+    },
+    "zenodo-yangtze-yellow-river-sediment": {
+      "access_status": "open",
+      "attribution_note": "Zenodo record metadata declares license id cc-by-4.0. Retain the dataset DOI and author attribution.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://zenodo.org/records/7098563",
+            "https://doi.org/10.5281/zenodo.7098563"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://zenodo.org/records/7098563",
+            "https://doi.org/10.5281/zenodo.7098563",
+            "doi:10.5281/zenodo.7098563"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: zenodo-record-7098563-rev2-2022-09-21",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "zenodo-yangtze-yellow-river-sediment",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
     }
   },
   "summary": {
     "evidence_tiers": {
-      "A": 20,
+      "A": 33,
       "B": 1,
       "C": 0,
-      "D": 33,
+      "D": 32,
       "U": 0
     },
     "use_modes": {
       "benchmark_ready": 0,
-      "discovery": 33,
-      "normalized_analysis": 21,
+      "discovery": 32,
+      "normalized_analysis": 34,
       "raw_observation": 0
     }
   }

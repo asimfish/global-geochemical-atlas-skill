@@ -1,0 +1,67 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-14T20:30:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Hg",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 56,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 78165,
+      "path": "demo_input.csv",
+      "sha256": "691dc78823b9df34111d726642453398633768751b94bc2ae6d7946e8793e999"
+    },
+    {
+      "bytes": 101253,
+      "path": "sources.jsonl",
+      "sha256": "0edf363173f888c18e7f2768fb9b2a20f7143978c30f7a572fb63d6d9b5c47cb"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 56,
+    "raw_source_rows": 6625,
+    "selected_source_rows": 56
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.6084/m9.figshare.22785971.v1",
+    "dataset_version": "figshare-v1-2023-05-10",
+    "license": "CC-BY-4.0",
+    "source_id": "figshare-yangtze-basin-soil-heavy-metals",
+    "title": "A georeferenced dataset of heavy metal occurrence in the soils of the Yangtze River Basin, China (2000-2020)"
+  },
+  "source_files": [
+    {
+      "bytes": 538969,
+      "filename": "Records.xlsx",
+      "retrieved_at": "2026-08-14T12:57:22Z",
+      "sha256": "6aa14bdaf87dac28864b59d867b27db536af7b7253fcf8ce0e50c483927289ae",
+      "source_url": "https://figshare.com/ndownloader/files/40503701"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The Yangtze basin product is a heterogeneous literature compilation, not a probability sample.",
+    "The workbook omits row-level methods, detection limits and original-publication identifiers; none are inferred.",
+    "The linked article describes mixed georeferencing workflows without one declared datum/CRS, so coordinates remain reported-only."
+  ]
+}

@@ -130,4 +130,4 @@ python scripts/run_workflow.py \
   --min-group-size 8
 ```
 
-预期为 1,144 条真实来源最小观测、四介质、21 来源、1,136/1,144 可标准化、808/1,144 有效 canonical 坐标、60 条已确认删失值、156 个隔离背景组及完整十五文件输出（含批次状态、统计空间报告与 `iteration_backlog.csv`）。未声明或尚未显式转换的 GEOROC、AfSIS、GDA94、JGD2000、NAD83 与 TPDC reported coordinates 不冒充 WGS84；FOREGS 中可能的 `DL/2` 数值和 AfSIS 中低于来源 DL/QL 的已发布数值只带证据边界。演示时先展示覆盖空白和来源范围，再展示地图；27 个工程异常候选只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。
+预期为 1,144 条真实来源最小观测、四介质、21 来源、1,136/1,144 可标准化、808/1,144 有效 canonical 坐标、60 条已确认删失值、156 个隔离背景组及完整十六文件输出（含批次状态、统计空间报告、`sources_and_confidence.json` 与 `iteration_backlog.csv`）。未声明或尚未显式转换的 GEOROC、AfSIS、GDA94、JGD2000、NAD83 与 TPDC reported coordinates 不冒充 WGS84；FOREGS 中可能的 `DL/2` 数值和 AfSIS 中低于来源 DL/QL 的已发布数值只带证据边界。演示时先展示覆盖空白和来源范围，再展示地图；27 个工程异常候选只用于说明筛查界面，不能作污染、矿化或区域元素丰亏结论。

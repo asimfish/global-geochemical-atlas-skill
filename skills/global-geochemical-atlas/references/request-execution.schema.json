@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:request-execution:v4",
+  "$id": "urn:global-geochemical-atlas:request-execution:v6",
   "title": "Request-driven atlas execution evidence",
   "type": "object",
   "additionalProperties": false,
@@ -9,10 +9,13 @@
     "status",
     "mode",
     "analysis_profile",
+    "coordinate_mode",
     "timing",
+    "skill_snapshot",
     "geology_grid",
     "record_counts",
     "source_outcomes",
+    "acquisition_scheduler",
     "acquisition_manifests",
     "route_status",
     "coverage_status",
@@ -22,10 +25,19 @@
     "warnings"
   ],
   "properties": {
-    "execution_version": {"const": "geochemical-request-execution-v4"},
+    "execution_version": {"const": "geochemical-request-execution-v6"},
     "status": {"type": "string", "enum": ["success", "partial_success"]},
     "mode": {"type": "string", "minLength": 1},
     "analysis_profile": {"type": "string", "enum": ["demo", "production"]},
+    "coordinate_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requested", "effective"],
+      "properties": {
+        "requested": {"type": "string", "enum": ["auto", "canonical", "reported"]},
+        "effective": {"type": "string", "enum": ["canonical", "reported"]}
+      }
+    },
     "timing": {
       "type": "object",
       "additionalProperties": false,
@@ -39,11 +51,29 @@
       ],
       "properties": {
         "official_task_limit_seconds": {"const": 900.0},
-        "internal_budget_seconds": {"type": "number", "minimum": 1, "maximum": 840},
+        "internal_budget_seconds": {"type": "number", "minimum": 1, "maximum": 43200},
         "workflow_reserve_seconds": {"type": "number", "minimum": 5},
         "elapsed_seconds": {"type": "number", "minimum": 0},
         "completed_within_internal_budget": {"const": true},
         "deadline_policy": {"const": "single_monotonic_deadline_v1"}
+      }
+    },
+    "skill_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm", "start_sha256", "end_sha256",
+        "stable_during_execution", "file_count", "total_bytes",
+        "stability_verification"
+      ],
+      "properties": {
+        "algorithm": {"const": "skill-tree-sha256-v1"},
+        "start_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "end_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "stable_during_execution": {"const": true},
+        "file_count": {"type": "integer", "minimum": 1},
+        "total_bytes": {"type": "integer", "minimum": 1},
+        "stability_verification": {"const": "path-and-stat-identity-v1"}
       }
     },
     "geology_grid": {
@@ -112,6 +142,27 @@
             }
           }
         ]
+      }
+    },
+    "acquisition_scheduler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy", "source_order_offset", "priority_source_ids", "effective_source_ids"
+      ],
+      "properties": {
+        "policy": {"const": "gap-priority-then-coverage-balanced-round-robin-v2"},
+        "source_order_offset": {"type": "integer", "minimum": 0},
+        "priority_source_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}
+        },
+        "effective_source_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}
+        }
       }
     },
     "acquisition_manifests": {
@@ -186,7 +237,8 @@
           "required": ["elements", "media"],
           "properties": {
             "elements": {"$ref": "#/$defs/requestDimension"},
-            "media": {"$ref": "#/$defs/requestDimension"}
+            "media": {"$ref": "#/$defs/requestDimension"},
+            "spatial_domains": {"$ref": "#/$defs/requestDimension"}
           }
         }
       }

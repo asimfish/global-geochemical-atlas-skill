@@ -20,7 +20,7 @@ of causal, pollution, resource, or global-completeness claims.
 
 - Inputs: a versioned JSON request; optional measurements CSV, schema map, record
   evidence JSONL, acquisition manifest, QC policy, and frozen cached source files.
-- Outputs: the fifteen-file atlas contract documented in
+- Outputs: the sixteen-file atlas contract documented in
   `references/request-output-contract.md`, plus optional profile-driven comparison or
   concentration-grid products.
 - Failure contract: stable structured states; missing evidence fails closed instead
@@ -30,9 +30,9 @@ of causal, pollution, resource, or global-completeness claims.
 
 | Capability | Declared behavior |
 |---|---|
-| Reads | User-selected request/input files; bundled schemas, registries, fixtures, and frozen map assets; explicitly selected cache entries. |
-| Writes | Only the caller-selected output directory and, for acquisition commands, the caller-selected versioned cache directory. The full request entry point rejects a non-empty output directory; lower-level stage commands may replace their documented named artifacts inside an explicitly selected directory. Cache deletion requires an exact source/version confirmation. |
-| Executes | Bundled Python 3.11+ scripts through structured argument lists. Core runtime uses the standard library and does not execute downloaded code. |
+| Reads | User-selected request/input files; the complete bundled Skill tree for an executable snapshot; bundled schemas, registries, full-population profiles, fixtures and frozen map assets; explicitly selected cache entries. |
+| Writes | Only the caller-selected output directory and, for acquisition commands, the caller-selected versioned cache directory. The loop additionally writes its report, machine-actionable D1 repair queue and hash-bound delivery receipt inside that output directory. The full single-round request entry point rejects a non-empty output directory; lower-level stage commands may replace their documented named artifacts inside an explicitly selected directory. Cache deletion requires an exact source/version confirmation. |
+| Executes | Bundled Python 3.10+ scripts through structured argument lists. Core runtime uses the standard library and does not execute downloaded code. |
 | Network | Optional reads from public scientific hosts selected by the source registry. The generic downloader requires HTTPS; a legacy FOREGS HTTP adapter is isolated and requires a pinned SHA-256. Requests enforce destination, timeout, retry, byte limit, content checks, and offline mode. |
 | Credentials | None required by the Skill. It must not request, read, log, or transmit API keys, cookies, shell history, or unrelated environment variables. |
 | External effects | Public data download and local artifact creation only. It does not publish, message, deploy, purchase, change permissions, or modify remote data. |
@@ -52,6 +52,8 @@ of causal, pollution, resource, or global-completeness claims.
   authority to send local files, prompts, credentials, or unrelated user data.
 - Generate deterministic, schema-validated outputs and record partial coverage,
   rejected rows, uncertainty, and competing explanations.
+- Bind every full request to a start/end fingerprint of the complete executable
+  Skill tree; fail closed if another process changes it during execution.
 
 ## Known limitations
 
@@ -80,3 +82,16 @@ The package contains no scanner suppression or ignored path; run any
 dependency-free static scanner against a clean tracked copy of this Skill and
 investigate every finding before release. Passing a scanner is evidence for its
 rules only, not a security proof.
+
+The Forge dependency-free scanner currently reports three conservative high-severity
+findings that require this manual disposition rather than a suppression:
+
+| Path | Scanner reason | Manual evidence and disposition |
+|---|---|---|
+| `assets/geology/pangaea-788537.zip` | opaque binary | Non-executable ZIP data asset, tracked mode `100644`, SHA-256 `43b4ce3276b155d804db8ff9fb227d620b4c35015a4cf564eac4d06d2b69d88e`; the archive contains only `Classnames.txt` and `glim_wgs84_0point5deg.txt.asc`. Its DOI, license and runtime hash gate are documented in `assets/geology/README.md`. |
+| `assets/readme-atlas-globe.png` | opaque binary | Non-executable PNG documentation image, tracked mode `100644`, SHA-256 `f88ed3344ede3c42189c541957174dc92e4e47257ff54227ebcd9d71b4d0c350`. It is referenced only by the repository README. |
+| `assets/readme-atlas-map.png` | opaque binary | Non-executable PNG documentation image, tracked mode `100644`, SHA-256 `b72ab9a06f6049211c312bc5f51e0f0ba2fdd1e15c2e3c30502b2689cf2c62dc`. It is referenced only by the repository README. |
+
+These are accepted false positives with repository-maintainer ownership. Any byte,
+type, archive-member or use-path change invalidates this disposition and requires a
+fresh review; no rule or path suppression is installed.

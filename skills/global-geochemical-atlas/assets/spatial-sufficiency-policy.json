@@ -1,0 +1,74 @@
+{
+  "policy_version": "atlas-spatial-sufficiency-policy-v6",
+  "global_scope": {
+    "grid_cell_degrees": 5.0,
+    "excluded_country_iso_a3": [
+      "ATA",
+      "GRL"
+    ],
+    "priority_country_count": 30,
+    "core_priority_country_count": 6,
+    "minimum_priority_country_pass_rate": 1.0,
+    "minimum_country_canonical_samples": 20,
+    "minimum_country_occupied_cells": 2,
+    "maximum_country_occupied_cells": 6,
+    "minimum_country_grid_coverage_rate": 0.1,
+    "minimum_macroregion_occupied_cells": 2,
+    "minimum_macroregion_grid_coverage_rate": 0.1,
+    "minimum_land_grid_coverage_rate": 0.15,
+    "breadth_mode_minimum_land_macroregions": 6,
+    "core_country_longitude_band_count": 3,
+    "minimum_core_country_longitude_span_degrees": 30,
+    "minimum_overall_core_country_longitude_band_rate": 1,
+    "minimum_cells_per_core_country_longitude_band": 1
+  },
+  "regional_scope": {
+    "allowed_grid_cell_degrees": [
+      5.0,
+      2.0,
+      1.0,
+      0.5,
+      0.25
+    ],
+    "target_cells_across_long_axis": 20,
+    "minimum_assessable_coverage_cells": 2,
+    "minimum_canonical_samples": 20,
+    "minimum_grid_coverage_rate": 0.5,
+    "longitude_band_count": 5,
+    "latitude_band_count": 3,
+    "minimum_overall_coverage_zone_rate": 1.0
+  },
+  "dimension_views": {
+    "element": {
+      "minimum_canonical_samples": 20,
+      "minimum_occupied_cells": 2,
+      "overall_cell_target_fraction": 0.5,
+      "minimum_global_coverage_zones": 3,
+      "minimum_cells_per_global_coverage_zone": 1,
+      "minimum_regional_coverage_zone_rate": 0.75,
+      "maximum_country_targets": 6,
+      "minimum_core_country_longitude_band_rate": 0.67
+    },
+    "medium": {
+      "minimum_canonical_samples": 20,
+      "minimum_occupied_cells": 2,
+      "overall_cell_target_fraction": 0.5,
+      "minimum_global_coverage_zones": 3,
+      "minimum_cells_per_global_coverage_zone": 1,
+      "minimum_regional_coverage_zone_rate": 0.75,
+      "maximum_country_targets": 6,
+      "minimum_core_country_longitude_band_rate": 0.67
+    },
+    "element_medium": {
+      "minimum_canonical_samples": 8,
+      "minimum_occupied_cells": 1,
+      "overall_cell_target_fraction": 0.25,
+      "minimum_global_coverage_zones": 2,
+      "minimum_cells_per_global_coverage_zone": 1,
+      "minimum_regional_coverage_zone_rate": 0.5,
+      "maximum_country_targets": 6,
+      "minimum_core_country_longitude_band_rate": 0.33
+    }
+  },
+  "claim_boundary": "The policy detects evidence-bearing observation gaps for requested map views. It does not interpolate, prove uniform or representative sampling, or treat an empty cell as elemental absence."
+}

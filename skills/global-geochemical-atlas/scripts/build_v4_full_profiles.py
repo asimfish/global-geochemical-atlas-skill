@@ -41,6 +41,10 @@ DEFAULT_REPORT = SKILL_DIR / "references" / "v4-full-population-profile.md"
 PROFILE_VERSION = "d1-v4-full-population-profile-v1"
 CUBE_VERSION = "d1-v4-coverage-cube-v1"
 GRID_RESOLUTION_DEGREES = 1.0
+REGISTERED_IDENTITY_CANONICALIZATION = {
+    "australia-ngsa": "gda94-geographic-wgs84-identity-v1",
+    "australia-ngsa-mercury": "gda94-geographic-wgs84-identity-v1",
+}
 
 PROFILE_FIELDS = (
     "element_or_analyte",
@@ -168,10 +172,17 @@ def _sample_and_place(
 ) -> tuple[str, str, str, str, str]:
     """Return sample_id, region, latitude, longitude and source CRS."""
 
-    if source_id in {"georoc-archaean", "georoc-antarctica-intraplate"}:
+    if source_id in {
+        "georoc-archaean",
+        "georoc-convergent-margins",
+        "georoc-antarctica-intraplate",
+    }:
+        # GEOROC LOCATION values can embed literal CRLF line breaks (for
+        # example the Kohistan-Ladakh members); collapse internal whitespace
+        # so region labels stay single-line in profiles and the coverage cube.
         return (
             _text(fields.get("SAMPLE NAME")) or _text(fields.get("UNIQUE_ID")),
-            _text(fields.get("LOCATION")),
+            " ".join(_text(fields.get("LOCATION")).split()),
             _exact_midpoint(fields, "LATITUDE MIN", "LATITUDE MAX"),
             _exact_midpoint(fields, "LONGITUDE MIN", "LONGITUDE MAX"),
             "",
@@ -271,6 +282,14 @@ def _sample_and_place(
             _text(station.get("HorizontalCoordinateReferenceSystemDatumName"))
             or "NAD83",
         )
+    if source_id == "australia-ngsa":
+        return (
+            _text(fields.get("SAMPLEID")),
+            _text(fields.get("STATE")),
+            _text(fields.get("LATITUDE")),
+            _text(fields.get("LONGITUDE")),
+            _text(fields.get("_source_crs")) or "EPSG:4283",
+        )
     if source_id == "australia-ngsa-mercury":
         return (
             _text(fields.get("SAMPLEID")),
@@ -295,6 +314,106 @@ def _sample_and_place(
             _text(fields.get("Longitude")),
             _text(fields.get("_source_crs")) or "EPSG:4326",
         )
+    if source_id == "pangaea-east-china-sea-clay":
+        return (
+            "|".join(
+                (
+                    _text(fields.get("Event")),
+                    _text(fields.get("Description")),
+                    _text(fields.get("Samp type")),
+                )
+            ),
+            _text(fields.get("Event")),
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id == "pangaea-south-china-sea-sediment":
+        return (
+            _text(fields.get("Event")),
+            _text(fields.get("Event")),
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id == "pangaea-barents-c-horizon-soil":
+        return (
+            _text(fields.get("Sample label")),
+            "central Barents region",
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id == "pangaea-amazonas-soil":
+        return (
+            "|".join(
+                (
+                    _text(fields.get("Event")),
+                    _text(fields.get("Date/Time")),
+                    _text(fields.get("Depth desc")),
+                    _text(fields.get("No (Number of Campaign)")),
+                )
+            ),
+            "Amazonas, Brazil",
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id == "pangaea-brasol-ne-brazil-soil":
+        canonical_latitude = _text(fields.get("_canonical_latitude"))
+        canonical_longitude = _text(fields.get("_canonical_longitude"))
+        return (
+            "|".join((_text(fields.get("Site_ID")), _text(fields.get("Lyr_name")))),
+            "northeastern Brazil transects",
+            canonical_latitude or _text(fields.get("Latitude")),
+            canonical_longitude or _text(fields.get("Longitude")),
+            (
+                _text(fields.get("_source_crs"))
+                if canonical_latitude and canonical_longitude
+                else "publisher-declared EPSG:4326; DMS/decimal conflict"
+            ),
+        )
+    if source_id == "figshare-yangtze-basin-soil-heavy-metals":
+        return (
+            _text(fields.get("FID")),
+            " / ".join(
+                part
+                for part in (
+                    "Yangtze River Basin, China",
+                    _text(fields.get("loc_l1")),
+                    _text(fields.get("loc_l2")),
+                    _text(fields.get("loc_l3")),
+                    _text(fields.get("loc_l4")),
+                )
+                if part
+            ),
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            "",
+        )
+    if source_id == "4tu-northern-china-sediment":
+        return (
+            _text(fields.get("_physical_sample_id")),
+            _text(fields.get("_survey_area")) or "northern and western China",
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            "",
+        )
+    if source_id == "pangaea-batagay-soil":
+        return (
+            "|".join(
+                (
+                    _text(fields.get("Sample ID")),
+                    _text(fields.get("Sample comment (soil horizon)")),
+                    _text(fields.get("Depth sed [m] (mean)")),
+                    _text(fields.get("Lab label")),
+                )
+            ),
+            "Batagay megaslump, North Yakutia, Russia",
+            _text(fields.get("Latitude")),
+            _text(fields.get("Longitude")),
+            _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
     if source_id == "tpdc-china-mountain-soil":
         return (
             "|".join((_text(fields.get("Sam.No")), _text(fields.get("Horizons")))),
@@ -303,6 +422,22 @@ def _sample_and_place(
             _text(fields.get("Longitude")),
             _text(fields.get("_source_crs")),
         )
+    if source_id == "earthchem-dehailonggang-rock":
+        return (
+            _text(fields.get("SAMPLE NAME")),
+            _text(fields.get("LOCATION KEYWORDS")),
+            _text(fields.get("LATITUDE")),
+            _text(fields.get("LONGITUDE")),
+            _text(fields.get("_source_crs")),
+        )
+    if source_id == "eidc-ningbo-soil":
+        return (
+            _text(fields.get("IGFS no.")),
+            "Ningbo Zhangxi catchment",
+            _text(fields.get("Latitude _degrees")),
+            _text(fields.get("Longitude_degrees")),
+            "",
+        )
     if source_id == "gemas-europe":
         return (
             _text(fields.get("_physical_sample_id")),
@@ -310,6 +445,19 @@ def _sample_and_place(
             _text(fields.get("YCOO")),
             _text(fields.get("XCOO")),
             _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id == "zenodo-yangtze-yellow-river-sediment":
+        # Data Set S2 publishes no sampling coordinates (fail closed).
+        return (
+            _text(fields.get("_sample_label")),
+            (
+                "Yellow River (Huanghe)"
+                if _text(fields.get("_river_sample")).startswith("HH")
+                else "Yangtze River (Changjiang)"
+            ),
+            "",
+            "",
+            "",
         )
     raise FullProfileError(f"no sample/place mapping for {source_id}")
 
@@ -397,7 +545,10 @@ def _target_values(
             units = fields.get("_units")
             if isinstance(units, Mapping):
                 unit = _text(units.get(candidate))
-            elif source_id == "georoc-archaean" and candidate.endswith("(PPM)"):
+            elif source_id in {
+                "georoc-archaean",
+                "georoc-convergent-margins",
+            } and candidate.endswith("(PPM)"):
                 unit = "ppm"
             elif source_id == "japan-gsj-geochemical-map":
                 target_units = fields.get("_target_units")
@@ -419,7 +570,7 @@ def _target_values(
                 values["measurement_basis"] = (
                     "HF-HNO3_digested_deflatable_surface_soil_fraction"
                 )
-            elif source_id == "georoc-archaean":
+            elif source_id in {"georoc-archaean", "georoc-convergent-margins"}:
                 values["measurement_basis"] = "reported_whole_rock_concentration"
             yield _text(analyte), candidate, raw, values
             break
@@ -450,7 +601,7 @@ def _semantic_evidence(
     elif source_id == "pangaea-north-africa-soil":
         evidence["potential_source_area"] = _text(fields.get("Area"))
         evidence["reported_location"] = _text(fields.get("Location"))
-    elif source_id == "australia-ngsa-mercury":
+    elif source_id in {"australia-ngsa", "australia-ngsa-mercury"}:
         evidence["reported_depth"] = _text(fields.get("DEPTH"))
         evidence["state"] = _text(fields.get("STATE"))
         evidence["site_id"] = _text(fields.get("SITEID"))
@@ -460,13 +611,70 @@ def _semantic_evidence(
     elif source_id == "pangaea-arabian-sea-sediment":
         evidence["event"] = _text(fields.get("Event"))
         evidence["location"] = _text(fields.get("Location")) or "Arabian Sea"
+    elif source_id == "pangaea-east-china-sea-clay":
+        evidence["event"] = _text(fields.get("Event"))
+        evidence["sample_description"] = _text(fields.get("Description"))
+        evidence["sample_fraction"] = _text(fields.get("Samp type"))
+    elif source_id == "pangaea-south-china-sea-sediment":
+        evidence["event"] = _text(fields.get("Event"))
+        evidence["sediment_depth_m"] = _text(fields.get("Depth sed [m]"))
+    elif source_id == "pangaea-barents-c-horizon-soil":
+        evidence["sample_label"] = _text(fields.get("Sample label"))
+        evidence["sample_description"] = _text(fields.get("Description"))
+        evidence["sampling_depth_m"] = _text(fields.get("Depth sed [m]"))
+    elif source_id == "pangaea-amazonas-soil":
+        evidence["event"] = _text(fields.get("Event"))
+        evidence["region"] = _text(fields.get("Region"))
+        evidence["land_use"] = _text(fields.get("Land use"))
+        evidence["land_cover_type"] = _text(fields.get("LC type"))
+        evidence["campaign"] = _text(fields.get("No (Number of Campaign)"))
+        evidence["sampled_at"] = _text(fields.get("Date/Time"))
+        evidence["depth_class"] = _text(fields.get("Depth desc"))
+    elif source_id == "pangaea-brasol-ne-brazil-soil":
+        evidence["site_id"] = _text(fields.get("Site_ID"))
+        evidence["layer"] = _text(fields.get("Lyr_name"))
+        evidence["biome"] = _text(fields.get("Biome"))
+        evidence["land_use"] = _text(fields.get("Land_use"))
+    elif source_id == "figshare-yangtze-basin-soil-heavy-metals":
+        evidence["location_hierarchy"] = [
+            value
+            for value in (
+                _text(fields.get("loc_l1")),
+                _text(fields.get("loc_l2")),
+                _text(fields.get("loc_l3")),
+                _text(fields.get("loc_l4")),
+            )
+            if value
+        ]
+    elif source_id == "4tu-northern-china-sediment":
+        evidence["sample_type"] = _text(fields.get("_sample_type"))
+        evidence["sediment_environment"] = _text(fields.get("_sediment_environment"))
+        evidence["survey_area"] = _text(fields.get("_survey_area"))
+        evidence["method_evidence_file"] = {
+            "filename": _text(fields.get("_method_evidence_file")),
+            "url": _text(fields.get("_method_evidence_url")),
+            "sha256": _text(fields.get("_method_evidence_sha256")),
+        }
+    elif source_id == "pangaea-batagay-soil":
+        evidence["sample_id"] = _text(fields.get("Sample ID"))
+        evidence["sampling_site"] = _text(fields.get("Sample comment (Sampling site)"))
+        evidence["sample_type"] = _text(fields.get("Samp type")) or "not reported"
+        evidence["soil_horizon"] = _text(fields.get("Sample comment (soil horizon)"))
+        evidence["sampling_depth_m"] = _text(fields.get("Depth sed [m] (mean)"))
     elif source_id == "tpdc-china-mountain-soil":
         evidence["reported_horizon"] = _text(fields.get("Horizons"))
         evidence["mountain"] = _text(fields.get("Mountain"))
         evidence["site"] = _text(fields.get("site"))
+    elif source_id == "eidc-ningbo-soil":
+        evidence["sample_id"] = _text(fields.get("IGFS no."))
+        evidence["sample_type"] = _text(fields.get("_sample_type"))
     elif source_id == "gemas-europe":
         evidence["sample_type"] = _text(fields.get("TYPE_"))
         evidence["country_raw"] = _text(fields.get("COUNTRY"))
+    elif source_id == "zenodo-yangtze-yellow-river-sediment":
+        evidence["sample_label"] = _text(fields.get("_sample_label"))
+        evidence["leach_group"] = _text(fields.get("_leach_group"))
+        evidence["size_fraction_raw"] = _text(fields.get("_size_fraction"))
     return evidence
 
 
@@ -485,7 +693,16 @@ def _observation(
         source_id, raw.fields
     )
     latitude, longitude, reported_spatial_cell = _coordinate(latitude, longitude)
-    spatial_cell = reported_spatial_cell if source_crs == "EPSG:4326" else ""
+    coordinate_policy_id = REGISTERED_IDENTITY_CANONICALIZATION.get(source_id, "")
+    if coordinate_policy_id and source_crs != "EPSG:4283":
+        raise FullProfileError(
+            f"{source_id} registered GDA94 identity policy requires EPSG:4283, got {source_crs or 'missing'}"
+        )
+    spatial_cell = (
+        reported_spatial_cell
+        if source_crs == "EPSG:4326" or coordinate_policy_id
+        else ""
+    )
     record_id = f"profile:{raw.source_record_id}:{analyte}:{ordinal}"
     method, method_locator = _method(source_id, raw.fields, field_name, values)
     evidence = _semantic_evidence(source_id, raw.fields, record_id)
@@ -514,15 +731,25 @@ def _observation(
         "unit": unit,
         "medium": _text((registry_entry.get("media") or [""])[0]),
         "measurement_basis": _text(values.get("measurement_basis")),
+        "value_qualifier": _text(values.get("qualifier")),
         "detection_limit": _text(values.get("detection_limit")),
         "latitude": latitude,
         "longitude": longitude,
         "source_crs": source_crs,
+        "coordinate_evidence_scope": (
+            "platform_policy_declared" if coordinate_policy_id else ""
+        ),
+        "coordinate_policy_id": coordinate_policy_id,
+        "coordinate_transform_method": (
+            f"identity:{coordinate_policy_id}" if coordinate_policy_id else ""
+        ),
         "coordinate_uncertainty_m": (
             "20"
             if source_id in {"japan-gsj-geochemical-map", "japan-gsj-marine-sediment"}
             else "15"
             if source_id == "us-wqp-sacramento-river-arsenic"
+            else _text(raw.fields.get("_coordinate_uncertainty_m"))
+            if source_id == "pangaea-brasol-ne-brazil-soil"
             else ""
         ),
         "analytical_method": method,
@@ -533,6 +760,10 @@ def _observation(
         or (
             _text(raw.fields.get("Rock Group"))
             if source_id == "tpdc-china-mountain-soil"
+            else _text(raw.fields.get("LITHOLOGY"))
+            if source_id == "earthchem-dehailonggang-rock"
+            else _text(raw.fields.get("Lithol_IBGE_EN"))
+            if source_id == "pangaea-brasol-ne-brazil-soil"
             else ""
         ),
         "geologic_age_raw": _text(raw.fields.get("AGE")),
@@ -541,6 +772,7 @@ def _observation(
     row = v4_semantics.enrich_row(row, evidence, registry_entry, registry_verified_at)
     comparable = bool(
         _numeric(value) is not None
+        and not _text(values.get("qualifier"))
         and unit
         and sample_id
         and spatial_cell
@@ -590,10 +822,15 @@ def _marchem_payload_equivalent_files(
         for file_id, info in candidates.items():
             payload = handle.read(info)
             expected = expected_by_id[file_id]
-            if file_id in {"data", "metadata"} and len(payload) != expected["bytes"]:
-                raise FullProfileError(
-                    f"MarChem scientific payload byte count changed: {file_id}"
-                )
+            if file_id in {"data", "metadata"}:
+                if len(payload) != expected["bytes"]:
+                    raise FullProfileError(
+                        f"MarChem scientific payload byte count changed: {file_id}"
+                    )
+                if hashlib.sha256(payload).hexdigest() != expected["expected_sha256"]:
+                    raise FullProfileError(
+                        f"MarChem scientific payload hash changed: {file_id}"
+                    )
             path = extract_dir / Path(info.filename).name
             path.write_bytes(payload)
             files.append(
@@ -640,7 +877,7 @@ def _downloaded_files(
             )
             .stat()
             .st_size,
-            "data_and_method_member_bytes_match": True,
+            "data_and_method_member_hashes_match": True,
             "non_scientific_info_member_changed": True,
         }
     return files, drift
@@ -926,8 +1163,7 @@ def _profile_one(
     }
     distinct_sample_count, reported_coordinate_sample_count, coordinate_sample_count = (
         distinct_db.execute(
-            "SELECT COUNT(*), COALESCE(SUM(has_reported_coordinate), 0), "
-            "COALESCE(SUM(has_coordinate), 0) FROM samples"
+            "SELECT COUNT(*), COALESCE(SUM(has_reported_coordinate), 0), COALESCE(SUM(has_coordinate), 0) FROM samples"
         ).fetchone()
     )
     element_sample_counts = {
@@ -1050,6 +1286,21 @@ def _profile_one(
             "source_crs_observation_counts": dict(sorted(source_crs_counts.items())),
             "coordinate_uncertainty_m_observation_counts": dict(
                 sorted(uncertainty_counts.items())
+            ),
+            "coordinate_canonicalization_status": (
+                "registered_identity_tolerance_policy"
+                if source_id in REGISTERED_IDENTITY_CANONICALIZATION
+                else "source_crs_declared_epsg4326"
+                if coordinate_sample_count
+                else "not_canonicalized"
+            ),
+            "coordinate_canonicalization_policy_id": (
+                REGISTERED_IDENTITY_CANONICALIZATION.get(source_id) or None
+            ),
+            **(
+                {"region_applicability": dict(registry_entry["region_applicability"])}
+                if isinstance(registry_entry.get("region_applicability"), Mapping)
+                else {}
             ),
         },
         "geology_coverage": {

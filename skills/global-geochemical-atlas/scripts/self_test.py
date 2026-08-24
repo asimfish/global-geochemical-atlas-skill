@@ -6,6 +6,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -17,6 +18,7 @@ from typing import Any
 import standardize_geochemistry as standardizer
 import evaluate_batch_qc as batch_qc
 import build_iteration_backlog as backlog_builder
+import skill_snapshot
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -32,6 +34,7 @@ EXPECTED_OUTPUTS = {
     "record_evidence.jsonl",
     "qc_report.json",
     "confidence_report.json",
+    "sources_and_confidence.json",
     "anomalies.geojson",
     "anomaly_report.json",
     "anomaly_regions.geojson",
@@ -110,14 +113,7 @@ def complete_d2_row(**overrides: str) -> dict[str, str]:
 def write_test_glim_grid(path: Path) -> str:
     """Create a tiny-compressed, structurally complete GLiM-compatible test archive."""
 
-    header = (
-        "ncols 720\n"
-        "nrows 360\n"
-        "xllcorner -180\n"
-        "yllcorner -90\n"
-        "cellsize 0.5\n"
-        "NODATA_value -9999\n"
-    )
+    header = "ncols 720\nnrows 360\nxllcorner -180\nyllcorner -90\ncellsize 0.5\nNODATA_value -9999\n"
     raster = header + (("1 " * 719 + "1\n") * 360)
     classes = '"OBJECTID";"Value_";"Count_";"xx"\n1;1;259200;"su"\n'
     with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
@@ -134,6 +130,7 @@ def run_suite() -> dict[str, Any]:
         "geochemistry-record.schema.json",
         "source-manifest.schema.json",
         "confidence-report.schema.json",
+        "sources-and-confidence.schema.json",
         "schema-map.schema.json",
         "platform-field-crosswalk.schema.json",
         "record-evidence.schema.json",
@@ -168,12 +165,56 @@ def run_suite() -> dict[str, Any]:
         "task-contract.schema.json",
         "element-comparison.schema.json",
         "concentration-grid.schema.json",
+        "loop-report.schema.json",
+        "research-delivery-receipt.schema.json",
+        "d1-repair-queue.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(
             schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema",
             f"bad {schema_name}",
         )
+
+    snapshot_capture = skill_snapshot.capture_skill_tree(SKILL_DIR)
+    snapshot_before = snapshot_capture.snapshot
+    snapshot_verification = skill_snapshot.verify_skill_tree_unchanged(
+        SKILL_DIR, snapshot_capture
+    )
+    require(
+        snapshot_before["algorithm"] == "skill-tree-sha256-v1"
+        and snapshot_verification["stable"] is True
+        and snapshot_before["sha256"] == snapshot_verification["snapshot"]["sha256"]
+        and snapshot_before["file_count"] > 500,
+        "Skill tree snapshot is stable and covers the submitted package",
+    )
+    with tempfile.TemporaryDirectory() as snapshot_temp:
+        snapshot_root = Path(snapshot_temp)
+        bound_file = snapshot_root / "SKILL.md"
+        bound_file.write_text("alpha", encoding="utf-8")
+        tamper_capture = skill_snapshot.capture_skill_tree(snapshot_root)
+        original_stat = bound_file.stat()
+        replacement = snapshot_root / "replacement"
+        replacement.write_text("bravo", encoding="utf-8")
+        os.utime(
+            replacement,
+            ns=(original_stat.st_atime_ns, original_stat.st_mtime_ns),
+        )
+        replacement.replace(bound_file)
+        tamper_verification = skill_snapshot.verify_skill_tree_unchanged(
+            snapshot_root, tamper_capture
+        )
+        require(
+            tamper_verification["stable"] is False
+            and tamper_verification["changed_paths"] == ["SKILL.md"],
+            "Skill tree guard detects a same-size replacement with restored mtime",
+        )
+        cache_link = snapshot_root / ".cache"
+        cache_link.symlink_to(bound_file)
+        try:
+            skill_snapshot.capture_skill_tree(snapshot_root)
+            require(False, "Skill tree capture must reject excluded-name symlinks")
+        except skill_snapshot.SkillSnapshotError:
+            pass
 
     record_schema = json_value(
         SKILL_DIR / "references" / "geochemistry-record.schema.json"
@@ -184,7 +225,11 @@ def run_suite() -> dict[str, Any]:
     require(
         coordinate_registry.get("schema_version")
         == "geochemical-coordinate-policy-registry-v1"
-        and len(coordinate_registry.get("policies", [])) == 1,
+        and [policy["policy_id"] for policy in coordinate_registry.get("policies", [])]
+        == [
+            "pangaea-geocode-wgs84-v1",
+            "gda94-geographic-wgs84-identity-v1",
+        ],
         "coordinate policy registry is not frozen and auditable",
     )
     crosswalk = json_value(SKILL_DIR / "references" / "platform-field-crosswalk.json")
@@ -716,6 +761,43 @@ def run_suite() -> dict[str, Any]:
             and "COORDINATE_NOT_CANONICALIZED" in missing_crs["qc_flags"],
             "numeric coordinates without CRS evidence are withheld from canonical map fields",
         )
+        no_coordinate = standardizer.normalize_row(
+            complete_d2_row(
+                latitude="",
+                longitude="",
+                original_latitude_raw="",
+                original_longitude_raw="",
+                source_crs="",
+                coordinate_uncertainty_m="",
+            ),
+            13,
+        )
+        require(
+            no_coordinate["latitude"] is None
+            and no_coordinate["longitude"] is None
+            and no_coordinate["coordinate_accuracy_evidence_status"]
+            == "not_applicable_no_canonical_coordinate"
+            and "MISSING_SOURCE_CRS" not in no_coordinate["qc_flags"]
+            and "MISSING_COORDINATE_UNCERTAINTY" not in no_coordinate["qc_flags"],
+            "records without coordinate observations do not receive inapplicable CRS or uncertainty flags",
+        )
+        require(
+            "MISSING_COORDINATE_UNCERTAINTY" not in reported_only["qc_flags"]
+            and reported_only["coordinate_accuracy_evidence_status"]
+            == "not_applicable_no_canonical_coordinate",
+            "reported coordinates withheld for missing CRS do not also claim missing canonical-coordinate precision",
+        )
+        canonical_without_uncertainty = standardizer.normalize_row(
+            complete_d2_row(coordinate_uncertainty_m=""),
+            14,
+        )
+        require(
+            canonical_without_uncertainty["coordinate_accuracy_evidence_status"]
+            == "not_reported"
+            and "MISSING_COORDINATE_UNCERTAINTY"
+            in canonical_without_uncertainty["qc_flags"],
+            "canonical coordinates still expose publisher-missing uncertainty evidence",
+        )
         pangaea_policy = standardizer.normalize_row(
             complete_d2_row(
                 source_crs="",
@@ -725,7 +807,7 @@ def run_suite() -> dict[str, Any]:
                 coordinate_latitude_field="LATITUDE",
                 coordinate_longitude_field="LONGITUDE",
             ),
-            13,
+            15,
         )
         require(
             pangaea_policy["latitude"] == 35
@@ -736,6 +818,47 @@ def run_suite() -> dict[str, Any]:
             and "PLATFORM_CRS_POLICY_APPLIED" in pangaea_policy["qc_flags"],
             "allowlisted PANGAEA platform CRS policy was not applied with evidence",
         )
+        ngsa_policy = standardizer.normalize_row(
+            complete_d2_row(
+                source_id="australia-ngsa",
+                source_crs="",
+                dataset_doi="10.11636/Record.2011.020",
+                coordinate_evidence_scope="platform_policy_declared",
+                coordinate_policy_id="gda94-geographic-wgs84-identity-v1",
+                coordinate_latitude_field="LATITUDE",
+                coordinate_longitude_field="LONGITUDE",
+            ),
+            14,
+        )
+        require(
+            ngsa_policy["latitude"] == 35
+            and ngsa_policy["longitude"] == 103
+            and ngsa_policy["source_crs"] == "EPSG:4326"
+            and ngsa_policy["coordinate_transform_method"]
+            == "identity:gda94-geographic-wgs84-identity-v1"
+            and ngsa_policy["coordinate_policy_sha256"]
+            == "337daefc4e7f9e3e7ed3910fb9f007c89404fcbddcd5763e7adb17c067e91fa1"
+            and "REGISTERED_CRS_POLICY_APPLIED" in ngsa_policy["qc_flags"],
+            "allowlisted NGSA GDA94 identity-tolerance policy was not applied with evidence",
+        )
+        ngsa_cross_binding = standardizer.normalize_row(
+            complete_d2_row(
+                source_id="australia-ngsa-mercury",
+                source_crs="",
+                dataset_doi="10.26186/150328",
+                coordinate_evidence_scope="platform_policy_declared",
+                coordinate_policy_id="gda94-geographic-wgs84-identity-v1",
+                coordinate_latitude_field="LATITUDE",
+                coordinate_longitude_field="LONGITUDE",
+            ),
+            15,
+        )
+        require(
+            ngsa_cross_binding["latitude"] is None
+            and ngsa_cross_binding["longitude"] is None
+            and "INVALID_COORDINATE_POLICY" in ngsa_cross_binding["qc_flags"],
+            "NGSA coordinate policy accepted fields from a different dataset binding",
+        )
         non_pangaea_policy = standardizer.normalize_row(
             complete_d2_row(
                 source_crs="",
@@ -745,7 +868,7 @@ def run_suite() -> dict[str, Any]:
                 coordinate_latitude_field="LATITUDE",
                 coordinate_longitude_field="LONGITUDE",
             ),
-            14,
+            16,
         )
         require(
             non_pangaea_policy["latitude"] is None
@@ -866,6 +989,7 @@ def run_suite() -> dict[str, Any]:
                     sample_id="geo-sample-water",
                     medium="water",
                     unit="ug/L",
+                    geologic_unit="",
                     latitude="35.25",
                     longitude="103.25",
                 ),
@@ -893,12 +1017,19 @@ def run_suite() -> dict[str, Any]:
                 "D2 GLiM point-in-cell did not populate versioned spatial geology evidence",
             )
             require(
-                geology_database["geo-water"]["matched_geologic_unit"] == ""
-                and geology_database["geo-water"]["geology_missing_reason"]
-                == "not_applicable_water"
-                and geology_qc["water_records_with_assigned_land_unit"] == 0
+                geology_database["geo-water"]["geologic_unit"] == ""
+                and geology_database["geo-water"]["matched_geologic_unit"]
+                == "GLiM:1:su"
+                and geology_database["geo-water"]["geology_map_source"]
+                == standardizer.GLIM_SOURCE
+                and geology_database["geo-water"]["geology_missing_reason"] == ""
+                and geology_qc[
+                    "inland_water_records_with_point_surface_geology_context"
+                ]
+                == 1
                 and geology_qc["grid"]["sha256"] == geology_hash,
-                "D2 GLiM join assigned land geology to water or lost the grid hash",
+                "D2 GLiM join failed to keep source geology separate from the "
+                "inland-water point surface-geology context or lost the grid hash",
             )
             try:
                 standardizer.run_pipeline(
@@ -1208,13 +1339,13 @@ def run_suite() -> dict[str, Any]:
                     'id="openAnomalyRegions"',
                     'id="statisticalRegionSummary"',
                     "d2-spatial-hypergeometric-fdr-v1",
-                    "d3-dual-scope-atlas-v4",
+                    "d3-domain-confidence-atlas-v5",
                     'id="projectionMode"',
                     'id="globe"',
                     'id="anomalyDensityCanvas"',
                     "showAnomalyRegion",
                     "focusAnomalyRegion",
-                    "D2 未提供分析方法",
+                    "发布方未报告分析方法",
                     "该结果比较同类样品的统计背景",
                     'id="deliverableCenter"',
                     'id="taskContext"',
@@ -1235,14 +1366,29 @@ def run_suite() -> dict[str, Any]:
                     'id="databaseBoxCanvas"',
                     'id="confidenceSummary"',
                     'id="confidenceComponents"',
+                    'id="confidenceGateReasons"',
                     "renderDatabase",
                     "renderConfidence",
                     'href="geochemistry.csv"',
                     'href="confidence_report.json"',
+                    "来源证据画像（不是空间工作流评分）",
+                    "工作流可用性 / 复核级别",
+                    "当前工作流需补证",
                     "不是正确概率",
+                    'id="sourcePortfolioSummary"',
+                    'id="comboUniverse"',
+                    "returnToAnomalyRegion",
+                    "showRecord(row,{preserveAnomalyRegion:true})",
+                    "发布方未报告位置不确定度；不代表坐标无效或处理失败",
+                    "坐标参考证据状态",
+                    "publisher_datum_not_declared",
                 )
             ),
             "map omits D3 v3 region, heatmap, combination or anomaly-region controls",
+        )
+        require(
+            "来源证据画像（不是空间工作流评分）" in html,
+            "map omits the explicitly bounded source-evidence confidence summary",
         )
         require(
             'id="storyPreset"' not in html and html.count('class="tabs"') == 1,

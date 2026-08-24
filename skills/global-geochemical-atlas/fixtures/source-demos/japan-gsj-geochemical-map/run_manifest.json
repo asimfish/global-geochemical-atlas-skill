@@ -11,20 +11,22 @@
       "Ni",
       "Zn"
     ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
     "mode": "cached",
     "observations": 48
   },
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 55562,
+      "bytes": 58030,
       "path": "demo_input.csv",
-      "sha256": "be3f5151d3fed9157038706cb2ef375d97df6eaf46b8e57ee14ec44082ecfb17"
+      "sha256": "e7d83a7a1a5a664377dbd12d1973a896e0377b11912f8b3ae440283d4443bad9"
     },
     {
-      "bytes": 89560,
+      "bytes": 94168,
       "path": "sources.jsonl",
-      "sha256": "34923c012dfd2638e65e7e61a5fea4191c10788c84d1c9f1df043d50038ef0a0"
+      "sha256": "2bb9956132c7ec978a752048a0a7500bc405d0f6e56334e415eb1334ed7d9226"
     }
   ],
   "record_counts": {
@@ -44,14 +46,14 @@
     {
       "bytes": 334302,
       "filename": "samplejoho.csv",
-      "retrieved_at": "2026-08-06T03:57:08Z",
+      "retrieved_at": "2026-08-09T15:23:39Z",
       "sha256": "9fdb58d86ad48eae564291421a0dad2b6f8a4f243d3e89d90016f3c61b0b521c",
       "source_url": "https://gbank.gsj.jp/geochemmap/data/joho/samplejoho.csv"
     },
     {
       "bytes": 1198951,
       "filename": "noudo.csv",
-      "retrieved_at": "2026-08-06T03:57:10Z",
+      "retrieved_at": "2026-08-09T15:23:40Z",
       "sha256": "0dbd2beae356adc45b762d50a9aa06ad556fd3ea004d427e369837bedda05671",
       "source_url": "https://gbank.gsj.jp/geochemmap/data/ganyuryo/noudo.csv"
     }
@@ -60,6 +62,7 @@
   "warnings": [
     "This is a deterministic demonstration slice, not a statistically representative sample.",
     "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
     "The fixture covers 3,024 fine river-sediment samples, not a regular grid or the separate marine/surface-soil products.",
     "Original coordinates are JGD2000; the display fixture carries values to WGS84 with a conservative 20 m uncertainty floor.",
     "Hg is ppb while the other registered trace elements are ppm; the CSV pair has no row-level method, detection-limit or QC fields.",

@@ -1,6 +1,6 @@
 # 公开地球化学数据源路由
 
-核对日期：2026-08-08。端点和使用条件可能变化；每次运行重新记录访问日期和实际响应。
+核对日期：2026-08-16。端点和使用条件可能变化；每次运行重新记录访问日期和实际响应。
 
 ## 优先级
 
@@ -29,10 +29,42 @@
 - 当前冻结版本：12.0，发布时间 2026-06-11，数据生成日期 2026-06-01；
 - 内容：按克拉通分组的 28 个 CSV，总展开体积 31,696,168 字节；
 - 许可：CC BY-SA 4.0；
-- 获取：GRO.data Dataverse 的 versioned dataset API；
-- 校验：动态 ZIP 本身不固定哈希，必须验证 28 个成员的文件名、大小和发布方 MD5，并为本次取得的 ZIP 和成员另算 SHA-256；
+- 获取：优先使用 GRO.data Dataverse 的 versioned dataset API；若整包端点不可用，则自动退回同一版本、同一数据集下的 28 个 member persistent-ID 官方端点，不转用镜像；
+- 校验：动态 ZIP 本身不固定哈希；无论走整包还是成员回退，都必须验证完全相同的 28 个成员集合、文件名、大小、发布方 MD5 和必需字段，并为本次取得的每个成员另算 SHA-256。成员回退先写私有暂存目录，全部通过后才原子发布；
+- 抽样：研究模式按发布方克拉通成员轮转后再应用逐元素上限，避免把按文件排序的前缀误当全球岩石分布；这只改进有限预算下的来源内部广度，不把 reported 坐标升级为 canonical；
+- 区域适用性：发布方固定成员名 `NORTH_CHINA_CRATON` 与 `YANGTZE_BLOCK` 构成中国相关性的正向证据，路由器据此允许中国任务在线取得并逐记录筛选；它不是完整国家目录，不能据“未列出”排除其他国家，也不能代替 CRS、国界或位置精度证据；
 - 科学边界：这是 GEOROC 预编译选择值，不是全部原始重复分析的无筛选拼接；结果必须保留数据集 DOI、版本、成员文件和 CITATIONS 字段。
+
+### `georoc-convergent-margins`
+
+- 数据集：GEOROC Compilation: Convergent Margins；
+- DOI：`10.25625/PVFZCE`；
+- 当前冻结版本：12.0，发布时间 2026-06-11，数据生成日期 2026-06-01；
+- 内容：按汇聚边缘弧/带分组的 46 个 CSV，总展开体积 134,730,702 字节；155,811 条物理行、177,217 条 As/Cu/Ni/Zn 目标观测（As 5,681、Cu 44,592、Ni 75,685、Zn 51,259），125,035 行为精确点坐标；
+- 许可：CC BY-SA 4.0；
+- 获取：与 `georoc-archaean` 相同的 versioned dataset API 整包下载加 46 个 member persistent-ID 官方端点回退，适配器复用同一实现（`GeorocConvergentMarginsAdapter`）；
+- 校验：动态 ZIP 不固定哈希；验证完全相同的 46 个成员集合、文件名、大小、发布方 MD5 和必需字段，并为每个成员另算 SHA-256（见 `fixtures/candidate-audits/georoc-convergent-margins-20260819T093000Z.json`，2026-08-19 实测在线取得并全部通过）；
+- 区域适用性：发布方固定成员名 `KOHISTAN-LADAKH_TERRANE_OR_GANGDISE_BELT`（冈底斯带，藏南，1,306 行）构成中国相关性正向证据；`KAMCHATKA_ARC`、`KURILE_ARC`、`OKHOTSK-CHUKOTKA_ARC`、`SIKHOTE-ALIN-SAKHALIN_ARC`、`UDA-MURGAL_ARC`（合计 11,701 行）构成俄罗斯相关性正向证据；安第斯弧三个分卷 25,760 行补南美；成员名跨政治边界（Kohistan-Ladakh 同时覆盖巴基斯坦与印度），国家归属必须由记录坐标与下游审查决定，不得凭成员文件名推断；
+- 科学边界：GEOROC 预编译选择值，与 `georoc-archaean`、`georoc-antarctica-intraplate` 同谱系（`georoc-compilation`），不构成独立岩石来源家族；结果必须保留数据集 DOI、版本、成员文件和 CITATIONS 字段；坐标保留 reported-only，不凭数值格式升级 EPSG:4326。
+
+### `earthchem-dehailonggang-rock`
+
+- 数据集：The bulk-rock composition of the Dehailonggang volcanic-plutonic complex of the East Kunlun Orogen, northern Tibet Plateau；
+- DOI/版本：`10.60520/IEDA/113338`，EarthChem Library dataset 3338 version 1.0 (2024)；
+- 内容：15 个 whole-rock 样品，Cr/Cu/Ni/Pb/Zn 共 75 条目标观测；ICP-MS、Agilent 7700e 和实验室信息来自同一 workbook 的方法表；
+- 许可：CC BY-SA 4.0；
+- 获取与校验：固定官方 POST 下载参数；ZIP、四个成员、主 workbook 行数与逐成员 SHA-256 全部固定，主 workbook SHA-256 为 `ccdc26ee169919144f7d1c8726eb8075c99b4d9cba30d249906f79c045a12ca7`；
+- 科学边界：两个坐标对未声明 CRS 或位置精度，故保留 reported-only，绝不冒充 WGS84；这是局地杂岩体，不代表中国西部或全国岩石覆盖。
 - 坐标边界：经审查的公开页面/元数据说明坐标采用十进制度，但未充分声明所有历史记录的统一 datum；D1 保留 reported coordinate，不能仅凭数值范围标记 EPSG:4326。缺 datum 时 canonical 坐标留空并等待人工核验，也不得对其执行 WGS84 bbox 筛选。
+
+### `4tu-northern-china-sediment`
+
+- 数据集：北方中国河流/冲积沉积物以及黄土—古土壤多元素数据；DOI `10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0`；CC0；
+- 内容：867 个物理样品、799 个发布坐标对，As/Cr/Cu/Hg/Ni/Pb/Zn 各 867 条，共 6,069 条观测；表层样点明确分到准噶尔、塔里木、柴达木、河套、阿拉善、青藏高原东部和东北沙地，另含黄土高原黄土/古土壤；
+- 获取：Figshare 官方 metadata API 与三个固定文件 ID；workbook、README、KML 的字节数、发布方 MD5 和本地 SHA-256 全部登记，三者必须同时通过才原子发布；
+- 方法与 QC：README 证据把 As 绑定到王水 + HG-AFS、Cr 绑定到熔片 XRF、Cu/Ni/Pb/Zn 绑定到四酸 + ICP-MS，并报告 3% 野外重复、盲重复和标准物质；Hg 方法没有充分证据，保持缺失；
+- 空间与地质边界：发布方分区是采样区域/沉积环境背景，不冒充点位地质单元。来源未声明 CRS/datum 和位置精度，因此只保留 reported 坐标；可用于可追溯浏览和非空间标准库，但不得计入 canonical WGS84 空间充分性或空间异常统计；
+- 校验入口：`../fixtures/candidate-audits/4tu-northern-china-sediment-20260816T000000Z.json`、`../assets/source_manifest.json` 与逐源 demo 的三文件 hash 链。
 
 ### `usgs-conus-soil`
 
@@ -74,6 +106,7 @@
 - 获取：官方 WebODV 提取服务；运行 `scripts/acquire_geotraces_idp2025.py --accept-fair-use`，冻结选择参数、cookies/CSRF 会话内的响应、归档 hash 和全部成员；
 - 当前快照：只选择深度和 dissolved Cu/Ni/Zn；69,704 个样品深度行、39,327 条非空目标观测；
 - 校验：验证 903,710-byte ZIP 的 SHA-256、242 个成员和主 ODV 文件 hash；`scripts/audit_geotraces_snapshot.py` 重算行数、变量、QC 和空间/深度覆盖；
+- 2026-08-19 重观测：WebODV 导出器的 `Creator`/`Software` 头字段随服务部署漂移（worker 容器主机名与构建号），导致 2026-08-05 注册快照的逐字节校验失败；适配器规范化已扩展到 `CreateTime`/`View`/`Creator`/`Software` 四个易变字段，扩展规范化后 2026-08-05 归档与 2026-08-19 在线导出产生相同 canonical payload hash `96663b85…07f5eb`，科学负载证实未变；manifest 已按最新观测重钉；
 - 科学边界：`nmol/kg` 原样保留，不与 `ug/L` 静默换算；航次点不是规则全球覆盖；变量表没有 As，水体 As 请求必须路由到其他来源。
 
 ### `gemstat-open-archive`
@@ -128,6 +161,31 @@
 - 单位证据：工作簿无单位行，构建器强制比对内嵌 BHVO-2/AGV-2/W-2/GSP-2 QC 块与认证 µg/g 值（容差 20%）后才接受 `ug/g`；
 - 质量边界：不发布采样坐标，记录只入标准化数据库、不进任何地图层；HCl/AC 残余与粒级保持独立比较组；
 - 登记范围：本来源只注册在中国区域 fixture（构建器 `scripts/build_china_demo.py`），不进入通用 source catalog 路由；完整登记、哈希与重建命令见 `references/china-fixture.md`。
+
+### `pangaea-east-china-sea-clay`
+
+- 数据集：Shao et al. (2016) 东海陆架、冲绳海槽 IODP 钻孔、长江与台湾河流黏土组分主微量元素表（Appendix A）；DOI `10.1594/PANGAEA.856762`（父数据集 `10.1594/PANGAEA.856763`）；CC BY 3.0；
+- 内容：98 行 × 28 个带坐标事件，逐行 WGS84 经纬度；其中 8 个长江干流站位（CJ-01–08）与 3 个台湾河流站位为陆地河流沉积物，其余为东海陆架与 IODP 海洋钻孔；Cr/Cu/Pb/Zn 各 98 条、共 392 条目标测定（mg/kg，发布方注明原单位为 ppm）；不含 As；
+- 获取：官方 `?format=textfile` 直链已验证；36,898 bytes，SHA-256 `b70b0d566d17d76c16e2bcad1f0ec176cca7c0efccf68243fb9ea28aac55d5e2`；完整发布表只进本地缓存，不提交 Git；
+- 质量边界：每个物理样品有 Bulk 与酸浸 Residue 两行，测量基准分开登记、禁止平均合并；发布方把全部浓度参数方法标注为 X-ray diffraction (XRD)，按原样保留、不推断仪器或消解；
+- 当前状态：canonical adapter 已注册并通过组件测试；32 条 per-source demo 由适配器生成；这是中国区域首个逐行 canonical 坐标的沉积物在线来源，与 TPDC、Zenodo 组成三条独立血缘。
+
+### `pangaea-south-china-sea-sediment`
+
+- 数据集：Wei et al. (2015) 南海不同沉积物岩芯微量元素表（Table 2）；DOI `10.1594/PANGAEA.855177`（父数据集 `10.1594/PANGAEA.855179`）；CC BY 3.0；
+- 内容：44 个表层沉积物岩芯事件（4.07–20.60°N、105.28–120.16°E），逐行 WGS84 坐标；Cr/Cu/Ni/Pb/Zn 各 44 条、共 220 条 ICP-MS（Perkin-Elmer Elan 6000）测定；发布方已将原 ppm 单位归一为 mg/kg 并在字段名中注明；
+- 获取：官方 `?format=textfile` 直链已验证；25,021 bytes，SHA-256 `703995078eaa849014e5075d357adaba5f33c76f95e349dc2329e8656047ea5d`；
+- 质量边界：全部为海洋点位，陆地国家审计不得计入；消解细节表内未报告、不推断；
+- 当前状态：canonical adapter 已注册并通过组件测试；40 条 per-source demo 由适配器生成；补强南海海域沉积物扇区覆盖。
+
+### `pangaea-barents-c-horizon-soil`
+
+- 数据集：Reimann (1998) Kola 生态地球化学 C 层土壤表；DOI `10.1594/PANGAEA.56227`（父数据集 `10.1594/PANGAEA.686641`）；CC BY 3.0；
+- 内容：中央巴伦支地区（科拉半岛俄罗斯段、芬兰北部、挪威北部，约 66–71°N、22–34°E）606 个站位，逐行 WGS84 坐标；注册目标为王水提取套件：As（AAS-GF，检出限 0.1 mg/kg）、Cu/Zn（ICP-AES，0.5）、Pb（AAS-GF，0.2），共 2,419 条测定，其中 As 有 10 条低于检出限、保留 `<` 限定符；
+- 获取：官方 `?format=textfile` 直链已验证；407,662 bytes，SHA-256 `e22093a40b9c68d25398f2322b68ae7af9b00e331483ae8a3927fc2c13be3d30`；
+- 结构边界：发布表头存在同名重复列（不同分析方法），适配器按注册列索引解析并逐次核验列名前缀，任何列序变化都会失败关闭；平行的全量/NAA 列暂未注册；
+- 科学边界：王水可提取浓度不是全量含量，比较时必须保留提取基准；覆盖范围仅为中央巴伦支地区，不得声明为全俄覆盖；
+- 当前状态：canonical adapter 已注册并通过组件测试；32 条 per-source demo 由适配器生成；**这是注册表首条俄罗斯陆地血缘**，Loop 的 RUS 目标现在会路由本来源而不再要求从零发现；同族的腐殖质层与 B 层数据集仍在候选目录中待实现。
 
 ## D1 适配器和稳定 ID
 

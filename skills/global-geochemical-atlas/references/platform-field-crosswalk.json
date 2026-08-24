@@ -7,9 +7,9 @@
   },
   "reviewed_at": "2026-08-05",
   "scope": {
-    "canonical_field_count": 125,
+    "canonical_field_count": 129,
     "crosswalked_field_count": 36,
-    "non_core_field_count": 89,
+    "non_core_field_count": 93,
     "statement": "The crosswalk covers priority sample, observation, method, spatial and provenance semantics. D1 V4 raw, scope, citation, geology and rights fields are explicitly classified as local extensions or deferred crosswalks until additional professional schemas are reviewed. This supports import/export design and gap analysis, but does not certify conformance to EarthChem, USGS AGDB2, ODM2, IGSN or DataCite."
   },
   "mapping_type_definitions": {
@@ -552,7 +552,7 @@
   "non_core_fields": [
     {
       "classification": "local_extension",
-      "fields": ["record_id", "source_record_id", "original_value_raw", "source_qualifier_raw", "conversion_factor", "conversion_formula", "original_latitude_raw", "original_longitude_raw", "coordinate_transform_method", "coordinate_evidence_scope", "coordinate_policy_id", "coordinate_policy_version", "coordinate_policy_url", "coordinate_policy_sha256", "coordinate_latitude_field", "coordinate_longitude_field", "source_file", "source_row", "file_sha256", "source_tier", "qc_flags", "operational_confidence", "sample_type_mapping_status", "sample_type_missing_reason", "geology_missing_reason", "method_assignment_basis", "method_missing_reason", "method_source_locator", "citation_id_raw", "citation_text_raw", "citation_scope", "citation_assignment_basis", "citation_resolution_status", "citation_missing_reason", "access_status", "research_use_status", "license_url", "license_scope", "attribution_required", "redistribution_status", "terms_verified_at"],
+      "fields": ["record_id", "source_record_id", "original_value_raw", "source_qualifier_raw", "conversion_factor", "conversion_formula", "original_latitude_raw", "original_longitude_raw", "coordinate_transform_method", "coordinate_evidence_scope", "coordinate_policy_id", "coordinate_policy_version", "coordinate_policy_url", "coordinate_policy_sha256", "coordinate_latitude_field", "coordinate_longitude_field", "coordinate_representation_resolution_m", "coordinate_representation_resolution_basis", "coordinate_accuracy_evidence_status", "source_file", "source_row", "official_source_url", "file_sha256", "source_tier", "qc_flags", "operational_confidence", "sample_type_mapping_status", "sample_type_missing_reason", "geology_missing_reason", "method_assignment_basis", "method_missing_reason", "method_source_locator", "citation_id_raw", "citation_text_raw", "citation_scope", "citation_assignment_basis", "citation_resolution_status", "citation_missing_reason", "access_status", "research_use_status", "license_url", "license_scope", "attribution_required", "redistribution_status", "terms_verified_at"],
       "rationale": "Workflow audit, deterministic identity, transformation evidence and operational QC fields. They are deliberately retained as D2 extensions and must not be presented as native EarthChem, AGDB2, ODM2 or IGSN/DataCite fields."
     },
     {

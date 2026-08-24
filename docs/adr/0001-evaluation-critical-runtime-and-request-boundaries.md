@@ -2,7 +2,10 @@
 
 ## Status
 
-Accepted
+Accepted. The 900-second evaluator is the default contract. An explicit
+extended-research mode may run longer, but it does not change evaluation
+defaults or prevent an evidence-sufficient 840-second run from becoming
+delivery-ready.
 
 ## Context
 
@@ -68,7 +71,9 @@ deadline, and spatial scope. Stage scripts continue to own domain algorithms.
 Choose Option C. Default the production command to an 840-second internal
 budget, leaving 60 seconds for agent overhead. Acquisition receives only the
 budget remaining before a workflow reserve; validation shares the same global
-deadline. Never extend the deadline after a partial failure.
+deadline. Never extend the deadline after a partial failure. A caller may
+explicitly request up to 43,200 seconds for non-evaluation research; execution
+evidence keeps that choice distinguishable from the official profile.
 
 ## Decision 3: spatial scope
 

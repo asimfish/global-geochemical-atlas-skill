@@ -2,7 +2,28 @@
 
 > V4 内容寻址规则覆盖本文中早期接口卡的 checksum/hash 表述：当前同时使用 DOI/PID、版本、文件 ID/名称、发布/访问时间、字节数、SHA-256、schema、行数和关键统计；哈希证明字节一致性，不替代科学可信性审查。
 
-核对日期：2026-08-06。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
+核对日期：2026-08-16。发现事实以 `../assets/source_catalog.json` 为准；V3 状态以 `../assets/source_evidence_scores.json` 为准。本文件只作人工审阅入口，旧状态不再单独决定路由。
+
+## 覆盖偏差诊断与下一批来源
+
+当前目录含 65 条审计记录，其中 33 个已有可执行适配器、32 个仍为 discovery-only；证据分层为 A 32、B 1、D 32。欧洲密集主要来自可公开下载、字段清楚且已完成适配的 FOREGS/GEMAS/国家产品，不是路由器给欧洲加权。`coverage-balanced_source_order` 首轮优先空间区 × 介质边际增益，后续轮换完整队列；当前 5×3 区域门禁还会把国家内部空洞拆成 bbox 级补采动作组，并把新疆、西藏、台湾、华北等可命名行政区加入定向检索队列。
+
+按覆盖增益排序的下一批工作：
+
+1. `usgs-ngdb`：先固定一个不可变 USGS release，保留历史项目、方法、qualifier 和上游血缘；不直接冻结动态总库。
+2. `wosis`：固定 2023 snapshot，并按记录路由 CC BY 与 CC BY-NC；NC 记录不能混入 open-only 输出，且 WoSIS 属性不自动等同于统一总量元素地球化学。
+3. `brazil-sgb-geochemistry`、`india-gsi-ngcm`：先解决文件级许可、稳定数值端点、字段与方法；`unresolved` 或活动登录分发不得直接接入。
+4. 中东/西亚：当前只有 Arabian Sea 海洋沉积物离散点等局部源，尚未找到可复用、记录级坐标齐全的广域陆地多介质开放源。必须把检索范围与失败证据留在修复队列，不能把“未检索到”写成“不存在”，也不能用欧洲或海洋点代填。
+
+### `australia-ngsa`
+
+- 介质与范围：澳大利亚近全国 1,315 个 catchment-outlet 站位的运移表生覆盖物；按任务语义归为 sediment，不等同于原位土壤或规则格网；
+- 固定产品：eCat 82869 / DOI `10.11636/Record.2011.020`，`Rec2011_020_110706.csv` 为 4,843,809 bytes，SHA-256 `d9fa6d5b92642c56cc0b1ea7cc1ca22b763cde283cb71dc7194004a005f87812`；
+- 全表审计分母为 10,492 条四元素观测；研究切片排除 QA/QC 重复并要求所选元素非空后为每元素 2,131 条、四元素 8,524 条。两个口径分别登记，循环不得拿全表含重复分母冒充独立可扩容量；
+- 对账：7,890 行、7,890 样品、1,315 站位；`<75 µm` As/Cu/Pb/Zn 各 2,623 条，共 10,492 条 ICP-MS 观测，TOS/BOS 分层，field duplicate 不计独立样品；
+- 坐标：官方 Field Manual GA10307 pp. 24–25 明确 GDA94；仅通过 `gda94-geographic-wgs84-identity-v1` 在粗尺度地图/覆盖审计中转成 canonical，原值保留，发布方位置精度记为 `not_reported`；
+- 许可：CSV 当期声明 CC BY 3.0 Australia，当前 portal 显示 CC BY 4.0；输出保守沿用文件级 3.0 AU 并显式保留版本差异；
+- 证据入口：`../fixtures/candidate-audits/australia-ngsa-20260812T174523Z.json`、`../assets/source_manifest.json` 和 `../references/coordinate-policy-registry.json`。
 
 ## V1 兼容状态说明
 
@@ -16,15 +37,34 @@
 
 ## 当前可执行样板来源
 
-V3 当前登记二十一项 `normalized_analysis` 来源：岩石二项、土壤八项、沉积物七项、水体四项；其中二十项为 A 级、一项为 B 级。30 条人工复核样本均只完成机器准备，尚未由具名人员签署，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
+V3 当前登记三十三项 `normalized_analysis` 来源：岩石三项、土壤十四项、沉积物十二项、水体四项；其中三十二项为 A 级、一项为 B 级。30 条人工复核样本均只完成机器准备，尚未由具名人员签署，因此都不是 `benchmark_ready`。V1 的 `approved` 字段只作兼容，不能覆盖 V3 证据。
+
+### `4tu-northern-china-sediment`
+
+- 介质与范围：中国北方—西北河流/冲积沉积物，并含黄土高原末次冰期黄土与现代间冰期古土壤；覆盖准噶尔、塔里木、柴达木、河套、阿拉善和青藏高原东部等发布方分区；
+- 接口与版本：4TU.ResearchData/Figshare 数据集 `10.4121/uuid:6cb0bf79-7467-4e78-a531-cc91655d9fd0`，CC0；固定 workbook、README 和 KML 三个官方文件；
+- 校验：workbook 693,878 bytes / SHA-256 `6b06695e359986bf0a50c6d0febda08ffa25a61028c00cdadd60cc8426001232`，README 95,467 bytes / `ef1bfdf082c86529682bfbc0446b1f571db16935c4ea16ee3a2813726778fd76`，KML 2,479 bytes / `3633ceb7c8ddc639c1a646c0c5acc0f6264daa09f58f4c4121b8c5a64950678c`；
+- 对账：867 个样品、799 个坐标对、As/Cr/Cu/Hg/Ni/Pb/Zn 各 867 条，共 6,069 条观测；workbook 的 737 个表层沉积物样品与论文摘要的 738 个存在发布方口径差异，按文件实数保留并标记；
+- 方法与 QC：As 为王水消解后 HG-AFS，Cr 为熔片 XRF，Cu/Ni/Pb/Zn 为四酸消解 ICP-MS；README 还报告 3% 野外重复、实验室盲重复和标准物质。Hg 的逐元素技术没有在固定证据中说明，必须显式缺失；
+- 空间边界：发布方没有声明 datum/CRS 或位置不确定度，故坐标为 reported-only，不能进入 canonical WGS84 覆盖或空间异常计算。它实质补强新疆、西藏及中国北方的可追溯观测与方法证据，但不能伪装成 canonical 空间门禁已通过。
+
+### `earthchem-dehailonggang-rock`
+
+- 介质与范围：中国东昆仑北部西藏高原德海龙岗火山—深成杂岩，15 个 whole-rock 样品、两个发布方坐标对；它补足中国岩石介质与方法证据，但不是新疆或全国覆盖；
+- 接口与版本：EarthChem Library dataset 3338 version 1.0 (2024)，DOI `10.60520/IEDA/113338`，CC BY-SA 4.0；固定 POST 下载合同和四个精确成员；
+- 校验：ZIP 374,124 bytes，SHA-256 `38ac6ff1a0890dc6eb6fa92039c068ef8d46990953e1b83d7256572486898420`；主 workbook 33,004 bytes，SHA-256 `ccdc26ee169919144f7d1c8726eb8075c99b4d9cba30d249906f79c045a12ca7`；
+- 对账：Cr/Cu/Ni/Pb/Zn 各 15 条，共 75 条目标观测；方法表报告 ICP-MS、Agilent 7700e 与武汉上谱实验室，并通过样品键连接；
+- 边界：发布方未声明 CRS、位置不确定度、消解和检出限，因此坐标只作 reported 展示，不能进入 canonical 覆盖门禁，缺失字段不推断。
 
 ### `georoc-archaean`
 
 - 介质与范围：全球太古宙克拉通岩石，属于全球岩石覆盖的局部集合；
-- 接口：GRO.data Dataverse 版本化元数据 API 和完整 ZIP 下载；
+- 中国路由证据：冻结的 28 个发布方成员清单明确包含 `NORTH_CHINA_CRATON` 与 `YANGTZE_BLOCK`，因此可作为中国岩石补采的正向适用证据；该清单不是完整国家索引，成员内记录仍须按请求范围逐条筛选，也不把来源报告坐标升级为 WGS84；
+- 接口：GRO.data Dataverse 版本化元数据 API；完整 ZIP 不可用时，回退到同一冻结版本的 member persistent-ID 官方下载；
 - 版本：12.0，数据集 DOI `10.25625/1KRR1P`；
 - 许可：CC BY-SA 4.0，必须保留 GEOROC 与原始论文引用；
-- 校验：28 个成员文件名、大小、发布方 MD5 和本地 SHA-256；
+- 校验：整包与成员回退共用同一套 28 成员文件名、大小、发布方 MD5、必需字段和本地 SHA-256 门禁；回退批次全部通过后才原子发布；
+- 有界研究抽样：先按 28 个发布方克拉通成员轮转，再满足逐元素配额，避免 archive 文件顺序造成单一区域前缀偏差；
 - 适配器：`georoc_dataverse`，已实现；
 - 边界：预编译选择值不是所有重复测定的无筛选全集。
 
@@ -158,7 +198,7 @@ V3 当前登记二十一项 `normalized_analysis` 来源：岩石二项、土壤
 | `foregs-stream-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；<150 µm，总量/王水分开 |
 | `foregs-floodplain-sediment` | 沉积物 | 欧洲 | 固定 ZIP/CSV | 已实现；0–25 cm，与溪流沉积物分开 |
 | `canada-cdogs` | 沉积物、水、精矿 | 加拿大 | 调查目录和部分标准化下载 | 逐调查版本/许可、复测关系 |
-| `australia-ngsa` | 沉积物（运移表生覆盖物） | 澳大利亚 | 国家 Atlas 和产品下载 | 固定具体产品、文件 hash、介质语义 |
+| `australia-ngsa` | 沉积物（运移表生覆盖物） | 澳大利亚 | 已实现；见上方固定产品卡 | 位置精度未报告；不是规则格网 |
 | `australia-ozchem` | 岩石、沉积物 | 澳大利亚 | 仅核实到官方旧版产品说明 | 当前数值端点、版本、上游重叠 |
 | `us-water-quality-portal` | 水、沉积物 | 美国 | WQP Web Services | 贡献者许可、介质/方法异质、上游去重 |
 | `soils4africa` | 土壤 | 非洲农业用地 | CSV、GeoPackage | 隐私与聚合条款、分析物清单、适配器 |

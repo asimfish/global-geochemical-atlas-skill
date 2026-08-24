@@ -47,6 +47,9 @@
     "coordinate_latitude_field",
     "coordinate_longitude_field",
     "coordinate_uncertainty_m",
+    "coordinate_representation_resolution_m",
+    "coordinate_representation_resolution_basis",
+    "coordinate_accuracy_evidence_status",
     "sampled_at",
     "sample_depth_min_m",
     "sample_depth_max_m",
@@ -119,6 +122,7 @@
     "source_file",
     "source_row",
     "source_locator",
+    "official_source_url",
     "file_sha256",
     "license",
     "access_status",
@@ -199,6 +203,17 @@
     "coordinate_latitude_field": {"type": ["string", "null"]},
     "coordinate_longitude_field": {"type": ["string", "null"]},
     "coordinate_uncertainty_m": {"type": ["number", "null"], "minimum": 0},
+    "coordinate_representation_resolution_m": {"type": ["number", "null"], "minimum": 0},
+    "coordinate_representation_resolution_basis": {
+      "enum": ["derived_from_source_decimal_places", "not_available"]
+    },
+    "coordinate_accuracy_evidence_status": {
+      "enum": [
+        "source_reported_uncertainty",
+        "not_reported",
+        "not_applicable_no_canonical_coordinate"
+      ]
+    },
     "sampled_at": {"type": ["string", "null"]},
     "sample_depth_min_m": {"type": ["number", "null"], "minimum": 0},
     "sample_depth_max_m": {"type": ["number", "null"], "minimum": 0},
@@ -274,6 +289,10 @@
     "source_file": {"type": ["string", "null"]},
     "source_row": {"type": ["string", "null"]},
     "source_locator": {"type": ["string", "null"]},
+    "official_source_url": {
+      "type": ["string", "null"],
+      "pattern": "^https?://"
+    },
     "file_sha256": {"type": ["string", "null"]},
     "license": {"type": ["string", "null"]},
     "access_status": {"type": ["string", "null"]},
@@ -292,7 +311,7 @@
     "operational_confidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["version", "source", "completeness", "method", "spatial", "qc", "overall", "band", "gates_applied"],
+      "required": ["version", "source", "completeness", "method", "spatial", "qc", "overall", "band", "gates_applied", "quality_dimensions"],
       "properties": {
         "version": {"const": "d2-confidence-v3"},
         "source": {"type": "number", "minimum": 0, "maximum": 1},
@@ -312,11 +331,43 @@
               "missing_canonical_coordinate_low_cap",
               "missing_coordinate_uncertainty_medium_cap",
               "incomplete_method_context_medium_cap",
-              "missing_geologic_context_medium_cap"
+              "missing_geologic_context_medium_cap",
+              "synthetic_fixture_low_cap"
             ]
+          }
+        },
+        "quality_dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_evidence", "analytical_readiness", "spatial_usability", "workflow_usability"],
+          "properties": {
+            "source_evidence": {"$ref": "#/$defs/qualityDimension"},
+            "analytical_readiness": {"$ref": "#/$defs/qualityDimension"},
+            "spatial_usability": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["score", "band", "coordinate_status"],
+              "properties": {
+                "score": {"type": "number", "minimum": 0, "maximum": 1},
+                "band": {"type": "string", "enum": ["high", "medium", "low"]},
+                "coordinate_status": {"type": "string", "enum": ["canonical_wgs84", "reported_only", "unlocated"]}
+              }
+            },
+            "workflow_usability": {"$ref": "#/$defs/qualityDimension"}
           }
         }
       }
+    }
+  },
+  "$defs": {
+    "qualityDimension": {
+      "type": "object",
+      "required": ["score", "band"],
+      "properties": {
+        "score": {"type": "number", "minimum": 0, "maximum": 1},
+        "band": {"type": "string", "enum": ["high", "medium", "low"]}
+      },
+      "additionalProperties": false
     }
   },
   "allOf": [

@@ -21,7 +21,8 @@
     "Total mercury was measured directly on about 100 mg by Milestone tri-cell DMA-80 without acid digestion, following USEPA Method 7473.",
     "The header reports a 0.01 ng Hg mass detection limit, not a concentration detection limit; the adapter does not incorrectly store 0.01 ng/g as a row threshold.",
     "TOS and BOS horizons and all duplicate codes remain explicit. QA/QC duplicates are not counted as independent sites.",
-    "Coordinates use GDA94 geographic coordinates (EPSG:4283); the values are retained without an unrecorded transformation."
+    "Coordinates use GDA94 geographic coordinates (EPSG:4283); canonical fields are created only through gda94-geographic-wgs84-identity-v1 and raw values remain preserved.",
+    "The publisher does not report positional accuracy; coordinate decimal resolution is not treated as accuracy."
   ],
   "observed_data": {
     "counts": {
@@ -71,6 +72,8 @@
     }
   },
   "observed_metadata": {
+    "coordinate_accuracy_evidence_status": "not_reported_by_publisher",
+    "coordinate_policy_id": "gda94-geographic-wgs84-identity-v1",
     "dataset_doi": "10.26186/150328",
     "dataset_version": "2025-03-31",
     "license": {
