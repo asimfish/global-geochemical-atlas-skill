@@ -57,6 +57,19 @@ A complete, agent-native **research skill** — not a pre-rendered map. Given an
 
 Latest global online production run (2026-08-19, fully autonomous): **199,730** deterministically admitted records · **45,753** distinct physical samples · **35** connected public sources (31 further candidates audited and rejected) · **100%** record-level provenance chains · **3,721** anomaly screening candidates · **393** records that failed the standardization gate kept honestly in place — never silently dropped. Structured run evidence with a guided walk-through is on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/).
 
+## 🎯 Design Commitments
+
+Six commitments define this skill. Each one is implemented, regression-tested, and documented — the table is your map to where:
+
+| Commitment | What it guarantees | Implementation & docs |
+|---|---|---|
+| **Complete iteration loop** | Nine research steps behind three gates; failed acceptance enters a five-step repair loop; unfixable gaps are flagged `needs_human_review`, never papered over | [The iteration loop](#the-iteration-loop-fix-what-fails-admit-what-cannot-be-fixed) · `run_self_correction_loop.py` |
+| **Three-layer adversarial mechanism** | Scout nominates, Skeptic objects, deterministic Referee scores — at the data entrance; a canary-calibrated auditor guards the exit | [Adversarial mechanisms](#adversarial-mechanisms-it-can-drive-never-acquit) · `discovery_duel.py` / `adversarial_audit.py` |
+| **Per-round evaluation independence** | Reviewers run in fresh threads from a different model family; cross-run memory seeds round 1 scheduling only and in-run evidence always outranks it — no round inherits another round's conclusions | [Each round stays independent](#the-iteration-loop-fix-what-fails-admit-what-cannot-be-fixed) · `acquisition_memory.py` |
+| **SHA-256 fingerprints, one per result** | Hashes anchor four links — frozen request, source files, all 16 artifacts, and every reportable claim (`file + JSON pointer + SHA-256`) | [The evidence chain](#the-evidence-chain-every-number-carries-a-fingerprint) · `claim_ledger.py` |
+| **Temporal evolution inside the atlas** | The temporal view is one of the atlas's visualization options driven by the same standardized database — not a separate deliverable | [Results](#-results-one-skill-four-analysis-domains) · [live temporal view](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-temporal.html) |
+| **Auto-research genuinely wired in** | After a validated atlas run, the user can opt to continue into the research layer — cohorts, context, sampling priorities, and onward to paper drafts | [After the atlas](#after-the-atlas-continue-into-research-mode) · `build_research_products.py` |
+
 ## 🚀 Quick Start (90 seconds)
 
 All you need is Python 3.11+ — **no network, no API keys, no GPU, no third-party packages**. From the repository root:
@@ -124,17 +137,17 @@ cp -r skills/global-geochemical-atlas ~/.codex/skills/
 
 ### Ready-to-use prompts
 
-Once mounted, a plain natural-language request triggers the skill. Start from this template — replace only the three `{...}` slots:
+Once mounted, a plain natural-language request triggers the skill. **This is the default task prompt** — it exercises the full workflow end to end, and you only replace the three bolded slots (say, swap the region) to make it yours:
 
-> Using only public data, build a **{MEDIUM}** **{ELEMENT}** atlas for **{REGION}**: standardize the units, flag candidate anomaly areas, and attach per-record sources, licenses, and confidence scores.
+> Using only public literature and open data platforms, build a **soil** **arsenic (As)** atlas for **Western Europe**: automatically collect element concentrations, sampling coordinates, geological background, and analytical-method information; unify units, spatially match records, run quality control, and trace every record to its source; render the distribution map, heatmap, and element-combination comparison, filterable by element, region, geological unit, and sample type; identify candidate enrichment and depletion areas; and deliver the interactive atlas, the standardized geochemical database, the source & confidence documentation, and the anomaly identification results.
 
 | Slot | What to put there | Examples |
 |---|---|---|
-| `{ELEMENT}` | Element symbol or analyte name | `arsenic (As)` · `Cu` · `Pb` · `Hg` |
-| `{REGION}` | `global`, a named region, or a WGS84 bounding box | `Western Europe` · `China` · `lat 30–45, lon –10–30` |
-| `{MEDIUM}` | One or more of the four supported media | `soil` · `sediment` · `water` · `rock` |
+| **medium** | One or more of the four supported media | `soil` · `sediment` · `water` · `rock` |
+| **element** | Element symbol or analyte name | `arsenic (As)` · `Cu` · `Pb` · `Hg` |
+| **region** | `global`, a named region, or a WGS84 bounding box | `Western Europe` · `China` · `lat 30–45, lon –10–30` |
 
-Filled-in examples you can paste as-is:
+Shorter requests activate the skill just as well:
 
 > Using only public data, build a **soil arsenic** atlas for **Western Europe**: standardize the units, flag candidate enrichment areas, and attach per-record sources, licenses, and confidence scores.
 
