@@ -6,9 +6,11 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import http.client
 import ipaddress
 import json
 import os
+import re
 import shutil
 import socket
 import stat
@@ -35,6 +37,7 @@ SENSITIVE_QUERY_TERMS = (
     "secret",
 )
 RETRYABLE_HTTP_STATUS = {429, 502, 503, 504}
+RESUME_MANIFEST_VERSION = "geochemical-download-resume-v1"
 
 
 class DownloadError(RuntimeError):
@@ -57,7 +60,15 @@ def failure_from_exception(exc: Exception) -> DownloadError:
             else "incomplete_retrieval"
         )
         return DownloadError(f"HTTP {exc.code}: {exc.reason}", status=status)
-    if isinstance(exc, (urllib.error.URLError, TimeoutError)):
+    if isinstance(
+        exc,
+        (
+            urllib.error.URLError,
+            TimeoutError,
+            ConnectionError,
+            http.client.IncompleteRead,
+        ),
+    ):
         return DownloadError(str(exc), status="network_unavailable")
     return DownloadError(str(exc), status="incomplete_retrieval")
 
@@ -68,8 +79,16 @@ def is_retryable_error(exc: Exception) -> bool:
     if isinstance(exc, urllib.error.HTTPError):
         return exc.code in RETRYABLE_HTTP_STATUS
     if isinstance(exc, DownloadError):
-        return False
-    return isinstance(exc, (urllib.error.URLError, TimeoutError))
+        return exc.status == "network_unavailable"
+    return isinstance(
+        exc,
+        (
+            urllib.error.URLError,
+            TimeoutError,
+            ConnectionError,
+            http.client.IncompleteRead,
+        ),
+    )
 
 
 def utc_now() -> str:
@@ -258,12 +277,19 @@ def validate_response_metadata(
 
 
 def copy_response_bounded(
-    source: Any, destination: Any, max_bytes: int
+    source: Any,
+    destination: Any,
+    max_bytes: int,
+    *,
+    initial_bytes: int = 0,
+    digest: Any | None = None,
 ) -> tuple[int, str]:
     """Copy a response while enforcing the limit even when Content-Length is absent or false."""
 
-    digest = hashlib.sha256()
-    total = 0
+    if initial_bytes < 0 or initial_bytes > max_bytes:
+        raise DownloadError("initial partial size exceeds --max-bytes")
+    digest = digest or hashlib.sha256()
+    total = initial_bytes
     while True:
         chunk = source.read(min(1024 * 1024, max_bytes - total + 1))
         if not chunk:
@@ -276,6 +302,93 @@ def copy_response_bounded(
     return total, digest.hexdigest()
 
 
+def _resume_paths(
+    output: Path, url: str, expected_sha256: str, max_bytes: int
+) -> tuple[Path, Path]:
+    """Return deterministic paths bound to the immutable download identity."""
+
+    identity = hashlib.sha256(
+        json.dumps(
+            {
+                "source_url": url,
+                "expected_sha256": expected_sha256,
+                "max_bytes": max_bytes,
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()[:20]
+    stem = f".{output.name}.{identity}.resume"
+    return output.parent / f"{stem}.part", output.parent / f"{stem}.json"
+
+
+def _discard_resume(partial: Path, manifest: Path) -> None:
+    partial.unlink(missing_ok=True)
+    manifest.unlink(missing_ok=True)
+
+
+def _resume_binding(url: str, expected_sha256: str, max_bytes: int) -> dict[str, Any]:
+    return {
+        "resume_manifest_version": RESUME_MANIFEST_VERSION,
+        "source_url": url,
+        "expected_sha256": expected_sha256,
+        "max_bytes": max_bytes,
+    }
+
+
+def _load_resume_state(
+    partial: Path,
+    manifest: Path,
+    *,
+    url: str,
+    expected_sha256: str,
+    max_bytes: int,
+) -> tuple[int, dict[str, Any]]:
+    """Load only a complete, identity-bound partial state."""
+
+    if not partial.exists() and not manifest.exists():
+        return 0, {}
+    if not partial.is_file() or not manifest.is_file():
+        _discard_resume(partial, manifest)
+        return 0, {}
+    try:
+        state = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        _discard_resume(partial, manifest)
+        return 0, {}
+    binding = _resume_binding(url, expected_sha256, max_bytes)
+    if not isinstance(state, dict) or any(
+        state.get(key) != value for key, value in binding.items()
+    ):
+        _discard_resume(partial, manifest)
+        return 0, {}
+    size = partial.stat().st_size
+    if size > max_bytes:
+        _discard_resume(partial, manifest)
+        raise DownloadError("saved partial exceeds --max-bytes")
+    return size, state
+
+
+def _parse_content_range(value: str | None) -> tuple[int, int, int]:
+    """Parse a complete byte Content-Range; wildcard totals are never resumable."""
+
+    match = re.fullmatch(r"bytes\s+(\d+)-(\d+)/(\d+)", (value or "").strip())
+    if match is None:
+        raise DownloadError("resumed response lacks a valid Content-Range")
+    start, end, total = (int(item) for item in match.groups())
+    if start > end or end >= total:
+        raise DownloadError("resumed response has an inconsistent Content-Range")
+    return start, end, total
+
+
+def _hash_prefix(path: Path) -> Any:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest
+
+
 def download_once(
     url: str,
     output: Path,
@@ -285,10 +398,53 @@ def download_once(
 ) -> dict[str, Any]:
     validate_public_https_url(url)
     opener = urllib.request.build_opener(SafeRedirectHandler())
-    request = urllib.request.Request(
-        url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"}
-    )
     output.parent.mkdir(parents=True, exist_ok=True)
+    resume_partial: Path | None = None
+    resume_manifest: Path | None = None
+    resume_state: dict[str, Any] = {}
+    offset = 0
+    if expected_sha256:
+        resume_partial, resume_manifest = _resume_paths(
+            output, url, expected_sha256, max_bytes
+        )
+        offset, resume_state = _load_resume_state(
+            resume_partial,
+            resume_manifest,
+            url=url,
+            expected_sha256=expected_sha256,
+            max_bytes=max_bytes,
+        )
+        if offset and sha256_file(resume_partial) == expected_sha256:
+            os.replace(resume_partial, output)
+            resume_manifest.unlink(missing_ok=True)
+            return {
+                "status": "downloaded",
+                "source_url": url,
+                "resolved_url": resume_state.get("resolved_url", url),
+                "content_type": resume_state.get(
+                    "content_type", "application/octet-stream"
+                ),
+                "bytes": offset,
+                "sha256": expected_sha256,
+                "sha256_basis": "expected",
+                "accessed_at": utc_now(),
+                "http_status": 206,
+                "etag": resume_state.get("etag"),
+                "last_modified": resume_state.get("last_modified"),
+                "content_disposition": resume_state.get("content_disposition"),
+                "resumed_bytes": offset,
+            }
+        if offset == max_bytes:
+            _discard_resume(resume_partial, resume_manifest)
+            raise DownloadError("complete-size partial failed the expected SHA-256")
+
+    headers = {"User-Agent": USER_AGENT, "Accept": "*/*"}
+    if offset:
+        headers["Range"] = f"bytes={offset}-"
+        validator = resume_state.get("etag") or resume_state.get("last_modified")
+        if isinstance(validator, str) and validator.strip():
+            headers["If-Range"] = validator.strip()
+    request = urllib.request.Request(url, headers=headers)
     temporary_path: Path | None = None
     try:
         with opener.open(request, timeout=timeout) as response:
@@ -296,25 +452,113 @@ def download_once(
             validate_public_https_url(resolved_url)
             content_type = response.headers.get_content_type().casefold()
             declared_length = response.headers.get("Content-Length")
-            validate_response_metadata(content_type, declared_length, max_bytes)
+            status = int(getattr(response, "status", 0) or response.getcode())
+            append = False
+            expected_total: int | None = None
+            expected_response_bytes: int | None = None
+            if offset:
+                if status == 206:
+                    start, end, expected_total = _parse_content_range(
+                        response.headers.get("Content-Range")
+                    )
+                    if start != offset:
+                        raise DownloadError(
+                            "resumed response Content-Range does not start at the saved offset"
+                        )
+                    if expected_total > max_bytes:
+                        raise DownloadError(
+                            "resumed response total exceeds --max-bytes"
+                        )
+                    expected_response_bytes = end - start + 1
+                    if end != expected_total - 1:
+                        raise DownloadError(
+                            "resumed response does not cover the remainder of the file"
+                        )
+                    append = True
+                    validate_response_metadata(
+                        content_type, declared_length, max_bytes - offset
+                    )
+                elif status == 200:
+                    # A server may legally ignore Range. Its full response is safe
+                    # only when the old prefix is discarded before writing.
+                    offset = 0
+                    validate_response_metadata(content_type, declared_length, max_bytes)
+                else:
+                    raise DownloadError(
+                        f"resumed request returned unexpected HTTP status {status}"
+                    )
+            else:
+                if status != 200:
+                    raise DownloadError(
+                        f"download returned unexpected HTTP status {status}"
+                    )
+                validate_response_metadata(content_type, declared_length, max_bytes)
 
-            with tempfile.NamedTemporaryFile(
-                "wb",
-                prefix=f".{output.name}.",
-                suffix=".part",
-                dir=output.parent,
-                delete=False,
-            ) as handle:
-                temporary_path = Path(handle.name)
-                total, observed = copy_response_bounded(response, handle, max_bytes)
+            state = {
+                **(
+                    _resume_binding(url, expected_sha256, max_bytes)
+                    if expected_sha256
+                    else {}
+                ),
+                "resolved_url": resolved_url,
+                "content_type": content_type,
+                "etag": response.headers.get("ETag"),
+                "last_modified": response.headers.get("Last-Modified"),
+                "content_disposition": response.headers.get("Content-Disposition"),
+            }
+            if resume_partial is not None and resume_manifest is not None:
+                atomic_json(resume_manifest, state)
+                temporary_path = resume_partial
+                digest = _hash_prefix(resume_partial) if append else hashlib.sha256()
+                with resume_partial.open("ab" if append else "wb") as handle:
+                    total, observed = copy_response_bounded(
+                        response,
+                        handle,
+                        max_bytes,
+                        initial_bytes=offset if append else 0,
+                        digest=digest,
+                    )
+            else:
+                with tempfile.NamedTemporaryFile(
+                    "wb",
+                    prefix=f".{output.name}.",
+                    suffix=".part",
+                    dir=output.parent,
+                    delete=False,
+                ) as handle:
+                    temporary_path = Path(handle.name)
+                    total, observed = copy_response_bounded(response, handle, max_bytes)
+            response_bytes = total - (offset if append else 0)
+            if declared_length:
+                try:
+                    declared_bytes = int(declared_length)
+                except ValueError:
+                    declared_bytes = None
+                if declared_bytes is not None and response_bytes != declared_bytes:
+                    raise DownloadError(
+                        "response ended before its declared Content-Length",
+                        status="network_unavailable",
+                    )
+            if expected_response_bytes is not None and (
+                response_bytes != expected_response_bytes or total != expected_total
+            ):
+                raise DownloadError(
+                    "resumed response length does not match Content-Range",
+                    status="network_unavailable",
+                )
             if total == 0:
                 raise DownloadError("server returned an empty file")
             if expected_sha256 and observed != expected_sha256:
+                if resume_partial is not None and resume_manifest is not None:
+                    _discard_resume(resume_partial, resume_manifest)
+                    temporary_path = None
                 raise DownloadError(
                     "downloaded file SHA-256 does not match --expected-sha256"
                 )
             os.replace(temporary_path, output)
             temporary_path = None
+            if resume_manifest is not None:
+                resume_manifest.unlink(missing_ok=True)
             return {
                 "status": "downloaded",
                 "source_url": url,
@@ -326,13 +570,14 @@ def download_once(
                 if expected_sha256
                 else "observed_not_publisher_verified",
                 "accessed_at": utc_now(),
-                "http_status": getattr(response, "status", 200),
+                "http_status": status,
                 "etag": response.headers.get("ETag"),
                 "last_modified": response.headers.get("Last-Modified"),
                 "content_disposition": response.headers.get("Content-Disposition"),
+                "resumed_bytes": offset if append else 0,
             }
     finally:
-        if temporary_path is not None:
+        if temporary_path is not None and resume_partial is None:
             temporary_path.unlink(missing_ok=True)
 
 
@@ -361,6 +606,8 @@ def download_with_retries(
             urllib.error.HTTPError,
             urllib.error.URLError,
             TimeoutError,
+            ConnectionError,
+            http.client.IncompleteRead,
             OSError,
         ) as exc:
             if attempt >= retries or not is_retryable_error(exc):
@@ -427,6 +674,43 @@ def _read_delimited_header(path: Path, required_fields: Sequence[str]) -> None:
     raise DownloadError(f"required delimited fields not found in {path.name}{suffix}")
 
 
+def _published_extraction_records(
+    destination: Path,
+) -> list[dict[str, Any]] | None:
+    """Return a content snapshot for an existing, ordinary extraction directory."""
+
+    try:
+        destination_mode = destination.lstat().st_mode
+    except FileNotFoundError:
+        return None
+    if not stat.S_ISDIR(destination_mode):
+        raise DownloadError(
+            f"extract destination is not an ordinary directory: {destination}"
+        )
+    records: list[dict[str, Any]] = []
+    try:
+        for path in sorted(destination.rglob("*")):
+            mode = path.lstat().st_mode
+            if stat.S_ISDIR(mode):
+                continue
+            if not stat.S_ISREG(mode):
+                raise DownloadError(
+                    f"extract destination contains a non-regular entry: {path}"
+                )
+            records.append(
+                {
+                    "path": str(path.relative_to(destination)),
+                    "bytes": path.stat().st_size,
+                    "sha256": sha256_file(path),
+                }
+            )
+    except FileNotFoundError as exc:
+        raise DownloadError(
+            f"extract destination changed during verification: {destination}"
+        ) from exc
+    return records
+
+
 def safe_extract_zip(
     archive_path: Path,
     destination: Path,
@@ -435,11 +719,10 @@ def safe_extract_zip(
     required_members: Sequence[str],
     required_fields: Sequence[str],
 ) -> list[dict[str, Any]]:
-    """Extract to a temporary sibling directory and publish only after validation."""
+    """Extract safely and atomically publish or reuse an identical winning result."""
 
+    destination = destination.absolute()
     destination.parent.mkdir(parents=True, exist_ok=True)
-    if destination.exists():
-        raise DownloadError(f"extract destination already exists: {destination}")
     temporary = Path(
         tempfile.mkdtemp(
             prefix=f".{destination.name}.", suffix=".part", dir=destination.parent
@@ -499,7 +782,28 @@ def safe_extract_zip(
             }
             for path in sorted(extracted)
         ]
-        os.replace(temporary, destination)
+        existing_records = _published_extraction_records(destination)
+        if existing_records is not None:
+            if existing_records == records:
+                return records
+            raise DownloadError(
+                f"extract destination exists with different contents: {destination}"
+            )
+        try:
+            os.replace(temporary, destination)
+        except OSError as exc:
+            # Another process may have won the same atomic cache publication
+            # after the existence check.  Reuse it only after exact path, size,
+            # and SHA-256 equivalence; conflicting or unsafe content fails closed.
+            existing_records = _published_extraction_records(destination)
+            if existing_records == records:
+                return records
+            if existing_records is not None:
+                raise DownloadError(
+                    "concurrent extract destination has different contents: "
+                    f"{destination}"
+                ) from exc
+            raise
         return records
     finally:
         if temporary.exists():
@@ -535,6 +839,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "--max-members must be between 1 and 10000", status="invalid_input"
         )
 
+    result: dict[str, Any]
     if args.offline:
         result = existing_verified_cache(
             args.output,
@@ -544,7 +849,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             args.dataset_version,
         )
     else:
-        result: dict[str, Any] = {}
+        result = {}
         if not args.refresh and args.output.is_file() and args.manifest.is_file():
             try:
                 result = existing_verified_cache(

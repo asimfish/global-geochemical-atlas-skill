@@ -1279,6 +1279,46 @@ def acquire_online_source(
         )
 
 
+def allocated_source_timeout(
+    configured_timeout: float,
+    acquisition_window: float,
+    remaining_source_count: int,
+    *,
+    priority_retry: bool,
+) -> float:
+    """Allocate one source subprocess budget inside the shared deadline.
+
+    Ordinary first-pass sources share the remaining acquisition window so a
+    long tail cannot starve every later candidate. A source explicitly moved
+    to the front by the previous round's repair queue instead receives the
+    configured cap, still bounded by the global deadline. Without that
+    exception, a 26-source route turns a 600-second configured timeout into
+    about 60 seconds on every retry, so a verified CPU-heavy source can never
+    finish and the controller falsely stops for no progress.
+    """
+
+    if remaining_source_count < 1:
+        raise RequestRunError(
+            "invalid_input", "remaining source count must be positive"
+        )
+    if priority_retry:
+        return min(configured_timeout, acquisition_window)
+    source_timeout = min(
+        configured_timeout,
+        acquisition_window / remaining_source_count,
+    )
+    if source_timeout < MIN_SOURCE_TIMEOUT_SECONDS:
+        if acquisition_window >= MIN_SOURCE_TIMEOUT_SECONDS:
+            return min(configured_timeout, MIN_SOURCE_TIMEOUT_SECONDS)
+        raise RequestRunError(
+            "incomplete_retrieval",
+            f"deferred: remaining acquisition window {acquisition_window:.1f}s "
+            f"is below the {MIN_SOURCE_TIMEOUT_SECONDS:.0f}s per-source budget "
+            "floor; retry in the next round",
+        )
+    return source_timeout
+
+
 def minimum_source_records(source_id: str, analyte_count: int) -> int:
     if source_id in {"georoc-archaean", "georoc-convergent-margins"}:
         return analyte_count
@@ -1661,10 +1701,22 @@ def request_visualization_profile(
             spatial_domains,
             float(request.get("adjacent_marine_distance_km") or 0),
         )
-        west, south, east, north = analysis_bbox
         adjacent_marine = bool(
             resolved_region.get("country_code") and "marine" in spatial_domains
         )
+        # Retrieval may include a bounded adjacent-marine ring, but expanding
+        # the primary map frame to that rectangular envelope makes a country
+        # product look continental or global.  Keep the scientific database
+        # scope unchanged and frame named-country atlas views on the frozen
+        # country extent.  In-frame marine observations remain visible; every
+        # admitted row, including out-of-frame marine evidence, stays in the
+        # complete CSV and provenance artifacts.
+        display_bbox = (
+            list(resolved_region["bbox"])
+            if resolved_region.get("country_code")
+            else analysis_bbox
+        )
+        west, south, east, north = display_bbox
         analysis_country_codes = list(
             resolved_region.get("analysis_country_codes") or []
         )
@@ -1673,7 +1725,7 @@ def request_visualization_profile(
         profile["default_region"] = "custom"
         profile["custom_region"] = {
             "label": (
-                f"{resolved_region['label']}陆地与邻近海洋分析域"
+                f"{resolved_region['label']}（国家范围主视图）"
                 if adjacent_marine
                 else str(resolved_region["label"])
             ),
@@ -1691,7 +1743,8 @@ def request_visualization_profile(
             profile["subtitle"] = (
                 f"范围 = 冻结 Admin-0 陆地边界 + 距其边界不超过 "
                 f"{request.get('adjacent_marine_distance_km')} km 的来源明确标注海洋观测；"
-                "该分析缓冲区不表示领海、EEZ 或主权边界。"
+                "该分析缓冲区不表示领海、EEZ 或主权边界。主图与时序视图按冻结国家范围取景；"
+                "范围外邻海记录仍保留在完整数据库与证据链中，可下载审计。"
             )
         if resolved_region.get("cartographic_reference"):
             reference = resolved_region["cartographic_reference"]
@@ -2081,6 +2134,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 elements=request["elements"],
             )
             successful: list[dict[str, Any]] = []
+            priority_source_ids = set(args.priority_source_id)
             for source_index, source_id in enumerate(requested_ids):
                 acquired = work / "acquired" / source_id
                 source_request = dict(request)
@@ -2092,26 +2146,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         reserve_seconds=args.workflow_reserve_seconds,
                         minimum_seconds=1.0,
                     )
-                    source_timeout = min(
+                    source_timeout = allocated_source_timeout(
                         float(args.source_timeout_seconds),
-                        acquisition_window / remaining_source_count,
+                        acquisition_window,
+                        remaining_source_count,
+                        priority_retry=source_id in priority_source_ids,
                     )
-                    if source_timeout < MIN_SOURCE_TIMEOUT_SECONDS:
-                        if acquisition_window >= MIN_SOURCE_TIMEOUT_SECONDS:
-                            # Borrow from later sources' shares rather than
-                            # launching a doomed sub-minute attempt.
-                            source_timeout = min(
-                                float(args.source_timeout_seconds),
-                                MIN_SOURCE_TIMEOUT_SECONDS,
-                            )
-                        else:
-                            raise RequestRunError(
-                                "incomplete_retrieval",
-                                f"deferred: remaining acquisition window "
-                                f"{acquisition_window:.1f}s is below the "
-                                f"{MIN_SOURCE_TIMEOUT_SECONDS:.0f}s per-source "
-                                "budget floor; retry in the next round",
-                            )
                     if source_timeout < float(args.source_timeout_seconds):
                         acquisition_warnings.append(
                             f"global deadline capped {source_id} acquisition at {source_timeout:.3f}s"

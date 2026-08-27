@@ -49,10 +49,10 @@ anomaly_report.json
 若存在 `record_evidence.jsonl`，渲染包一并保留。全球产物选择 `global_globe`，区域产物选择
 `regional_focus`；两者共用同一模板契约而不是两份漂移的 HTML。`geochemistry.csv` 至少包含记录 ID、元素、介质、
 标准值/单位、坐标、QC、置信度、来源 ID 和来源定位。坐标为空、非有限或超出 WGS84 的记录不进入
-地图，但继续保留在数据库和 QC 报告。`--max-points` 是输入安全上限（默认 200,000）；`--max-embedded-records` 默认同为 200,000，因此请求上限内的可绘记录默认全部内嵌。二者不得混用：前者约束输入，后者仅在操作者显式调低时启用浏览器预览。预览必须写抽取证明，不能冒充完整结果。全量内嵌不等于每帧绘制全部点；二维和地球仪按当前视图采用像素级 LOD，只合并过密视觉符号，筛选、搜索、聚合统计和 CSV 仍全量。
+地图，但继续保留在数据库和 QC 报告。`--max-points` 是 canonical 输入安全上限（默认 200,000）；`--max-embedded-records` 是浏览器载荷上限（默认 80,000）。二者不得混用：前者约束完整科研数据库，后者只约束 HTML/GeoJSON 的确定性覆盖保持预览，防止单文件超过 100 MB 后让已采集的近 20 万条数据整轮回滚。预览必须写抽取证明，不能冒充完整结果；筛选、来源链、聚合统计和 CSV 对账仍以 canonical 全集为准。
 
-核心十六产物目录还包含 `sources_and_confidence.json`、`batch_acceptance.csv`、`batch_qc_report.json`、`anomaly_regions.geojson`、
-`spatial_anomaly_report.json`。D3 在它们存在时必须原样嵌入/复制并展示；独立兼容模式要求上方七个最小输入，缺少统计区域时只能显示记录级候选和显示聚合，不能补造 FDR 结果。
+核心十八产物目录还包含 `sources_and_confidence.json`、`batch_acceptance.csv`、`batch_qc_report.json`、`anomaly_regions.geojson`、
+`spatial_anomaly_report.json`、`anomaly_provenance.json` 与 `temporal_map.html`。D3 在它们存在时必须原样嵌入/复制并展示；独立兼容模式要求上方七个最小输入，缺少统计区域时只能显示记录级候选和显示聚合，不能补造 FDR 结果。
 
 ## 4. 任务配置模板
 
@@ -169,14 +169,17 @@ python scripts/create_visualization_profile.py \
 python scripts/validate_visualization.py --output-dir VISUALIZATION_OUTPUT
 ```
 
-`validate_outputs.py` 验证 `run_workflow.py` 的核心十六文件目录；它要求 `run_summary.json`，不用于
+`validate_outputs.py` 验证 `run_workflow.py` 的核心十八文件目录；它要求 `run_summary.json`，不用于
 独立 D3 目录。D3 验证器改为核对配置、报告、输入与输出哈希、地图计数、离线依赖和科学边界。
 
 ## 6. 输出与验收
 
 核心 D3 输出：
 
-- `interactive_map.html`：任务配置驱动、离线、自包含的交互地图；
+- `interactive_map.html`：任务配置驱动、离线、自包含的唯一主交互体验；主导航必须含
+  `temporalView` 和 `autoResearchView`。完整时序文档以 base64 bytes 嵌入并经 sandboxed
+  `srcdoc` 懒加载，禁止链接/iframe `src` 依赖 `temporal_map.html`；Auto-Research 在静态
+  模式只导出 typed request，在 loopback controller 模式才可创建真实运行；
 - `samples.geojson`：一条 feature 对应一条当前空间产物内的合格坐标测定记录；区域模式先严格按 bbox/国家多边形裁剪。可上图记录不超过 `--max-embedded-records` 时全量嵌入；超过时使用 `d3-coverage-preserving-preview-v1` 确定性选择，保留全部异常记录、任何入选物理样品的全部元素测定，并优先覆盖来源 × 介质 × 元素 × 5°空间格，再以稳定 hash 补足。feature properties 采用 `d3-map-sample-properties-v3` 最小空间交换字段，并以 `record_id` 无损连接完整 `geochemistry.csv`。GeoJSON 和报告必须写 input/output 记录数、物理样品数、阈值、分层粒度与声明边界；这是一种浏览器性能预览，不是完整库、随机样本或统计代表性样本；
 - `visualization_profile.json`：本次可复现任务配置；
 - `visualization_report.json`：输入哈希、配置、警告、地图计数和失败边界，结构见

@@ -18,11 +18,13 @@
         "4tu-northern-china-sediment",
         "earthchem-dehailonggang-rock",
         "eidc-ningbo-soil",
+        "europe-pmc-pearl-river-dissolved-metals",
         "figshare-yangtze-basin-soil-heavy-metals",
         "india-gsi-ngcm",
         "jamstec-darwin",
         "japan-gsj-geochemical-map",
         "japan-gsj-marine-sediment",
+        "mendeley-guangdong-fujian-groundwater",
         "pangaea-arabian-sea-sediment",
         "pangaea-batagay-soil",
         "pangaea-east-china-sea-clay",
@@ -33,7 +35,7 @@
       ],
       "remaining_work": [
         "Search additional Southeast, Central and West Asian national geological surveys and more East Asian country portals beyond the verified TPDC China mountain-soil dataset. The completed pass has not yet found a broad, reusable, record-coordinate-complete terrestrial Middle East/West Asia multi-element source; retain this as a searched-but-unresolved boundary, not a claim of nonexistence.",
-        "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented river- and marine-sediment products into separately versioned surface-soil products; the 4TU source now supplies As plus six other elements across northern/western China, but its undeclared datum/CRS leaves the China canonical-map gap open.",
+        "Resolve stable numerical access and terms for India NGCM; expand GSJ beyond the implemented river- and marine-sediment products into separately versioned surface-soil products; the 4TU source now supplies As plus six other elements across northern/western China, while the new Guangdong-Fujian groundwater and Pearl River sources improve inland-water evidence. All three retain undeclared-datum boundaries, and none closes nationwide canonical-map coverage.",
         "Resolve the current numerical lineage of legacy marine-rock geochemistry systems such as GANSEKI.",
         "Taiwan terrestrial gap re-checked 2026-08-19: MOENV groundwater API remains behind an API-key credential boundary; data.gov.tw TLS reachability is restored (the earlier handshake EOF was transient), but the leading open soil datasets (e.g. dataset/83968, dataset/53321) locate samples by cadastral parcel number without published WGS84 coordinates, so ingestion needs a dedicated adapter plus a coordinate-evidence decision; retained as open work, not a nonexistence claim."
       ],
@@ -155,10 +157,10 @@
       "status": "in_progress"
     }
   },
-  "as_of": "2026-08-16T00:00:00Z",
+  "as_of": "2026-08-23T00:00:00Z",
   "claim_boundary": "A checked channel means that at least one documented search pass was completed. It does not mean every relevant source in that region or channel has been found.",
   "completion_rule": "Discovery can only become saturated after every area has documented searches across official agency, disciplinary repository, program archive and publication-linked channels, followed by two consecutive rounds with no new high-relevance source.",
-  "round": 15,
+  "round": 16,
   "saturated": false,
   "scope_version": "geochemical-source-discovery-scope-v1",
   "status": "in_progress"

@@ -322,6 +322,29 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     backlog_path = args.output_dir / "iteration_backlog.csv"
     backlog_report = backlog_builder.build(outputs["database"], backlog_path)
     try:
+        temporal_region = (
+            temporal_map_builder.region_from_profile(args.visualization_profile)
+            if args.visualization_profile is not None
+            else None
+        )
+        temporal_payload = temporal_map_builder.build_payload(
+            outputs["database"],
+            args.output_dir / "anomaly_provenance.json",
+            region=temporal_region,
+        )
+        temporal_html = temporal_map_builder.build_html(
+            temporal_payload,
+            temporal_map_builder.DEFAULT_TEMPLATE,
+            temporal_map_builder.DEFAULT_BASEMAP,
+        )
+    except (temporal_map_builder.TemporalMapBuildError, OSError) as exc:
+        raise WorkflowError(
+            "incomplete_retrieval", f"temporal map generation failed: {exc}"
+        ) from exc
+    temporal_map_path = args.output_dir / "temporal_map.html"
+    temporal_map_path.write_bytes(temporal_html.encode("utf-8"))
+
+    try:
         map_report = map_builder.build_map(
             outputs["database"],
             outputs["anomalies"],
@@ -343,33 +366,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             iteration_backlog_path=backlog_path,
             visualization_profile_path=args.visualization_profile,
             coordinate_mode=args.coordinate_mode,
+            temporal_html_path=temporal_map_path,
         )
     except (map_builder.MapBuildError, OSError) as exc:
         raise WorkflowError(
             "incomplete_retrieval", f"map generation failed: {exc}"
         ) from exc
-
-    try:
-        temporal_region = (
-            temporal_map_builder.region_from_profile(args.visualization_profile)
-            if args.visualization_profile is not None
-            else None
-        )
-        temporal_payload = temporal_map_builder.build_payload(
-            outputs["database"],
-            args.output_dir / "anomaly_provenance.json",
-            region=temporal_region,
-        )
-        temporal_html = temporal_map_builder.build_html(
-            temporal_payload,
-            temporal_map_builder.DEFAULT_TEMPLATE,
-            temporal_map_builder.DEFAULT_BASEMAP,
-        )
-    except (temporal_map_builder.TemporalMapBuildError, OSError) as exc:
-        raise WorkflowError(
-            "incomplete_retrieval", f"temporal map generation failed: {exc}"
-        ) from exc
-    (args.output_dir / "temporal_map.html").write_bytes(temporal_html.encode("utf-8"))
 
     qc_report = json_file(outputs["qc_report"])
     anomaly_report = json_file(outputs["anomaly_report"])

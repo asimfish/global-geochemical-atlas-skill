@@ -234,6 +234,26 @@ def _reported_float(value: Any) -> float | None:
     return parsed if math.isfinite(parsed) else None
 
 
+def _article_doi(citation: str) -> str | None:
+    """Extract a DOI while preserving balanced identifier punctuation.
+
+    GEOROC reference text uses a terminal question mark to flag an uncertain
+    transcription.  That marker is not part of the DOI (for example,
+    ``10.1130/2006.2412(09)?``).  Ordinary citation punctuation and only
+    unmatched closing parentheses are removed; balanced DOI parentheses stay.
+    """
+
+    match = re.search(r"\bdoi:\s*(10\.\d{4,9}/\S+)", citation, flags=re.IGNORECASE)
+    if match is None:
+        return None
+    doi = match.group(1).rstrip(".,;")
+    if doi.endswith("?"):
+        doi = doi[:-1].rstrip(".,;")
+    while doi.endswith(")") and doi.count(")") > doi.count("("):
+        doi = doi[:-1].rstrip(".,;")
+    return doi or None
+
+
 def _parse_analytes(value: str) -> tuple[str, ...]:
     analytes: list[str] = []
     for token in value.split(","):
@@ -291,12 +311,13 @@ def _validate_generated_at(value: str) -> str:
 
 
 def _source_row(record: RawRecord) -> tuple[str, str]:
-    file_locator, separator, row_text = record.source_locator.partition("#row=")
-    if not separator or not row_text.isdigit():
+    file_locator, separator, fragment = record.source_locator.partition("#")
+    match = re.fullmatch(r"(?:sheet\d+-)?row=(\d+)", fragment)
+    if not separator or match is None:
         raise DemoError(
             f"source locator has no numeric row fragment: {record.source_locator}"
         )
-    return file_locator, row_text
+    return file_locator, match.group(1)
 
 
 def _provenance_fields(
@@ -571,14 +592,10 @@ def georoc_demo(
             ]
             article_dois = sorted(
                 {
-                    match.group(1).rstrip(".,;)")
+                    doi
                     for citation in article_citations
-                    for match in [
-                        re.search(
-                            r"\bdoi:\s*(10\.\d{4,9}/\S+)", citation, flags=re.IGNORECASE
-                        )
-                    ]
-                    if match
+                    for doi in [_article_doi(citation)]
+                    if doi is not None
                 }
             )
             entry.update(
@@ -636,9 +653,7 @@ def gard_demo(
     to exhaustion so the adapter row-count reconciliation runs every time.
     """
     supported = {"As", "Cr", "Cu", "Ni", "Pb", "Zn"}
-    selected_analytes = tuple(
-        item for item in requested_analytes if item in supported
-    )
+    selected_analytes = tuple(item for item in requested_analytes if item in supported)
     if not selected_analytes:
         raise DemoError("Gard compilation registers none of the requested analytes")
     if observation_limit % len(selected_analytes) != 0:
@@ -733,9 +748,7 @@ def gard_demo(
         reported_longitude = str(fields.get("longitude") or "")
         rock_name = str(fields.get("rock_name") or "").strip()
         rock_type = str(fields.get("rock_type") or "").strip()
-        lithology = (
-            rock_name if rock_name and rock_name != "not given" else rock_type
-        )
+        lithology = rock_name if rock_name and rock_name != "not given" else rock_type
         method = str(fields.get("method") or "").strip()
         record_id = stable_record_id(
             record.source_id,
@@ -744,6 +757,14 @@ def gard_demo(
             original_value,
             "ppm",
         )
+        member = candidate.registry_entry["download"]["archive_members"][0]
+        member_file, member_row = _source_row(record)
+        provenance = _provenance_fields(record, downloaded, candidate, analyte)
+        if member_file == str(member["member"]):
+            # The canonical row points inside the decoded member. Bind the
+            # same exact member hash used by record evidence and the
+            # acquisition manifest, rather than the outer ZIP hash.
+            provenance["file_sha256"] = str(member["sha256"])
         rows.append(
             {
                 "record_id": record_id,
@@ -781,15 +802,13 @@ def gard_demo(
                 "lithology_raw": lithology,
                 "geologic_age_raw": str(fields.get("age") or "").strip(),
                 "tectonic_setting_raw": "",
-                **_provenance_fields(record, downloaded, candidate, analyte),
+                **provenance,
             }
         )
         entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
         # Rows locate values inside the decoded complete.csv member, so the
         # evidence must cite that member (pinned in registry archive_members)
         # instead of the outer archive, or packaging reconciliation fails.
-        member = candidate.registry_entry["download"]["archive_members"][0]
-        member_file, member_row = _source_row(record)
         if member_file == str(member["member"]):
             entry["source_file"] = member_file
             entry["source_row"] = int(member_row)
@@ -814,9 +833,7 @@ def gard_demo(
                 "article_citations": (
                     [". ".join(citation_parts)] if citation_parts else []
                 ),
-                "article_dois": (
-                    [reference["doi"]] if reference.get("doi") else []
-                ),
+                "article_dois": ([reference["doi"]] if reference.get("doi") else []),
                 "compilation_upstream": reference.get("data_source", ""),
                 "selection_rule": (
                     "whole-rock compilation; reported point coordinates; "
@@ -936,12 +953,22 @@ def usgs_demo(
         if first_censored[layer] is None and any(value[3] for value in measurements):
             first_censored[layer] = item
 
-    # Exercise the censored-value path when the source offers a suitable row, without inventing a limit.
+    # A production request may intentionally ask beyond a source's finite
+    # capacity.  Preserve the three-layer balance at the largest complete
+    # source-backed size instead of turning that auditable capacity signal into
+    # a source failure (which would discard otherwise usable USGS records).
+    balanced_site_limit = min(len(candidates[layer]) for layer in layers)
+    if balanced_site_limit == 0:
+        counts = ", ".join(f"{layer}={len(candidates[layer])}" for layer in layers)
+        raise DemoError(
+            "USGS has no complete balanced soil-layer set inside the requested "
+            f"scope ({counts})"
+        )
+
+    # Exercise the censored-value path when the source offers a suitable row,
+    # without inventing a limit.
     for layer in layers:
-        if len(candidates[layer]) != site_limit:
-            raise DemoError(
-                f"USGS produced only {len(candidates[layer])} usable sites for {layer}"
-            )
+        candidates[layer] = candidates[layer][:balanced_site_limit]
         if not any(any(value[3] for value in item[2]) for item in candidates[layer]):
             replacement = first_censored[layer]
             if replacement is not None and all(
@@ -1041,9 +1068,10 @@ def usgs_demo(
                 )
                 evidence.append(entry)
                 selected_source_rows.add(record.source_record_id)
-    if len(rows) != observation_limit:
+    expected_observations = balanced_site_limit * len(layers) * len(analytes)
+    if len(rows) != expected_observations:
         raise DemoError(
-            f"USGS produced {len(rows)} observations, expected {observation_limit}"
+            f"USGS produced {len(rows)} observations, expected {expected_observations}"
         )
     return rows, evidence, len(selected_source_rows), raw_source_rows
 
@@ -4232,6 +4260,168 @@ def v4_m6_demo(
     return rows, evidence_rows, len(selected_source_rows)
 
 
+def inland_water_demo(
+    records: Sequence[RawRecord],
+    files: Mapping[str, DownloadedFile],
+    candidate: Any,
+    observation_limit: int,
+    requested_analytes: Sequence[str],
+    bbox: tuple[float, float, float, float] | None,
+    purpose: str,
+) -> tuple[list[dict[str, str]], list[dict[str, Any]], int]:
+    """Build a balanced reported-coordinate slice for the two China water sources."""
+
+    registered = candidate.registry_entry["target_analytes"]
+    analytes = tuple(item for item in requested_analytes if item in registered)
+    if not analytes:
+        raise DemoError(
+            f"{candidate.source_id} registers none of the requested analytes"
+        )
+    if observation_limit < len(analytes):
+        raise DemoError(
+            f"{candidate.source_id} observation limit must cover each requested analyte"
+        )
+    per_analyte, remainder = divmod(observation_limit, len(analytes))
+    quotas = {
+        analyte: per_analyte + (index < remainder)
+        for index, analyte in enumerate(analytes)
+    }
+    selected: Counter[str] = Counter()
+    selected_source_rows: set[str] = set()
+    rows: list[dict[str, str]] = []
+    evidence_rows: list[dict[str, Any]] = []
+    source_id = candidate.source_id
+    for record in records:
+        if all(selected[item] >= quotas[item] for item in analytes):
+            break
+        observations = record.fields.get("_target_observations")
+        if not isinstance(observations, Mapping):
+            continue
+        latitude = str(record.fields.get("_reported_latitude") or "").strip()
+        longitude = str(record.fields.get("_reported_longitude") or "").strip()
+        if not _inside_bbox(latitude, longitude, bbox):
+            continue
+        downloaded = files.get(str(record.fields.get("_source_file") or ""))
+        if downloaded is None:
+            raise DemoError(f"{source_id} record references an unknown source file")
+        if source_id == "mendeley-guangdong-fujian-groundwater":
+            sample_id = str(record.fields.get("Site") or "").strip()
+            sampled_at = ""
+            material = "well water"
+        else:
+            sample_id = "|".join(
+                (
+                    str(record.fields.get("Site number") or "").strip(),
+                    str(record.fields.get("_sampled_at") or "").strip(),
+                )
+            )
+            sampled_at = str(record.fields.get("_sampled_at") or "").strip()
+            material = "0.22 um filtered river water"
+        if not sample_id or not latitude or not longitude:
+            continue
+        for analyte in analytes:
+            if selected[analyte] >= quotas[analyte]:
+                continue
+            values = observations.get(analyte)
+            if not isinstance(values, Mapping):
+                continue
+            raw_value = str(values.get("value") or "").strip()
+            numeric = _reported_float(raw_value)
+            if numeric is None or numeric < 0:
+                continue
+            unit = str(values.get("unit") or "").strip()
+            record_id = stable_record_id(
+                record.source_id,
+                record.source_record_id,
+                analyte,
+                raw_value,
+                unit,
+            )
+            rows.append(
+                {
+                    "record_id": record_id,
+                    "source_record_id": record.source_record_id,
+                    "sample_id": sample_id,
+                    "element_or_analyte": analyte,
+                    "value": raw_value,
+                    "unit": unit,
+                    "medium": "water",
+                    "material": material,
+                    "measurement_basis": str(values.get("measurement_basis") or ""),
+                    "value_qualifier": "",
+                    "missing_reason": "",
+                    "detection_limit": "",
+                    "detection_limit_unit": "",
+                    "original_latitude_raw": latitude,
+                    "original_longitude_raw": longitude,
+                    "latitude": "",
+                    "longitude": "",
+                    "source_crs": "",
+                    "coordinate_transform_method": "",
+                    "coordinate_uncertainty_m": "",
+                    "geologic_unit": "",
+                    "analytical_method": str(values.get("analytical_method") or ""),
+                    "method_family": (
+                        "icp_ms" if values.get("analytical_method") else ""
+                    ),
+                    "digestion_or_extraction": str(
+                        values.get("digestion_or_extraction") or ""
+                    ),
+                    "laboratory": "",
+                    "source_tier": "peer_reviewed_open_data",
+                    "sampled_at": sampled_at,
+                    "sample_depth_min_m": "",
+                    "sample_depth_max_m": "",
+                    "grain_fraction": "",
+                    **_provenance_fields(record, downloaded, candidate, analyte),
+                }
+            )
+            entry = _base_evidence(record, downloaded, candidate, record_id, analyte)
+            entry.update(
+                {
+                    "article_citations": [candidate.registry_entry["citation"]],
+                    "article_dois": [candidate.dataset_doi]
+                    if candidate.dataset_doi
+                    else [],
+                    "selection_rule": (
+                        "balanced deterministic inland-water slice by analyte; "
+                        "reported-coordinate filtering only"
+                    ),
+                    "sample_type": str(record.fields.get("_sample_type_raw") or ""),
+                    "row_provenance": str(record.fields.get("_row_provenance") or ""),
+                    "river_reach": str(record.fields.get("River reach") or ""),
+                    "season": str(record.fields.get("_season") or ""),
+                    "sampled_at": sampled_at,
+                    "reported_coordinate_text": str(
+                        record.fields.get("_reported_coordinate_text") or ""
+                    ),
+                    "reported_latitude": latitude,
+                    "reported_longitude": longitude,
+                    "method_source_locator": str(
+                        values.get("variable_metadata_locator") or ""
+                    ),
+                    "coordinate_evidence": {
+                        "reported_latitude": latitude,
+                        "reported_longitude": longitude,
+                        "datum_status": "not_declared",
+                        "canonicalization_status": "withheld_pending_datum_verification",
+                    },
+                }
+            )
+            evidence_rows.append(entry)
+            selected[analyte] += 1
+            selected_source_rows.add(record.source_record_id)
+    if not rows:
+        raise DemoError(
+            f"{source_id} has no usable observations inside the requested scope"
+        )
+    if len(rows) != observation_limit and purpose == "demo":
+        raise DemoError(
+            f"{source_id} produced {len(rows)} observations, expected {observation_limit}"
+        )
+    return rows, evidence_rows, len(selected_source_rows)
+
+
 @contextmanager
 def acquired_source(
     args: argparse.Namespace,
@@ -4297,6 +4487,8 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
         "pangaea-brasol-ne-brazil-soil",
         "figshare-yangtze-basin-soil-heavy-metals",
         "4tu-northern-china-sediment",
+        "europe-pmc-pearl-river-dissolved-metals",
+        "mendeley-guangdong-fujian-groundwater",
     }
     bbox_parameterized_sources = parameterized_sources - {"japan-gsj-marine-sediment"}
     if args.source not in bbox_parameterized_sources and args.bbox is not None:
@@ -4390,9 +4582,7 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                     "sha256": str(member["sha256"]),
                     "retrieved_at": zip_file.retrieved_at,
                 }
-                for member in candidate.registry_entry["download"][
-                    "archive_members"
-                ]
+                for member in candidate.registry_entry["download"]["archive_members"]
             ]
             rows, evidence, selected_source_rows, raw_source_rows = gard_demo(
                 raw_records,
@@ -4535,6 +4725,20 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 args.observations,
                 args.elements,
                 args.bbox,
+            )
+            raw_source_rows = len(raw_records)
+        elif args.source in {
+            "europe-pmc-pearl-river-dissolved-metals",
+            "mendeley-guangdong-fujian-groundwater",
+        }:
+            rows, evidence, selected_source_rows = inland_water_demo(
+                raw_records,
+                files,
+                candidate,
+                args.observations,
+                args.elements,
+                args.bbox,
+                args.purpose,
             )
             raw_source_rows = len(raw_records)
         elif args.source in {
@@ -4806,6 +5010,21 @@ def generate(args: argparse.Namespace) -> dict[str, Any]:
                 "Aqua-regia and XRF measurements remain in separate comparison partitions.",
             ]
         )
+    elif args.source == "europe-pmc-pearl-river-dissolved-metals":
+        warnings.extend(
+            [
+                "The 81 Pearl River sites and two flow seasons are regional evidence, not national inland-water coverage.",
+                "The article documents dissolved 0.22 um filtered water and ICP-MS, while the coordinate datum remains unreported; map canonicalization is withheld.",
+            ]
+        )
+    elif args.source == "mendeley-guangdong-fujian-groundwater":
+        warnings.extend(
+            [
+                "The 124 well-water records cover parts of Guangdong and Fujian and are not a uniform groundwater grid.",
+                "Analytical method, sampling dates and coordinate datum are unreported; no values are inferred, and method-aware comparability is withheld.",
+                "Blank below-detection-limit cells without numeric limits and hyphen no-data cells are not converted to observations.",
+            ]
+        )
 
     research_purpose = args.purpose == "research"
     manifest = {
@@ -4956,6 +5175,8 @@ def build_parser() -> argparse.ArgumentParser:
             "pangaea-brasol-ne-brazil-soil",
             "figshare-yangtze-basin-soil-heavy-metals",
             "4tu-northern-china-sediment",
+            "europe-pmc-pearl-river-dissolved-metals",
+            "mendeley-guangdong-fujian-groundwater",
         ),
     )
     parser.add_argument("--cache-dir", required=True, type=Path)

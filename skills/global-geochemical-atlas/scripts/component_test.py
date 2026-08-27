@@ -8,6 +8,7 @@ import binascii
 import copy
 import csv
 import hashlib
+import http.client
 import io
 import json
 import os
@@ -17,9 +18,11 @@ import struct
 import subprocess
 import sys
 import tempfile
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
+import warnings
 import zipfile
 import zlib
 from collections import Counter
@@ -28,6 +31,7 @@ from pathlib import Path
 from typing import Any
 
 import acquire_gemstat_arsenic as gemstat_acquisition
+import auto_research
 import benchmark_workflow
 import build_china_demo
 import build_evidence_bundle as evidence_builder
@@ -37,7 +41,9 @@ import build_temporal_map as temporal_map_builder
 import build_element_comparison as comparison_builder
 import build_index as index_builder
 import benchmark_index
+import agent_audit
 import cache_control
+import claim_ledger
 import coverage_report
 import download_data as downloader
 import evaluate_batch_qc as batch_qc
@@ -59,7 +65,9 @@ import migrate_v4_source_demos
 import profile_source_completeness
 import reconcile_v4_coordinate_claims
 import run_atlas_request as request_runner
+import run_self_correction_loop as loop_controller
 import sampling_time
+import serve_atlas_research
 import classify_anomaly_provenance as provenance_classifier
 import validate_acquisition as acquisition_validator
 import validate_outputs as output_validator
@@ -149,6 +157,155 @@ def run_command(
 
 def check_d1(output_dir: Path) -> list[str]:
     checks: list[str] = []
+    with tempfile.TemporaryDirectory() as audit_temp:
+        audit_root = Path(audit_temp)
+        gap = {"region": "Africa", "medium": "soil", "element": "Cu"}
+        facts = [
+            {
+                "source_id": "official-candidate",
+                "title": "Official candidate",
+                "official_url": "https://example.org/data",
+                "dimensions": {
+                    "official_identity": True,
+                    "machine_access": True,
+                    "research_use_license": True,
+                    "version_and_integrity": True,
+                    "region_relevance": True,
+                    "medium_relevance": True,
+                    "record_locator": False,
+                },
+                "evidence_locators": {
+                    "official_identity": "https://example.org/about",
+                    "machine_access": "https://example.org/data",
+                    "research_use_license": "https://example.org/license",
+                },
+            }
+        ]
+        first = agent_audit.prepare_audit_round(
+            audit_root / "first",
+            round_id="round-01-gap-01",
+            gap=gap,
+            source_facts=facts,
+            prior_memory={"previous_verdict": "approve"},
+        )
+        second = agent_audit.prepare_audit_round(
+            audit_root / "second",
+            round_id="round-01-gap-01",
+            gap=gap,
+            source_facts=facts,
+            prior_memory={"previous_verdict": "reject", "review_prose": "coach"},
+        )
+        require(
+            first["role_packet_sha256"] == second["role_packet_sha256"]
+            and first["prior_memory_sha256"] != second["prior_memory_sha256"],
+            "D1 adversarial evaluator packets are invariant to cross-round memory while selection memory remains fingerprinted",
+            checks,
+        )
+        agent_audit.create_result_envelope(
+            audit_root / "first",
+            role="scout",
+            invocation_id="fresh-scout-01",
+            model_family="family-a",
+            payload={
+                "candidate_ids": ["official-candidate"],
+                "evidence_requests": ["record locator"],
+            },
+        )
+        agent_audit.create_result_envelope(
+            audit_root / "first",
+            role="challenger",
+            invocation_id="fresh-challenger-01",
+            model_family="family-b",
+            payload={
+                "challenges": [
+                    {
+                        "source_id": "official-candidate",
+                        "dimension": "record_locator",
+                        "evidence_ref": "frozen facts",
+                    }
+                ],
+                "unresolved_dimensions": ["record_locator"],
+            },
+        )
+        judged = agent_audit.deterministic_judge(audit_root / "first")
+        require(
+            judged["cross_model_status"] == "cross_family"
+            and judged["decisions"][0]["score"] == 9
+            and judged["decisions"][0]["route"] == "integration_draft"
+            and judged["decisions"][0]["admitted"] is False
+            and judged["decisions"][0]["human_review_required"] is True,
+            "D1 scout and challenger cannot self-score or admit; deterministic judge routes a human-approved integration draft",
+            checks,
+        )
+        packet = json_value(
+            audit_root / "first" / "roles" / "scout" / "input" / "packet.json"
+        )
+        envelope = json_value(
+            audit_root / "first" / "roles" / "scout" / "result" / "envelope.json"
+        )
+        envelope["input_hashes"] = {"context": "0" * 64, "unknown": "1" * 64}
+        try:
+            agent_audit.validate_result_envelope(
+                envelope, packet, expected_role="scout"
+            )
+        except agent_audit.AgentAuditError:
+            tamper_blocked = True
+        else:
+            tamper_blocked = False
+        require(
+            tamper_blocked,
+            "D1 adversarial result validation rejects changed or unknown role inputs",
+            checks,
+        )
+        substituted = copy.deepcopy(
+            json_value(
+                audit_root
+                / "first"
+                / "roles"
+                / "challenger"
+                / "result"
+                / "envelope.json"
+            )
+        )
+        try:
+            agent_audit.validate_result_envelope(
+                substituted, packet, expected_role="scout"
+            )
+        except agent_audit.AgentAuditError:
+            substitution_blocked = True
+        else:
+            substitution_blocked = False
+        reuse_dir = audit_root / "reuse"
+        agent_audit.prepare_audit_round(
+            reuse_dir,
+            round_id="round-01-gap-02",
+            gap=gap,
+            source_facts=facts,
+        )
+        agent_audit.create_result_envelope(
+            reuse_dir,
+            role="scout",
+            invocation_id="same-invocation",
+            model_family="family-a",
+            payload={"candidate_ids": [], "evidence_requests": []},
+        )
+        try:
+            agent_audit.create_result_envelope(
+                reuse_dir,
+                role="challenger",
+                invocation_id="same-invocation",
+                model_family="family-b",
+                payload={"challenges": [], "unresolved_dimensions": []},
+            )
+        except agent_audit.AgentAuditError:
+            reuse_blocked = True
+        else:
+            reuse_blocked = False
+        require(
+            substitution_blocked and reuse_blocked,
+            "D1 adversarial audit rejects role-packet substitution and invocation reuse",
+            checks,
+        )
     manifest_path = output_dir / "source_manifest.json"
     confidence_path = output_dir / "confidence_report.json"
     manifest = json_value(manifest_path)
@@ -294,8 +451,25 @@ def check_d1(output_dir: Path) -> list[str]:
             "earthchem-dehailonggang-rock",
             "4tu-northern-china-sediment",
             "zenodo-gard-whole-rock",
+            "europe-pmc-pearl-river-dissolved-metals",
+            "mendeley-guangdong-fujian-groundwater",
         },
-        "D1 registry freezes thirty-five executable datasets across the four required media",
+        "D1 registry freezes thirty-seven executable datasets across the four required media",
+        checks,
+    )
+    gard_download = registry["sources"]["zenodo-gard-whole-rock"]["download"]
+    gard_files = {item["file_id"]: item for item in gard_download["files"]}
+    gard_archive_types = source_contracts.accepted_content_types_for_file(
+        gard_download, gard_files["complete-zip"]
+    )
+    gard_reference_types = source_contracts.accepted_content_types_for_file(
+        gard_download, gard_files["reference-csv"]
+    )
+    require(
+        "text/plain" not in gard_archive_types
+        and "text/plain" in gard_reference_types
+        and "application/zip" not in gard_reference_types,
+        "D1 Gard applies file-specific MIME allowlists without permitting text responses for the ZIP archive",
         checks,
     )
     with tempfile.TemporaryDirectory(prefix="georoc-member-fallback-") as temporary:
@@ -954,6 +1128,139 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 AfSIS workbook reader preserves sparse columns without extracting untrusted members",
         checks,
     )
+    mendeley_water = source_contracts.registry_candidate(
+        "mendeley-guangdong-fujian-groundwater"
+    )
+    pearl_water = source_contracts.registry_candidate(
+        "europe-pmc-pearl-river-dissolved-metals"
+    )
+    require(
+        mendeley_water.version == "mendeley-84gkydb5y9-v2"
+        and mendeley_water.registry_entry["expected_counts"]["physical_rows"] == 124
+        and mendeley_water.registry_entry["expected_counts"]["target_observations"]
+        == 702
+        and pearl_water.version == "peerj-7-e6578-supplement-s004"
+        and pearl_water.registry_entry["expected_counts"]["physical_rows"] == 162
+        and pearl_water.registry_entry["expected_counts"]["target_observations"] == 648,
+        "D1 pins two China inland-water workbooks with exact physical and observation counts",
+        checks,
+    )
+    parsed_pearl_coordinate = source_contracts.EuropePmcPearlRiverDissolvedMetalsAdapter._reported_coordinates(
+        "N：25º54.376'  E：103º57.101'", 4
+    )
+    malformed_coordinate_rejections = 0
+    for malformed_coordinate in (
+        "25.9063,103.9517",
+        "N：25º60.000'  E：103º57.101'",
+        "N：91º00.000'  E：103º57.101'",
+        "N：90º01.000'  E：103º57.101'",
+        "N：25º54.376'  E：180º01.000'",
+    ):
+        try:
+            source_contracts.EuropePmcPearlRiverDissolvedMetalsAdapter._reported_coordinates(
+                malformed_coordinate, 4
+            )
+        except source_contracts.SourceAdapterError:
+            malformed_coordinate_rejections += 1
+    require(
+        parsed_pearl_coordinate == ("25.9062666667", "103.951683333")
+        and malformed_coordinate_rejections == 5,
+        "D1 converts only the publisher Pearl River DMS envelope and rejects malformed coordinates",
+        checks,
+    )
+    with tempfile.TemporaryDirectory(
+        prefix="pearl-supplement-contract-"
+    ) as temporary_directory:
+        archive_root = Path(temporary_directory)
+        target = "peerj-07-6578-s004.xlsx"
+        payload = b"pinned-workbook-member"
+        archive_contract = {
+            "max_members": 4,
+            "max_extracted_bytes": 1000,
+            "files": [
+                {
+                    "archive_member": target,
+                    "bytes": len(payload),
+                    "expected_sha256": hashlib.sha256(payload).hexdigest(),
+                }
+            ],
+        }
+        valid_archive = archive_root / "valid.zip"
+        with zipfile.ZipFile(valid_archive, "w") as archive:
+            archive.writestr(target, payload)
+        valid_member = source_contracts.EuropePmcPearlRiverDissolvedMetalsAdapter._verified_member_payload(
+            valid_archive, archive_contract
+        )
+        rejected_archives = 0
+        unsafe_archive = archive_root / "unsafe.zip"
+        with zipfile.ZipFile(unsafe_archive, "w") as archive:
+            archive.writestr(target, payload)
+            archive.writestr("../escape.txt", b"unsafe")
+        duplicate_archive = archive_root / "duplicate.zip"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            with zipfile.ZipFile(duplicate_archive, "w") as archive:
+                archive.writestr(target, payload)
+                archive.writestr(target, payload)
+        tampered_archive = archive_root / "tampered.zip"
+        with zipfile.ZipFile(tampered_archive, "w") as archive:
+            archive.writestr(target, b"tampered")
+        oversized_contract = copy.deepcopy(archive_contract)
+        oversized_contract["max_extracted_bytes"] = 2
+        for archive_path, contract in (
+            (unsafe_archive, archive_contract),
+            (duplicate_archive, archive_contract),
+            (tampered_archive, archive_contract),
+            (valid_archive, oversized_contract),
+        ):
+            try:
+                source_contracts.EuropePmcPearlRiverDissolvedMetalsAdapter._verified_member_payload(
+                    archive_path, contract
+                )
+            except source_contracts.SourceAdapterError:
+                rejected_archives += 1
+        require(
+            valid_member == payload and rejected_archives == 4,
+            "D1 Europe PMC extraction rejects traversal, duplicate, tampered and oversized archives",
+            checks,
+        )
+    with tempfile.TemporaryDirectory(
+        prefix="mendeley-schema-contract-"
+    ) as temporary_directory:
+        malformed_workbook = Path(temporary_directory) / "Table S1.xlsx"
+        with zipfile.ZipFile(malformed_workbook, "w") as archive:
+            archive.writestr(
+                "xl/worksheets/sheet1.xml",
+                '<?xml version="1.0"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+                '<sheetData><row r="1"><c r="A1" t="inlineStr"><is><t>unexpected</t></is></c></row>'
+                '<row r="2"><c r="A2"><v>1</v></c></row>'
+                '<row r="3"><c r="A3"><v>2</v></c></row>'
+                "</sheetData></worksheet>",
+            )
+        malformed_file = source_contracts.DownloadedFile(
+            source_id=mendeley_water.source_id,
+            file_id="table-s1",
+            path=malformed_workbook,
+            source_url=mendeley_water.registry_entry["download"]["files"][0]["url"],
+            bytes=malformed_workbook.stat().st_size,
+            cache_status="fixture",
+            retrieved_at=None,
+        )
+        try:
+            list(
+                source_contracts.MendeleyGuangdongFujianGroundwaterAdapter().parse(
+                    [malformed_file]
+                )
+            )
+        except source_contracts.SourceAdapterError as exc:
+            mendeley_schema_rejected = "schema changed" in str(exc)
+        else:
+            mendeley_schema_rejected = False
+    require(
+        mendeley_schema_rejected,
+        "D1 Mendeley parser rejects empty or drifted workbook schemas",
+        checks,
+    )
     catalog = source_router.load_catalog()
     request_schema = json_value(SKILL_DIR / "references" / "request.schema.json")
     region_branches = request_schema["properties"]["region"]["oneOf"]
@@ -1157,6 +1464,29 @@ def check_d1(output_dir: Path) -> list[str]:
     require(
         initial_child_timeout == 8.0 and expired_budget_rejected,
         "D1 orchestration uses one monotonic deadline and never spends the downstream reserve",
+        checks,
+    )
+    ordinary_source_timeout = request_runner.allocated_source_timeout(
+        600.0, 1566.0, 26, priority_retry=False
+    )
+    priority_source_timeout = request_runner.allocated_source_timeout(
+        600.0, 1566.0, 26, priority_retry=True
+    )
+    final_source_timeout = request_runner.allocated_source_timeout(
+        600.0, 1566.0, 1, priority_retry=False
+    )
+    try:
+        request_runner.allocated_source_timeout(600.0, 59.0, 2, priority_retry=False)
+    except request_runner.RequestRunError as exc:
+        short_window_deferred = exc.status == "incomplete_retrieval"
+    else:
+        short_window_deferred = False
+    require(
+        round(ordinary_source_timeout, 6) == round(1566.0 / 26, 6)
+        and priority_source_timeout == 600.0
+        and final_source_timeout == 600.0
+        and short_window_deferred,
+        "D1 repair-priority sources receive the configured retry timeout while ordinary sources share the global acquisition window",
         checks,
     )
     require(
@@ -1607,8 +1937,10 @@ def check_d1(output_dir: Path) -> list[str]:
             "earthchem-dehailonggang-rock",
             "4tu-northern-china-sediment",
             "zenodo-gard-whole-rock",
+            "europe-pmc-pearl-river-dissolved-metals",
+            "mendeley-guangdong-fujian-groundwater",
         },
-        "D1 V4 router selects the thirty-four analyte-compatible normalized-analysis datasets across all media",
+        "D1 V4 router selects the thirty-six analyte-compatible normalized-analysis datasets across all media",
         checks,
     )
     require(
@@ -1663,6 +1995,7 @@ def check_d1(output_dir: Path) -> list[str]:
             "foregs-stream-water",
             "gemstat-open-archive",
             "us-wqp-sacramento-river-arsenic",
+            "mendeley-guangdong-fujian-groundwater",
         }
         and "geotraces-idp2025"
         in {entry["source_id"] for entry in arsenic_water_route["review_sources"]}
@@ -1781,17 +2114,17 @@ def check_d1(output_dir: Path) -> list[str]:
         evidence["summary"]
         == {
             "evidence_tiers": {
-                "A": 34,
+                "A": 36,
                 "B": 1,
                 "C": 0,
-                "D": len(catalog["sources"]) - 35,
+                "D": len(catalog["sources"]) - 37,
                 "U": 0,
             },
             "use_modes": {
                 "benchmark_ready": 0,
-                "normalized_analysis": 35,
+                "normalized_analysis": 37,
                 "raw_observation": 0,
-                "discovery": len(catalog["sources"]) - 35,
+                "discovery": len(catalog["sources"]) - 37,
             },
         },
         "D1 V3 evidence scoring keeps all catalog sources while separating their current use modes",
@@ -2709,12 +3042,12 @@ def check_d1(output_dir: Path) -> list[str]:
         == json_value(SKILL_DIR / "assets" / "v4-source-completeness.json")
         and completeness_profile["summary"]
         == {
-            "executable_source_count": 35,
+            "executable_source_count": 37,
             "sources_with_full_audit": 23,
-            "sources_with_target_observation_denominator": 35,
-            "sources_without_full_audit": 12,
-            "demo_record_count": 1820,
-            "uniform_full_field_profiles": 35,
+            "sources_with_target_observation_denominator": 37,
+            "sources_without_full_audit": 14,
+            "demo_record_count": 1916,
+            "uniform_full_field_profiles": 37,
         }
         and completeness_profile["sources"]["georoc-archaean"]["full_population"][
             "audit_status"
@@ -2743,14 +3076,14 @@ def check_d1(output_dir: Path) -> list[str]:
         full_profile_root / "norway-marchem" / "automation_health.json"
     )
     require(
-        full_manifest["source_count"] == full_manifest["registered_source_count"] == 35
-        and full_manifest["observation_count"] == 6989258
-        and full_manifest["distinct_sample_count"] == 1551170
-        and full_manifest["reported_coordinate_sample_count"] == 1522285
+        full_manifest["source_count"] == full_manifest["registered_source_count"] == 37
+        and full_manifest["observation_count"] == 6990608
+        and full_manifest["distinct_sample_count"] == 1551452
+        and full_manifest["reported_coordinate_sample_count"] == 1522567
         and full_manifest["valid_coordinate_sample_count"] == 737757
         and full_manifest["comparable_observation_count"] == 424267
-        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 28304
-        and sum(int(row["observation_count"]) for row in cube_rows) == 6989258
+        and full_manifest["coverage_cube_rows"] == len(cube_rows) == 28354
+        and sum(int(row["observation_count"]) for row in cube_rows) == 6990608
         and sum(int(row["comparable_observation_count"]) for row in cube_rows) == 424267
         and all(
             profile["profile_scope"] == "full_population"
@@ -2766,8 +3099,8 @@ def check_d1(output_dir: Path) -> list[str]:
         and marchem_health["version_drift"]["outer_archive_drift"] is False
         and marchem_health["version_drift"]["status"] == "matches_registered_snapshot"
         and set(coverage_balance["media"]) == {"rock", "soil", "sediment", "water"}
-        and coverage_balance["media"]["water"]["observation_count"] == 3783544
-        and coverage_balance["media"]["water"]["independent_lineage_count"] == 4
+        and coverage_balance["media"]["water"]["observation_count"] == 3784894
+        and coverage_balance["media"]["water"]["independent_lineage_count"] == 6
         and coverage_balance["media"]["sediment"]["independent_lineage_count"] == 11
         and coverage_balance["media"]["rock"]["reported_coordinate_sample_count"]
         == 765644
@@ -2822,6 +3155,8 @@ def check_d1(output_dir: Path) -> list[str]:
                 "figshare-yangtze-basin-soil-heavy-metals",
                 "earthchem-dehailonggang-rock",
                 "4tu-northern-china-sediment",
+                "europe-pmc-pearl-river-dissolved-metals",
+                "mendeley-guangdong-fujian-groundwater",
             }
         )
         and all(
@@ -2832,6 +3167,8 @@ def check_d1(output_dir: Path) -> list[str]:
             for source_id in {
                 "figshare-yangtze-basin-soil-heavy-metals",
                 "zenodo-yangtze-yellow-river-sediment",
+                "europe-pmc-pearl-river-dissolved-metals",
+                "mendeley-guangdong-fujian-groundwater",
             }
         )
         and all(
@@ -2844,7 +3181,7 @@ def check_d1(output_dir: Path) -> list[str]:
             and sha256_file(SKILL_DIR / item["path"]) == item["sha256"]
             for item in full_manifest["artifacts"]
         ),
-        "D1 V4 full profiles prove thirty-five full-cache denominators and all coverage-cube metrics",
+        "D1 V4 full profiles prove thirty-seven full-cache denominators and all coverage-cube metrics",
         checks,
     )
     require(
@@ -2922,7 +3259,16 @@ def check_d1(output_dir: Path) -> list[str]:
         and matrix["cells"]["water"]["source_independence"]
         == "multiple_sources_but_single_source_per_analyte"
         and matrix["cells"]["water"]["analyte_source_counts"]
-        == {"As": 3, "Cr": 2, "Cu": 3, "Hg": 1, "Ni": 3, "Pb": 2, "Zn": 3},
+        == {"As": 4, "Cr": 4, "Cu": 5, "Hg": 1, "Ni": 5, "Pb": 4, "Zn": 4}
+        and matrix["cells"]["water"]["selected_sources"]
+        == [
+            "europe-pmc-pearl-river-dissolved-metals",
+            "foregs-stream-water",
+            "gemstat-open-archive",
+            "geotraces-idp2025",
+            "mendeley-guangdong-fujian-groundwater",
+            "us-wqp-sacramento-river-arsenic",
+        ],
         "D1 coverage matrix keeps rock, soil, sediment and water source independence explicit",
         checks,
     )
@@ -3273,6 +3619,8 @@ def check_d1(output_dir: Path) -> list[str]:
         "tpdc-china-mountain-soil": 40,
         "gemas-europe": 52,
         "zenodo-yangtze-yellow-river-sediment": 48,
+        "europe-pmc-pearl-river-dissolved-metals": 48,
+        "mendeley-guangdong-fujian-groundwater": 48,
     }
     expected_demo_analyte_counts = {
         "geotraces-idp2025": {"Cu": 16, "Ni": 16, "Zn": 16},
@@ -3333,6 +3681,20 @@ def check_d1(output_dir: Path) -> list[str]:
             "Pb": 8,
             "Zn": 8,
         },
+        "europe-pmc-pearl-river-dissolved-metals": {
+            "Cr": 12,
+            "Cu": 12,
+            "Ni": 12,
+            "Pb": 12,
+        },
+        "mendeley-guangdong-fujian-groundwater": {
+            "As": 8,
+            "Cr": 8,
+            "Cu": 8,
+            "Ni": 8,
+            "Pb": 8,
+            "Zn": 8,
+        },
         "norway-marchem": {"As": 28, "Cu": 28, "Ni": 28, "Zn": 28},
         "usgs-conus-soil": {"As": 27, "Cu": 27, "Ni": 27, "Zn": 27},
     }
@@ -3383,6 +3745,18 @@ def check_d1(output_dir: Path) -> list[str]:
             == {row["record_id"] for row in evidence_rows}
             and {row["source_id"] for row in demo_rows} == {source_id},
             f"D1 {source_id} fixture preserves record-level evidence linkage",
+            checks,
+        )
+        evidence_by_record = {row["record_id"]: row for row in evidence_rows}
+        require(
+            all(
+                row["source_file"]
+                == evidence_by_record[row["record_id"]]["source_file"]
+                and row["file_sha256"]
+                == evidence_by_record[row["record_id"]]["source_file_sha256"]
+                for row in demo_rows
+            ),
+            f"D1 {source_id} fixture keeps canonical rows and record evidence on the same exact source-file identity",
             checks,
         )
         expected_analyte_counts = expected_demo_analyte_counts.get(
@@ -3676,6 +4050,14 @@ def check_d1(output_dir: Path) -> list[str]:
         "D1 GEOROC fixture resolves every selected citation ID to original reference text",
         checks,
     )
+    require(
+        demo_generator._article_doi("citation doi: 10.1130/2006.2412(09)?")
+        == "10.1130/2006.2412(09)"
+        and demo_generator._article_doi("citation doi: 10.1234/example(test).")
+        == "10.1234/example(test)",
+        "D1 GEOROC DOI extraction removes uncertainty punctuation without truncating balanced identifier parentheses",
+        checks,
+    )
     georoc_rows = csv_rows(SOURCE_DEMOS / "georoc-archaean" / "demo_input.csv")
     require(
         all(
@@ -3766,6 +4148,76 @@ def check_d1(output_dir: Path) -> list[str]:
         and Counter(row["material"] for row in usgs_rows)
         == Counter({"soil:top-0-5cm": 36, "soil:a-horizon": 36, "soil:c-horizon": 36}),
         "D1 USGS fixture makes soil horizons explicit for D2 background grouping",
+        checks,
+    )
+    with tempfile.TemporaryDirectory(prefix="usgs-capacity-") as directory:
+        source_path = Path(directory) / "usgs.csv"
+        source_path.write_text("source-backed test bytes\n", encoding="utf-8")
+        downloaded = source_contracts.DownloadedFile(
+            source_id="usgs-conus-soil",
+            file_id="synthetic",
+            path=source_path,
+            source_url="https://example.invalid/usgs.csv",
+            bytes=source_path.stat().st_size,
+            cache_status="fixture",
+            retrieved_at="2026-08-24T00:00:00Z",
+        )
+        candidate = source_contracts.DatasetCandidate(
+            source_id="usgs-conus-soil",
+            title="USGS capacity regression fixture",
+            adapter="usgs-conus-soil",
+            version="test-v1",
+            dataset_doi="10.5066/F7X31VHK",
+            license_id="US-PD",
+            landing_page="https://example.invalid/usgs",
+            registry_entry={"citation": "USGS capacity regression fixture"},
+        )
+        prefixes = {
+            "top-0-5cm": "Top5_",
+            "a-horizon": "A_",
+            "c-horizon": "C_",
+        }
+        capacity_records = []
+        for row_number, (layer, prefix) in enumerate(prefixes.items(), start=2):
+            capacity_records.append(
+                source_contracts.RawRecord(
+                    source_id="usgs-conus-soil",
+                    source_record_id=f"{layer}-1",
+                    source_locator=f"usgs.csv#row={row_number}",
+                    fields={
+                        "_soil_layer": layer,
+                        "_source_file": "synthetic",
+                        "_units": {f"{prefix}As": "mg/kg"},
+                        "Latitude": "40",
+                        "Longitude": "-100",
+                        f"{prefix}As": "1.5",
+                        f"{prefix}LabID": f"lab-{layer}",
+                        "SiteID": f"site-{layer}",
+                        "CollDate": "2010-01-01",
+                    },
+                )
+            )
+        capacity_rows, _, selected_sites, raw_rows = demo_generator.usgs_demo(
+            capacity_records,
+            {"synthetic": downloaded},
+            candidate,
+            observation_limit=6,
+            analytes=("As",),
+            bbox=None,
+        )
+    require(
+        len(capacity_rows) == 3
+        and selected_sites == 3
+        and raw_rows == 3
+        and Counter(row["material"] for row in capacity_rows)
+        == Counter(
+            {
+                "soil:top-0-5cm": 1,
+                "soil:a-horizon": 1,
+                "soil:c-horizon": 1,
+            }
+        ),
+        "D1 USGS finite capacity returns the largest balanced layer set instead of failing an oversized request",
         checks,
     )
     marchem_evidence = [
@@ -4093,8 +4545,8 @@ def check_d1(output_dir: Path) -> list[str]:
 
     migration_check = migrate_v4_source_demos.migrate(SOURCE_DEMOS, check=True)
     require(
-        migration_check["status"] == "PASS" and migration_check["source_count"] == 35,
-        "D1 V4 source-demo migration is byte-stable across all thirty-five sources",
+        migration_check["status"] == "PASS" and migration_check["source_count"] == 37,
+        "D1 V4 source-demo migration is byte-stable across all thirty-seven sources",
         checks,
     )
 
@@ -4918,6 +5370,273 @@ def check_d1(output_dir: Path) -> list[str]:
         else:
             raise ContractError("D1 must enforce the streaming response size limit")
 
+        class FakeHeaders(dict[str, str]):
+            def get_content_type(self) -> str:
+                return self.get("Content-Type", "application/octet-stream").split(
+                    ";", maxsplit=1
+                )[0]
+
+        class FakeResponse(io.BytesIO):
+            def __init__(
+                self,
+                payload: bytes,
+                *,
+                status: int,
+                headers: dict[str, str],
+            ) -> None:
+                super().__init__(payload)
+                self.status = status
+                self.headers = FakeHeaders(headers)
+
+            def geturl(self) -> str:
+                return cached_url
+
+            def getcode(self) -> int:
+                return self.status
+
+            def __enter__(self) -> "FakeResponse":
+                return self
+
+            def __exit__(self, *_args: Any) -> None:
+                self.close()
+
+        class FakeOpener:
+            def __init__(self, response: FakeResponse) -> None:
+                self.response = response
+                self.requests: list[urllib.request.Request] = []
+
+            def open(
+                self, request: urllib.request.Request, timeout: float
+            ) -> FakeResponse:
+                del timeout
+                self.requests.append(request)
+                return self.response
+
+        class SequenceOpener:
+            def __init__(self, responses: Sequence[FakeResponse]) -> None:
+                self.responses = list(responses)
+                self.requests: list[urllib.request.Request] = []
+
+            def open(
+                self, request: urllib.request.Request, timeout: float
+            ) -> FakeResponse:
+                del timeout
+                self.requests.append(request)
+                return self.responses.pop(0)
+
+        resume_payload = b"abcdef"
+        resume_hash = hashlib.sha256(resume_payload).hexdigest()
+        resume_output = Path(evidence_temp) / "resume.bin"
+
+        def seed_resume(
+            output: Path,
+            prefix: bytes,
+            *,
+            expected_hash: str = resume_hash,
+            max_bytes: int = 10,
+        ) -> tuple[Path, Path]:
+            partial, state_path = downloader._resume_paths(
+                output, cached_url, expected_hash, max_bytes
+            )
+            partial.write_bytes(prefix)
+            downloader.atomic_json(
+                state_path,
+                {
+                    **downloader._resume_binding(cached_url, expected_hash, max_bytes),
+                    "resolved_url": cached_url,
+                    "content_type": "application/octet-stream",
+                    "etag": '"fixture-v1"',
+                },
+            )
+            return partial, state_path
+
+        original_build_opener = downloader.urllib.request.build_opener
+        original_url_validator = downloader.validate_public_https_url
+        try:
+            downloader.validate_public_https_url = lambda _url: None
+
+            partial, resume_state_path = seed_resume(resume_output, b"abc")
+            range_opener = FakeOpener(
+                FakeResponse(
+                    b"def",
+                    status=206,
+                    headers={
+                        "Content-Type": "application/octet-stream",
+                        "Content-Length": "3",
+                        "Content-Range": "bytes 3-5/6",
+                        "ETag": '"fixture-v1"',
+                    },
+                )
+            )
+            downloader.urllib.request.build_opener = lambda *_args: range_opener
+            resume_result = downloader.download_once(
+                cached_url, resume_output, 1, 10, resume_hash
+            )
+            require(
+                resume_output.read_bytes() == resume_payload
+                and resume_result.get("resumed_bytes") == 3
+                and range_opener.requests[0].get_header("Range") == "bytes=3-"
+                and not partial.exists()
+                and not resume_state_path.exists(),
+                "D1 resumes an identity-bound partial only from an exact 206 byte range",
+                checks,
+            )
+
+            truncated_output = Path(evidence_temp) / "truncated-resume.bin"
+            truncated_partial, truncated_state = seed_resume(truncated_output, b"abc")
+            truncated_opener = SequenceOpener(
+                [
+                    FakeResponse(
+                        b"de",
+                        status=206,
+                        headers={
+                            "Content-Type": "application/octet-stream",
+                            "Content-Length": "3",
+                            "Content-Range": "bytes 3-5/6",
+                        },
+                    ),
+                    FakeResponse(
+                        b"f",
+                        status=206,
+                        headers={
+                            "Content-Type": "application/octet-stream",
+                            "Content-Length": "1",
+                            "Content-Range": "bytes 5-5/6",
+                        },
+                    ),
+                ]
+            )
+            downloader.urllib.request.build_opener = lambda *_args: truncated_opener
+            retry_delays: list[float] = []
+            truncated_result = downloader.download_with_retries(
+                cached_url,
+                truncated_output,
+                1,
+                10,
+                resume_hash,
+                1,
+                sleeper=retry_delays.append,
+            )
+            require(
+                truncated_output.read_bytes() == resume_payload
+                and truncated_result.get("attempts") == 2
+                and truncated_result.get("resumed_bytes") == 5
+                and [
+                    request.get_header("Range") for request in truncated_opener.requests
+                ]
+                == ["bytes=3-", "bytes=5-"]
+                and retry_delays == [1]
+                and not truncated_partial.exists()
+                and not truncated_state.exists(),
+                "D1 retains and retries a truncated HTTP range from its new verified prefix",
+                checks,
+            )
+
+            resume_output.unlink()
+            seed_resume(resume_output, b"abc")
+            fallback_opener = FakeOpener(
+                FakeResponse(
+                    resume_payload,
+                    status=200,
+                    headers={
+                        "Content-Type": "application/octet-stream",
+                        "Content-Length": str(len(resume_payload)),
+                    },
+                )
+            )
+            downloader.urllib.request.build_opener = lambda *_args: fallback_opener
+            fallback_result = downloader.download_once(
+                cached_url, resume_output, 1, 10, resume_hash
+            )
+            require(
+                resume_output.read_bytes() == resume_payload
+                and fallback_result.get("resumed_bytes") == 0,
+                "D1 truncates the saved prefix when a server ignores Range with HTTP 200",
+                checks,
+            )
+
+            resume_output.unlink()
+            partial, _ = seed_resume(resume_output, b"abc")
+            mismatched_range_opener = FakeOpener(
+                FakeResponse(
+                    b"cdef",
+                    status=206,
+                    headers={
+                        "Content-Type": "application/octet-stream",
+                        "Content-Length": "4",
+                        "Content-Range": "bytes 2-5/6",
+                    },
+                )
+            )
+            downloader.urllib.request.build_opener = (
+                lambda *_args: mismatched_range_opener
+            )
+            try:
+                downloader.download_once(cached_url, resume_output, 1, 10, resume_hash)
+            except downloader.DownloadError as exc:
+                require(
+                    "saved offset" in str(exc)
+                    and partial.read_bytes() == b"abc"
+                    and not resume_output.exists(),
+                    "D1 rejects a mismatched Content-Range without corrupting the saved prefix",
+                    checks,
+                )
+            else:
+                raise ContractError("D1 must reject a mismatched Content-Range")
+            downloader._discard_resume(
+                *downloader._resume_paths(resume_output, cached_url, resume_hash, 10)
+            )
+
+            oversized_output = Path(evidence_temp) / "oversized-resume.bin"
+            oversized_partial, oversized_state = seed_resume(
+                oversized_output, resume_payload, max_bytes=5
+            )
+            try:
+                downloader.download_once(
+                    cached_url, oversized_output, 1, 5, resume_hash
+                )
+            except downloader.DownloadError as exc:
+                require(
+                    "exceeds --max-bytes" in str(exc)
+                    and not oversized_partial.exists()
+                    and not oversized_state.exists()
+                    and not oversized_output.exists(),
+                    "D1 discards and rejects a saved partial larger than the byte ceiling",
+                    checks,
+                )
+            else:
+                raise ContractError("D1 must reject an oversized saved partial")
+
+            wrong_output = Path(evidence_temp) / "wrong-hash-resume.bin"
+            wrong_partial, wrong_state = seed_resume(wrong_output, b"")
+            wrong_hash_opener = FakeOpener(
+                FakeResponse(
+                    b"xxxxxx",
+                    status=200,
+                    headers={
+                        "Content-Type": "application/octet-stream",
+                        "Content-Length": "6",
+                    },
+                )
+            )
+            downloader.urllib.request.build_opener = lambda *_args: wrong_hash_opener
+            try:
+                downloader.download_once(cached_url, wrong_output, 1, 10, resume_hash)
+            except downloader.DownloadError as exc:
+                require(
+                    "SHA-256" in str(exc)
+                    and not wrong_output.exists()
+                    and not wrong_partial.exists()
+                    and not wrong_state.exists(),
+                    "D1 never publishes or retains a completed response with the wrong SHA-256",
+                    checks,
+                )
+            else:
+                raise ContractError("D1 must reject a wrong final SHA-256")
+        finally:
+            downloader.urllib.request.build_opener = original_build_opener
+            downloader.validate_public_https_url = original_url_validator
+
         proxy_env_keys = ("https_proxy", "HTTPS_PROXY", "no_proxy", "NO_PROXY")
         saved_proxy_env = {key: os.environ.get(key) for key in proxy_env_keys}
         try:
@@ -5034,6 +5753,42 @@ def check_d1(output_dir: Path) -> list[str]:
             "D1 validates required ZIP members and fields before publishing extraction",
             checks,
         )
+        repeated_extraction = downloader.safe_extract_zip(
+            valid_zip,
+            extract_dir,
+            max_members=5,
+            max_extracted_bytes=1000,
+            required_members=["dataset/data.csv"],
+            required_fields=["SiteID", "Latitude", "Longitude"],
+        )
+        require(
+            repeated_extraction == extracted,
+            "D1 safely reuses an identical extraction after a concurrent publisher wins",
+            checks,
+        )
+
+        conflicting_zip = Path(evidence_temp) / "conflicting.zip"
+        with zipfile.ZipFile(conflicting_zip, "w") as archive:
+            archive.writestr("dataset/data.csv", "SiteID,Latitude,Longitude\nB,3,4\n")
+        try:
+            downloader.safe_extract_zip(
+                conflicting_zip,
+                extract_dir,
+                max_members=5,
+                max_extracted_bytes=1000,
+                required_members=["dataset/data.csv"],
+                required_fields=["SiteID", "Latitude", "Longitude"],
+            )
+        except downloader.DownloadError as exc:
+            require(
+                "different contents" in str(exc)
+                and (extract_dir / "dataset" / "data.csv").read_text(encoding="utf-8")
+                == "SiteID,Latitude,Longitude\nA,1,2\n",
+                "D1 rejects a conflicting concurrent extraction without replacing the winner",
+                checks,
+            )
+        else:
+            raise ContractError("D1 must reject conflicting extraction cache content")
 
         missing_member_zip = Path(evidence_temp) / "missing-member.zip"
         with zipfile.ZipFile(missing_member_zip, "w") as archive:
@@ -5595,6 +6350,12 @@ def check_d2(output_dir: Path) -> list[str]:
         ("norway-marchem", "2015", "2015", "year"),
         ("afsis-phase-i-wet-chemistry", "2009/2013", "2009/2013", "year_range"),
         ("pangaea-amazonas-soil", "2016-03-01", "2016-03-01", "day"),
+        (
+            "europe-pmc-pearl-river-dissolved-metals",
+            "2014-07-18",
+            "2014-07-18",
+            "day",
+        ),
     )
     require(
         all(
@@ -6824,6 +7585,8 @@ def check_d3(output_dir: Path) -> list[str]:
         and 'id="modeCompare"' in temporal_html
         and 'id="modeProvenance"' in temporal_html
         and 'id="colorConc"' in temporal_html
+        and "initialTemporalMode" in temporal_html
+        and "setMode(initialTemporalMode())" in temporal_html
         and "<script src=" not in temporal_html
         and "https://" not in temporal_html.split("<style>")[0],
         "D3 temporal map ships both replay and station modes as one offline HTML",
@@ -6940,6 +7703,1292 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 integrated outputs pass the public validator",
         checks,
     )
+    ledger = claim_ledger.build_claim_ledger(output_dir)
+    require(
+        not claim_ledger.validate_claim_ledger(output_dir, ledger)
+        and ledger["claim_count"] == 9
+        and all(
+            item["evidence"]["artifact_sha256"]
+            == sha256_file(output_dir / item["evidence"]["artifact"])
+            for item in ledger["claims"]
+        ),
+        "D3 report claims are individually recomputed and SHA-256-bound to exact artifacts",
+        checks,
+    )
+    tampered_ledger = copy.deepcopy(ledger)
+    tampered_ledger["claims"][0]["value"] += 1
+    require(
+        any(
+            "standardized_measurement_record_count" in error
+            or "self-hash mismatch" in error
+            for error in claim_ledger.validate_claim_ledger(output_dir, tampered_ledger)
+        ),
+        "D3 claim-ledger validation blocks a changed number even when the evidence file is unchanged",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as research_temp:
+        research_root = Path(research_temp)
+        research_request = {
+            "question": "Do comparable Cu cohorts show a reproducible regional contrast?",
+            "output_language": "en",
+            "target_venue": "Applied Geochemistry",
+        }
+        research_state = auto_research.start_research(
+            output_dir, research_root, research_request
+        )
+        run_dir = research_root / research_state["run_id"]
+        resumed_state = auto_research.start_research(
+            output_dir, research_root, research_request
+        )
+        require(
+            research_state["status"] == "awaiting_agents"
+            and research_state["stage"] == "pilot_and_literature"
+            and resumed_state["run_id"] == research_state["run_id"]
+            and (run_dir / "five-paper-program.json").is_file()
+            and (run_dir / "pilot_contract.json").is_file()
+            and (run_dir / "literature_queue.json").is_file()
+            and (run_dir / "paper_spine.json").is_file()
+            and (run_dir / "figure_contract.json").is_file(),
+            "D3 Auto-Research starts and resumes a real gated run with deterministic topic, pilot, literature, paper and figure contracts",
+            checks,
+        )
+        pilot_packet = json_value(run_dir / "agents" / "pilot_analyst" / "packet.json")
+        require(
+            {
+                "row_level_geochemistry",
+                "analysis_cohorts",
+                "analysis_cohort_exclusions",
+                "research_context",
+                "sources_and_confidence",
+                "atlas_run_summary",
+            }.issubset(pilot_packet["allowed_inputs"])
+            and all(
+                sha256_file(run_dir / item["path"]) == item["sha256"]
+                for item in pilot_packet["allowed_inputs"].values()
+            ),
+            "D3 Auto-Research pilot receives exact hash-bound row, cohort, exclusion, context, and source/QC inputs",
+            checks,
+        )
+
+        def agent_artifact(
+            role: str,
+            name: str,
+            content: str,
+            cycle_id: str = auto_research.INITIAL_CYCLE,
+        ) -> dict[str, Any]:
+            cycle_root = (
+                run_dir
+                if cycle_id == auto_research.INITIAL_CYCLE
+                else run_dir / "revisions" / cycle_id
+            )
+            path = cycle_root / "agent_outputs" / role / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content, encoding="utf-8")
+            return {
+                "path": path.relative_to(run_dir).as_posix(),
+                "sha256": sha256_file(path),
+            }
+
+        def agent_binary_artifact(
+            role: str,
+            name: str,
+            content: bytes,
+            cycle_id: str = auto_research.INITIAL_CYCLE,
+        ) -> dict[str, Any]:
+            cycle_root = (
+                run_dir
+                if cycle_id == auto_research.INITIAL_CYCLE
+                else run_dir / "revisions" / cycle_id
+            )
+            path = cycle_root / "agent_outputs" / role / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+            return {
+                "path": path.relative_to(run_dir).as_posix(),
+                "sha256": sha256_file(path),
+            }
+
+        def empirical_figure_package(
+            cycle_id: str = auto_research.INITIAL_CYCLE,
+            iterations: int = 1,
+        ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+            roles = (
+                (
+                    "primary_result",
+                    "What effect did the frozen pilot estimate?",
+                    "effect point and uncertainty axis",
+                ),
+                (
+                    "spatial_pattern",
+                    "Where does the frozen cohort contribute evidence?",
+                    "bounded spatial cohort layer",
+                ),
+                (
+                    "robustness_or_external_validation",
+                    "Does the bounded conclusion survive its check?",
+                    "sensitivity comparison",
+                ),
+            )
+            artifacts: list[dict[str, Any]] = []
+            specs: list[dict[str, Any]] = []
+            for index, (role, question, encoding) in enumerate(roles, 1):
+                prefix = f"figure-{index}"
+                renders = {
+                    "svg": agent_binary_artifact(
+                        "figure_designer",
+                        f"{prefix}.svg",
+                        (
+                            "<svg xmlns='http://www.w3.org/2000/svg'>"
+                            f"<title>{role}</title></svg>\n"
+                        ).encode(),
+                        cycle_id,
+                    ),
+                    "pdf": agent_binary_artifact(
+                        "figure_designer",
+                        f"{prefix}.pdf",
+                        b"%PDF-1.4\n%%EOF\n",
+                        cycle_id,
+                    ),
+                    "png": agent_binary_artifact(
+                        "figure_designer",
+                        f"{prefix}.png",
+                        b"\x89PNG\r\n\x1a\ncomponent-test",
+                        cycle_id,
+                    ),
+                }
+                generation_script = agent_artifact(
+                    "figure_designer",
+                    f"{prefix}.py",
+                    "print('deterministic figure generation source')\n",
+                    cycle_id,
+                )
+                artifacts.extend(renders.values())
+                artifacts.append(generation_script)
+                specs.append(
+                    {
+                        "figure_id": prefix,
+                        "figure_role": role,
+                        "question_answered": question,
+                        "claim_ids": ["pilot-null-effect"],
+                        "visual_encoding": encoding,
+                        "artifact_paths": {
+                            output_format: artifact["path"]
+                            for output_format, artifact in renders.items()
+                        },
+                        "candidate_generation": {
+                            "candidates_considered": 2,
+                            "alternatives_rejected": [
+                                "Rejected a table-style candidate with weaker "
+                                "uncertainty encoding."
+                            ],
+                        },
+                        "source_fidelity": (
+                            "Every plotted mark resolves to the frozen pilot claim "
+                            "values; no decorative data was invented."
+                        ),
+                        "editable_source": generation_script["path"],
+                        "render_review": {
+                            "iterations": iterations,
+                            "inspected": True,
+                            "findings": [
+                                "Checked labels, clipping, and claim alignment."
+                            ],
+                            "revisions_applied": [
+                                "Improved annotation hierarchy and uncertainty labels."
+                            ],
+                        },
+                    }
+                )
+            return artifacts, specs
+
+        spine_document = json_value(run_dir / "paper_spine.json")
+        spine_sections = [
+            *spine_document["section_order"],
+            *spine_document["required_sections"],
+        ]
+
+        def manuscript_delivery(
+            cycle_id: str = auto_research.INITIAL_CYCLE,
+            body: str = "# Screening result\n",
+        ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+            source = agent_artifact(
+                "manuscript_writer", "manuscript.md", body, cycle_id
+            )
+            pdf = agent_binary_artifact(
+                "manuscript_writer", "manuscript.pdf", b"%PDF-1.4\n%%EOF\n", cycle_id
+            )
+            typeset = {
+                "source_artifact": source["path"],
+                "pdf_artifact": pdf["path"],
+                "section_manifest": list(spine_sections),
+            }
+            return [source, pdf], typeset
+
+        manuscript_reference_list = [
+            {
+                "reference_id": "ref-1",
+                "title": "Verified primary source",
+                "authors": ["Researcher"],
+                "year": 2025,
+                "venue": "Journal",
+                "identifier": {"type": "doi", "value": "10.0000/example"},
+            }
+        ]
+
+        def citation_checks(**overrides: bool) -> dict[str, bool]:
+            checks = {field: True for field in auto_research.CITATION_CHECK_FIELDS}
+            checks.update(overrides)
+            return checks
+
+        def citation_audit_payload(
+            cycle_id: str = auto_research.INITIAL_CYCLE,
+            *,
+            verdict: str = "verified",
+            checks: dict[str, bool] | None = None,
+            summary_override: dict[str, Any] | None = None,
+            reference_ids: list[str] | None = None,
+        ) -> dict[str, Any]:
+            registry_evidence = agent_artifact(
+                "citation_auditor",
+                "registry-evidence-ref-1.json",
+                '{"registry":"doi.org","title":"Verified primary source"}\n',
+                cycle_id,
+            )
+            audit_checks = checks if checks is not None else citation_checks()
+            ids = reference_ids if reference_ids is not None else ["ref-1"]
+            audit = [
+                {
+                    "reference_id": reference_id,
+                    "verdict": verdict,
+                    "checks": dict(audit_checks),
+                    "registry_evidence_artifact": registry_evidence["path"],
+                    "evidence": (
+                        "Registry metadata was fetched and compared field by field."
+                    ),
+                }
+                for reference_id in ids
+            ]
+            summary = {
+                "total": len(audit),
+                "verified": sum(
+                    1 for item in audit if item["verdict"] == "verified"
+                ),
+                "mismatched": sum(
+                    1 for item in audit if item["verdict"] == "mismatch"
+                ),
+                "unverifiable": sum(
+                    1 for item in audit if item["verdict"] == "unverifiable"
+                ),
+            }
+            summary["all_verified"] = summary["verified"] == summary["total"]
+            if summary_override:
+                summary.update(summary_override)
+            return {
+                "artifacts": [registry_evidence],
+                "reference_audit": audit,
+                "audit_summary": summary,
+            }
+
+        pilot_artifact = agent_artifact(
+            "pilot_analyst", "results.json", '{"effect":0,"status":"null"}\n'
+        )
+        pilot_state = auto_research.submit_agent_result(
+            run_dir,
+            role="pilot_analyst",
+            invocation_id="pilot-fresh-1",
+            model_family="family-a",
+            payload={
+                "artifacts": [pilot_artifact],
+                "claims": [
+                    {
+                        "claim_id": "pilot-null-effect",
+                        "value": 0,
+                        "unit": "dimensionless",
+                        "artifact": pilot_artifact["path"],
+                        "artifact_sha256": pilot_artifact["sha256"],
+                    }
+                ],
+                "analysis_outcome": {
+                    "status": "supported_null",
+                    "analysis_executed": True,
+                    "result_claim_ids": ["pilot-null-effect"],
+                    "routing_destination": "paper_production",
+                    "evidence_summary": (
+                        "The frozen pilot executed and returned a bounded null effect."
+                    ),
+                },
+            },
+        )
+        literature_artifact = agent_artifact(
+            "literature_researcher", "citations.json", "{}\n"
+        )
+        retrieval_evidence = agent_artifact(
+            "literature_researcher",
+            "retrieval-evidence-1.html",
+            "<html><title>Verified primary source landing page</title></html>\n",
+        )
+        verified_citation = {
+            "title": "Verified primary source",
+            "authors": ["Researcher"],
+            "year": 2025,
+            "venue": "Journal",
+            "doi_or_official_url": "https://doi.org/10.0000/example",
+            "primary_source_verified": True,
+            "supported_claim": "method boundary",
+            "retrieval": {
+                "retrieved_at": "2026-08-27T00:00:00+00:00",
+                "evidence_artifact": retrieval_evidence["path"],
+            },
+        }
+        literature_search_coverage = {
+            "queries": ["copper cohort regional contrast geochemistry"],
+            "sources_searched": ["doi.org", "publisher archive"],
+            "candidates_screened": 12,
+            "inclusion_criteria": (
+                "Primary empirical sources with registry identifiers that bear on "
+                "the frozen question."
+            ),
+        }
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="literature_researcher",
+                invocation_id="literature-from-memory",
+                model_family="family-b",
+                payload={
+                    "artifacts": [literature_artifact, retrieval_evidence],
+                    "citations": [
+                        {
+                            key: value
+                            for key, value in verified_citation.items()
+                            if key != "retrieval"
+                        }
+                    ],
+                    "search_coverage": literature_search_coverage,
+                    "frontier_assessment": {
+                        "status": "supports_empirical_article",
+                        "open_problem": "Comparable null effects remain under-reported.",
+                        "closest_prior_work": "The verified source defines the method boundary.",
+                        "novelty_delta": "The frozen pilot tests that boundary on a new cohort.",
+                        "venue_fit": "The empirical result fits Applied Geochemistry.",
+                    },
+                },
+            )
+        except auto_research.AutoResearchError:
+            memory_citation_blocked = True
+        else:
+            memory_citation_blocked = False
+        require(
+            memory_citation_blocked,
+            "D3 Auto-Research rejects citations without a bound retrieval-evidence artifact and timestamp",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="literature_researcher",
+                invocation_id="literature-shallow-search",
+                model_family="family-b",
+                payload={
+                    "artifacts": [literature_artifact, retrieval_evidence],
+                    "citations": [verified_citation],
+                    "search_coverage": {
+                        **literature_search_coverage,
+                        "candidates_screened": 2,
+                    },
+                    "frontier_assessment": {
+                        "status": "supports_empirical_article",
+                        "open_problem": "Comparable null effects remain under-reported.",
+                        "closest_prior_work": "The verified source defines the method boundary.",
+                        "novelty_delta": "The frozen pilot tests that boundary on a new cohort.",
+                        "venue_fit": "The empirical result fits Applied Geochemistry.",
+                    },
+                },
+            )
+        except auto_research.AutoResearchError:
+            shallow_search_blocked = True
+        else:
+            shallow_search_blocked = False
+        require(
+            shallow_search_blocked,
+            "D3 Auto-Research rejects literature results whose documented search screened too few candidates",
+            checks,
+        )
+        literature_state = auto_research.submit_agent_result(
+            run_dir,
+            role="literature_researcher",
+            invocation_id="literature-fresh-1",
+            model_family="family-b",
+            payload={
+                "artifacts": [literature_artifact, retrieval_evidence],
+                "citations": [verified_citation],
+                "search_coverage": literature_search_coverage,
+                "frontier_assessment": {
+                    "status": "supports_empirical_article",
+                    "open_problem": "Comparable null effects remain under-reported.",
+                    "closest_prior_work": "The verified source defines the method boundary.",
+                    "novelty_delta": "The frozen pilot tests that boundary on a new cohort.",
+                    "venue_fit": "The empirical result fits Applied Geochemistry.",
+                },
+            },
+        )
+        quality_contract = json_value(run_dir / "research_quality_contract.json")
+        research_gate_receipt = json_value(run_dir / "research_gate_receipt.json")
+        unsigned_gate_receipt = dict(research_gate_receipt)
+        receipt_sha256 = unsigned_gate_receipt.pop("receipt_sha256")
+        require(
+            pilot_state["stage"] == "pilot_and_literature"
+            and literature_state["stage"] == "manuscript_and_figures"
+            and set(literature_state["required_roles"])
+            == {"manuscript_writer", "figure_designer"},
+            "D3 Auto-Research advances only after hash-bound pilot and primary-source literature results",
+            checks,
+        )
+        require(
+            research_gate_receipt["paper_eligible"] is True
+            and research_gate_receipt["pilot_result_sha256"]
+            == json_value(run_dir / "agents" / "pilot_analyst" / "result.json")[
+                "result_sha256"
+            ]
+            and receipt_sha256
+            == auto_research.sha256_bytes(
+                auto_research.canonical_json_bytes(unsigned_gate_receipt)
+            )
+            and [
+                (item["gate_id"], item["gate_name"])
+                for item in quality_contract["review_gates"]
+            ]
+            == list(auto_research.REVIEW_GATE_CONTRACT),
+            "D3 scientific entry decision and immutable review meanings are content-addressed by the controller",
+            checks,
+        )
+        contribution_map_fixture = [
+            {
+                "contribution_id": "c1",
+                "statement": "The frozen cohort supports a bounded null effect.",
+                "claim_ids": ["pilot-null-effect"],
+                "frontier_delta": "Tests the open comparability question.",
+            },
+            {
+                "contribution_id": "c2",
+                "statement": "The null is retained with an explicit evidence boundary.",
+                "claim_ids": ["pilot-null-effect"],
+                "frontier_delta": "Separates a supported null from missing evidence.",
+            },
+        ]
+        manuscript_artifacts, manuscript_typeset = manuscript_delivery()
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="manuscript_writer",
+                invocation_id="writer-unsupported-claim",
+                model_family="family-c",
+                payload={
+                    "artifacts": manuscript_artifacts,
+                    "claim_ids": ["claim-not-present-in-frozen-evidence"],
+                },
+            )
+        except auto_research.AutoResearchError:
+            unsupported_claim_blocked = True
+        else:
+            unsupported_claim_blocked = False
+        require(
+            unsupported_claim_blocked,
+            "D3 Auto-Research blocks manuscript claims absent from the frozen atlas or pilot ledger",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="manuscript_writer",
+                invocation_id="writer-incomplete-typeset",
+                model_family="family-c",
+                payload={
+                    "artifacts": manuscript_artifacts,
+                    "claim_ids": ["pilot-null-effect"],
+                    "contribution_map": contribution_map_fixture,
+                    "reference_list": manuscript_reference_list,
+                    "typeset_manifest": {
+                        **manuscript_typeset,
+                        "section_manifest": [
+                            section
+                            for section in manuscript_typeset["section_manifest"]
+                            if section != "Limitations"
+                        ],
+                    },
+                },
+            )
+        except auto_research.AutoResearchError:
+            incomplete_typeset_blocked = True
+        else:
+            incomplete_typeset_blocked = False
+        require(
+            incomplete_typeset_blocked,
+            "D3 Auto-Research rejects manuscripts whose typeset section manifest misses frozen spine sections",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="manuscript_writer",
+                invocation_id="writer-untyped-references",
+                model_family="family-c",
+                payload={
+                    "artifacts": manuscript_artifacts,
+                    "claim_ids": ["pilot-null-effect"],
+                    "contribution_map": contribution_map_fixture,
+                    "reference_list": [
+                        {
+                            **manuscript_reference_list[0],
+                            "identifier": {"type": "memory", "value": "recalled"},
+                        }
+                    ],
+                    "typeset_manifest": manuscript_typeset,
+                },
+            )
+        except auto_research.AutoResearchError:
+            untyped_reference_blocked = True
+        else:
+            untyped_reference_blocked = False
+        require(
+            untyped_reference_blocked,
+            "D3 Auto-Research rejects manuscript references without a typed registry identifier",
+            checks,
+        )
+        auto_research.submit_agent_result(
+            run_dir,
+            role="manuscript_writer",
+            invocation_id="writer-fresh-1",
+            model_family="family-c",
+            payload={
+                "artifacts": manuscript_artifacts,
+                "claim_ids": ["pilot-null-effect"],
+                "contribution_map": contribution_map_fixture,
+                "reference_list": manuscript_reference_list,
+                "typeset_manifest": manuscript_typeset,
+            },
+        )
+        figure_artifact = agent_artifact(
+            "figure_designer",
+            "figure.svg",
+            "<svg xmlns='http://www.w3.org/2000/svg'/>\n",
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="figure_designer",
+                invocation_id="figure-one-diagram-only",
+                model_family="family-d",
+                payload={
+                    "artifacts": [figure_artifact],
+                    "claim_ids": ["pilot-null-effect"],
+                    "figure_specs": [
+                        {
+                            "figure_id": "figure-1",
+                            "figure_role": "methods",
+                            "question_answered": "How does the workflow operate?",
+                            "claim_ids": ["pilot-null-effect"],
+                            "visual_encoding": "three-panel method diagram",
+                            "render_review": {"iterations": 1, "inspected": True},
+                        }
+                    ],
+                },
+            )
+        except auto_research.AutoResearchError:
+            shallow_figure_story_blocked = True
+        else:
+            shallow_figure_story_blocked = False
+        require(
+            shallow_figure_story_blocked,
+            "D3 Auto-Research rejects a methods-only figure package that lacks primary, spatial, and robustness evidence roles",
+            checks,
+        )
+        invalid_render_artifacts, invalid_render_specs = empirical_figure_package()
+        invalid_render_specs[0]["artifact_paths"]["png"] = invalid_render_specs[0][
+            "artifact_paths"
+        ]["svg"]
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="figure_designer",
+                invocation_id="figure-false-render-format",
+                model_family="family-d",
+                payload={
+                    "artifacts": invalid_render_artifacts,
+                    "claim_ids": ["pilot-null-effect"],
+                    "figure_specs": invalid_render_specs,
+                },
+            )
+        except auto_research.AutoResearchError:
+            false_render_format_blocked = True
+        else:
+            false_render_format_blocked = False
+        require(
+            false_render_format_blocked,
+            "D3 Auto-Research rejects figure manifests that relabel one render as another format",
+            checks,
+        )
+        figure_artifacts, figure_specs = empirical_figure_package()
+        figure_state = auto_research.submit_agent_result(
+            run_dir,
+            role="figure_designer",
+            invocation_id="figure-fresh-1",
+            model_family="family-d",
+            payload={
+                "artifacts": figure_artifacts,
+                "claim_ids": ["pilot-null-effect"],
+                "figure_specs": figure_specs,
+            },
+        )
+        citation_packet = json_value(
+            run_dir / "agents" / "citation_auditor" / "packet.json"
+        )
+        reference_manifest = json_value(run_dir / "reference_manifest.json")
+        require(
+            figure_state["stage"] == "citation_audit"
+            and figure_state["required_roles"] == ["citation_auditor"]
+            and citation_packet["fresh_session_required"] is True
+            and citation_packet["previous_review_allowed"] is False
+            and citation_packet["executor_summary_allowed"] is False
+            and "reference_manifest" in citation_packet["allowed_inputs"]
+            and [item["reference_id"] for item in reference_manifest["references"]]
+            == ["ref-1"]
+            and not (
+                run_dir / "agents" / "independent_reviewer" / "packet.json"
+            ).exists(),
+            "D3 finished manuscript and figures route into a fresh citation audit bound to the manuscript reference manifest before any review",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="citation_auditor",
+                invocation_id="citation-false-verified",
+                model_family="family-h",
+                payload=citation_audit_payload(
+                    checks=citation_checks(author_order_match=False)
+                ),
+            )
+        except auto_research.AutoResearchError:
+            false_verified_blocked = True
+        else:
+            false_verified_blocked = False
+        require(
+            false_verified_blocked,
+            "D3 Auto-Research rejects a verified reference verdict whose author-order registry check failed",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="citation_auditor",
+                invocation_id="citation-partial-coverage",
+                model_family="family-h",
+                payload=citation_audit_payload(reference_ids=["ref-1", "ref-404"]),
+            )
+        except auto_research.AutoResearchError:
+            partial_coverage_blocked = True
+        else:
+            partial_coverage_blocked = False
+        require(
+            partial_coverage_blocked,
+            "D3 Auto-Research rejects citation audits that do not cover exactly the manuscript reference list",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="citation_auditor",
+                invocation_id="citation-forged-summary",
+                model_family="family-h",
+                payload=citation_audit_payload(
+                    verdict="mismatch",
+                    checks=citation_checks(authors_match=False),
+                    summary_override={
+                        "verified": 1,
+                        "mismatched": 0,
+                        "all_verified": True,
+                    },
+                ),
+            )
+        except auto_research.AutoResearchError:
+            forged_summary_blocked = True
+        else:
+            forged_summary_blocked = False
+        require(
+            forged_summary_blocked,
+            "D3 Auto-Research rejects citation audit summaries that contradict the per-reference verdicts",
+            checks,
+        )
+        citation_mismatch_state = auto_research.submit_agent_result(
+            run_dir,
+            role="citation_auditor",
+            invocation_id="citation-fresh-1",
+            model_family="family-h",
+            payload=citation_audit_payload(
+                verdict="mismatch",
+                checks=citation_checks(
+                    authors_match=False, author_order_match=False
+                ),
+            ),
+        )
+        initial_citation_receipt = json_value(
+            run_dir / "citation_audit_receipt.json"
+        )
+        revision_cycle = citation_mismatch_state["active_cycle"]
+        citation_feedback = json_value(
+            run_dir / "revisions" / revision_cycle / "feedback_tasks.json"
+        )
+        revision_writer_packet = json_value(
+            run_dir
+            / "revisions"
+            / revision_cycle
+            / "agents"
+            / "manuscript_writer"
+            / "packet.json"
+        )
+        require(
+            citation_mismatch_state["status"] == "awaiting_agents"
+            and citation_mismatch_state["stage"] == "manuscript_and_figures"
+            and citation_mismatch_state["revision_count"] == 1
+            and revision_cycle == "revision-01"
+            and initial_citation_receipt["all_references_verified"] is False
+            and initial_citation_receipt["mismatched"] == 1
+            and citation_feedback["task_count"] == 1
+            and citation_feedback["tasks"][0]["gate_id"] == "citation_audit"
+            and not (
+                run_dir / "agents" / "independent_reviewer" / "packet.json"
+            ).exists(),
+            "D3 a mismatched reference blocks independent review and opens a citation-repair revision with enumerated tasks",
+            checks,
+        )
+        require(
+            revision_writer_packet["previous_review_allowed"] is True
+            and "feedback_tasks" in revision_writer_packet["allowed_inputs"],
+            "D3 failed quality gates open an immutable feedback-bound revision round instead of dead-ending",
+            checks,
+        )
+        (
+            revised_manuscript_artifacts,
+            revised_manuscript_typeset,
+        ) = manuscript_delivery(revision_cycle, "# Revised screening result\n")
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="manuscript_writer",
+                invocation_id="writer-fresh-1",
+                model_family="family-f",
+                payload={
+                    "artifacts": revised_manuscript_artifacts,
+                    "claim_ids": ["pilot-null-effect"],
+                },
+            )
+        except auto_research.AutoResearchError:
+            cross_cycle_invocation_reuse_blocked = True
+        else:
+            cross_cycle_invocation_reuse_blocked = False
+        require(
+            cross_cycle_invocation_reuse_blocked,
+            "D3 Auto-Research rejects invocation reuse across immutable revision cycles",
+            checks,
+        )
+        auto_research.submit_agent_result(
+            run_dir,
+            role="manuscript_writer",
+            invocation_id="writer-fresh-revision-1",
+            model_family="family-f",
+            payload={
+                "artifacts": revised_manuscript_artifacts,
+                "claim_ids": ["pilot-null-effect"],
+                "contribution_map": contribution_map_fixture,
+                "reference_list": manuscript_reference_list,
+                "typeset_manifest": revised_manuscript_typeset,
+            },
+        )
+        revised_figure_artifacts, revised_figure_specs = empirical_figure_package(
+            revision_cycle, 2
+        )
+        revised_figure_state = auto_research.submit_agent_result(
+            run_dir,
+            role="figure_designer",
+            invocation_id="figure-fresh-revision-1",
+            model_family="family-g",
+            payload={
+                "artifacts": revised_figure_artifacts,
+                "claim_ids": ["pilot-null-effect"],
+                "figure_specs": revised_figure_specs,
+            },
+        )
+        require(
+            revised_figure_state["stage"] == "citation_audit"
+            and revised_figure_state["active_cycle"] == revision_cycle,
+            "D3 every revision cycle repeats the fresh citation audit before independent review",
+            checks,
+        )
+        revision_citation_state = auto_research.submit_agent_result(
+            run_dir,
+            role="citation_auditor",
+            invocation_id="citation-fresh-revision-1",
+            model_family="family-h",
+            payload=citation_audit_payload(revision_cycle),
+        )
+        revision_citation_receipt = json_value(
+            run_dir / "revisions" / revision_cycle / "citation_audit_receipt.json"
+        )
+        latest_citation_receipt = json_value(
+            run_dir / "citation_audit_receipt.json"
+        )
+        revision_reviewer_packet = json_value(
+            run_dir
+            / "revisions"
+            / revision_cycle
+            / "agents"
+            / "independent_reviewer"
+            / "packet.json"
+        )
+        require(
+            revision_citation_state["stage"] == "independent_review"
+            and revision_citation_receipt["all_references_verified"] is True
+            and latest_citation_receipt["cycle_id"] == revision_cycle
+            and "citation_audit_receipt"
+            in revision_reviewer_packet["allowed_inputs"]
+            and "reference_manifest" in revision_reviewer_packet["allowed_inputs"],
+            "D3 a fully verified citation audit is receipted and bound into the fresh reviewer packet",
+            checks,
+        )
+        require(
+            revision_reviewer_packet["fresh_session_required"] is True
+            and revision_reviewer_packet["previous_review_allowed"] is False
+            and revision_reviewer_packet["executor_summary_allowed"] is False
+            and "previous_review" not in revision_reviewer_packet["allowed_inputs"]
+            and "executor_summary"
+            not in revision_reviewer_packet["allowed_inputs"]
+            and "feedback_tasks" not in revision_reviewer_packet["allowed_inputs"]
+            and all(
+                not key.startswith("previous_")
+                for key in revision_reviewer_packet["allowed_inputs"]
+            ),
+            "D3 revision reviewer sees only revised canonical artifacts and never inherits feedback or previous artifacts",
+            checks,
+        )
+        review_artifact = agent_artifact(
+            "independent_reviewer",
+            "review.json",
+            '{"all_pass":false}\n',
+            revision_cycle,
+        )
+
+        def review_gates(failing_gate: str | None = None) -> list[dict[str, Any]]:
+            return [
+                {
+                    "gate_id": gate_id,
+                    "gate_name": gate_name,
+                    "score": 2 if gate_id == failing_gate else 4,
+                    "pass": gate_id != failing_gate,
+                    "evidence": [f"direct evidence for {gate_name}"],
+                    "feedback": (
+                        "repair figure evidence" if gate_id == failing_gate else ""
+                    ),
+                }
+                for gate_id, gate_name in auto_research.REVIEW_GATE_CONTRACT
+            ]
+
+        drifted_gates = review_gates("a6")
+        drifted_gates[2]["gate_name"] = "layout_only"
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="independent_reviewer",
+                invocation_id="review-drifted-rubric",
+                model_family="family-e",
+                payload={
+                    "artifacts": [review_artifact],
+                    "gate_results": drifted_gates,
+                },
+            )
+        except auto_research.AutoResearchError:
+            reviewer_rubric_drift_blocked = True
+        else:
+            reviewer_rubric_drift_blocked = False
+        require(
+            reviewer_rubric_drift_blocked,
+            "D3 Auto-Research rejects reviewers that rename scientific-quality gates between cycles",
+            checks,
+        )
+        second_revision_state = auto_research.submit_agent_result(
+            run_dir,
+            role="independent_reviewer",
+            invocation_id="review-fresh-1",
+            model_family="family-e",
+            payload={
+                "artifacts": [review_artifact],
+                "gate_results": review_gates("a6"),
+            },
+        )
+        second_revision_cycle = second_revision_state["active_cycle"]
+        review_feedback = json_value(
+            run_dir / "revisions" / second_revision_cycle / "feedback_tasks.json"
+        )
+        require(
+            second_revision_state["status"] == "awaiting_agents"
+            and second_revision_state["stage"] == "manuscript_and_figures"
+            and second_revision_state["revision_count"] == 2
+            and second_revision_cycle == "revision-02"
+            and review_feedback["tasks"][0]["gate_id"] == "a6",
+            "D3 failed independent review opens an immutable feedback-bound revision round instead of dead-ending",
+            checks,
+        )
+        (
+            final_manuscript_artifacts,
+            final_manuscript_typeset,
+        ) = manuscript_delivery(second_revision_cycle, "# Final screening result\n")
+        auto_research.submit_agent_result(
+            run_dir,
+            role="manuscript_writer",
+            invocation_id="writer-fresh-revision-2",
+            model_family="family-f",
+            payload={
+                "artifacts": final_manuscript_artifacts,
+                "claim_ids": ["pilot-null-effect"],
+                "contribution_map": contribution_map_fixture,
+                "reference_list": manuscript_reference_list,
+                "typeset_manifest": final_manuscript_typeset,
+            },
+        )
+        final_figure_artifacts, final_figure_specs = empirical_figure_package(
+            second_revision_cycle, 2
+        )
+        auto_research.submit_agent_result(
+            run_dir,
+            role="figure_designer",
+            invocation_id="figure-fresh-revision-2",
+            model_family="family-g",
+            payload={
+                "artifacts": final_figure_artifacts,
+                "claim_ids": ["pilot-null-effect"],
+                "figure_specs": final_figure_specs,
+            },
+        )
+        auto_research.submit_agent_result(
+            run_dir,
+            role="citation_auditor",
+            invocation_id="citation-fresh-revision-2",
+            model_family="family-h",
+            payload=citation_audit_payload(second_revision_cycle),
+        )
+        revised_review_artifact = agent_artifact(
+            "independent_reviewer",
+            "review.json",
+            '{"all_pass":true}\n',
+            second_revision_cycle,
+        )
+        final_research_state = auto_research.submit_agent_result(
+            run_dir,
+            role="independent_reviewer",
+            invocation_id="review-fresh-revision-2",
+            model_family="family-f",
+            payload={
+                "artifacts": [revised_review_artifact],
+                "gate_results": review_gates(),
+            },
+        )
+        review_receipt = json_value(run_dir / "review_receipt.json")
+        require(
+            final_research_state["status"] == "awaiting_human_approval"
+            and final_research_state["publication_allowed"] is False
+            and review_receipt["cross_model_status"] == "provisional_same_family"
+            and review_receipt["cycle_id"] == "revision-02"
+            and review_receipt["human_approval_required"] is True,
+            "D3 Auto-Research repairs failed gates, re-reviews independently, then stops at human approval with same-family status provisional",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="pilot_analyst",
+                invocation_id="pilot-fresh-2",
+                model_family="family-z",
+                payload={"artifacts": [pilot_artifact], "claims": []},
+            )
+        except auto_research.AutoResearchError:
+            duplicate_role_blocked = True
+        else:
+            duplicate_role_blocked = False
+        require(
+            duplicate_role_blocked,
+            "D3 Auto-Research rejects replacement of an accepted role result",
+            checks,
+        )
+        require(
+            serve_atlas_research.valid_host("127.0.0.1:8765", 8765)
+            and not serve_atlas_research.valid_host("evil.example:8765", 8765)
+            and serve_atlas_research.valid_origin("http://localhost:8765", 8765)
+            and not serve_atlas_research.valid_origin("https://evil.example", 8765)
+            and serve_atlas_research.safe_static_path(
+                output_dir, "/interactive_map.html"
+            )
+            == (output_dir / "interactive_map.html").resolve()
+            and serve_atlas_research.safe_static_path(output_dir, "/../README.md")
+            is None,
+            "D3 localhost research server fixes Host and static roots and rejects traversal",
+            checks,
+        )
+        symlink_path = output_dir / "linked-map.html"
+        symlink_path.symlink_to("interactive_map.html")
+        try:
+            symlink_blocked = (
+                serve_atlas_research.safe_static_path(output_dir, "/linked-map.html")
+                is None
+            )
+        finally:
+            symlink_path.unlink()
+        require(
+            symlink_blocked,
+            "D3 localhost research server rejects symlink-backed static content",
+            checks,
+        )
+
+        pending_root = research_root / "pending-selection"
+        pending_state = auto_research.start_research(
+            output_dir, pending_root, {"output_language": "en"}
+        )
+        pending_run = pending_root / pending_state["run_id"]
+        selected_state = auto_research.select_research_direction(
+            pending_run,
+            question="Does the frozen atlas support a method-stratified Cu pilot?",
+        )
+        require(
+            pending_state["status"] == "awaiting_selection"
+            and selected_state["status"] == "awaiting_agents"
+            and selected_state["stage"] == "pilot_and_literature"
+            and (pending_run / "selection.json").is_file()
+            and (pending_run / "agents" / "pilot_analyst" / "packet.json").is_file(),
+            "D3 Auto-Research can pause for deterministic candidate selection and resume from an explicit user choice",
+            checks,
+        )
+        pilot_output_root = pending_run / "agent_outputs" / "pilot_analyst"
+        real_output_dir = pilot_output_root / "real"
+        real_output_dir.mkdir(parents=True)
+        linked_output_dir = pilot_output_root / "linked"
+        linked_output_dir.symlink_to("real", target_is_directory=True)
+        linked_artifact = real_output_dir / "result.json"
+        linked_artifact.write_text("{}\n", encoding="utf-8")
+        try:
+            auto_research.submit_agent_result(
+                pending_run,
+                role="pilot_analyst",
+                invocation_id="wrong-artifact-hash-attempt",
+                model_family="family-a",
+                payload={
+                    "artifacts": [
+                        {
+                            "path": "agent_outputs/pilot_analyst/real/result.json",
+                            "sha256": "0" * 64,
+                        }
+                    ],
+                    "claims": [],
+                },
+            )
+        except auto_research.AutoResearchError:
+            agent_hash_mismatch_blocked = True
+        else:
+            agent_hash_mismatch_blocked = False
+        require(
+            agent_hash_mismatch_blocked,
+            "D3 Auto-Research blocks agent outputs whose declared SHA-256 no longer matches artifact bytes",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                pending_run,
+                role="pilot_analyst",
+                invocation_id="symlink-attempt",
+                model_family="family-a",
+                payload={
+                    "artifacts": [
+                        {
+                            "path": "agent_outputs/pilot_analyst/linked/result.json",
+                            "sha256": sha256_file(linked_artifact),
+                        }
+                    ],
+                    "claims": [],
+                },
+            )
+        except auto_research.AutoResearchError:
+            agent_symlink_blocked = True
+        else:
+            agent_symlink_blocked = False
+        require(
+            agent_symlink_blocked,
+            "D3 Auto-Research rejects intermediate symlink traversal in agent artifacts",
+            checks,
+        )
+        unsupported_pilot_state = auto_research.submit_agent_result(
+            pending_run,
+            role="pilot_analyst",
+            invocation_id="pilot-unsupported-inputs",
+            model_family="family-a",
+            payload={
+                "artifacts": [
+                    {
+                        "path": "agent_outputs/pilot_analyst/real/result.json",
+                        "sha256": sha256_file(linked_artifact),
+                    }
+                ],
+                "claims": [
+                    {
+                        "claim_id": "pilot-input-status",
+                        "value": "unsupported",
+                        "unit": "status",
+                        "artifact": "agent_outputs/pilot_analyst/real/result.json",
+                        "artifact_sha256": sha256_file(linked_artifact),
+                    }
+                ],
+                "analysis_outcome": {
+                    "status": "unsupported_inputs",
+                    "analysis_executed": False,
+                    "result_claim_ids": [],
+                    "routing_destination": "candidate_selection",
+                    "evidence_summary": "The selected rows cannot resolve the estimand.",
+                },
+            },
+        )
+        pending_literature_root = (
+            pending_run / "agent_outputs" / "literature_researcher"
+        )
+        pending_literature_root.mkdir(parents=True)
+        pending_citations = pending_literature_root / "citations.json"
+        pending_citations.write_text("{}\n", encoding="utf-8")
+        pending_retrieval = pending_literature_root / "retrieval-evidence-1.html"
+        pending_retrieval.write_text(
+            "<html><title>Verified primary source landing page</title></html>\n",
+            encoding="utf-8",
+        )
+        redirected_state = auto_research.submit_agent_result(
+            pending_run,
+            role="literature_researcher",
+            invocation_id="literature-for-unsupported-pilot",
+            model_family="family-b",
+            payload={
+                "artifacts": [
+                    {
+                        "path": ("agent_outputs/literature_researcher/citations.json"),
+                        "sha256": sha256_file(pending_citations),
+                    },
+                    {
+                        "path": (
+                            "agent_outputs/literature_researcher/"
+                            "retrieval-evidence-1.html"
+                        ),
+                        "sha256": sha256_file(pending_retrieval),
+                    },
+                ],
+                "citations": [
+                    {
+                        "title": "Verified primary source",
+                        "authors": ["Researcher"],
+                        "year": 2025,
+                        "venue": "Journal",
+                        "doi_or_official_url": "https://doi.org/10.0000/example",
+                        "primary_source_verified": True,
+                        "supported_claim": "frontier boundary",
+                        "retrieval": {
+                            "retrieved_at": "2026-08-27T00:00:00+00:00",
+                            "evidence_artifact": (
+                                "agent_outputs/literature_researcher/"
+                                "retrieval-evidence-1.html"
+                            ),
+                        },
+                    }
+                ],
+                "search_coverage": {
+                    "queries": ["method-stratified Cu pilot literature"],
+                    "sources_searched": ["doi.org", "publisher archive"],
+                    "candidates_screened": 9,
+                    "inclusion_criteria": (
+                        "Primary empirical sources with registry identifiers."
+                    ),
+                },
+                "frontier_assessment": {
+                    "status": "supports_empirical_article",
+                    "open_problem": "The empirical question remains open.",
+                    "closest_prior_work": "Prior work defines the expected contrast.",
+                    "novelty_delta": "A supported frozen pilot could test it.",
+                    "venue_fit": "The question fits Applied Geochemistry.",
+                },
+            },
+        )
+        require(
+            unsupported_pilot_state["stage"] == "pilot_and_literature"
+            and redirected_state["status"] == "needs_research_redirection"
+            and redirected_state["stage"] == "research_quality_gate"
+            and redirected_state["research_gate"]["paper_eligible"] is False
+            and not (
+                pending_run / "agents" / "manuscript_writer" / "packet.json"
+            ).exists()
+            and not (
+                pending_run / "agents" / "figure_designer" / "packet.json"
+            ).exists(),
+            "D3 unsupported pilots stop before manuscript and figure generation and route to a new research direction",
+            checks,
+        )
+
+        token = "component-test-token"
+        server = serve_atlas_research.AtlasResearchServer(
+            ("127.0.0.1", 0), output_dir, research_root, token
+        )
+        server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+        server_thread.start()
+        port = int(server.server_address[1])
+        body = json.dumps(research_request).encode("utf-8")
+        headers = {
+            "Content-Type": "application/json",
+            "Content-Length": str(len(body)),
+            "Host": f"127.0.0.1:{port}",
+            "Origin": f"http://127.0.0.1:{port}",
+            "X-GGA-Research-Token": token,
+            "X-GGA-Request-Nonce": "component-http-nonce-0001",
+        }
+        try:
+            connection = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+            connection.request(
+                "POST", "/api/v1/research-runs", body=body, headers=headers
+            )
+            first_response = connection.getresponse()
+            first_http_body = json.loads(first_response.read().decode("utf-8"))
+            first_status = first_response.status
+            connection.close()
+            replay = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+            replay.request("POST", "/api/v1/research-runs", body=body, headers=headers)
+            replay_response = replay.getresponse()
+            replay_response.read()
+            replay_status = replay_response.status
+            replay.close()
+            hostile_headers = {
+                **headers,
+                "Origin": "https://evil.example",
+                "X-GGA-Request-Nonce": "component-http-nonce-0002",
+            }
+            hostile = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+            hostile.request(
+                "POST", "/api/v1/research-runs", body=body, headers=hostile_headers
+            )
+            hostile_response = hostile.getresponse()
+            hostile_response.read()
+            hostile_status = hostile_response.status
+            hostile.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+            server_thread.join(timeout=10)
+        require(
+            first_status == 201
+            and first_http_body["run_id"] == research_state["run_id"]
+            and replay_status == 409
+            and hostile_status == 403,
+            "D3 real localhost HTTP boundary starts a run and blocks replayed nonces and hostile origins",
+            checks,
+        )
     research_validation = research_delivery_validator.validate_delivery(output_dir)
     require(
         research_validation.get("status") == "invalid"
@@ -7014,6 +9063,10 @@ def check_d3(output_dir: Path) -> list[str]:
         queue_path.write_text(
             json.dumps(queue, sort_keys=True) + "\n", encoding="utf-8"
         )
+        loop_controller.prepare_pending_agent_audits(checkpoint_dir, loop, queue)
+        audit_manifest_path = next(
+            (checkpoint_dir / "agent_audits").glob("round-*/manifest.json")
+        )
         artifacts = {
             filename: {
                 "root_sha256": sha256_file(checkpoint_dir / filename),
@@ -7022,7 +9075,7 @@ def check_d3(output_dir: Path) -> list[str]:
             for filename in output_validator.REQUIRED_FILES.values()
         }
         receipt = {
-            "schema_version": "atlas-research-delivery-receipt-v3",
+            "schema_version": "atlas-research-delivery-receipt-v4",
             "request_sha256": request_hash,
             "published_round": 1,
             "published_round_dir": "rounds/round-01",
@@ -7047,6 +9100,12 @@ def check_d3(output_dir: Path) -> list[str]:
             },
             "delivery_ready": False,
             "artifacts": artifacts,
+            "claim_ledger": claim_ledger.build_claim_ledger(checkpoint_dir),
+            "adversarial_source_audit": {
+                "status": "pending_agent_or_discovery_work",
+                "manifest": audit_manifest_path.relative_to(checkpoint_dir).as_posix(),
+                "manifest_sha256": sha256_file(audit_manifest_path),
+            },
             "claim_boundary": "checkpoint test",
         }
         receipt_path = checkpoint_dir / "research_delivery_receipt.json"
@@ -7436,7 +9495,7 @@ def check_d3(output_dir: Path) -> list[str]:
         }.issubset(set(map_report.get("visualization_modes", [])))
         and map_report.get("external_assets") == 0
         and map_report.get("interpolation") is False
-        and map_builder.DEFAULT_MAX_EMBEDDED_RECORDS == 200_000
+        and map_builder.DEFAULT_MAX_EMBEDDED_RECORDS == 80_000
         and map_report.get("admin1_boundary_asset", {}).get("asset_version")
         == "ai4s-natural-earth-admin1-china-visual-v1"
         and map_report.get("admin1_boundary_asset", {}).get("boundary_count") == 31
@@ -7598,6 +9657,34 @@ def check_d3(output_dir: Path) -> list[str]:
             77.2, 28.6, china_preset, country_index
         ),
         "D3 china preset clips on the CHN+TWN analysis bundle so Taiwan and Southern Tibet stay inside",
+        checks,
+    )
+    resolved_china = spatial_scope.resolve_region("China")
+    china_marine_profile = request_runner.request_visualization_profile(
+        {
+            "region": "China",
+            "elements": ["As", "Cu"],
+            "media": ["soil", "water"],
+            "spatial_domains": ["land", "inland_water", "marine"],
+            "adjacent_marine_distance_km": 600,
+            "geology_units": None,
+        },
+        resolved_china,
+    )
+    china_view_bounds = china_marine_profile["custom_region"]["bounds"]
+    require(
+        [
+            china_view_bounds["w"],
+            china_view_bounds["s"],
+            china_view_bounds["e"],
+            china_view_bounds["n"],
+        ]
+        == resolved_china["bbox"]
+        and "邻近海洋" not in china_marine_profile["custom_region"]["label"]
+        and "国家范围主视图" in china_marine_profile["custom_region"]["label"]
+        and "600" in china_marine_profile["subtitle"]
+        and "完整数据库" in china_marine_profile["subtitle"],
+        "D3 China atlas frames the strict China extent while retaining the declared adjacent-marine analysis in the complete database",
         checks,
     )
     profile = json_value(VISUALIZATION_PROFILE)

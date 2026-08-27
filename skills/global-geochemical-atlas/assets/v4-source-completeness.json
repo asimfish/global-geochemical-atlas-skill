@@ -10,15 +10,17 @@
       "source_ids": []
     },
     {
-      "affected_sources": 12,
+      "affected_sources": 14,
       "code": "FULL_AUDIT_MISSING",
       "detail": "These executable sources have no checked-in candidate full-population audit.",
       "next_action": "Add immutable full-source audits without substituting demo rows.",
       "severity": "high",
       "source_ids": [
         "eidc-ningbo-soil",
+        "europe-pmc-pearl-river-dissolved-metals",
         "figshare-yangtze-basin-soil-heavy-metals",
         "georoc-archaean",
+        "mendeley-guangdong-fujian-groundwater",
         "pangaea-amazonas-soil",
         "pangaea-barents-c-horizon-soil",
         "pangaea-batagay-soil",
@@ -31,7 +33,7 @@
       ]
     }
   ],
-  "generated_from_registry_verified_at": "2026-08-15T07:00:00Z",
+  "generated_from_registry_verified_at": "2026-08-23T00:00:00Z",
   "population_definitions": {
     "demo_fixture": "Deterministic selected rows for engineering tests; never a full-population denominator.",
     "full_population": "Uniform field counts produced by parsing every target-bearing observation in a verified full cache; candidate audits remain separate supporting evidence.",
@@ -42,7 +44,7 @@
     "4tu-northern-china-sediment": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 3,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -72,7 +74,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-16T00:00:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 867,
@@ -370,7 +372,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/4tu-northern-china-sediment/field_completeness.json",
-        "audit_sha256": "32040f33eb58a4567acffd37e95d70412571c1706614a94d4d312dd3e5eca271",
+        "audit_sha256": "dccc32a116e9c8f1770f63edf8fd9dded5d2b10f13ff4f70230a2b7b3630e6d1",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -596,7 +598,7 @@
         "access_status_counts": {
           "public_download": 6069
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 6069
         },
@@ -618,7 +620,7 @@
     "afsis-phase-i-wet-chemistry": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 3,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -648,7 +650,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 2002,
@@ -895,7 +897,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/afsis-phase-i-wet-chemistry/field_completeness.json",
-        "audit_sha256": "f40dbbe572a31560ca5166e6349cc5012d28d4423eb308518e02eaa5dea55c60",
+        "audit_sha256": "961370d14f12a6bf23d00256206abe946e11ca326b11160e59a1e789a165044b",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -1121,7 +1123,7 @@
         "access_status_counts": {
           "public_download": 12012
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 12012
         },
@@ -1143,7 +1145,7 @@
     "australia-ngsa": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -1159,7 +1161,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-12T21:32:57Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 7890,
@@ -1545,7 +1547,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/australia-ngsa/field_completeness.json",
-        "audit_sha256": "b543a83cb0cbf2feae1bb4ec804d4324a03baab093ec6a848f785108dab3912a",
+        "audit_sha256": "b0a1dffe25eadfbe935252eb8a60fb0209cbf61242650724391c982a694e8f43",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -1771,7 +1773,7 @@
         "access_status_counts": {
           "public_download": 10492
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 10492
         },
@@ -1793,7 +1795,7 @@
     "australia-ngsa-mercury": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -1809,7 +1811,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-06T16:07:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 2396,
@@ -2014,7 +2016,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/australia-ngsa-mercury/field_completeness.json",
-        "audit_sha256": "e83326580e15e25e777ca9669b1365ad33ee53a6a68d140dc7354fdeb88ec3ea",
+        "audit_sha256": "5d34edfab1f219a825cb3d532187d82d81ae17769e2236dee6ddc17804d2be85",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -2240,7 +2242,7 @@
         "access_status_counts": {
           "public_download": 2396
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 2396
         },
@@ -2262,7 +2264,7 @@
     "earthchem-dehailonggang-rock": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -2278,7 +2280,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 15,
@@ -2491,7 +2493,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/earthchem-dehailonggang-rock/field_completeness.json",
-        "audit_sha256": "bd6efa82ed90d0b8affdfc4dac12e0bd50e5492d6fedb65777db1959033c3463",
+        "audit_sha256": "01c252aef5273eb6fa82a60206c5c250bbc3072deddbc0332143a6a827a8f722",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -2717,7 +2719,7 @@
         "access_status_counts": {
           "public_download": 75
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 75
         },
@@ -2739,7 +2741,7 @@
     "eidc-ningbo-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -2755,7 +2757,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 80,
@@ -2990,7 +2992,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/eidc-ningbo-soil/field_completeness.json",
-        "audit_sha256": "fe2eac8a6faccd7613f7cd2b8e97311f0ba2b45eb56e2e7c397bcf021f7aa56b",
+        "audit_sha256": "fcf4a46a2c2f71304ca12b78a41296c49b9e721a5f51c0c4282c7e8c51c7fe29",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -3216,7 +3218,7 @@
         "access_status_counts": {
           "public_download": 480
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 480
         },
@@ -3235,10 +3237,485 @@
         "source_id": "eidc-ningbo-soil"
       }
     },
+    "europe-pmc-pearl-river-dissolved-metals": {
+      "automation_health": {
+        "adapter_registered": true,
+        "as_of": "2026-08-23T00:00:00Z",
+        "cache_hit_count": 1,
+        "cached_parse_status": "pass",
+        "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+        "dataset_version": "peerj-7-e6578-supplement-s004",
+        "expected_target_observation_count": 648,
+        "files": [
+          {
+            "bytes": 46580,
+            "cache_status": "cache_hit",
+            "file_id": "raw-data-workbook",
+            "filename": "peerj-07-6578-s004.xlsx",
+            "sha256": "dbe27bbd31c9de335dcacca5bc6ae8a3e14d117c443048efb7449ab8453d09ba"
+          }
+        ],
+        "last_successful_fetch_at": null,
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
+        "offline_replay_status": "pass",
+        "online_fetch_health": "not_probed_by_reproducible_offline_run",
+        "parsed_source_record_count": 162,
+        "profile_version": "d1-v4-full-population-profile-v1",
+        "raw_schema_field_count": 25,
+        "raw_schema_fields": [
+          "Ba",
+          "Cd",
+          "Co",
+          "Cr",
+          "Cu",
+          "Date      (m-d-y)",
+          "Mn",
+          "Mo",
+          "Ni",
+          "Pb",
+          "River reach",
+          "Sample location",
+          "Site number",
+          "V",
+          "WQI",
+          "_dataset_version",
+          "_reported_coordinate_text",
+          "_reported_latitude",
+          "_reported_longitude",
+          "_sample_type_raw",
+          "_sampled_at",
+          "_season",
+          "_source_crs",
+          "_source_file",
+          "_target_observations"
+        ],
+        "retry_health": "not_measured_in_offline_profile",
+        "row_count_drift_status": "matches_registered_expected_count",
+        "schema_drift_detection": "checked-in profile exact comparison",
+        "source_id": "europe-pmc-pearl-river-dissolved-metals",
+        "supported_modes": [
+          "online",
+          "cached",
+          "offline_fixture"
+        ],
+        "target_observation_count": 648,
+        "version_drift": {
+          "outer_archive_drift": false,
+          "status": "matches_registered_snapshot"
+        }
+      },
+      "candidate_audit": {
+        "audit_path": null,
+        "audit_status": "not_measured",
+        "denominator_status": "not_available",
+        "distinct_sample_count": null,
+        "physical_row_count": null,
+        "target_observation_count": null,
+        "warning": "No checked-in full-population audit; demo counts must not be substituted."
+      },
+      "dataset_version": "peerj-7-e6578-supplement-s004",
+      "demo_fixture": {
+        "analytes": {
+          "Cr": 12,
+          "Cu": 12,
+          "Ni": 12,
+          "Pb": 12
+        },
+        "field_completeness": {
+          "analytical_method": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "citation_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "coordinate_pair": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "element_or_analyte": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "geologic_unit_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "grain_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "license": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "matched_geologic_unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "medium": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "method_assignment_basis": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "method_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_id": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_mapping_status": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sediment_environment": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "soil_horizon_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_locator": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "value": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "water_body_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "water_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          }
+        },
+        "file_sha256": "b39e15f29d4bab5b366b0d56a47ae9d99f4d2df75005675c12bd3071585a0d81",
+        "header_sha256": "a13ca6b5a39c3e09c271413b27a4375204f670a5f3b5d5e5f2363971772d128a",
+        "manifest_sha256": "223fdb17ba506b1d31b393fdd916dfdb18353c835147808143522827bc05d4f4",
+        "media": {
+          "water": 48
+        },
+        "record_count": 48,
+        "status": "deterministic_demo_only",
+        "warning": "This profile describes a deliberately selected fixture, not the full source population."
+      },
+      "full_population": {
+        "audit_path": "assets/v4-full-profiles/europe-pmc-pearl-river-dissolved-metals/field_completeness.json",
+        "audit_sha256": "f61540252fb731acab995486cc7ef529feaf5a890f50e73d6c5b6ea2ee8fa266",
+        "audit_status": "uniform_full_profile",
+        "denominator_status": "available",
+        "distinct_sample_count": null,
+        "field_completeness": {
+          "access_status": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "analytical_method": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "citation_resolution_status": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "citation_scope": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "citation_text_raw": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "coordinate_pair": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "coordinate_uncertainty_m": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "detection_limit": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "element_or_analyte": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "geologic_age_raw": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "geologic_unit_raw": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "grain_fraction": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "license": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "license_url": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "lithology_raw": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "matched_geologic_unit": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "measurement_basis": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "method_assignment_basis": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "method_or_missing_reason": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "method_scope": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "research_use_status": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "sample_id": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "sample_type": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "sample_type_mapping_status": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "sample_type_raw": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "sediment_environment": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "soil_horizon": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_crs": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_locator": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "tectonic_setting_raw": {
+            "denominator": 648,
+            "missing": 648,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "unit": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "value": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "water_body_type": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          },
+          "water_fraction": {
+            "denominator": 648,
+            "missing": 0,
+            "non_empty": 648,
+            "rate": 1.0
+          }
+        },
+        "field_completeness_status": "measured_uniformly",
+        "physical_row_count": 162,
+        "profile_scope": "full_population",
+        "snapshot_id": "peerj-7-e6578-supplement-s004",
+        "target_observation_count": 648,
+        "target_observation_count_basis": "all non-empty target-analyte observations emitted by the verified source adapter",
+        "warning": "The full profile covers every target-bearing adapter observation in the verified cache. It does not imply spatial representativeness or that unreported source fields are complete."
+      },
+      "media": [
+        "water"
+      ],
+      "source_id": "europe-pmc-pearl-river-dissolved-metals",
+      "usage_rights": {
+        "access_status_counts": {
+          "public_download": 648
+        },
+        "as_of": "2026-08-23T00:00:00Z",
+        "attribution_required_counts": {
+          "true": 648
+        },
+        "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+        "dataset_version": "peerj-7-e6578-supplement-s004",
+        "license_id": "CC-BY-4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "profile_version": "d1-v4-full-population-profile-v1",
+        "redistribution_is_not_a_research_use_gate": true,
+        "redistribution_status_counts": {
+          "not_evaluated_for_project_output": 648
+        },
+        "research_use_status_counts": {
+          "permitted_research": 648
+        },
+        "source_id": "europe-pmc-pearl-river-dissolved-metals"
+      }
+    },
     "figshare-yangtze-basin-soil-heavy-metals": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -3254,7 +3731,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-14T20:22:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 6625,
@@ -3463,7 +3940,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/figshare-yangtze-basin-soil-heavy-metals/field_completeness.json",
-        "audit_sha256": "931d0f03260add9326bf32546c3353e46f085e07d234609c08b894014c2dd377",
+        "audit_sha256": "e88ca7258ed4f35cf25245d5d7f1f3c8820d9c7c5b6657e4edde8aae15f92e4d",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -3689,7 +4166,7 @@
         "access_status_counts": {
           "public_download": 6625
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 6625
         },
@@ -3711,7 +4188,7 @@
     "foregs-floodplain-sediment": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 4,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -3748,7 +4225,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 2935,
@@ -4029,7 +4506,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/foregs-floodplain-sediment/field_completeness.json",
-        "audit_sha256": "eb9961980919f53fc5d92494d8af8a49255be1406b7c3c1e59ff9cb786f797ea",
+        "audit_sha256": "ae80cea025c7cce8e51d62af6e2eba5310db9c7e6d44018a345d20b5dd3a7bdb",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -4255,7 +4732,7 @@
         "access_status_counts": {
           "public_download": 9672
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 9672
         },
@@ -4277,7 +4754,7 @@
     "foregs-humus": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 3,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -4307,7 +4784,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 1111,
@@ -4527,7 +5004,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/foregs-humus/field_completeness.json",
-        "audit_sha256": "854e777220cc2d03837ba12d1495fd869c9adf54f6f0a9d5e63a63e0a0febe48",
+        "audit_sha256": "2aee5d8a20daa79ea92ed18a914dea5f7130441dbf6a01b1c29255c934459aab",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -4753,7 +5230,7 @@
         "access_status_counts": {
           "public_download": 1845
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 1845
         },
@@ -4775,7 +5252,7 @@
     "foregs-stream-sediment": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 4,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -4812,7 +5289,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 3393,
@@ -5094,7 +5571,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/foregs-stream-sediment/field_completeness.json",
-        "audit_sha256": "421c217d50fc3e74e3f9178d3a098bbe3c57a69e21befd21bf476c82a8bb0fa6",
+        "audit_sha256": "1adcdadbb372e90389dc94acf85fdcf4f914ee9af0e87ec857949dec85969ec8",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -5320,7 +5797,7 @@
         "access_status_counts": {
           "public_download": 11030
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 11030
         },
@@ -5342,7 +5819,7 @@
     "foregs-stream-water": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -5358,7 +5835,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 808,
@@ -5632,7 +6109,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/foregs-stream-water/field_completeness.json",
-        "audit_sha256": "c8e2cc215ca0c955c6cef2417455af0ae5ab8939668e39023da794a38ac22745",
+        "audit_sha256": "f7c38a38d13af5c135633ece79b7dc90f1b3ce00ad9ae8cc0b63e682ae118735",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -5858,7 +6335,7 @@
         "access_status_counts": {
           "public_download": 4848
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 4848
         },
@@ -5880,7 +6357,7 @@
     "foregs-subsoil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 5,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -5924,7 +6401,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 3922,
@@ -6208,7 +6685,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/foregs-subsoil/field_completeness.json",
-        "audit_sha256": "bfff307828a2c462b14d7d87703b2d04456948e9d3ffb521aa6daa9e2461d6b4",
+        "audit_sha256": "a31e59b9f853b501300efa1360e639cbba8d41409cc8ea7b6b82f07b881ceeda",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -6434,7 +6911,7 @@
         "access_status_counts": {
           "public_download": 10201
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 10201
         },
@@ -6456,7 +6933,7 @@
     "foregs-topsoil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 5,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -6500,7 +6977,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 4195,
@@ -6785,7 +7262,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/foregs-topsoil/field_completeness.json",
-        "audit_sha256": "956fbaedb03b58cec5880665731ee57f8f5bef4de29ab458800df21da8ea5c71",
+        "audit_sha256": "2f1dd92be9ae40296c53d12e7b94e2ea8f3c77975298e557ad7f7dfb6cce285e",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -7011,7 +7488,7 @@
         "access_status_counts": {
           "public_download": 10908
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 10908
         },
@@ -7033,7 +7510,7 @@
     "gemas-europe": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -7049,7 +7526,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 8262,
@@ -7390,7 +7867,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/gemas-europe/field_completeness.json",
-        "audit_sha256": "ee22742bf5a9a2cf8d1b730c10558a20a216a0ba05c90458cc709a238ea7ddf5",
+        "audit_sha256": "0f70b5e252484058d640e662b2a6ec86e2fa1af91ffc64db8cbffed1f4dc257d",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -7616,7 +8093,7 @@
         "access_status_counts": {
           "public_download": 53703
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 53703
         },
@@ -7638,7 +8115,7 @@
     "gemstat-open-archive": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 11,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -7724,7 +8201,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-05T14:41:20Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 3739180,
@@ -7936,7 +8413,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/gemstat-open-archive/field_completeness.json",
-        "audit_sha256": "1990ffa5a484ffbb2774129404cf7292f5594c1053393cffdda9dccaa22cdbdc",
+        "audit_sha256": "1f9aefa14424e8a3d8ce70b985f6a15072e0e30cfa65a3c411ca1d0aad85626a",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -8162,7 +8639,7 @@
         "access_status_counts": {
           "public_download": 3739180
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 3739180
         },
@@ -8184,7 +8661,7 @@
     "georoc-antarctica-intraplate": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -8200,7 +8677,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 424,
@@ -8566,7 +9043,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/georoc-antarctica-intraplate/field_completeness.json",
-        "audit_sha256": "eb7881a2c623a03df4fa5322fac7f5c690b945ad1db83f454609f991e781c109",
+        "audit_sha256": "40b7e9732497e0cec9cc7bab1ef6d9c8cc2ba7f7f6ae9a5b906878046c94cc8e",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -8792,7 +9269,7 @@
         "access_status_counts": {
           "public_download": 1183
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 1183
         },
@@ -8814,7 +9291,7 @@
     "georoc-archaean": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 28,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -9019,7 +9496,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 33745,
@@ -9378,7 +9855,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/georoc-archaean/field_completeness.json",
-        "audit_sha256": "916b3c7c51139a060619c5ae72b262378f55400f8a989ab42fb52931049fd0d0",
+        "audit_sha256": "90127bceb2d7501deac20593255d69afb2589f7e9a93f3f93584b2b7cb082aad",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -9604,7 +10081,7 @@
         "access_status_counts": {
           "public_download": 65988
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 65988
         },
@@ -9626,7 +10103,7 @@
     "georoc-convergent-margins": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 46,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -9957,7 +10434,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 155811,
@@ -10320,7 +10797,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/georoc-convergent-margins/field_completeness.json",
-        "audit_sha256": "6a47a72619126093c1ce4ed9c91a40a25f41a48edbb1f5e74f0afa667b928842",
+        "audit_sha256": "01e19278f0ea29c77310a6e26674e304f7a4deef87de4fc53ead94dee4de7e90",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -10546,7 +11023,7 @@
         "access_status_counts": {
           "public_download": 177217
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 177217
         },
@@ -10568,7 +11045,7 @@
     "geotraces-idp2025": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -10584,7 +11061,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-18T22:39:09Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 69704,
@@ -10793,7 +11270,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/geotraces-idp2025/field_completeness.json",
-        "audit_sha256": "9d687c32673890b67a4845a8a27b208b7727df733a716403d61ba7d98580524a",
+        "audit_sha256": "6f378cad5b6a956bfafc6a8875de972110803815a68fa0dc76f313fff03008d7",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -11019,7 +11496,7 @@
         "access_status_counts": {
           "public_download": 39327
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 39327
         },
@@ -11041,7 +11518,7 @@
     "japan-gsj-geochemical-map": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 2,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -11064,7 +11541,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-06T03:48:23Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 3024,
@@ -11330,7 +11807,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/japan-gsj-geochemical-map/field_completeness.json",
-        "audit_sha256": "a23f6a012d2fbb624729d7f1253a41952fc5fbd102f5a59b7a8e75d708312f05",
+        "audit_sha256": "24fd9ae3795503ff9485cfd5aa8955c228b443b509a079dcfbc171375d5651ea",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -11556,7 +12033,7 @@
         "access_status_counts": {
           "public_download": 21168
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 21168
         },
@@ -11578,7 +12055,7 @@
     "japan-gsj-marine-sediment": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -11594,7 +12071,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-06T16:07:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 4905,
@@ -11851,7 +12328,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/japan-gsj-marine-sediment/field_completeness.json",
-        "audit_sha256": "cab8ab8ba6066254eed2b07c434e7276d16776df46128bdbcc4fd67dcbe78eef",
+        "audit_sha256": "be22aadb641dcee1bb087f44605d8b5a53d01faacd1843c078cebb3386ac6fee",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -12077,7 +12554,7 @@
         "access_status_counts": {
           "public_download": 34334
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 34334
         },
@@ -12096,10 +12573,503 @@
         "source_id": "japan-gsj-marine-sediment"
       }
     },
+    "mendeley-guangdong-fujian-groundwater": {
+      "automation_health": {
+        "adapter_registered": true,
+        "as_of": "2026-08-23T00:00:00Z",
+        "cache_hit_count": 1,
+        "cached_parse_status": "pass",
+        "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+        "dataset_version": "mendeley-84gkydb5y9-v2",
+        "expected_target_observation_count": 702,
+        "files": [
+          {
+            "bytes": 44162,
+            "cache_status": "cache_hit",
+            "file_id": "table-s1",
+            "filename": "Table S1.xlsx",
+            "sha256": "0269b4ff66c268775dc8fe2aea4a7d67e61bdde73327f3a19077f2252be1598a"
+          }
+        ],
+        "last_successful_fetch_at": "2026-08-23T00:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
+        "offline_replay_status": "pass",
+        "online_fetch_health": "not_probed_by_reproducible_offline_run",
+        "parsed_source_record_count": 124,
+        "profile_version": "d1-v4-full-population-profile-v1",
+        "raw_schema_field_count": 41,
+        "raw_schema_fields": [
+          "Al",
+          "As",
+          "B",
+          "Ba",
+          "Br",
+          "CO3",
+          "Ca",
+          "Cd",
+          "Cl",
+          "Cr",
+          "Cu",
+          "F",
+          "Fe",
+          "HCO3",
+          "K",
+          "Latitude",
+          "Li",
+          "Longitude",
+          "Mg",
+          "Mn",
+          "NO3",
+          "Na",
+          "Ni",
+          "PH",
+          "Pb",
+          "SO4",
+          "Site",
+          "T",
+          "TDS",
+          "Zn",
+          "_dataset_version",
+          "_reported_latitude",
+          "_reported_longitude",
+          "_row_provenance",
+          "_sample_type_raw",
+          "_source_crs",
+          "_source_file",
+          "_target_observations",
+          "conductivity",
+          "δ18OVSMOW",
+          "δDVSMOW"
+        ],
+        "retry_health": "not_measured_in_offline_profile",
+        "row_count_drift_status": "matches_registered_expected_count",
+        "schema_drift_detection": "checked-in profile exact comparison",
+        "source_id": "mendeley-guangdong-fujian-groundwater",
+        "supported_modes": [
+          "online",
+          "cached",
+          "offline_fixture"
+        ],
+        "target_observation_count": 702,
+        "version_drift": {
+          "outer_archive_drift": false,
+          "status": "matches_registered_snapshot"
+        }
+      },
+      "candidate_audit": {
+        "audit_path": null,
+        "audit_status": "not_measured",
+        "denominator_status": "not_available",
+        "distinct_sample_count": null,
+        "physical_row_count": null,
+        "target_observation_count": null,
+        "warning": "No checked-in full-population audit; demo counts must not be substituted."
+      },
+      "dataset_version": "mendeley-84gkydb5y9-v2",
+      "demo_fixture": {
+        "analytes": {
+          "As": 8,
+          "Cr": 8,
+          "Cu": 8,
+          "Ni": 8,
+          "Pb": 8,
+          "Zn": 8
+        },
+        "field_completeness": {
+          "analytical_method": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "citation_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "coordinate_pair": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "element_or_analyte": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "geologic_unit_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "grain_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "license": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "matched_geologic_unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "medium": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "method_assignment_basis": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "method_scope": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "sample_id": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_mapping_status": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sample_type_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "sediment_environment": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "soil_horizon_raw": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_locator": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "unit": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "value": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "water_body_type": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 48,
+            "rate": 1.0
+          },
+          "water_fraction": {
+            "column_present": true,
+            "denominator": 48,
+            "non_empty": 0,
+            "rate": 0.0
+          }
+        },
+        "file_sha256": "b13a4c8080005e170bcfd5461f3dd5c8d676ca9b77cf06e0c96553937c4eeff5",
+        "header_sha256": "a13ca6b5a39c3e09c271413b27a4375204f670a5f3b5d5e5f2363971772d128a",
+        "manifest_sha256": "4f7b6932edfad59d8b7ce4bb954dffee2948fe0060d5b10f40be4960101b6f46",
+        "media": {
+          "water": 48
+        },
+        "record_count": 48,
+        "status": "deterministic_demo_only",
+        "warning": "This profile describes a deliberately selected fixture, not the full source population."
+      },
+      "full_population": {
+        "audit_path": "assets/v4-full-profiles/mendeley-guangdong-fujian-groundwater/field_completeness.json",
+        "audit_sha256": "98381d8a88c5cef8a9c4268b6edd8b59744b8c5eae887c0bfceec0f1ee2e7e18",
+        "audit_status": "uniform_full_profile",
+        "denominator_status": "available",
+        "distinct_sample_count": null,
+        "field_completeness": {
+          "access_status": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "analytical_method": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "citation_resolution_status": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "citation_scope": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "citation_text_raw": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "coordinate_pair": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "coordinate_uncertainty_m": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "detection_limit": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "element_or_analyte": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "geologic_age_raw": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "geologic_unit_raw": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "grain_fraction": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "license": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "license_url": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "lithology_raw": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "matched_geologic_unit": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "measurement_basis": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "method_assignment_basis": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "method_or_missing_reason": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "method_scope": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "research_use_status": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "sample_id": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "sample_type": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "sample_type_mapping_status": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "sample_type_raw": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "sediment_environment": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "soil_horizon": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_crs": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "source_locator": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "tectonic_setting_raw": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          },
+          "unit": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "value": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "water_body_type": {
+            "denominator": 702,
+            "missing": 0,
+            "non_empty": 702,
+            "rate": 1.0
+          },
+          "water_fraction": {
+            "denominator": 702,
+            "missing": 702,
+            "non_empty": 0,
+            "rate": 0.0
+          }
+        },
+        "field_completeness_status": "measured_uniformly",
+        "physical_row_count": 124,
+        "profile_scope": "full_population",
+        "snapshot_id": "mendeley-84gkydb5y9-v2",
+        "target_observation_count": 702,
+        "target_observation_count_basis": "all non-empty target-analyte observations emitted by the verified source adapter",
+        "warning": "The full profile covers every target-bearing adapter observation in the verified cache. It does not imply spatial representativeness or that unreported source fields are complete."
+      },
+      "media": [
+        "water"
+      ],
+      "source_id": "mendeley-guangdong-fujian-groundwater",
+      "usage_rights": {
+        "access_status_counts": {
+          "public_download": 702
+        },
+        "as_of": "2026-08-23T00:00:00Z",
+        "attribution_required_counts": {
+          "true": 702
+        },
+        "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+        "dataset_version": "mendeley-84gkydb5y9-v2",
+        "license_id": "CC-BY-4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "profile_version": "d1-v4-full-population-profile-v1",
+        "redistribution_is_not_a_research_use_gate": true,
+        "redistribution_status_counts": {
+          "not_evaluated_for_project_output": 702
+        },
+        "research_use_status_counts": {
+          "permitted_research": 702
+        },
+        "source_id": "mendeley-guangdong-fujian-groundwater"
+      }
+    },
     "norway-marchem": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 3,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -12129,7 +13099,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 1070,
@@ -12374,7 +13344,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/norway-marchem/field_completeness.json",
-        "audit_sha256": "da50f8ce03551e8cd0c23aa29b9d1f65c2a20b116adece47c0754b96c31076a5",
+        "audit_sha256": "acf7b34edded9d02069a21e6b9f4350bef969376942badc57f0a6dca12a72bd5",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -12600,7 +13570,7 @@
         "access_status_counts": {
           "public_download": 3520
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 3520
         },
@@ -12622,7 +13592,7 @@
     "pangaea-amazonas-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -12638,7 +13608,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-13T10:00:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 174,
@@ -12908,7 +13878,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-amazonas-soil/field_completeness.json",
-        "audit_sha256": "09b6011ed12739d7b082d152151a0e40d123413a9a548f7b72430680b26159ee",
+        "audit_sha256": "a61f2f9668f38e895e381a2e8dd277a813d2f473b87e4dd24fef7fd8826db573",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -13134,7 +14104,7 @@
         "access_status_counts": {
           "public_download": 1181
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 1181
         },
@@ -13156,7 +14126,7 @@
     "pangaea-arabian-sea-sediment": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -13172,7 +14142,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-06T16:12:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 27,
@@ -13431,7 +14401,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-arabian-sea-sediment/field_completeness.json",
-        "audit_sha256": "2813ee3124e37ab8bbc7d2631b6075e443f0f6d96e2c9baba4fd49ae4e4f2ffb",
+        "audit_sha256": "e25bbeff98812300b76be92b0b8202e11b0f6e7403cd6acd9bfd46f1b2bf5fe1",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -13657,7 +14627,7 @@
         "access_status_counts": {
           "public_download": 162
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 162
         },
@@ -13679,7 +14649,7 @@
     "pangaea-barents-c-horizon-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -13695,7 +14665,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-12T16:30:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 606,
@@ -13891,7 +14861,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-barents-c-horizon-soil/field_completeness.json",
-        "audit_sha256": "6fdf8e5f460712226f031892505d4bb4a27fc93111626a1259e34b55793f02f6",
+        "audit_sha256": "56037beb85ea45b5edc4ec9c5d05e042ea58aa2c94002acaf8c64e9f733e0209",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -14117,7 +15087,7 @@
         "access_status_counts": {
           "public_download": 2419
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 2419
         },
@@ -14139,7 +15109,7 @@
     "pangaea-batagay-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -14155,7 +15125,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-13T10:00:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 31,
@@ -14367,7 +15337,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-batagay-soil/field_completeness.json",
-        "audit_sha256": "4a3a9aab698c941a0e7c624db05286cce0dfba0a1692a2142db71d4f2cb97f3f",
+        "audit_sha256": "d8d16705738d2c2beeddaefe8fc63c1c9e9ac5add1d82d89cc6900300d6fbf6d",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -14593,7 +15563,7 @@
         "access_status_counts": {
           "public_download": 93
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 93
         },
@@ -14615,7 +15585,7 @@
     "pangaea-brasol-ne-brazil-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 2,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -14638,7 +15608,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-14T20:22:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 396,
@@ -15138,7 +16108,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-brasol-ne-brazil-soil/field_completeness.json",
-        "audit_sha256": "028265eeb638a931efdfc38b1aedbe8bfbfe1aa40d0422fdae201dce7799b094",
+        "audit_sha256": "29d67e01be6731a5c0c36c927bbe6f02c42643a52547351ec4271d8eec887863",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -15364,7 +16334,7 @@
         "access_status_counts": {
           "public_download": 1614
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 1614
         },
@@ -15386,7 +16356,7 @@
     "pangaea-east-china-sea-clay": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -15402,7 +16372,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-12T06:55:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 98,
@@ -15638,7 +16608,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-east-china-sea-clay/field_completeness.json",
-        "audit_sha256": "113bf45611005226854ff96986ef9bf2c19b1de87b0cb1fb1fb628799f9123b4",
+        "audit_sha256": "a6060d9bf896917e2a65da19000265da286dda30a7ca6282e151b7c5b4658270",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -15864,7 +16834,7 @@
         "access_status_counts": {
           "public_download": 392
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 392
         },
@@ -15886,7 +16856,7 @@
     "pangaea-north-africa-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -15902,7 +16872,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-06T03:13:54Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 43,
@@ -16150,7 +17120,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-north-africa-soil/field_completeness.json",
-        "audit_sha256": "9fe65526e6c51cf8678b4e4657d8ecb44d276f9d871786f2fa7f4b40cc47c751",
+        "audit_sha256": "929a33e4948fc31140d323e72716a8d24c64be149f3db7e6287665aaa62415ba",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -16376,7 +17346,7 @@
         "access_status_counts": {
           "public_download": 258
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 258
         },
@@ -16398,7 +17368,7 @@
     "pangaea-south-china-sea-sediment": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -16414,7 +17384,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-12T16:30:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 44,
@@ -16650,7 +17620,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/pangaea-south-china-sea-sediment/field_completeness.json",
-        "audit_sha256": "11c847e8ec93404063931685da84cc51b7d8cdfc5d40fa591d06a2fd30785cc9",
+        "audit_sha256": "67b9fc240f6959af95173b4a10b5ed24ad49168b4c7e3c26a0edfa85a6617e24",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -16876,7 +17846,7 @@
         "access_status_counts": {
           "public_download": 220
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 220
         },
@@ -16898,7 +17868,7 @@
     "tpdc-china-mountain-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 3,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -16928,7 +17898,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 1314,
@@ -17173,7 +18143,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/tpdc-china-mountain-soil/field_completeness.json",
-        "audit_sha256": "e13ea6b96df325ef2a69dc7e0f427bc8cbd2b3bcea9dc12323d5076ea17db3c4",
+        "audit_sha256": "8a67bc15b2448619d6f8cd3d230eabb720cdce40f1ec5c0af00c9730a4e60b7e",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -17399,7 +18369,7 @@
         "access_status_counts": {
           "public_download": 6570
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 6570
         },
@@ -17421,7 +18391,7 @@
     "us-wqp-sacramento-river-arsenic": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 2,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -17444,7 +18414,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-06T14:50:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 189,
@@ -17716,7 +18686,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/us-wqp-sacramento-river-arsenic/field_completeness.json",
-        "audit_sha256": "890c29a7b1854916b688847acc1b14e0c62301df4546502c8d8fd77454713335",
+        "audit_sha256": "efdbc070322f6e219596113e19c14de125eab4f0580e379a279f5e092b2cd3a8",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -17942,7 +18912,7 @@
         "access_status_counts": {
           "public_download": 189
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "false": 189
         },
@@ -17964,7 +18934,7 @@
     "usgs-conus-soil": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 3,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -17994,7 +18964,7 @@
           }
         ],
         "last_successful_fetch_at": null,
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 14571,
@@ -18416,7 +19386,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/usgs-conus-soil/field_completeness.json",
-        "audit_sha256": "bbd6a8ec6d93a2e4a07ed697cb307c90704208d7291d75c30f672f2132736d51",
+        "audit_sha256": "1148d254283edfe6b7ebec4a38c04f229c127f11abcf3896d1c2aa5fc53ef47f",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -18642,7 +19612,7 @@
         "access_status_counts": {
           "public_download": 58284
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "false": 58284
         },
@@ -18664,7 +19634,7 @@
     "zenodo-gard-whole-rock": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 2,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -18687,7 +19657,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-21T00:00:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 1022092,
@@ -18885,9 +19855,9 @@
             "rate": 0.0
           }
         },
-        "file_sha256": "53c315e54e023d8127a226a2710282d9b31c8979b0c77f3404ec36f36e18a94b",
+        "file_sha256": "62b063b30937ac1495b52a778986ab59eb0760307ccc5caa07b8303f6c759f7a",
         "header_sha256": "a13ca6b5a39c3e09c271413b27a4375204f670a5f3b5d5e5f2363971772d128a",
-        "manifest_sha256": "263f2c827e6347d9d1f518b8146e034d8c2c58e655f500ba9f576c31d412385a",
+        "manifest_sha256": "c09ff27a9184a0906640bbed590c7d4ba3e74958c317c59993cb17540e094041",
         "media": {
           "rock": 48
         },
@@ -18897,7 +19867,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/zenodo-gard-whole-rock/field_completeness.json",
-        "audit_sha256": "6fbb2ec8d44e8b230d47e899ef714f8d4f460659b83b3b2949f0ed8ad9b6ce77",
+        "audit_sha256": "e17306b3c80d83dbfc11a13793168b9e31b800ec3ab42e8d29b7d7423b508d52",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -19123,7 +20093,7 @@
         "access_status_counts": {
           "public_download": 2695045
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 2695045
         },
@@ -19145,7 +20115,7 @@
     "zenodo-yangtze-yellow-river-sediment": {
       "automation_health": {
         "adapter_registered": true,
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "cache_hit_count": 1,
         "cached_parse_status": "pass",
         "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -19161,7 +20131,7 @@
           }
         ],
         "last_successful_fetch_at": "2026-08-09T00:00:00Z",
-        "last_successful_parse_at": "2026-08-15T07:00:00Z",
+        "last_successful_parse_at": "2026-08-23T00:00:00Z",
         "offline_replay_status": "pass",
         "online_fetch_health": "not_probed_by_reproducible_offline_run",
         "parsed_source_record_count": 93,
@@ -19357,7 +20327,7 @@
       },
       "full_population": {
         "audit_path": "assets/v4-full-profiles/zenodo-yangtze-yellow-river-sediment/field_completeness.json",
-        "audit_sha256": "3251cf50935f3d2ff01c591d1453e2ba9ed8df4295b6e4accdfdf8edfee45b73",
+        "audit_sha256": "0edd6de84cff87cb99b1a321ca3d30c440a248e737b0c644ac38db2dc27799d3",
         "audit_status": "uniform_full_profile",
         "denominator_status": "available",
         "distinct_sample_count": null,
@@ -19583,7 +20553,7 @@
         "access_status_counts": {
           "public_download": 558
         },
-        "as_of": "2026-08-15T07:00:00Z",
+        "as_of": "2026-08-23T00:00:00Z",
         "attribution_required_counts": {
           "true": 558
         },
@@ -19604,11 +20574,11 @@
     }
   },
   "summary": {
-    "demo_record_count": 1820,
-    "executable_source_count": 35,
+    "demo_record_count": 1916,
+    "executable_source_count": 37,
     "sources_with_full_audit": 23,
-    "sources_with_target_observation_denominator": 35,
-    "sources_without_full_audit": 12,
-    "uniform_full_field_profiles": 35
+    "sources_with_target_observation_denominator": 37,
+    "sources_without_full_audit": 14,
+    "uniform_full_field_profiles": 37
   }
 }

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:research-quality-contract:v1",
+  "title": "Controller-owned scientific quality contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "paper_entry_gate", "contribution_gate",
+    "figure_storyboard_gate", "literature_search_gate", "citation_audit_gate",
+    "typesetting_gate", "review_gates", "benchmark"
+  ],
+  "properties": {
+    "schema_version": {"const": "gga-research-quality-contract-v1"},
+    "paper_entry_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligible_pilot_outcomes", "required_frontier_status",
+        "failure_status", "rule"
+      ],
+      "properties": {
+        "eligible_pilot_outcomes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {"enum": ["supported_effect", "supported_null"]}
+        },
+        "required_frontier_status": {"const": "supports_empirical_article"},
+        "failure_status": {"const": "needs_research_redirection"},
+        "rule": {"type": "string", "minLength": 1}
+      }
+    },
+    "contribution_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_contributions", "each_contribution_requires_claim_ids",
+        "required_dimensions"
+      ],
+      "properties": {
+        "minimum_contributions": {"const": 2},
+        "each_contribution_requires_claim_ids": {"const": true},
+        "required_dimensions": {
+          "type": "array", "minItems": 3,
+          "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+        }
+      }
+    },
+    "figure_storyboard_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_empirical_roles", "minimum_data_bearing_figures",
+        "method_schematic_is_supplementary_to_result_roles",
+        "render_inspect_revise_minimum_iterations"
+      ],
+      "properties": {
+        "required_empirical_roles": {
+          "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true,
+          "items": {"enum": [
+            "primary_result", "spatial_pattern",
+            "robustness_or_external_validation"
+          ]}
+        },
+        "minimum_data_bearing_figures": {"const": 3},
+        "method_schematic_is_supplementary_to_result_roles": {"const": true},
+        "render_inspect_revise_minimum_iterations": {"type": "integer", "minimum": 1},
+        "candidate_generation_minimum_alternatives": {"const": 2},
+        "editable_vector_and_generation_source_required": {"const": true},
+        "source_fidelity_statement_required": {"const": true}
+      }
+    },
+    "literature_search_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_candidates_screened",
+        "per_citation_retrieval_evidence_required", "rule"
+      ],
+      "properties": {
+        "minimum_candidates_screened": {"type": "integer", "minimum": 1},
+        "per_citation_retrieval_evidence_required": {"const": true},
+        "rule": {"type": "string", "minLength": 1}
+      }
+    },
+    "citation_audit_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verdicts", "checks", "identifier_types",
+        "all_references_must_verify", "rule"
+      ],
+      "properties": {
+        "verdicts": {
+          "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true,
+          "items": {"enum": ["mismatch", "unverifiable", "verified"]}
+        },
+        "checks": {
+          "type": "array", "minItems": 6, "maxItems": 6, "uniqueItems": true,
+          "items": {"enum": [
+            "title_match", "authors_match", "author_order_match",
+            "year_match", "venue_match", "identifier_resolves"
+          ]}
+        },
+        "identifier_types": {
+          "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true,
+          "items": {"enum": ["arxiv", "doi", "official_url"]}
+        },
+        "all_references_must_verify": {"const": true},
+        "rule": {"type": "string", "minLength": 1}
+      }
+    },
+    "typesetting_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_artifacts", "section_manifest_must_cover_spine", "rule"
+      ],
+      "properties": {
+        "required_artifacts": {
+          "type": "array", "minItems": 2,
+          "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+        },
+        "section_manifest_must_cover_spine": {"const": true},
+        "rule": {"type": "string", "minLength": 1}
+      }
+    },
+    "review_gates": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gate_id", "gate_name", "minimum_score", "maximum_score"],
+        "properties": {
+          "gate_id": {"type": "string", "pattern": "^a[1-7]$"},
+          "gate_name": {"type": "string", "minLength": 1},
+          "minimum_score": {"const": 3},
+          "maximum_score": {"const": 4}
+        }
+      }
+    },
+    "benchmark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "comparison_axes", "claim_boundary"],
+      "properties": {
+        "reference": {"type": "string", "minLength": 1},
+        "comparison_axes": {
+          "type": "array", "minItems": 5,
+          "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+        },
+        "claim_boundary": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

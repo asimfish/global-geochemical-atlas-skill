@@ -1,0 +1,69 @@
+{
+  "as_of": "2026-08-23T00:00:00Z",
+  "bbox": null,
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "coordinate_canonicalization_policy_id": null,
+  "coordinate_canonicalization_status": "not_canonicalized",
+  "coordinate_count_definition": "reported_coordinate_sample_count is numeric and range-valid in source coordinates; valid_coordinate_sample_count additionally requires canonical EPSG:4326",
+  "coordinate_uncertainty_m_observation_counts": {
+    "not_reported": 648
+  },
+  "covered_spatial_cells": 0,
+  "dataset_version": "peerj-7-e6578-supplement-s004",
+  "distinct_sample_count": 162,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "region_applicability": {
+    "country_index_status": "complete_for_snapshot",
+    "country_iso_a3_codes": [
+      "CHN"
+    ],
+    "evidence_basis": "publisher article title, river-reach table and all 162 reported sample coordinates place this complete supplement table in China's Zhujiang (Pearl River) system; coordinate values remain reported-only because the datum is not declared",
+    "spatial_domain": "inland_water"
+  },
+  "region_count": 11,
+  "region_observation_counts": {
+    "HSR": 24,
+    "NPR": 72,
+    "QJR": 24,
+    "T-BPR": 152,
+    "T-HSR": 56,
+    "T-NPR": 40,
+    "T-QJR": 56,
+    "T-XJR": 88,
+    "T-XUR": 56,
+    "XJR": 40,
+    "XUR": 40
+  },
+  "reported_coordinate_sample_count": 162,
+  "reported_covered_spatial_cells": 20,
+  "reported_spatial_cell_ids": [
+    "+22:+108",
+    "+22:+109",
+    "+23:+109",
+    "+23:+110",
+    "+23:+111",
+    "+23:+112",
+    "+24:+103",
+    "+24:+104",
+    "+24:+105",
+    "+24:+106",
+    "+24:+107",
+    "+24:+108",
+    "+24:+109",
+    "+25:+103",
+    "+25:+104",
+    "+25:+105",
+    "+25:+106",
+    "+26:+104",
+    "+26:+105",
+    "+26:+106"
+  ],
+  "reported_spatial_grid": "source-coordinate 1-degree floor cell; not cross-source comparable",
+  "source_crs_observation_counts": {
+    "not_reported": 648
+  },
+  "source_id": "europe-pmc-pearl-river-dissolved-metals",
+  "spatial_cell_ids": [],
+  "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
+  "valid_coordinate_sample_count": 0
+}

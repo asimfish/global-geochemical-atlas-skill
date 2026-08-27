@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:auto-research-agent-result:v2",
+  "title": "Hash-bound Auto-Research role result envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "cycle_id", "role", "invocation_id",
+    "model_family", "packet_sha256", "input_hashes", "payload",
+    "payload_sha256", "result_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "gga-auto-research-agent-result-v2"},
+    "run_id": {"type": "string", "pattern": "^run-[0-9a-f]{20}$"},
+    "cycle_id": {"type": "string", "pattern": "^(initial|revision-[0-9]{2})$"},
+    "role": {
+      "enum": [
+        "pilot_analyst", "literature_researcher", "manuscript_writer",
+        "figure_designer", "citation_auditor", "independent_reviewer"
+      ]
+    },
+    "invocation_id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,200}$"},
+    "model_family": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,200}$"},
+    "packet_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "input_hashes": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "payload": {"type": "object"},
+    "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "result_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "analysis_outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status", "analysis_executed", "result_claim_ids",
+        "routing_destination", "evidence_summary"
+      ],
+      "properties": {
+        "status": {"enum": [
+          "supported_effect", "supported_null", "unsupported_inputs",
+          "acquisition_required", "invalid_analysis"
+        ]},
+        "analysis_executed": {"type": "boolean"},
+        "result_claim_ids": {
+          "type": "array", "items": {"type": "string"}, "uniqueItems": true
+        },
+        "routing_destination": {"type": "string", "minLength": 1},
+        "evidence_summary": {"type": "string", "minLength": 1}
+      }
+    },
+    "frontier_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status", "open_problem", "closest_prior_work",
+        "novelty_delta", "venue_fit"
+      ],
+      "properties": {
+        "status": {"enum": [
+          "supports_empirical_article", "weak_frontier_position",
+          "needs_verification"
+        ]},
+        "open_problem": {"type": "string", "minLength": 1},
+        "closest_prior_work": {"type": "string", "minLength": 1},
+        "novelty_delta": {"type": "string", "minLength": 1},
+        "venue_fit": {"type": "string", "minLength": 1}
+      }
+    },
+    "contribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contribution_id", "statement", "claim_ids", "frontier_delta"],
+      "properties": {
+        "contribution_id": {"type": "string", "minLength": 1},
+        "statement": {"type": "string", "minLength": 1},
+        "claim_ids": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "string"}, "uniqueItems": true
+        },
+        "frontier_delta": {"type": "string", "minLength": 1}
+      }
+    },
+    "figure_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "figure_id", "figure_role", "question_answered", "claim_ids",
+        "visual_encoding", "artifact_paths", "render_review"
+      ],
+      "properties": {
+        "figure_id": {"type": "string", "minLength": 1},
+        "figure_role": {"type": "string", "minLength": 1},
+        "question_answered": {"type": "string", "minLength": 1},
+        "claim_ids": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "string"}, "uniqueItems": true
+        },
+        "visual_encoding": {"type": "string", "minLength": 1},
+        "artifact_paths": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["svg", "pdf", "png"],
+          "properties": {
+            "svg": {"type": "string", "pattern": "\\.svg$"},
+            "pdf": {"type": "string", "pattern": "\\.pdf$"},
+            "png": {"type": "string", "pattern": "\\.png$"}
+          }
+        },
+        "render_review": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "iterations", "inspected", "findings", "revisions_applied"
+          ],
+          "properties": {
+            "iterations": {"type": "integer", "minimum": 1},
+            "inspected": {"const": true},
+            "findings": {
+              "type": "array", "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "revisions_applied": {
+              "type": "array", "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "review_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate_id", "gate_name", "score", "pass", "evidence"],
+      "properties": {
+        "gate_id": {"type": "string", "pattern": "^a[1-7]$"},
+        "gate_name": {"enum": [
+          "evidence_integrity", "scientific_validity",
+          "novelty_and_significance", "frontier_and_venue_fit",
+          "manuscript_argument_and_contribution",
+          "figure_evidence_and_visual_quality", "reproducibility_and_release"
+        ]},
+        "score": {"type": "integer", "minimum": 0, "maximum": 4},
+        "pass": {"type": "boolean"},
+        "evidence": {
+          "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}
+        },
+        "feedback": {"type": "string"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"role": {"const": "pilot_analyst"}}},
+      "then": {"properties": {"payload": {
+        "required": ["artifacts", "claims", "analysis_outcome"],
+        "properties": {
+          "artifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+          "claims": {"type": "array"},
+          "analysis_outcome": {"$ref": "#/$defs/analysis_outcome"}
+        }
+      }}}
+    },
+    {
+      "if": {"properties": {"role": {"const": "literature_researcher"}}},
+      "then": {"properties": {"payload": {
+        "required": ["artifacts", "citations", "frontier_assessment"],
+        "properties": {
+          "artifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+          "citations": {"type": "array", "minItems": 1},
+          "frontier_assessment": {"$ref": "#/$defs/frontier_assessment"}
+        }
+      }}}
+    },
+    {
+      "if": {"properties": {"role": {"const": "manuscript_writer"}}},
+      "then": {"properties": {"payload": {
+        "required": ["artifacts", "claim_ids", "contribution_map"],
+        "properties": {
+          "artifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+          "claim_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "contribution_map": {
+            "type": "array", "minItems": 2, "maxItems": 5,
+            "items": {"$ref": "#/$defs/contribution"}
+          }
+        }
+      }}}
+    },
+    {
+      "if": {"properties": {"role": {"const": "figure_designer"}}},
+      "then": {"properties": {"payload": {
+        "required": ["artifacts", "claim_ids", "figure_specs"],
+        "properties": {
+          "artifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+          "claim_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "figure_specs": {
+            "type": "array", "minItems": 3,
+            "items": {"$ref": "#/$defs/figure_spec"}
+          }
+        }
+      }}}
+    },
+    {
+      "if": {"properties": {"role": {"const": "independent_reviewer"}}},
+      "then": {"properties": {"payload": {
+        "required": ["artifacts", "gate_results"],
+        "properties": {
+          "artifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+          "gate_results": {
+            "type": "array", "minItems": 7, "maxItems": 7,
+            "items": {"$ref": "#/$defs/review_gate"}
+          }
+        }
+      }}}
+    }
+  ]
+}

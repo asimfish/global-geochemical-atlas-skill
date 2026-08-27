@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:auto-research-state:v2",
+  "title": "Resumable atlas-to-research state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "request_sha256", "atlas_snapshot_sha256",
+    "status", "stage", "required_roles", "completed_roles",
+    "active_cycle", "revision_count",
+    "selected_candidate_id", "human_approval_required", "publication_allowed",
+    "claim_boundary", "created_at", "updated_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "gga-auto-research-state-v2"},
+    "run_id": {"type": "string", "pattern": "^run-[0-9a-f]{20}$"},
+    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "atlas_snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {
+      "enum": [
+        "awaiting_selection", "awaiting_agents", "revision_required",
+        "awaiting_human_approval", "needs_human_intervention",
+        "needs_research_redirection"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "candidate_selection", "pilot_and_literature",
+        "research_quality_gate",
+        "manuscript_and_figures", "citation_audit", "independent_review",
+        "feedback_revision", "human_approval"
+      ]
+    },
+    "required_roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "completed_roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "active_cycle": {"type": "string", "pattern": "^(initial|revision-[0-9]{2})$"},
+    "revision_count": {"type": "integer", "minimum": 0, "maximum": 3},
+    "selected_candidate_id": {"type": ["string", "null"]},
+    "research_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paper_eligible", "pilot_outcome", "frontier_status",
+        "routing_destination"
+      ],
+      "properties": {
+        "paper_eligible": {"type": "boolean"},
+        "pilot_outcome": {"enum": [
+          "supported_effect", "supported_null", "unsupported_inputs",
+          "acquisition_required", "invalid_analysis"
+        ]},
+        "frontier_status": {"enum": [
+          "supports_empirical_article", "weak_frontier_position",
+          "needs_verification"
+        ]},
+        "routing_destination": {"type": "string", "minLength": 1}
+      }
+    },
+    "human_approval_required": {"const": true},
+    "publication_allowed": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "minLength": 1},
+    "updated_at": {"type": "string", "minLength": 1}
+  }
+}

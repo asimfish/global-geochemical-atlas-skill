@@ -1,0 +1,66 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-23T00:00:00Z",
+  "cache_hit_count": 1,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "peerj-7-e6578-supplement-s004",
+  "expected_target_observation_count": 648,
+  "files": [
+    {
+      "bytes": 46580,
+      "cache_status": "cache_hit",
+      "file_id": "raw-data-workbook",
+      "filename": "peerj-07-6578-s004.xlsx",
+      "sha256": "dbe27bbd31c9de335dcacca5bc6ae8a3e14d117c443048efb7449ab8453d09ba"
+    }
+  ],
+  "last_successful_fetch_at": null,
+  "last_successful_parse_at": "2026-08-23T00:00:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 162,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_field_count": 25,
+  "raw_schema_fields": [
+    "Ba",
+    "Cd",
+    "Co",
+    "Cr",
+    "Cu",
+    "Date      (m-d-y)",
+    "Mn",
+    "Mo",
+    "Ni",
+    "Pb",
+    "River reach",
+    "Sample location",
+    "Site number",
+    "V",
+    "WQI",
+    "_dataset_version",
+    "_reported_coordinate_text",
+    "_reported_latitude",
+    "_reported_longitude",
+    "_sample_type_raw",
+    "_sampled_at",
+    "_season",
+    "_source_crs",
+    "_source_file",
+    "_target_observations"
+  ],
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "europe-pmc-pearl-river-dissolved-metals",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 648,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

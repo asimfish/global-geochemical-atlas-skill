@@ -1,6 +1,6 @@
 ---
 name: global-geochemical-atlas
-description: 构建全球或区域地球化学元素图谱；用于从公开来源采集岩石、土壤、沉积物或水体元素测定，统一单位和坐标，执行 QC、来源追溯、置信度拆分、异常筛查、元素组合比较，记录采样时间并沿岩性/空间/伴生/时序证据线区分富集是母质高背景还是疑似人为输入，生成离线交互地图（含时间演变四模式）与标准数据库；支持 900 秒快速档与小时级完整档。 Use for traceable geochemical atlas, normalization, provenance, anomaly-screening, temporal-evolution, enrichment-attribution, comparison, and mapping tasks; do not use for general chemistry, generic maps, or definitive pollution/mineral-deposit claims.
+description: 构建全球或区域地球化学元素图谱；用于从公开来源采集岩石、土壤、沉积物或水体元素测定，统一单位和坐标，执行 QC、来源追溯、置信度拆分、异常筛查、元素组合比较，记录采样时间并沿岩性/空间/伴生/时序证据线区分富集是母质高背景还是疑似人为输入，生成含时间演变选项的离线交互地图与标准数据库，并可在用户选择后从冻结图谱接续可恢复、声明绑定、独立评审的 Auto-Research。 Use for traceable geochemical atlas, normalization, provenance, anomaly-screening, temporal-evolution, enrichment-attribution, comparison, mapping, and atlas-grounded research-continuation tasks; do not use for general chemistry, generic maps, generic paper writing, or definitive pollution/mineral-deposit claims.
 ---
 
 # 全球地球化学元素分布图谱
@@ -26,8 +26,9 @@ description: 构建全球或区域地球化学元素图谱；用于从公开来�
 5. 可选地质空间匹配；
 6. 在可比背景组内筛查 high/low 候选；
 7. 生成数据库、证据说明、异常结果和交互地图；
-8. 校验十六文件、充分性与 Skill 快照；
-9. 若仍有可修复缺口且预算允许，按修复队列继续；否则诚实交付检查点。
+8. 校验十八文件、逐声明 hash、充分性与 Skill 快照；
+9. 若仍有可修复缺口且预算允许，生成本轮隔离的侦察/质疑 packet，按修复队列继续；否则诚实交付检查点；
+10. 图谱完成后只在用户选择时启动 Auto-Research；通过独立评审后仍停在人工批准，不自动发表。
 
 不得用地图补造上游证据，也不得用总记录数掩盖元素、介质、来源或区域缺口。hash 只证明字节一致，规则通过只证明该规则满足，二者都不证明测量值或科学解释正确。
 
@@ -141,6 +142,8 @@ python scripts/run_self_correction_loop.py \
 
 `controller_rerun_current_skill` 与 `data_action_current_skill` 在现有不可变 Skill 下续跑；`evidence_audit_current_skill` 只读核验 CRS/许可/方法并记录正证据或 no-hit。`skill_maintenance_new_run` 只有原任务明确授权维护仓库时才可执行：先停止控制器，保存当前轮和队列回执；再复制/分叉 Skill，在隔离目录按优先级只实现可审计的候选来源（官方 URL/DOI、许可、版本、hash、字段 crosswalk、最小真实 fixture 和组件测试缺一不可）；冻结新 Skill hash 后，以字节一致的请求和新输出目录重启，并用 continuation receipt 连接前后运行。不得在活动输出目录或活动 Skill 快照中热修改。若任务已授权而唯一剩余修复路径属于此类，Agent 不得连续空跑相同来源后直接结束，必须实施最高优先级可准入候选，或留下许可、访问、证据不足等可审计硬阻断。数据动作只能改变当前研究输出/缓存；队列本身不构成接受未知许可或扩大权限的授权。当所有组均有可审计回执且仍不足，才能将剩余缺口作为结构性边界交付。
 
+每个带已治理候选的待修 action group 由控制器生成 `agent_audits/round-.../audit-.../`。侦察者与质疑者必须由宿主分别启动全新会话且只读各自 `packet.json`；上一轮记忆只参与选择并留下 hash，不进入本轮 evaluator packet。二者都不能评分或准入，第三层由 `agent_audit.py judge` 从冻结事实确定性计分，结果仍须 D1 门禁和具名人工批准。相同 `invocation_id`、角色/packet 替换、未知输入或任一 hash 变化均失败关闭；完整调用与边界见 [adversarial-agent-audit.md](references/adversarial-agent-audit.md)。
+
 ## 3. D1：来源与证据链
 
 来源目录是候选，不是当前请求可执行证明。使用 `source_router.py`、`source_audit.py`、`score_source_evidence.py` 和 `coverage_report.py`；准入规则见 [source-acceptance-standard.md](references/source-acceptance-standard.md)，逐源接口边界见 [source-interface-cards.md](references/source-interface-cards.md)。
@@ -202,9 +205,9 @@ USGS DS801 可按其元数据使用 WGS84；PANGAEA 只有 DOI、原字段和固
 
 ## 6. D3：交互地图
 
-必须由 `render_visualization.py` 从真实 CSV/GeoJSON 和版本化 profile 生成自包含 `interactive_map.html`；不得手写、复制或事后改 HTML。页面至少支持元素、区域、介质、样品类型、方法、地质单元、四维置信度和 high/low 候选筛选，并显示来源跳转、单位、图例、数据库有但地图无的原因。正式空间匹配地质单元与发布方直报的岩性、土层、沉积环境、水体类型、构造或调查区背景必须分栏展示：后者可证明“有背景描述”，但不得冒充 polygon join。异常网格详情必须保留“返回全部记录”导航。
+必须由 `render_visualization.py` 从真实 CSV/GeoJSON 和版本化 profile 生成自包含 `interactive_map.html`；不得手写、复制或事后改 HTML。页面至少支持元素、区域、介质、样品类型、方法、地质单元、四维置信度和 high/low 候选筛选，并把完整时间演变图谱作为同一主导航中的一级 `temporalView` 选项，把 Auto-Research 作为 `autoResearchView` 选项。时序内容以 `srcdoc` 懒加载嵌入同一文件，禁止主导航链接或 iframe `src` 依赖 `temporal_map.html`。页面同时显示来源跳转、单位、图例、数据库有但地图无的原因。正式空间匹配地质单元与发布方直报的岩性、土层、沉积环境、水体类型、构造或调查区背景必须分栏展示：后者可证明“有背景描述”，但不得冒充 polygon join。异常网格详情必须保留“返回全部记录”导航。
 
-研究请求默认可把请求上限内的 200,000 条可绘测定完整嵌入自包含 HTML，不再静默使用 50,000 条预览。浏览器绘图按当前缩放执行 `zoom-aware-pixel-lod-v1`：同一屏幕像素过密时只合并视觉符号，优先保留异常点；筛选、搜索、来源链、完整标准库和统计仍使用全部内嵌记录。只有操作者显式设置更低 `--max-embedded-records` 时才生成 `d3-coverage-preserving-preview-v1`，并必须同时显示全库可上图数、实际内嵌数和抽取证明，不得把预览冒充完整数据库。
+研究请求可保留请求上限内的 200,000 条 canonical 测定到 `geochemistry.csv`；主 HTML 与 `samples.geojson` 默认最多内嵌 80,000 条 `d3-coverage-preserving-preview-v1` 浏览记录，避免完整数据因单文件 100 MB 门禁被整轮回滚。预览必须保留完整物理样品组、全部候选异常，以及来源 × 介质 × 元素 × 空间格覆盖，并同时显示全库可上图数、实际内嵌数和抽取证明。浏览器绘图继续按当前缩放执行 `zoom-aware-pixel-lod-v1`；筛选预览不等于删除科研数据，完整标准库、逐记录证据、聚合统计和 SHA-256 对账始终使用 canonical 全集。
 
 全球地图同时提供二维世界图与可旋转地球仪；区域地图锁定请求范围。热力图只表示物理采样点密度，不插值浓度；异常密度只表示候选聚集。无坐标记录留在数据库，不放 `(0,0)`。
 
@@ -229,8 +232,8 @@ D3 文件的主工作流目录误用此命令并把预期的契约差异当成�
 
 | 赛题交付 | 文件 |
 |---|---|
-| 可交互地图 | `interactive_map.html`, `samples.geojson` |
-| 时间演变地图 | `temporal_map.html`（单文件离线双模式：采样史回放按采样时刻回放观测扩张史，站点演变对同一站点≥3 个采样时相画浓度-时间趋势；只有 `publisher_reported` 的记录参与回放，无采样时刻的记录绝不假装有时间，只作显式标注的灰色底衬） |
+| 可交互地图（含时间演变一级选项） | `interactive_map.html`, `samples.geojson`；同一 HTML 内含区域对比、异常成因、采样史回放、站点演变四模式，只有 `publisher_reported` 记录参与时间推断 |
+| 时序兼容镜像（非独立产品入口） | `temporal_map.html`；其完整字节必须嵌入 `interactive_map.html`，仅保留给旧链接与单页下载，主导航不得跳转它 |
 | 标准化数据库 | `geochemistry.csv`（含 atlas-sampling-time-v1 契约的 `sampling_time`/`sampling_time_precision`/`sampling_time_status` 三列：采样时间指样品被采集那一刻的元素含量，发表年一律不算，支持时序查询） |
 | 来源与置信度 | `sources_and_confidence.json`, `source_manifest.json`, `record_evidence.jsonl`, `confidence_report.json` |
 | 异常识别 | `anomalies.geojson`, `anomaly_report.json`, `anomaly_regions.geojson`, `spatial_anomaly_report.json`, `anomaly_provenance.json`（成因归因：母质高背景型/疑似人为输入型/混合叠加型/证据不足暂不判定，每条附四证据线的通俗解释） |
@@ -259,7 +262,7 @@ python scripts/validate_research_delivery.py --output-dir OUTPUT_DIR
 
 ## 9. 可选研究后处理层（research_mode）
 
-面向气候与地球科学研究者的可选增值层，只消费一次已完成运行的产物，不采集新数据、不修改十六文件契约：
+面向气候与地球科学研究者的可选增值层，只消费一次已完成运行的产物，不采集新数据、不修改十八文件契约：
 
 ```bash
 python scripts/build_research_products.py --output-dir OUTPUT_DIR --minimum-confidence medium
@@ -269,11 +272,33 @@ python scripts/build_research_products.py --output-dir OUTPUT_DIR --minimum-conf
 
 队列分层阈值与 D2 production 背景组门禁保持一致；三类产品都是筛查与数据准备产物，不是气候机制、污染或矿化结论。外部协变量（ERA5-Land、HydroBASINS、SoilGrids）仅是收据中声明的扩展接口，接入必须走 D1 来源准入与证据链流程。完整契约见 [research-mode.md](references/research-mode.md)。
 
-## 10. 可选科学发现与论文层（discovery_mode）
+## 10. 图谱内 Auto-Research（discovery_mode）
 
-五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户可直接给出自己的选题，也可要求 agent 生成候选；用户不回应则不启动，本层永不自动运行。
+五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户也可在 `interactive_map.html` 的 Auto-Research 选项直接填写问题或候选 ID。用户不回应则不启动；一旦明确启动，控制器自动推进所有已满足门禁的阶段，只在缺少外部 agent、缺少证据、达到三轮修订上限或最终人工批准时停下。
 
-候选选题由确定性脚本从 research_mode 产物生成；agent 可在其上补充建议，但必须区分「脚本证据」与「agent 推测」：
+本仓库只发布一个 production Skill；Auto-Research 是该 Skill 的图谱后续状态机，不是第二个宣称。浏览器真实启动方式：
+
+```bash
+python scripts/serve_atlas_research.py \
+  --atlas-dir OUTPUT_DIR \
+  --research-root RESEARCH_ROOT \
+  --port 8765
+```
+
+只打开命令打印的带 fragment token URL。GitHub Pages 或 `file://` 只能导出同一 typed request，并明确显示“未创建任务”。CLI 等价入口与候选后选入口：
+
+```bash
+python scripts/auto_research.py start \
+  --atlas-dir OUTPUT_DIR --research-root RESEARCH_ROOT \
+  --request gga-auto-research-request.json
+
+python scripts/auto_research.py select \
+  --run-dir RESEARCH_ROOT/run-... --candidate-id dc-001
+```
+
+当 `state.json.status=awaiting_agents` 时，宿主 MUST 为 `required_roles` 中每个角色启动独立全新会话，只向其提供 `agents/<role>/packet.json` 或 `revisions/revision-NN/agents/<role>/packet.json`，把产物写到 packet 声明的 `artifact_output_dir`，再用 `auto_research.py submit` 提交。不得把当前聊天、其他角色 scratch、executor summary 或旧 reviewer 文本注入新 reviewer。模型宿主不可用时必须保持 `awaiting_agents`，禁止伪造论文或后台任务。完整运行合同见 [auto-research.md](references/auto-research.md)。
+
+候选选题由控制器调用确定性脚本从 research_mode 产物生成；agent 可在其上补充建议，但必须区分「脚本证据」与「agent 推测」：
 
 ```bash
 python scripts/build_discovery_candidates.py --research-dir OUTPUT_DIR/research
@@ -281,23 +306,25 @@ python scripts/build_discovery_candidates.py --research-dir OUTPUT_DIR/research
 
 输出 `discovery_candidates.json` 与 `discovery_candidates.md`，五类模板：T1 配对层位富集筛查（同元素×介质存在表/深层可用队列且方法族一致、bbox 相交）；T2 同层位方法伪影量化（≥2 方法族）；T3 单源依赖风险与独立验证目标；T4 缺口驱动的区域采集选题（来自 sampling_priority）；T5 跨介质耦合筛查。每个候选携带队列 id 与样本数等证据指针、建议设计、统计模板与预期产物，输出含输入文件 SHA-256 收据；禁止在脚本证据之外编造候选。
 
-用户选定选题后按序执行，每步向用户汇报再进下一步：
+用户选定选题后按序执行；每个角色结果先经路径、角色、input、payload、artifact 与 claim hash 校验，合格才自动进入下一步：
 
-1. 试点：在相关队列上跑最小配对/分层统计（站点=坐标取整 0.01°→逐站中位→表/深比值→bootstrap 95% CI→Wilcoxon，含 Ni/Cr 地质对照）。效应不存在就如实回报并换选题，不硬写。
-2. 文献核实：逐篇核对 DOI 与作者后才可写入引用，禁止凭记忆引用；至少覆盖领域基线（如 FOREGS 解释卷）、方法学批评（如 EF 争议 Reimann & de Caritat 2005）与两篇近两年前沿（如土壤 Hg-气候、公约成效评估）。
-3. 深化：敏感性分析（网格粒度、替代方法族）、外部一致性检查（独立调查对照）、跨大陆可复制性；所有数字由单一脚本从冻结快照确定性再生，bootstrap 必须定种子。
-4. 论文草稿：arXiv article 模板；Figure 1 必须是方法图（pipeline 全流程 + 本研究设计两层）；结构为 Materials and methods / Results / Discussion / Conclusions；Discussion 必须含「Position within the current frontier」与「New questions generated」；Data and code availability 逐源列许可证；Agent disclosure 一节强制保留；结论一律 screening 级，不做因果、健康或矿化断言。
-5. 质量审计门（七项全过才可交付；任一项不过必须修复后重审）：(a) 全文数字与 results.json 及被引论文逐项对齐，同 setting 下与文献值偏差过大必须解释或对齐文献；(b) 叙述前后一致，所有图表在正文被引用且解释一致；(c) 排版紧凑规范、无明显空白（用渲染后的逐页 PDF 图像检查）；(d) 无空缺或异常数据；(e) 公式、缩写、术语符合领域惯例，首次出现给全称（如 ICP-MS、XRF、AAS、CI、EF、QC、IQR、FOREGS、LUCAS、GEMAS）；(f) 主表主图数据完整规范、多表紧凑、实验规划合理；(g) 表格命名与表达符合领域规范（booktabs、面板缩写在题注定义、单位齐全）。
-6. 期刊对标：给出 2–3 个目标期刊/会议（筛查+数据基础设施类 → Science of the Total Environment / Applied Geochemistry / ESSD；方法伪影类 → ES&T / Geostandards and Geoanalytical Research；会议 → Goldschmidt / EGU / AGU），并用四步前沿对比法说明问题体量匹配：锚定引用（回应前沿明文写出的 open problem）→ 数值对比（同 setting 我方 vs 文献值）→ 缺口对接（前沿缺 X 则提供或量化 X）→ 时效窗口（对准政策/计划时间表）。
-7. 归档：草稿 PDF、分析脚本、results.json、图源文件与 SHA-256 收据归入 `research-products/<topic>-<date>/`，「不可宣称事项」写进正文 Limitations。
+1. 试点：只读取 packet 中逐文件 SHA-256 绑定的 `atlas_snapshot_files/geochemistry.csv`、cohort、exclusion、context 与来源/QC 文件，在相关队列上跑最小配对/分层统计（站点=坐标取整 0.01°→逐站中位→表/深比值→bootstrap 95% CI→Wilcoxon，含 Ni/Cr 地质对照）。返回 typed `analysis_outcome`：只有已执行的 `supported_effect` 或 `supported_null` 可继续；缺行、只需采集、分析无效分别写 `unsupported_inputs`、`acquisition_required`、`invalid_analysis` 并停在 `needs_research_redirection`，不得生成论文。
+2. 文献核实：逐篇核对 DOI 与作者后才可写入引用，禁止凭记忆引用；每条引用必须绑定一个已声明的检索证据 artifact（落地页/记录页快照）与检索时间戳，并提交 `search_coverage`（检索式、检索源、纳入标准、至少筛过 8 个候选且不少于返回引用数）；至少覆盖领域基线（如 FOREGS 解释卷）、方法学批评（如 EF 争议 Reimann & de Caritat 2005）与两篇近两年前沿（如土壤 Hg-气候、公约成效评估）。
+3. 科学机会门：同时读取 pilot 的 typed outcome 与文献角色的 `frontier_assessment`。只有“已执行可解释结果 + 明确 open problem + 最近邻工作差异 + 期刊匹配”同时成立才写 `paper_eligible=true`；否则按 receipt 返回候选重选或 D1 采集。不要把输入不足或采集计划改写成科学结果。
+4. 深化：敏感性分析（网格粒度、替代方法族）、外部一致性检查（独立调查对照）、跨大陆可复制性；所有数字由单一脚本从冻结快照确定性再生，bootstrap 必须定种子。
+5. 论文与图件：每篇先交 2–5 条 claim-bound contribution map，再写 Results → Methods → Discussion → Introduction → Abstract → Title。手稿必须同时交付：typed `reference_list`（唯一 reference_id、题名、有序作者、年份、期刊/会议与一个可解析的 DOI/arXiv/官方 URL 标识符）与 `typeset_manifest`（互不相同的手稿源文件 artifact 和渲染 PDF artifact，其 section manifest 覆盖 paper spine 全部冻结章节）。实证主图至少覆盖 primary result、spatial pattern、robustness/external validation 三种角色；方法图可以保留，但不能替代数据主图。每张图声明科学问题、claim IDs、视觉编码，并分别绑定真实 SVG/PDF/PNG 的路径与 SHA-256；至少一次 render→inspect→revise 必须留下非空发现与已实施修改，不能只交布尔自评；另须记录 `candidate_generation`（至少比较 2 个候选设计并列出被否方案）、`source_fidelity`（渲染图如何忠实于源数据）与一个可编辑源文件 artifact（不得以 PDF/PNG 渲染件充当）。Discussion 必须含「Position within the current frontier」与「New questions generated」；Data and code availability 逐源列许可证；Agent disclosure 强制保留；结论一律不越过筛查证据。
+6. 引用审计门：手稿与图件通过校验后，controller 把 `reference_list` 冻结为本轮 `reference_manifest.json`，并启动全新 `citation_auditor` 会话（不见手稿正文之外的任何旧上下文）。审计必须精确覆盖 manifest 每一条：给出 `verified`/`mismatch`/`unverifiable` 结论、六项 typed registry 检查（题名、作者、作者顺序、年份、期刊、标识符可解析）、书面证据与一个已声明的 registry 证据 artifact；`verified` 要求六项全过，汇总必须与逐条结论一致。任何非 verified 条目阻断评审并自动开启 citation-repair 修订轮（含逐条反馈任务）；每个修订轮都必须重跑全新引用审计。
+7. 固定质量审计门：controller 固定 a1 evidence integrity、a2 scientific validity、a3 novelty/significance、a4 frontier/venue fit、a5 manuscript argument、a6 figure evidence/visual quality、a7 reproducibility/release。reviewer packet 额外携带已收据化的引用审计与 reference manifest。每门给 0–4 分、非空证据，≥3 才 pass；reviewer 不得换门名或把排版门代替科学门。任一项不过自动建立不可覆盖的 `revision-NN`，只把结构化反馈给修订写作/绘图角色，再由不见旧评语的新 reviewer 重审；最多三轮后转人工。
+8. 期刊对标：给出 2–3 个目标期刊/会议（筛查+数据基础设施类 → Science of the Total Environment / Applied Geochemistry / ESSD；方法伪影类 → ES&T / Geostandards and Geoanalytical Research；会议 → Goldschmidt / EGU / AGU），并用四步前沿对比法说明问题体量匹配：锚定引用（回应前沿明文写出的 open problem）→ 数值对比（同 setting 我方 vs 文献值）→ 缺口对接（前沿缺 X 则提供或量化 X）→ 时效窗口（对准政策/计划时间表）。
+9. 归档：草稿 PDF、分析脚本、results.json、图源文件与逐文件 SHA-256 收据归入 `research-products/<topic>-<date>/`，「不可宣称事项」写进正文 Limitations。SHA-256 只证明字节身份与绑定关系，不证明测量正确、观点新颖或科学结论为真。
 
-After step 7 archives a draft, ask one more per-paper question: run the optional top-journal polishing layer (paper_polish, Section 11) on this draft? paper_polish starts only on an explicit yes; no response means no polish.
+After step 9 archives a draft, ask one more per-paper question: run the optional top-journal polishing layer (paper_polish, Section 11) on this draft? paper_polish starts only on an explicit yes; no response means no polish.
 
-边界：本层不采集新数据（T4 只产出采集计划，执行须回到 D1 准入流程）；用户未确认前不进入下一步；引用先核实后写入。完整 worked example（FOREGS Hg/Pb 配对层位 → 10 页 arXiv 草稿，含方法图与前沿连接）见 `research-products/paper-demo-20260817/`。
+边界：本层不采集新数据（T4 只产出采集计划，执行须回到 D1 准入流程）；用户未确认启动前不运行，启动后仍不越过证据或人工发布门；引用先核实后写入。完整 worked example（FOREGS Hg/Pb 配对层位 → 10 页 arXiv 草稿，含方法图与前沿连接）见 `research-products/paper-demo-20260817/`。
 
 ## 11. Optional top-journal polishing layer (paper_polish)
 
-paper_polish upgrades a discovery_mode draft to top-chemistry-journal standard. It is optional and interactive: it runs only on an existing draft from Section 10, only after the user explicitly agrees, and never starts on its own. It rewrites text, rebuilds figures, and audits; it never collects new data, never edits the sixteen-file contract, and never upgrades screening-level conclusions into causal, health, or mineralization claims.
+paper_polish upgrades a discovery_mode draft to top-chemistry-journal standard. It is optional and interactive: it runs only on an existing draft from Section 10, only after the user explicitly agrees, and never starts on its own. It rewrites text, rebuilds figures, and audits; it never collects new data, never edits the eighteen-file contract, and never upgrades screening-level conclusions into causal, health, or mineralization claims.
 
 Workspace: `research-products/<topic>-<date>/polish/`. Each step P1-P8 writes one small state artifact when it completes. On re-entry, read the artifacts in P1-P8 order and resume from the first incomplete step; never redo a completed step unless the user asks. All numbers in the polished text must still be regenerated by the frozen analysis scripts; polish changes wording, figures, and structure, never values.
 
@@ -321,7 +348,7 @@ Boundaries: paper_polish consumes Section 10 artifacts only; it does not collect
 
 ## 按需资源
 
-- 输入输出与闭环：[request-output-contract.md](references/request-output-contract.md)、[iteration-loop.md](references/iteration-loop.md)、[research-delivery-receipt.schema.json](references/research-delivery-receipt.schema.json)。
+- 输入输出与闭环：[request-output-contract.md](references/request-output-contract.md)、[iteration-loop.md](references/iteration-loop.md)、[adversarial-agent-audit.md](references/adversarial-agent-audit.md)、[auto-research.md](references/auto-research.md)、[research-delivery-receipt.schema.json](references/research-delivery-receipt.schema.json)。
 - 来源与证据：[data-sources.md](references/data-sources.md)、[source-acceptance-standard.md](references/source-acceptance-standard.md)、[source-evidence-standard-v3.md](references/source-evidence-standard-v3.md)、[coordinate-policy-registry.json](references/coordinate-policy-registry.json)。
 - D2 科学：[scientific-rules.md](references/scientific-rules.md)、[data-model.md](references/data-model.md)、[schema-mapping.md](references/schema-mapping.md)、[platform-field-crosswalk.md](references/platform-field-crosswalk.md)。
 - 时序与成因归因：[temporal-analysis.md](references/temporal-analysis.md)（采样时间契约 atlas-sampling-time-v1 与异常成因归因契约 anomaly-provenance-v1 的完整定义、逐源声明与可复现命令）、[temporal-map-design.md](references/temporal-map-design.md)（时间演变地图 temporal-atlas-v1 的双模式设计、payload 契约与美观设计决策）。

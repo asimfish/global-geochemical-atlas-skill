@@ -1,0 +1,416 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{1.2em}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.8}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{5}
+
+\title{The European surface legacy-metal fingerprint is absent from Australian
+catchment outlet sediments: a site-paired hemispheric contrast from
+harmonized open geochemical data}
+
+\author{Global Geochemical Atlas Skill \\ \small autonomous research agent (human oversight pending) \\
+\small AI for Climate and Earth Sciences track, entry 0066}
+
+\date{August 18, 2026 \\ \vspace{4pt} \small Preprint draft (screening-level results; human review pending)}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Natural-archive reconstructions show that anthropogenic lead deposition has
+been over\-whelmingly concentrated in the Northern Hemisphere, yet
+continental-scale surface/deep screening statistics that would register this
+asymmetry in situ have only been reported for northern surveys. Here we apply
+one identical, fully reproducible screening design --- site-paired,
+method-stratified surface/deep concentration ratios with bootstrap
+confidence intervals (CIs) and Wilcoxon signed-rank tests, derived
+automatically from a harmonized open geochemical database --- to two
+continents. In Europe (Forum of European Geological Surveys, FOREGS,
+topsoil/subsoil), the legacy metals are enriched at the surface: Pb median
+ratio 1.24 (95\% CI 1.19--1.30, $n{=}389$ site pairs), Hg 1.36. In Australia
+(National Geochemical Survey of Australia, NGSA, catchment outlet sediments,
+0--10 cm over $\sim$60--80 cm), the same design on $>$1,000 site pairs per
+element finds no surface Pb excess: 0.982 (95\% CI 0.973--0.993,
+$n{=}1{,}064$, inductively coupled plasma mass spectrometry, ICP-MS). Arsenic
+is surface-depleted (0.886, 0.867--0.905), Cu slightly depleted (0.955), and
+Zn indistinguishable from unity (1.005) --- a profile consistent with deep
+weathering and leaching rather than atmospheric legacy input. Results are
+invariant to coordinate rounding. Paired Hg exists at only 17 Australian
+sites and the harmonized NGSA slice carries no Cr/Ni geogenic-control pair,
+both emitted by the pipeline as machine-actionable acquisition gaps. The
+contrast supports reading the European fingerprint as a
+Northern-Hemisphere-industrial signature rather than a global default, and
+provides a Southern-Hemisphere baseline panel for the global background
+separation that the Minamata Convention's effectiveness evaluation currently
+lacks. All numbers regenerate deterministically from a frozen snapshot and
+two seeded scripts.
+\end{abstract}
+
+\section{Introduction}
+
+Ice-core, peat and lake-sediment archives agree that anthropogenic Pb
+deposition rose to global ubiquity during the industrial era while remaining
+overwhelmingly concentrated in the Northern Hemisphere; Southern-Hemisphere
+archives record signals that are typically an order of magnitude weaker and
+later \cite{marx2016}. Continental geochemical surveys ought to carry the
+same asymmetry in their vertical structure: where a century of atmospheric
+deposition has accumulated, surface horizons should be systematically
+enriched in Pb and Hg relative to deep material at the same site, and where
+it has not, they should not.
+
+The Northern-Hemisphere half of this expectation is established. The
+Geochemical Atlas of Europe of the Forum of European Geological Surveys
+(FOREGS) \cite{salminen2005} reported topsoil/subsoil ratios of 1.66 for Hg
+and 1.36 for Pb (arithmetic means of site ratios, methods pooled)
+\cite{devos2006}, and our companion screening study re-derived the
+fingerprint with method stratification and uncertainty (Hg 1.364, Pb 1.239,
+geogenic controls Ni/Cr $\approx$ 1) \cite{gga2026a}. The
+Southern-Hemisphere half has, to our knowledge, not been tested with an
+equivalent site-paired design on open continental data.
+
+Australia provides the natural test bed. The National Geochemical Survey of
+Australia (NGSA) sampled catchment outlet sediments --- floodplain-like
+deposits near catchment outlets --- at 1{,}315 sites covering $\sim$81\% of
+the continent (one site per $\sim$5{,}200 km$^2$), at two depths: a Top
+Outlet Sediment (TOS, 0--10 cm) and a Bottom Outlet Sediment (BOS,
+$\sim$60--80 cm) \cite{decaritat2011,decaritat2016}. If industrial-era
+atmospheric deposition dominated the recent sediment surface, TOS/BOS ratios
+for Pb should sit measurably above unity, as topsoil/subsoil ratios do in
+Europe.
+
+This paper asks one question: \emph{does the European surface legacy-metal
+fingerprint replicate on a Southern-Hemisphere continent under an identical,
+automated screening design?} The answer is no, and the shape of the negative
+result --- element-wise depletion rather than noise --- is itself
+informative. We emphasize scope throughout: both panels are screening-level
+statements about harmonized open observations, not source attributions;
+media differ between continents (residual soil profiles in Europe,
+transported outlet sediments in Australia), and we treat that difference as
+a declared limitation and a proposed follow-up rather than an obstacle
+buried in prose.
+
+\section{Materials and methods}
+
+\subsection{Harmonized database and surveys}
+Both panels derive from the same frozen snapshot of the Global Geochemical
+Atlas (GGA) pipeline described in the companion study \cite{gga2026a}: a
+191{,}715-record standardized database assembled autonomously from 29 open
+sources, with normalized units (mg\,kg$^{-1}$ for solids), WGS84
+coordinates, per-record method family, license and SHA-256 provenance, and
+four-dimensional confidence scores. The European panel uses FOREGS topsoil
+(0--25 cm) and subsoil (C-horizon, 50--200 cm) \cite{salminen2005}; the
+Australian panel uses NGSA TOS and BOS
+\cite{decaritat2011}. NGSA data are published by Geoscience Australia under
+CC-BY 4.0; the harmonized slice contains 8{,}572 NGSA determinations of the
+five analytes As, Cu, Hg, Pb and Zn (Cr and Ni determinations are not
+present in the ingested NGSA files --- see \S\ref{sec:gaps}).
+
+\subsection{Site-paired screening design}
+The design is identical to the companion study and is applied without
+modification to both continents. Within one survey and one method family per
+element (ICP-MS for Pb, As, Cu, Zn on both NGSA layers; US EPA Method 7473
+direct mercury analysis, DMA, for NGSA Hg), records with positive values and
+canonical coordinates are grouped into sites by rounding coordinates to
+0.01$^{\circ}$; per-site medians are taken per layer; and the surface/deep
+ratio $r = c_{\mathrm{surf}}/c_{\mathrm{deep}}$ is computed at sites where
+both layers exist. We report the median ratio, a 2{,}000-draw seeded
+bootstrap 95\% CI of the median, the fraction of sites with $r > 1.5$, and a
+two-sided Wilcoxon signed-rank test on $\log r$. Sensitivity analyses repeat
+the procedure at 0.1$^{\circ}$ rounding. European reference values are taken
+unchanged from the companion run \cite{gga2026a}.
+
+\subsection{Media caveat and controls}
+\label{sec:media}
+The two panels compare different media: European ratios are formed within
+residual soil profiles, Australian ratios within transported catchment
+sediments. BOS is older than TOS but is not guaranteed pre-industrial at
+every site, and fluvial mixing attenuates atmospheric signals; the
+Australian panel therefore tests for a \emph{preserved surface excess}, not
+for the absence of deposition. Three design features bound the
+interpretation. First, the same-site pairing cancels catchment-scale
+lithology shared by both layers. Second, Zn --- mildly enriched in Europe
+(1.027) --- behaves as a quasi-reference in Australia (1.005,
+$p{=}0.13$), showing that the design does not manufacture spurious
+depletion. Third, the harmonized NGSA slice lacks the Cr/Ni geogenic
+controls used in Europe; this is recorded as an acquisition gap rather than
+silently ignored, and all Australian statements are correspondingly
+screening-level.
+
+\section{Results}
+
+\subsection{No surface Pb excess on the Australian continent}
+Table~\ref{tab:hemi} and Figure~\ref{fig:forest2} give the paired ratios.
+Australian outlet sediments show no surface Pb enrichment: TOS/BOS median
+0.982 (95\% CI 0.973--0.993; $n{=}1{,}064$ pairs; 5.8\% of sites $>$1.5).
+The European value under the identical design is 1.239 (1.194--1.299;
+28.3\% $>$1.5); the CIs are separated by $\sim$0.2 in ratio units, a
+first-order continental difference, not a marginal effect. As is
+surface-\emph{depleted} in Australia (0.886, 0.867--0.905,
+$p{=}3.9{\times}10^{-45}$) and Cu slightly so (0.955), while Zn is at unity
+(1.005). Ratios are unchanged at 0.1$^{\circ}$ rounding (Pb 0.982,
+$n{=}1{,}049$; As 0.884, $n{=}1{,}028$).
+
+Figure~\ref{fig:pairs} shows the raw site pairs behind these medians ---
+the least processed view of the contrast. In Europe, 80.7\% of Pb sites
+and 73.2\% of Hg sites lie above the 1:1 line; in Australia the Pb cloud
+straddles it (44.6\% above) and As sits clearly below (29.2\%).
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.88\linewidth]{fig_p2_pairs.pdf}
+\caption{Raw site-paired concentrations (log-log; dashed line 1:1). Top
+row: FOREGS Europe --- topsoil sits systematically above subsoil for Pb
+and Hg. Bottom row: NGSA Australia --- Top Outlet Sediment straddles the
+1:1 line for Pb and falls below it for As. Annotations give the share of
+sites above the 1:1 line and the median ratio; methods per panel as in
+Table~\ref{tab:hemi}.}
+\label{fig:pairs}
+\end{figure}
+
+\subsection{The full ratio distributions separate by continent}
+\label{sec:ecdf}
+The hemispheric difference is not confined to the medians.
+Figure~\ref{fig:ecdf} overlays the empirical cumulative distribution
+functions (ECDFs) of the per-site $\log_2$ ratios, and two-sample
+Kolmogorov--Smirnov (KS) tests reject distributional equality in every
+panel --- but with effect sizes that themselves rank the elements. Pb
+separates most strongly (KS $D{=}0.453$, $p{=}2.2{\times}10^{-53}$): the
+European curve is shifted bodily toward enrichment, not merely stretched
+in a tail. As ($D{=}0.271$) and Cu ($D{=}0.217$) separate through the
+Australian shift toward depletion. Zn --- the quasi-reference of
+\S\ref{sec:media} --- shows much the smallest separation
+($D{=}0.095$, $p{=}0.011$), its two curves nearly coinciding: the element
+expected to behave alike on both continents does, which is itself a check
+that the design manufactures neither enrichment nor depletion.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\linewidth]{fig_p2_ecdf.pdf}
+\caption{ECDFs of per-site $\log_2$ (surface/deep) ratios: Europe (FOREGS,
+red) versus Australia (NGSA, blue) for the four elements paired on both
+continents. Dashed line: no enrichment. Panel titles give the two-sample
+KS statistic and $p$-value.}
+\label{fig:ecdf}
+\end{figure}
+
+\begin{table}[!t]
+\centering\small
+\caption{Surface/deep concentration ratios under one identical site-paired
+design: median, 95\% bootstrap CI of the median, share of site pairs with
+ratio $>$1.5, and two-sided Wilcoxon signed-rank $p$. Panels --- EU T/S:
+FOREGS topsoil/subsoil (residual soil; from the companion run
+\cite{gga2026a}); AU T/B: NGSA Top/Bottom Outlet Sediment (transported
+sediment; this work). Method families: EU as in \cite{gga2026a}; AU ICP-MS
+except Hg by DMA.}
+\label{tab:hemi}
+\begin{tabular}{llrrrrl}
+\toprule
+Panel & Element & $n$ pairs & Median & 95\% CI & $>$1.5 & $p$ \\
+\midrule
+EU T/S & Hg & 392 & 1.364 & 1.303--1.444 & 41.3\% & $6.4{\times}10^{-29}$ \\
+EU T/S & Pb & 389 & 1.239 & 1.194--1.299 & 28.3\% & $1.7{\times}10^{-35}$ \\
+EU T/S & Cu & 384 & 1.055 & 1.008--1.112 & 21.1\% & $4.4{\times}10^{-4}$ \\
+EU T/S & As & 384 & 1.045 & 1.008--1.105 & 18.2\% & $5.4{\times}10^{-3}$ \\
+EU T/S & Zn & 387 & 1.027 & 1.014--1.058 & 15.0\% & $6.5{\times}10^{-4}$ \\
+EU T/S & Cr & 387 & 0.976 & 0.947--1.000 & 9.6\% & 0.064 \\
+EU T/S & Ni & 389 & 0.947 & 0.926--0.970 & 9.5\% & $1.2{\times}10^{-3}$ \\
+\midrule
+AU T/B & Hg & 17 & 1.206 & 0.896--1.702 & 35.3\% & 0.045 \\
+AU T/B & Zn & 1{,}057 & 1.005 & 0.992--1.018 & 9.6\% & 0.133 \\
+AU T/B & Pb & 1{,}064 & 0.982 & 0.973--0.993 & 5.8\% & 0.035 \\
+AU T/B & Cu & 1{,}055 & 0.955 & 0.942--0.968 & 6.8\% & $3.1{\times}10^{-8}$ \\
+AU T/B & As & 1{,}042 & 0.886 & 0.867--0.905 & 3.6\% & $3.9{\times}10^{-45}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.92\linewidth]{fig_p2_forest.pdf}
+\caption{Hemispheric contrast under one screening design. Red circles:
+FOREGS topsoil/subsoil ratios (EU). Blue squares: NGSA Top/Bottom Outlet
+Sediment ratios (AU). Points are medians of per-site ratios; bars are 95\%
+bootstrap CIs of the median. The Australian Hg estimate (faint) rests on 17
+pairs and is emitted as a coverage gap rather than interpreted. Cr and Ni
+have no Australian pair in the harmonized slice. Dashed line: no
+enrichment.}
+\label{fig:forest2}
+\end{figure}
+
+\subsection{Spatial structure: local, not continental}
+Mapping per-site log2 Pb ratios (Fig.~\ref{fig:aumap}) shows scattered local
+structure --- patches of surface excess in parts of southwest and southern
+Australia interleaved with depletion --- but no coherent continental belt
+comparable to the European 48$^{\circ}$N enrichment belt of the companion
+study. Under a deposition-dominated regime the map would be expected to show
+broad coherent excess; under weathering- and transport-dominated regimes,
+spatially patchy ratios centred at or below unity, as observed.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.8\linewidth]{fig_p2_au_map.pdf}
+\caption{Top/Bottom Outlet Sediment Pb ratio (log2) at NGSA paired sites.
+Red: surface excess; blue: surface depletion. Land outline: Natural Earth.}
+\label{fig:aumap}
+\end{figure}
+
+\subsection{Mercury and controls as first-class gaps}
+\label{sec:gaps}
+Two absences are results in their own right, and the pipeline emits both as
+machine-actionable sampling/acquisition priorities. (1) Paired Hg exists at
+only 17 Australian sites (DMA method family); the Wilcoxon test is nominally
+significant ($p{=}0.045$) but the bootstrap CI of the median spans unity
+(0.896--1.702), so no inference is drawn --- the Southern-Hemisphere half of
+the global soil-Hg background question remains observationally open. (2) The
+ingested NGSA files carry no Cr or Ni determinations, so the European
+geogenic-control check cannot yet be replicated; acquiring the NGSA
+aqua-regia/total multi-element extensions is queued as the corresponding
+acquisition task.
+
+\section{Discussion}
+
+\textbf{What the contrast supports.} Under one identical, automated design,
+the Northern-Hemisphere industrial fingerprint (surface Pb and Hg excess
+with geogenic controls at unity) is present in Europe and absent from
+Australian catchment sediments, where the profile instead matches deep
+weathering and leaching (As and Cu depleted at the surface, Zn at unity, Pb
+marginally below). This is the in-situ, continental-median counterpart of
+the hemispheric asymmetry long documented in natural archives
+\cite{marx2016}: legacy enrichment is a regional-industrial signature, not a
+property of surface earth materials in general.
+
+\textbf{Alternative explanations, bounded.} The media difference of
+\S\ref{sec:media} is the principal confounder: fluvial mixing could dilute a
+genuine atmospheric excess in outlet sediments. Three observations bound
+this. Australian near-city and mining-adjacent sites do show local surface
+excess (Fig.~\ref{fig:aumap}), so the medium can record enrichment where
+inputs are strong; the As depletion signal is directional and enormous
+($p{\sim}10^{-45}$), which mixing alone does not produce; and the European
+signal survives its own transported-media analogue in the companion study's
+floodplain-adjacent sources. A definitive separation --- Australian residual
+soil profiles under the same design --- is the natural follow-up and is
+already expressible as a pipeline acquisition task.
+
+\textbf{Position within the current frontier.} The Minamata Convention's
+effectiveness evaluation reports that soil-Hg data cannot yet be separated
+into background and anthropogenic components, and its evidence base is
+dominated by Northern-Hemisphere surveys \cite{unep2025}. A
+Southern-Hemisphere continental panel in which the legacy fingerprint is
+demonstrably absent is exactly the background end-member that global
+separation requires --- and the 17-pair Australian Hg count quantifies how
+far current open data are from providing it. For Pb, hemispheric asymmetry
+inferred from point archives \cite{marx2016} gains a survey-scale,
+site-paired confirmation.
+
+\textbf{New questions generated.} (Q1) \emph{Media separation}: do
+Australian residual soil profiles (e.g., state survey soil archives)
+reproduce the null, isolating deposition history from sediment transport?
+(Q2) \emph{Depletion mechanism}: is the strong As surface depletion in
+outlet sediments a weathering/leaching signature of the deeply weathered
+Australian regolith, and does it covary with regolith age maps? (Q3)
+\emph{Southern-Hemisphere Hg baseline}: which acquisitions (NGSA Hg
+extensions, state surveys, Southern-Hemisphere national programs) would
+raise paired Hg coverage from 17 sites to statistical usability, and at what
+cost?
+
+\textbf{Limitations.} Media differ between panels; BOS age is
+heterogeneous; Australian geogenic controls are absent from the harmonized
+slice; Hg is effectively unobserved; NGSA density is one site per
+$\sim$5{,}200 km$^2$; and no isotopes or chronology constrain input history.
+All statements are screening products intended to define, not close, the
+hemispheric question.
+
+\textbf{Reproducibility.} Both panels regenerate from one frozen snapshot
+via seeded deterministic scripts; the Australian panel is produced by a
+$\sim$40-line pilot plus a figure script, unchanged from the companion
+methodology --- the marginal cost of extending a continental screening
+result to a second continent was one evening.
+
+\section{Conclusion}
+An identical site-paired screening design applied automatically to two
+continents shows that the European surface legacy-metal fingerprint does not
+replicate in Australian catchment outlet sediments: Pb sits at 0.982
+(0.973--0.993) against Europe's 1.239, As is strongly surface-depleted, and
+the data needed to test Hg and the geogenic controls do not yet exist in
+open form --- a gap the pipeline outputs as concrete acquisition targets.
+Hemispheric asymmetry of the anthropogenic legacy, previously documented in
+point archives, is thus visible directly in harmonized continental survey
+data.
+
+\section*{Data and code availability}
+Input sources (licenses recorded per record): NGSA Geochemical Atlas of
+Australia data (Geoscience Australia, CC-BY 4.0)
+\cite{decaritat2011,decaritat2016}; FOREGS Geochemical Atlas of Europe
+(Geological Survey of Finland; research use with attribution)
+\cite{salminen2005,devos2006}. The frozen snapshot, pilot and figure scripts
+(\path{p2_ngsa_pilot.py}, \path{p2_extra.py},
+\path{p2345_addfigs.py}), result JSONs (\path{p2_results.json},
+\path{p2345_addfigs_results.json}) and figure sources are archived with
+SHA-256 receipts in the pipeline's
+\path{research-products/paper-demo-20260817} directory.
+
+\section*{Agent disclosure}
+This draft, including analysis design, statistics, figures and text, was
+produced end-to-end by an AI research agent operating the Global Geochemical
+Atlas skill; the topic was proposed by the skill's deterministic
+discovery-candidate generator (candidates dc-001--dc-004 of the 2026-08-15
+world run) and has not yet completed human review. Screening-level framing
+is intentional and load-bearing.
+
+\begin{thebibliography}{9}
+\bibitem{decaritat2011}
+de Caritat, P., Cooper, M. (2011). \emph{National Geochemical Survey of
+Australia: The Geochemical Atlas of Australia}. Geoscience Australia Record
+2011/20, 557 pp. doi:10.11636/Record.2011.020.
+
+\bibitem{decaritat2016}
+de Caritat, P., Cooper, M. (2016). A continental-scale geochemical atlas for
+resource exploration and environmental management: the National Geochemical
+Survey of Australia. \emph{Geochemistry: Exploration, Environment,
+Analysis}, 16, 3--13. doi:10.1144/geochem2014-322.
+
+\bibitem{devos2006}
+De Vos, W., Tarvainen, T. (chief eds.), et al. (2006). \emph{Geochemical
+Atlas of Europe. Part 2: Interpretation of Geochemical Maps, Additional
+Tables, Figures, Maps, and Related Publications}. Geological Survey of
+Finland, Espoo.
+
+\bibitem{gga2026a}
+Global Geochemical Atlas Skill (2026). Comparability-aware screening of
+legacy mercury and lead enrichment in European soil profiles from harmonized
+open geochemical data. Companion preprint draft,
+\texttt{research-products/paper-demo-20260817}.
+
+\bibitem{marx2016}
+Marx, S.K., Rashid, S., Stromsoe, N. (2016). Global-scale patterns in
+anthropogenic Pb contamination reconstructed from natural archives.
+\emph{Environmental Pollution}, 213, 283--298.
+doi:10.1016/j.envpol.2016.02.006.
+
+\bibitem{reimann2005}
+Reimann, C., de Caritat, P. (2005). Distinguishing between natural and
+anthropogenic sources for elements in the environment: regional geochemical
+surveys versus enrichment factors. \emph{Science of the Total Environment},
+337, 91--107.
+
+\bibitem{salminen2005}
+Salminen, R. (chief ed.), et al. (2005). \emph{Geochemical Atlas of Europe.
+Part 1: Background Information, Methodology and Maps}. Geological Survey of
+Finland, Espoo.
+
+\bibitem{unep2025}
+UNEP Minamata Convention on Mercury, Open-Ended Scientific Group (2025).
+\emph{Overview of monitoring, emission and release data}
+(UNEP/MC/OESG.2/2/Rev.1) and OESG scientific report executive summary.
+\url{https://minamataconvention.org}.
+\end{thebibliography}
+
+\end{document}

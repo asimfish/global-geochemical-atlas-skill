@@ -18,6 +18,8 @@ from pathlib import Path
 from typing import Any
 
 import validate_outputs as output_validator
+import agent_audit
+import claim_ledger
 import skill_snapshot
 
 RECEIPT_FILENAME = "research_delivery_receipt.json"
@@ -72,7 +74,7 @@ def validate_delivery(
         errors.append("formal research delivery requires loop report v7")
     if (
         receipt
-        and receipt.get("schema_version") != "atlas-research-delivery-receipt-v3"
+        and receipt.get("schema_version") != "atlas-research-delivery-receipt-v4"
     ):
         errors.append("unsupported research delivery receipt version")
 
@@ -307,6 +309,143 @@ def validate_delivery(
 
         if receipt.get("request_sha256") != loop.get("request_sha256"):
             errors.append("receipt request hash does not match loop report")
+        errors.extend(
+            claim_ledger.validate_claim_ledger(output_dir, receipt.get("claim_ledger"))
+        )
+        audit_binding = receipt.get("adversarial_source_audit")
+        if not isinstance(audit_binding, Mapping):
+            errors.append("receipt lacks adversarial source-audit status")
+        else:
+            audit_status = audit_binding.get("status")
+            manifest_name = audit_binding.get("manifest")
+            manifest_hash = audit_binding.get("manifest_sha256")
+            groups = repair_queue.get("action_groups") if repair_queue else []
+            if groups:
+                if audit_status != "pending_agent_or_discovery_work":
+                    errors.append("pending D1 groups lack adversarial audit work")
+                if not isinstance(manifest_name, str) or not manifest_name:
+                    errors.append("pending adversarial audit lacks a manifest")
+                else:
+                    manifest_path = output_dir / manifest_name
+                    try:
+                        output_root = output_dir.resolve(strict=True)
+                        resolved_manifest = manifest_path.resolve(strict=True)
+                    except OSError as exc:
+                        errors.append(
+                            f"adversarial audit manifest is unavailable: {exc}"
+                        )
+                    else:
+                        if (
+                            manifest_path.is_symlink()
+                            or not resolved_manifest.is_relative_to(output_root)
+                            or not resolved_manifest.is_file()
+                        ):
+                            errors.append(
+                                "adversarial audit manifest escapes output root"
+                            )
+                        elif manifest_hash != sha256_file(resolved_manifest):
+                            errors.append("adversarial audit manifest hash mismatch")
+                        else:
+                            try:
+                                manifest = read_object(resolved_manifest, errors)
+                                expected_queue_hash = (
+                                    control_files.get("d1_repair_queue_sha256")
+                                    if isinstance(control_files, Mapping)
+                                    else None
+                                )
+                                if (
+                                    manifest.get("d1_repair_queue_sha256")
+                                    != expected_queue_hash
+                                ):
+                                    errors.append(
+                                        "adversarial audit manifest binds another D1 queue"
+                                    )
+                                unsigned_manifest = dict(manifest)
+                                supplied_manifest_hash = unsigned_manifest.pop(
+                                    "manifest_sha256", None
+                                )
+                                expected_manifest_hash = hashlib.sha256(
+                                    json.dumps(
+                                        unsigned_manifest,
+                                        sort_keys=True,
+                                        separators=(",", ":"),
+                                    ).encode("utf-8")
+                                ).hexdigest()
+                                if supplied_manifest_hash != expected_manifest_hash:
+                                    errors.append(
+                                        "adversarial audit manifest self-hash mismatch"
+                                    )
+                                for item in manifest.get("audits") or []:
+                                    if (
+                                        not isinstance(item, Mapping)
+                                        or item.get("status") != "awaiting_fresh_agents"
+                                    ):
+                                        continue
+                                    audit_dir_name = item.get("audit_dir")
+                                    if not isinstance(audit_dir_name, str):
+                                        errors.append(
+                                            "adversarial audit lacks audit_dir"
+                                        )
+                                        continue
+                                    audit_dir_candidate = output_dir / audit_dir_name
+                                    try:
+                                        audit_dir = audit_dir_candidate.resolve(
+                                            strict=True
+                                        )
+                                    except OSError:
+                                        errors.append(
+                                            "adversarial audit directory is unavailable"
+                                        )
+                                        continue
+                                    if (
+                                        audit_dir_candidate.is_symlink()
+                                        or not audit_dir.is_relative_to(output_root)
+                                        or not audit_dir.is_dir()
+                                    ):
+                                        errors.append(
+                                            "adversarial audit directory escapes output root"
+                                        )
+                                        continue
+                                    selection_path = (
+                                        audit_dir / "selection_receipt.json"
+                                    )
+                                    if (
+                                        selection_path.is_symlink()
+                                        or not selection_path.is_file()
+                                        or item.get("selection_receipt_sha256")
+                                        != sha256_file(selection_path)
+                                    ):
+                                        errors.append(
+                                            "adversarial audit selection receipt mismatch"
+                                        )
+                                        continue
+                                    for role in agent_audit.ROLES:
+                                        packet_path = (
+                                            audit_dir
+                                            / "roles"
+                                            / role
+                                            / "input"
+                                            / "packet.json"
+                                        )
+                                        try:
+                                            packet = read_object(packet_path, errors)
+                                            agent_audit.validate_packet(
+                                                packet, expected_role=role
+                                            )
+                                        except agent_audit.AgentAuditError as exc:
+                                            errors.append(
+                                                f"invalid adversarial {role} packet: {exc}"
+                                            )
+                            except (OSError, json.JSONDecodeError):
+                                pass
+            elif (
+                audit_status != "not_required_no_pending_action_groups"
+                or manifest_name is not None
+                or manifest_hash is not None
+            ):
+                errors.append(
+                    "clear D1 queue has inconsistent adversarial audit status"
+                )
         if receipt.get("delivery_ready") is not True:
             message = "receipt marks delivery_ready=false"
             if allow_insufficient_checkpoint and not errors:

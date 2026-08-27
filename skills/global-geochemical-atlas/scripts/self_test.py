@@ -170,12 +170,27 @@ def run_suite() -> dict[str, Any]:
         "loop-report.schema.json",
         "research-delivery-receipt.schema.json",
         "d1-repair-queue.schema.json",
+        "agent-audit-packet.schema.json",
+        "auto-research-state.schema.json",
+        "auto-research-agent-packet.schema.json",
+        "auto-research-agent-result.schema.json",
+        "research-quality-contract.schema.json",
+        "research-gate-receipt.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(
             schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema",
             f"bad {schema_name}",
         )
+    delivery_schema = json_value(
+        SKILL_DIR / "references" / "research-delivery-receipt.schema.json"
+    )
+    delivery_artifacts = delivery_schema["properties"]["artifacts"]
+    require(
+        set(delivery_artifacts["required"]) == EXPECTED_OUTPUTS
+        and set(delivery_artifacts["properties"]) == EXPECTED_OUTPUTS,
+        "delivery receipt Schema drifted from the eighteen-file output contract",
+    )
 
     snapshot_capture = skill_snapshot.capture_skill_tree(SKILL_DIR)
     snapshot_before = snapshot_capture.snapshot
@@ -1491,7 +1506,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 75,
+            "tests": 76,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

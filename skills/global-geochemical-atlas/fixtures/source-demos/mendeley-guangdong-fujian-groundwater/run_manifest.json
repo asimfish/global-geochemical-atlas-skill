@@ -1,0 +1,66 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-23T00:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "As",
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb",
+      "Zn"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 70667,
+      "path": "demo_input.csv",
+      "sha256": "b13a4c8080005e170bcfd5461f3dd5c8d676ca9b77cf06e0c96553937c4eeff5"
+    },
+    {
+      "bytes": 96732,
+      "path": "sources.jsonl",
+      "sha256": "ac7511bd592a74c118a22d66c88f17801a1395bb58c7d0c90af82fd955c96e2b"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 124,
+    "selected_source_rows": 8
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.17632/84gkydb5y9.2",
+    "dataset_version": "mendeley-84gkydb5y9-v2",
+    "license": "CC-BY-4.0",
+    "source_id": "mendeley-guangdong-fujian-groundwater",
+    "title": "Recharge sources, hydrochemical evolution, and health risks of groundwater and geothermal water in the Guangdong-Fujian coastal region, southeastern China"
+  },
+  "source_files": [
+    {
+      "bytes": 44162,
+      "filename": "Table S1.xlsx",
+      "retrieved_at": "2026-08-23T13:25:43Z",
+      "sha256": "0269b4ff66c268775dc8fe2aea4a7d67e61bdde73327f3a19077f2252be1598a",
+      "source_url": "https://data.mendeley.com/public-files/datasets/84gkydb5y9/files/e292cfea-1d2a-48b1-85ef-319973d863e4/file_downloaded"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The 124 well-water records cover parts of Guangdong and Fujian and are not a uniform groundwater grid.",
+    "Analytical method, sampling dates and coordinate datum are unreported; no values are inferred, and method-aware comparability is withheld.",
+    "Blank below-detection-limit cells without numeric limits and hyphen no-data cells are not converted to observations."
+  ]
+}

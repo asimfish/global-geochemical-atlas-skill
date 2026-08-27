@@ -293,7 +293,9 @@ def main():
                 }
             )
 
-    # rank within type, cap, stable order
+    # Rank feasibility within type, cap, and preserve a stable order.  This score
+    # is deliberately not called novelty or paper quality: those require the
+    # hash-bound pilot and primary-literature frontier gate.
     final = []
     for t in sorted({c["type"] for c in cands}):
         group = sorted(
@@ -303,6 +305,37 @@ def main():
         final.extend(group[: args.top_per_type])
     for i, c in enumerate(final, 1):
         c["candidate_id"] = f"dc-{i:03d}"
+        empirical = c["type"] in {
+            "T1_paired_layer_screening",
+            "T2_method_artifact",
+            "T5_cross_media",
+        }
+        c["research_readiness"] = {
+            "paper_track": (
+                "empirical_candidate" if empirical else "acquisition_or_audit_plan"
+            ),
+            "row_level_pilot_required": True,
+            "paper_eligible_before_pilot": False,
+            "paper_eligible_before_acquisition": empirical,
+            "frontier_status": "needs_primary_literature_verification",
+            "visual_evidence_potential": (
+                [
+                    "primary_result",
+                    "spatial_pattern",
+                    "robustness_or_external_validation",
+                ]
+                if empirical
+                else ["coverage_gap", "acquisition_priority"]
+            ),
+            "routing_if_unsupported": ("candidate_selection" if empirical else "D1"),
+        }
+        c["ranking_basis"] = {
+            "score_meaning": (
+                "within-template evidence volume or gap-task count; not novelty, "
+                "significance, or publication readiness"
+            ),
+            "requires_quality_gate": True,
+        }
 
     receipt = {
         "inputs": {

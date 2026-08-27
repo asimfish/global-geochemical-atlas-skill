@@ -111,22 +111,26 @@
     "water": {
       "comparable_observation_count": 306327,
       "covered_spatial_cells": 2440,
-      "distinct_sample_count": 708605,
-      "independent_lineage_count": 4,
+      "distinct_sample_count": 708887,
+      "independent_lineage_count": 6,
       "lineage_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
         "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater",
         "us-wqp-sacramento-river-arsenic"
       ],
-      "observation_count": 3783544,
+      "observation_count": 3784894,
       "reported_comparable_observation_count": 306327,
-      "reported_coordinate_sample_count": 708605,
-      "reported_covered_spatial_cells": 2440,
+      "reported_coordinate_sample_count": 708887,
+      "reported_covered_spatial_cells": 2483,
       "source_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-stream-water",
         "gemstat-open-archive",
         "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater",
         "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
@@ -810,22 +814,24 @@
     "water|As": {
       "comparable_observation_count": 44093,
       "covered_spatial_cells": 1219,
-      "distinct_sample_count": 458213,
+      "distinct_sample_count": 458321,
       "element": "As",
-      "independent_lineage_count": 3,
+      "independent_lineage_count": 4,
       "lineage_ids": [
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
+        "mendeley-guangdong-fujian-groundwater",
         "us-wqp-sacramento-river-arsenic"
       ],
       "medium": "water",
-      "observation_count": 493996,
+      "observation_count": 494104,
       "reported_comparable_observation_count": 44093,
-      "reported_coordinate_sample_count": 458213,
-      "reported_covered_spatial_cells": 1219,
+      "reported_coordinate_sample_count": 458321,
+      "reported_covered_spatial_cells": 1241,
       "source_ids": [
         "foregs-stream-water",
         "gemstat-open-archive",
+        "mendeley-guangdong-fujian-groundwater",
         "us-wqp-sacramento-river-arsenic"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
@@ -834,21 +840,25 @@
     "water|Cr": {
       "comparable_observation_count": 47456,
       "covered_spatial_cells": 1187,
-      "distinct_sample_count": 494384,
+      "distinct_sample_count": 494665,
       "element": "Cr",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 4,
       "lineage_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-geochemical-atlas-europe-2005",
-        "gemstat-open-archive"
+        "gemstat-open-archive",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "medium": "water",
-      "observation_count": 538569,
+      "observation_count": 538850,
       "reported_comparable_observation_count": 47456,
-      "reported_coordinate_sample_count": 494384,
-      "reported_covered_spatial_cells": 1187,
+      "reported_coordinate_sample_count": 494665,
+      "reported_covered_spatial_cells": 1230,
       "source_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-stream-water",
-        "gemstat-open-archive"
+        "gemstat-open-archive",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 494384
@@ -856,23 +866,27 @@
     "water|Cu": {
       "comparable_observation_count": 51377,
       "covered_spatial_cells": 1661,
-      "distinct_sample_count": 425125,
+      "distinct_sample_count": 425406,
       "element": "Cu",
-      "independent_lineage_count": 3,
+      "independent_lineage_count": 5,
       "lineage_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "medium": "water",
-      "observation_count": 467612,
+      "observation_count": 467893,
       "reported_comparable_observation_count": 51377,
-      "reported_coordinate_sample_count": 425125,
-      "reported_covered_spatial_cells": 1661,
+      "reported_coordinate_sample_count": 425406,
+      "reported_covered_spatial_cells": 1704,
       "source_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 425125
@@ -900,23 +914,27 @@
     "water|Ni": {
       "comparable_observation_count": 58108,
       "covered_spatial_cells": 2244,
-      "distinct_sample_count": 610877,
+      "distinct_sample_count": 611155,
       "element": "Ni",
-      "independent_lineage_count": 3,
+      "independent_lineage_count": 5,
       "lineage_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "medium": "water",
-      "observation_count": 656390,
+      "observation_count": 656668,
       "reported_comparable_observation_count": 58108,
-      "reported_coordinate_sample_count": 610877,
-      "reported_covered_spatial_cells": 2244,
+      "reported_coordinate_sample_count": 611155,
+      "reported_covered_spatial_cells": 2287,
       "source_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 610877
@@ -924,21 +942,25 @@
     "water|Pb": {
       "comparable_observation_count": 47911,
       "covered_spatial_cells": 1266,
-      "distinct_sample_count": 611042,
+      "distinct_sample_count": 611324,
       "element": "Pb",
-      "independent_lineage_count": 2,
+      "independent_lineage_count": 4,
       "lineage_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-geochemical-atlas-europe-2005",
-        "gemstat-open-archive"
+        "gemstat-open-archive",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "medium": "water",
-      "observation_count": 655477,
+      "observation_count": 655759,
       "reported_comparable_observation_count": 47911,
-      "reported_coordinate_sample_count": 611042,
-      "reported_covered_spatial_cells": 1266,
+      "reported_coordinate_sample_count": 611324,
+      "reported_covered_spatial_cells": 1309,
       "source_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-stream-water",
-        "gemstat-open-archive"
+        "gemstat-open-archive",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 611042
@@ -946,23 +968,25 @@
     "water|Zn": {
       "comparable_observation_count": 55153,
       "covered_spatial_cells": 2089,
-      "distinct_sample_count": 410190,
+      "distinct_sample_count": 410310,
       "element": "Zn",
-      "independent_lineage_count": 3,
+      "independent_lineage_count": 4,
       "lineage_ids": [
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "medium": "water",
-      "observation_count": 454029,
+      "observation_count": 454149,
       "reported_comparable_observation_count": 55153,
-      "reported_coordinate_sample_count": 410190,
-      "reported_covered_spatial_cells": 2089,
+      "reported_coordinate_sample_count": 410310,
+      "reported_covered_spatial_cells": 2113,
       "source_ids": [
         "foregs-stream-water",
         "gemstat-open-archive",
-        "geotraces-idp2025"
+        "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater"
       ],
       "spatial_grid": "canonical EPSG:4326 1-degree floor cell; no interpolation",
       "valid_coordinate_sample_count": 410190

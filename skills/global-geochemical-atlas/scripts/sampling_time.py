@@ -95,6 +95,10 @@ SOURCE_SAMPLING_TIME: dict[str, dict[str, str]] = {
         "raw_format": "iso8601",
     },
     "pangaea-amazonas-soil": {"raw_field": "Date/Time", "raw_format": "iso8601"},
+    "europe-pmc-pearl-river-dissolved-metals": {
+        "raw_field": "Date      (m-d-y) (normalized by the source adapter)",
+        "raw_format": "iso8601",
+    },
     "usgs-conus-soil": {"raw_field": "CollDate", "raw_format": "mdy_slash_2digit"},
     "australia-ngsa": {"raw_field": "DATE SAMPLED", "raw_format": "dmy_slash"},
     "australia-ngsa-mercury": {
@@ -123,6 +127,7 @@ SOURCE_SAMPLING_TIME: dict[str, dict[str, str]] = {
     "4tu-northern-china-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
     "eidc-ningbo-soil": {"reason": REASON_NOT_IN_ARCHIVE},
     "figshare-yangtze-basin-soil-heavy-metals": {"reason": REASON_NOT_IN_ARCHIVE},
+    "mendeley-guangdong-fujian-groundwater": {"reason": REASON_NOT_IN_ARCHIVE},
     # FOREGS atlas documents the national field seasons (1997-2001;
     # Sweden re-sampled stream sediments in 2004) without row-level
     # dates.  The campaign period is the publisher's own claim:

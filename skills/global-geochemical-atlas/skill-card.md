@@ -20,9 +20,10 @@ of causal, pollution, resource, or global-completeness claims.
 
 - Inputs: a versioned JSON request; optional measurements CSV, schema map, record
   evidence JSONL, acquisition manifest, QC policy, and frozen cached source files.
-- Outputs: the sixteen-file atlas contract documented in
-  `references/request-output-contract.md`, plus optional profile-driven comparison or
-  concentration-grid products.
+- Outputs: the eighteen-file atlas contract documented in
+  `references/request-output-contract.md`, with temporal evolution embedded as a
+  first-class main-atlas option, plus optional profile-driven comparison,
+  concentration-grid, adversarial-audit, or atlas-grounded Auto-Research products.
 - Failure contract: stable structured states; missing evidence fails closed instead
   of being guessed, imputed, or presented as verified.
 
@@ -31,12 +32,12 @@ of causal, pollution, resource, or global-completeness claims.
 | Capability | Declared behavior |
 |---|---|
 | Reads | User-selected request/input files; the complete bundled Skill tree for an executable snapshot; bundled schemas, registries, full-population profiles, fixtures and frozen map assets; explicitly selected cache entries. |
-| Writes | Only the caller-selected output directory and, for acquisition commands, the caller-selected versioned cache directory. The loop additionally writes its report, machine-actionable D1 repair queue and hash-bound delivery receipt inside that output directory. The full single-round request entry point rejects a non-empty output directory; lower-level stage commands may replace their documented named artifacts inside an explicitly selected directory. Cache deletion requires an exact source/version confirmation. |
+| Writes | Only the caller-selected output directory and, for acquisition commands, the caller-selected versioned cache directory. The loop additionally writes its report, machine-actionable D1 repair queue, role-isolated audit packets and hash-bound delivery receipt inside that output directory. Optional Auto-Research writes only a caller-selected research root separate from the frozen atlas; accepted role results are immutable and revisions use new `revision-NN` directories. The full single-round request entry point rejects a non-empty output directory; lower-level stage commands may replace their documented named artifacts inside an explicitly selected directory. Cache deletion requires an exact source/version confirmation. |
 | Executes | Bundled Python 3.10+ scripts through structured argument lists. Core runtime uses the standard library and does not execute downloaded code. |
-| Network | Optional reads from public scientific hosts selected by the source registry. The generic downloader requires HTTPS; a legacy FOREGS HTTP adapter is isolated and requires a pinned SHA-256. Requests enforce destination, timeout, retry, byte limit, content checks, and offline mode. |
+| Network | Optional reads from public scientific hosts selected by the source registry. The generic downloader requires HTTPS; a legacy FOREGS HTTP adapter is isolated and requires a pinned SHA-256. Requests enforce destination, timeout, retry, byte limit, content checks, and offline mode. The optional research UI binds only to loopback and does not call a model provider or accept arbitrary commands. |
 | Credentials | None required by the Skill. It must not request, read, log, or transmit API keys, cookies, shell history, or unrelated environment variables. |
-| External effects | Public data download and local artifact creation only. It does not publish, message, deploy, purchase, change permissions, or modify remote data. |
-| Approval gates | Ask before adding an unregistered source, accepting unclear research-use terms, replacing an existing cache/output, or taking any external action beyond public read-only retrieval. Human scientific review is mandatory where the source or analysis status requires it. |
+| External effects | Public data download and local artifact creation only. It does not publish, message, deploy, purchase, change permissions, or modify remote data. Static/GitHub Pages mode exports an Auto-Research request but never claims to start a job. |
+| Approval gates | Ask before adding an unregistered source, accepting unclear research-use terms, replacing an existing cache/output, or taking any external action beyond public read-only retrieval. A user choice is required to start Auto-Research; all passing research runs stop at explicit human approval with publication disabled. Human scientific review is mandatory where the source or analysis status requires it. |
 
 ## Trust boundaries and controls
 
@@ -54,6 +55,10 @@ of causal, pollution, resource, or global-completeness claims.
   rejected rows, uncertainty, and competing explanations.
 - Bind every full request to a start/end fingerprint of the complete executable
   Skill tree; fail closed if another process changes it during execution.
+- Bind each reportable delivery claim to an exact artifact SHA-256 and independent
+  recomputation. Keep scout, challenger and reviewer sessions role-isolated; hashes
+  prove byte identity and context separation mechanics, not scientific truth or
+  statistical independence between model calls.
 
 ## Known limitations
 

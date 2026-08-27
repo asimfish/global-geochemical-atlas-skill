@@ -1,6 +1,6 @@
 # 数据许可与引用说明
 
-核对日期：2026-08-05。机器可读详情以 `../assets/source_manifest.json` 为准。
+核对日期：2026-08-23。机器可读详情以 `../assets/source_manifest.json` 为准。
 
 ## 仓库原创内容
 
@@ -47,6 +47,13 @@
 - 后续真实来源 demo 必须从允许本次科研使用的来源确定性生成，并记录生成脚本、DOI/PID、输入版本、文件 ID/名称、字节数、schema、行数和筛选步骤；
 - fixture 输出必须标明仅用于流水线演示，不得用于科学解释；
 - 不兼容许可的数据不合并发布为一个统一开放数据包。
+
+## 中国内陆水补充来源
+
+- 珠江溶解金属：Zhen et al. (2019), *Geochemical characteristics of dissolved heavy metals in Zhujiang River, Southwest China*, PeerJ 7:e6578，DOI <https://doi.org/10.7717/peerj.6578>，CC BY 4.0；
+- 闽粤沿海地下水：*Recharge sources, hydrochemical evolution, and health risks of groundwater and geothermal water in the Guangdong-Fujian coastal region, southeastern China* 支撑数据，Mendeley Data V2，DOI <https://doi.org/10.17632/84gkydb5y9.2>，CC BY 4.0。
+
+使用两源的派生记录时必须保留作者/标题、DOI、版本、源行定位与获取日期。完整工作簿只进本地缓存，不随 MIT 代码仓库重新分发；下游若分发数据衍生物，应继续履行 CC BY 4.0 署名条件。
 
 ## Natural Earth 离线底图
 

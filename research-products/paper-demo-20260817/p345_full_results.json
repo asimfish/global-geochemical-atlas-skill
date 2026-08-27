@@ -1,0 +1,647 @@
+{
+ "P3": {
+  "GEMAS_As": {
+   "n": 2224,
+   "median_ratio": 1.228,
+   "ci95": [
+    1.215,
+    1.242
+   ],
+   "iqr": [
+    1.058,
+    1.435
+   ],
+   "slope": 0.83,
+   "intercept": 0.495,
+   "slope_se": 0.0084,
+   "r2": 0.815,
+   "oos_mdape_powerlaw": 0.173,
+   "oos_mdape_constant": 0.173
+  },
+  "GEMAS_Cr": {
+   "n": 2224,
+   "median_ratio": 2.942,
+   "ci95": [
+    2.893,
+    2.993
+   ],
+   "iqr": [
+    2.366,
+    3.66
+   ],
+   "slope": 0.849,
+   "intercept": 1.535,
+   "slope_se": 0.0089,
+   "r2": 0.805,
+   "oos_mdape_powerlaw": 0.203,
+   "oos_mdape_constant": 0.211
+  },
+  "GEMAS_Cu": {
+   "n": 2224,
+   "median_ratio": 0.864,
+   "ci95": [
+    0.856,
+    0.872
+   ],
+   "iqr": [
+    0.742,
+    0.973
+   ],
+   "slope": 1.0,
+   "intercept": -0.174,
+   "slope_se": 0.0084,
+   "r2": 0.863,
+   "oos_mdape_powerlaw": 0.141,
+   "oos_mdape_constant": 0.135
+  },
+  "GEMAS_Ni": {
+   "n": 2224,
+   "median_ratio": 1.269,
+   "ci95": [
+    1.256,
+    1.283
+   ],
+   "iqr": [
+    1.146,
+    1.486
+   ],
+   "slope": 0.909,
+   "intercept": 0.529,
+   "slope_se": 0.0055,
+   "r2": 0.925,
+   "oos_mdape_powerlaw": 0.116,
+   "oos_mdape_constant": 0.117
+  },
+  "GEMAS_Pb": {
+   "n": 2224,
+   "median_ratio": 1.288,
+   "ci95": [
+    1.269,
+    1.308
+   ],
+   "iqr": [
+    1.108,
+    1.628
+   ],
+   "slope": 0.735,
+   "intercept": 1.03,
+   "slope_se": 0.0115,
+   "r2": 0.647,
+   "oos_mdape_powerlaw": 0.11,
+   "oos_mdape_constant": 0.182
+  },
+  "GEMAS_Zn": {
+   "n": 2224,
+   "median_ratio": 1.342,
+   "ci95": [
+    1.335,
+    1.348
+   ],
+   "iqr": [
+    1.25,
+    1.486
+   ],
+   "slope": 0.837,
+   "intercept": 0.917,
+   "slope_se": 0.008,
+   "r2": 0.833,
+   "oos_mdape_powerlaw": 0.062,
+   "oos_mdape_constant": 0.075
+  },
+  "FOREGS_top_Cr": {
+   "n": 420,
+   "median_ratio": 2.537,
+   "ci95": [
+    2.476,
+    2.654
+   ],
+   "iqr": [
+    2.093,
+    3.163
+   ],
+   "slope": 0.938,
+   "intercept": 1.178,
+   "slope_se": 0.0225,
+   "r2": 0.805,
+   "oos_mdape_powerlaw": 0.206,
+   "oos_mdape_constant": 0.227
+  },
+  "FOREGS_sub_Cr": {
+   "n": 417,
+   "median_ratio": 2.5,
+   "ci95": [
+    2.429,
+    2.6
+   ],
+   "iqr": [
+    2.036,
+    3.16
+   ],
+   "slope": 0.891,
+   "intercept": 1.3,
+   "slope_se": 0.0173,
+   "r2": 0.864,
+   "oos_mdape_powerlaw": 0.199,
+   "oos_mdape_constant": 0.204
+  },
+  "FOREGS_top_Zn": {
+   "n": 420,
+   "median_ratio": 1.091,
+   "ci95": [
+    1.078,
+    1.107
+   ],
+   "iqr": [
+    1.0,
+    1.198
+   ],
+   "slope": 1.131,
+   "intercept": -0.458,
+   "slope_se": 0.0179,
+   "r2": 0.906,
+   "oos_mdape_powerlaw": 0.087,
+   "oos_mdape_constant": 0.09
+  },
+  "FOREGS_sub_Zn": {
+   "n": 417,
+   "median_ratio": 1.075,
+   "ci95": [
+    1.062,
+    1.1
+   ],
+   "iqr": [
+    0.982,
+    1.179
+   ],
+   "slope": 1.261,
+   "intercept": -1.012,
+   "slope_se": 0.0189,
+   "r2": 0.915,
+   "oos_mdape_powerlaw": 0.106,
+   "oos_mdape_constant": 0.093
+  }
+ },
+ "P4": {
+  "colocated_cells": 26,
+  "spearman_rho": 0.681,
+  "spearman_p": 0.00012977061090720262,
+  "median_ratio": 0.982,
+  "within_factor2": 19,
+  "both_gt20": 2,
+  "both_gt45": 1,
+  "soil_as_records": 8979,
+  "soil_as_gt20": 688,
+  "soil_as_gt45": 162,
+  "by_source": [
+   {
+    "source_id": "foregs-subsoil",
+    "n": 838,
+    "median": 9.0,
+    "gt20": 147,
+    "gt45": 39
+   },
+   {
+    "source_id": "foregs-topsoil",
+    "n": 892,
+    "median": 9.46,
+    "gt20": 159,
+    "gt45": 40
+   },
+   {
+    "source_id": "gemas-europe",
+    "n": 4448,
+    "median": 6.0,
+    "gt20": 315,
+    "gt45": 68
+   },
+   {
+    "source_id": "pangaea-amazonas-soil",
+    "n": 166,
+    "median": 6.55,
+    "gt20": 16,
+    "gt45": 4
+   },
+   {
+    "source_id": "pangaea-barents-c-horizon-soil",
+    "n": 594,
+    "median": 0.6,
+    "gt20": 2,
+    "gt45": 0
+   },
+   {
+    "source_id": "pangaea-brasol-ne-brazil-soil",
+    "n": 21,
+    "median": 10.4,
+    "gt20": 4,
+    "gt45": 2
+   },
+   {
+    "source_id": "pangaea-north-africa-soil",
+    "n": 43,
+    "median": 7.52,
+    "gt20": 6,
+    "gt45": 3
+   },
+   {
+    "source_id": "usgs-conus-soil",
+    "n": 1977,
+    "median": 4.9,
+    "gt20": 39,
+    "gt45": 6
+   }
+  ],
+  "cells_table": [
+   {
+    "cell": "47.6_-2.3",
+    "lat": 47.62,
+    "lon": -2.31,
+    "gemas": 208.5,
+    "foregs": 59.6,
+    "ratio": 3.501
+   },
+   {
+    "cell": "37.3_14.7",
+    "lat": 37.32,
+    "lon": 14.66,
+    "gemas": 6.6,
+    "foregs": 3.0,
+    "ratio": 2.233
+   },
+   {
+    "cell": "44.7_6.6",
+    "lat": 44.66,
+    "lon": 6.59,
+    "gemas": 20.0,
+    "foregs": 11.1,
+    "ratio": 1.806
+   },
+   {
+    "cell": "48.4_12.8",
+    "lat": 48.42,
+    "lon": 12.83,
+    "gemas": 11.7,
+    "foregs": 8.2,
+    "ratio": 1.426
+   },
+   {
+    "cell": "38.7_-0.6",
+    "lat": 38.67,
+    "lon": -0.55,
+    "gemas": 4.1,
+    "foregs": 2.9,
+    "ratio": 1.411
+   },
+   {
+    "cell": "48.7_7.0",
+    "lat": 48.72,
+    "lon": 6.99,
+    "gemas": 12.5,
+    "foregs": 9.6,
+    "ratio": 1.294
+   },
+   {
+    "cell": "42.4_11.8",
+    "lat": 42.39,
+    "lon": 11.84,
+    "gemas": 14.2,
+    "foregs": 11.0,
+    "ratio": 1.292
+   },
+   {
+    "cell": "49.7_7.9",
+    "lat": 49.67,
+    "lon": 7.92,
+    "gemas": 8.9,
+    "foregs": 6.9,
+    "ratio": 1.291
+   },
+   {
+    "cell": "50.3_2.7",
+    "lat": 50.34,
+    "lon": 2.68,
+    "gemas": 7.8,
+    "foregs": 6.6,
+    "ratio": 1.179
+   },
+   {
+    "cell": "46.7_6.7",
+    "lat": 46.71,
+    "lon": 6.67,
+    "gemas": 7.6,
+    "foregs": 6.8,
+    "ratio": 1.118
+   },
+   {
+    "cell": "39.0_-7.7",
+    "lat": 39.03,
+    "lon": -7.67,
+    "gemas": 31.5,
+    "foregs": 28.4,
+    "ratio": 1.108
+   },
+   {
+    "cell": "47.8_5.7",
+    "lat": 47.78,
+    "lon": 5.71,
+    "gemas": 13.3,
+    "foregs": 13.0,
+    "ratio": 1.016
+   },
+   {
+    "cell": "35.2_26.1",
+    "lat": 35.2,
+    "lon": 26.08,
+    "gemas": 6.6,
+    "foregs": 6.7,
+    "ratio": 0.985
+   },
+   {
+    "cell": "37.1_-5.4",
+    "lat": 37.13,
+    "lon": -5.41,
+    "gemas": 6.0,
+    "foregs": 6.2,
+    "ratio": 0.979
+   },
+   {
+    "cell": "39.4_-5.3",
+    "lat": 39.42,
+    "lon": -5.32,
+    "gemas": 19.6,
+    "foregs": 20.4,
+    "ratio": 0.96
+   },
+   {
+    "cell": "37.2_22.0",
+    "lat": 37.21,
+    "lon": 21.98,
+    "gemas": 5.1,
+    "foregs": 5.4,
+    "ratio": 0.954
+   },
+   {
+    "cell": "52.0_1.0",
+    "lat": 51.98,
+    "lon": 1.04,
+    "gemas": 9.1,
+    "foregs": 9.8,
+    "ratio": 0.931
+   },
+   {
+    "cell": "50.9_11.4",
+    "lat": 50.92,
+    "lon": 11.42,
+    "gemas": 6.8,
+    "foregs": 7.9,
+    "ratio": 0.863
+   },
+   {
+    "cell": "50.4_4.1",
+    "lat": 50.4,
+    "lon": 4.07,
+    "gemas": 7.9,
+    "foregs": 10.1,
+    "ratio": 0.782
+   },
+   {
+    "cell": "50.4_12.2",
+    "lat": 50.42,
+    "lon": 12.17,
+    "gemas": 10.6,
+    "foregs": 18.8,
+    "ratio": 0.561
+   },
+   {
+    "cell": "43.8_-0.2",
+    "lat": 43.75,
+    "lon": -0.2,
+    "gemas": 7.6,
+    "foregs": 15.0,
+    "ratio": 0.508
+   },
+   {
+    "cell": "47.2_11.9",
+    "lat": 47.24,
+    "lon": 11.89,
+    "gemas": 14.8,
+    "foregs": 29.8,
+    "ratio": 0.498
+   },
+   {
+    "cell": "37.1_22.4",
+    "lat": 37.09,
+    "lon": 22.43,
+    "gemas": 7.9,
+    "foregs": 17.1,
+    "ratio": 0.46
+   },
+   {
+    "cell": "40.7_15.5",
+    "lat": 40.71,
+    "lon": 15.45,
+    "gemas": 3.9,
+    "foregs": 8.8,
+    "ratio": 0.439
+   },
+   {
+    "cell": "41.1_0.8",
+    "lat": 41.12,
+    "lon": 0.83,
+    "gemas": 1.8,
+    "foregs": 7.0,
+    "ratio": 0.259
+   },
+   {
+    "cell": "40.9_-7.6",
+    "lat": 40.9,
+    "lon": -7.55,
+    "gemas": 2.9,
+    "foregs": 12.4,
+    "ratio": 0.234
+   }
+  ]
+ },
+ "P5": {
+  "records": 18563,
+  "elements": {
+   "Zn": 6275,
+   "Cu": 6013,
+   "Ni": 6275
+  },
+  "basin_counts": {
+   "Pacific": 5547,
+   "Southern": 4866,
+   "Atlantic": 4790,
+   "Arctic": 2483,
+   "Indian": 877
+  },
+  "Zn": {
+   "n_surface": 1768,
+   "n_deep": 1754,
+   "median_surface": 0.958,
+   "median_deep": 5.334,
+   "deep_over_surface": 5.57,
+   "mannwhitney_p": 6.138294188290392e-283,
+   "by_basin": {
+    "Atlantic": {
+     "n_surface": 414,
+     "n_deep": 746,
+     "ratio": 13.0
+    },
+    "Pacific": {
+     "n_surface": 394,
+     "n_deep": 591,
+     "ratio": 24.5
+    },
+    "Indian": {
+     "n_surface": 48,
+     "n_deep": 68,
+     "ratio": 12.39
+    },
+    "Southern": {
+     "n_surface": 672,
+     "n_deep": 213,
+     "ratio": 2.19
+    },
+    "Arctic": {
+     "n_surface": 240,
+     "n_deep": 136,
+     "ratio": 1.5
+    }
+   }
+  },
+  "Cu": {
+   "n_surface": 2159,
+   "n_deep": 1293,
+   "median_surface": 1.225,
+   "median_deep": 2.337,
+   "deep_over_surface": 1.91,
+   "mannwhitney_p": 3.2480165628150636e-170,
+   "by_basin": {
+    "Atlantic": {
+     "n_surface": 628,
+     "n_deep": 404,
+     "ratio": 2.75
+    },
+    "Pacific": {
+     "n_surface": 553,
+     "n_deep": 479,
+     "ratio": 3.53
+    },
+    "Indian": {
+     "n_surface": 67,
+     "n_deep": 116,
+     "ratio": 6.54
+    },
+    "Southern": {
+     "n_surface": 529,
+     "n_deep": 85,
+     "ratio": 1.5
+    },
+    "Arctic": {
+     "n_surface": 382,
+     "n_deep": 209,
+     "ratio": 0.55
+    }
+   }
+  },
+  "Ni": {
+   "n_surface": 1946,
+   "n_deep": 1559,
+   "median_surface": 3.742,
+   "median_deep": 6.921,
+   "deep_over_surface": 1.85,
+   "mannwhitney_p": 1.6233777144360096e-193,
+   "by_basin": {
+    "Atlantic": {
+     "n_surface": 345,
+     "n_deep": 578,
+     "ratio": 1.69
+    },
+    "Pacific": {
+     "n_surface": 643,
+     "n_deep": 560,
+     "ratio": 3.4
+    },
+    "Indian": {
+     "n_surface": 99,
+     "n_deep": 97,
+     "ratio": 3.91
+    },
+    "Southern": {
+     "n_surface": 589,
+     "n_deep": 172,
+     "ratio": 1.11
+    },
+    "Arctic": {
+     "n_surface": 270,
+     "n_deep": 152,
+     "ratio": 0.69
+    }
+   }
+  },
+  "audit": {
+   "method_families_total": 34,
+   "records_missing_method": 7007,
+   "missing_share": 0.377,
+   "top_family_share": 0.377,
+   "top5_families": [
+    {
+     "family": "(missing)",
+     "n": 7007
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_310901",
+     "n": 1947
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_579050",
+     "n": 1281
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_682902",
+     "n": 1206
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_676007",
+     "n": 872
+    }
+   ],
+   "per_element_families": {
+    "Zn": 23,
+    "Cu": 13,
+    "Ni": 25
+   },
+   "top_resolvable_share": 0.105,
+   "top5_resolvable": [
+    {
+     "family": "other_bodc_originator_and_methods_record_310901",
+     "n": 1947,
+     "share": 0.105
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_579050",
+     "n": 1281,
+     "share": 0.069
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_682902",
+     "n": 1206,
+     "share": 0.065
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_676007",
+     "n": 872,
+     "share": 0.047
+    },
+    {
+     "family": "other_bodc_originator_and_methods_record_591363",
+     "n": 807,
+     "share": 0.043
+    }
+   ],
+   "resolvable_families_total": 33
+  }
+ },
+ "seed": 20260819
+}

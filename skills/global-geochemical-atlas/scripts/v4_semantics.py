@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evidence-bound V4 semantic mappings for the twenty-one executable sources."""
+"""Evidence-bound V4 semantic mappings for the executable source registry."""
 
 from __future__ import annotations
 
@@ -65,6 +65,25 @@ SOURCE_CONTRACTS: dict[str, dict[str, Any]] = {
         "method_scope": "cruise_analyte",
         "method_assignment_basis": "cruise_and_analyte_to_exported_originator_method_record",
         "method_missing_reason": "multiple_linked_method_records_unresolved_to_observation",
+        "citation_scope": "dataset",
+    },
+    "europe-pmc-pearl-river-dissolved-metals": {
+        "sample_type_raw": "0.22 um filtered river water",
+        "sample_type": "water_river",
+        "sample_type_mapping_status": "dataset_constant",
+        "water_body_type": "river",
+        "water_fraction": "dissolved",
+        "filtered_state": "filtered_<0.22um",
+        "method_scope": "dataset",
+        "method_assignment_basis": "article_documented_dataset_constant",
+        "citation_scope": "dataset",
+    },
+    "mendeley-guangdong-fujian-groundwater": {
+        "sample_type_raw": "well water",
+        "sample_type": "water_groundwater",
+        "sample_type_mapping_status": "dataset_constant",
+        "water_body_type": "groundwater",
+        "method_missing_reason": "not_reported_in_dataset_or_repository_metadata",
         "citation_scope": "dataset",
     },
     "gemstat-open-archive": {
@@ -568,6 +587,27 @@ def _geographic_semantics(
     elif source_id == "eidc-ningbo-soil":
         result["survey_area"] = "Ningbo Zhangxi catchment"
         result["geographic_context_raw"] = result["survey_area"]
+    elif source_id == "europe-pmc-pearl-river-dissolved-metals":
+        result["survey_area"] = "Zhujiang (Pearl River), China"
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                result["survey_area"],
+                _text(evidence.get("river_reach")),
+                _text(evidence.get("season")),
+            )
+            if part
+        )
+    elif source_id == "mendeley-guangdong-fujian-groundwater":
+        result["survey_area"] = "Guangdong-Fujian coastal region, China"
+        result["geographic_context_raw"] = " / ".join(
+            part
+            for part in (
+                result["survey_area"],
+                _text(evidence.get("row_provenance")),
+            )
+            if part
+        )
     elif source_id == "pangaea-north-africa-soil":
         result["survey_area"] = (
             _text(evidence.get("potential_source_area"))

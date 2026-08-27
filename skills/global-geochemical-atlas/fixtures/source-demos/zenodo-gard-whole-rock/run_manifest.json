@@ -3,7 +3,7 @@
   "demo_generation_version": "d1-demo-slice-v1",
   "exchange_schema": "d1-v4-exchange-v1",
   "failures": [],
-  "generated_at": "2026-08-21T06:30:00Z",
+  "generated_at": "2026-08-21T10:16:45Z",
   "generation_request": {
     "analytes": [
       "As",
@@ -24,12 +24,12 @@
     {
       "bytes": 56395,
       "path": "demo_input.csv",
-      "sha256": "53c315e54e023d8127a226a2710282d9b31c8979b0c77f3404ec36f36e18a94b"
+      "sha256": "62b063b30937ac1495b52a778986ab59eb0760307ccc5caa07b8303f6c759f7a"
     },
     {
       "bytes": 95053,
       "path": "sources.jsonl",
-      "sha256": "1a30afc0536f817e432da48f024b4762b48bd75f30da319aa830d71cfc63a8b2"
+      "sha256": "42d999ca201547d00f6330a97a3def1deed19248bfc0f6424846982d05b530ee"
     }
   ],
   "record_counts": {
@@ -49,21 +49,21 @@
     {
       "bytes": 192615473,
       "filename": "complete.zip",
-      "retrieved_at": "2026-08-21T10:16:45Z",
+      "retrieved_at": "2026-08-23T14:34:13Z",
       "sha256": "c9054b2f87ec51589d1974aa35e00ce2efb696e5db7f265ef279e8c67beb61ba",
       "source_url": "https://zenodo.org/api/records/3359791/files/complete.zip/content"
     },
     {
       "bytes": 3339065,
       "filename": "reference.csv",
-      "retrieved_at": "2026-08-21T10:16:46Z",
+      "retrieved_at": "2026-08-23T14:34:22Z",
       "sha256": "a36aaf931456d4cb28e42e43e3700eec78823b252974c5399f7d37159386ba6a",
       "source_url": "https://zenodo.org/api/records/3359791/files/reference.csv/content"
     },
     {
       "bytes": 827865710,
       "filename": "complete.csv",
-      "retrieved_at": "2026-08-21T10:16:45Z",
+      "retrieved_at": "2026-08-23T14:34:13Z",
       "sha256": "e85c9bba5a5fae1f65cb41d5eb5ddb0220e5a2d5d961c4836807fd42d01f610a",
       "source_url": "https://zenodo.org/api/records/3359791/files/complete.zip/content"
     }

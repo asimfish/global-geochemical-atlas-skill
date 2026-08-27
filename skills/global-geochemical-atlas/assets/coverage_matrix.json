@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-16T00:00:00Z",
+  "as_of": "2026-08-23T00:00:00Z",
   "cells": {
     "rock": {
       "analyte_coverage": "complete_for_registered_targets",
@@ -782,13 +782,13 @@
     "water": {
       "analyte_coverage": "complete_for_registered_targets",
       "analyte_source_counts": {
-        "As": 3,
-        "Cr": 2,
-        "Cu": 3,
+        "As": 4,
+        "Cr": 4,
+        "Cu": 5,
         "Hg": 1,
-        "Ni": 3,
-        "Pb": 2,
-        "Zn": 3
+        "Ni": 5,
+        "Pb": 4,
+        "Zn": 4
       },
       "analytes_with_multiple_sources": [
         "As",
@@ -825,11 +825,13 @@
         "pangaea-repository",
         "us-water-quality-portal"
       ],
-      "independent_lineage_count": 4,
+      "independent_lineage_count": 6,
       "lineage_ids": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-geochemical-atlas-europe-2005",
         "gemstat-open-archive",
         "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater",
         "us-wqp-sacramento-river-arsenic"
       ],
       "method_metadata_coverage": "not_yet_audited",
@@ -845,9 +847,11 @@
         "Zn"
       ],
       "selected_sources": [
+        "europe-pmc-pearl-river-dissolved-metals",
         "foregs-stream-water",
         "gemstat-open-archive",
         "geotraces-idp2025",
+        "mendeley-guangdong-fujian-groundwater",
         "us-wqp-sacramento-river-arsenic"
       ],
       "source_evidence_tiers": {
@@ -858,6 +862,7 @@
         "earthchem-library": "D",
         "eea-waterbase": "D",
         "emodnet-chemistry": "D",
+        "europe-pmc-pearl-river-dissolved-metals": "A",
         "foregs-europe": "D",
         "foregs-stream-water": "A",
         "gemstat-open-archive": "A",
@@ -865,6 +870,7 @@
         "glorich": "D",
         "iodp-data-systems": "D",
         "ireland-tellus": "D",
+        "mendeley-guangdong-fujian-groundwater": "A",
         "pangaea-repository": "D",
         "us-water-quality-portal": "D",
         "us-wqp-sacramento-river-arsenic": "B"
@@ -878,6 +884,7 @@
         "earthchem-library": "global_collection",
         "eea-waterbase": "regional_partial",
         "emodnet-chemistry": "regional_partial",
+        "europe-pmc-pearl-river-dissolved-metals": "regional_two_season_river_transect",
         "foregs-europe": "regional_partial",
         "foregs-stream-water": "regional_partial",
         "gemstat-open-archive": "global_partial",
@@ -885,11 +892,18 @@
         "glorich": "global_partial",
         "iodp-data-systems": "global_partial",
         "ireland-tellus": "national_partial",
+        "mendeley-guangdong-fujian-groundwater": "regional_groundwater_well_dataset",
         "pangaea-repository": "global_collection",
         "us-water-quality-portal": "national_partial",
         "us-wqp-sacramento-river-arsenic": "single_station_time_series"
       },
       "source_target_analytes": {
+        "europe-pmc-pearl-river-dissolved-metals": [
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb"
+        ],
         "foregs-stream-water": [
           "As",
           "Cr",
@@ -912,6 +926,14 @@
           "Ni",
           "Zn"
         ],
+        "mendeley-guangdong-fujian-groundwater": [
+          "As",
+          "Cr",
+          "Cu",
+          "Ni",
+          "Pb",
+          "Zn"
+        ],
         "us-wqp-sacramento-river-arsenic": [
           "As"
         ]
@@ -924,6 +946,7 @@
         "earthchem-library": "discovery",
         "eea-waterbase": "discovery",
         "emodnet-chemistry": "discovery",
+        "europe-pmc-pearl-river-dissolved-metals": "normalized_analysis",
         "foregs-europe": "discovery",
         "foregs-stream-water": "normalized_analysis",
         "gemstat-open-archive": "normalized_analysis",
@@ -931,6 +954,7 @@
         "glorich": "discovery",
         "iodp-data-systems": "discovery",
         "ireland-tellus": "discovery",
+        "mendeley-guangdong-fujian-groundwater": "normalized_analysis",
         "pangaea-repository": "discovery",
         "us-water-quality-portal": "discovery",
         "us-wqp-sacramento-river-arsenic": "normalized_analysis"
@@ -960,7 +984,8 @@
       "institutional_doi_dataset_download_verification",
       "targeted_south_america_and_russia_doi_dataset_verification",
       "targeted_china_and_brazil_primary_repository_verification",
-      "targeted_northern_western_china_sediment_repository_verification"
+      "targeted_northern_western_china_sediment_repository_verification",
+      "targeted_china_inland_water_repository_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -968,7 +993,7 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 15,
+    "round": 16,
     "saturated": false,
     "status": "in_progress"
   },

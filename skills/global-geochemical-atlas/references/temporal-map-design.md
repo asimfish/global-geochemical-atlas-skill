@@ -1,7 +1,9 @@
 # 时间演变可交互地图 · 设计决策(temporal-atlas-v1)
 
-交付物:`scripts/build_temporal_map.py` + `assets/temporal-atlas-v1.html`(模板)。
-产物:单文件离线 HTML,零外部依赖,同输入字节级确定性输出。
+实现:`scripts/build_temporal_map.py` + `assets/temporal-atlas-v1.html`(模板)。
+主产品:`interactive_map.html` 中的一级 `temporalView`；生成器的单文件离线
+HTML 以 base64/source bytes 嵌入主图并经 `srcdoc` 懒加载。`temporal_map.html`
+仅是相同内容的兼容镜像，零外部依赖、同输入字节级确定性输出，不是独立导航体验。
 
 ## CLI
 
@@ -47,10 +49,17 @@ stdout 输出 JSON 构建报告(记录/站点统计,无时间戳)。
 - 内嵌底图仅保留 rings/title/scale/license/asset_version,剥离 source_url 等 URL 字段 → 整个 HTML 零 `http(s)://` 出现。
 - 兼容性:内嵌 JS 避免 `?.`/`??` 等 ES2020 语法,通过 node v12 `--check`。
 
-## 集成接线建议(主线)
+## 集成接线（已实现）
 
-- run_workflow 在 D3 阶段追加调用本生成器,输出放包内 `temporal_map.html`;
-- component_test 可断言:两次构建 sha256 相等、`http(s)://` 计数为 0、报告 stats.dated_share 与 CSV 实际一致。
+- `run_workflow` 在 D3 阶段先生成时序文档，再把其 exact bytes 传给
+  `build_interactive_map.py`，输出主图内一级选项和兼容 `temporal_map.html`；
+- `validate_outputs.py` 解码主图 payload，断言它与兼容文件逐字节一致，并拒绝
+  主导航 `<a href="temporal_map.html">` 或 iframe `src`；
+- `component_test` 断言两次构建 SHA-256 相等、`http(s)://` 计数为 0、报告
+  `stats.dated_share` 与 CSV 实际一致。
+- 命名国家请求的主图与时序一级视图固定按冻结 Admin-0 国家范围
+  取景；D1 可依请求在完整数据库中保留距边界不超过宣告距离的邻海
+  记录，但邻海矩形包络盒不得改变国家主视图的初始范围。
 
 ## v2 追加：区域对比成为默认模式（同一区域的含量升降）
 
@@ -61,6 +70,10 @@ stdout 输出 JSON 构建报告(记录/站点统计,无时间戳)。
   |变化| > 15% 记为上升（红）/ 下降（蓝），否则基本持平（灰）；只有单期观测的格子画虚线暗格并如实说明「无法比较」。
   点击格子弹出该区域的含量—时间散点（早期青 / 晚期橙、两期中位横线、分割年虚线、删失点空心倒三角）。
   删失值不参与分位与中位数统计，只按检出限绘制。
+- **能力感知默认页**：只有至少一个元素在同层网格内同时具有早、晚两期
+  可比观测时才默认打开「区域对比」；有真实日期但不足以构成对比时默认
+  打开「采样史回放」，没有任何日期时也打开回放的明确缺口空态。
+  不得为了让默认页“有数据”而伪造采样年或放宽同层可比门槛。
 - **采样史回放**：点色默认改为「按含量高低」（同元素 × 同介质 × 同单位层内分位，蓝低红高），
   可切回「按元素类别」；含量高低随时间窗口即见即所得。
 - **站点演变**：保持 v1（同一位置 ≥3 采样时相的浓度—时间序列与趋势）。

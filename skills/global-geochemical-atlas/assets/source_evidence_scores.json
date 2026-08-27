@@ -13,8 +13,8 @@
   },
   "evidence_version": "geochemical-source-evidence-v3",
   "registry_version": "geochemical-source-registry-v1",
-  "scored_at": "2026-08-16T00:00:00Z",
-  "source_count": 67,
+  "scored_at": "2026-08-23T00:00:00Z",
+  "source_count": 69,
   "sources": {
     "4tu-northern-china-sediment": {
       "access_status": "open",
@@ -1629,6 +1629,91 @@
       "use_mode": "discovery",
       "use_mode_limitations": [
         "research_use_status=permission_required"
+      ]
+    },
+    "europe-pmc-pearl-river-dissolved-metals": {
+      "access_status": "open",
+      "attribution_note": "PeerJ full text and supplements are published under CC BY 4.0; retain article citation and DOI.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://europepmc.org/article/PMC/6420802",
+            "https://doi.org/10.7717/peerj.6578",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6420802/supplementaryFiles"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://europepmc.org/article/PMC/6420802",
+            "https://doi.org/10.7717/peerj.6578",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6420802/supplementaryFiles",
+            "doi:10.7717/peerj.6578"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: peerj-7-e6578-supplement-s004",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "europe-pmc-pearl-river-dissolved-metals",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
       ]
     },
     "figshare-yangtze-basin-soil-heavy-metals": {
@@ -3729,6 +3814,91 @@
       },
       "source_evidence_score": 85.0,
       "source_id": "japan-gsj-marine-sediment",
+      "use_mode": "normalized_analysis",
+      "use_mode_limitations": [
+        "30-record human review is incomplete"
+      ]
+    },
+    "mendeley-guangdong-fujian-groundwater": {
+      "access_status": "open",
+      "attribution_note": "Mendeley Data version 2 declares CC BY 4.0; retain dataset DOI, version and in-sheet row provenance.",
+      "conflicts": [],
+      "evidence_tier": "A",
+      "missing_dimensions": [
+        "human_review"
+      ],
+      "research_use_status": "attribution_required",
+      "score_denominator": 100,
+      "score_interpretation": "Evidence completeness score; not the probability that a measurement is true.",
+      "source_evidence_dimensions": {
+        "adapter_reproducibility": {
+          "awarded_points": 10.0,
+          "evidence": [],
+          "note": "Adapter, registry and catalog resolve the same frozen version.",
+          "status": "verified",
+          "weight": 10
+        },
+        "file_record_integrity": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "Every registered file has a pinned SHA-256.",
+          "status": "verified",
+          "weight": 15
+        },
+        "human_review": {
+          "awarded_points": 0.0,
+          "evidence": [],
+          "note": "No checked-in human review record is available.",
+          "status": "missing",
+          "weight": 10
+        },
+        "identity_publisher": {
+          "awarded_points": 10.0,
+          "evidence": [
+            "https://data.mendeley.com/datasets/84gkydb5y9/2",
+            "https://doi.org/10.17632/84gkydb5y9.2",
+            "https://data.mendeley.com/api/datasets-v2/datasets/84gkydb5y9?fields=results.*&version=2"
+          ],
+          "note": "Publisher, title, landing page and official HTTPS evidence are recorded.",
+          "status": "verified",
+          "weight": 10
+        },
+        "method_qc_metadata": {
+          "awarded_points": 5.0,
+          "evidence": [],
+          "note": "The source adapter preserves available method fields, but method/QC completeness is not yet audited.",
+          "status": "partial",
+          "weight": 10
+        },
+        "provenance": {
+          "awarded_points": 15.0,
+          "evidence": [
+            "https://data.mendeley.com/datasets/84gkydb5y9/2",
+            "https://doi.org/10.17632/84gkydb5y9.2",
+            "https://data.mendeley.com/api/datasets-v2/datasets/84gkydb5y9?fields=results.*&version=2",
+            "doi:10.17632/84gkydb5y9.2"
+          ],
+          "note": "The registered source can be traced to its dataset, frozen files and source locators.",
+          "status": "verified",
+          "weight": 15
+        },
+        "schema_semantics": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "The production registry freezes required source fields and a parsed output contract.",
+          "status": "verified",
+          "weight": 15
+        },
+        "version_snapshot": {
+          "awarded_points": 15.0,
+          "evidence": [],
+          "note": "A concrete publisher version is pinned: mendeley-84gkydb5y9-v2",
+          "status": "verified",
+          "weight": 15
+        }
+      },
+      "source_evidence_score": 85.0,
+      "source_id": "mendeley-guangdong-fujian-groundwater",
       "use_mode": "normalized_analysis",
       "use_mode_limitations": [
         "30-record human review is incomplete"
@@ -6025,7 +6195,7 @@
   },
   "summary": {
     "evidence_tiers": {
-      "A": 34,
+      "A": 36,
       "B": 1,
       "C": 0,
       "D": 32,
@@ -6034,7 +6204,7 @@
     "use_modes": {
       "benchmark_ready": 0,
       "discovery": 32,
-      "normalized_analysis": 35,
+      "normalized_analysis": 37,
       "raw_observation": 0
     }
   }

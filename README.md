@@ -9,7 +9,7 @@
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#-90-秒快速开始)
 [![Runtime Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-%E9%9B%B6%E7%AC%AC%E4%B8%89%E6%96%B9-brightgreen)](#-90-秒快速开始)
-[![Tests](https://img.shields.io/badge/tests-527%20%2B%2075%20%2B%20110%20passing-brightgreen)](#-开发与验证)
+[![Tests](https://img.shields.io/badge/tests-611%20%2B%2076%20%2B%20117%20passing-brightgreen)](#-开发与验证)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-在你的-ai-agent-中使用)
 [![Works with](https://img.shields.io/badge/Works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Copilot%20CLI-6E56CF)](#-在你的-ai-agent-中使用)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -17,7 +17,7 @@
 [🌐 在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
 [🚀 快速开始](#-90-秒快速开始) ·
 [🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
-[🧭 数据来源](#-数据来源35-个已冻结可执行来源--67-条审计目录记录) ·
+[🧭 数据来源](#-数据来源37-个已冻结可执行来源--69-条审计目录记录) ·
 [📦 输出产物](#-十八个输出产物) ·
 [❓ FAQ](#-faq)
 
@@ -41,11 +41,13 @@
 
 | 你关心的 | 它给你的 |
 |---|---|
-| 数据从哪来 | 65 条审计目录记录，其中 33 个已冻结、可执行公开来源、32 个 discovery-only 候选（岩石/土壤/沉积物/水体）；正式记录逐条绑定 DOI/URL、版本、许可、定位与文件 SHA-256 |
+| 数据从哪来 | 69 条审计目录记录，其中 37 个已冻结、可执行公开来源、32 个 discovery-only 候选（岩石/土壤/沉积物/水体）；正式记录逐条绑定 DOI/URL、版本、许可、定位与文件 SHA-256 |
 | 数值和证据能不能用 | 原值永不覆盖、删失值不插补、批次 QC 逐条重算；来源证据/分析就绪度/空间可用性/工作流可用性分开报告 |
 | 结论敢不敢用 | 异常只作筛查候选并列出竞争解释；跑不齐的范围诚实报告缺口，绝不冒充全量覆盖 |
 | 能不能复用 | 40+ JSON Schema、十八文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接；纯 Markdown + 标准库，Claude Code / Codex / Cursor 等运行时零改动挂载 |
-| 时间维度呢 | 每条记录带采样时刻三列（`atlas-sampling-time-v1`，发表年不算数）；时间演变四模式交互地图；异常富集沿岩性/空间/伴生/时序四条证据线归因「母质高背景 / 疑似人为输入」，证据不足如实不判 |
+| 时间维度呢 | 每条记录带采样时刻三列（`atlas-sampling-time-v1`，发表年不算数）；时间演变四模式是主 `interactive_map.html` 的一级选项；异常富集沿岩性/空间/伴生/时序四条证据线归因「母质高背景 / 疑似人为输入」，证据不足如实不判 |
+| Loop 会互相带偏吗 | 当前轮侦察者与质疑者使用独立 fresh-session packet，上一轮记忆只参与选题并留下 hash；第三层由确定性 judge 计分，agent 无权自行准入来源 |
+| 图谱后还能做什么 | 用户可在同一 HTML 选择 Auto-Research：冻结图谱后自动生成候选、试点、文献核验、论文骨架、制图契约与独立评审；失败进入不可覆盖的修订轮，通过后仍停在人工批准 |
 
 ## 🚀 90 秒快速开始
 
@@ -108,6 +110,7 @@ cp -r skills/global-geochemical-atlas ~/.copilot/skills/
 - *「用公开数据做一张西欧土壤砷分布图，标出候选富集区并给出来源和置信度」*
 - *「快速模式跑一张全球铅分布图，我先看看效果」*（走 900 秒轻量档）
 - *「这些沉积物铜异常是母质决定的还是人为排放？给我证据线」*（走成因归因）
+- *「基于刚生成的 Cu 图谱继续 Auto-Research，做试点、论文和图，并独立核对每个数字」*（走图谱后续研究状态机）
 
 - 激活边界与示例：[`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json)（含 3 条应激活与 3 条相邻不应激活样例）
 - 平台元数据：[`agents/openai.yaml`](skills/global-geochemical-atlas/agents/openai.yaml) · 能力卡片：[`skill-card.md`](skills/global-geochemical-atlas/skill-card.md)
@@ -204,12 +207,29 @@ flowchart LR
     D2 --> D3[D3 产品<br/>研究配置·地图·迭代]
     D3 --> O[数据库<br/>证据与置信度<br/>异常结果<br/>交互地图]
     O -. iteration_backlog 驱动的多轮闭环 .-> D1
+    O -->|用户选择继续| AR[Auto-Research<br/>试点·文献·论文·图·独立评审]
+    AR -->|评审失败·版本化反馈| AR
+    AR -->|全门通过| H[人工批准<br/>不自动发表]
 ```
 
 - **D1** 保存许可、版本、下载请求、文件哈希和记录级定位；来源目录中的候选不等于本次请求可用。
 - **D2** 保守处理单位、删失值、坐标、方法、实验室批次和可选地质匹配；先用稳健 MAD z-score 筛记录级高/低值，再用精确超几何检验 + BH-FDR 筛空间聚集。
 - **D3** 只消费公共产物，通过版本化 profile 生成全球、国家或 WGS84 bbox 研究视图；不重算 D2 科学结果。
 - **多轮迭代**：每次运行产出 `iteration_backlog.csv`、`loop_report.json` 和 `d1_repair_queue.json`。每个预算约束轮次后审计一次：通用数量/背景缺口扩采，空间缺口按 `元素 + 介质 + 动态区域` 定向采集，来源/许可/CRS/方法缺口转 D1 准入；每轮生成新版本，canonical 数据与原始证据不在原地改写。
+- **三层来源对抗**：每个待修 action group 可生成互相隔离的侦察者与质疑者 packet；上一轮记忆不进入本轮 evaluator context。确定性 judge 只按冻结的七维来源事实计分，agent 结果不能直接准入，所有 packet、input、payload、result 与 judge receipt 均作 SHA‑256 绑定。
+- **逐声明对账**：正式 delivery receipt 内含九项 typed claim ledger。展示的记录数、覆盖元素/介质、来源数、删失数、坐标率、异常数和 FDR 区域数均指向精确文件、locator、重算方法与 SHA‑256；改数字或改证据都会使 validator 失败。
+
+## 🧪 从图谱继续 Auto-Research
+
+`interactive_map.html` 的 Auto-Research 选项会把当前十八文件冻结成内容寻址快照，然后生成可比研究队列、确定性选题、行级试点合同、原始文献核验队列、科学机会门、贡献优先论文骨架、数据主图契约和五篇候选研究计划。只有已执行的 effect/null 试点与经核验的前沿增量同时成立，才创建写作和绘图任务；缺数据、只需采集、分析无效或选题前沿性弱会停在 `needs_research_redirection`，不会拿修订轮润色成论文。静态页面只导出请求；要真实创建可恢复任务，运行：
+
+```bash
+python skills/global-geochemical-atlas/scripts/serve_atlas_research.py \
+  --atlas-dir /tmp/geochemical-output \
+  --research-root /tmp/geochemical-research
+```
+
+本地服务只绑定 `127.0.0.1`，使用 URL fragment token、单次 nonce、Host/Origin 校验和固定 JSON API。外部 agent 宿主按 `state.json.required_roles` 为试点、文献、写作、绘图和 reviewer 分别启动新会话，并通过 hash-bound payload 推进状态。写作必须提交 2–5 项 claim-bound 贡献；绘图必须提交 primary/spatial/robustness 三类数据主图，分别绑定真实 SVG/PDF/PNG 及检查修改记录。评审使用 controller 固定的科学有效性、新颖性、前沿适配、论文论证、视觉证据等七门 0–4 分量表；失败会自动开启新的 `revision-NN`，只把结构化反馈交给修订角色，下一轮 reviewer 不接收旧评语或 executor summary。最多三轮仍不通过则转人工；全部七门通过也只到 `awaiting_human_approval`，`publication_allowed` 永远为 `false`。详见 [Auto-Research 运行合同](skills/global-geochemical-atlas/references/auto-research.md)。
 
 ## ⏳ 时间维度：演变地图与成因归因
 
@@ -226,7 +246,7 @@ flowchart LR
 <sub>「异常成因」模式：每个富集候选沿岩性 / 空间 / 伴生元素 / 时序四条证据线归因，每条给一句通俗解释；至少两条同向才判「母质高背景」或「疑似人为输入」，证据不够就明说不判——不会把高背景硬扣成污染。</sub>
 
 - **采样时刻契约**（`atlas-sampling-time-v1`）：`sampling_time` 记录样品被采集那一刻，发表年一律不算；逐源声明取值字段与格式，发布方没报就如实标 `publisher_not_reported`。
-- **时间演变地图**（`temporal_map.html`）：区域对比 / 异常成因 / 含量着色采样史回放 / 站点演变四模式，单文件离线可开。
+- **时间演变选项**（`interactive_map.html#temporalView`）：区域对比 / 异常成因 / 含量着色采样史回放 / 站点演变四模式完整嵌在主图；`temporal_map.html` 仅保留为相同字节的兼容镜像。
 - **成因归因**（`anomaly_provenance.json`）：时序证据线的规则很直白——同一点位含量随时间明显上升支持「人为输入」，长期平稳支持「母质决定」；与岩性、空间、伴生元素三条线合议。
 
 ## 📦 十八个输出产物
@@ -235,8 +255,8 @@ flowchart LR
 
 | 赛题交付物 | 运行产物 | 核心保证 |
 |---|---|---|
-| **可交互元素分布地图** | `interactive_map.html` · `samples.geojson` | 自包含无 CDN；按元素、介质、区域、方法与工作流可用性筛选；样点、热力与异常候选视图 |
-| **时间演变交互地图** | `temporal_map.html` | 同一份自包含 HTML 四个模式：区域对比（同一 5° 格子早晚两期中位含量升降）、异常成因、含量着色采样史回放、站点演变；无采样时刻的记录绝不假装有时间 |
+| **可交互元素分布地图** | `interactive_map.html` · `samples.geojson` | 唯一主产品体验，自包含无 CDN；按元素、介质、区域、方法与工作流可用性筛选；时序演化和 Auto-Research 均为同一主导航的一级选项 |
+| **时序兼容镜像** | `temporal_map.html` | 完整四模式字节嵌入主图，只为旧链接/单页下载保留；主导航不跳转独立文件，无采样时刻的记录绝不假装有时间 |
 | **标准化地球化学数据库** | `geochemistry.csv` · `batch_acceptance.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法、分析批次与 QC 字段；含 `atlas-sampling-time-v1` 采样时刻三列（采样那一刻的含量，发表年不算），支持时序查询 |
 | **数据来源与置信度说明** | `sources_and_confidence.json` · `source_manifest.json` · `record_evidence.jsonl` · `confidence_report.json` | URL/DOI、许可、版本、获取时间、哈希、源记录定位；按来源给出测定行/独立样品数，并把来源证据、分析就绪度、空间可用性与工作流可用性分开报告 |
 | **异常区域识别结果** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` · `anomaly_provenance.json` | 记录级 robust-MAD 候选 + 精确超几何富集/BH-FDR 空间筛查；每个富集候选沿岩性/空间/伴生/时序四条证据线归因「母质高背景 / 疑似人为输入 / 混合 / 证据不足」，每条证据线给通俗解释 |
@@ -244,16 +264,16 @@ flowchart LR
 
 第五项赛题交付「可复用 Skill 文档」即 [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) 本体与其 schema、脚本和 fixture。
 
-## 🧭 数据来源（35 个已冻结可执行来源 · 67 条审计目录记录）
+## 🧭 数据来源（37 个已冻结可执行来源 · 69 条审计目录记录）
 
 | 介质 | 已冻结来源 |
 |---|---|
-| 🪨 岩石 | GEOROC（太古宙克拉通汇编 · 南极板内火山岩）· EarthChem Library 3338（中国东昆仑德海龙岗岩石，方法完整的局地来源） |
-| 🌱 土壤 | USGS DS801（美国本土）· GEMAS（欧洲）· FOREGS 表土/底土/腐殖质 · AfSIS Phase I（撒哈拉以南非洲）· PANGAEA 北非/巴伦支海沿岸/Amazonas/Batagay · TPDC 中国山地 · EIDC 宁波 |
+| 🪨 岩石 | GEOROC（太古宙克拉通、汇聚边缘、南极板内火山岩）· EarthChem Library 3338（中国东昆仑德海龙岗岩石）· Gard 2019 全球全岩汇编 |
+| 🌱 土壤 | USGS DS801（美国本土）· GEMAS（欧洲）· FOREGS 表土/底土/腐殖质 · AfSIS Phase I（撒哈拉以南非洲）· PANGAEA 北非/巴伦支海沿岸/Amazonas/Batagay/BraSol · TPDC 中国山地 · EIDC 宁波 · Figshare 长江流域 |
 | 🏞️ 沉积物 | FOREGS 河流/洪泛平原沉积物 · GSJ 日本地球化学图/日本海洋沉积物 · 澳大利亚 NGSA（多元素与 Hg 产品）· 挪威 MarChem · PANGAEA 阿拉伯海/东海/南海 · Zenodo 长江/黄河沉积物 · 4TU 中国北方/西北沉积物（准噶尔、塔里木、柴达木、河套、阿拉善与青藏高原东部） |
-| 💧 水体 | FOREGS 河水 · GEMStat 全球内陆水 · GEOTRACES IDP2025 海水 · 美国 WQP 萨克拉门托河（As） |
+| 💧 水体 | FOREGS 河水 · GEMStat 全球内陆水 · GEOTRACES IDP2025 海水 · 美国 WQP 萨克拉门托河（As）· 珠江 81 站丰/枯水期溶解金属 · 闽粤沿海 124 口井地下水 |
 
-35 个 executable source 已完成版本冻结、下载/解析契约与证据评分；67 条 catalog 记录是总目录，其中另外 32 条仍为 discovery-only，不能与正式入库来源重复相加。每个 executable source 的 DOI、版本、许可、科研使用条件、字段边界与八维证据评分记录在[来源目录](skills/global-geochemical-atlas/references/data-sources.md)、[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[许可引用说明](skills/global-geochemical-atlas/references/licenses-and-citations.md)；中国区域 fixture 的登记与重建见[中国区域 fixture](skills/global-geochemical-atlas/references/china-fixture.md)。EarthChem Portal/Library 总入口仍只作发现层；只有像已固定到 DOI、文件、成员 hash 与原始行的 dataset 3338 才能作为测量证据。
+37 个 executable source 已完成版本冻结、下载/解析契约与证据评分；69 条 catalog 记录是总目录，其中另外 32 条仍为 discovery-only，不能与正式入库来源重复相加。每个 executable source 的 DOI、版本、许可、科研使用条件、字段边界与八维证据评分记录在[来源目录](skills/global-geochemical-atlas/references/data-sources.md)、[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[许可引用说明](skills/global-geochemical-atlas/references/licenses-and-citations.md)；中国区域 fixture 的登记与重建见[中国区域 fixture](skills/global-geochemical-atlas/references/china-fixture.md)。EarthChem Portal/Library 总入口仍只作发现层；只有像已固定到 DOI、文件、成员 hash 与原始行的 dataset 3338 才能作为测量证据。
 
 ## 🛡️ 科学护栏
 
@@ -273,7 +293,9 @@ flowchart LR
 | 在浏览器里体验完整交互图谱与评委讲解页 | [在线演示站](https://asimfish.github.io/global-geochemical-atlas-demo/) |
 | 让 Agent 执行完整任务 | [Skill 入口](skills/global-geochemical-atlas/SKILL.md) |
 | 为单阶段或完整任务生成最小命令计划 | [任务合同 schema](skills/global-geochemical-atlas/references/task-contract.schema.json) |
-| 对接输入或消费 16 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
+| 对接输入或消费 18 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
+| 从图谱启动可恢复研究流程 | [Auto-Research 运行合同](skills/global-geochemical-atlas/references/auto-research.md) |
+| 审计三层 agent 独立性与准入边界 | [对抗式来源审计合同](skills/global-geochemical-atlas/references/adversarial-agent-audit.md) |
 | 理解数据库字段与专业平台 crosswalk | [数据模型](skills/global-geochemical-atlas/references/data-model.md) |
 | 审查单位、删失值、置信度和异常规则 | [科学规则](skills/global-geochemical-atlas/references/scientific-rules.md) |
 | 复现真实数据生产阈值闭环 | [生产演示](skills/global-geochemical-atlas/references/production-demo.md) |
@@ -288,7 +310,7 @@ flowchart LR
 | 入口 | 验证内容 |
 |---|---|
 | `component_test.py --component all` | D1/D2/D3 公共接口与契约边界（以机器输出为准） |
-| `self_test.py` | 科学边界、异常输入与两次运行字节级确定性（75 项检查） |
+| `self_test.py` | 科学边界、异常输入与两次运行字节级确定性（76 项检查） |
 | `run_self_correction_loop.py --self-test` | 在线扩采、独立样品、尺度自适应及逐筛选视图空间充分性决策（以机器输出为准） |
 | `benchmark_workflow.py` | 可重复的离线工作流性能基线 |
 

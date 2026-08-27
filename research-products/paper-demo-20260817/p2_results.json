@@ -1,0 +1,160 @@
+{
+ "au_ngsa_top_over_bottom": {
+  "Hg": {
+   "n_pairs": 17,
+   "median_ratio": 1.206,
+   "ci95": [
+    0.896,
+    1.702
+   ],
+   "frac_gt_1_5": 0.353,
+   "wilcoxon_p": 0.044769287109375,
+   "method_family": "other_usepa_method_7473_milestone_tri_cell_dma_80_direct_mercury_analyser"
+  },
+  "Pb": {
+   "n_pairs": 1064,
+   "median_ratio": 0.982,
+   "ci95": [
+    0.973,
+    0.993
+   ],
+   "frac_gt_1_5": 0.058,
+   "wilcoxon_p": 0.03515960735140476,
+   "method_family": "icp_ms"
+  },
+  "As": {
+   "n_pairs": 1042,
+   "median_ratio": 0.886,
+   "ci95": [
+    0.867,
+    0.905
+   ],
+   "frac_gt_1_5": 0.036,
+   "wilcoxon_p": 3.9429191403830597e-45,
+   "method_family": "icp_ms"
+  },
+  "Cu": {
+   "n_pairs": 1055,
+   "median_ratio": 0.955,
+   "ci95": [
+    0.942,
+    0.968
+   ],
+   "frac_gt_1_5": 0.068,
+   "wilcoxon_p": 3.0501066627222396e-08,
+   "method_family": "icp_ms"
+  },
+  "Zn": {
+   "n_pairs": 1057,
+   "median_ratio": 1.005,
+   "ci95": [
+    0.992,
+    1.018
+   ],
+   "frac_gt_1_5": 0.096,
+   "wilcoxon_p": 0.1327317650269913,
+   "method_family": "icp_ms"
+  }
+ },
+ "sensitivity": {
+  "Pb_round0.1deg": {
+   "n_pairs": 1049,
+   "median_ratio": 0.982,
+   "ci95": [
+    0.973,
+    0.993
+   ],
+   "frac_gt_1_5": 0.058,
+   "wilcoxon_p": 0.03577331509479916
+  },
+  "As_round0.1deg": {
+   "n_pairs": 1028,
+   "median_ratio": 0.884,
+   "ci95": [
+    0.868,
+    0.902
+   ],
+   "frac_gt_1_5": 0.036,
+   "wilcoxon_p": 5.054014517024317e-45
+  }
+ },
+ "eu_reference": {
+  "Hg": {
+   "n_pairs": 392,
+   "median_ratio": 1.364,
+   "ci95": [
+    1.303,
+    1.444
+   ],
+   "frac_gt_1_5": 0.413,
+   "wilcoxon_p": 6.381255024272205e-29,
+   "method_family": "aas"
+  },
+  "Pb": {
+   "n_pairs": 389,
+   "median_ratio": 1.239,
+   "ci95": [
+    1.194,
+    1.299
+   ],
+   "frac_gt_1_5": 0.283,
+   "wilcoxon_p": 1.7445743851374772e-35,
+   "method_family": "icp_ms"
+  },
+  "As": {
+   "n_pairs": 384,
+   "median_ratio": 1.045,
+   "ci95": [
+    1.008,
+    1.105
+   ],
+   "frac_gt_1_5": 0.182,
+   "wilcoxon_p": 0.005363053211819668,
+   "method_family": "icp_ms"
+  },
+  "Cu": {
+   "n_pairs": 384,
+   "median_ratio": 1.055,
+   "ci95": [
+    1.008,
+    1.112
+   ],
+   "frac_gt_1_5": 0.211,
+   "wilcoxon_p": 0.00043593571469537616,
+   "method_family": "icp_ms"
+  },
+  "Ni": {
+   "n_pairs": 389,
+   "median_ratio": 0.947,
+   "ci95": [
+    0.926,
+    0.97
+   ],
+   "frac_gt_1_5": 0.095,
+   "wilcoxon_p": 0.0012231341629517797,
+   "method_family": "icp_ms"
+  },
+  "Cr": {
+   "n_pairs": 387,
+   "median_ratio": 0.976,
+   "ci95": [
+    0.947,
+    1.0
+   ],
+   "frac_gt_1_5": 0.096,
+   "wilcoxon_p": 0.0641359187635205,
+   "method_family": "xrf"
+  },
+  "Zn": {
+   "n_pairs": 387,
+   "median_ratio": 1.027,
+   "ci95": [
+    1.014,
+    1.058
+   ],
+   "frac_gt_1_5": 0.15,
+   "wilcoxon_p": 0.0006456912042641374,
+   "method_family": "xrf"
+  }
+ }
+}

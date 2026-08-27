@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import csv
 import hashlib
 import json
@@ -872,6 +874,16 @@ def validate_html(path: Path, errors: list[str]) -> None:
         'id="anomalyInspector"',
         "anomaly-contrast",
         "comboConclusion",
+        'id="temporalView"',
+        'id="temporalFrame"',
+        'id="temporal-document"',
+        "loadTemporalView",
+        'id="autoResearchView"',
+        'id="autoResearchForm"',
+        'id="exportAutoResearch"',
+        "startAutoResearch",
+        "/api/v1/research-runs",
+        "静态模式没有创建后台任务",
     ):
         if marker not in text:
             errors.append(
@@ -893,6 +905,47 @@ def validate_html(path: Path, errors: list[str]) -> None:
             errors.append(
                 f"interactive_map.html uses an informal primary navigation label: {informal_label}"
             )
+
+
+def validate_temporal_embedding(
+    interactive_path: Path, temporal_path: Path, errors: list[str]
+) -> None:
+    """Prove the first-class temporal view embeds the compatibility bytes."""
+
+    text = interactive_path.read_text(encoding="utf-8")
+    navigation = re.search(r'<nav class="tabs".*?</nav>', text, re.DOTALL)
+    if navigation is None or 'data-view="temporalView"' not in navigation.group(0):
+        errors.append("interactive_map.html lacks a temporal top-level view")
+    elif re.search(
+        r'<a\b[^>]*href="temporal_map\.html"', navigation.group(0), re.IGNORECASE
+    ):
+        errors.append(
+            "interactive_map.html still uses temporal_map.html as primary navigation"
+        )
+    frame = re.search(r'<iframe\b[^>]*id="temporalFrame"[^>]*>', text, re.IGNORECASE)
+    if frame is None:
+        errors.append("interactive_map.html lacks the embedded temporal frame")
+    elif re.search(r"\bsrc\s*=", frame.group(0), re.IGNORECASE):
+        errors.append(
+            "embedded temporal frame must use srcdoc and must not depend on src"
+        )
+    block = re.search(
+        r'<script id="temporal-document" type="application/octet-stream">(.*?)</script>',
+        text,
+        re.DOTALL,
+    )
+    if block is None:
+        errors.append("interactive_map.html lacks the embedded temporal document")
+        return
+    try:
+        embedded = base64.b64decode(block.group(1).strip(), validate=True)
+    except (ValueError, binascii.Error):
+        errors.append("interactive_map.html temporal document is not valid base64")
+        return
+    if temporal_path.is_file() and embedded != temporal_path.read_bytes():
+        errors.append(
+            "interactive_map.html temporal view differs from temporal_map.html"
+        )
 
 
 def summary_outputs_for_validation(paths: Mapping[str, Path]) -> dict[str, str]:
@@ -1623,6 +1676,7 @@ def validate_dir(output_dir: Path) -> dict[str, Any]:
 
     validate_html(paths["interactive_map"], errors)
     validate_temporal_html(paths["temporal_map"], errors)
+    validate_temporal_embedding(paths["interactive_map"], paths["temporal_map"], errors)
     return {
         "status": "valid" if not errors else "invalid",
         "errors": errors,

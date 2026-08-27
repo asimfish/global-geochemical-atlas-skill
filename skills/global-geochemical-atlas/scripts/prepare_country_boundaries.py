@@ -100,9 +100,7 @@ def zangnan_polygon(disputed_raw: Any) -> list[Any]:
         if geometry.get("type") != "Polygon":
             raise ValueError("disputed-area feature geometry must be a Polygon")
         return rounded(geometry["coordinates"])
-    raise ValueError(
-        f"disputed-area feature is missing: {ZANGNAN_DISPUTED_BRK_NAME!r}"
-    )
+    raise ValueError(f"disputed-area feature is missing: {ZANGNAN_DISPUTED_BRK_NAME!r}")
 
 
 def taiwan_geometry(countries_50m_raw: Any) -> dict[str, Any]:

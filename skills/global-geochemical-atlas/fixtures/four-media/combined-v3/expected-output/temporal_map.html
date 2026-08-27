@@ -1598,6 +1598,15 @@ function setMode(m) {
   if (m === "station") renderStationList(); else drawTimeline();
   scheduleDraw();
 }
+function initialTemporalMode() {
+  /* Do not open on an analytically empty comparison panel when real dated
+     observations exist.  Prefer the strongest supported view: two-period
+     regional comparison when available, otherwise the honest sampling replay. */
+  if (!HAS_DATED) return "replay";
+  if (state.element === "ALL") selectElement(bestCompareElement());
+  computeCells();
+  return compareSummary.comparable > 0 ? "compare" : "replay";
+}
 $("modeCompare").addEventListener("click", () => setMode("compare"));
 $("modeProvenance").addEventListener("click", () => setMode("provenance"));
 $("modeReplay").addEventListener("click", () => setMode("replay"));
@@ -1694,7 +1703,7 @@ buildChips();
 renderFooter();
 updateLegend();
 refilter();
-setMode("compare");
+setMode(initialTemporalMode());
 resize();
 fitRegionView();
 scheduleDraw();

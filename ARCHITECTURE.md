@@ -31,3 +31,33 @@ Major structural decisions are recorded in
 [ADR-0001](docs/adr/0001-evaluation-critical-runtime-and-request-boundaries.md)
 [ADR-0002](docs/adr/0002-policy-driven-spatial-sufficiency.md), and
 [ADR-0003](docs/adr/0003-domain-aware-country-scope-and-confidence-views.md).
+
+The post-atlas trust and research boundary has three additional rules.  Agent
+source discovery uses content-addressed, role-specific context packets: scout
+and challenger workspaces are separate, and a deterministic judge alone applies
+the source-admission scoreboard.  Prior-run memory can schedule the next target
+but is excluded from the current evaluator context.  The formal delivery
+receipt contains a claim ledger that independently recomputes every supported
+reporting fact and binds it to its artifact hash and locator.
+
+D3 owns one primary product surface: `interactive_map.html`.  The complete
+temporal application is embedded as an offline top-level view; the standalone
+`temporal_map.html` is a generated compatibility copy, not a second product.
+The optional Auto-Research controller is downstream-only: it validates and
+freezes D1-D3 outputs, materializes model-neutral agent packets and resumable
+paper/figure/review state, and routes any new data need back to D1.  It never
+mutates the atlas snapshot or performs D2 calculations.  The structural choice,
+alternatives, security boundary, and interfaces are recorded in
+[ADR-0004](docs/adr/0004-isolated-agent-audit-and-research-continuation.md).
+The downstream research controller additionally separates a scientific
+opportunity loop from the paper-production loop: only an executed, frontier-
+supported result may enter writing and figure generation.  This fail-closed
+quality boundary and its stable reviewer rubric are recorded in
+[ADR-0005](docs/adr/0005-auto-research-scientific-quality-loop.md).
+Publication evidence is controller-enforced as well: literature results carry
+retrieval evidence and search coverage, manuscripts deliver a typed reference
+list plus a spine-complete typeset manifest, figures record design candidates
+and an editable source, and a dedicated fresh citation-audit stage verifies
+the full bibliography against public registries before every review.  These
+contracts are recorded in
+[ADR-0006](docs/adr/0006-citation-audit-and-publication-evidence-loop.md).

@@ -42,9 +42,9 @@
         "sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839"
       },
       "interactive_map": {
-        "bytes": 1697387,
+        "bytes": 2073319,
         "filename": "interactive_map.html",
-        "sha256": "277dde8c77b364e2c110148f085b0170802f4f7ee9735098886d9180e5412140"
+        "sha256": "952d1bb641d2747276e82a2e43f9ad1f91479573472762a171aa4feadd18406d"
       },
       "iteration_backlog": {
         "bytes": 703571,
@@ -82,9 +82,9 @@
         "sha256": "0bdb2c92476c7b19de6f0d6c55c58a76954664489adf87d8bc372e3fe2fd634f"
       },
       "temporal_map": {
-        "bytes": 275454,
+        "bytes": 275916,
         "filename": "temporal_map.html",
-        "sha256": "7a00caf8702918364fdc5aca4438343713734fe1ec457aca83a8b493e83aa22a"
+        "sha256": "a07bf1819fbfcf07115a71d06f39fd410cd82b712967465fb6cb15af812aa808"
       }
     },
     "commit_marker": "run_summary.json",
@@ -154,8 +154,9 @@
     "artifact_bindings": {
       "anomalies_sha256": "9221a087e73e8cf794b15a29c86c1880cfc5ccf24da821723c381c8689f29702",
       "database_sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839",
-      "interactive_map_sha256": "277dde8c77b364e2c110148f085b0170802f4f7ee9735098886d9180e5412140",
-      "samples_geojson_sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82"
+      "interactive_map_sha256": "952d1bb641d2747276e82a2e43f9ad1f91479573472762a171aa4feadd18406d",
+      "samples_geojson_sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82",
+      "temporal_map_sha256": "a07bf1819fbfcf07115a71d06f39fd410cd82b712967465fb6cb15af812aa808"
     },
     "basemap": {
       "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
@@ -170,10 +171,12 @@
     "capability_matrix": {
       "deliverables": {
         "anomaly_results_first_class_ui": true,
+        "auto_research_continuation_first_class_ui": true,
         "confidence_and_sources_first_class_ui": true,
         "interactive_map_first_class_ui": true,
         "iteration_backlog_first_class_ui": true,
-        "standardized_database_first_class_ui": true
+        "standardized_database_first_class_ui": true,
+        "temporal_evolution_first_class_ui": true
       },
       "filter_dimensions": {
         "element": true,
@@ -307,7 +310,7 @@
     "display_sample_count": 274,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 1697387,
+    "html_bytes": 2073319,
     "interpolation": false,
     "map_preview_sampling": {
       "applied": false,
@@ -507,7 +510,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-domain-confidence-atlas-v5",
-    "template_sha256": "f3b1a065744732e4e1b027b4ff5f89a086d90601ed9f1ff216918cf48a9c39d6",
+    "template_sha256": "69559615babb38864ff0219106dcccba4b13186634cd421ef3f040d91e1dc6df",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "atlas-progressive-disclosure-v2",
@@ -585,7 +588,9 @@
       "interactive_orthographic_globe",
       "element_pair_comparison",
       "candidate_anomaly_region_aggregation",
-      "fdr_screened_candidate_anomaly_regions"
+      "fdr_screened_candidate_anomaly_regions",
+      "embedded_temporal_evolution_and_provenance",
+      "auto_research_continuation_launcher"
     ],
     "visualization_profile": {
       "comparison": {

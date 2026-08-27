@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
 import hashlib
 import json
@@ -42,7 +43,12 @@ BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v2"
 ADMIN1_BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin1-china-visual-v1"
 MISSING_METHOD_LABEL = "发布方未报告分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
-DEFAULT_MAX_EMBEDDED_RECORDS = 200_000
+# The canonical database may contain 200k rows, but embedding every verbose
+# observation in both HTML and GeoJSON can breach the competition/runtime
+# 100 MB single-file gate.  The deterministic preview retains complete physical
+# sample groups, anomalies and source × medium × element × spatial strata; the
+# unsampled rows remain in geochemistry.csv and all aggregate summaries.
+DEFAULT_MAX_EMBEDDED_RECORDS = 80_000
 COORDINATE_MODES = ("canonical", "reported")
 COORDINATE_BASIS_CANONICAL = "canonical_wgs84"
 COORDINATE_BASIS_REPORTED = "reported_unverified"
@@ -2013,6 +2019,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         "__BOUNDARIES_JSON__",
         "__ADMIN1_BOUNDARIES_JSON__",
         "__CONTEXT_JSON__",
+        "__TEMPORAL_HTML_BASE64__",
         MAP_VERSION,
         PAYLOAD_VERSION,
         ANOMALY_RENDER_MODE,
@@ -2044,6 +2051,11 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="databaseEditor"',
         'id="sourceTableBody"',
         'id="anomalyInspector"',
+        'id="temporalView"',
+        'id="temporalFrame"',
+        'id="autoResearchView"',
+        'id="autoResearchForm"',
+        "startAutoResearch",
         'id="exportComparisonProfile"',
         "comparisonProfile",
         "officialSourceLinks",
@@ -2091,6 +2103,7 @@ def build_map(
     boundaries_path: Path = DEFAULT_BOUNDARIES,
     admin1_boundaries_path: Path = DEFAULT_ADMIN1_BOUNDARIES,
     coordinate_mode: str = "canonical",
+    temporal_html_path: Path | None = None,
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
@@ -2238,6 +2251,8 @@ def build_map(
             "anomaly_results_first_class_ui": True,
             "interactive_map_first_class_ui": True,
             "iteration_backlog_first_class_ui": True,
+            "temporal_evolution_first_class_ui": True,
+            "auto_research_continuation_first_class_ui": True,
         },
         "interaction_design": {
             "hierarchy_version": UI_HIERARCHY_VERSION,
@@ -2280,6 +2295,27 @@ def build_map(
         },
     }
     template = load_html_template()
+    if temporal_html_path is None:
+        temporal_document = (
+            "<!doctype html><html lang='zh-CN'><meta charset='utf-8'>"
+            "<title>时序视图未生成</title><body><h1>时序视图未生成</h1>"
+            "<p>请使用 run_workflow.py 生成完整图谱。</p></body></html>"
+        ).encode("utf-8")
+        temporal_embedded = False
+        temporal_sha256 = None
+    else:
+        if temporal_html_path.is_symlink() or not temporal_html_path.is_file():
+            raise MapBuildError("temporal HTML must be a regular file")
+        temporal_document = temporal_html_path.read_bytes()
+        if len(temporal_document) > 20_000_000:
+            raise MapBuildError("temporal HTML exceeds the 20 MB embedding limit")
+        try:
+            temporal_document.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise MapBuildError("temporal HTML must be UTF-8") from exc
+        temporal_embedded = True
+        temporal_sha256 = hashlib.sha256(temporal_document).hexdigest()
+    temporal_base64 = base64.b64encode(temporal_document).decode("ascii")
     template_sha256 = hashlib.sha256(template.encode("utf-8")).hexdigest()
     template_variant = (
         "regional_focus" if profile["spatial_scope"] == "regional" else "global_globe"
@@ -2337,6 +2373,11 @@ def build_map(
         "iteration_backlog": backlog_builder.load(iteration_backlog_path)
         if iteration_backlog_path
         else backlog_builder.load(Path("")),
+        "temporal_view": {
+            "embedded": temporal_embedded,
+            "sha256": temporal_sha256,
+            "compatibility_artifact": "temporal_map.html",
+        },
     }
     html = (
         template.replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
@@ -2345,6 +2386,7 @@ def build_map(
         .replace("__BOUNDARIES_JSON__", safe_embedded_json(boundaries))
         .replace("__ADMIN1_BOUNDARIES_JSON__", safe_embedded_json(admin1_boundaries))
         .replace("__CONTEXT_JSON__", safe_embedded_json(context))
+        .replace("__TEMPORAL_HTML_BASE64__", temporal_base64)
     )
     if reported_banner:
         html = inject_reported_coordinate_banner(html, coordinate_statistics)
@@ -2422,6 +2464,8 @@ def build_map(
             "element_pair_comparison",
             "candidate_anomaly_region_aggregation",
             "fdr_screened_candidate_anomaly_regions",
+            "embedded_temporal_evolution_and_provenance",
+            "auto_research_continuation_launcher",
         ],
         "capability_matrix": capability_matrix,
         "region_presets": [*REGION_PRESETS, "custom_bbox"],
@@ -2437,6 +2481,7 @@ def build_map(
             "anomalies_sha256": sha256_file(anomalies_path),
             "interactive_map_sha256": sha256_file(output_html),
             "samples_geojson_sha256": sha256_file(output_geojson),
+            "temporal_map_sha256": temporal_sha256,
         },
         "basemap": {
             "asset_version": basemap["asset_version"],
@@ -2558,6 +2603,11 @@ def build_parser() -> argparse.ArgumentParser:
             "and injects a prominent warning banner into the HTML"
         ),
     )
+    parser.add_argument(
+        "--temporal-html",
+        type=Path,
+        help="Generated temporal_map.html to embed as a first-class atlas view",
+    )
     return parser
 
 
@@ -2585,6 +2635,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             boundaries_path=args.boundaries,
             admin1_boundaries_path=args.admin1_boundaries,
             coordinate_mode=args.coordinate_mode,
+            temporal_html_path=args.temporal_html,
         )
     except (MapBuildError, OSError) as exc:
         parser.error(str(exc))
