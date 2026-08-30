@@ -304,7 +304,7 @@ python scripts/auto_research.py select \
 python scripts/build_discovery_candidates.py --research-dir OUTPUT_DIR/research
 ```
 
-输出 `discovery_candidates.json` 与 `discovery_candidates.md`，五类模板：T1 配对层位富集筛查（同元素×介质存在表/深层可用队列且方法族一致、bbox 相交）；T2 同层位方法伪影量化（≥2 方法族）；T3 单源依赖风险与独立验证目标；T4 缺口驱动的区域采集选题（来自 sampling_priority）；T5 跨介质耦合筛查。每个候选携带队列 id 与样本数等证据指针、建议设计、统计模板与预期产物，输出含输入文件 SHA-256 收据；禁止在脚本证据之外编造候选。
+输出 `discovery_candidates.json` 与 `discovery_candidates.md`，六类模板：T1 配对层位富集筛查（同元素×介质存在表/深层可用队列且方法族一致、bbox 相交）；T2 同层位方法伪影量化（≥2 方法族）；T3 单源依赖风险与独立验证目标；T4 缺口驱动的区域采集选题（来自 sampling_priority）；T5 跨介质耦合筛查；T6 同样品化学分馏配对筛查（同元素×介质×方法族下全样 vs 淋滤残渣等分馏对，词干一致、bbox 相交；配对设计允许独立下限 ≥40 对，Wilcoxon 符号秩在该规模下功效充分）。其中 T1/T2/T5/T6 为 `empirical_candidate`，T3/T4 为 `acquisition_or_audit_plan`。每个候选携带队列 id 与样本数等证据指针、建议设计、统计模板与预期产物，输出含输入文件 SHA-256 收据；禁止在脚本证据之外编造候选。
 
 用户选定选题后按序执行；每个角色结果先经路径、角色、input、payload、artifact 与 claim hash 校验，合格才自动进入下一步：
 

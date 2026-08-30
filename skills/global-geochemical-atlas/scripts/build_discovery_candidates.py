@@ -37,6 +37,14 @@ STAT_TEMPLATE = (
     "bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: "
     "0.1 deg grid and alternative method family; geogenic controls (Ni, Cr)."
 )
+# Paired chemical fractions determined on the same physical samples within one
+# lineage (e.g. total digestion vs leach residue).  The stem before the suffix
+# must match for two sample types to form a partition pair.
+FRACTION_RULES = {"bulk_vs_leach_residue": ("_bulk", "_leach_residue")}
+# Same-sample paired designs need fewer sites than population screening: the
+# Wilcoxon signed-rank test retains adequate power for moderate shifts near
+# 40 pairs, so T6 applies its own floor instead of --min-samples.
+MIN_PAIRED_FRACTION_SAMPLES = 40
 
 
 def sha256(path):
@@ -293,6 +301,69 @@ def main():
                 }
             )
 
+    # T6 paired chemical-fraction partition screening
+    fraction_pool = [
+        c
+        for c in cohorts
+        if c["comparability_tier"] in USABLE
+        and int(c["n_quantified_samples"]) >= MIN_PAIRED_FRACTION_SAMPLES
+    ]
+    by_emf = defaultdict(list)
+    for c in fraction_pool:
+        by_emf[(c["element_or_analyte"], c["medium"], c["method_family"])].append(c)
+    for (el, med, fam), cs in sorted(by_emf.items()):
+        by_stem = defaultdict(dict)
+        for c in cs:
+            st = c["sample_type"]
+            for rule, (bulk_sfx, part_sfx) in sorted(FRACTION_RULES.items()):
+                if st.endswith(bulk_sfx):
+                    by_stem[(st[: -len(bulk_sfx)], rule)]["bulk"] = c
+                elif st.endswith(part_sfx):
+                    by_stem[(st[: -len(part_sfx)], rule)]["partial"] = c
+        for (stem, rule), pair in sorted(by_stem.items()):
+            b = pair.get("bulk")
+            p = pair.get("partial")
+            if not b or not p or not bbox_overlap(b, p):
+                continue
+            n = int(b["n_quantified_samples"]) + int(p["n_quantified_samples"])
+            cands.append(
+                {
+                    "type": "T6_paired_fraction_partition",
+                    "element": el,
+                    "medium": med,
+                    "score": n,
+                    "title": (
+                        f"{el} leachable vs residual partition in {stem} "
+                        f"({b['sample_type']} vs {p['sample_type']})"
+                    ),
+                    "question": (
+                        f"What share of {el} in {stem} is leachable versus residual "
+                        f"at the same sites, and does that share vary spatially in a "
+                        f"way consistent with provenance or input history?"
+                    ),
+                    "evidence": [ev(b), ev(p)],
+                    "suggested_design": (
+                        "join bulk and partial determinations on shared sample "
+                        "identifiers within one lineage; per-sample leachable share "
+                        "from paired concentrations; report median share, bootstrap "
+                        "95% CI, Wilcoxon signed-rank on paired log concentrations; "
+                        "map the share; sensitivity: alternative normalization and "
+                        "independent geogenic reference elements"
+                    ),
+                    "expected_products": [
+                        "per-sample fraction-partition table",
+                        "leachable-share estimate + CI per element",
+                        "spatial partition map",
+                        "robustness table (normalization variants)",
+                    ],
+                    "caveats": (
+                        "requires shared sample identifiers between fractions within "
+                        "one source; partition screening only, no mechanistic "
+                        "leaching claims"
+                    ),
+                }
+            )
+
     # Rank feasibility within type, cap, and preserve a stable order.  This score
     # is deliberately not called novelty or paper quality: those require the
     # hash-bound pilot and primary-literature frontier gate.
@@ -309,6 +380,7 @@ def main():
             "T1_paired_layer_screening",
             "T2_method_artifact",
             "T5_cross_media",
+            "T6_paired_fraction_partition",
         }
         c["research_readiness"] = {
             "paper_track": (
@@ -345,6 +417,7 @@ def main():
         "parameters": {
             "min_samples": args.min_samples,
             "top_per_type": args.top_per_type,
+            "paired_fraction_min_samples": MIN_PAIRED_FRACTION_SAMPLES,
         },
         "counts": {
             "cohorts_total": len(cohorts),

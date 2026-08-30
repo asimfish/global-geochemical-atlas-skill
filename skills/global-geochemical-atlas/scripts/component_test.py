@@ -7758,6 +7758,128 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 claim-ledger validation blocks a changed number even when the evidence file is unchanged",
         checks,
     )
+    with tempfile.TemporaryDirectory() as discovery_temp:
+        discovery_dir = Path(discovery_temp)
+        cohort_fields = [
+            "cohort_id",
+            "element_or_analyte",
+            "medium",
+            "sample_type",
+            "method_family",
+            "comparability_tier",
+            "n_quantified_samples",
+            "n_sources",
+            "dominant_source_id",
+            "bbox_west",
+            "bbox_south",
+            "bbox_east",
+            "bbox_north",
+        ]
+
+        def fraction_cohort(
+            cohort_id: str,
+            element: str,
+            sample_type: str,
+            method_family: str = "icp_ms",
+            n_quantified_samples: str = "48",
+        ) -> dict[str, str]:
+            return {
+                "cohort_id": cohort_id,
+                "element_or_analyte": element,
+                "medium": "sediment",
+                "sample_type": sample_type,
+                "method_family": method_family,
+                "comparability_tier": "single_lineage_ready",
+                "n_quantified_samples": n_quantified_samples,
+                "n_sources": "1",
+                "dominant_source_id": "src-fraction",
+                "bbox_west": "117.7",
+                "bbox_south": "24.1",
+                "bbox_east": "126.9",
+                "bbox_north": "31.9",
+            }
+
+        with (discovery_dir / "analysis_cohorts.csv").open(
+            "w", encoding="utf-8", newline=""
+        ) as handle:
+            writer = csv.DictWriter(handle, fieldnames=cohort_fields)
+            writer.writeheader()
+            writer.writerow(
+                fraction_cohort("cohort-pb-b", "Pb", "sediment_clay_fraction_bulk")
+            )
+            writer.writerow(
+                fraction_cohort(
+                    "cohort-pb-r", "Pb", "sediment_clay_fraction_leach_residue"
+                )
+            )
+            writer.writerow(
+                fraction_cohort(
+                    "cohort-zn-b",
+                    "Zn",
+                    "sediment_clay_fraction_bulk",
+                    method_family="xrf",
+                )
+            )
+            writer.writerow(
+                fraction_cohort(
+                    "cohort-zn-r", "Zn", "sediment_clay_fraction_leach_residue"
+                )
+            )
+            writer.writerow(
+                fraction_cohort(
+                    "cohort-cu-b",
+                    "Cu",
+                    "sediment_clay_fraction_bulk",
+                    n_quantified_samples="39",
+                )
+            )
+            writer.writerow(
+                fraction_cohort(
+                    "cohort-cu-r",
+                    "Cu",
+                    "sediment_clay_fraction_leach_residue",
+                    n_quantified_samples="39",
+                )
+            )
+        (discovery_dir / "sampling_priority.geojson").write_text(
+            json.dumps({"type": "FeatureCollection", "features": []}),
+            encoding="utf-8",
+        )
+        run_command(
+            [
+                sys.executable,
+                str(SCRIPT_DIR / "build_discovery_candidates.py"),
+                "--research-dir",
+                str(discovery_dir),
+            ]
+        )
+        discovery_doc = json_value(discovery_dir / "discovery_candidates.json")
+        discovery_items = discovery_doc["discovery_candidates"]
+        fraction_items = [
+            item
+            for item in discovery_items
+            if item["type"] == "T6_paired_fraction_partition"
+        ]
+        require(
+            len(discovery_items) == 1
+            and len(fraction_items) == 1
+            and fraction_items[0]["element"] == "Pb"
+            and fraction_items[0]["score"] == 96
+            and {ev["cohort_id"] for ev in fraction_items[0]["evidence"]}
+            == {"cohort-pb-b", "cohort-pb-r"}
+            and fraction_items[0]["research_readiness"]["paper_track"]
+            == "empirical_candidate"
+            and fraction_items[0]["research_readiness"]["routing_if_unsupported"]
+            == "candidate_selection"
+            and discovery_doc["receipt"]["parameters"][
+                "paired_fraction_min_samples"
+            ]
+            == 40,
+            "D3 discovery T6 pairs same-family bulk/leach-residue cohorts into an"
+            " empirical candidate while rejecting mixed method families and"
+            " sub-40 pair counts",
+            checks,
+        )
     with tempfile.TemporaryDirectory() as research_temp:
         research_root = Path(research_temp)
         research_request = {
