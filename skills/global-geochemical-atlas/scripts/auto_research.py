@@ -11,6 +11,8 @@ review stops at explicit human approval.
 from __future__ import annotations
 
 import argparse
+import contextlib
+import fcntl
 import hashlib
 import json
 import os
@@ -19,12 +21,13 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 import claim_ledger
+import publication_lint
 import validate_outputs
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -82,6 +85,19 @@ REVIEW_GATE_CONTRACT = (
     ("a7", "reproducibility_and_release"),
 )
 REVIEW_GATE_NAMES = dict(REVIEW_GATE_CONTRACT)
+# Revision feedback routes to the role that owns the failing gate. Gates whose
+# evidence spans both deliverables reopen both roles; an unknown gate fails
+# safe by reopening both.
+GATE_OWNER_ROLES = {
+    "citation_audit": ("manuscript_writer",),
+    "a1": ("manuscript_writer", "figure_designer"),
+    "a2": ("manuscript_writer", "figure_designer"),
+    "a3": ("manuscript_writer",),
+    "a4": ("manuscript_writer",),
+    "a5": ("manuscript_writer",),
+    "a6": ("figure_designer",),
+    "a7": ("manuscript_writer", "figure_designer"),
+}
 REQUIRED_EMPIRICAL_FIGURE_ROLES = {
     "primary_result",
     "spatial_pattern",
@@ -529,6 +545,16 @@ def _build_research_contracts(
             "candidate_generation_minimum_alternatives": 2,
             "editable_vector_and_generation_source_required": True,
             "source_fidelity_statement_required": True,
+            "typography_floor": {
+                "min_print_font_pt": publication_lint.MIN_PRINT_FONT_PT,
+                "min_raster_width_px": publication_lint.MIN_RASTER_WIDTH_PX,
+                "rule": (
+                    "The controller lints every submitted SVG/PNG/PDF render: "
+                    "vector text below the print-equivalent font floor, rasters "
+                    "below the print-quality width floor, and structurally "
+                    "broken files are rejected at submission."
+                ),
+            },
         },
         "literature_search_gate": {
             "minimum_candidates_screened": MINIMUM_LITERATURE_CANDIDATES_SCREENED,
@@ -554,6 +580,16 @@ def _build_research_contracts(
         "typesetting_gate": {
             "required_artifacts": ["manuscript source", "typeset PDF"],
             "section_manifest_must_cover_spine": True,
+            "layout_rules": [
+                "Section and subsection headings are noun phrases; "
+                "three-way coordinated headings of the form 'A, B and C' "
+                "are rejected in review.",
+                "Inline enumerations of three or more items are typeset as "
+                "structured lists, not comma chains inside a paragraph.",
+                "Figure typography follows a strict hierarchy: title above "
+                "panel labels above axis and annotation text, and no visible "
+                "text below the print-equivalent font floor.",
+            ],
             "rule": (
                 "The manuscript must ship a typeset PDF whose section manifest covers "
                 "the frozen paper spine; prose without a compilable delivery fails."
@@ -1464,6 +1500,17 @@ def _validate_role_payload(
         _validate_search_coverage(payload.get("search_coverage"), len(citations))
         _validate_frontier_assessment(payload.get("frontier_assessment"))
     elif role in SECOND_WAVE:
+        lint_errors = [
+            message
+            for item in artifacts
+            for message in publication_lint.lint_publication_artifact(
+                run_dir / item["path"]
+            )
+        ]
+        if lint_errors:
+            raise AutoResearchError(
+                f"{role} publication lint failed: " + "; ".join(lint_errors)
+            )
         claim_ids = payload.get("claim_ids")
         if not isinstance(claim_ids, list):
             raise AutoResearchError(f"{role} must enumerate claim_ids")
@@ -1580,6 +1627,45 @@ def _result_path(run_dir: Path, role: str, cycle_id: str = INITIAL_CYCLE) -> Pat
     return _role_root(run_dir, cycle_id, role) / "result.json"
 
 
+def _cycle_sequence(active_cycle: str) -> list[str]:
+    if active_cycle == INITIAL_CYCLE:
+        return [INITIAL_CYCLE]
+    ordinal = int(active_cycle.split("-", 1)[1])
+    return [INITIAL_CYCLE] + [
+        f"revision-{index:02d}" for index in range(1, ordinal + 1)
+    ]
+
+
+def _latest_result_cycle(run_dir: Path, role: str, active_cycle: str) -> str:
+    """Newest cycle at or before ``active_cycle`` with an accepted result.
+
+    Targeted revisions reopen only the roles that own failing gates, so the
+    canonical artifact set for an untouched role is its most recent accepted
+    result, still bound by the hashes recorded when it was accepted.
+    """
+    for cycle_id in reversed(_cycle_sequence(active_cycle)):
+        if _result_path(run_dir, role, cycle_id).is_file():
+            return cycle_id
+    raise AutoResearchError(f"{role} has no accepted result to carry forward")
+
+
+@contextlib.contextmanager
+def _state_lock(run_dir: Path) -> Iterator[None]:
+    """Serialize state transitions so parallel agent sessions submit safely.
+
+    Role sessions in the same wave run concurrently by design; only the
+    ledger transition itself is serialized, mirroring shard-owned outputs
+    with a single serialized ledger writer.
+    """
+    lock_path = run_dir / "state.lock"
+    with lock_path.open("w", encoding="utf-8") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
 def submit_agent_result(
     run_dir: Path,
     *,
@@ -1595,50 +1681,53 @@ def submit_agent_result(
         raise AutoResearchError("invalid invocation_id")
     if re.fullmatch(r"[A-Za-z0-9_.:-]{1,200}", model_family) is None:
         raise AutoResearchError("invalid model_family")
-    state = _state(run_dir)
-    cycle_id = str(state.get("active_cycle") or INITIAL_CYCLE)
-    if role not in state.get("required_roles", []):
-        raise AutoResearchError(f"{role} is not requested in the active stage")
-    packet = _read_object(_role_root(run_dir, cycle_id, role) / "packet.json")
-    _validate_packet(packet, role, cycle_id)
-    result_path = _result_path(run_dir, role, cycle_id)
-    if result_path.exists():
-        raise AutoResearchError(f"{role} already submitted a result")
-    existing_results = list((run_dir / "agents").glob("*/result.json"))
-    revisions = run_dir / "revisions"
-    if revisions.is_dir():
-        existing_results.extend(revisions.glob("revision-*/agents/*/result.json"))
-    for other_path in existing_results:
-        if _read_object(other_path).get("invocation_id") == invocation_id:
-            raise AutoResearchError("invocation_id reuse across roles is forbidden")
-    clean_payload = json.loads(canonical_json_bytes(dict(payload)))
-    _validate_role_payload(run_dir, role, clean_payload, cycle_id)
-    body = {
-        "schema_version": RESULT_VERSION,
-        "run_id": run_dir.name,
-        "cycle_id": cycle_id,
-        "role": role,
-        "invocation_id": invocation_id,
-        "model_family": model_family,
-        "packet_sha256": packet["packet_sha256"],
-        "input_hashes": {
-            key: item["sha256"] for key, item in packet["allowed_inputs"].items()
-        },
-        "payload": clean_payload,
-        "payload_sha256": sha256_bytes(canonical_json_bytes(clean_payload)),
-    }
-    envelope = {**body, "result_sha256": sha256_bytes(canonical_json_bytes(body))}
-    _write_json(result_path, envelope)
-    _append_event(
-        run_dir,
-        "agent_result_accepted",
-        {
+    # Role sessions in one wave run in parallel; the ledger transition itself
+    # is serialized so concurrent submissions cannot interleave state writes.
+    with _state_lock(run_dir):
+        state = _state(run_dir)
+        cycle_id = str(state.get("active_cycle") or INITIAL_CYCLE)
+        if role not in state.get("required_roles", []):
+            raise AutoResearchError(f"{role} is not requested in the active stage")
+        packet = _read_object(_role_root(run_dir, cycle_id, role) / "packet.json")
+        _validate_packet(packet, role, cycle_id)
+        result_path = _result_path(run_dir, role, cycle_id)
+        if result_path.exists():
+            raise AutoResearchError(f"{role} already submitted a result")
+        existing_results = list((run_dir / "agents").glob("*/result.json"))
+        revisions = run_dir / "revisions"
+        if revisions.is_dir():
+            existing_results.extend(revisions.glob("revision-*/agents/*/result.json"))
+        for other_path in existing_results:
+            if _read_object(other_path).get("invocation_id") == invocation_id:
+                raise AutoResearchError("invocation_id reuse across roles is forbidden")
+        clean_payload = json.loads(canonical_json_bytes(dict(payload)))
+        _validate_role_payload(run_dir, role, clean_payload, cycle_id)
+        body = {
+            "schema_version": RESULT_VERSION,
+            "run_id": run_dir.name,
             "cycle_id": cycle_id,
             "role": role,
-            "result_sha256": envelope["result_sha256"],
-        },
-    )
-    return _advance(run_dir)
+            "invocation_id": invocation_id,
+            "model_family": model_family,
+            "packet_sha256": packet["packet_sha256"],
+            "input_hashes": {
+                key: item["sha256"] for key, item in packet["allowed_inputs"].items()
+            },
+            "payload": clean_payload,
+            "payload_sha256": sha256_bytes(canonical_json_bytes(clean_payload)),
+        }
+        envelope = {**body, "result_sha256": sha256_bytes(canonical_json_bytes(body))}
+        _write_json(result_path, envelope)
+        _append_event(
+            run_dir,
+            "agent_result_accepted",
+            {
+                "cycle_id": cycle_id,
+                "role": role,
+                "result_sha256": envelope["result_sha256"],
+            },
+        )
+        return _advance(run_dir)
 
 
 def _all_complete(
@@ -1733,9 +1822,14 @@ def _prepare_citation_audit(
 
 
 def _prepare_reviewer(run_dir: Path, state: dict[str, Any], cycle_id: str) -> None:
-    manuscript_result = _read_valid_result(run_dir, "manuscript_writer", cycle_id)
-    figure_result = _read_valid_result(run_dir, "figure_designer", cycle_id)
-    citation_result = _read_valid_result(run_dir, "citation_auditor", cycle_id)
+    # Targeted revisions may leave a role untouched; the reviewer always sees
+    # the newest accepted result per role, resolved and bound by hash.
+    writer_cycle = _latest_result_cycle(run_dir, "manuscript_writer", cycle_id)
+    figure_cycle = _latest_result_cycle(run_dir, "figure_designer", cycle_id)
+    audit_cycle = _latest_result_cycle(run_dir, "citation_auditor", cycle_id)
+    manuscript_result = _read_valid_result(run_dir, "manuscript_writer", writer_cycle)
+    figure_result = _read_valid_result(run_dir, "figure_designer", figure_cycle)
+    citation_result = _read_valid_result(run_dir, "citation_auditor", audit_cycle)
     _write_packet(
         run_dir,
         role="independent_reviewer",
@@ -1751,17 +1845,17 @@ def _prepare_reviewer(run_dir: Path, state: dict[str, Any], cycle_id: str) -> No
             "research_quality_contract": run_dir / "research_quality_contract.json",
             "paper_spine": run_dir / "paper_spine.json",
             "figure_contract": run_dir / "figure_contract.json",
-            "reference_manifest": _reference_manifest_path(run_dir, cycle_id),
-            "citation_audit_receipt": _cycle_root(run_dir, cycle_id)
+            "reference_manifest": _reference_manifest_path(run_dir, audit_cycle),
+            "citation_audit_receipt": _cycle_root(run_dir, audit_cycle)
             / "citation_audit_receipt.json",
             **_result_artifact_inputs(
-                run_dir, "manuscript_writer", manuscript_result, cycle_id
+                run_dir, "manuscript_writer", manuscript_result, writer_cycle
             ),
             **_result_artifact_inputs(
-                run_dir, "figure_designer", figure_result, cycle_id
+                run_dir, "figure_designer", figure_result, figure_cycle
             ),
             **_result_artifact_inputs(
-                run_dir, "citation_auditor", citation_result, cycle_id
+                run_dir, "citation_auditor", citation_result, audit_cycle
             ),
         },
         required_output={
@@ -1797,17 +1891,27 @@ def _prepare_revision_cycle(
     cycle_id = f"revision-{revision_count:02d}"
     cycle_root = _cycle_root(run_dir, cycle_id)
     feedback_path = cycle_root / "feedback_tasks.json"
+    tasks = []
+    reopened: set[str] = set()
+    for item in feedback:
+        owners = GATE_OWNER_ROLES.get(str(item.get("gate_id")), tuple(SECOND_WAVE))
+        reopened.update(owners)
+        tasks.append({**dict(item), "owner_roles": sorted(owners)})
+    reopened_roles = sorted(reopened)
     _write_json(
         feedback_path,
         {
             "schema_version": "gga-research-feedback-tasks-v1",
             "source_cycle": previous_cycle,
-            "tasks": [dict(item) for item in feedback],
-            "task_count": len(feedback),
+            "tasks": tasks,
+            "task_count": len(tasks),
+            "reopened_roles": reopened_roles,
         },
     )
-    previous_writer = _read_valid_result(run_dir, "manuscript_writer", previous_cycle)
-    previous_figure = _read_valid_result(run_dir, "figure_designer", previous_cycle)
+    writer_cycle = _latest_result_cycle(run_dir, "manuscript_writer", previous_cycle)
+    figure_cycle = _latest_result_cycle(run_dir, "figure_designer", previous_cycle)
+    previous_writer = _read_valid_result(run_dir, "manuscript_writer", writer_cycle)
+    previous_figure = _read_valid_result(run_dir, "figure_designer", figure_cycle)
     common = {
         "atlas_snapshot": run_dir / "atlas_snapshot.json",
         "selected_hypothesis": run_dir / "selected_hypothesis.json",
@@ -1818,57 +1922,59 @@ def _prepare_revision_cycle(
         **{
             f"previous_{key}": value
             for key, value in _result_artifact_inputs(
-                run_dir, "manuscript_writer", previous_writer, previous_cycle
+                run_dir, "manuscript_writer", previous_writer, writer_cycle
             ).items()
         },
         **{
             f"previous_{key}": value
             for key, value in _result_artifact_inputs(
-                run_dir, "figure_designer", previous_figure, previous_cycle
+                run_dir, "figure_designer", previous_figure, figure_cycle
             ).items()
         },
     }
-    _write_packet(
-        run_dir,
-        role="manuscript_writer",
-        cycle_id=cycle_id,
-        purpose="Revise the manuscript only against enumerated review tasks and frozen claims.",
-        inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
-        required_output={
-            "artifacts": "revised manuscript source plus a typeset PDF",
-            "claim_ids": "all numerical claims",
-            "contribution_map": "two to five claim-bound frontier contributions",
-            "reference_list": (
-                "every cited reference with id, title, ordered authors, year, "
-                "venue and a typed identifier"
-            ),
-            "typeset_manifest": (
-                "source_artifact, pdf_artifact, and a section manifest covering "
-                "the frozen paper spine"
-            ),
-        },
-    )
-    _write_packet(
-        run_dir,
-        role="figure_designer",
-        cycle_id=cycle_id,
-        purpose="Revise figures only against enumerated review tasks and frozen claims.",
-        inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
-        required_output={
-            "artifacts": "revised figure generation source and renders",
-            "claim_ids": "all plotted claims",
-            "figure_specs": (
-                "data-bearing primary, spatial, and robustness storyboard with "
-                "render-inspect-revise evidence, candidate comparison, "
-                "source-fidelity statement and an editable source per figure"
-            ),
-        },
-    )
+    if "manuscript_writer" in reopened:
+        _write_packet(
+            run_dir,
+            role="manuscript_writer",
+            cycle_id=cycle_id,
+            purpose="Revise the manuscript only against enumerated review tasks and frozen claims.",
+            inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
+            required_output={
+                "artifacts": "revised manuscript source plus a typeset PDF",
+                "claim_ids": "all numerical claims",
+                "contribution_map": "two to five claim-bound frontier contributions",
+                "reference_list": (
+                    "every cited reference with id, title, ordered authors, year, "
+                    "venue and a typed identifier"
+                ),
+                "typeset_manifest": (
+                    "source_artifact, pdf_artifact, and a section manifest covering "
+                    "the frozen paper spine"
+                ),
+            },
+        )
+    if "figure_designer" in reopened:
+        _write_packet(
+            run_dir,
+            role="figure_designer",
+            cycle_id=cycle_id,
+            purpose="Revise figures only against enumerated review tasks and frozen claims.",
+            inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
+            required_output={
+                "artifacts": "revised figure generation source and renders",
+                "claim_ids": "all plotted claims",
+                "figure_specs": (
+                    "data-bearing primary, spatial, and robustness storyboard with "
+                    "render-inspect-revise evidence, candidate comparison, "
+                    "source-fidelity statement and an editable source per figure"
+                ),
+            },
+        )
     state.update(
         {
             "status": "awaiting_agents",
             "stage": "manuscript_and_figures",
-            "required_roles": list(SECOND_WAVE),
+            "required_roles": reopened_roles,
             "active_cycle": cycle_id,
             "revision_count": revision_count,
         }
@@ -1880,6 +1986,7 @@ def _prepare_revision_cycle(
             "cycle_id": cycle_id,
             "previous_cycle": previous_cycle,
             "feedback_task_count": len(feedback),
+            "reopened_roles": reopened_roles,
         },
     )
 
@@ -2043,9 +2150,31 @@ def _advance(run_dir: Path) -> dict[str, Any]:
                 run_dir, "second_agent_wave_ready", {"roles": list(SECOND_WAVE)}
             )
     elif stage == "manuscript_and_figures" and _all_complete(
-        run_dir, SECOND_WAVE, cycle_id
+        run_dir,
+        [role for role in state.get("required_roles", []) if role in SECOND_WAVE]
+        or list(SECOND_WAVE),
+        cycle_id,
     ):
-        _prepare_citation_audit(run_dir, state, cycle_id)
+        if _result_path(run_dir, "manuscript_writer", cycle_id).is_file():
+            _prepare_citation_audit(run_dir, state, cycle_id)
+        else:
+            # Figure-only revision: the reference list is unchanged, so the
+            # verified citation audit from the manuscript's own cycle carries
+            # forward by hash instead of being re-run against identical input.
+            audit_cycle = _latest_result_cycle(run_dir, "citation_auditor", cycle_id)
+            receipt = _read_object(
+                _cycle_root(run_dir, audit_cycle) / "citation_audit_receipt.json"
+            )
+            if receipt.get("all_references_verified") is not True:
+                raise AutoResearchError(
+                    "carried citation audit is not fully verified"
+                )
+            _append_event(
+                run_dir,
+                "citation_audit_carried_forward",
+                {"cycle_id": cycle_id, "audit_cycle": audit_cycle},
+            )
+            _prepare_reviewer(run_dir, state, cycle_id)
     elif (
         stage == "citation_audit"
         and _result_path(run_dir, "citation_auditor", cycle_id).is_file()
@@ -2127,9 +2256,11 @@ def _advance(run_dir: Path) -> dict[str, Any]:
         review = _read_valid_result(run_dir, "independent_reviewer", cycle_id)
         gates = review["payload"]["gate_results"]
         passed = all(item["pass"] for item in gates)
-        writer_family = _read_valid_result(run_dir, "manuscript_writer", cycle_id)[
-            "model_family"
-        ]
+        writer_family = _read_valid_result(
+            run_dir,
+            "manuscript_writer",
+            _latest_result_cycle(run_dir, "manuscript_writer", cycle_id),
+        )["model_family"]
         review_family = review["model_family"]
         feedback = [
             {"gate_id": item["gate_id"], "feedback": item.get("feedback", "")}

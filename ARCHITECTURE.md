@@ -61,3 +61,9 @@ and an editable source, and a dedicated fresh citation-audit stage verifies
 the full bibliography against public registries before every review.  These
 contracts are recorded in
 [ADR-0006](docs/adr/0006-citation-audit-and-publication-evidence-loop.md).
+The revision loop itself is targeted and parallel-safe: failed gates reopen
+only their owner roles while untouched work carries forward by content hash, a
+deterministic publication lint rejects print-unreadable SVG/PNG/PDF artifacts
+at submission, and all state transitions serialize through a file lock so wave
+roles can run concurrently. This loop mechanics layer is recorded in
+[ADR-0007](docs/adr/0007-targeted-revision-routing-and-publication-lint.md).

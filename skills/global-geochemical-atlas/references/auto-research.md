@@ -55,7 +55,10 @@ and `state.json` expose the next incomplete gate.
    spine, figure storyboard contract and a type-diverse five-paper candidate
    program. The program is labelled proposals, not papers.
 4. Start `pilot_analyst` and `literature_researcher` in separate fresh sessions.
-   The pilot packet includes hash-bound row-level geochemistry plus cohort,
+   Roles inside one wave may run concurrently: each role writes only inside its
+   own `artifact_output_dir`, and the controller serializes every state
+   transition through an exclusive `state.lock`, so parallel submissions cannot
+   interleave ledger writes. The pilot packet includes hash-bound row-level geochemistry plus cohort,
    exclusion, context and source/QC files; it does not receive chat or mutable
    atlas paths. The literature result must document its search coverage
    (queries, sources searched, inclusion criteria and at least eight screened
@@ -81,7 +84,14 @@ and `state.json` expose the next incomplete gate.
    plus the revisions actually applied, documents at least two candidate
    designs with the rejected alternatives, states how the rendered figure
    stays faithful to its source data, and binds an editable source artifact
-   that is neither the PDF nor the PNG render.
+   that is neither the PDF nor the PNG render. On submission the controller
+   additionally runs a deterministic publication lint over every declared
+   SVG/PNG/PDF artifact of both roles: vector text below the 4.5 pt
+   print-equivalent font floor, rasters narrower than 1000 px, page-less or
+   malformed PDFs and non-well-formed SVGs are rejected at the gate instead of
+   relying on self-attested render inspection. The quality contract also fixes
+   manuscript layout rules (noun-phrase headings, structured inline lists,
+   figure typography hierarchy) that the a5/a6 reviewer gates enforce.
 7. Finished manuscript and figures route into a fresh `citation_auditor`
    session before any review. The controller freezes the manuscript reference
    list into a cycle-level reference manifest; the auditor must return one
@@ -95,12 +105,19 @@ and `state.json` expose the next incomplete gate.
 8. Start `independent_reviewer` with canonical artifacts, the receipted
    citation audit, the reference manifest and the fixed a1-a7 rubric,
    excluding executor summaries and all previous review prose.
-9. Failed gates create an immutable `revision-NN` cycle. Only the writer and
-   figure roles see structured feedback plus the prior canonical artifacts.
-   Every revision cycle repeats the fresh citation audit before independent
-   review. The next reviewer sees only the revised artifacts and frozen claim
-   contracts, never feedback or previous review prose. At most three revision
-   cycles run; unresolved failures then stop at `needs_human_intervention`.
+9. Failed gates create an immutable `revision-NN` cycle routed to the roles
+   that own the failing gates: citation-audit and manuscript-argument failures
+   reopen only `manuscript_writer`, figure-evidence failures reopen only
+   `figure_designer`, and shared-evidence gates (a1, a2, a7) reopen both. Each
+   feedback task records its `owner_roles`; a role outside the targeted set
+   cannot submit into the cycle, and its newest accepted artifacts carry
+   forward by hash into the next audit and review packets. A revision that
+   touches the manuscript repeats the fresh citation audit; a figure-only
+   revision carries the already-verified audit receipt forward instead of
+   re-auditing an unchanged reference list. The next reviewer sees only the
+   canonical artifacts and frozen claim contracts, never feedback or previous
+   review prose. At most three revision cycles run; unresolved failures then
+   stop at `needs_human_intervention`.
 10. Passing gates stop at human approval; same-family review is provisional
     and `publication_allowed` stays false.
 

@@ -32,6 +32,7 @@ from typing import Any
 
 import acquire_gemstat_arsenic as gemstat_acquisition
 import auto_research
+import publication_lint
 import benchmark_workflow
 import build_china_demo
 import build_evidence_bundle as evidence_builder
@@ -7962,6 +7963,26 @@ def check_d3(output_dir: Path) -> list[str]:
                 "sha256": sha256_file(path),
             }
 
+        def minimal_png_bytes(width: int = 1200, height: int = 900) -> bytes:
+            def chunk(kind: bytes, body: bytes) -> bytes:
+                return (
+                    struct.pack(">I", len(body))
+                    + kind
+                    + body
+                    + struct.pack(">I", zlib.crc32(kind + body) & 0xFFFFFFFF)
+                )
+
+            header = struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0)
+            raster = zlib.compress(b"".join(b"\x00" * (width + 1) for _ in range(height)))
+            return (
+                b"\x89PNG\r\n\x1a\n"
+                + chunk(b"IHDR", header)
+                + chunk(b"IDAT", raster)
+                + chunk(b"IEND", b"")
+            )
+
+        PAGE_BEARING_PDF = b"%PDF-1.4\n1 0 obj\n<</Type /Page>>\nendobj\n%%EOF\n"
+
         def empirical_figure_package(
             cycle_id: str = auto_research.INITIAL_CYCLE,
             iterations: int = 1,
@@ -7992,21 +8013,23 @@ def check_d3(output_dir: Path) -> list[str]:
                         "figure_designer",
                         f"{prefix}.svg",
                         (
-                            "<svg xmlns='http://www.w3.org/2000/svg'>"
-                            f"<title>{role}</title></svg>\n"
+                            "<svg xmlns='http://www.w3.org/2000/svg' "
+                            "viewBox='0 0 800 600'>"
+                            f"<text x='10' y='30' font-size='16'>{role}</text>"
+                            "</svg>\n"
                         ).encode(),
                         cycle_id,
                     ),
                     "pdf": agent_binary_artifact(
                         "figure_designer",
                         f"{prefix}.pdf",
-                        b"%PDF-1.4\n%%EOF\n",
+                        PAGE_BEARING_PDF,
                         cycle_id,
                     ),
                     "png": agent_binary_artifact(
                         "figure_designer",
                         f"{prefix}.png",
-                        b"\x89PNG\r\n\x1a\ncomponent-test",
+                        minimal_png_bytes(),
                         cycle_id,
                     ),
                 }
@@ -8069,7 +8092,7 @@ def check_d3(output_dir: Path) -> list[str]:
                 "manuscript_writer", "manuscript.md", body, cycle_id
             )
             pdf = agent_binary_artifact(
-                "manuscript_writer", "manuscript.pdf", b"%PDF-1.4\n%%EOF\n", cycle_id
+                "manuscript_writer", "manuscript.pdf", PAGE_BEARING_PDF, cycle_id
             )
             typeset = {
                 "source_artifact": source["path"],
@@ -8316,6 +8339,42 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 scientific entry decision and immutable review meanings are content-addressed by the controller",
             checks,
         )
+        typography_floor = quality_contract["figure_storyboard_gate"][
+            "typography_floor"
+        ]
+        require(
+            typography_floor["min_print_font_pt"]
+            == publication_lint.MIN_PRINT_FONT_PT
+            and typography_floor["min_raster_width_px"]
+            == publication_lint.MIN_RASTER_WIDTH_PX
+            and len(quality_contract["typesetting_gate"]["layout_rules"]) == 3,
+            "D3 the quality contract discloses the typography floor and manuscript layout rules to every downstream role",
+            checks,
+        )
+        require(
+            publication_lint.lint_pdf_bytes(b"%PDF-1.4\n%%EOF\n") != []
+            and publication_lint.lint_pdf_bytes(
+                b"%PDF-1.4\n1 0 obj\n<</Type /Page>>\nendobj\n%%EOF\n"
+            )
+            == []
+            and publication_lint.lint_pdf_bytes(b"not a pdf") != []
+            and publication_lint.lint_png_bytes(minimal_png_bytes(640, 480)) != []
+            and publication_lint.lint_png_bytes(minimal_png_bytes()) == []
+            and publication_lint.lint_png_bytes(b"\x89PNG\r\n\x1a\nbroken") != []
+            and publication_lint.lint_svg_bytes(
+                b"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>"
+                b"<text font-size='4'>tiny</text></svg>"
+            )
+            != []
+            and publication_lint.lint_svg_bytes(
+                b"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>"
+                b"<text font-size='16'>readable</text></svg>"
+            )
+            == []
+            and publication_lint.lint_svg_bytes(b"not xml") != [],
+            "D3 publication lint deterministically enforces page structure, raster width and vector font floors",
+            checks,
+        )
         contribution_map_fixture = [
             {
                 "contribution_id": "c1",
@@ -8409,6 +8468,35 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 Auto-Research rejects manuscript references without a typed registry identifier",
             checks,
         )
+        broken_pdf = agent_binary_artifact(
+            "manuscript_writer", "broken.pdf", b"%PDF-1.4\n%%EOF\n"
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="manuscript_writer",
+                invocation_id="writer-pageless-pdf",
+                model_family="family-c",
+                payload={
+                    "artifacts": [*manuscript_artifacts, broken_pdf],
+                    "claim_ids": ["pilot-null-effect"],
+                    "contribution_map": contribution_map_fixture,
+                    "reference_list": manuscript_reference_list,
+                    "typeset_manifest": {
+                        **manuscript_typeset,
+                        "pdf_artifact": broken_pdf["path"],
+                    },
+                },
+            )
+        except auto_research.AutoResearchError as exc:
+            pageless_pdf_blocked = "publication lint" in str(exc)
+        else:
+            pageless_pdf_blocked = False
+        require(
+            pageless_pdf_blocked,
+            "D3 publication lint rejects a typeset PDF that declares no page object",
+            checks,
+        )
         auto_research.submit_agent_result(
             run_dir,
             role="manuscript_writer",
@@ -8480,6 +8568,38 @@ def check_d3(output_dir: Path) -> list[str]:
         require(
             false_render_format_blocked,
             "D3 Auto-Research rejects figure manifests that relabel one render as another format",
+            checks,
+        )
+        tiny_font_artifacts, tiny_font_specs = empirical_figure_package()
+        tiny_font_svg = agent_binary_artifact(
+            "figure_designer",
+            "tiny-font.svg",
+            (
+                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>"
+                "<text x='10' y='30' font-size='4'>unreadable annotation</text>"
+                "</svg>\n"
+            ).encode(),
+        )
+        tiny_font_specs[0]["artifact_paths"]["svg"] = tiny_font_svg["path"]
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="figure_designer",
+                invocation_id="figure-tiny-font",
+                model_family="family-d",
+                payload={
+                    "artifacts": [*tiny_font_artifacts, tiny_font_svg],
+                    "claim_ids": ["pilot-null-effect"],
+                    "figure_specs": tiny_font_specs,
+                },
+            )
+        except auto_research.AutoResearchError as exc:
+            tiny_font_blocked = "publication lint" in str(exc)
+        else:
+            tiny_font_blocked = False
+        require(
+            tiny_font_blocked,
+            "D3 publication lint rejects vector text below the print-equivalent font floor",
             checks,
         )
         figure_artifacts, figure_specs = empirical_figure_package()
@@ -8617,6 +8737,45 @@ def check_d3(output_dir: Path) -> list[str]:
             checks,
         )
         require(
+            citation_mismatch_state["required_roles"] == ["manuscript_writer"]
+            and citation_feedback["reopened_roles"] == ["manuscript_writer"]
+            and citation_feedback["tasks"][0]["owner_roles"]
+            == ["manuscript_writer"]
+            and not (
+                run_dir
+                / "revisions"
+                / revision_cycle
+                / "agents"
+                / "figure_designer"
+                / "packet.json"
+            ).exists()
+            and auto_research.GATE_OWNER_ROLES["a1"]
+            == ("manuscript_writer", "figure_designer")
+            and auto_research.GATE_OWNER_ROLES["a2"]
+            == ("manuscript_writer", "figure_designer")
+            and auto_research.GATE_OWNER_ROLES["a7"]
+            == ("manuscript_writer", "figure_designer"),
+            "D3 revision feedback routes to the owning role only, with shared-evidence gates reopening both deliverables",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="figure_designer",
+                invocation_id="figure-not-reopened",
+                model_family="family-g",
+                payload={"artifacts": [], "claim_ids": []},
+            )
+        except auto_research.AutoResearchError:
+            untargeted_role_blocked = True
+        else:
+            untargeted_role_blocked = False
+        require(
+            untargeted_role_blocked,
+            "D3 a role outside the targeted revision cannot inject a result into the cycle",
+            checks,
+        )
+        require(
             revision_writer_packet["previous_review_allowed"] is True
             and "feedback_tasks" in revision_writer_packet["allowed_inputs"],
             "D3 failed quality gates open an immutable feedback-bound revision round instead of dead-ending",
@@ -8646,7 +8805,7 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 Auto-Research rejects invocation reuse across immutable revision cycles",
             checks,
         )
-        auto_research.submit_agent_result(
+        revised_writer_state = auto_research.submit_agent_result(
             run_dir,
             role="manuscript_writer",
             invocation_id="writer-fresh-revision-1",
@@ -8659,24 +8818,10 @@ def check_d3(output_dir: Path) -> list[str]:
                 "typeset_manifest": revised_manuscript_typeset,
             },
         )
-        revised_figure_artifacts, revised_figure_specs = empirical_figure_package(
-            revision_cycle, 2
-        )
-        revised_figure_state = auto_research.submit_agent_result(
-            run_dir,
-            role="figure_designer",
-            invocation_id="figure-fresh-revision-1",
-            model_family="family-g",
-            payload={
-                "artifacts": revised_figure_artifacts,
-                "claim_ids": ["pilot-null-effect"],
-                "figure_specs": revised_figure_specs,
-            },
-        )
         require(
-            revised_figure_state["stage"] == "citation_audit"
-            and revised_figure_state["active_cycle"] == revision_cycle,
-            "D3 every revision cycle repeats the fresh citation audit before independent review",
+            revised_writer_state["stage"] == "citation_audit"
+            and revised_writer_state["active_cycle"] == revision_cycle,
+            "D3 a revision that touches the manuscript repeats the fresh citation audit before independent review",
             checks,
         )
         revision_citation_state = auto_research.submit_agent_result(
@@ -8700,6 +8845,11 @@ def check_d3(output_dir: Path) -> list[str]:
             / "independent_reviewer"
             / "packet.json"
         )
+        carried_figure_inputs = [
+            item["path"]
+            for key, item in revision_reviewer_packet["allowed_inputs"].items()
+            if key.startswith("figure_designer_artifact_")
+        ]
         require(
             revision_citation_state["stage"] == "independent_review"
             and revision_citation_receipt["all_references_verified"] is True
@@ -8708,6 +8858,14 @@ def check_d3(output_dir: Path) -> list[str]:
             in revision_reviewer_packet["allowed_inputs"]
             and "reference_manifest" in revision_reviewer_packet["allowed_inputs"],
             "D3 a fully verified citation audit is receipted and bound into the fresh reviewer packet",
+            checks,
+        )
+        require(
+            bool(carried_figure_inputs)
+            and all(
+                not path.startswith("revisions/") for path in carried_figure_inputs
+            ),
+            "D3 an untouched role's newest accepted artifacts carry forward by hash into the revision reviewer packet",
             checks,
         )
         require(
@@ -8792,27 +8950,42 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 failed independent review opens an immutable feedback-bound revision round instead of dead-ending",
             checks,
         )
-        (
-            final_manuscript_artifacts,
-            final_manuscript_typeset,
-        ) = manuscript_delivery(second_revision_cycle, "# Final screening result\n")
-        auto_research.submit_agent_result(
-            run_dir,
-            role="manuscript_writer",
-            invocation_id="writer-fresh-revision-2",
-            model_family="family-f",
-            payload={
-                "artifacts": final_manuscript_artifacts,
-                "claim_ids": ["pilot-null-effect"],
-                "contribution_map": contribution_map_fixture,
-                "reference_list": manuscript_reference_list,
-                "typeset_manifest": final_manuscript_typeset,
-            },
+        require(
+            second_revision_state["required_roles"] == ["figure_designer"]
+            and review_feedback["reopened_roles"] == ["figure_designer"]
+            and review_feedback["tasks"][0]["owner_roles"] == ["figure_designer"]
+            and not (
+                run_dir
+                / "revisions"
+                / second_revision_cycle
+                / "agents"
+                / "manuscript_writer"
+                / "packet.json"
+            ).exists(),
+            "D3 a figure-evidence failure reopens only the figure role for revision",
+            checks,
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="manuscript_writer",
+                invocation_id="writer-not-reopened",
+                model_family="family-f",
+                payload={"artifacts": [], "claim_ids": []},
+            )
+        except auto_research.AutoResearchError:
+            writer_not_reopened_blocked = True
+        else:
+            writer_not_reopened_blocked = False
+        require(
+            writer_not_reopened_blocked,
+            "D3 the untouched manuscript role cannot resubmit inside a figure-only revision",
+            checks,
         )
         final_figure_artifacts, final_figure_specs = empirical_figure_package(
             second_revision_cycle, 2
         )
-        auto_research.submit_agent_result(
+        figure_only_state = auto_research.submit_agent_result(
             run_dir,
             role="figure_designer",
             invocation_id="figure-fresh-revision-2",
@@ -8823,12 +8996,28 @@ def check_d3(output_dir: Path) -> list[str]:
                 "figure_specs": final_figure_specs,
             },
         )
-        auto_research.submit_agent_result(
-            run_dir,
-            role="citation_auditor",
-            invocation_id="citation-fresh-revision-2",
-            model_family="family-h",
-            payload=citation_audit_payload(second_revision_cycle),
+        final_reviewer_packet = json_value(
+            run_dir
+            / "revisions"
+            / second_revision_cycle
+            / "agents"
+            / "independent_reviewer"
+            / "packet.json"
+        )
+        require(
+            figure_only_state["stage"] == "independent_review"
+            and not (
+                run_dir
+                / "revisions"
+                / second_revision_cycle
+                / "citation_audit_receipt.json"
+            ).exists()
+            and final_reviewer_packet["allowed_inputs"]["citation_audit_receipt"][
+                "path"
+            ]
+            == f"revisions/{revision_cycle}/citation_audit_receipt.json",
+            "D3 a figure-only revision carries the verified citation audit forward by hash instead of re-auditing an unchanged reference list",
+            checks,
         )
         revised_review_artifact = agent_artifact(
             "independent_reviewer",
