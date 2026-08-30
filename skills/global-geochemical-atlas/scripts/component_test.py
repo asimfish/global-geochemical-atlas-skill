@@ -7907,6 +7907,23 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 Auto-Research starts and resumes a real gated run with deterministic topic, pilot, literature, paper and figure contracts",
             checks,
         )
+        pilot_contract = json_value(run_dir / "pilot_contract.json")
+        figure_contract_doc = json_value(run_dir / "figure_contract.json")
+        require(
+            pilot_contract["schema_version"] == "gga-pilot-contract-v2"
+            and set(pilot_contract["inference_requirements"])
+            == {
+                "site_identity",
+                "spatial_dependence",
+                "holdout_replication",
+                "regeneration",
+            }
+            and figure_contract_doc["schema_version"] == "gga-figure-contract-v2"
+            and "fails gate a6"
+            in figure_contract_doc["spatial_pattern_semantics"],
+            "D3 pilot contract freezes spatial-inference rigor and the figure contract pins empirical spatial-pattern semantics",
+            checks,
+        )
         pilot_packet = json_value(run_dir / "agents" / "pilot_analyst" / "packet.json")
         require(
             {
@@ -8169,6 +8186,65 @@ def check_d3(output_dir: Path) -> list[str]:
         pilot_artifact = agent_artifact(
             "pilot_analyst", "results.json", '{"effect":0,"status":"null"}\n'
         )
+        pilot_scientific_rigor = {
+            "site_identity": {
+                "basis": "shared sample identifiers join both fractions per site",
+                "residual_risk": "none beyond registry transcription",
+            },
+            "spatial_dependence": {
+                "diagnostic": "site-level Moran's I on residuals",
+                "finding": "no material autocorrelation at the tested lags",
+                "uncertainty_method": "spatial block bootstrap over 2-degree cells",
+            },
+            "holdout_replication": {
+                "scheme": "east-west spatial block hold-out",
+                "result": "null effect replicates in both blocks",
+                "consistent": True,
+            },
+            "regeneration": {
+                "command": "python3 agent_outputs/pilot_analyst/analysis.py",
+                "deterministic": True,
+            },
+        }
+        pilot_claims = [
+            {
+                "claim_id": "pilot-null-effect",
+                "value": 0,
+                "unit": "dimensionless",
+                "artifact": pilot_artifact["path"],
+                "artifact_sha256": pilot_artifact["sha256"],
+            }
+        ]
+        pilot_outcome_base = {
+            "status": "supported_null",
+            "analysis_executed": True,
+            "result_claim_ids": ["pilot-null-effect"],
+            "routing_destination": "paper_production",
+            "evidence_summary": (
+                "The frozen pilot executed and returned a bounded null effect."
+            ),
+        }
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="pilot_analyst",
+                invocation_id="pilot-missing-rigor",
+                model_family="family-a",
+                payload={
+                    "artifacts": [pilot_artifact],
+                    "claims": pilot_claims,
+                    "analysis_outcome": dict(pilot_outcome_base),
+                },
+            )
+        except auto_research.AutoResearchError as exc:
+            missing_rigor_blocked = "scientific_rigor" in str(exc)
+        else:
+            missing_rigor_blocked = False
+        require(
+            missing_rigor_blocked,
+            "D3 paper-eligible pilot outcome without scientific_rigor is rejected",
+            checks,
+        )
         pilot_state = auto_research.submit_agent_result(
             run_dir,
             role="pilot_analyst",
@@ -8176,23 +8252,10 @@ def check_d3(output_dir: Path) -> list[str]:
             model_family="family-a",
             payload={
                 "artifacts": [pilot_artifact],
-                "claims": [
-                    {
-                        "claim_id": "pilot-null-effect",
-                        "value": 0,
-                        "unit": "dimensionless",
-                        "artifact": pilot_artifact["path"],
-                        "artifact_sha256": pilot_artifact["sha256"],
-                    }
-                ],
+                "claims": pilot_claims,
                 "analysis_outcome": {
-                    "status": "supported_null",
-                    "analysis_executed": True,
-                    "result_claim_ids": ["pilot-null-effect"],
-                    "routing_destination": "paper_production",
-                    "evidence_summary": (
-                        "The frozen pilot executed and returned a bounded null effect."
-                    ),
+                    **pilot_outcome_base,
+                    "scientific_rigor": pilot_scientific_rigor,
                 },
             },
         )

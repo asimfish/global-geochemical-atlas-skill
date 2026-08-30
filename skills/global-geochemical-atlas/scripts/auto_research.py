@@ -460,7 +460,7 @@ def _build_research_contracts(
     )
     seed = int(sha256_file(selected_path)[:8], 16)
     pilot = {
-        "schema_version": "gga-pilot-contract-v1",
+        "schema_version": "gga-pilot-contract-v2",
         "candidate_id": selected.get("candidate_id"),
         "question": selected.get("question"),
         "frozen_random_seed": seed,
@@ -471,6 +471,28 @@ def _build_research_contracts(
             "report sample size, effect, uncertainty and sensitivity",
             "emit an executable analysis script and machine-readable results",
         ],
+        "inference_requirements": {
+            "site_identity": (
+                "state the evidence that paired or grouped rows resolve to the same "
+                "physical site or sample lineage, and the residual risk when the "
+                "pairing rests on coordinate rounding rather than sample identifiers"
+            ),
+            "spatial_dependence": (
+                "diagnose spatial autocorrelation of the analysed quantity at site "
+                "level and use a dependence-aware uncertainty method (for example a "
+                "spatial block bootstrap) whenever dependence is material; plain iid "
+                "inference must be justified, not assumed"
+            ),
+            "holdout_replication": (
+                "re-estimate the headline effect on at least one disjoint split "
+                "(spatial blocks, region hold-out or leave-one-source-out) and "
+                "report whether the direction and magnitude replicate"
+            ),
+            "regeneration": (
+                "one pinned-seed command regenerates every reported number from the "
+                "frozen snapshot end to end"
+            ),
+        },
         "stop_rules": [
             "stop unsupported if no comparable cohort exists",
             "report a null/weak effect instead of changing the hypothesis",
@@ -651,7 +673,7 @@ def _build_research_contracts(
     }
     _write_json(run_dir / "paper_spine.json", spine)
     figure = {
-        "schema_version": "gga-figure-contract-v1",
+        "schema_version": "gga-figure-contract-v2",
         "status": "planned_awaiting_pilot",
         "method_figure": {
             "required": True,
@@ -686,6 +708,11 @@ def _build_research_contracts(
         "source_fidelity": (
             "every visual element must trace to frozen claim data; invented or "
             "decorative data points fail the storyboard"
+        ),
+        "spatial_pattern_semantics": (
+            "the spatial_pattern figure must encode the claimed effect or measured "
+            "values in space; a data-availability or cohort-coverage map does not "
+            "satisfy the role and fails gate a6"
         ),
         "editable_delivery": (
             "each figure binds an editable source (generation script or editable "
@@ -780,7 +807,11 @@ def _build_research_contracts(
             "claims": "claim_id, value, unit, artifact and locator",
             "analysis_outcome": (
                 "status, analysis_executed, result_claim_ids, routing_destination, "
-                "and concise evidence_summary"
+                "and concise evidence_summary; paper-eligible outcomes must add a "
+                "scientific_rigor object with site_identity (basis, residual_risk), "
+                "spatial_dependence (diagnostic, finding, uncertainty_method), "
+                "holdout_replication (scheme, result, consistent) and regeneration "
+                "(command, deterministic=true) per the pilot contract"
             ),
         },
     )
@@ -1026,6 +1057,41 @@ def _result_artifact_inputs(
     }
 
 
+def _validate_scientific_rigor(value: Any) -> None:
+    """Typed rigor evidence required before any paper-eligible pilot outcome."""
+    if not isinstance(value, Mapping):
+        raise AutoResearchError(
+            "paper-eligible pilot outcome requires a scientific_rigor object"
+        )
+    text_fields = {
+        "site_identity": ("basis", "residual_risk"),
+        "spatial_dependence": ("diagnostic", "finding", "uncertainty_method"),
+        "holdout_replication": ("scheme", "result"),
+    }
+    for section, keys in text_fields.items():
+        block = value.get(section)
+        if not isinstance(block, Mapping) or any(
+            not str(block.get(key) or "").strip() for key in keys
+        ):
+            raise AutoResearchError(
+                f"scientific_rigor.{section} must document: " + ", ".join(keys)
+            )
+    holdout = value["holdout_replication"]
+    if not isinstance(holdout.get("consistent"), bool):
+        raise AutoResearchError(
+            "scientific_rigor.holdout_replication.consistent must be boolean"
+        )
+    regeneration = value.get("regeneration")
+    if (
+        not isinstance(regeneration, Mapping)
+        or not str(regeneration.get("command") or "").strip()
+        or regeneration.get("deterministic") is not True
+    ):
+        raise AutoResearchError(
+            "scientific_rigor.regeneration requires a deterministic command"
+        )
+
+
 def _validate_analysis_outcome(outcome: Any, claim_ids: set[str]) -> dict[str, Any]:
     if not isinstance(outcome, Mapping):
         raise AutoResearchError("pilot_analyst must return analysis_outcome")
@@ -1051,6 +1117,7 @@ def _validate_analysis_outcome(outcome: Any, claim_ids: set[str]) -> dict[str, A
             raise AutoResearchError(
                 "paper-eligible pilot outcome requires executed result claims"
             )
+        _validate_scientific_rigor(outcome.get("scientific_rigor"))
     elif executed is not False or result_claim_ids:
         raise AutoResearchError(
             "non-paper-eligible pilot outcome cannot declare executed result claims"

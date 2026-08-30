@@ -58,9 +58,17 @@ and `state.json` expose the next incomplete gate.
    Roles inside one wave may run concurrently: each role writes only inside its
    own `artifact_output_dir`, and the controller serializes every state
    transition through an exclusive `state.lock`, so parallel submissions cannot
-   interleave ledger writes. The pilot packet includes hash-bound row-level geochemistry plus cohort,
+   interleave ledger writes.    The pilot packet includes hash-bound row-level geochemistry plus cohort,
    exclusion, context and source/QC files; it does not receive chat or mutable
-   atlas paths. The literature result must document its search coverage
+   atlas paths. The frozen pilot contract (`gga-pilot-contract-v2`) carries four
+   inference requirements, and every paper-eligible outcome must return a typed
+   `scientific_rigor` object covering site identity (basis plus residual risk of
+   coordinate-key pairing), spatial dependence (diagnostic, finding and a
+   dependence-aware uncertainty method), hold-out replication (scheme, result
+   and a `consistent` boolean) and deterministic regeneration (pinned-seed
+   command). The controller rejects paper-eligible submissions that omit any of
+   these fields, so statistical-design gaps surface at the pilot gate instead of
+   burning review revision rounds. The literature result must document its search coverage
    (queries, sources searched, inclusion criteria and at least eight screened
    candidates, never fewer than the citations returned) and must bind every
    citation to a declared retrieval-evidence artifact with a retrieval
@@ -77,9 +85,12 @@ and `state.json` expose the next incomplete gate.
    ordered authors, years, venues and one resolvable DOI/arXiv/official-URL
    identifier each) plus a typeset manifest binding a distinct manuscript
    source artifact and a rendered PDF whose section manifest covers every
-   frozen paper-spine section. The empirical visual storyboard must contain
+   frozen paper-spine section.    The empirical visual storyboard must contain
    primary-result, spatial-pattern, and robustness/external-validation roles;
-   a methods diagram cannot replace them. Each figure binds distinct
+   a methods diagram cannot replace them. The spatial-pattern figure must
+   encode the claimed effect or measured values in space; per the frozen figure
+   contract a data-availability or cohort-coverage map does not satisfy the
+   role and fails review gate a6. Each figure binds distinct
    SVG/PDF/PNG artifacts by SHA-256, records non-empty inspection findings
    plus the revisions actually applied, documents at least two candidate
    designs with the rejected alternatives, states how the rendered figure

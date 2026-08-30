@@ -67,3 +67,10 @@ deterministic publication lint rejects print-unreadable SVG/PNG/PDF artifacts
 at submission, and all state transitions serialize through a file lock so wave
 roles can run concurrently. This loop mechanics layer is recorded in
 [ADR-0007](docs/adr/0007-targeted-revision-routing-and-publication-lint.md).
+Scientific rigor is front-loaded into the entry contracts rather than left to
+review: the frozen pilot contract demands typed evidence of site identity,
+spatial-dependence-aware inference, hold-out replication and deterministic
+regeneration before any paper-eligible outcome is accepted, and the figure
+contract pins the spatial-pattern role to empirical values rather than data
+availability. This is recorded in
+[ADR-0008](docs/adr/0008-front-loaded-scientific-rigor-contract.md).
