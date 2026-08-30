@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:auto-research-state:v2",
+  "$id": "urn:global-geochemical-atlas:auto-research-state:v3",
   "title": "Resumable atlas-to-research state",
   "type": "object",
   "additionalProperties": false,
@@ -12,15 +12,15 @@
     "claim_boundary", "created_at", "updated_at"
   ],
   "properties": {
-    "schema_version": {"const": "gga-auto-research-state-v2"},
+    "schema_version": {"const": "gga-auto-research-state-v3"},
     "run_id": {"type": "string", "pattern": "^run-[0-9a-f]{20}$"},
     "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "atlas_snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "status": {
       "enum": [
         "awaiting_selection", "awaiting_agents", "revision_required",
-        "awaiting_human_approval", "needs_human_intervention",
-        "needs_research_redirection"
+        "completed_published", "completed_with_findings",
+        "redirected_next_candidate", "needs_research_redirection"
       ]
     },
     "stage": {
@@ -28,7 +28,7 @@
         "candidate_selection", "pilot_and_literature",
         "research_quality_gate",
         "manuscript_and_figures", "citation_audit", "independent_review",
-        "feedback_revision", "human_approval"
+        "feedback_revision", "publication"
       ]
     },
     "required_roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
@@ -56,8 +56,37 @@
         "routing_destination": {"type": "string", "minLength": 1}
       }
     },
-    "human_approval_required": {"const": true},
-    "publication_allowed": {"const": false},
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grade", "package_dir", "manifest_sha256", "packaged_cycle",
+        "disclosed_finding_count"
+      ],
+      "properties": {
+        "grade": {"enum": ["camera_ready", "draft_with_disclosed_findings"]},
+        "package_dir": {"const": "publication"},
+        "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "packaged_cycle": {"type": "string", "pattern": "^(initial|revision-[0-9]{2})$"},
+        "disclosed_finding_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "fallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "next_candidate_id", "next_candidate_title", "remaining_candidates",
+        "reason"
+      ],
+      "properties": {
+        "next_candidate_id": {"type": "string", "pattern": "^dc-[0-9]{3}$"},
+        "next_candidate_title": {"type": "string"},
+        "remaining_candidates": {"type": "integer", "minimum": 1},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "human_approval_required": {"const": false},
+    "publication_allowed": {"type": "boolean"},
     "claim_boundary": {"type": "string", "minLength": 1},
     "created_at": {"type": "string", "minLength": 1},
     "updated_at": {"type": "string", "minLength": 1}

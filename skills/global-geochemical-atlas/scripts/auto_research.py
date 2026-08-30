@@ -3,9 +3,12 @@
 
 The controller performs deterministic preparation itself and exposes fresh,
 model-neutral packets for the genuinely model-authored stages.  It never calls
-an unconfigured model, invents a paper, or publishes automatically.  A missing
-agent result is an ``awaiting_agents`` state, and even a passing independent
-review stops at explicit human approval.
+an unconfigured model and never invents a paper.  Direction selection is the
+only human decision: after it, the run always terminates autonomously in a
+packaged final deliverable — a camera-ready paper when every review gate
+passes, a draft with disclosed reviewer findings when the revision budget is
+spent, or a deterministic redirect to the next ranked empirical candidate when
+the evidence cannot support the selected direction.
 """
 
 from __future__ import annotations
@@ -33,7 +36,8 @@ import validate_outputs
 SCRIPT_DIR = Path(__file__).resolve().parent
 BUILD_RESEARCH_PRODUCTS = SCRIPT_DIR / "build_research_products.py"
 BUILD_DISCOVERY_CANDIDATES = SCRIPT_DIR / "build_discovery_candidates.py"
-STATE_VERSION = "gga-auto-research-state-v2"
+STATE_VERSION = "gga-auto-research-state-v3"
+PUBLICATION_GRADES = ("camera_ready", "draft_with_disclosed_findings")
 REQUEST_VERSION = "gga-auto-research-request-v1"
 PACKET_VERSION = "gga-auto-research-agent-packet-v2"
 RESULT_VERSION = "gga-auto-research-agent-result-v2"
@@ -544,10 +548,12 @@ def _build_research_contracts(
         "paper_entry_gate": {
             "eligible_pilot_outcomes": sorted(PAPER_ELIGIBLE_PILOT_OUTCOMES),
             "required_frontier_status": "supports_empirical_article",
-            "failure_status": "needs_research_redirection",
+            "failure_status": "candidate_fallback_or_research_redirection",
             "rule": (
                 "Unsupported, acquisition-only, invalid, or weak-frontier work must "
-                "stop before manuscript and figure generation."
+                "stop before manuscript and figure generation; the run then "
+                "redirects to the next ranked empirical candidate or, when the "
+                "queue is empty, to acquisition/audit planning."
             ),
         },
         "contribution_gate": {
@@ -763,7 +769,7 @@ def _build_research_contracts(
                         "figure_designer",
                         "citation_auditor",
                         "independent_reviewer",
-                        "human_approval",
+                        "publication",
                     ],
                 }
                 for index, item in enumerate(candidates, 1)
@@ -771,6 +777,38 @@ def _build_research_contracts(
             "claim_boundary": (
                 "These are an automatically ranked research program, not completed or "
                 "accepted papers. Each slot requires its own gated run."
+            ),
+        },
+    )
+    selected_id = str(selected.get("candidate_id") or "")
+    selected_index = next(
+        (
+            index
+            for index, item in enumerate(all_candidates)
+            if str(item.get("candidate_id")) == selected_id
+        ),
+        -1,
+    )
+    fallback_candidates = [
+        {
+            "candidate_id": str(item.get("candidate_id")),
+            "title": str(item.get("title") or ""),
+            "type": str(item.get("type") or ""),
+        }
+        for item in all_candidates[selected_index + 1 :]
+        if str(item.get("paper_track") or "") == "empirical_candidate"
+    ]
+    _write_json(
+        run_dir / "candidate_fallback_queue.json",
+        {
+            "schema_version": "gga-candidate-fallback-queue-v1",
+            "selected_candidate_id": selected_id,
+            "candidates": fallback_candidates,
+            "rule": (
+                "When the scientific opportunity gate rejects the selected "
+                "direction, the run redirects to the first queued candidate; the "
+                "queue strictly advances through the ranked list, so fallback "
+                "chains are finite and end in an acquisition/audit redirect."
             ),
         },
     )
@@ -912,11 +950,13 @@ def start_research(
         "active_cycle": INITIAL_CYCLE,
         "revision_count": 0,
         "selected_candidate_id": selected.get("candidate_id") if selected else None,
-        "human_approval_required": True,
+        "human_approval_required": False,
         "publication_allowed": False,
         "claim_boundary": (
-            "A started run is not a completed study. Model stages and human approval "
-            "remain explicit; no publication is performed by this controller."
+            "Direction selection is the only human decision. The run then advances "
+            "autonomously to a packaged final deliverable whose grade discloses "
+            "whether every review gate passed; packaging proves byte identity, "
+            "not external peer review or venue acceptance."
         ),
         "created_at": utc_now(),
     }
@@ -2058,6 +2098,183 @@ def _prepare_revision_cycle(
     )
 
 
+def _finalize_publication(
+    run_dir: Path,
+    state: dict[str, Any],
+    cycle_id: str,
+    *,
+    grade: str,
+    findings: Sequence[Mapping[str, Any]],
+) -> None:
+    """Package the newest accepted deliverables into a final publication tree.
+
+    Packaging proves byte identity and records gate outcomes; it does not
+    replace external peer review.  A failing run is packaged too, but its
+    grade discloses the unresolved reviewer findings instead of hiding them.
+    """
+    if grade not in PUBLICATION_GRADES:
+        raise AutoResearchError(f"unknown publication grade: {grade}")
+    writer_cycle = _latest_result_cycle(run_dir, "manuscript_writer", cycle_id)
+    figure_cycle = _latest_result_cycle(run_dir, "figure_designer", cycle_id)
+    audit_cycle = _latest_result_cycle(run_dir, "citation_auditor", cycle_id)
+    writer_result = _read_valid_result(run_dir, "manuscript_writer", writer_cycle)
+    figure_result = _read_valid_result(run_dir, "figure_designer", figure_cycle)
+    package_dir = run_dir / "publication"
+    files: list[dict[str, str]] = []
+    for role, result, source_cycle in (
+        ("manuscript_writer", writer_result, writer_cycle),
+        ("figure_designer", figure_result, figure_cycle),
+    ):
+        for item in result["payload"]["artifacts"]:
+            relative = str(item["path"])
+            source = (
+                run_dir / relative
+                if source_cycle == INITIAL_CYCLE
+                else _cycle_root(run_dir, source_cycle) / relative
+            )
+            if not source.is_file():
+                source = run_dir / relative
+            if sha256_file(source) != item["sha256"]:
+                raise AutoResearchError(
+                    f"publication packaging found a hash drift in {relative}"
+                )
+            destination = package_dir / role / Path(relative).name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+            files.append(
+                {
+                    "path": destination.relative_to(run_dir).as_posix(),
+                    "sha256": item["sha256"],
+                    "source_role": role,
+                    "source_cycle": source_cycle,
+                }
+            )
+    for name, source in (
+        ("review_receipt.json", _cycle_root(run_dir, cycle_id) / "review_receipt.json"),
+        (
+            "citation_audit_receipt.json",
+            _cycle_root(run_dir, audit_cycle) / "citation_audit_receipt.json",
+        ),
+        ("reference_manifest.json", _reference_manifest_path(run_dir, audit_cycle)),
+        ("research_gate_receipt.json", run_dir / "research_gate_receipt.json"),
+        ("research_claim_registry.json", run_dir / "research_claim_registry.json"),
+    ):
+        if source.is_file():
+            destination = package_dir / "receipts" / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+            files.append(
+                {
+                    "path": destination.relative_to(run_dir).as_posix(),
+                    "sha256": sha256_file(source),
+                    "source_role": "controller",
+                    "source_cycle": cycle_id,
+                }
+            )
+    manifest = {
+        "schema_version": "gga-publication-manifest-v1",
+        "grade": grade,
+        "packaged_cycle": cycle_id,
+        "writer_result_sha256": writer_result["result_sha256"],
+        "figure_result_sha256": figure_result["result_sha256"],
+        "disclosed_findings": [dict(item) for item in findings],
+        "files": files,
+        "claim_boundary": (
+            "Autonomous packaging proves byte identity and records controller "
+            "gate outcomes; it does not constitute external peer review or "
+            "venue acceptance."
+        ),
+    }
+    manifest["manifest_sha256"] = sha256_bytes(canonical_json_bytes(manifest))
+    _write_json(run_dir / "publication_manifest.json", manifest)
+    status = (
+        "completed_published" if grade == "camera_ready" else "completed_with_findings"
+    )
+    state.update(
+        {
+            "status": status,
+            "stage": "publication",
+            "required_roles": [],
+            "publication_allowed": True,
+            "publication": {
+                "grade": grade,
+                "package_dir": "publication",
+                "manifest_sha256": manifest["manifest_sha256"],
+                "packaged_cycle": cycle_id,
+                "disclosed_finding_count": len(manifest["disclosed_findings"]),
+            },
+        }
+    )
+    _append_event(
+        run_dir,
+        "publication_packaged",
+        {
+            "grade": grade,
+            "cycle_id": cycle_id,
+            "manifest_sha256": manifest["manifest_sha256"],
+            "file_count": len(files),
+        },
+    )
+
+
+def _prepare_candidate_fallback(
+    run_dir: Path, state: dict[str, Any], reason: str
+) -> None:
+    """Route a failed direction to the next ranked empirical candidate.
+
+    The fallback queue was frozen at contract time and strictly advances
+    through the ranked candidate list, so a chain of failing directions is
+    finite and ends in an honest acquisition/audit redirect.
+    """
+    queue_path = run_dir / "candidate_fallback_queue.json"
+    queue: list[dict[str, Any]] = []
+    if queue_path.is_file():
+        document = _read_object(queue_path)
+        raw_queue = document.get("candidates")
+        if isinstance(raw_queue, list):
+            queue = [dict(item) for item in raw_queue if isinstance(item, Mapping)]
+    if not queue:
+        state.update(
+            {
+                "status": "needs_research_redirection",
+                "stage": "research_quality_gate",
+                "required_roles": [],
+            }
+        )
+        return
+    next_candidate = queue[0]
+    request = _read_object(run_dir / "request.json")
+    next_request = {
+        key: request[key]
+        for key in ("output_language", "target_venue")
+        if request.get(key)
+    }
+    next_request["candidate_id"] = next_candidate["candidate_id"]
+    _write_json(run_dir / "next_request.json", next_request)
+    state.update(
+        {
+            "status": "redirected_next_candidate",
+            "stage": "research_quality_gate",
+            "required_roles": [],
+            "fallback": {
+                "next_candidate_id": str(next_candidate["candidate_id"]),
+                "next_candidate_title": str(next_candidate.get("title") or ""),
+                "remaining_candidates": len(queue),
+                "reason": reason,
+            },
+        }
+    )
+    _append_event(
+        run_dir,
+        "candidate_fallback_prepared",
+        {
+            "next_candidate_id": str(next_candidate["candidate_id"]),
+            "remaining_candidates": len(queue),
+            "reason": reason,
+        },
+    )
+
+
 def _advance(run_dir: Path) -> dict[str, Any]:
     state = _state(run_dir)
     cycle_id = str(state.get("active_cycle") or INITIAL_CYCLE)
@@ -2128,18 +2345,19 @@ def _advance(run_dir: Path) -> dict[str, Any]:
             },
         )
         if not paper_eligible:
-            state.update(
-                {
-                    "status": "needs_research_redirection",
-                    "stage": "research_quality_gate",
-                    "required_roles": [],
-                    "research_gate": {
-                        "paper_eligible": False,
-                        "pilot_outcome": pilot_outcome["status"],
-                        "frontier_status": frontier["status"],
-                        "routing_destination": routing_destination,
-                    },
-                }
+            state["research_gate"] = {
+                "paper_eligible": False,
+                "pilot_outcome": pilot_outcome["status"],
+                "frontier_status": frontier["status"],
+                "routing_destination": routing_destination,
+            }
+            _prepare_candidate_fallback(
+                run_dir,
+                state,
+                reason=(
+                    f"pilot outcome {pilot_outcome['status']} with frontier "
+                    f"status {frontier['status']}"
+                ),
             )
         else:
             common = {
@@ -2301,13 +2519,12 @@ def _advance(run_dir: Path) -> dict[str, Any]:
                 if item["verdict"] != "verified"
             ]
             if int(state.get("revision_count") or 0) >= MAX_REVISION_ROUNDS:
-                state.update(
-                    {
-                        "status": "needs_human_intervention",
-                        "stage": "feedback_revision",
-                        "required_roles": [],
-                        "publication_allowed": False,
-                    }
+                _finalize_publication(
+                    run_dir,
+                    state,
+                    cycle_id,
+                    grade="draft_with_disclosed_findings",
+                    findings=feedback,
                 )
             else:
                 _prepare_revision_cycle(
@@ -2335,7 +2552,7 @@ def _advance(run_dir: Path) -> dict[str, Any]:
             if not item["pass"]
         ]
         receipt = {
-            "schema_version": "gga-independent-review-receipt-v1",
+            "schema_version": "gga-independent-review-receipt-v2",
             "cycle_id": cycle_id,
             "all_seven_gates_pass": passed,
             "gate_scores": {str(item["gate_id"]): int(item["score"]) for item in gates},
@@ -2348,8 +2565,12 @@ def _advance(run_dir: Path) -> dict[str, Any]:
                 else "cross_family"
             ),
             "review_result_sha256": review["result_sha256"],
-            "human_approval_required": True,
-            "publication_allowed": False,
+            "human_approval_required": False,
+            "publication_decision": (
+                "auto_publish_camera_ready"
+                if passed
+                else "revise_or_auto_publish_with_disclosed_findings"
+            ),
         }
         _write_json(_cycle_root(run_dir, cycle_id) / "review_receipt.json", receipt)
         if cycle_id != INITIAL_CYCLE:
@@ -2371,22 +2592,16 @@ def _advance(run_dir: Path) -> dict[str, Any]:
             },
         )
         if passed:
-            state.update(
-                {
-                    "status": "awaiting_human_approval",
-                    "stage": "human_approval",
-                    "required_roles": [],
-                    "publication_allowed": False,
-                }
+            _finalize_publication(
+                run_dir, state, cycle_id, grade="camera_ready", findings=[]
             )
         elif int(state.get("revision_count") or 0) >= MAX_REVISION_ROUNDS:
-            state.update(
-                {
-                    "status": "needs_human_intervention",
-                    "stage": "feedback_revision",
-                    "required_roles": [],
-                    "publication_allowed": False,
-                }
+            _finalize_publication(
+                run_dir,
+                state,
+                cycle_id,
+                grade="draft_with_disclosed_findings",
+                findings=feedback,
             )
         else:
             _prepare_revision_cycle(

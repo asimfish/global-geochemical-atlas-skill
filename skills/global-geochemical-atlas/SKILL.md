@@ -28,7 +28,7 @@ description: 构建全球或区域地球化学元素图谱；用于从公开来�
 7. 生成数据库、证据说明、异常结果和交互地图；
 8. 校验十八文件、逐声明 hash、充分性与 Skill 快照；
 9. 若仍有可修复缺口且预算允许，生成本轮隔离的侦察/质疑 packet，按修复队列继续；否则诚实交付检查点；
-10. 图谱完成后只在用户选择时启动 Auto-Research；通过独立评审后仍停在人工批准，不自动发表。
+10. 图谱完成后只在用户选择方向时启动 Auto-Research；选方向是唯一人工决策，此后控制器全自动推进到打包好的最终论文，发布分级（camera_ready / draft_with_disclosed_findings）如实披露评审结果。
 
 不得用地图补造上游证据，也不得用总记录数掩盖元素、介质、来源或区域缺口。hash 只证明字节一致，规则通过只证明该规则满足，二者都不证明测量值或科学解释正确。
 
@@ -274,7 +274,7 @@ python scripts/build_research_products.py --output-dir OUTPUT_DIR --minimum-conf
 
 ## 10. 图谱内 Auto-Research（discovery_mode）
 
-五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户也可在 `interactive_map.html` 的 Auto-Research 选项直接填写问题或候选 ID。用户不回应则不启动；一旦明确启动，控制器自动推进所有已满足门禁的阶段，只在缺少外部 agent、缺少证据、达到三轮修订上限或最终人工批准时停下。
+五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户也可在 `interactive_map.html` 的 Auto-Research 选项直接填写问题或候选 ID。用户不回应则不启动；一旦明确启动，选方向就是唯一人工输入，控制器全自动推进直至产出打包发布件：独立评审通过 → `completed_published`（camera_ready）；三轮修订或引用修复用尽 → `completed_with_findings`（draft_with_disclosed_findings，遗留问题逐条披露在发布清单）；科研质量门失败 → 自动改道 `candidate_fallback_queue.json` 中下一个实证候选并写出 `next_request.json`，队列耗尽才落到 `needs_research_redirection`。运行中途只会因缺少外部 agent 会话而等待，不再存在人工批准门。
 
 本仓库只发布一个 production Skill；Auto-Research 是该 Skill 的图谱后续状态机，不是第二个宣称。浏览器真实启动方式：
 
@@ -314,13 +314,13 @@ python scripts/build_discovery_candidates.py --research-dir OUTPUT_DIR/research
 4. 深化：敏感性分析（网格粒度、替代方法族）、外部一致性检查（独立调查对照）、跨大陆可复制性；所有数字由单一脚本从冻结快照确定性再生，bootstrap 必须定种子。
 5. 论文与图件：每篇先交 2–5 条 claim-bound contribution map，再写 Results → Methods → Discussion → Introduction → Abstract → Title。手稿必须同时交付：typed `reference_list`（唯一 reference_id、题名、有序作者、年份、期刊/会议与一个可解析的 DOI/arXiv/官方 URL 标识符）与 `typeset_manifest`（互不相同的手稿源文件 artifact 和渲染 PDF artifact，其 section manifest 覆盖 paper spine 全部冻结章节）。实证主图至少覆盖 primary result、spatial pattern、robustness/external validation 三种角色；方法图可以保留，但不能替代数据主图。spatial pattern 图必须在空间上编码被主张的效应或实测值本身——数据可用性/覆盖度地图不满足该角色，a6 门直接判负（图件合同 `spatial_pattern_semantics` 已固化此语义）。每张图声明科学问题、claim IDs、视觉编码，并分别绑定真实 SVG/PDF/PNG 的路径与 SHA-256；至少一次 render→inspect→revise 必须留下非空发现与已实施修改，不能只交布尔自评；另须记录 `candidate_generation`（至少比较 2 个候选设计并列出被否方案）、`source_fidelity`（渲染图如何忠实于源数据）与一个可编辑源文件 artifact（不得以 PDF/PNG 渲染件充当）。提交时 controller 对写作/绘图两角色声明的每个 SVG/PNG/PDF 运行确定性排版 lint：矢量文字低于 4.5 pt 打印等效地板、栅格宽度低于 1000 px、无页对象或损坏的 PDF、非良构 SVG 一律在门口拒绝，不依赖自评；质量合同同时固化排版词法规则（名词短语式节标题、行内三项以上枚举须结构化列表、图内字号层级），由 a5/a6 评审门执行。Discussion 必须含「Position within the current frontier」与「New questions generated」；Data and code availability 逐源列许可证；Agent disclosure 强制保留；结论一律不越过筛查证据。
 6. 引用审计门：手稿与图件通过校验后，controller 把 `reference_list` 冻结为本轮 `reference_manifest.json`，并启动全新 `citation_auditor` 会话（不见手稿正文之外的任何旧上下文）。审计必须精确覆盖 manifest 每一条：给出 `verified`/`mismatch`/`unverifiable` 结论、六项 typed registry 检查（题名、作者、作者顺序、年份、期刊、标识符可解析）、书面证据与一个已声明的 registry 证据 artifact；`verified` 要求六项全过，汇总必须与逐条结论一致。任何非 verified 条目阻断评审并自动开启 citation-repair 修订轮（含逐条反馈任务）；凡手稿被重开的修订轮都必须重跑全新引用审计，仅图件被重开的修订轮按哈希延续已核实的审计收据，不对未变化的引用清单重复审计。
-7. 固定质量审计门：controller 固定 a1 evidence integrity、a2 scientific validity、a3 novelty/significance、a4 frontier/venue fit、a5 manuscript argument、a6 figure evidence/visual quality、a7 reproducibility/release。reviewer packet 额外携带已收据化的引用审计与 reference manifest。每门给 0–4 分、非空证据，≥3 才 pass；reviewer 不得换门名或把排版门代替科学门。任一项不过自动建立不可覆盖的 `revision-NN`，并按门的属主定向重开角色：引用审计与 a3/a4/a5 只重开写作、a6 只重开绘图、a1/a2/a7 双开；每条反馈任务记录 `owner_roles`，未被重开的角色不得向该轮提交，其最新已接受产物按哈希延续进下游审计与评审 packet。重审由不见旧评语的新 reviewer 执行；最多三轮后转人工。
+7. 固定质量审计门：controller 固定 a1 evidence integrity、a2 scientific validity、a3 novelty/significance、a4 frontier/venue fit、a5 manuscript argument、a6 figure evidence/visual quality、a7 reproducibility/release。reviewer packet 额外携带已收据化的引用审计与 reference manifest。每门给 0–4 分、非空证据，≥3 才 pass；reviewer 不得换门名或把排版门代替科学门。任一项不过自动建立不可覆盖的 `revision-NN`，并按门的属主定向重开角色：引用审计与 a3/a4/a5 只重开写作、a6 只重开绘图、a1/a2/a7 双开；每条反馈任务记录 `owner_roles`，未被重开的角色不得向该轮提交，其最新已接受产物按哈希延续进下游审计与评审 packet。重审由不见旧评语的新 reviewer 执行；三轮用尽不再转人工，而是以 `draft_with_disclosed_findings` 等级自动打包发布，未解决的反馈逐条写入 `publication_manifest.json.disclosed_findings`。
 8. 期刊对标：给出 2–3 个目标期刊/会议（筛查+数据基础设施类 → Science of the Total Environment / Applied Geochemistry / ESSD；方法伪影类 → ES&T / Geostandards and Geoanalytical Research；会议 → Goldschmidt / EGU / AGU），并用四步前沿对比法说明问题体量匹配：锚定引用（回应前沿明文写出的 open problem）→ 数值对比（同 setting 我方 vs 文献值）→ 缺口对接（前沿缺 X 则提供或量化 X）→ 时效窗口（对准政策/计划时间表）。
 9. 归档：草稿 PDF、分析脚本、results.json、图源文件与逐文件 SHA-256 收据归入 `research-products/<topic>-<date>/`，「不可宣称事项」写进正文 Limitations。SHA-256 只证明字节身份与绑定关系，不证明测量正确、观点新颖或科学结论为真。
 
 After step 9 archives a draft, ask one more per-paper question: run the optional top-journal polishing layer (paper_polish, Section 11) on this draft? paper_polish starts only on an explicit yes; no response means no polish.
 
-边界：本层不采集新数据（T4 只产出采集计划，执行须回到 D1 准入流程）；用户未确认启动前不运行，启动后仍不越过证据或人工发布门；引用先核实后写入。完整 worked example（FOREGS Hg/Pb 配对层位 → 10 页 arXiv 草稿，含方法图与前沿连接）见 `research-products/paper-demo-20260817/`。
+边界：本层不采集新数据（T4 只产出采集计划，执行须回到 D1 准入流程）；用户未确认启动前不运行，启动后证据门依旧硬性生效——自动发布只改变「谁按发布键」，不放松任何 a1–a7、引用审计或排版门；引用先核实后写入，未通过项以披露形式随发布件公开而非被掩盖。完整 worked example（FOREGS Hg/Pb 配对层位 → 10 页 arXiv 草稿，含方法图与前沿连接）见 `research-products/paper-demo-20260817/`。
 
 ## 11. Optional top-journal polishing layer (paper_polish)
 

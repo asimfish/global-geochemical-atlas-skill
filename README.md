@@ -229,7 +229,7 @@ python skills/global-geochemical-atlas/scripts/serve_atlas_research.py \
   --research-root /tmp/geochemical-research
 ```
 
-本地服务只绑定 `127.0.0.1`，使用 URL fragment token、单次 nonce、Host/Origin 校验和固定 JSON API。外部 agent 宿主按 `state.json.required_roles` 为试点、文献、写作、绘图和 reviewer 分别启动新会话，并通过 hash-bound payload 推进状态。写作必须提交 2–5 项 claim-bound 贡献；绘图必须提交 primary/spatial/robustness 三类数据主图，分别绑定真实 SVG/PDF/PNG 及检查修改记录。评审使用 controller 固定的科学有效性、新颖性、前沿适配、论文论证、视觉证据等七门 0–4 分量表；失败会自动开启新的 `revision-NN`，只把结构化反馈交给修订角色，下一轮 reviewer 不接收旧评语或 executor summary。最多三轮仍不通过则转人工；全部七门通过也只到 `awaiting_human_approval`，`publication_allowed` 永远为 `false`。详见 [Auto-Research 运行合同](skills/global-geochemical-atlas/references/auto-research.md)。
+本地服务只绑定 `127.0.0.1`，使用 URL fragment token、单次 nonce、Host/Origin 校验和固定 JSON API。外部 agent 宿主按 `state.json.required_roles` 为试点、文献、写作、绘图和 reviewer 分别启动新会话，并通过 hash-bound payload 推进状态。写作必须提交 2–5 项 claim-bound 贡献；绘图必须提交 primary/spatial/robustness 三类数据主图，分别绑定真实 SVG/PDF/PNG 及检查修改记录。评审使用 controller 固定的科学有效性、新颖性、前沿适配、论文论证、视觉证据等七门 0–4 分量表；失败会自动开启新的 `revision-NN`，只把结构化反馈交给修订角色，下一轮 reviewer 不接收旧评语或 executor summary。选定研究方向是唯一人工输入：全部七门通过后控制器校验各产物哈希并自动打包 `publication/`（等级 `camera_ready`，终态 `completed_published`）；三轮修订或引用修复预算用尽则以 `draft_with_disclosed_findings` 等级打包，未解决反馈逐条写入 `publication_manifest.json`（终态 `completed_with_findings`）；科研机会门失败则自动改道冻结回退队列中的下一个实证候选并写出可直接运行的 `next_request.json`（终态 `redirected_next_candidate`）。详见 [Auto-Research 运行合同](skills/global-geochemical-atlas/references/auto-research.md)。
 
 ## ⏳ 时间维度：演变地图与成因归因
 

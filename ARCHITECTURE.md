@@ -74,3 +74,10 @@ regeneration before any paper-eligible outcome is accepted, and the figure
 contract pins the spatial-pattern role to empirical values rather than data
 availability. This is recorded in
 [ADR-0008](docs/adr/0008-front-loaded-scientific-rigor-contract.md).
+Selecting a direction is the only human decision: passing runs auto-publish a
+hash-bound `camera_ready` package, exhausted revision or citation budgets
+auto-publish a `draft_with_disclosed_findings` package that lists every open
+finding, and a failed opportunity gate descends a frozen empirical-candidate
+fallback queue with a ready-to-run next request instead of waiting for a new
+instruction. This autonomy layer is recorded in
+[ADR-0009](docs/adr/0009-autonomous-publication-and-candidate-fallback.md).

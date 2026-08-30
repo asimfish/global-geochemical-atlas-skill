@@ -9100,12 +9100,43 @@ def check_d3(output_dir: Path) -> list[str]:
         )
         review_receipt = json_value(run_dir / "review_receipt.json")
         require(
-            final_research_state["status"] == "awaiting_human_approval"
-            and final_research_state["publication_allowed"] is False
+            final_research_state["status"] == "completed_published"
+            and final_research_state["stage"] == "publication"
+            and final_research_state["publication_allowed"] is True
+            and final_research_state["publication"]["grade"] == "camera_ready"
+            and final_research_state["publication"]["disclosed_finding_count"] == 0
             and review_receipt["cross_model_status"] == "provisional_same_family"
             and review_receipt["cycle_id"] == "revision-02"
-            and review_receipt["human_approval_required"] is True,
-            "D3 Auto-Research repairs failed gates, re-reviews independently, then stops at human approval with same-family status provisional",
+            and review_receipt["human_approval_required"] is False
+            and review_receipt["publication_decision"]
+            == "auto_publish_camera_ready",
+            "D3 Auto-Research repairs failed gates, re-reviews independently, then auto-publishes a camera-ready package with same-family status provisional",
+            checks,
+        )
+        publication_manifest = json_value(run_dir / "publication_manifest.json")
+        unsigned_manifest = dict(publication_manifest)
+        manifest_sha256 = unsigned_manifest.pop("manifest_sha256")
+        packaged_files_intact = all(
+            (run_dir / item["path"]).is_file()
+            and sha256_file(run_dir / item["path"]) == item["sha256"]
+            for item in publication_manifest["files"]
+        )
+        packaged_roles = {item["source_role"] for item in publication_manifest["files"]}
+        require(
+            publication_manifest["grade"] == "camera_ready"
+            and publication_manifest["packaged_cycle"] == "revision-02"
+            and publication_manifest["disclosed_findings"] == []
+            and manifest_sha256
+            == auto_research.sha256_bytes(
+                auto_research.canonical_json_bytes(unsigned_manifest)
+            )
+            and manifest_sha256
+            == final_research_state["publication"]["manifest_sha256"]
+            and packaged_files_intact
+            and {"manuscript_writer", "figure_designer", "controller"}
+            <= packaged_roles
+            and (run_dir / "publication" / "receipts" / "review_receipt.json").is_file(),
+            "D3 the publication package is hash-bound, carries manuscript, figure and receipt files, and matches the state manifest",
             checks,
         )
         try:
@@ -9171,6 +9202,31 @@ def check_d3(output_dir: Path) -> list[str]:
             and (pending_run / "agents" / "pilot_analyst" / "packet.json").is_file(),
             "D3 Auto-Research can pause for deterministic candidate selection and resume from an explicit user choice",
             checks,
+        )
+        natural_queue = json_value(pending_run / "candidate_fallback_queue.json")
+        require(
+            natural_queue["candidates"] == []
+            and natural_queue["selected_candidate_id"] == "user-question",
+            "D3 the bundled demo atlas yields no empirical fallback candidates and the frozen queue records that honestly",
+            checks,
+        )
+        synthetic_queue = {
+            **natural_queue,
+            "candidates": [
+                {
+                    "candidate_id": "dc-002",
+                    "title": "Synthetic paired-horizon fallback",
+                    "type": "T1_paired_horizon_partition",
+                },
+                {
+                    "candidate_id": "dc-003",
+                    "title": "Synthetic paired-fraction fallback",
+                    "type": "T6_paired_fraction_partition",
+                },
+            ],
+        }
+        (pending_run / "candidate_fallback_queue.json").write_text(
+            json.dumps(synthetic_queue), encoding="utf-8"
         )
         pilot_output_root = pending_run / "agent_outputs" / "pilot_analyst"
         real_output_dir = pilot_output_root / "real"
@@ -9324,18 +9380,34 @@ def check_d3(output_dir: Path) -> list[str]:
                 },
             },
         )
+        next_request = json_value(pending_run / "next_request.json")
         require(
             unsupported_pilot_state["stage"] == "pilot_and_literature"
-            and redirected_state["status"] == "needs_research_redirection"
+            and redirected_state["status"] == "redirected_next_candidate"
             and redirected_state["stage"] == "research_quality_gate"
             and redirected_state["research_gate"]["paper_eligible"] is False
+            and redirected_state["fallback"]["next_candidate_id"] == "dc-002"
+            and redirected_state["fallback"]["remaining_candidates"] == 2
+            and next_request["candidate_id"] == "dc-002"
+            and next_request["output_language"] == "en"
             and not (
                 pending_run / "agents" / "manuscript_writer" / "packet.json"
             ).exists()
             and not (
                 pending_run / "agents" / "figure_designer" / "packet.json"
             ).exists(),
-            "D3 unsupported pilots stop before manuscript and figure generation and route to a new research direction",
+            "D3 unsupported pilots stop before manuscript and figure generation and redirect autonomously to the next ranked empirical candidate",
+            checks,
+        )
+        empty_fallback_state: dict = {}
+        with tempfile.TemporaryDirectory() as fallback_temp:
+            auto_research._prepare_candidate_fallback(
+                Path(fallback_temp), empty_fallback_state, reason="unit check"
+            )
+        require(
+            empty_fallback_state["status"] == "needs_research_redirection"
+            and empty_fallback_state["stage"] == "research_quality_gate",
+            "D3 an exhausted fallback queue routes to honest research redirection instead of fabricating a candidate",
             checks,
         )
 

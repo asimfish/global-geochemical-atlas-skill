@@ -1,8 +1,12 @@
 # Atlas-to-Auto-Research runtime contract
 
 `Auto-Research` is an optional continuation inside the generated
-`interactive_map.html`.  It consumes a validated, frozen atlas; it never edits
-the eighteen core products and never publishes.
+`interactive_map.html`.  It consumes a validated, frozen atlas and never edits
+the eighteen core products.  Selecting a research direction is the only human
+decision: from there the controller advances autonomously until it packages a
+final publication (`camera_ready`, or `draft_with_disclosed_findings` when
+revision budgets are exhausted) or redirects itself to the next ranked
+empirical candidate.
 
 ## Start locally
 
@@ -77,8 +81,14 @@ and `state.json` expose the next incomplete gate.
 5. Apply the outer scientific-opportunity gate. Only an executed
    `supported_effect` or `supported_null` plus a verified
    `supports_empirical_article` frontier assessment may start writing. An
-   unsupported, acquisition-only, invalid or weak-frontier result stops at
-   `needs_research_redirection`; no manuscript/figure packets are created.
+   unsupported, acquisition-only, invalid or weak-frontier result never
+   fabricates a paper: the controller consults the frozen
+   `candidate_fallback_queue.json` (the empirical candidates ranked after the
+   user's selection), records the next direction in the state `fallback`
+   block, writes a ready-to-run `next_request.json`, and ends the run at
+   `redirected_next_candidate`. Only an exhausted queue ends at
+   `needs_research_redirection`. No manuscript/figure packets are created
+   either way.
 6. Start `manuscript_writer` and `figure_designer` only after that gate. Every
    contribution and plotted result must cite an atlas or pilot claim ID. The
    manuscript delivers a typed reference list (unique reference IDs, titles,
@@ -128,9 +138,15 @@ and `state.json` expose the next incomplete gate.
    re-auditing an unchanged reference list. The next reviewer sees only the
    canonical artifacts and frozen claim contracts, never feedback or previous
    review prose. At most three revision cycles run; unresolved failures then
-   stop at `needs_human_intervention`.
-10. Passing gates stop at human approval; same-family review is provisional
-    and `publication_allowed` stays false.
+   auto-publish at grade `draft_with_disclosed_findings`, with every open
+   feedback item disclosed verbatim in the publication manifest.
+10. Passing gates auto-publish at grade `camera_ready`: the controller
+    verifies every deliverable hash, packages the manuscript, figures, review
+    and audit receipts under `publication/`, and writes a hash-bound
+    `publication_manifest.json`. The run ends at `completed_published` (or
+    `completed_with_findings` for disclosed-findings drafts). Same-family
+    review remains labeled provisional inside the receipt, and the manifest
+    grade is the honest publication record; no human approval gate exists.
 
 The controller owns the meaning of every review gate; the reviewer cannot rename
 or substitute them between cycles. Each gate returns a score from 0 to 4,
@@ -148,7 +164,8 @@ non-empty evidence, and `pass=true` only for scores of at least 3:
 
 `SHA-256` proves exact byte identity and declared association. It does not prove
 measurement correctness, scientific importance, truth, or journal acceptance;
-the scientific and human gates remain separate.
+the publication grade in `publication_manifest.json` is the honest record of
+which scientific gates the package cleared and which findings remain open.
 
 An agent host reads only the active `agents/<role>/packet.json` or
 `revisions/revision-NN/agents/<role>/packet.json`, creates files under the exact

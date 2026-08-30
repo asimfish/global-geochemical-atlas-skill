@@ -45,7 +45,7 @@
           "const": "supports_empirical_article"
         },
         "failure_status": {
-          "const": "needs_research_redirection"
+          "const": "candidate_fallback_or_research_redirection"
         },
         "rule": {
           "type": "string",
