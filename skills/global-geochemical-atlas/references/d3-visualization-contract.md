@@ -49,7 +49,7 @@ anomaly_report.json
 若存在 `record_evidence.jsonl`，渲染包一并保留。全球产物选择 `global_globe`，区域产物选择
 `regional_focus`；两者共用同一模板契约而不是两份漂移的 HTML。`geochemistry.csv` 至少包含记录 ID、元素、介质、
 标准值/单位、坐标、QC、置信度、来源 ID 和来源定位。坐标为空、非有限或超出 WGS84 的记录不进入
-地图，但继续保留在数据库和 QC 报告。`--max-points` 是 canonical 输入安全上限（默认 200,000）；`--max-embedded-records` 是浏览器载荷上限（默认 80,000）。二者不得混用：前者约束完整科研数据库，后者只约束 HTML/GeoJSON 的确定性覆盖保持预览，防止单文件超过 100 MB 后让已采集的近 20 万条数据整轮回滚。预览必须写抽取证明，不能冒充完整结果；筛选、来源链、聚合统计和 CSV 对账仍以 canonical 全集为准。
+地图，但继续保留在数据库和 QC 报告。`--max-points` 是 canonical 输入安全上限（默认 200,000）；`--max-embedded-records` 只是浏览器载荷的绝对上界（默认 200,000），实际内嵌量由 96 MB 字节预算自适应决定：构建先尝试内嵌全部可绘记录，仅当 HTML 或 GeoJSON 序列化体积超预算时才按比例确定性收缩覆盖保持预览并重建。二者不得混用：前者约束完整科研数据库，后者只约束 HTML/GeoJSON 的确定性覆盖保持预览，防止单文件超过 100 MB 后让已采集的近 20 万条数据整轮回滚。预览必须写抽取证明（含 `byte_budget_bytes` 与最终 `maximum_embedded_records`），不能冒充完整结果；筛选、来源链、聚合统计和 CSV 对账仍以 canonical 全集为准。
 
 核心十八产物目录还包含 `sources_and_confidence.json`、`batch_acceptance.csv`、`batch_qc_report.json`、`anomaly_regions.geojson`、
 `spatial_anomaly_report.json`、`anomaly_provenance.json` 与 `temporal_map.html`。D3 在它们存在时必须原样嵌入/复制并展示；独立兼容模式要求上方七个最小输入，缺少统计区域时只能显示记录级候选和显示聚合，不能补造 FDR 结果。

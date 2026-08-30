@@ -207,7 +207,7 @@ USGS DS801 可按其元数据使用 WGS84；PANGAEA 只有 DOI、原字段和固
 
 必须由 `render_visualization.py` 从真实 CSV/GeoJSON 和版本化 profile 生成自包含 `interactive_map.html`；不得手写、复制或事后改 HTML。页面至少支持元素、区域、介质、样品类型、方法、地质单元、四维置信度和 high/low 候选筛选，并把完整时间演变图谱作为同一主导航中的一级 `temporalView` 选项，把 Auto-Research 作为 `autoResearchView` 选项。时序内容以 `srcdoc` 懒加载嵌入同一文件，禁止主导航链接或 iframe `src` 依赖 `temporal_map.html`。页面同时显示来源跳转、单位、图例、数据库有但地图无的原因。正式空间匹配地质单元与发布方直报的岩性、土层、沉积环境、水体类型、构造或调查区背景必须分栏展示：后者可证明“有背景描述”，但不得冒充 polygon join。异常网格详情必须保留“返回全部记录”导航。
 
-研究请求可保留请求上限内的 200,000 条 canonical 测定到 `geochemistry.csv`；主 HTML 与 `samples.geojson` 默认最多内嵌 80,000 条 `d3-coverage-preserving-preview-v1` 浏览记录，避免完整数据因单文件 100 MB 门禁被整轮回滚。预览必须保留完整物理样品组、全部候选异常，以及来源 × 介质 × 元素 × 空间格覆盖，并同时显示全库可上图数、实际内嵌数和抽取证明。浏览器绘图继续按当前缩放执行 `zoom-aware-pixel-lod-v1`；筛选预览不等于删除科研数据，完整标准库、逐记录证据、聚合统计和 SHA-256 对账始终使用 canonical 全集。
+研究请求可保留请求上限内的 200,000 条 canonical 测定到 `geochemistry.csv`；主 HTML 与 `samples.geojson` 的内嵌量不设固定条数上限，而由 `d3-coverage-preserving-preview-v2` 按 96 MB 字节预算自适应：先尝试内嵌全部可绘记录，仅当序列化体积超预算时才确定性收缩预览，避免完整数据因单文件 100 MB 门禁被整轮回滚。预览必须保留完整物理样品组、全部候选异常，以及来源 × 介质 × 元素 × 空间格覆盖，并同时显示全库可上图数、实际内嵌数和抽取证明。浏览器绘图继续按当前缩放执行 `zoom-aware-pixel-lod-v1`；筛选预览不等于删除科研数据，完整标准库、逐记录证据、聚合统计和 SHA-256 对账始终使用 canonical 全集。
 
 全球地图同时提供二维世界图与可旋转地球仪；区域地图锁定请求范围。热力图只表示物理采样点密度，不插值浓度；异常密度只表示候选聚集。无坐标记录留在数据库，不放 `(0,0)`。
 

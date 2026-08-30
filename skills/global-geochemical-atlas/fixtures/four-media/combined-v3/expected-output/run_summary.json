@@ -42,9 +42,9 @@
         "sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839"
       },
       "interactive_map": {
-        "bytes": 2073319,
+        "bytes": 2357284,
         "filename": "interactive_map.html",
-        "sha256": "952d1bb641d2747276e82a2e43f9ad1f91479573472762a171aa4feadd18406d"
+        "sha256": "04c38cfa1f5511a838ba7010773df226e68dc3ed36381d16e433613073644c99"
       },
       "iteration_backlog": {
         "bytes": 703571,
@@ -62,9 +62,9 @@
         "sha256": "6d1ff37ea80c515dc2a88361524e8c37091b93b176745a24f39f40240e1626a6"
       },
       "samples": {
-        "bytes": 327684,
+        "bytes": 327753,
         "filename": "samples.geojson",
-        "sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82"
+        "sha256": "e5b393bd4627fcfdc4691af8baa62c3432a218c161b22171298113be7d08f85b"
       },
       "source_manifest": {
         "bytes": 43899,
@@ -82,9 +82,9 @@
         "sha256": "0bdb2c92476c7b19de6f0d6c55c58a76954664489adf87d8bc372e3fe2fd634f"
       },
       "temporal_map": {
-        "bytes": 275916,
+        "bytes": 488838,
         "filename": "temporal_map.html",
-        "sha256": "a07bf1819fbfcf07115a71d06f39fd410cd82b712967465fb6cb15af812aa808"
+        "sha256": "863e19bc560001e4bc083232fa547995d9e215346eba313ea35582627ab17d2b"
       }
     },
     "commit_marker": "run_summary.json",
@@ -154,9 +154,9 @@
     "artifact_bindings": {
       "anomalies_sha256": "9221a087e73e8cf794b15a29c86c1880cfc5ccf24da821723c381c8689f29702",
       "database_sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839",
-      "interactive_map_sha256": "952d1bb641d2747276e82a2e43f9ad1f91479573472762a171aa4feadd18406d",
-      "samples_geojson_sha256": "3a735708afc9459d7d5fde278d635d895ceddf321e6310c114095e46860a2a82",
-      "temporal_map_sha256": "a07bf1819fbfcf07115a71d06f39fd410cd82b712967465fb6cb15af812aa808"
+      "interactive_map_sha256": "04c38cfa1f5511a838ba7010773df226e68dc3ed36381d16e433613073644c99",
+      "samples_geojson_sha256": "e5b393bd4627fcfdc4691af8baa62c3432a218c161b22171298113be7d08f85b",
+      "temporal_map_sha256": "863e19bc560001e4bc083232fa547995d9e215346eba313ea35582627ab17d2b"
     },
     "basemap": {
       "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
@@ -310,18 +310,20 @@
     "display_sample_count": 274,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 2073319,
+    "html_bytes": 2357284,
     "interpolation": false,
     "map_preview_sampling": {
       "applied": false,
+      "byte_budget_bytes": 96000000,
       "candidate_anomaly_records_preserved": true,
       "complete_database_artifact": "geochemistry.csv",
       "embedded_physical_sample_count": 274,
       "embedded_record_count": 856,
       "input_physical_sample_count": 274,
       "input_record_count": 856,
+      "limit_basis": "single_file_byte_budget",
       "maximum_embedded_records": 50000,
-      "policy_version": "d3-coverage-preserving-preview-v1",
+      "policy_version": "d3-coverage-preserving-preview-v2",
       "stratification_cell_degrees": null,
       "whole_physical_sample_groups_preserved": true
     },
@@ -491,7 +493,7 @@
       "custom_bbox"
     ],
     "reported_coordinate_banner": false,
-    "samples_geojson_bytes": 327684,
+    "samples_geojson_bytes": 327753,
     "scope_excluded_mappable_record_count": 0,
     "scope_mappable_record_count": 856,
     "source_mappable_record_count": 856,

@@ -203,9 +203,24 @@ button,select,input{font:inherit}
 /* ====== 数据载入与契约校验 ====== */
 const PAYLOAD = JSON.parse(document.getElementById("temporal-payload").textContent);
 const REGION = PAYLOAD.region || null;
+const BOUNDARIES = PAYLOAD.boundaries || null;
 const BASE = JSON.parse(document.getElementById("basemap-data").textContent);
 if (PAYLOAD.schema_version !== "temporal-atlas-payload-v1") throw new Error("unsupported temporal payload");
 if (!BASE || !Array.isArray(BASE.rings)) throw new Error("unsupported basemap payload");
+/* 边界环预计算包围盒，绘制时按视口剔除，保证平移缩放流畅 */
+function ringBBoxes(layer) {
+  if (!layer || !Array.isArray(layer.rings)) return null;
+  return layer.rings.map(ring => {
+    let w = Infinity, e = -Infinity, s = Infinity, n = -Infinity;
+    for (const p of ring) {
+      if (p[0] < w) w = p[0]; if (p[0] > e) e = p[0];
+      if (p[1] < s) s = p[1]; if (p[1] > n) n = p[1];
+    }
+    return [w, s, e, n];
+  });
+}
+const ADMIN0_BBOX = BOUNDARIES ? ringBBoxes(BOUNDARIES.admin0) : null;
+const ADMIN1_BBOX = BOUNDARIES ? ringBBoxes(BOUNDARIES.admin1) : null;
 
 const STATS = PAYLOAD.stats;
 const ELEMENTS = PAYLOAD.elements;
@@ -417,7 +432,20 @@ function unproject(x, y) {
   const s = baseScale() * state.view.zoom;
   return [state.view.lon + (x - W / 2) / s, state.view.lat - (y - H / 2) / s];
 }
+/* 区域研究导航钳制：视野锁定在冻结区域附近，且不能缩到比"整个区域"还远；
+   区域内允许更深的放大倍率以查看站点细节。 */
+let REGION_FIT_ZOOM = 1;
+function minZoom() { return REGION ? Math.max(0.85, REGION_FIT_ZOOM * 0.9) : 0.85; }
+function maxZoom() { return REGION ? 120 : 45; }
 function clampView() {
+  state.view.zoom = Math.max(minZoom(), Math.min(maxZoom(), state.view.zoom));
+  if (REGION) {
+    const b = REGION.bounds;
+    const mLon = Math.max(3, (b.e - b.w) * 0.35), mLat = Math.max(2.5, (b.n - b.s) * 0.35);
+    state.view.lon = Math.max(b.w - mLon, Math.min(b.e + mLon, state.view.lon));
+    state.view.lat = Math.max(Math.max(-88, b.s - mLat), Math.min(Math.min(88, b.n + mLat), state.view.lat));
+    return;
+  }
   const s = baseScale() * state.view.zoom;
   const halfLon = W / 2 / s;
   state.view.lon = Math.max(-180 + halfLon * 0.2, Math.min(180 - halfLon * 0.2, state.view.lon));
@@ -430,10 +458,11 @@ function fitRegionView() {
   const spanLon = Math.max(1e-6, b.e - b.w), spanLat = Math.max(1e-6, b.n - b.s);
   const zoomW = W / (baseScale() * spanLon * 1.12);
   const zoomH = H / (baseScale() * spanLat * 1.12);
+  REGION_FIT_ZOOM = Math.max(0.85, Math.min(45, Math.min(zoomW, zoomH)));
   state.view = {
     lon: (b.w + b.e) / 2,
     lat: (b.s + b.n) / 2,
-    zoom: Math.max(0.85, Math.min(45, Math.min(zoomW, zoomH)))
+    zoom: REGION_FIT_ZOOM
   };
   clampView();
 }
@@ -511,6 +540,32 @@ function drawLand() {
   ctx.strokeStyle = "rgba(64,150,148,.22)"; ctx.lineWidth = 2.2; ctx.stroke();
   ctx.strokeStyle = "rgba(139,232,216,.55)"; ctx.lineWidth = 0.8; ctx.stroke();
   ctx.restore();
+}
+function strokeBoundaryLayer(layer, bboxes, style) {
+  if (!layer || !bboxes) return;
+  const tl = unproject(0, 0), br = unproject(W, H);
+  const vw = tl[0] - 2, ve = br[0] + 2, vs = br[1] - 2, vn = tl[1] + 2;
+  ctx.save();
+  if (style.dash) ctx.setLineDash(style.dash);
+  ctx.beginPath();
+  for (let r = 0; r < layer.rings.length; r++) {
+    const bb = bboxes[r];
+    if (bb[2] < vw || bb[0] > ve || bb[3] < vs || bb[1] > vn) continue;
+    const ring = layer.rings[r];
+    for (let i = 0; i < ring.length; i++) {
+      const p = project(ring[i][0], ring[i][1]);
+      if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+    }
+    ctx.closePath();
+  }
+  ctx.strokeStyle = style.color; ctx.lineWidth = style.width; ctx.stroke();
+  ctx.restore();
+}
+function drawBoundaries() {
+  /* 参考边界：国界常显，省界（Admin-1）在区域研究命中时叠加；仅示意定位，不作法定边界依据 */
+  if (!BOUNDARIES) return;
+  strokeBoundaryLayer(BOUNDARIES.admin1, ADMIN1_BBOX, { color: "rgba(139,232,216,.24)", width: 0.7, dash: [5, 4] });
+  strokeBoundaryLayer(BOUNDARIES.admin0, ADMIN0_BBOX, { color: "rgba(158,220,232,.4)", width: 0.9, dash: null });
 }
 function drawGraticule() {
   ctx.strokeStyle = "rgba(130,198,198,.09)"; ctx.lineWidth = 0.7;
@@ -624,6 +679,7 @@ function drawMap(now) {
   if (starCanvas) ctx.drawImage(starCanvas, 0, 0, W, H);
   drawGraticule();
   drawLand();
+  drawBoundaries();
   hitPoints = []; hitStations = [];
   const fade = Math.min(1, (now - state.filterFadeStart) / 260); /* 过滤切换 <=300ms 渐入 */
   let needMore = fade < 1;
@@ -1139,15 +1195,15 @@ mapCanvas.addEventListener("wheel", e => {
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
   const before = unproject(mx, my);
   const f = Math.exp(-e.deltaY * 0.0016);
-  state.view.zoom = Math.max(0.85, Math.min(45, state.view.zoom * f));
+  state.view.zoom = Math.max(minZoom(), Math.min(maxZoom(), state.view.zoom * f));
   const after = unproject(mx, my);
   state.view.lon += before[0] - after[0];
   state.view.lat += before[1] - after[1];
   clampView();
   scheduleDraw();
 }, { passive: false });
-$("zoomIn").addEventListener("click", () => { state.view.zoom = Math.min(45, state.view.zoom * 1.5); clampView(); scheduleDraw(); });
-$("zoomOut").addEventListener("click", () => { state.view.zoom = Math.max(0.85, state.view.zoom / 1.5); clampView(); scheduleDraw(); });
+$("zoomIn").addEventListener("click", () => { state.view.zoom = Math.min(maxZoom(), state.view.zoom * 1.5); clampView(); scheduleDraw(); });
+$("zoomOut").addEventListener("click", () => { state.view.zoom = Math.max(minZoom(), state.view.zoom / 1.5); clampView(); scheduleDraw(); });
 $("zoomReset").addEventListener("click", () => { state.view = { lon: 12, lat: 12, zoom: 1 }; fitRegionView(); scheduleDraw(); });
 
 function handleHover(mx, my, cx, cy) {
@@ -1688,8 +1744,8 @@ function renderFooter() {
     `区域对比在同元素 · 同介质 · 同单位层内按 ${CELL_DEG}° 网格对比早晚两期实测中位数（删失点不参与统计），只描述观测变化，不外推、不代表成因。` +
     (PROV ? `异常成因按 anomaly-provenance-v1 契约嵌入：${PROV.candidate_count} 个候选，${PROV.mapped} 个上图，${PROV.unmapped} 个无可用坐标未上图；至少两条证据线同向才判母质 / 人为，否则如实标注证据不足。` : "本次构建未嵌入异常成因归因结果（可选 --provenance）。") +
     `其中 ${STATS.coordinate_fallback_used} 条使用发布方原始坐标回退（original_latitude_raw / original_longitude_raw，未规范化，图上有标注）。<br>` +
-    (REGION ? `<b>研究区域</b>：${REGION.label}（初始视野按请求冻结区域取景，可缩放查看周边）。` : "") +
-    `<b>制图</b>：海岸线 Natural Earth 1:110m Land（公有领域）· WGS84 等经纬投影 · 仅科学示意，不作法定边界依据。` +
+    (REGION ? `<b>研究区域</b>：${REGION.label}（视野锁定在区域附近，已叠加国界${BOUNDARIES && BOUNDARIES.admin1 ? "与省级 Admin-1 参考边界" : "参考边界"}，区域内可深度放大查看站点细节）。` : "") +
+    `<b>制图</b>：海岸线 Natural Earth 1:110m Land、国界 Natural Earth 1:110m Admin-0${BOUNDARIES && BOUNDARIES.admin1 ? "、省界 Natural Earth 1:50m Admin-1" : ""}（均公有领域）· WGS84 等经纬投影 · 边界仅供定位示意，不作法定边界依据。` +
     `数据集：${PAYLOAD.source_dataset} · 模板 temporal-atlas-v1。`;
 }
 

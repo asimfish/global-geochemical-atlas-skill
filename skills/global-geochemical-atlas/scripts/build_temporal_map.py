@@ -33,6 +33,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "temporal-atlas-v1.html"
 DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
+DEFAULT_BOUNDARIES = SKILL_DIR / "assets" / "natural-earth-110m-admin0.json"
+DEFAULT_ADMIN1_BOUNDARIES = (
+    SKILL_DIR / "assets" / "natural-earth-50m-admin1-china-visual.json"
+)
 
 PAYLOAD_SCHEMA_VERSION = "temporal-atlas-payload-v1"
 POINT_PRECISION_FORMATS = {
@@ -316,6 +320,75 @@ def load_provenance(
     }
 
 
+def _geometry_rings(geometry: dict[str, Any]) -> list[list[list[float]]]:
+    geometry_type = geometry.get("type")
+    coordinates = geometry.get("coordinates")
+    if geometry_type == "Polygon":
+        return [list(ring) for ring in coordinates]
+    if geometry_type == "MultiPolygon":
+        return [list(ring) for polygon in coordinates for ring in polygon]
+    raise TemporalMapBuildError(
+        f"unsupported boundary geometry type: {geometry_type}"
+    )
+
+
+def load_boundary_layers(
+    region: dict[str, Any] | None,
+    boundaries_path: Path = DEFAULT_BOUNDARIES,
+    admin1_boundaries_path: Path = DEFAULT_ADMIN1_BOUNDARIES,
+) -> dict[str, Any]:
+    """Embed offline reference boundaries so regional runs are orientable.
+
+    Country (Admin-0) outlines are always embedded; the pinned Admin-1
+    province layer is embedded only when the frozen request region actually
+    overlaps that asset, so a regional study is framed with its borders and
+    provinces instead of floating on a bare coastline.
+    """
+    with boundaries_path.open(encoding="utf-8") as handle:
+        admin0_raw = json.load(handle)
+    admin0_rings: list[list[list[float]]] = []
+    for country in admin0_raw["countries"]:
+        admin0_rings.extend(_geometry_rings(country["geometry"]))
+    if not admin0_rings:
+        raise TemporalMapBuildError("offline admin-0 asset has no boundaries")
+    layers: dict[str, Any] = {
+        "admin0": {
+            "asset_version": admin0_raw["asset_version"],
+            "license": admin0_raw["license"],
+            "boundary_semantics": admin0_raw["boundary_semantics"],
+            "rings": admin0_rings,
+        },
+        "admin1": None,
+    }
+    if region is None:
+        return layers
+    with admin1_boundaries_path.open(encoding="utf-8") as handle:
+        admin1_raw = json.load(handle)
+    admin1_rings: list[list[list[float]]] = []
+    for boundary in admin1_raw["boundaries"]:
+        admin1_rings.extend(_geometry_rings(boundary["geometry"]))
+    if not admin1_rings:
+        raise TemporalMapBuildError("offline admin-1 asset has no boundaries")
+    longitudes = [point[0] for ring in admin1_rings for point in ring]
+    latitudes = [point[1] for ring in admin1_rings for point in ring]
+    bounds = region["bounds"]
+    overlaps = (
+        min(longitudes) <= float(bounds["e"])
+        and max(longitudes) >= float(bounds["w"])
+        and min(latitudes) <= float(bounds["n"])
+        and max(latitudes) >= float(bounds["s"])
+    )
+    if overlaps:
+        layers["admin1"] = {
+            "asset_version": admin1_raw["asset_version"],
+            "license": admin1_raw["license"],
+            "country_iso_a3": admin1_raw["country_iso_a3"],
+            "boundary_semantics": admin1_raw["boundary_semantics"],
+            "rings": admin1_rings,
+        }
+    return layers
+
+
 def region_from_profile(profile_path: Path) -> dict[str, Any] | None:
     """Resolve the frozen request region from a d3 visualization profile.
 
@@ -568,6 +641,7 @@ def build_payload(
         "schema_version": PAYLOAD_SCHEMA_VERSION,
         "source_dataset": input_path.name,
         "region": region_payload,
+        "boundaries": load_boundary_layers(region),
         "stats": stats,
         "elements": elements,
         "media": media,

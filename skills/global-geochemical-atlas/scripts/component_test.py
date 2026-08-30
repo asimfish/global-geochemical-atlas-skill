@@ -7671,6 +7671,38 @@ def check_d3(output_dir: Path) -> list[str]:
         " template frames its initial view on it",
         checks,
     )
+    temporal_offshore_payload = temporal_map_builder.build_payload(
+        combined_expected_dir / "geochemistry.csv",
+        region={
+            "label": "冰岛周边",
+            "bounds": {"w": -30.0, "s": 62.0, "e": -12.0, "n": 68.0},
+            "clip_method": "bbox",
+        },
+    )
+    temporal_boundaries = temporal_payload["boundaries"]
+    temporal_region_boundaries = temporal_region_payload["boundaries"]
+    require(
+        temporal_boundaries["admin0"]["asset_version"]
+        == "ai4s-natural-earth-admin0-v2"
+        and len(temporal_boundaries["admin0"]["rings"]) >= 177
+        and temporal_boundaries["admin1"] is None
+        and temporal_region_boundaries["admin0"]["asset_version"]
+        == "ai4s-natural-earth-admin0-v2"
+        and temporal_region_boundaries["admin1"] is not None
+        and temporal_region_boundaries["admin1"]["asset_version"]
+        == "ai4s-natural-earth-admin1-china-visual-v1"
+        and temporal_region_boundaries["admin1"]["country_iso_a3"] == "CHN"
+        and temporal_offshore_payload["boundaries"]["admin1"] is None
+        and "ai4s-natural-earth-admin0-v2" in temporal_html
+        and "drawBoundaries" in temporal_html
+        and "REGION_FIT_ZOOM" in temporal_html
+        and "function minZoom()" in temporal_html
+        and "function maxZoom()" in temporal_html,
+        "D3 temporal map always embeds offline country borders, adds China"
+        " Admin-1 only for overlapping regional runs, and locks regional"
+        " navigation near the frozen region",
+        checks,
+    )
     good_temporal_errors: list[str] = []
     output_validator.validate_temporal_html(
         output_dir / "temporal_map.html", good_temporal_errors
@@ -9467,7 +9499,11 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         map_report.get("map_version") == "d3-interactive-atlas-v3"
         and map_report.get("map_preview_sampling", {}).get("policy_version")
-        == "d3-coverage-preserving-preview-v1"
+        == "d3-coverage-preserving-preview-v2"
+        and map_report.get("map_preview_sampling", {}).get("limit_basis")
+        == "single_file_byte_budget"
+        and map_report.get("map_preview_sampling", {}).get("byte_budget_bytes")
+        == 96_000_000
         and map_report.get("scope_mappable_record_count")
         == map_report.get("mapped_record_count")
         and map_report.get("default_view") == "all_data_sample_deduplicated"
@@ -9495,7 +9531,9 @@ def check_d3(output_dir: Path) -> list[str]:
         }.issubset(set(map_report.get("visualization_modes", [])))
         and map_report.get("external_assets") == 0
         and map_report.get("interpolation") is False
-        and map_builder.DEFAULT_MAX_EMBEDDED_RECORDS == 80_000
+        and map_builder.DEFAULT_MAX_EMBEDDED_RECORDS == 200_000
+        and map_builder.EMBED_TARGET_BYTES == 96_000_000
+        and map_builder.EMBED_TARGET_BYTES <= map_builder.MAX_OUTPUT_BYTES
         and map_report.get("admin1_boundary_asset", {}).get("asset_version")
         == "ai4s-natural-earth-admin1-china-visual-v1"
         and map_report.get("admin1_boundary_asset", {}).get("boundary_count") == 31

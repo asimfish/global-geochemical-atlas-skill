@@ -45,10 +45,15 @@ MISSING_METHOD_LABEL = "发布方未报告分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
 # The canonical database may contain 200k rows, but embedding every verbose
 # observation in both HTML and GeoJSON can breach the competition/runtime
-# 100 MB single-file gate.  The deterministic preview retains complete physical
-# sample groups, anomalies and source × medium × element × spatial strata; the
-# unsampled rows remain in geochemistry.csv and all aggregate summaries.
-DEFAULT_MAX_EMBEDDED_RECORDS = 80_000
+# 100 MB single-file gate.  Instead of a fixed record cap, the build embeds as
+# many records as the byte budget below allows: it assembles the full preview
+# first and, only when the serialized HTML or GeoJSON exceeds the budget,
+# deterministically shrinks the coverage-preserving preview and rebuilds.  The
+# preview retains complete physical sample groups, anomalies and source ×
+# medium × element × spatial strata; unsampled rows always remain in
+# geochemistry.csv and all aggregate summaries.
+DEFAULT_MAX_EMBEDDED_RECORDS = 200_000
+EMBED_TARGET_BYTES = 96_000_000
 COORDINATE_MODES = ("canonical", "reported")
 COORDINATE_BASIS_CANONICAL = "canonical_wgs84"
 COORDINATE_BASIS_REPORTED = "reported_unverified"
@@ -1474,13 +1479,15 @@ def coverage_preserving_map_preview(
         groups.setdefault(sample_display_key(record), []).append(record)
     if len(normalized_records) <= limit:
         return normalized_records, {
-            "policy_version": "d3-coverage-preserving-preview-v1",
+            "policy_version": "d3-coverage-preserving-preview-v2",
             "applied": False,
             "input_record_count": len(normalized_records),
             "embedded_record_count": len(normalized_records),
             "input_physical_sample_count": len(groups),
             "embedded_physical_sample_count": len(groups),
             "maximum_embedded_records": limit,
+            "byte_budget_bytes": EMBED_TARGET_BYTES,
+            "limit_basis": "single_file_byte_budget",
             "stratification_cell_degrees": None,
             "candidate_anomaly_records_preserved": True,
             "whole_physical_sample_groups_preserved": True,
@@ -1558,13 +1565,15 @@ def coverage_preserving_map_preview(
         if str(record.get("record_id")) in anomaly_ids
     }
     return preview, {
-        "policy_version": "d3-coverage-preserving-preview-v1",
+        "policy_version": "d3-coverage-preserving-preview-v2",
         "applied": True,
         "input_record_count": len(normalized_records),
         "embedded_record_count": len(preview),
         "input_physical_sample_count": len(groups),
         "embedded_physical_sample_count": len(selected),
         "maximum_embedded_records": limit,
+        "byte_budget_bytes": EMBED_TARGET_BYTES,
+        "limit_basis": "single_file_byte_budget",
         "stratification_cell_degrees": chosen_degrees,
         "candidate_anomaly_records_preserved": (
             preserved_anomaly_ids == expected_anomaly_ids
@@ -2396,6 +2405,44 @@ def build_map(
     )
     html_bytes = len(html.encode("utf-8"))
     geojson_bytes = len(geojson_text.encode("utf-8"))
+    if html_bytes > EMBED_TARGET_BYTES or geojson_bytes > EMBED_TARGET_BYTES:
+        # Byte-budget adaptive preview: rebuild with a proportionally smaller
+        # coverage-preserving preview instead of failing or fixing an arbitrary
+        # record cap.  Deterministic: identical inputs shrink identically.
+        embedded_count = len(records)
+        scale = min(
+            EMBED_TARGET_BYTES / html_bytes, EMBED_TARGET_BYTES / geojson_bytes
+        )
+        reduced_limit = max(
+            1, min(embedded_count - 1, int(embedded_count * scale * 0.97))
+        )
+        if embedded_count <= 1 or reduced_limit >= embedded_count:
+            raise MapBuildError(
+                "map output exceeds the single-file byte budget even at the "
+                "minimum preview size; filter or split the input"
+            )
+        return build_map(
+            database,
+            anomalies_path,
+            output_html,
+            output_geojson,
+            max_points=max_points,
+            max_embedded_records=reduced_limit,
+            qc_report_path=qc_report_path,
+            confidence_report_path=confidence_report_path,
+            source_manifest_path=source_manifest_path,
+            sources_and_confidence_path=sources_and_confidence_path,
+            anomaly_report_path=anomaly_report_path,
+            anomaly_regions_path=anomaly_regions_path,
+            spatial_anomaly_report_path=spatial_anomaly_report_path,
+            iteration_backlog_path=iteration_backlog_path,
+            basemap_path=basemap_path,
+            visualization_profile_path=visualization_profile_path,
+            boundaries_path=boundaries_path,
+            admin1_boundaries_path=admin1_boundaries_path,
+            coordinate_mode=coordinate_mode,
+            temporal_html_path=temporal_html_path,
+        )
     if html_bytes > MAX_OUTPUT_BYTES or geojson_bytes > MAX_OUTPUT_BYTES:
         raise MapBuildError(
             "map output would exceed the 100 MB runtime safety limit; filter or split the input"
