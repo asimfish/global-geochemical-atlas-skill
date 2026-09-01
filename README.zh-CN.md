@@ -121,7 +121,7 @@ python skills/global-geochemical-atlas/scripts/autopilot.py \
 
 </details>
 
-本地重复基准采用 3 次预热与 10 次独立测量，每次都创建新输出目录并验证全部 15 项产物；结果与适用边界见[工作流性能基准](skills/global-geochemical-atlas/BENCHMARK.md)。它不是官方模型得分或 2 CPU 容器成绩。
+本地重复基准采用 3 次预热与 10 次独立测量，每次都创建新输出目录并验证全部 16 项产物；结果与适用边界见[工作流性能基准](skills/global-geochemical-atlas/BENCHMARK.md)。它不是官方模型得分或 2 CPU 容器成绩。
 
 ## 🤖 在你的 AI Agent 中使用
 

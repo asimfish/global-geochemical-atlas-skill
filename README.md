@@ -119,7 +119,7 @@ It proves the engineering and scientific rules are executable — it does not re
 
 </details>
 
-A local repeatability benchmark uses 3 warm-ups and 10 independent measurements, each in a fresh output directory with all 15 artifacts validated; results and applicability limits are recorded in the [workflow benchmark](skills/global-geochemical-atlas/BENCHMARK.md). It is not an official model score or a 2-CPU container result.
+A local repeatability benchmark uses 3 warm-ups and 10 independent measurements, each in a fresh output directory with all 16 artifacts validated; results and applicability limits are recorded in the [workflow benchmark](skills/global-geochemical-atlas/BENCHMARK.md). It is not an official model score or a 2-CPU container result.
 
 ## 🤖 Use It with Your AI Agent
 
