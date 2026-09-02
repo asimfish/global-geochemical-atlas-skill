@@ -25,11 +25,16 @@ import csv
 import json
 import statistics
 import sys
+from collections.abc import Mapping, Sequence
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+import sampling_time  # noqa: E402
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "temporal-atlas-v1.html"
 DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
@@ -38,7 +43,7 @@ DEFAULT_ADMIN1_BOUNDARIES = (
     SKILL_DIR / "assets" / "natural-earth-50m-admin1-china-visual.json"
 )
 
-PAYLOAD_SCHEMA_VERSION = "temporal-atlas-payload-v1"
+PAYLOAD_SCHEMA_VERSION = "temporal-atlas-payload-v2"
 POINT_PRECISION_FORMATS = {
     "second": "%Y-%m-%dT%H:%M:%S",
     "minute": "%Y-%m-%dT%H:%M",
@@ -46,6 +51,11 @@ POINT_PRECISION_FORMATS = {
     "month": "%Y-%m",
     "year": "%Y",
 }
+# Dated records are reported in two honest tiers: a per-sample timestamp the
+# publisher wrote on the row, or a documented campaign / dataset collection
+# window attached to every row of that dataset.
+POINT_DATED_PRECISIONS = frozenset({"second", "minute", "day"})
+WINDOW_DATED_PRECISIONS = frozenset({"month", "year", "year_range"})
 TREND_RELATIVE_THRESHOLD = 0.15
 STATION_MIN_TIMEPOINTS = 3
 STATION_COORD_DECIMALS = 3
@@ -359,9 +369,36 @@ def load_boundary_layers(
             "rings": admin0_rings,
         },
         "admin1": None,
+        "focus": None,
     }
     if region is None:
         return layers
+    # The study countries are emphasised as the cartographic frame.  This is
+    # the same outline the main map draws in gold; it never clips records.
+    focus_codes = [str(code) for code in region.get("highlight_country_codes") or []]
+    if focus_codes:
+        by_code = {str(country["iso_a3"]): country for country in admin0_raw["countries"]}
+        unknown = [code for code in focus_codes if code not in by_code]
+        if unknown:
+            raise TemporalMapBuildError(
+                "highlight_country_codes missing from the offline admin-0 asset: "
+                + ", ".join(unknown)
+            )
+        focus_rings: list[list[list[float]]] = []
+        for code in focus_codes:
+            focus_rings.extend(_geometry_rings(by_code[code]["geometry"]))
+        layers["focus"] = {
+            "asset_version": admin0_raw["asset_version"],
+            "license": admin0_raw["license"],
+            # ISO codes only: the frame names analysis units, not polities.
+            "country_codes": focus_codes,
+            "boundary_semantics": (
+                "Study-frame emphasis of the Natural Earth Admin-0 outlines named "
+                "by highlight_country_codes; cartographic orientation only, never a "
+                "record clip or a legal boundary."
+            ),
+            "rings": focus_rings,
+        }
     with admin1_boundaries_path.open(encoding="utf-8") as handle:
         admin1_raw = json.load(handle)
     admin1_rings: list[list[list[float]]] = []
@@ -410,6 +447,62 @@ def region_from_profile(profile_path: Path) -> dict[str, Any] | None:
         raise TemporalMapBuildError(
             f"visualization profile has no resolvable region: {exc}"
         ) from exc
+
+
+REASON_ROW_VALUE_MISSING = "declared_field_missing_or_unparseable_on_row"
+REASON_UNDECLARED_SOURCE = "source_not_in_sampling_time_contract"
+
+
+def summarize_source_time_semantics(
+    rows: Sequence[Mapping[str, str]], dated: Sequence[Mapping[str, Any]]
+) -> list[dict[str, Any]]:
+    """Explain, per source, why records do or do not carry a sampling time.
+
+    The temporal map must never leave a reader guessing whether a thin dated
+    share is a parsing bug or a property of the archives.  Each source is
+    reported with its record and dated counts, the time basis (a per-row
+    timestamp, a publisher-documented dataset collection window, or none) and
+    the controlled reason from the ``atlas-sampling-time-v1`` contract.
+    """
+    totals: dict[str, int] = {}
+    for row in rows:
+        source_id = row.get("source_id") or ""
+        totals[source_id] = totals.get(source_id, 0) + 1
+    dated_counts: dict[str, int] = {}
+    for entry in dated:
+        source_id = entry["row"].get("source_id") or ""
+        dated_counts[source_id] = dated_counts.get(source_id, 0) + 1
+    summary: list[dict[str, Any]] = []
+    for source_id, total in totals.items():
+        declaration = sampling_time.SOURCE_SAMPLING_TIME.get(source_id)
+        dated_total = dated_counts.get(source_id, 0)
+        if declaration is None:
+            basis, raw_field, reason = "none", None, REASON_UNDECLARED_SOURCE
+        elif "raw_format" in declaration:
+            basis = (
+                "dataset_window"
+                if source_id in sampling_time.PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS
+                or declaration["raw_format"] == "year_range_slash"
+                else "row_timestamp"
+            )
+            raw_field = declaration["raw_field"]
+            reason = REASON_ROW_VALUE_MISSING if dated_total < total else None
+        else:
+            basis, raw_field, reason = "none", None, declaration["reason"]
+        summary.append(
+            {
+                "source_id": source_id,
+                "records": total,
+                "dated": dated_total,
+                "undated": total - dated_total,
+                "basis": basis,
+                "raw_field": raw_field,
+                "reason": reason,
+                "evidence": (declaration or {}).get("evidence"),
+            }
+        )
+    summary.sort(key=lambda item: (-item["records"], item["source_id"]))
+    return summary
 
 
 def build_payload(
@@ -601,11 +694,30 @@ def build_payload(
     year_min = min((int(rec[7]) for rec in records), default=None)
     year_max = max((int(rec[8] - 1e-9) for rec in records), default=None)
 
+    point_dated = sum(
+        count
+        for precision, count in precision_counts.items()
+        if precision in POINT_DATED_PRECISIONS
+    )
+    window_dated = sum(
+        count
+        for precision, count in precision_counts.items()
+        if precision in WINDOW_DATED_PRECISIONS
+    )
+    source_time_semantics = summarize_source_time_semantics(rows, dated)
+    undated_by_reason: dict[str, int] = {}
+    for item in source_time_semantics:
+        if item["undated"]:
+            undated_by_reason[item["reason"]] = (
+                undated_by_reason.get(item["reason"], 0) + item["undated"]
+            )
+
     stats = {
         "total_records": len(rows),
         "dated_records": len(dated),
         "undated_records": len(undated),
         "dated_share": round(len(dated) / len(rows), 4),
+        "dated_tiers": {"point": point_dated, "window": window_dated},
         "status_counts": status_counts,
         "precision_counts": precision_counts,
         "time_parse_failed": time_parse_failed,
@@ -613,6 +725,8 @@ def build_payload(
         "dated_unmapped": dated_unmapped,
         "undated_mapped": len(undated_points),
         "undated_unmapped": undated_unmapped,
+        "undated_by_reason": dict(sorted(undated_by_reason.items())),
+        "source_time_semantics": source_time_semantics,
         "coordinate_fallback_used": coordinate_fallback_used,
         "year_min": year_min,
         "year_max": year_max,
@@ -637,6 +751,10 @@ def build_payload(
             },
             "clip_method": str(region.get("clip_method", "bbox")),
         }
+        if region.get("highlight_country_codes"):
+            region_payload["highlight_country_codes"] = [
+                str(code) for code in region["highlight_country_codes"]
+            ]
     return {
         "schema_version": PAYLOAD_SCHEMA_VERSION,
         "source_dataset": input_path.name,

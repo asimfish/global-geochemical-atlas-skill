@@ -6357,6 +6357,9 @@ def check_d2(output_dir: Path) -> list[str]:
             "2014-07-18",
             "day",
         ),
+        ("eidc-ningbo-soil", "2016-03", "2016-03", "month"),
+        ("tpdc-china-mountain-soil", "2012/2013", "2012/2013", "year_range"),
+        ("gemas-europe", "2008/2009", "2008/2009", "year_range"),
     )
     require(
         all(
@@ -6379,8 +6382,42 @@ def check_d2(output_dir: Path) -> list[str]:
         and sampling_time.normalize_sampling_time("georoc-archaean", "1987")[
             "sampling_time_status"
         ]
-        == "unparseable_raw_value",
+        == "unparseable_raw_value"
+        and sampling_time.normalize_sampling_time(
+            "figshare-yangtze-basin-soil-heavy-metals", "2000/2020"
+        )["sampling_time_status"]
+        == "unparseable_raw_value"
+        and sampling_time.SOURCE_SAMPLING_TIME[
+            "figshare-yangtze-basin-soil-heavy-metals"
+        ]["reason"]
+        == sampling_time.REASON_PUBLICATION_YEAR,
         "D2 normalizes sampling dates per declared source format and never lets publication years pose as sampling times",
+        checks,
+    )
+    require(
+        set(sampling_time.PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS)
+        == {"gemas-europe", "eidc-ningbo-soil", "tpdc-china-mountain-soil"}
+        and all(
+            sampling_time.normalize_sampling_time(source_id, window)[
+                "sampling_time_status"
+            ]
+            == "publisher_reported"
+            and sampling_time.SOURCE_SAMPLING_TIME[source_id].get("raw_field")
+            for source_id, window in sampling_time.PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS.items()
+        )
+        and all(
+            sampling_time.SOURCE_SAMPLING_TIME[source_id].get("evidence", "").startswith(
+                "https://doi.org/"
+            )
+            for source_id in ("eidc-ningbo-soil", "tpdc-china-mountain-soil")
+        )
+        and "PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS.get(" in (
+            SCRIPT_DIR / "generate_demo_data.py"
+        ).read_text(encoding="utf-8")
+        and '"2008/2009" if record.source_id == "gemas-europe"' not in (
+            SCRIPT_DIR / "generate_demo_data.py"
+        ).read_text(encoding="utf-8"),
+        "D1 attaches publisher-documented dataset collection windows (GEMAS campaign, EIDC Ningbo month, TPDC temporal coverage) from one cited table instead of hard-coding a single source",
         checks,
     )
     require(
@@ -7577,7 +7614,7 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         output_validator.REQUIRED_FILES["temporal_map"] == "temporal_map.html"
         and '<script id="temporal-payload" type="application/json">' in temporal_html
-        and '"schema_version":"temporal-atlas-payload-v1"' in temporal_html
+        and '"schema_version":"temporal-atlas-payload-v2"' in temporal_html
         and '<script id="basemap-data" type="application/json">' in temporal_html
         and "\u533a\u57df\u5bf9\u6bd4" in temporal_html
         and "\u91c7\u6837\u53f2\u56de\u653e" in temporal_html
@@ -7656,6 +7693,7 @@ def check_d3(output_dir: Path) -> list[str]:
             "label": "中国（含台湾）",
             "bounds": {"w": 73.0, "s": 18.0, "e": 135.0, "n": 54.0},
             "clip_method": "country",
+            "highlight_country_codes": ["CHN", "TWN"],
         },
     )
     require(
@@ -7664,12 +7702,50 @@ def check_d3(output_dir: Path) -> list[str]:
             "label": "中国（含台湾）",
             "bounds": {"w": 73.0, "s": 18.0, "e": 135.0, "n": 54.0},
             "clip_method": "country",
+            "highlight_country_codes": ["CHN", "TWN"],
         }
         and temporal_payload["region"] is None
         and "fitRegionView" in temporal_html
         and 'id="pageTitle"' in temporal_html,
         "D3 temporal map payload carries the frozen request region and the"
         " template frames its initial view on it",
+        checks,
+    )
+    temporal_semantics = {
+        item["source_id"]: item for item in temporal_stats["source_time_semantics"]
+    }
+    require(
+        temporal_stats["dated_tiers"] == {"point": 308, "window": 160}
+        and temporal_stats["dated_tiers"]["point"] + temporal_stats["dated_tiers"]["window"]
+        == temporal_stats["dated_records"]
+        and sum(temporal_stats["undated_by_reason"].values())
+        == temporal_stats["undated_records"]
+        and temporal_stats["undated_by_reason"]["publication_year_not_sampling_time"]
+        == 96
+        and sum(item["records"] for item in temporal_semantics.values())
+        == temporal_stats["total_records"]
+        and temporal_semantics["geotraces-idp2025"]["basis"] == "row_timestamp"
+        and temporal_semantics["geotraces-idp2025"]["reason"] is None
+        and temporal_semantics["afsis-phase-i-wet-chemistry"]["basis"]
+        == "dataset_window"
+        and temporal_semantics["georoc-archaean"]["basis"] == "none"
+        and temporal_semantics["georoc-archaean"]["reason"]
+        == "publication_year_not_sampling_time"
+        and temporal_semantics["japan-gsj-marine-sediment"]["reason"]
+        == "no_extractable_sampling_time_in_registered_archive"
+        and temporal_semantics["tpdc-china-mountain-soil"]["basis"] == "dataset_window"
+        and temporal_semantics["tpdc-china-mountain-soil"]["reason"]
+        == "declared_field_missing_or_unparseable_on_row"
+        and temporal_semantics["tpdc-china-mountain-soil"]["evidence"]
+        == "https://doi.org/10.11888/Terre.tpdc.302620"
+        and "renderTimeSemantics" in temporal_html
+        and 'id="timeSemanticsTable"' in temporal_html
+        and "publication_year_not_sampling_time" in temporal_html
+        and "逐样时刻" in temporal_html
+        and "采集时段" in temporal_html,
+        "D3 temporal map splits dated records into per-sample and documented"
+        " dataset-window tiers and explains every undated source with its"
+        " contract reason instead of a bare percentage",
         checks,
     )
     temporal_offshore_payload = temporal_map_builder.build_payload(
@@ -7702,6 +7778,39 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 temporal map always embeds offline country borders, adds China"
         " Admin-1 only for overlapping regional runs, and locks regional"
         " navigation near the frozen region",
+        checks,
+    )
+    temporal_focus = temporal_region_boundaries["focus"]
+    try:
+        temporal_map_builder.build_payload(
+            combined_expected_dir / "geochemistry.csv",
+            region={
+                "label": "未知国家",
+                "bounds": {"w": 73.0, "s": 18.0, "e": 135.0, "n": 54.0},
+                "clip_method": "bbox",
+                "highlight_country_codes": ["XXX"],
+            },
+        )
+        unknown_focus_rejected = False
+    except temporal_map_builder.TemporalMapBuildError:
+        unknown_focus_rejected = True
+    require(
+        temporal_boundaries["focus"] is None
+        and temporal_offshore_payload["boundaries"]["focus"] is None
+        and temporal_focus is not None
+        and temporal_focus["country_codes"] == ["CHN", "TWN"]
+        and "labels_zh" not in temporal_focus
+        and len(temporal_focus["rings"]) >= 2
+        and unknown_focus_rejected
+        and "fillBoundaryLayer(BOUNDARIES.focus" in temporal_html
+        and 'color: "#ffd274", width: 2.4' in temporal_html
+        and "return REGION ? Math.max(0.85, REGION_FIT_ZOOM) : 0.85" in temporal_html
+        and "lonLo <= lonHi" in temporal_html
+        and "REGION_FIT_ZOOM * 0.9" not in temporal_html
+        and "不能缩放到区域之外" in temporal_html,
+        "D3 temporal map frames the study countries in gold from"
+        " highlight_country_codes (ISO codes only, unknown codes fail closed)"
+        " and pins the viewport inside the frozen region",
         checks,
     )
     good_temporal_errors: list[str] = []
@@ -9769,7 +9878,8 @@ def check_d3(output_dir: Path) -> list[str]:
                 'activeRegionKey==="global"?0',
             )
         )
-        and "current*factor>maxSpan?1:factor" in html,
+        and "capped=factor>1?Math.min(factor,maxSpan/current):factor" in html
+        and "zoom=current*capped<.08?1:capped" in html,
         "D3 planar world map clamps zoom and pan to one non-repeating world",
         checks,
     )
@@ -10169,6 +10279,61 @@ def check_d3(output_dir: Path) -> list[str]:
         and "600" in china_marine_profile["subtitle"]
         and "完整数据库" in china_marine_profile["subtitle"],
         "D3 China atlas frames the strict China extent while retaining the declared adjacent-marine analysis in the complete database",
+        checks,
+    )
+    china_marine_region = map_builder.selected_region(china_marine_profile)
+    interactive_template = (SKILL_DIR / "assets" / "interactive-atlas-v3.html").read_text(
+        encoding="utf-8"
+    )
+    require(
+        china_marine_profile["custom_region"]["country_code"] is None
+        and china_marine_profile["custom_region"]["highlight_country_codes"]
+        == ["CHN", "TWN"]
+        and china_marine_region["clip_method"] == "bbox"
+        and china_marine_region["highlight_country_codes"] == ["CHN", "TWN"]
+        and map_builder.selected_region(
+            {"default_region": "china", "custom_region": None}
+        )["highlight_country_codes"]
+        == ["CHN", "TWN"]
+        and "highlight_country_codes"
+        not in map_builder.selected_region(
+            {"default_region": "global", "custom_region": None}
+        )
+        and "region?.highlight_country_codes||region?.analysis_country_codes"
+        in interactive_template
+        and '(CTX.spatial_scope?.highlight_country_codes||[]).includes("CHN")'
+        in interactive_template,
+        "D3 named-country atlases keep the study frame (highlight_country_codes) separate from record clipping so adjacent-marine rows survive while the CHN+TWN outline is still drawn",
+        checks,
+    )
+    require(
+        "function regionFrame()" in interactive_template
+        and "function regionMaxSpan()" in interactive_template
+        and "function fittedBounds(" in interactive_template
+        and "maxSpan=regionMaxSpan()" in interactive_template
+        and "Math.max(70," not in interactive_template
+        and "regionW*.3" not in interactive_template
+        and 'ctx.fillStyle="rgba(255,210,116,.075)"' in interactive_template
+        and "视野锁定在冻结研究区域的取景框内" in interactive_template,
+        "D3 regional atlas navigation is locked to the fitted region frame (no zoom-out past it, no pan beyond it) and the study countries are tinted and outlined",
+        checks,
+    )
+    with tempfile.TemporaryDirectory() as highlight_temp:
+        bad_profile_path = Path(highlight_temp) / "profile.json"
+        bad_profile = dict(china_marine_profile)
+        bad_profile["custom_region"] = {
+            **china_marine_profile["custom_region"],
+            "highlight_country_codes": ["cn"],
+        }
+        bad_profile_path.write_text(json.dumps(bad_profile), encoding="utf-8")
+        try:
+            map_builder.load_visualization_profile(bad_profile_path)
+            bad_highlight_rejected = False
+        except map_builder.MapBuildError:
+            bad_highlight_rejected = True
+    require(
+        bad_highlight_rejected,
+        "D3 visualization profile rejects malformed highlight_country_codes instead of silently dropping the study frame",
         checks,
     )
     profile = json_value(VISUALIZATION_PROFILE)

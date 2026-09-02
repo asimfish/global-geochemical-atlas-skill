@@ -232,9 +232,9 @@ D3 文件的主工作流目录误用此命令并把预期的契约差异当成�
 
 | 赛题交付 | 文件 |
 |---|---|
-| 可交互地图（含时间演变一级选项） | `interactive_map.html`, `samples.geojson`；同一 HTML 内含区域对比、异常成因、采样史回放、站点演变四模式，只有 `publisher_reported` 记录参与时间推断 |
+| 可交互地图（含时间演变一级选项） | `interactive_map.html`, `samples.geojson`；同一 HTML 内含区域对比、异常成因、采样史回放、站点演变四模式，只有 `publisher_reported` 记录参与时间推断；带时间记录分「逐样时刻」与「出版方文档的数据集采集时段」两层披露，无时间记录逐来源给出受控原因（temporal-atlas-payload-v2）。国家图谱由 `highlight_country_codes` 画出研究国家 Admin-0 研究框（不裁剪记录），主图与时序图的视野都锁定在冻结区域取景框内 |
 | 时序兼容镜像（非独立产品入口） | `temporal_map.html`；其完整字节必须嵌入 `interactive_map.html`，仅保留给旧链接与单页下载，主导航不得跳转它 |
-| 标准化数据库 | `geochemistry.csv`（含 atlas-sampling-time-v1 契约的 `sampling_time`/`sampling_time_precision`/`sampling_time_status` 三列：采样时间指样品被采集那一刻的元素含量，发表年一律不算，支持时序查询） |
+| 标准化数据库 | `geochemistry.csv`（含 atlas-sampling-time-v1 契约的 `sampling_time`/`sampling_time_precision`/`sampling_time_status` 三列：采样时间指样品被采集那一刻的元素含量，发表年一律不算；出版方文档声明的整份数据集采集时段（如 EIDC 宁波 2016-03、TPDC 山地土壤 2012/2013、GEMAS 2008/2009）由 D1 按 `PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS` 登记表挂到每行并附证据链接，未登记来源绝不发明时段） |
 | 来源与置信度 | `sources_and_confidence.json`, `source_manifest.json`, `record_evidence.jsonl`, `confidence_report.json` |
 | 异常识别 | `anomalies.geojson`, `anomaly_report.json`, `anomaly_regions.geojson`, `spatial_anomaly_report.json`, `anomaly_provenance.json`（成因归因：母质高背景型/疑似人为输入型/混合叠加型/证据不足暂不判定，每条附四证据线的通俗解释） |
 | 可复用 Skill | 本文件、references、scripts、fixtures |

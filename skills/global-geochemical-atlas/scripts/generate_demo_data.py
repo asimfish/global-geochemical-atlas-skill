@@ -19,6 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterator
 
+from sampling_time import PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS
 from source_adapters import (
     DownloadedFile,
     RawRecord,
@@ -4200,11 +4201,13 @@ def v4_m6_demo(
                         record.fields.get("_official_source_url")
                         or downloaded.source_url
                     ),
-                    # GEMAS publisher-documented joint field campaign
-                    # (samples collected during 2008 and early 2009); other
-                    # sources served by this shared builder stay empty.
-                    "sampled_at": (
-                        "2008/2009" if record.source_id == "gemas-europe" else ""
+                    # Publisher-documented whole-dataset collection windows
+                    # (GEMAS 2008/2009 campaign, EIDC Ningbo March 2016,
+                    # TPDC 2012-2013 temporal coverage); every other source
+                    # served by this shared builder stays empty and is
+                    # recorded as publisher_not_reported downstream.
+                    "sampled_at": PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS.get(
+                        record.source_id, ""
                     ),
                     "sample_depth_min_m": sample_depth_min,
                     "sample_depth_max_m": sample_depth_max,

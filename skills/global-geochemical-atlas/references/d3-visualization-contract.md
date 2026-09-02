@@ -104,8 +104,9 @@ Admin‑0 国家名称、常用中英文别名或 ISO-3。国家范围使用固�
 `bounds={w,s,e,n}`；`w>e` 表示跨日期变更线。区域模式下：
 
 - `interactive_map.html` 的样点、异常候选、来源卡片和元素组合只来自配置范围内记录；
-- `samples.geojson` 只含配置范围内 feature，并声明 `spatial_scope.output_clipped=true`、`clip_method` 与可选 `country_code`；
-- 页面不提供切回世界图的入口，URL 参数也不得突破区域范围；
+- `samples.geojson` 只含配置范围内 feature，并声明 `spatial_scope.output_clipped=true`、`clip_method`、可选 `country_code` 与 `highlight_country_codes`；
+- 页面不提供切回世界图的入口，URL 参数也不得突破区域范围；导航锁定在冻结区域的取景框内：缩放上限等于取景框跨度（不能缩到比整个区域更远），平移时视口不得越过取景框 ±3%，区域内可继续放大；
+- **制图强调与裁剪分离**：`custom_region.highlight_country_codes`（1–6 个 ISO-3，须存在于冻结 Admin-0 资产，否则构建失败关闭）只决定哪些国家轮廓被画成研究框（淡金填充 + 金色描边 + 光晕，主图与时序图同一语义），**不裁剪任何记录**；`country_code` 才触发严格多边形裁剪。命名国家请求由 `run_atlas_request` 自动写入 `highlight_country_codes = analysis_country_codes`（中国为 `["CHN","TWN"]`），因此带邻海分析域的国家图谱既保留海洋记录又画出国界；国家预设按 `analysis_country_codes` 或 `country_code` 自动推导，无国家的 bbox 区域不画研究框。区域模式下邻国 Admin-0 与中国 Admin-1 参考线同时加粗，便于定位。
 - `geochemistry.csv`、`anomalies.geojson` 等原始 D1/D2 证据文件仍原样保留，避免破坏来源追溯；
 - 国家多边形采用 Natural Earth de facto 制图口径，只作定位与严格点内筛选，不构成法定边界声明；bbox 不宣称为精确行政或地质边界。
 

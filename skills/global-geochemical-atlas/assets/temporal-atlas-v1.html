@@ -33,6 +33,18 @@ button,select,input{font:inherit}
 .kpi small{color:var(--muted);font-size:10px;font-weight:650}
 .kpi .bar{height:5px;border-radius:99px;background:rgba(255,255,255,.07);margin-top:7px;overflow:hidden}
 .kpi .bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#16b8a8,#7df3de);box-shadow:0 0 10px rgba(65,230,211,.55)}
+.kpi-link{margin-top:6px;background:none;border:0;padding:0;color:#8be8d8;font:inherit;font-size:9.5px;font-weight:700;cursor:pointer;text-decoration:underline dotted}
+.time-semantics{background:linear-gradient(150deg,rgba(12,45,58,.9),rgba(7,28,38,.92));border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:10px}
+.ts-head{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline;font-size:10.5px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.ts-head b{color:#effffc;font-size:12px}
+.tier{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 4px 0 2px;vertical-align:middle}
+.tier.point{background:#7df3de}.tier.window{background:#f4c15d}.tier.none{background:rgba(255,255,255,.28)}
+#timeSemanticsTable{width:100%;border-collapse:collapse;font-size:10.5px}
+#timeSemanticsTable th{text-align:left;color:var(--muted);font-weight:780;padding:5px 8px;border-bottom:1px solid var(--line)}
+#timeSemanticsTable td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.05);color:#d4e8e5;vertical-align:top}
+#timeSemanticsTable td.num{text-align:right;font-variant-numeric:tabular-nums}
+#timeSemanticsTable code{color:#c9f0ea;font-size:10px}
+#timeSemanticsTable a{color:#8be8d8}
 .stage{border:1px solid rgba(64,150,148,.28);border-radius:18px;background:linear-gradient(180deg,#08222d,#04141f);box-shadow:0 26px 70px rgba(2,14,20,.5);overflow:hidden}
 .stage-head{padding:12px 15px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(9,38,49,.9),rgba(10,54,64,.72))}
 .head-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -128,9 +140,13 @@ button,select,input{font:inherit}
 <main class="shell" data-template-contract="temporal-atlas-v1">
   <section class="kpis">
     <div class="kpi" style="--accent:#38cdb8"><span class="label">数据库记录总数</span><strong id="kTotal">—</strong><small id="kTotalSub"></small></div>
-    <div class="kpi" style="--accent:#f4c15d"><span class="label">带采样时刻的记录占比</span><strong id="kDated">—</strong><div class="bar"><i id="kDatedBar" style="width:0%"></i></div></div>
+    <div class="kpi" style="--accent:#f4c15d"><span class="label">带采样时间的记录占比</span><strong id="kDated">—</strong><div class="bar"><i id="kDatedBar" style="width:0%"></i></div><small id="kDatedSub"></small><button type="button" class="kpi-link" id="toggleTimeSemantics">为什么其余记录没有时间？</button></div>
     <div class="kpi" style="--accent:#54a7ff"><span class="label" id="kWinLabel">当前时间窗口内记录</span><strong id="kWindow">—</strong><small id="kWindowSub"></small></div>
     <div class="kpi" style="--accent:#ff8a5e"><span class="label">站点演变 · 可交互站点</span><strong id="kStations">—</strong><small id="kStationsSub"></small></div>
+  </section>
+  <section class="time-semantics" id="timeSemantics" hidden>
+    <div class="ts-head"><b>逐来源的采样时间语义</b><span>时间层级：<i class="tier point"></i>逐样时刻（秒/分/日）· <i class="tier window"></i>出版方文档的采集时段（月/年/年段）· <i class="tier none"></i>无采样时间。无时间的原因来自 atlas-sampling-time-v1 合同，不是解析失败就能补上的。</span></div>
+    <table id="timeSemanticsTable"><thead><tr><th>来源</th><th>记录</th><th>带时间</th><th>时间层级</th><th>出版方字段 / 无时间原因</th></tr></thead><tbody></tbody></table>
   </section>
   <section class="stage">
     <div class="stage-head">
@@ -205,7 +221,7 @@ const PAYLOAD = JSON.parse(document.getElementById("temporal-payload").textConte
 const REGION = PAYLOAD.region || null;
 const BOUNDARIES = PAYLOAD.boundaries || null;
 const BASE = JSON.parse(document.getElementById("basemap-data").textContent);
-if (PAYLOAD.schema_version !== "temporal-atlas-payload-v1") throw new Error("unsupported temporal payload");
+if (PAYLOAD.schema_version !== "temporal-atlas-payload-v2") throw new Error("unsupported temporal payload");
 if (!BASE || !Array.isArray(BASE.rings)) throw new Error("unsupported basemap payload");
 /* 边界环预计算包围盒，绘制时按视口剔除，保证平移缩放流畅 */
 function ringBBoxes(layer) {
@@ -221,6 +237,7 @@ function ringBBoxes(layer) {
 }
 const ADMIN0_BBOX = BOUNDARIES ? ringBBoxes(BOUNDARIES.admin0) : null;
 const ADMIN1_BBOX = BOUNDARIES ? ringBBoxes(BOUNDARIES.admin1) : null;
+const FOCUS_BBOX = BOUNDARIES ? ringBBoxes(BOUNDARIES.focus) : null;
 
 const STATS = PAYLOAD.stats;
 const ELEMENTS = PAYLOAD.elements;
@@ -259,6 +276,30 @@ const LINE_LABEL = { lithology: "岩性", spatial: "空间", association: "伴�
 
 const MEDIUM_LABEL = { soil: "土壤", sediment: "沉积物", water: "水体", rock: "岩石" };
 const PRECISION_LABEL = { second: "秒", minute: "分", day: "日", month: "月", year: "年", year_range: "年段" };
+const REASON_LABEL = {
+  publication_year_not_sampling_time: "仅有发表年（不是采样时间）",
+  no_extractable_sampling_time_in_registered_archive: "存档不含采样时间",
+  declared_field_missing_or_unparseable_on_row: "该行缺值或无法解析",
+  source_not_in_sampling_time_contract: "来源未纳入时间合同"
+};
+const BASIS_LABEL = { row_timestamp: "逐样时刻", dataset_window: "出版方文档的采集时段", none: "无采样时间" };
+function renderTimeSemantics() {
+  const body = document.querySelector("#timeSemanticsTable tbody");
+  const items = STATS.source_time_semantics || [];
+  body.innerHTML = items.map(item => {
+    const tier = item.basis === "none" ? "none" : item.basis === "dataset_window" ? "window" : "point";
+    const why = item.basis === "none"
+      ? (REASON_LABEL[item.reason] || item.reason || "—")
+      : `<code>${item.raw_field}</code>` + (item.reason ? `（${REASON_LABEL[item.reason] || item.reason}：${item.undated.toLocaleString("en-US")} 条）` : "");
+    const evidence = item.evidence ? ` <a href="${item.evidence}" target="_blank" rel="noopener noreferrer">来源元数据 ↗</a>` : "";
+    return `<tr><td><code>${item.source_id}</code></td><td class="num">${item.records.toLocaleString("en-US")}</td><td class="num">${item.dated.toLocaleString("en-US")}</td><td><i class="tier ${tier}"></i>${BASIS_LABEL[item.basis] || item.basis}</td><td>${why}${evidence}</td></tr>`;
+  }).join("");
+}
+document.getElementById("toggleTimeSemantics").addEventListener("click", () => {
+  const panel = document.getElementById("timeSemantics");
+  panel.hidden = !panel.hidden;
+  document.getElementById("toggleTimeSemantics").textContent = panel.hidden ? "为什么其余记录没有时间？" : "收起来源时间语义";
+});
 const TREND_LABEL = { rising: "上升", falling: "下降", stable: "平稳", insufficient: "时相不足" };
 const TREND_COLOR = { rising: "#ff8a5e", falling: "#5fb7ff", stable: "#9fc6c4", insufficient: "#6e8391" };
 const ELEMENT_PALETTE = { As: "#ffd166", Cr: "#ff6b8a", Cu: "#ff9e64", Hg: "#c792ea", Ni: "#4be1c3", Pb: "#6ea8ff", Zn: "#8ef0a2" };
@@ -435,15 +476,20 @@ function unproject(x, y) {
 /* 区域研究导航钳制：视野锁定在冻结区域附近，且不能缩到比"整个区域"还远；
    区域内允许更深的放大倍率以查看站点细节。 */
 let REGION_FIT_ZOOM = 1;
-function minZoom() { return REGION ? Math.max(0.85, REGION_FIT_ZOOM * 0.9) : 0.85; }
+function minZoom() { return REGION ? Math.max(0.85, REGION_FIT_ZOOM) : 0.85; }
 function maxZoom() { return REGION ? 120 : 45; }
 function clampView() {
   state.view.zoom = Math.max(minZoom(), Math.min(maxZoom(), state.view.zoom));
   if (REGION) {
+    /* 视口矩形必须留在冻结区域内（留 4% 余量）；某一轴上视口比区域还宽时，该轴居中锁定 */
     const b = REGION.bounds;
-    const mLon = Math.max(3, (b.e - b.w) * 0.35), mLat = Math.max(2.5, (b.n - b.s) * 0.35);
-    state.view.lon = Math.max(b.w - mLon, Math.min(b.e + mLon, state.view.lon));
-    state.view.lat = Math.max(Math.max(-88, b.s - mLat), Math.min(Math.min(88, b.n + mLat), state.view.lat));
+    const s = baseScale() * state.view.zoom, halfLon = W / 2 / s, halfLat = H / 2 / s;
+    const mLon = (b.e - b.w) * 0.04, mLat = (b.n - b.s) * 0.04;
+    const lonLo = b.w - mLon + halfLon, lonHi = b.e + mLon - halfLon;
+    const latLo = b.s - mLat + halfLat, latHi = b.n + mLat - halfLat;
+    state.view.lon = lonLo <= lonHi ? Math.max(lonLo, Math.min(lonHi, state.view.lon)) : (b.w + b.e) / 2;
+    state.view.lat = latLo <= latHi ? Math.max(latLo, Math.min(latHi, state.view.lat)) : (b.s + b.n) / 2;
+    state.view.lat = Math.max(-88, Math.min(88, state.view.lat));
     return;
   }
   const s = baseScale() * state.view.zoom;
@@ -561,11 +607,42 @@ function strokeBoundaryLayer(layer, bboxes, style) {
   ctx.strokeStyle = style.color; ctx.lineWidth = style.width; ctx.stroke();
   ctx.restore();
 }
+function fillBoundaryLayer(layer, bboxes, color) {
+  if (!layer || !bboxes) return;
+  const tl = unproject(0, 0), br = unproject(W, H);
+  const vw = tl[0] - 2, ve = br[0] + 2, vs = br[1] - 2, vn = tl[1] + 2;
+  ctx.save();
+  ctx.beginPath();
+  for (let r = 0; r < layer.rings.length; r++) {
+    const bb = bboxes[r];
+    if (bb[2] < vw || bb[0] > ve || bb[3] < vs || bb[1] > vn) continue;
+    const ring = layer.rings[r];
+    for (let i = 0; i < ring.length; i++) {
+      const p = project(ring[i][0], ring[i][1]);
+      if (i === 0) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]);
+    }
+    ctx.closePath();
+  }
+  ctx.fillStyle = color; ctx.fill("evenodd");
+  ctx.restore();
+}
 function drawBoundaries() {
-  /* 参考边界：国界常显，省界（Admin-1）在区域研究命中时叠加；仅示意定位，不作法定边界依据 */
+  /* 参考边界：国界常显，省界（Admin-1）在区域研究命中时叠加，研究国家轮廓（focus）金色描边并淡填充；
+     区域研究模式下邻国边界加粗以便定位。仅示意定位，不作法定边界依据 */
   if (!BOUNDARIES) return;
-  strokeBoundaryLayer(BOUNDARIES.admin1, ADMIN1_BBOX, { color: "rgba(139,232,216,.24)", width: 0.7, dash: [5, 4] });
-  strokeBoundaryLayer(BOUNDARIES.admin0, ADMIN0_BBOX, { color: "rgba(158,220,232,.4)", width: 0.9, dash: null });
+  if (BOUNDARIES.focus) fillBoundaryLayer(BOUNDARIES.focus, FOCUS_BBOX, "rgba(255,210,116,.07)");
+  strokeBoundaryLayer(BOUNDARIES.admin1, ADMIN1_BBOX, REGION
+    ? { color: "rgba(255,238,184,.42)", width: 0.9, dash: [6, 4] }
+    : { color: "rgba(139,232,216,.24)", width: 0.7, dash: [5, 4] });
+  strokeBoundaryLayer(BOUNDARIES.admin0, ADMIN0_BBOX, REGION
+    ? { color: "rgba(222,242,240,.72)", width: 1.25, dash: null }
+    : { color: "rgba(158,220,232,.4)", width: 0.9, dash: null });
+  if (BOUNDARIES.focus) {
+    ctx.save();
+    ctx.shadowColor = "rgba(255,210,116,.7)"; ctx.shadowBlur = 10;
+    strokeBoundaryLayer(BOUNDARIES.focus, FOCUS_BBOX, { color: "#ffd274", width: 2.4, dash: null });
+    ctx.restore();
+  }
 }
 function drawGraticule() {
   ctx.strokeStyle = "rgba(130,198,198,.09)"; ctx.lineWidth = 0.7;
@@ -818,6 +895,11 @@ function updateKpis() {
   const pct = (STATS.dated_share * 100).toFixed(1);
   $("kDated").textContent = `${STATS.dated_records.toLocaleString("en-US")} 条 · ${pct}%`;
   $("kDatedBar").style.width = pct + "%";
+  const tiers = STATS.dated_tiers || { point: STATS.dated_records, window: 0 };
+  const reasons = STATS.undated_by_reason || {};
+  const reasonBits = Object.keys(reasons).sort((a, b) => reasons[b] - reasons[a])
+    .map(k => `${REASON_LABEL[k] || k} ${reasons[k].toLocaleString("en-US")}`).join(" · ");
+  $("kDatedSub").textContent = `逐样时刻 ${tiers.point.toLocaleString("en-US")} · 采集时段 ${tiers.window.toLocaleString("en-US")}` + (reasonBits ? `｜无时间：${reasonBits}` : "");
   $("kStations").textContent = STATS.stations_mode_b;
   $("kStationsSub").textContent = `同一位置 ≥3 采样时相 · 共识别站点 ${STATS.station_total} 个`;
   if (state.mode === "provenance") {
@@ -1744,9 +1826,10 @@ function renderFooter() {
     `区域对比在同元素 · 同介质 · 同单位层内按 ${CELL_DEG}° 网格对比早晚两期实测中位数（删失点不参与统计），只描述观测变化，不外推、不代表成因。` +
     (PROV ? `异常成因按 anomaly-provenance-v1 契约嵌入：${PROV.candidate_count} 个候选，${PROV.mapped} 个上图，${PROV.unmapped} 个无可用坐标未上图；至少两条证据线同向才判母质 / 人为，否则如实标注证据不足。` : "本次构建未嵌入异常成因归因结果（可选 --provenance）。") +
     `其中 ${STATS.coordinate_fallback_used} 条使用发布方原始坐标回退（original_latitude_raw / original_longitude_raw，未规范化，图上有标注）。<br>` +
-    (REGION ? `<b>研究区域</b>：${REGION.label}（视野锁定在区域附近，已叠加国界${BOUNDARIES && BOUNDARIES.admin1 ? "与省级 Admin-1 参考边界" : "参考边界"}，区域内可深度放大查看站点细节）。` : "") +
+    (REGION ? `<b>研究区域</b>：${REGION.label}（视野锁定在冻结区域取景框内，不能缩放到区域之外；已叠加国界${BOUNDARIES && BOUNDARIES.admin1 ? "与省级 Admin-1 参考边界" : "参考边界"}${BOUNDARIES && BOUNDARIES.focus ? `，金色描边与淡填充为研究国家分析单元（${BOUNDARIES.focus.country_codes.join("、")}）的 Admin-0 参考轮廓` : ""}，区域内可深度放大查看站点细节）。` : "") +
+    `<b>时间层级</b>：逐样时刻 ${(STATS.dated_tiers || {}).point || 0} 条、出版方文档的采集时段 ${(STATS.dated_tiers || {}).window || 0} 条（如整份数据集声明的采样月份或年段，按区间处理）；发表年、汇编年一律不算采样时间。` +
     `<b>制图</b>：海岸线 Natural Earth 1:110m Land、国界 Natural Earth 1:110m Admin-0${BOUNDARIES && BOUNDARIES.admin1 ? "、省界 Natural Earth 1:50m Admin-1" : ""}（均公有领域）· WGS84 等经纬投影 · 边界仅供定位示意，不作法定边界依据。` +
-    `数据集：${PAYLOAD.source_dataset} · 模板 temporal-atlas-v1。`;
+    `数据集：${PAYLOAD.source_dataset} · 模板 temporal-atlas-v1 · payload v2。`;
 }
 
 /* ====== 启动 ====== */
@@ -1756,6 +1839,7 @@ if (REGION && REGION.label && REGION.label !== "全球") {
   document.title = shortLabel + "地球化学时间演变地图";
 }
 buildChips();
+renderTimeSemantics();
 renderFooter();
 updateLegend();
 refilter();

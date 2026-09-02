@@ -81,3 +81,9 @@ finding, and a failed opportunity gate descends a frozen empirical-candidate
 fallback queue with a ready-to-run next request instead of waiting for a new
 instruction. This autonomy layer is recorded in
 [ADR-0009](docs/adr/0009-autonomous-publication-and-candidate-fallback.md).
+On the atlas side, a named-country study frame (`highlight_country_codes`) is
+drawn independently of record clipping, regional navigation is locked to the
+fitted frame in both map templates, and publisher-documented dataset collection
+windows form an explicit second dated tier whose per-source reasons ship inside
+the temporal payload. This is recorded in
+[ADR-0010](docs/adr/0010-study-frame-and-dataset-collection-windows.md).

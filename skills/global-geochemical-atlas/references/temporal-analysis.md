@@ -16,7 +16,17 @@
 | `sampling_time_precision` | 精度 | second / minute / day / month / year / year_range |
 | `sampling_time_status` | 状态 | publisher_reported / publisher_not_reported / unparseable_raw_value |
 
-**逐源声明摘要**（37 个可执行来源全覆盖）：18 个来源带发布方采样时间（GEOTRACES 秒级、GEMStat 分钟级、us-wqp 秒级、USGS/NGSA/NGSA-Hg/BraSol/Amazonas/珠江补充表日级、MarChem 年级、AfSIS 年段；FOREGS 六源与 GEMAS 用发布方声明的采样战役年段：FOREGS 五源 1997/2001、河流沉积物 1997/2004（瑞典补采）、GEMAS 2008/2009）；GEOROC 三源、EarthChem 与 Gard 2019 全岩汇编为文献汇编（仅发表年或地质年龄 Ma，均不算采样时间）；其余 14 源（含闽粤沿海地下水表）在已注册档案内未见可提取采样时刻。两位年份用固定轴心：00-49 归 2000 年代，50-99 归 1900 年代。
+**逐源声明摘要**（37 个可执行来源全覆盖）：20 个来源带发布方采样时间（GEOTRACES 秒级、GEMStat 分钟级、us-wqp 秒级、USGS/NGSA/NGSA-Hg/BraSol/Amazonas/珠江补充表日级、MarChem 年级、AfSIS 年段；FOREGS 六源、GEMAS、宁波土壤与青藏中心山地土壤用发布方文档声明的**整份数据集采集时段**：FOREGS 五源 1997/2001、河流沉积物 1997/2004（瑞典补采）、GEMAS 2008/2009、宁波 `2016-03`、山地土壤 `2012/2013`）；GEOROC 三源、EarthChem、Gard 2019 全岩汇编与长江流域土壤重金属文献汇编只有发表年（或地质年龄 Ma），均不算采样时间，受控原因 `publication_year_not_sampling_time`；其余 12 源（含闽粤沿海地下水表、4TU 中国北方沉积物、两份 PANGAEA 表、长江黄河沉积物）在已注册档案与出版方元数据内均未见可提取采样时刻，受控原因 `no_extractable_sampling_time_in_registered_archive`。两位年份用固定轴心：00-49 归 2000 年代，50-99 归 1900 年代。
+
+**数据集采集时段的证据门**：整份数据集的采样时段只能来自出版方自己的文档或结构化元数据，逐条登记在 `sampling_time.PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS` 并在 `SOURCE_SAMPLING_TIME` 声明 `evidence` 链接：
+
+| 来源 | 挂载值 | 精度 | 出版方证据 |
+|---|---|---|---|
+| `eidc-ningbo-soil` | `2016-03` | month | EIDC 数据集摘要 "Data was collected in March 2016"（DOI 10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f） |
+| `tpdc-china-mountain-soil` | `2012/2013` | year_range | TPDC 结构化元数据 startTime 2012-07-01 / endTime 2013-03-31（DOI 10.11888/Terre.tpdc.302620） |
+| `gemas-europe` | `2008/2009` | year_range | GEMAS 项目文档：2008 年与 2009 年初联合野外采样 |
+
+被明确拒绝的情形：Figshare 长江流域土壤重金属数据集标题与摘要中的 "2000-2020" 是**被检索文献的发表年份**（"by searching peer-reviewed literatures published between 2000 and 2020"），不是采样期，因此保持无时间；4TU 中国北方沉积物的 README.pdf 与摘要只记录点位、深度与方法，不含野外年份；两份 PANGAEA 表的 Event 行没有 DATE/TIME；Mendeley 与 Zenodo 数据集描述均未声明采集时期。D1 适配器只对登记表内的来源写入 `sampled_at`，绝不为未登记的来源发明时段。
 
 **时序查询口径**：同一站点的多时相序列用 `sample_id` 识别——GEMStat 的 `sample_id` 形如 `站号|时间|深度`（竖线分隔，前缀是站号）；其余来源用坐标圆整 0.01° 聚合。置信度说明 `sources_and_confidence.json` 新增 `sampling_time_coverage` 节（总体与逐源的时间覆盖、最早/最晚采样时刻）。
 

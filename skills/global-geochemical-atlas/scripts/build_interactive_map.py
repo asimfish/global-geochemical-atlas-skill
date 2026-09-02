@@ -960,7 +960,10 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
                 "visualization profile custom_region must be null or an object"
             )
         missing = sorted({"label", "bounds"} - set(custom_region))
-        unknown = sorted(set(custom_region) - {"label", "bounds", "country_code"})
+        unknown = sorted(
+            set(custom_region)
+            - {"label", "bounds", "country_code", "highlight_country_codes"}
+        )
         if missing or unknown:
             details = []
             if missing:
@@ -1005,13 +1008,34 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
             raise MapBuildError(
                 "visualization profile custom_region.country_code must be null or ISO-3"
             )
-        custom_region = {
+        highlight_codes = custom_region.get("highlight_country_codes")
+        if highlight_codes is not None:
+            if (
+                not isinstance(highlight_codes, list)
+                or not highlight_codes
+                or len(highlight_codes) > 6
+                or len(set(highlight_codes)) != len(highlight_codes)
+                or not all(
+                    isinstance(code, str) and re.fullmatch(r"[A-Z]{3}", code)
+                    for code in highlight_codes
+                )
+            ):
+                raise MapBuildError(
+                    "visualization profile custom_region.highlight_country_codes "
+                    "must be 1-6 unique ISO-3 codes"
+                )
+        normalized_custom_region: dict[str, Any] = {
             "label": profile_text(
                 custom_region.get("label"), "custom_region.label", 80
             ),
             "bounds": numbers,
             "country_code": country_code,
         }
+        if highlight_codes is not None:
+            normalized_custom_region["highlight_country_codes"] = [
+                str(code) for code in highlight_codes
+            ]
+        custom_region = normalized_custom_region
     if default_region == "custom" and custom_region is None:
         raise MapBuildError("default_region=custom requires custom_region")
     if default_region != "custom" and custom_region is not None:
@@ -1119,6 +1143,16 @@ def selected_region(profile: Mapping[str, Any]) -> dict[str, Any]:
     selected["clip_method"] = (
         "country_polygon_and_bbox" if region.get("country_code") else "bbox"
     )
+    # Cartographic emphasis is independent of clipping: an explicit
+    # highlight list wins, otherwise the analysis/clip countries frame the
+    # view, otherwise nothing is emphasised.
+    highlight = region.get("highlight_country_codes") or region.get(
+        "analysis_country_codes"
+    )
+    if not highlight and region.get("country_code"):
+        highlight = [region["country_code"]]
+    if highlight:
+        selected["highlight_country_codes"] = [str(code) for code in highlight]
     return selected
 
 
@@ -1776,6 +1810,9 @@ def samples_geojson(
             "region_label": scope_region["label"],
             "bounds": dict(scope_region["bounds"]),
             "country_code": scope_region.get("country_code"),
+            "highlight_country_codes": list(
+                scope_region.get("highlight_country_codes") or []
+            ),
             "clip_method": scope_region["clip_method"],
             "output_clipped": profile["spatial_scope"] == "regional",
         },
@@ -2126,6 +2163,16 @@ def build_map(
     countries_by_code = {
         str(country["iso_a3"]): country for country in boundaries["countries"]
     }
+    unknown_highlights = [
+        code
+        for code in scope_region.get("highlight_country_codes") or []
+        if code not in countries_by_code
+    ]
+    if unknown_highlights:
+        raise MapBuildError(
+            "highlight_country_codes reference countries missing from the "
+            f"offline Admin-0 asset: {', '.join(unknown_highlights)}"
+        )
     records, coordinate_counts = load_records(
         database, max_points, scope_region, countries_by_code, coordinate_mode
     )
@@ -2232,6 +2279,9 @@ def build_map(
         "region_label": scope_region["label"],
         "bounds": dict(scope_region["bounds"]),
         "country_code": scope_region.get("country_code"),
+        "highlight_country_codes": list(
+            scope_region.get("highlight_country_codes") or []
+        ),
         "clip_method": scope_region["clip_method"],
         "output_clipped": profile["spatial_scope"] == "regional",
     }

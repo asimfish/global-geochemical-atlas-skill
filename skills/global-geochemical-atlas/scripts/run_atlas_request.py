@@ -1738,6 +1738,18 @@ def request_visualization_profile(
                 else resolved_region.get("country_code")
             ),
         }
+        # Framing is separate from clipping: a named-country atlas always
+        # draws its Admin-0 outline(s) as the study frame, even when the
+        # admitted adjacent-marine rows forbid a polygon clip.
+        highlight_country_codes = analysis_country_codes or (
+            [str(resolved_region["country_code"])]
+            if resolved_region.get("country_code")
+            else []
+        )
+        if highlight_country_codes:
+            profile["custom_region"]["highlight_country_codes"] = (
+                highlight_country_codes
+            )
         profile["title"] = f"{resolved_region['label']}地球化学元素图谱"
         if adjacent_marine:
             profile["subtitle"] = (

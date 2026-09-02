@@ -24,6 +24,18 @@ Two-digit years use a fixed pivot: 00-49 map to 2000-2049 and 50-99 map
 to 1950-1999.  Excel serial days count from the 1900 date system epoch
 (1899-12-30).  Normalized values outside 1900..2035 are rejected as
 unparseable rather than silently accepted.
+
+Dataset collection windows
+--------------------------
+Some publishers document when a whole campaign was sampled (a month, a
+season or a span of years) without writing a date on every row.  That
+window is still the publisher's own statement about *collection*, so the
+D1 adapter attaches it to every row of that dataset and D2 parses it at
+its honest coarser precision (``month``, ``year`` or ``year_range``).
+``PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS`` lists those values together
+with the public metadata that states them; a compilation window that only
+dates the *papers* (e.g. "literature published 2000-2020") is not a
+collection window and stays ``publication_year_not_sampling_time``.
 """
 
 from __future__ import annotations
@@ -50,6 +62,20 @@ REASON_NOT_IN_ARCHIVE = "no_extractable_sampling_time_in_registered_archive"
 
 _YEAR_MIN = 1900
 _YEAR_MAX = 2035
+
+# Whole-dataset collection windows the D1 adapters write into ``sampled_at``
+# for every row of these sources.  Each value is the publisher's own
+# documented statement, cited next to the matching SOURCE_SAMPLING_TIME
+# declaration below; the adapters must never invent a window for a source
+# that is absent here.
+PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS: dict[str, str] = {
+    # GEMAS joint field campaign: samples collected during 2008 and early 2009.
+    "gemas-europe": "2008/2009",
+    # EIDC abstract: "Data was collected in March 2016".
+    "eidc-ningbo-soil": "2016-03",
+    # TPDC metadata temporal coverage 2012-07-01 .. 2013-03-31.
+    "tpdc-china-mountain-soil": "2012/2013",
+}
 
 # Excel 1900 date system epoch (serial 1 renders as 1900-01-01 there, and
 # the historical leap-year bug makes 1899-12-30 the working epoch).
@@ -123,10 +149,33 @@ SOURCE_SAMPLING_TIME: dict[str, dict[str, str]] = {
     "georoc-antarctica-intraplate": {"reason": REASON_PUBLICATION_YEAR},
     "georoc-convergent-margins": {"reason": REASON_PUBLICATION_YEAR},
     "earthchem-dehailonggang-rock": {"reason": REASON_PUBLICATION_YEAR},
+    # The dataset abstract (DOI 10.6084/m9.figshare.22785971) states the
+    # records were compiled "by searching peer-reviewed literatures
+    # published between 2000 and 2020"; that window dates the papers,
+    # not the soil sampling, so it never enters sampling_time.
+    "figshare-yangtze-basin-soil-heavy-metals": {"reason": REASON_PUBLICATION_YEAR},
+    # -- publisher-documented dataset collection windows ----------------
+    # EIDC abstract (DOI 10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f):
+    # "Data was collected in March 2016 and analysed at Queens Belfast
+    # University."  Month precision is the publisher's own claim.
+    "eidc-ningbo-soil": {
+        "raw_field": "collection month (EIDC dataset abstract)",
+        "raw_format": "iso8601",
+        "evidence": "https://doi.org/10.5285/9c2e8b85-48ab-48c9-b69d-dd676a5d086f",
+    },
+    # TPDC structured metadata (DOI 10.11888/Terre.tpdc.302620) declares the
+    # dataset temporal coverage startTime 2012-07-01 / endTime 2013-03-31;
+    # the workbook itself carries no row-level dates.
+    "tpdc-china-mountain-soil": {
+        "raw_field": "temporal coverage (TPDC metadata startTime/endTime)",
+        "raw_format": "year_range_slash",
+        "evidence": "https://doi.org/10.11888/Terre.tpdc.302620",
+    },
     # -- registered archives without an extractable sampling time -------
+    # 4TU README.pdf and abstract describe sites, depth and methods but no
+    # field seasons; the PANGAEA tables carry no event Date/Time; the
+    # Mendeley and Zenodo descriptions state no collection period.
     "4tu-northern-china-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
-    "eidc-ningbo-soil": {"reason": REASON_NOT_IN_ARCHIVE},
-    "figshare-yangtze-basin-soil-heavy-metals": {"reason": REASON_NOT_IN_ARCHIVE},
     "mendeley-guangdong-fujian-groundwater": {"reason": REASON_NOT_IN_ARCHIVE},
     # FOREGS atlas documents the national field seasons (1997-2001;
     # Sweden re-sampled stream sediments in 2004) without row-level
@@ -170,7 +219,6 @@ SOURCE_SAMPLING_TIME: dict[str, dict[str, str]] = {
     "pangaea-east-china-sea-clay": {"reason": REASON_NOT_IN_ARCHIVE},
     "pangaea-north-africa-soil": {"reason": REASON_NOT_IN_ARCHIVE},
     "pangaea-south-china-sea-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
-    "tpdc-china-mountain-soil": {"reason": REASON_NOT_IN_ARCHIVE},
     "zenodo-yangtze-yellow-river-sediment": {"reason": REASON_NOT_IN_ARCHIVE},
     # Gard 2019 compilation: the archive publishes geological rock ages
     # (Ma), never collection dates, so no sampling time exists to parse.

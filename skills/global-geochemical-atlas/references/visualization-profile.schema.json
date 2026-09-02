@@ -53,6 +53,14 @@
             "country_code": {
               "type": ["string", "null"],
               "pattern": "^[A-Z]{3}$"
+            },
+            "highlight_country_codes": {
+              "description": "Cartographic emphasis only: these Admin-0 outlines are drawn as the study frame on the main and temporal maps. Unlike country_code this never clips records, so a country request that admits adjacent-marine rows can still frame its coastline.",
+              "type": "array",
+              "items": {"type": "string", "pattern": "^[A-Z]{3}$"},
+              "minItems": 1,
+              "maxItems": 6,
+              "uniqueItems": true
             }
           },
           "additionalProperties": false

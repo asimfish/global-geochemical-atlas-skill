@@ -771,8 +771,14 @@ def validate_temporal_html(path: Path, errors: list[str]) -> None:
     text = path.read_text(encoding="utf-8")
     if '<script id="temporal-payload" type="application/json">' not in text:
         errors.append("temporal_map.html does not embed the temporal payload block")
-    if '"temporal-atlas-payload-v1"' not in text:
+    if '"temporal-atlas-payload-v2"' not in text:
         errors.append("temporal_map.html omits the temporal payload schema version")
+    if '"source_time_semantics"' not in text or '"dated_tiers"' not in text:
+        errors.append(
+            "temporal_map.html omits the per-source sampling-time semantics and dated tiers"
+        )
+    if 'id="timeSemanticsTable"' not in text:
+        errors.append("temporal_map.html omits the sampling-time reason table")
     if '<script id="basemap-data" type="application/json">' not in text:
         errors.append("temporal_map.html does not embed the offline basemap block")
     if re.search(r"<script\b[^>]*\bsrc\s*=", text, re.IGNORECASE):
