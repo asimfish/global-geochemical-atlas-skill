@@ -14,7 +14,7 @@
 [![Champion](https://img.shields.io/badge/AI4S%20Hackathon-🏆%20Champion-f6c344)](#-awards--media)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[🌐 Project Site](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
+[🌐 Project Site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html) ·
 [🗺️ Live Atlas](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-atlas.html) ·
 [🎬 Demo Video](https://asimfish.github.io/global-geochemical-atlas-demo/finals/Global-Geochemical-Atlas-Final-Demo.mp4) ·
 [🧪 Team Site](https://chembot.zgca.com/)
@@ -30,7 +30,7 @@
 
 <img src="docs/readme/atlas-world-map.png" alt="Interactive world atlas from a real production run: 198,445 displayable measurements, anomaly-candidate rings, and a media-coverage sidebar" width="100%">
 
-<sub>Interface capture from the 2026-08-19 global online production run: <b>199,730</b> measurements admitted to the database · <b>45,753</b> distinct physical samples · <b>35</b> public sources · <b>3,721</b> anomaly screening candidates (robust-z candidates, not genetic conclusions). Blank areas honestly show data gaps. <b><a href="https://asimfish.github.io/global-geochemical-atlas-demo/">Live demo ↗</a></b></sub>
+<sub>Interface capture from the 2026-08-19 global online production run: <b>199,730</b> measurements admitted to the database · <b>45,753</b> distinct physical samples · <b>35</b> public sources · <b>3,721</b> anomaly screening candidates (robust-z candidates, not genetic conclusions). Blank areas honestly show data gaps. <b><a href="https://asimfish.github.io/global-geochemical-atlas-demo/en.html">Live demo ↗</a></b></sub>
 
 <br><br>
 
@@ -55,7 +55,7 @@ A complete, agent-native **research skill** — not a pre-rendered map. Given an
 | Dare I cite the conclusions? | Anomalies are reported strictly as screening candidates with competing explanations listed; scopes that could not be completed are reported as gaps — never dressed up as full coverage |
 | Can I reuse it elsewhere? | 40+ JSON Schemas, a 16-file output contract, self-contained HTML maps, and pure-stdlib scripts that work outside this repository |
 
-Latest global online production run (2026-08-19, fully autonomous): **199,730** deterministically admitted records · **45,753** distinct physical samples · **35** connected public sources (31 further candidates audited and rejected) · **100%** record-level provenance chains · **3,721** anomaly screening candidates · **393** records that failed the standardization gate kept honestly in place — never silently dropped. Structured run evidence with a guided walk-through is on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/).
+Latest global online production run (2026-08-19, fully autonomous): **199,730** deterministically admitted records · **45,753** distinct physical samples · **35** connected public sources (31 further candidates audited and rejected) · **100%** record-level provenance chains · **3,721** anomaly screening candidates · **393** records that failed the standardization gate kept honestly in place — never silently dropped. Structured run evidence with a guided walk-through is on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html).
 
 ## 🎯 Design Commitments
 
@@ -350,7 +350,7 @@ Each source's DOI, version, license, research-use terms, field boundaries, and e
 
 ## 🧾 Validated in Three Independent Real Runs
 
-Beyond the offline regressions in this repository, the skill has been checked by three mutually independent real runs covering different risk surfaces (all evidence files can be inspected on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/)):
+Beyond the offline regressions in this repository, the skill has been checked by three mutually independent real runs covering different risk surfaces (all evidence files can be inspected on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html)):
 
 | Run | What it tests | Key result |
 |---|---|---|
@@ -398,7 +398,7 @@ An honest premise: this project does not compete with institutional archives on 
 
 | If you want to… | Start here |
 |---|---|
-| Explore the full interactive atlas in a browser | [Project site](https://asimfish.github.io/global-geochemical-atlas-demo/) |
+| Explore the full interactive atlas in a browser | [Project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html) |
 | Have an agent execute the full task | [Skill entry point](skills/global-geochemical-atlas/SKILL.md) |
 | Generate a minimal command plan for one stage or the whole task | [Task contract schema](skills/global-geochemical-atlas/references/task-contract.schema.json) |
 | Integrate inputs or consume the 16 outputs | [Request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md) |
