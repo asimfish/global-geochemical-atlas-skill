@@ -87,3 +87,10 @@ fitted frame in both map templates, and publisher-documented dataset collection
 windows form an explicit second dated tier whose per-source reasons ship inside
 the temporal payload. This is recorded in
 [ADR-0010](docs/adr/0010-study-frame-and-dataset-collection-windows.md).
+When a direction fails the scientific opportunity gate, the run does not stop:
+the attempt is archived hash-bound under `attempts/`, the next untried
+empirical candidate (round-robin across template types, dead-end siblings
+exhausted together) gets fresh contracts and first-wave packets, and the same
+run returns to `awaiting_agents`; first-wave packets carry a machine-precise
+payload contract and roles can dry-run submissions with `--validate-only`. This
+is recorded in [ADR-0011](docs/adr/0011-in-run-candidate-chaining.md).

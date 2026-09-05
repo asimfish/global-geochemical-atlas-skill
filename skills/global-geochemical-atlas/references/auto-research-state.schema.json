@@ -1,18 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:auto-research-state:v3",
+  "$id": "urn:global-geochemical-atlas:auto-research-state:v4",
   "title": "Resumable atlas-to-research state",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version", "run_id", "request_sha256", "atlas_snapshot_sha256",
     "status", "stage", "required_roles", "completed_roles",
-    "active_cycle", "revision_count",
+    "active_cycle", "revision_count", "attempt", "attempt_history",
+    "exhausted_candidate_ids",
     "selected_candidate_id", "human_approval_required", "publication_allowed",
     "claim_boundary", "created_at", "updated_at"
   ],
   "properties": {
-    "schema_version": {"const": "gga-auto-research-state-v3"},
+    "schema_version": {"const": "gga-auto-research-state-v4"},
     "run_id": {"type": "string", "pattern": "^run-[0-9a-f]{20}$"},
     "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "atlas_snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
@@ -20,7 +21,7 @@
       "enum": [
         "awaiting_selection", "awaiting_agents", "revision_required",
         "completed_published", "completed_with_findings",
-        "redirected_next_candidate", "needs_research_redirection"
+        "needs_research_redirection"
       ]
     },
     "stage": {
@@ -35,6 +36,32 @@
     "completed_roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "active_cycle": {"type": "string", "pattern": "^(initial|revision-[0-9]{2})$"},
     "revision_count": {"type": "integer", "minimum": 0, "maximum": 3},
+    "attempt": {
+      "description": "1-based index of the research direction currently being pursued inside this run; every earlier attempt is archived under attempts/.",
+      "type": "integer", "minimum": 1
+    },
+    "attempt_history": {
+      "description": "Archived directions that failed the scientific opportunity gate, in order.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["attempt", "candidate_id", "archive_dir", "manifest_sha256", "reason"],
+        "properties": {
+          "attempt": {"type": "integer", "minimum": 1},
+          "candidate_id": {"type": "string", "minLength": 1},
+          "archive_dir": {"type": "string", "pattern": "^attempts/attempt-[0-9]{2}-.+$"},
+          "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "pilot_outcome": {"type": ["string", "null"]},
+          "frontier_status": {"type": ["string", "null"]},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "exhausted_candidate_ids": {
+      "description": "Candidates that were attempted or share a dead-end data signature with an unsupported_inputs attempt; they never re-enter the fallback queue.",
+      "type": "array", "items": {"type": "string"}, "uniqueItems": true
+    },
     "selected_candidate_id": {"type": ["string", "null"]},
     "research_gate": {
       "type": "object",
@@ -72,17 +99,18 @@
       }
     },
     "fallback": {
+      "description": "Most recent in-run redirect. next_candidate_id is null only when the queue was exhausted and the run ended at needs_research_redirection.",
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "next_candidate_id", "next_candidate_title", "remaining_candidates",
-        "reason"
-      ],
+      "required": ["next_candidate_id", "remaining_candidates", "reason"],
       "properties": {
-        "next_candidate_id": {"type": "string", "pattern": "^dc-[0-9]{3}$"},
+        "next_candidate_id": {"type": ["string", "null"], "pattern": "^dc-[0-9]{3}$"},
         "next_candidate_title": {"type": "string"},
-        "remaining_candidates": {"type": "integer", "minimum": 1},
-        "reason": {"type": "string", "minLength": 1}
+        "remaining_candidates": {"type": "integer", "minimum": 0},
+        "reason": {"type": "string", "minLength": 1},
+        "from_candidate_id": {"type": "string"},
+        "archived_attempt": {"type": "string", "pattern": "^attempts/attempt-[0-9]{2}-.+$"},
+        "exhausted_candidate_ids": {"type": "array", "items": {"type": "string"}}
       }
     },
     "human_approval_required": {"const": false},

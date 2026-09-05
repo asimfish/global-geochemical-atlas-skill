@@ -261,6 +261,7 @@ def public_state(state: MappingLike) -> dict[str, Any]:
         "completed_roles",
         "active_cycle",
         "revision_count",
+        "attempt",
         "selected_candidate_id",
         "human_approval_required",
         "publication_allowed",

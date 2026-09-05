@@ -82,13 +82,22 @@ and `state.json` expose the next incomplete gate.
    `supported_effect` or `supported_null` plus a verified
    `supports_empirical_article` frontier assessment may start writing. An
    unsupported, acquisition-only, invalid or weak-frontier result never
-   fabricates a paper: the controller consults the frozen
-   `candidate_fallback_queue.json` (the empirical candidates ranked after the
-   user's selection), records the next direction in the state `fallback`
-   block, writes a ready-to-run `next_request.json`, and ends the run at
-   `redirected_next_candidate`. Only an exhausted queue ends at
+   fabricates a paper and never stops the run for a human: the controller
+   archives the whole attempt (contracts, packets, results, gate receipt)
+   under `attempts/attempt-NN-<candidate>/` with a hash-bound
+   `attempt_manifest.json`, pops the next candidate from
+   `candidate_fallback_queue.json`, rebuilds the contracts and first-wave
+   packets for it at the run root and returns to `awaiting_agents` in the
+   **same run** (`state.attempt` increments, `attempt_history` and
+   `exhausted_candidate_ids` grow). The agent host simply keeps serving
+   `required_roles`. The queue holds every untried empirical candidate
+   ordered round-robin across template types (the failed type rotates last,
+   discovery rank inside a type); an `unsupported_inputs` pilot also exhausts
+   the siblings that share the failed candidate's data signature (same type,
+   medium and sample-type pairing), because the archive cannot identify that
+   estimand for any element. Only an exhausted queue ends the run at
    `needs_research_redirection`. No manuscript/figure packets are created
-   either way.
+   for a failed direction.
 6. Start `manuscript_writer` and `figure_designer` only after that gate. Every
    contribution and plotted result must cite an atlas or pilot claim ID. The
    manuscript delivers a typed reference list (unique reference IDs, titles,
@@ -181,6 +190,16 @@ python scripts/auto_research.py submit \
 ```
 
 The controller validates cycle, paths, hashes, role identity, invocation
-uniqueness across every cycle, typed claim/citation contracts and stage
-dependencies before advancing. Accepted results are never overwritten. An agent
-result is evidence to review, never authority to alter the atlas.
+uniqueness across every cycle and every archived attempt, typed claim/citation
+contracts and stage dependencies before advancing. Accepted results are never
+overwritten. An agent result is evidence to review, never authority to alter
+the atlas.
+
+Every first-wave packet carries `required_output.payload_contract`: the exact
+field names, enum values (`analysis_outcome.status`,
+`frontier_assessment.status`), the retrieval field name `retrieved_at`, the
+`search_coverage` shape and the artifact path rule (paths are relative to the
+run root and start with `artifact_output_dir`). Roles should dry-run their
+payload with `submit ... --validate-only`, which executes the identical
+acceptance checks without recording a result or advancing the run, and only
+then submit.

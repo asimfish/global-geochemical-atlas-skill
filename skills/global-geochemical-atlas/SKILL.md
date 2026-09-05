@@ -274,7 +274,7 @@ python scripts/build_research_products.py --output-dir OUTPUT_DIR --minimum-conf
 
 ## 10. 图谱内 Auto-Research（discovery_mode）
 
-五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户也可在 `interactive_map.html` 的 Auto-Research 选项直接填写问题或候选 ID。用户不回应则不启动；一旦明确启动，选方向就是唯一人工输入，控制器全自动推进直至产出打包发布件：独立评审通过 → `completed_published`（camera_ready）；三轮修订或引用修复用尽 → `completed_with_findings`（draft_with_disclosed_findings，遗留问题逐条披露在发布清单）；科研质量门失败 → 自动改道 `candidate_fallback_queue.json` 中下一个实证候选并写出 `next_request.json`，队列耗尽才落到 `needs_research_redirection`。运行中途只会因缺少外部 agent 会话而等待，不再存在人工批准门。
+五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户也可在 `interactive_map.html` 的 Auto-Research 选项直接填写问题或候选 ID。用户不回应则不启动；一旦明确启动，选方向就是唯一人工输入，控制器全自动推进直至产出打包发布件：独立评审通过 → `completed_published`（camera_ready）；三轮修订或引用修复用尽 → `completed_with_findings`（draft_with_disclosed_findings，遗留问题逐条披露在发布清单）；科研质量门失败 → 控制器把本次尝试归档到 `attempts/attempt-NN-<candidate>/`，在**同一 run 内**改道 `candidate_fallback_queue.json` 的下一个实证候选（按模板类型轮转排序，失败类型排最后；Pilot 判 `unsupported_inputs` 时同数据签名的兄弟候选一并耗尽），重建契约与首波 packet 后回到 `awaiting_agents`，宿主只需继续按 `required_roles` 开新会话；队列耗尽才落到 `needs_research_redirection`。运行中途只会因缺少外部 agent 会话而等待，不再存在人工批准门。角色提交前应先用 `auto_research.py submit ... --validate-only` 按 packet 中的 `payload_contract` 自检。
 
 本仓库只发布一个 production Skill；Auto-Research 是该 Skill 的图谱后续状态机，不是第二个宣称。浏览器真实启动方式：
 

@@ -326,6 +326,11 @@ def main():
             if not b or not p or not bbox_overlap(b, p):
                 continue
             n = int(b["n_quantified_samples"]) + int(p["n_quantified_samples"])
+            # The estimand is the operational paired concentration contrast
+            # between the two fractions of the same physical sample.  A
+            # physical "leachable share" would need leachate or residue mass
+            # recovery, which these archives do not publish; asking for it
+            # makes every pilot fail closed on an unidentifiable quantity.
             cands.append(
                 {
                     "type": "T6_paired_fraction_partition",
@@ -333,33 +338,36 @@ def main():
                     "medium": med,
                     "score": n,
                     "title": (
-                        f"{el} leachable vs residual partition in {stem} "
+                        f"{el} bulk vs {rule} fraction contrast in {stem} "
                         f"({b['sample_type']} vs {p['sample_type']})"
                     ),
                     "question": (
-                        f"What share of {el} in {stem} is leachable versus residual "
-                        f"at the same sites, and does that share vary spatially in a "
-                        f"way consistent with provenance or input history?"
+                        f"For the same physical {stem} samples, how large and how "
+                        f"consistent is the paired {el} concentration contrast between "
+                        f"the {b['sample_type']} and {p['sample_type']} determinations, "
+                        f"and does that operational contrast vary spatially?"
                     ),
                     "evidence": [ev(b), ev(p)],
                     "suggested_design": (
                         "join bulk and partial determinations on shared sample "
-                        "identifiers within one lineage; per-sample leachable share "
-                        "from paired concentrations; report median share, bootstrap "
-                        "95% CI, Wilcoxon signed-rank on paired log concentrations; "
-                        "map the share; sensitivity: alternative normalization and "
-                        "independent geogenic reference elements"
+                        "identifiers within one lineage; per-sample paired log-ratio "
+                        "(partial / bulk) of concentrations; report the median ratio, a "
+                        "dependence-aware 95% interval, Wilcoxon signed-rank on paired "
+                        "log concentrations; map the ratio; sensitivity: alternative "
+                        "normalization and independent geogenic reference elements"
                     ),
                     "expected_products": [
-                        "per-sample fraction-partition table",
-                        "leachable-share estimate + CI per element",
-                        "spatial partition map",
+                        "per-sample fraction-contrast table",
+                        "paired concentration-ratio estimate + interval per element",
+                        "spatial contrast map",
                         "robustness table (normalization variants)",
                     ],
                     "caveats": (
                         "requires shared sample identifiers between fractions within "
-                        "one source; partition screening only, no mechanistic "
-                        "leaching claims"
+                        "one source; the contrast is an operational concentration "
+                        "ratio, not a physical leachable mass share (no leachate or "
+                        "residue mass recovery is published); partition screening "
+                        "only, no mechanistic leaching claims"
                     ),
                 }
             )

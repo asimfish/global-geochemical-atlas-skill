@@ -24,7 +24,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from collections.abc import Iterator, Mapping, Sequence
+from collections.abc import Iterable, Iterator, Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -36,7 +36,7 @@ import validate_outputs
 SCRIPT_DIR = Path(__file__).resolve().parent
 BUILD_RESEARCH_PRODUCTS = SCRIPT_DIR / "build_research_products.py"
 BUILD_DISCOVERY_CANDIDATES = SCRIPT_DIR / "build_discovery_candidates.py"
-STATE_VERSION = "gga-auto-research-state-v3"
+STATE_VERSION = "gga-auto-research-state-v4"
 PUBLICATION_GRADES = ("camera_ready", "draft_with_disclosed_findings")
 REQUEST_VERSION = "gga-auto-research-request-v1"
 PACKET_VERSION = "gga-auto-research-agent-packet-v2"
@@ -448,10 +448,98 @@ def _write_packet(
     return packet
 
 
+def candidate_data_signature(candidate: Mapping[str, Any]) -> str:
+    """Identify candidates that draw on the same data design.
+
+    Two candidates share a signature when they instantiate the same template
+    on the same medium and the same sample-type pairing; they differ only by
+    element.  When a pilot reports ``unsupported_inputs`` -- the archive cannot
+    identify the estimand -- every sibling with this signature would fail for
+    the same structural reason, so the fallback queue drops them instead of
+    spending two fresh agent sessions per element on a known dead end.
+    """
+    sample_types = sorted(
+        {
+            str(item.get("sample_type") or "")
+            for item in candidate.get("evidence") or []
+            if isinstance(item, Mapping)
+        }
+    )
+    return "|".join(
+        [
+            str(candidate.get("type") or ""),
+            str(candidate.get("medium") or ""),
+            ",".join(sample_types),
+        ]
+    )
+
+
+def rank_fallback_candidates(
+    all_candidates: Sequence[Mapping[str, Any]],
+    selected: Mapping[str, Any],
+    exhausted_candidate_ids: Iterable[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Order the untried empirical candidates for autonomous fallback.
+
+    The list is a round-robin across template types so a direction that
+    failed on one template does not burn the whole budget on its own
+    siblings before a structurally different question gets a pilot.  Types
+    rotate in order of their best-ranked member, except that the selected
+    candidate's own type rotates last; inside a type the frozen discovery
+    rank is preserved.  Exhausted candidates (already attempted, or sharing a
+    dead-end data signature) never re-enter the queue.
+    """
+    exhausted = set(exhausted_candidate_ids or ())
+    selected_id = str(selected.get("candidate_id") or "")
+    pool = [
+        item
+        for item in all_candidates
+        if str(item.get("candidate_id") or "")
+        and str(item.get("candidate_id")) != selected_id
+        and str(item.get("candidate_id")) not in exhausted
+        and str((item.get("research_readiness") or {}).get("paper_track") or "")
+        == "empirical_candidate"
+    ]
+    rank = {
+        str(item.get("candidate_id")): index for index, item in enumerate(all_candidates)
+    }
+    by_type: dict[str, list[Mapping[str, Any]]] = {}
+    for item in pool:
+        by_type.setdefault(str(item.get("type") or ""), []).append(item)
+    for members in by_type.values():
+        members.sort(key=lambda item: rank[str(item.get("candidate_id"))])
+    selected_type = str(selected.get("type") or "")
+    types = sorted(
+        by_type,
+        key=lambda name: (
+            name == selected_type,
+            rank[str(by_type[name][0].get("candidate_id"))],
+        ),
+    )
+    ordered: list[dict[str, Any]] = []
+    depth = 0
+    while any(depth < len(by_type[name]) for name in types):
+        for name in types:
+            if depth < len(by_type[name]):
+                item = by_type[name][depth]
+                ordered.append(
+                    {
+                        "candidate_id": str(item.get("candidate_id")),
+                        "title": str(item.get("title") or ""),
+                        "type": str(item.get("type") or ""),
+                        "element": str(item.get("element") or ""),
+                        "data_signature": candidate_data_signature(item),
+                    }
+                )
+        depth += 1
+    return ordered
+
+
 def _build_research_contracts(
     run_dir: Path,
     selected: Mapping[str, Any],
     candidates_document: Mapping[str, Any],
+    exhausted_candidate_ids: Iterable[str] | None = None,
 ) -> None:
     selected_path = run_dir / "selected_hypothesis.json"
     _write_json(
@@ -781,34 +869,25 @@ def _build_research_contracts(
         },
     )
     selected_id = str(selected.get("candidate_id") or "")
-    selected_index = next(
-        (
-            index
-            for index, item in enumerate(all_candidates)
-            if str(item.get("candidate_id")) == selected_id
-        ),
-        -1,
+    fallback_candidates = rank_fallback_candidates(
+        all_candidates, selected, exhausted_candidate_ids
     )
-    fallback_candidates = [
-        {
-            "candidate_id": str(item.get("candidate_id")),
-            "title": str(item.get("title") or ""),
-            "type": str(item.get("type") or ""),
-        }
-        for item in all_candidates[selected_index + 1 :]
-        if str(item.get("paper_track") or "") == "empirical_candidate"
-    ]
     _write_json(
         run_dir / "candidate_fallback_queue.json",
         {
-            "schema_version": "gga-candidate-fallback-queue-v1",
+            "schema_version": "gga-candidate-fallback-queue-v2",
             "selected_candidate_id": selected_id,
+            "exhausted_candidate_ids": sorted(exhausted_candidate_ids or []),
             "candidates": fallback_candidates,
             "rule": (
                 "When the scientific opportunity gate rejects the selected "
-                "direction, the run redirects to the first queued candidate; the "
-                "queue strictly advances through the ranked list, so fallback "
-                "chains are finite and end in an acquisition/audit redirect."
+                "direction, the controller archives that attempt and continues the "
+                "same run on the first queued candidate. The queue holds every "
+                "untried empirical candidate, ordered round-robin across template "
+                "types (the type that just failed rotates last) and by rank inside "
+                "each type; an unsupported_inputs pilot outcome also drops the "
+                "siblings that share the failed candidate's data signature. The "
+                "chain is finite and ends in an acquisition/audit redirect."
             ),
         },
     )
@@ -851,6 +930,7 @@ def _build_research_contracts(
                 "holdout_replication (scheme, result, consistent) and regeneration "
                 "(command, deterministic=true) per the pilot contract"
             ),
+            "payload_contract": _pilot_payload_contract(),
         },
     )
     _write_packet(
@@ -878,8 +958,124 @@ def _build_research_contracts(
             "frontier_assessment": (
                 "status, open_problem, closest_prior_work, novelty_delta, venue_fit"
             ),
+            "payload_contract": _literature_payload_contract(),
         },
     )
+
+
+ARTIFACT_PATH_RULE = (
+    "Every artifacts[].path is relative to the run directory root and must start "
+    "with this packet's artifact_output_dir (for example "
+    "agent_outputs/<role>/results.json); paths relative to the artifact directory "
+    "itself are rejected. Each entry needs the SHA-256 of the file bytes."
+)
+SELF_CHECK_RULE = (
+    "Dry-run the payload before submitting: python scripts/auto_research.py submit "
+    "--run-dir <run> --role <role> --invocation-id <id> --model-family <family> "
+    "--payload <payload.json> --validate-only. It runs the identical acceptance "
+    "checks without recording anything."
+)
+
+
+def _pilot_payload_contract() -> dict[str, Any]:
+    """Machine-precise mirror of the pilot validators (field names and enums)."""
+    return {
+        "artifact_path_rule": ARTIFACT_PATH_RULE,
+        "self_check": SELF_CHECK_RULE,
+        "claims": {
+            "type": "array",
+            "item_required_keys": ["claim_id", "value", "unit", "artifact", "artifact_sha256"],
+            "rules": [
+                "claim_id values must be unique",
+                "artifact must equal one artifacts[].path and artifact_sha256 must "
+                "equal that entry's sha256",
+                "value may be a number, string or list but never null",
+            ],
+        },
+        "analysis_outcome": {
+            "required_keys": [
+                "status",
+                "analysis_executed",
+                "result_claim_ids",
+                "routing_destination",
+                "evidence_summary",
+            ],
+            "status_enum": sorted(PILOT_OUTCOMES),
+            "paper_eligible_statuses": sorted(PAPER_ELIGIBLE_PILOT_OUTCOMES),
+            "rules": [
+                "analysis_executed is boolean; result_claim_ids is a list of unique "
+                "claim_id values from claims",
+                "paper-eligible statuses require analysis_executed=true, at least one "
+                "result claim and a scientific_rigor object",
+                "non-eligible statuses require analysis_executed=false and an empty "
+                "result_claim_ids list",
+                "routing_destination and evidence_summary are non-empty strings",
+            ],
+            "scientific_rigor": {
+                "site_identity": ["basis", "residual_risk"],
+                "spatial_dependence": ["diagnostic", "finding", "uncertainty_method"],
+                "holdout_replication": ["scheme", "result", "consistent (boolean)"],
+                "regeneration": ["command", "deterministic (must be true)"],
+            },
+        },
+    }
+
+
+def _literature_payload_contract() -> dict[str, Any]:
+    """Machine-precise mirror of the literature validators (field names and enums)."""
+    return {
+        "artifact_path_rule": ARTIFACT_PATH_RULE,
+        "self_check": SELF_CHECK_RULE,
+        "citations": {
+            "type": "array (at least one record)",
+            "item_required_keys": [
+                "title",
+                "authors (non-empty list of non-empty strings)",
+                "year",
+                "venue",
+                "doi_or_official_url",
+                "primary_source_verified (must be true)",
+                "supported_claim",
+                "retrieval",
+            ],
+            "retrieval_required_keys": ["retrieved_at", "evidence_artifact"],
+            "rules": [
+                "retrieval.retrieved_at is the exact field name (not timestamp) and "
+                "must be a non-empty string",
+                "retrieval.evidence_artifact must equal one artifacts[].path",
+            ],
+        },
+        "search_coverage": {
+            "required_keys": [
+                "queries (non-empty list of strings)",
+                "sources_searched (non-empty list of strings)",
+                "candidates_screened (integer)",
+                "inclusion_criteria (non-empty string)",
+            ],
+            "minimum_candidates_screened": MINIMUM_LITERATURE_CANDIDATES_SCREENED,
+            "rules": [
+                "candidates_screened must be at least the minimum and at least the "
+                "number of citations returned"
+            ],
+        },
+        "frontier_assessment": {
+            "required_keys": [
+                "status",
+                "open_problem",
+                "closest_prior_work",
+                "novelty_delta",
+                "venue_fit",
+            ],
+            "status_enum": sorted(FRONTIER_STATUSES),
+            "rules": [
+                "status must be exactly one enum value; descriptive variants such as "
+                "does_not_support_empirical_article are rejected",
+                "only supports_empirical_article lets the run write a paper; "
+                "weak_frontier_position and needs_verification redirect the run to "
+                "the next empirical candidate",
+            ],
+        },
+    }
 
 
 def _state(run_dir: Path) -> dict[str, Any]:
@@ -949,14 +1145,19 @@ def start_research(
         "completed_roles": [],
         "active_cycle": INITIAL_CYCLE,
         "revision_count": 0,
+        "attempt": 1,
+        "attempt_history": [],
+        "exhausted_candidate_ids": [],
         "selected_candidate_id": selected.get("candidate_id") if selected else None,
         "human_approval_required": False,
         "publication_allowed": False,
         "claim_boundary": (
             "Direction selection is the only human decision. The run then advances "
             "autonomously to a packaged final deliverable whose grade discloses "
-            "whether every review gate passed; packaging proves byte identity, "
-            "not external peer review or venue acceptance."
+            "whether every review gate passed, redirecting itself to the next "
+            "untried empirical candidate whenever a direction fails the "
+            "scientific gate; packaging proves byte identity, not external peer "
+            "review or venue acceptance."
         ),
         "created_at": utc_now(),
     }
@@ -1773,6 +1974,90 @@ def _state_lock(run_dir: Path) -> Iterator[None]:
             fcntl.flock(handle, fcntl.LOCK_UN)
 
 
+def _check_submission(
+    run_dir: Path,
+    *,
+    role: str,
+    invocation_id: str,
+    model_family: str,
+    payload: Mapping[str, Any],
+) -> tuple[dict[str, Any], str, dict[str, Any], Path]:
+    """Run every acceptance check for a role result without writing anything.
+
+    Returns the packet, the active cycle, the canonicalised payload and the
+    result path so ``submit_agent_result`` can commit exactly what was checked.
+    """
+    if role not in ROLES:
+        raise AutoResearchError(f"unsupported role: {role}")
+    if re.fullmatch(r"[A-Za-z0-9_.:-]{1,200}", invocation_id) is None:
+        raise AutoResearchError("invalid invocation_id")
+    if re.fullmatch(r"[A-Za-z0-9_.:-]{1,200}", model_family) is None:
+        raise AutoResearchError("invalid model_family")
+    state = _state(run_dir)
+    cycle_id = str(state.get("active_cycle") or INITIAL_CYCLE)
+    if role not in state.get("required_roles", []):
+        raise AutoResearchError(f"{role} is not requested in the active stage")
+    packet = _read_object(_role_root(run_dir, cycle_id, role) / "packet.json")
+    _validate_packet(packet, role, cycle_id)
+    result_path = _result_path(run_dir, role, cycle_id)
+    if result_path.exists():
+        raise AutoResearchError(f"{role} already submitted a result")
+    existing_results = list((run_dir / "agents").glob("*/result.json"))
+    revisions = run_dir / "revisions"
+    if revisions.is_dir():
+        existing_results.extend(revisions.glob("revision-*/agents/*/result.json"))
+    attempts = run_dir / "attempts"
+    if attempts.is_dir():
+        # Archived directions keep their invocation IDs reserved: a session
+        # from a failed attempt must not be replayed against a new one.
+        existing_results.extend(attempts.glob("attempt-*/agents/*/result.json"))
+        existing_results.extend(
+            attempts.glob("attempt-*/revisions/revision-*/agents/*/result.json")
+        )
+    for other_path in existing_results:
+        if _read_object(other_path).get("invocation_id") == invocation_id:
+            raise AutoResearchError("invocation_id reuse across roles is forbidden")
+    clean_payload = json.loads(canonical_json_bytes(dict(payload)))
+    _validate_role_payload(run_dir, role, clean_payload, cycle_id)
+    return packet, cycle_id, clean_payload, result_path
+
+
+def validate_agent_result(
+    run_dir: Path,
+    *,
+    role: str,
+    invocation_id: str,
+    model_family: str,
+    payload: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Dry-run the acceptance checks so a role can self-correct before submitting.
+
+    Nothing is written and no state advances; the same checks run again at
+    submission, so a passing dry run is a prediction, not a reservation.
+    """
+    run_dir = run_dir.resolve(strict=True)
+    with _state_lock(run_dir):
+        packet, cycle_id, clean_payload, _ = _check_submission(
+            run_dir,
+            role=role,
+            invocation_id=invocation_id,
+            model_family=model_family,
+            payload=payload,
+        )
+    return {
+        "valid": True,
+        "run_id": run_dir.name,
+        "cycle_id": cycle_id,
+        "role": role,
+        "packet_sha256": packet["packet_sha256"],
+        "payload_sha256": sha256_bytes(canonical_json_bytes(clean_payload)),
+        "claim_boundary": (
+            "Validation only: no result was recorded and the run state did not "
+            "advance. Submit the identical payload to commit it."
+        ),
+    }
+
+
 def submit_agent_result(
     run_dir: Path,
     *,
@@ -1782,33 +2067,16 @@ def submit_agent_result(
     payload: Mapping[str, Any],
 ) -> dict[str, Any]:
     run_dir = run_dir.resolve(strict=True)
-    if role not in ROLES:
-        raise AutoResearchError(f"unsupported role: {role}")
-    if re.fullmatch(r"[A-Za-z0-9_.:-]{1,200}", invocation_id) is None:
-        raise AutoResearchError("invalid invocation_id")
-    if re.fullmatch(r"[A-Za-z0-9_.:-]{1,200}", model_family) is None:
-        raise AutoResearchError("invalid model_family")
     # Role sessions in one wave run in parallel; the ledger transition itself
     # is serialized so concurrent submissions cannot interleave state writes.
     with _state_lock(run_dir):
-        state = _state(run_dir)
-        cycle_id = str(state.get("active_cycle") or INITIAL_CYCLE)
-        if role not in state.get("required_roles", []):
-            raise AutoResearchError(f"{role} is not requested in the active stage")
-        packet = _read_object(_role_root(run_dir, cycle_id, role) / "packet.json")
-        _validate_packet(packet, role, cycle_id)
-        result_path = _result_path(run_dir, role, cycle_id)
-        if result_path.exists():
-            raise AutoResearchError(f"{role} already submitted a result")
-        existing_results = list((run_dir / "agents").glob("*/result.json"))
-        revisions = run_dir / "revisions"
-        if revisions.is_dir():
-            existing_results.extend(revisions.glob("revision-*/agents/*/result.json"))
-        for other_path in existing_results:
-            if _read_object(other_path).get("invocation_id") == invocation_id:
-                raise AutoResearchError("invocation_id reuse across roles is forbidden")
-        clean_payload = json.loads(canonical_json_bytes(dict(payload)))
-        _validate_role_payload(run_dir, role, clean_payload, cycle_id)
+        packet, cycle_id, clean_payload, result_path = _check_submission(
+            run_dir,
+            role=role,
+            invocation_id=invocation_id,
+            model_family=model_family,
+            payload=payload,
+        )
         body = {
             "schema_version": RESULT_VERSION,
             "run_id": run_dir.name,
@@ -2217,59 +2485,190 @@ def _finalize_publication(
     )
 
 
+# Everything the controller writes for one research direction.  A redirect
+# moves these into ``attempts/attempt-NN-<candidate>/`` so the next direction
+# starts from a clean run root while the failed attempt stays auditable.
+ATTEMPT_SCOPED_ENTRIES = (
+    "agents",
+    "agent_outputs",
+    "revisions",
+    "publication",
+    "selected_hypothesis.json",
+    "pilot_contract.json",
+    "literature_queue.json",
+    "research_quality_contract.json",
+    "paper_spine.json",
+    "figure_contract.json",
+    "five-paper-program.json",
+    "candidate_fallback_queue.json",
+    "research_gate_receipt.json",
+    "research_claim_registry.json",
+    "review_receipt.json",
+    "feedback_tasks.json",
+    "citation_audit_receipt.json",
+    "reference_manifest.json",
+    "publication_manifest.json",
+)
+
+
+def _archive_attempt(
+    run_dir: Path, state: Mapping[str, Any], reason: str
+) -> dict[str, Any]:
+    attempt = int(state.get("attempt") or 1)
+    candidate_id = str(state.get("selected_candidate_id") or "unselected")
+    archive_dir = run_dir / "attempts" / f"attempt-{attempt:02d}-{candidate_id}"
+    if archive_dir.exists():
+        raise AutoResearchError(f"attempt archive already exists: {archive_dir.name}")
+    archive_dir.mkdir(parents=True)
+    moved: list[dict[str, Any]] = []
+    for name in ATTEMPT_SCOPED_ENTRIES:
+        source = run_dir / name
+        if not source.exists() or source.is_symlink():
+            continue
+        shutil.move(str(source), str(archive_dir / name))
+        moved.append({"path": name, "kind": "directory" if (archive_dir / name).is_dir() else "file"})
+    result_hashes = {
+        path.relative_to(archive_dir).as_posix(): _read_object(path).get("result_sha256")
+        for path in sorted(archive_dir.glob("agents/*/result.json"))
+    }
+    gate = dict(state.get("research_gate") or {})
+    manifest_body = {
+        "schema_version": "gga-research-attempt-v1",
+        "attempt": attempt,
+        "candidate_id": candidate_id,
+        "reason": reason,
+        "research_gate": gate,
+        "archived_entries": moved,
+        "result_sha256": result_hashes,
+        "claim_boundary": (
+            "An archived attempt records why a direction could not support a "
+            "paper; its artifacts remain hash-bound evidence and are never reused "
+            "as results for another candidate."
+        ),
+    }
+    manifest = {
+        **manifest_body,
+        "manifest_sha256": sha256_bytes(canonical_json_bytes(manifest_body)),
+    }
+    _write_json(archive_dir / "attempt_manifest.json", manifest)
+    return {
+        "attempt": attempt,
+        "candidate_id": candidate_id,
+        "archive_dir": archive_dir.relative_to(run_dir).as_posix(),
+        "manifest_sha256": manifest["manifest_sha256"],
+        "pilot_outcome": gate.get("pilot_outcome"),
+        "frontier_status": gate.get("frontier_status"),
+        "reason": reason,
+    }
+
+
 def _prepare_candidate_fallback(
     run_dir: Path, state: dict[str, Any], reason: str
 ) -> None:
-    """Route a failed direction to the next ranked empirical candidate.
+    """Continue the same run on the next untried empirical candidate.
 
-    The fallback queue was frozen at contract time and strictly advances
-    through the ranked candidate list, so a chain of failing directions is
-    finite and ends in an honest acquisition/audit redirect.
+    The failed direction is archived under ``attempts/``, the contracts and
+    first-wave packets are rebuilt for the next candidate, and the run returns
+    to ``awaiting_agents`` -- the agent host keeps serving packets without ever
+    noticing a redirect.  Every attempted candidate (plus, after an
+    ``unsupported_inputs`` pilot, its same-data-signature siblings) becomes
+    exhausted, so the chain is finite and ends honestly at
+    ``needs_research_redirection`` when no empirical direction remains.
     """
     queue_path = run_dir / "candidate_fallback_queue.json"
     queue: list[dict[str, Any]] = []
     if queue_path.is_file():
-        document = _read_object(queue_path)
-        raw_queue = document.get("candidates")
+        raw_queue = _read_object(queue_path).get("candidates")
         if isinstance(raw_queue, list):
             queue = [dict(item) for item in raw_queue if isinstance(item, Mapping)]
-    if not queue:
+    candidates_document = _read_object(
+        run_dir / "deterministic" / "discovery_candidates.json"
+    )
+    all_candidates = [
+        item
+        for item in candidates_document.get("discovery_candidates") or []
+        if isinstance(item, Mapping)
+    ]
+    by_id = {str(item.get("candidate_id")): item for item in all_candidates}
+    failed_id = str(state.get("selected_candidate_id") or "")
+    exhausted = set(str(item) for item in state.get("exhausted_candidate_ids") or [])
+    exhausted.add(failed_id)
+    gate = dict(state.get("research_gate") or {})
+    if gate.get("pilot_outcome") == "unsupported_inputs" and failed_id in by_id:
+        failed_signature = candidate_data_signature(by_id[failed_id])
+        for item in queue:
+            if item.get("data_signature") == failed_signature:
+                exhausted.add(str(item["candidate_id"]))
+    next_candidate = next(
+        (item for item in queue if str(item["candidate_id"]) not in exhausted),
+        None,
+    )
+    history = list(state.get("attempt_history") or [])
+    if next_candidate is None or str(next_candidate["candidate_id"]) not in by_id:
         state.update(
             {
                 "status": "needs_research_redirection",
                 "stage": "research_quality_gate",
                 "required_roles": [],
+                "exhausted_candidate_ids": sorted(exhausted),
+                "attempt_history": history,
+                "fallback": {
+                    "next_candidate_id": None,
+                    "remaining_candidates": 0,
+                    "reason": reason,
+                    "exhausted_candidate_ids": sorted(exhausted),
+                },
             }
         )
+        _append_event(
+            run_dir,
+            "candidate_fallback_exhausted",
+            {"reason": reason, "exhausted_candidate_ids": sorted(exhausted)},
+        )
         return
-    next_candidate = queue[0]
-    request = _read_object(run_dir / "request.json")
-    next_request = {
-        key: request[key]
-        for key in ("output_language", "target_venue")
-        if request.get(key)
-    }
-    next_request["candidate_id"] = next_candidate["candidate_id"]
-    _write_json(run_dir / "next_request.json", next_request)
+    archived = _archive_attempt(run_dir, state, reason)
+    history.append(archived)
+    selected = dict(by_id[str(next_candidate["candidate_id"])])
+    _build_research_contracts(
+        run_dir, selected, candidates_document, exhausted_candidate_ids=exhausted
+    )
+    remaining = [
+        item
+        for item in queue
+        if str(item["candidate_id"]) not in exhausted
+        and str(item["candidate_id"]) != str(next_candidate["candidate_id"])
+    ]
+    state.pop("research_gate", None)
     state.update(
         {
-            "status": "redirected_next_candidate",
-            "stage": "research_quality_gate",
-            "required_roles": [],
+            "status": "awaiting_agents",
+            "stage": "pilot_and_literature",
+            "active_cycle": INITIAL_CYCLE,
+            "required_roles": list(FIRST_WAVE),
+            "revision_count": 0,
+            "selected_candidate_id": str(next_candidate["candidate_id"]),
+            "attempt": archived["attempt"] + 1,
+            "attempt_history": history,
+            "exhausted_candidate_ids": sorted(exhausted),
             "fallback": {
                 "next_candidate_id": str(next_candidate["candidate_id"]),
                 "next_candidate_title": str(next_candidate.get("title") or ""),
-                "remaining_candidates": len(queue),
+                "remaining_candidates": len(remaining),
                 "reason": reason,
+                "from_candidate_id": failed_id,
+                "archived_attempt": archived["archive_dir"],
             },
         }
     )
     _append_event(
         run_dir,
-        "candidate_fallback_prepared",
+        "candidate_redirected_in_run",
         {
-            "next_candidate_id": str(next_candidate["candidate_id"]),
-            "remaining_candidates": len(queue),
+            "from_candidate_id": failed_id,
+            "to_candidate_id": str(next_candidate["candidate_id"]),
+            "attempt": archived["attempt"] + 1,
+            "archived_attempt": archived["archive_dir"],
+            "remaining_candidates": len(remaining),
             "reason": reason,
         },
     )
@@ -2634,6 +3033,14 @@ def build_parser() -> argparse.ArgumentParser:
     submit.add_argument("--invocation-id", required=True)
     submit.add_argument("--model-family", required=True)
     submit.add_argument("--payload", type=Path, required=True)
+    submit.add_argument(
+        "--validate-only",
+        action="store_true",
+        help=(
+            "run every acceptance check against the active packet without "
+            "recording a result or advancing the run"
+        ),
+    )
     return parser
 
 
@@ -2654,6 +3061,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 args.run_dir,
                 candidate_id=args.candidate_id,
                 question=args.question,
+            )
+        elif args.validate_only:
+            result = validate_agent_result(
+                args.run_dir,
+                role=args.role,
+                invocation_id=args.invocation_id,
+                model_family=args.model_family,
+                payload=_read_object(args.payload),
             )
         else:
             result = submit_agent_result(

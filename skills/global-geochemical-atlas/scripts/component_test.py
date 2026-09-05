@@ -9299,12 +9299,81 @@ def check_d3(output_dir: Path) -> list[str]:
             output_dir, pending_root, {"output_language": "en"}
         )
         pending_run = pending_root / pending_state["run_id"]
+        candidates_path = pending_run / "deterministic" / "discovery_candidates.json"
+        candidates_document = json_value(candidates_path)
+        natural_candidates = list(candidates_document["discovery_candidates"])
+        natural_queue_order = auto_research.rank_fallback_candidates(
+            natural_candidates, {"candidate_id": "user-question"}
+        )
+
+        def synthetic_candidate(
+            candidate_id: str,
+            candidate_type: str,
+            element: str,
+            medium: str,
+            sample_types: tuple[str, str],
+        ) -> dict:
+            return {
+                "candidate_id": candidate_id,
+                "type": candidate_type,
+                "element": element,
+                "medium": medium,
+                "score": 40,
+                "title": f"Synthetic {candidate_type} {element}",
+                "question": f"Synthetic {element} question for {candidate_type}.",
+                "suggested_design": "paired comparison on frozen cohorts",
+                "evidence": [
+                    {
+                        "cohort_id": f"cohort-{candidate_id}-{index}",
+                        "element": element,
+                        "medium": medium,
+                        "sample_type": sample_type,
+                        "n_quantified_samples": 40,
+                    }
+                    for index, sample_type in enumerate(sample_types)
+                ],
+                "research_readiness": {
+                    "paper_track": "empirical_candidate",
+                    "routing_if_unsupported": "candidate_selection",
+                },
+            }
+
+        injected = [
+            synthetic_candidate(
+                "dc-002",
+                "T1_paired_layer_screening",
+                "Cu",
+                "soil",
+                ("soil_topsoil", "soil_subsoil"),
+            ),
+            synthetic_candidate(
+                "dc-003",
+                "T6_paired_fraction_partition",
+                "Cr",
+                "sediment",
+                ("sediment_clay_fraction_bulk", "sediment_clay_fraction_leach_residue"),
+            ),
+            synthetic_candidate(
+                "dc-004",
+                "T6_paired_fraction_partition",
+                "Cu",
+                "sediment",
+                ("sediment_clay_fraction_bulk", "sediment_clay_fraction_leach_residue"),
+            ),
+        ]
+        candidates_document["discovery_candidates"] = natural_candidates + injected
+        candidates_path.write_text(
+            json.dumps(candidates_document, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
         selected_state = auto_research.select_research_direction(
             pending_run,
             question="Does the frozen atlas support a method-stratified Cu pilot?",
         )
         require(
             pending_state["status"] == "awaiting_selection"
+            and pending_state["attempt"] == 1
+            and pending_state["attempt_history"] == []
             and selected_state["status"] == "awaiting_agents"
             and selected_state["stage"] == "pilot_and_literature"
             and (pending_run / "selection.json").is_file()
@@ -9312,30 +9381,67 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 Auto-Research can pause for deterministic candidate selection and resume from an explicit user choice",
             checks,
         )
-        natural_queue = json_value(pending_run / "candidate_fallback_queue.json")
+        pilot_packet = json_value(pending_run / "agents" / "pilot_analyst" / "packet.json")
+        literature_packet = json_value(
+            pending_run / "agents" / "literature_researcher" / "packet.json"
+        )
+        pilot_contract_doc = pilot_packet["required_output"]["payload_contract"]
+        literature_contract_doc = literature_packet["required_output"]["payload_contract"]
+        try:
+            auto_research.validate_agent_result(
+                pending_run,
+                role="pilot_analyst",
+                invocation_id="dry-run-invalid",
+                model_family="family-a",
+                payload={"artifacts": [], "claims": [], "analysis_outcome": {}},
+            )
+            dry_run_rejected = False
+        except auto_research.AutoResearchError:
+            dry_run_rejected = True
         require(
-            natural_queue["candidates"] == []
-            and natural_queue["selected_candidate_id"] == "user-question",
-            "D3 the bundled demo atlas yields no empirical fallback candidates and the frozen queue records that honestly",
+            pilot_contract_doc["analysis_outcome"]["status_enum"]
+            == sorted(auto_research.PILOT_OUTCOMES)
+            and pilot_contract_doc["claims"]["item_required_keys"]
+            == ["claim_id", "value", "unit", "artifact", "artifact_sha256"]
+            and literature_contract_doc["frontier_assessment"]["status_enum"]
+            == sorted(auto_research.FRONTIER_STATUSES)
+            and literature_contract_doc["citations"]["retrieval_required_keys"]
+            == ["retrieved_at", "evidence_artifact"]
+            and "artifact_output_dir" in pilot_contract_doc["artifact_path_rule"]
+            and "--validate-only" in literature_contract_doc["self_check"]
+            and dry_run_rejected
+            and not (pending_run / "agents" / "pilot_analyst" / "result.json").exists(),
+            "D3 first-wave packets carry a machine-precise payload contract (exact keys, enums, path rule) and a dry-run validator that never records a result",
             checks,
         )
-        synthetic_queue = {
-            **natural_queue,
-            "candidates": [
-                {
-                    "candidate_id": "dc-002",
-                    "title": "Synthetic paired-horizon fallback",
-                    "type": "T1_paired_horizon_partition",
-                },
-                {
-                    "candidate_id": "dc-003",
-                    "title": "Synthetic paired-fraction fallback",
-                    "type": "T6_paired_fraction_partition",
-                },
-            ],
-        }
-        (pending_run / "candidate_fallback_queue.json").write_text(
-            json.dumps(synthetic_queue), encoding="utf-8"
+        natural_queue = json_value(pending_run / "candidate_fallback_queue.json")
+        require(
+            natural_queue_order == []
+            and all(
+                item["research_readiness"]["paper_track"] != "empirical_candidate"
+                for item in natural_candidates
+            )
+            and natural_queue["schema_version"] == "gga-candidate-fallback-queue-v2"
+            and natural_queue["selected_candidate_id"] == "user-question"
+            and [item["candidate_id"] for item in natural_queue["candidates"]]
+            == ["dc-002", "dc-003", "dc-004"]
+            and natural_queue["candidates"][1]["data_signature"]
+            == natural_queue["candidates"][2]["data_signature"]
+            and natural_queue["candidates"][0]["data_signature"]
+            != natural_queue["candidates"][1]["data_signature"]
+            and auto_research.rank_fallback_candidates(
+                natural_candidates + injected, injected[1]
+            )[0]["candidate_id"]
+            == "dc-002"
+            and [
+                item["candidate_id"]
+                for item in auto_research.rank_fallback_candidates(
+                    natural_candidates + injected, injected[0], ["dc-003"]
+                )
+            ]
+            == ["dc-004"],
+            "D3 the fallback queue lists every untried empirical candidate round-robin across template types, rotates the failed type last and never re-queues exhausted IDs",
+            checks,
         )
         pilot_output_root = pending_run / "agent_outputs" / "pilot_analyst"
         real_output_dir = pilot_output_root / "real"
@@ -9489,34 +9595,216 @@ def check_d3(output_dir: Path) -> list[str]:
                 },
             },
         )
-        next_request = json_value(pending_run / "next_request.json")
+        archive_dir = pending_run / "attempts" / "attempt-01-user-question"
+        archive_manifest = json_value(archive_dir / "attempt_manifest.json")
+        redirected_queue = json_value(pending_run / "candidate_fallback_queue.json")
+        redirected_hypothesis = json_value(pending_run / "selected_hypothesis.json")
+        redirected_events = [
+            json.loads(line)
+            for line in (pending_run / "events.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+            if line.strip()
+        ]
         require(
             unsupported_pilot_state["stage"] == "pilot_and_literature"
-            and redirected_state["status"] == "redirected_next_candidate"
-            and redirected_state["stage"] == "research_quality_gate"
-            and redirected_state["research_gate"]["paper_eligible"] is False
+            and redirected_state["status"] == "awaiting_agents"
+            and redirected_state["stage"] == "pilot_and_literature"
+            and redirected_state["required_roles"] == list(auto_research.FIRST_WAVE)
+            and redirected_state["attempt"] == 2
+            and redirected_state["selected_candidate_id"] == "dc-002"
+            and "research_gate" not in redirected_state
+            and redirected_state["completed_roles"] == []
+            and redirected_state["attempt_history"][0]["candidate_id"] == "user-question"
+            and redirected_state["attempt_history"][0]["pilot_outcome"]
+            == "unsupported_inputs"
+            and redirected_state["attempt_history"][0]["archive_dir"]
+            == "attempts/attempt-01-user-question"
+            and redirected_state["exhausted_candidate_ids"] == ["user-question"]
             and redirected_state["fallback"]["next_candidate_id"] == "dc-002"
+            and redirected_state["fallback"]["from_candidate_id"] == "user-question"
             and redirected_state["fallback"]["remaining_candidates"] == 2
-            and next_request["candidate_id"] == "dc-002"
-            and next_request["output_language"] == "en"
+            and archive_manifest["research_gate"]["paper_eligible"] is False
+            and set(archive_manifest["result_sha256"])
+            == {
+                "agents/pilot_analyst/result.json",
+                "agents/literature_researcher/result.json",
+            }
+            and (archive_dir / "research_gate_receipt.json").is_file()
+            and (archive_dir / "agents" / "pilot_analyst" / "result.json").is_file()
+            and not (pending_run / "research_gate_receipt.json").exists()
+            and not (pending_run / "next_request.json").exists()
+            and (pending_run / "agents" / "pilot_analyst" / "packet.json").is_file()
+            and not (pending_run / "agents" / "pilot_analyst" / "result.json").exists()
+            and redirected_hypothesis["candidate"]["candidate_id"] == "dc-002"
+            and [item["candidate_id"] for item in redirected_queue["candidates"]]
+            == ["dc-003", "dc-004"]
+            and redirected_queue["exhausted_candidate_ids"] == ["user-question"]
+            and redirected_events[-1]["event"] == "candidate_redirected_in_run"
             and not (
                 pending_run / "agents" / "manuscript_writer" / "packet.json"
             ).exists()
             and not (
                 pending_run / "agents" / "figure_designer" / "packet.json"
             ).exists(),
-            "D3 unsupported pilots stop before manuscript and figure generation and redirect autonomously to the next ranked empirical candidate",
+            "D3 a direction that fails the scientific gate is archived and the same run continues on the next empirical candidate with fresh first-wave packets, never a manuscript",
             checks,
         )
-        empty_fallback_state: dict = {}
-        with tempfile.TemporaryDirectory() as fallback_temp:
-            auto_research._prepare_candidate_fallback(
-                Path(fallback_temp), empty_fallback_state, reason="unit check"
+        try:
+            auto_research.submit_agent_result(
+                pending_run,
+                role="pilot_analyst",
+                invocation_id="pilot-unsupported-inputs",
+                model_family="family-a",
+                payload={"artifacts": [], "claims": []},
             )
+            archived_invocation_reused = True
+        except auto_research.AutoResearchError:
+            archived_invocation_reused = False
         require(
-            empty_fallback_state["status"] == "needs_research_redirection"
-            and empty_fallback_state["stage"] == "research_quality_gate",
-            "D3 an exhausted fallback queue routes to honest research redirection instead of fabricating a candidate",
+            not archived_invocation_reused,
+            "D3 invocation IDs consumed by an archived attempt stay reserved after an in-run redirect",
+            checks,
+        )
+
+        dry_runs: list[bool] = []
+
+        def submit_unsupported_first_wave(tag: str) -> dict:
+            pilot_dir = pending_run / "agent_outputs" / "pilot_analyst" / tag
+            pilot_dir.mkdir(parents=True)
+            pilot_artifact = pilot_dir / "result.json"
+            pilot_artifact.write_text(json.dumps({"attempt": tag}) + "\n", encoding="utf-8")
+            pilot_relative = f"agent_outputs/pilot_analyst/{tag}/result.json"
+            pilot_payload = {
+                "artifacts": [
+                    {"path": pilot_relative, "sha256": sha256_file(pilot_artifact)}
+                ],
+                "claims": [
+                    {
+                        "claim_id": f"pilot-input-status-{tag}",
+                        "value": "unsupported",
+                        "unit": "status",
+                        "artifact": pilot_relative,
+                        "artifact_sha256": sha256_file(pilot_artifact),
+                    }
+                ],
+                "analysis_outcome": {
+                    "status": "unsupported_inputs",
+                    "analysis_executed": False,
+                    "result_claim_ids": [],
+                    "routing_destination": "candidate_selection",
+                    "evidence_summary": "The archive cannot identify the estimand.",
+                },
+            }
+            dry_run = auto_research.validate_agent_result(
+                pending_run,
+                role="pilot_analyst",
+                invocation_id=f"pilot-unsupported-{tag}",
+                model_family="family-a",
+                payload=pilot_payload,
+            )
+            dry_runs.append(
+                dry_run["valid"] is True
+                and dry_run["cycle_id"] == "initial"
+                and not (pending_run / "agents" / "pilot_analyst" / "result.json").exists()
+            )
+            auto_research.submit_agent_result(
+                pending_run,
+                role="pilot_analyst",
+                invocation_id=f"pilot-unsupported-{tag}",
+                model_family="family-a",
+                payload=pilot_payload,
+            )
+            literature_dir = pending_run / "agent_outputs" / "literature_researcher" / tag
+            literature_dir.mkdir(parents=True)
+            citations_artifact = literature_dir / "citations.json"
+            citations_artifact.write_text("{}\n", encoding="utf-8")
+            retrieval_artifact = literature_dir / "retrieval-evidence-1.html"
+            retrieval_artifact.write_text(
+                "<html><title>Verified primary source landing page</title></html>\n",
+                encoding="utf-8",
+            )
+            citations_relative = f"agent_outputs/literature_researcher/{tag}/citations.json"
+            retrieval_relative = (
+                f"agent_outputs/literature_researcher/{tag}/retrieval-evidence-1.html"
+            )
+            return auto_research.submit_agent_result(
+                pending_run,
+                role="literature_researcher",
+                invocation_id=f"literature-unsupported-{tag}",
+                model_family="family-b",
+                payload={
+                    "artifacts": [
+                        {
+                            "path": citations_relative,
+                            "sha256": sha256_file(citations_artifact),
+                        },
+                        {
+                            "path": retrieval_relative,
+                            "sha256": sha256_file(retrieval_artifact),
+                        },
+                    ],
+                    "citations": [
+                        {
+                            "title": "Verified primary source",
+                            "authors": ["Researcher"],
+                            "year": 2025,
+                            "venue": "Journal",
+                            "doi_or_official_url": "https://doi.org/10.0000/example",
+                            "primary_source_verified": True,
+                            "supported_claim": "frontier boundary",
+                            "retrieval": {
+                                "retrieved_at": "2026-08-27T00:00:00+00:00",
+                                "evidence_artifact": retrieval_relative,
+                            },
+                        }
+                    ],
+                    "search_coverage": {
+                        "queries": [f"{tag} literature"],
+                        "sources_searched": ["doi.org", "publisher archive"],
+                        "candidates_screened": 9,
+                        "inclusion_criteria": "Primary empirical sources with registry identifiers.",
+                    },
+                    "frontier_assessment": {
+                        "status": "supports_empirical_article",
+                        "open_problem": "The empirical question remains open.",
+                        "closest_prior_work": "Prior work defines the expected contrast.",
+                        "novelty_delta": "A supported frozen pilot could test it.",
+                        "venue_fit": "The question fits Applied Geochemistry.",
+                    },
+                },
+            )
+
+        second_redirect = submit_unsupported_first_wave("attempt2")
+        exhausted_state = submit_unsupported_first_wave("attempt3")
+        exhausted_events = [
+            json.loads(line)
+            for line in (pending_run / "events.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+            if line.strip()
+        ]
+        require(
+            second_redirect["status"] == "awaiting_agents"
+            and second_redirect["attempt"] == 3
+            and second_redirect["selected_candidate_id"] == "dc-003"
+            and second_redirect["fallback"]["remaining_candidates"] == 1
+            and (pending_run / "attempts" / "attempt-02-dc-002").is_dir()
+            and exhausted_state["status"] == "needs_research_redirection"
+            and exhausted_state["stage"] == "research_quality_gate"
+            and exhausted_state["attempt"] == 3
+            and exhausted_state["selected_candidate_id"] == "dc-003"
+            and exhausted_state["research_gate"]["pilot_outcome"] == "unsupported_inputs"
+            and exhausted_state["exhausted_candidate_ids"]
+            == ["dc-002", "dc-003", "dc-004", "user-question"]
+            and exhausted_state["fallback"]["next_candidate_id"] is None
+            and exhausted_state["fallback"]["remaining_candidates"] == 0
+            and len(exhausted_state["attempt_history"]) == 2
+            and (pending_run / "research_gate_receipt.json").is_file()
+            and not (pending_run / "attempts" / "attempt-03-dc-003").exists()
+            and exhausted_events[-1]["event"] == "candidate_fallback_exhausted"
+            and dry_runs == [True, True],
+            "D3 an unsupported_inputs pilot exhausts its same-data-signature siblings and the chain ends honestly at research redirection once no empirical candidate remains",
             checks,
         )
 
