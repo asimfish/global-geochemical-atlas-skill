@@ -3,10 +3,15 @@
 `Auto-Research` is an optional continuation inside the generated
 `interactive_map.html`.  It consumes a validated, frozen atlas and never edits
 the eighteen core products.  Selecting a research direction is the only human
-decision: from there the controller advances autonomously until it packages a
-final publication (`camera_ready`, or `draft_with_disclosed_findings` when
-revision budgets are exhausted) or redirects itself to the next ranked
-empirical candidate.
+decision: from there the controller advances autonomously and **every run ends
+with a packaged, reviewed deliverable** whose grade states its basis:
+`camera_ready` (strong frontier, every review gate passed),
+`draft_with_disclosed_findings` (revision budget exhausted, or the manuscript
+rests on the best executed pilot whose frontier the literature judged weak), or
+`evidence_report` (no attempted direction could execute a pilot, so the run
+writes a data-adequacy and research-direction report).  Failed directions are
+archived and the same run redirects itself to the next untried empirical
+candidate before any of these fallbacks apply.
 
 ## Start locally
 
@@ -95,9 +100,22 @@ and `state.json` expose the next incomplete gate.
    discovery rank inside a type); an `unsupported_inputs` pilot also exhausts
    the siblings that share the failed candidate's data signature (same type,
    medium and sample-type pairing), because the archive cannot identify that
-   estimand for any element. Only an exhausted queue ends the run at
-   `needs_research_redirection`. No manuscript/figure packets are created
-   for a failed direction.
+   estimand for any element. An executed pilot whose frontier is weak or
+   unverified is a *writeable* attempt: it is archived and kept while other
+   directions are tried. When the queue is exhausted the run never stops
+   empty-handed: if any attempt is writeable, the best one (`supported_effect`
+   before `supported_null`, then the earliest) is restored to the run root and
+   written up with a `frontier` disclosure in the gate receipt, the writer and
+   figure packets and the final manifest (`writing_basis =
+   best_available_executed_pilot`, grade capped at
+   `draft_with_disclosed_findings`); otherwise the controller opens an
+   **evidence report** (`writing_basis = evidence_report`): the archived pilots'
+   diagnostic claims (attempt-prefixed), literature verdicts, gate receipts and
+   the acquisition/audit candidates become the inputs of the same writer,
+   figure, citation-audit and review roles under a report spine and report
+   figure roles (`coverage_and_gaps`, `pilot_diagnostics`,
+   `acquisition_priority`). No manuscript/figure packets are created for a
+   direction while a stronger one may still be found.
 6. Start `manuscript_writer` and `figure_designer` only after that gate. Every
    contribution and plotted result must cite an atlas or pilot claim ID. The
    manuscript delivers a typed reference list (unique reference IDs, titles,
@@ -149,13 +167,20 @@ and `state.json` expose the next incomplete gate.
    review prose. At most three revision cycles run; unresolved failures then
    auto-publish at grade `draft_with_disclosed_findings`, with every open
    feedback item disclosed verbatim in the publication manifest.
-10. Passing gates auto-publish at grade `camera_ready`: the controller
-    verifies every deliverable hash, packages the manuscript, figures, review
-    and audit receipts under `publication/`, and writes a hash-bound
-    `publication_manifest.json`. The run ends at `completed_published` (or
-    `completed_with_findings` for disclosed-findings drafts). Same-family
-    review remains labeled provisional inside the receipt, and the manifest
-    grade is the honest publication record; no human approval gate exists.
+10. Passing gates auto-publish: the controller verifies every deliverable
+    hash, packages the manuscript, figures, review and audit receipts under
+    `publication/`, and writes a hash-bound `publication_manifest.json` that
+    records `grade`, `deliverable_mode`, `writing_basis` and the number of
+    attempted directions. A strong-frontier manuscript that passes every gate
+    is `camera_ready` (`completed_published`); a manuscript written on the
+    best available weak-frontier pilot is capped at
+    `draft_with_disclosed_findings` (`completed_with_findings`) even when every
+    gate passes, with the frontier verdict listed in `disclosed_findings`; an
+    evidence report is always graded `evidence_report`
+    (`completed_evidence_report`) and discloses that it claims no empirical
+    effect. Same-family review remains labeled provisional inside the receipt,
+    and the manifest grade is the honest publication record; no human approval
+    gate exists.
 
 The controller owns the meaning of every review gate; the reviewer cannot rename
 or substitute them between cycles. Each gate returns a score from 0 to 4,

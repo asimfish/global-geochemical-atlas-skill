@@ -36,8 +36,12 @@ import validate_outputs
 SCRIPT_DIR = Path(__file__).resolve().parent
 BUILD_RESEARCH_PRODUCTS = SCRIPT_DIR / "build_research_products.py"
 BUILD_DISCOVERY_CANDIDATES = SCRIPT_DIR / "build_discovery_candidates.py"
-STATE_VERSION = "gga-auto-research-state-v4"
-PUBLICATION_GRADES = ("camera_ready", "draft_with_disclosed_findings")
+STATE_VERSION = "gga-auto-research-state-v5"
+PUBLICATION_GRADES = (
+    "camera_ready",
+    "draft_with_disclosed_findings",
+    "evidence_report",
+)
 REQUEST_VERSION = "gga-auto-research-request-v1"
 PACKET_VERSION = "gga-auto-research-agent-packet-v2"
 RESULT_VERSION = "gga-auto-research-agent-result-v2"
@@ -107,6 +111,19 @@ REQUIRED_EMPIRICAL_FIGURE_ROLES = {
     "spatial_pattern",
     "robustness_or_external_validation",
 }
+# When no attempted direction could execute a paper-eligible pilot, the run
+# still ends with a typeset, reviewed deliverable: a data-adequacy and research
+# direction report built from the archived attempts.  Its figures answer
+# different questions than an empirical article.
+REQUIRED_REPORT_FIGURE_ROLES = {
+    "coverage_and_gaps",
+    "pilot_diagnostics",
+    "acquisition_priority",
+}
+DELIVERABLE_MODES = ("empirical_article", "evidence_report")
+WRITING_BASIS_STRONG = "supports_empirical_article"
+WRITING_BASIS_BEST_AVAILABLE = "best_available_executed_pilot"
+WRITING_BASIS_REPORT = "evidence_report"
 
 
 class AutoResearchError(RuntimeError):
@@ -632,16 +649,30 @@ def _build_research_contracts(
     }
     _write_json(run_dir / "literature_queue.json", literature)
     quality_contract = {
-        "schema_version": "gga-research-quality-contract-v1",
+        "schema_version": "gga-research-quality-contract-v2",
+        "deliverable_mode": "empirical_article",
         "paper_entry_gate": {
             "eligible_pilot_outcomes": sorted(PAPER_ELIGIBLE_PILOT_OUTCOMES),
-            "required_frontier_status": "supports_empirical_article",
-            "failure_status": "candidate_fallback_or_research_redirection",
+            "required_frontier_status": WRITING_BASIS_STRONG,
+            "failure_status": "chain_then_best_available_or_evidence_report",
+            "weak_frontier_policy": (
+                "An executed pilot whose frontier is weak or unverified is kept as a "
+                "writeable attempt while untried candidates are pursued; once none "
+                "remain, the best executed pilot is written up with the frontier "
+                "verdict disclosed and the grade capped at "
+                "draft_with_disclosed_findings."
+            ),
+            "no_executed_pilot_policy": (
+                "When no attempted direction executes a paper-eligible pilot, the "
+                "run writes a typeset, cited, independently reviewed data-adequacy "
+                "and research-direction report graded evidence_report."
+            ),
             "rule": (
-                "Unsupported, acquisition-only, invalid, or weak-frontier work must "
-                "stop before manuscript and figure generation; the run then "
-                "redirects to the next ranked empirical candidate or, when the "
-                "queue is empty, to acquisition/audit planning."
+                "Unsupported, acquisition-only, invalid, or weak-frontier work never "
+                "starts an empirical manuscript on its own merits; the run redirects "
+                "to the next untried empirical candidate and, when the queue is "
+                "empty, still ends with a packaged deliverable whose grade states its "
+                "basis."
             ),
         },
         "contribution_gate": {
@@ -1764,11 +1795,26 @@ def _validate_figure_storyboard(
         seen_roles.add(role)
     if len(figure_ids) != len(set(figure_ids)):
         raise AutoResearchError("figure IDs must be unique")
-    missing = REQUIRED_EMPIRICAL_FIGURE_ROLES - seen_roles
+    missing = _required_figure_roles(run_dir) - seen_roles
     if missing:
         raise AutoResearchError(
-            "figure storyboard lacks empirical roles: " + ", ".join(sorted(missing))
+            "figure storyboard lacks required roles: " + ", ".join(sorted(missing))
         )
+
+
+def _required_figure_roles(run_dir: Path) -> set[str]:
+    """The frozen figure contract decides which storyboard roles are mandatory.
+
+    Empirical articles need primary/spatial/robustness evidence; an evidence
+    report needs coverage, pilot-diagnostic and acquisition-priority figures.
+    """
+    contract_path = run_dir / "figure_contract.json"
+    if contract_path.is_file():
+        contract = _read_object(contract_path)
+        roles = (contract.get("result_figures") or {}).get("required_roles")
+        if isinstance(roles, list) and roles:
+            return {str(role) for role in roles}
+    return set(REQUIRED_EMPIRICAL_FIGURE_ROLES)
 
 
 def _validate_role_payload(
@@ -1927,6 +1973,16 @@ def _allowed_claim_ids(run_dir: Path) -> set[str]:
             str(item.get("claim_id"))
             for item in pilot.get("payload", {}).get("claims", [])
             if isinstance(item, Mapping)
+        )
+    # An evidence report cites the archived attempts' diagnostic claims, which
+    # the controller re-registers (attempt-prefixed) in the claim registry.
+    registry_path = run_dir / "research_claim_registry.json"
+    if registry_path.is_file():
+        registry = _read_object(registry_path)
+        ids.update(
+            str(item.get("claim_id"))
+            for item in registry.get("pilot_claims", [])
+            if isinstance(item, Mapping) and item.get("claim_id")
         )
     return ids
 
@@ -2382,6 +2438,31 @@ def _finalize_publication(
     """
     if grade not in PUBLICATION_GRADES:
         raise AutoResearchError(f"unknown publication grade: {grade}")
+    # The grade can never overstate the basis the run was written on: an
+    # evidence report stays an evidence report, and a manuscript written on the
+    # best available (weak-frontier) pilot stays a disclosed-findings draft
+    # even when every review gate passes.
+    disclosed: list[dict[str, Any]] = [dict(item) for item in findings]
+    gate = dict(state.get("research_gate") or {})
+    if state.get("deliverable_mode") == "evidence_report":
+        grade = "evidence_report"
+        disclosed.append(
+            {
+                "gate_id": "deliverable_mode",
+                "feedback": (
+                    "evidence report: no attempted direction executed a paper-eligible "
+                    "pilot; this deliverable assesses data adequacy and recommends "
+                    "acquisition or audit work, and claims no empirical effect"
+                ),
+            }
+        )
+    elif grade == "camera_ready" and gate.get("writing_basis") == WRITING_BASIS_BEST_AVAILABLE:
+        grade = "draft_with_disclosed_findings"
+        receipt = _read_object(run_dir / "research_gate_receipt.json")
+        disclosed.extend(
+            dict(item) for item in receipt.get("disclosures", []) if isinstance(item, Mapping)
+        )
+    findings = disclosed
     writer_cycle = _latest_result_cycle(run_dir, "manuscript_writer", cycle_id)
     figure_cycle = _latest_result_cycle(run_dir, "figure_designer", cycle_id)
     audit_cycle = _latest_result_cycle(run_dir, "citation_auditor", cycle_id)
@@ -2440,8 +2521,11 @@ def _finalize_publication(
                 }
             )
     manifest = {
-        "schema_version": "gga-publication-manifest-v1",
+        "schema_version": "gga-publication-manifest-v2",
         "grade": grade,
+        "deliverable_mode": str(state.get("deliverable_mode") or "empirical_article"),
+        "writing_basis": str(gate.get("writing_basis") or WRITING_BASIS_STRONG),
+        "attempted_directions": len(state.get("attempt_history") or []) + 1,
         "packaged_cycle": cycle_id,
         "writer_result_sha256": writer_result["result_sha256"],
         "figure_result_sha256": figure_result["result_sha256"],
@@ -2455,9 +2539,11 @@ def _finalize_publication(
     }
     manifest["manifest_sha256"] = sha256_bytes(canonical_json_bytes(manifest))
     _write_json(run_dir / "publication_manifest.json", manifest)
-    status = (
-        "completed_published" if grade == "camera_ready" else "completed_with_findings"
-    )
+    status = {
+        "camera_ready": "completed_published",
+        "draft_with_disclosed_findings": "completed_with_findings",
+        "evidence_report": "completed_evidence_report",
+    }[grade]
     state.update(
         {
             "status": status,
@@ -2532,12 +2618,14 @@ def _archive_attempt(
         for path in sorted(archive_dir.glob("agents/*/result.json"))
     }
     gate = dict(state.get("research_gate") or {})
+    writeable = gate.get("pilot_outcome") in PAPER_ELIGIBLE_PILOT_OUTCOMES
     manifest_body = {
         "schema_version": "gga-research-attempt-v1",
         "attempt": attempt,
         "candidate_id": candidate_id,
         "reason": reason,
         "research_gate": gate,
+        "writeable": writeable,
         "archived_entries": moved,
         "result_sha256": result_hashes,
         "claim_boundary": (
@@ -2558,8 +2646,509 @@ def _archive_attempt(
         "manifest_sha256": manifest["manifest_sha256"],
         "pilot_outcome": gate.get("pilot_outcome"),
         "frontier_status": gate.get("frontier_status"),
+        "writeable": writeable,
         "reason": reason,
     }
+
+
+def _frontier_disclosure(
+    frontier: Mapping[str, Any], pilot_outcome: str
+) -> dict[str, Any]:
+    """The reviewer-visible statement that a manuscript rests on a weak frontier."""
+    return {
+        "gate_id": "frontier",
+        "frontier_status": str(frontier.get("status") or ""),
+        "pilot_outcome": pilot_outcome,
+        "closest_prior_work": frontier.get("closest_prior_work"),
+        "novelty_delta": str(frontier.get("novelty_delta") or ""),
+        "feedback": (
+            f"literature frontier verdict {frontier.get('status')}: the manuscript "
+            "must be framed as a bounded replication, regional confirmation or "
+            "null-result note; the contribution map states the closest prior work "
+            "and claims no novelty beyond the disclosed delta"
+        ),
+    }
+
+
+def _start_paper_production(
+    run_dir: Path, state: dict[str, Any], *, writing_basis: str
+) -> None:
+    """Open the manuscript and figure wave on the pilot result now at the run root.
+
+    ``writing_basis`` records why writing is allowed: a strong frontier, the
+    best available executed pilot after every other direction failed (its
+    frontier weakness is disclosed to the writer, the reviewer and the final
+    manifest), or an evidence report.
+    """
+    pilot_result = _read_valid_result(run_dir, "pilot_analyst")
+    literature_result = _read_valid_result(run_dir, "literature_researcher")
+    pilot_outcome = _validate_analysis_outcome(
+        pilot_result["payload"].get("analysis_outcome"),
+        {
+            str(item.get("claim_id"))
+            for item in pilot_result["payload"].get("claims", [])
+            if isinstance(item, Mapping)
+        },
+    )
+    frontier = _validate_frontier_assessment(
+        literature_result["payload"].get("frontier_assessment")
+    )
+    disclosure = (
+        None
+        if writing_basis == WRITING_BASIS_STRONG
+        else _frontier_disclosure(frontier, pilot_outcome["status"])
+    )
+    if writing_basis != WRITING_BASIS_STRONG:
+        # Re-issue the gate receipt: the earlier one honestly said this
+        # direction was not eligible on its own; it is eligible now only as the
+        # best available executed pilot, and the receipt must say so.
+        gate_receipt = {
+            "schema_version": "gga-research-gate-receipt-v2",
+            "paper_eligible": True,
+            "executed_pilot": True,
+            "writing_basis": writing_basis,
+            "pilot_outcome": pilot_outcome["status"],
+            "pilot_result_sha256": pilot_result["result_sha256"],
+            "frontier_status": frontier["status"],
+            "literature_result_sha256": literature_result["result_sha256"],
+            "routing_destination": "paper_production",
+            "disclosures": [disclosure],
+            "decision_rule": (
+                "No attempted direction reached a strong frontier position; the "
+                "best executed pilot is written up with its frontier weakness "
+                "disclosed, and the final grade cannot exceed "
+                "draft_with_disclosed_findings."
+            ),
+        }
+        gate_receipt["receipt_sha256"] = sha256_bytes(canonical_json_bytes(gate_receipt))
+        _write_json(run_dir / "research_gate_receipt.json", gate_receipt)
+    common = {
+        "atlas_snapshot": run_dir / "atlas_snapshot.json",
+        "selected_hypothesis": run_dir / "selected_hypothesis.json",
+        "claim_registry": run_dir / "research_claim_registry.json",
+        "research_gate_receipt": run_dir / "research_gate_receipt.json",
+        "research_quality_contract": run_dir / "research_quality_contract.json",
+        **_result_artifact_inputs(run_dir, "pilot_analyst", pilot_result),
+        **_result_artifact_inputs(run_dir, "literature_researcher", literature_result),
+    }
+    framing = (
+        ""
+        if disclosure is None
+        else (
+            " The literature frontier verdict is "
+            f"{frontier['status']}; frame the manuscript as a bounded replication, "
+            "regional confirmation or null-result note, name the closest prior work "
+            "in the contribution map, and claim no novelty beyond the disclosed delta."
+        )
+    )
+    writer_output: dict[str, Any] = {
+        "artifacts": "manuscript source plus a typeset PDF",
+        "claim_ids": "all numerical claims",
+        "contribution_map": "two to five claim-bound contributions with frontier delta",
+        "reference_list": (
+            "every cited reference with id, title, ordered authors, "
+            "year, venue and a typed identifier"
+        ),
+        "typeset_manifest": (
+            "source_artifact, pdf_artifact, and a section manifest "
+            "covering the frozen paper spine"
+        ),
+    }
+    figure_output: dict[str, Any] = {
+        "artifacts": "figure generation source and SVG/PDF/PNG renders per figure",
+        "claim_ids": "all plotted claims",
+        "figure_specs": (
+            "primary, spatial, and robustness storyboard with render "
+            "review, candidate comparison, source-fidelity statement "
+            "and an editable source per figure"
+        ),
+    }
+    if disclosure is not None:
+        writer_output["frontier_disclosure"] = disclosure
+        figure_output["frontier_disclosure"] = disclosure
+    _write_packet(
+        run_dir,
+        role="manuscript_writer",
+        purpose=(
+            "Draft an evidence-first empirical manuscript whose contribution "
+            "map states the frontier delta and binds every contribution to "
+            "executed claims, then typeset it into a section-complete PDF." + framing
+        ),
+        inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
+        required_output=writer_output,
+    )
+    _write_packet(
+        run_dir,
+        role="figure_designer",
+        purpose=(
+            "Design a data-bearing visual argument, not a status dashboard: "
+            "primary result, spatial pattern, and robustness or independent "
+            "validation must each answer a scientific question after "
+            "comparing candidate designs and auditing source fidelity."
+        ),
+        inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
+        required_output=figure_output,
+    )
+    state.update(
+        {
+            "status": "awaiting_agents",
+            "stage": "manuscript_and_figures",
+            "active_cycle": INITIAL_CYCLE,
+            "required_roles": list(SECOND_WAVE),
+            "revision_count": 0,
+            "deliverable_mode": "empirical_article",
+            "research_gate": {
+                "paper_eligible": True,
+                "pilot_outcome": pilot_outcome["status"],
+                "frontier_status": frontier["status"],
+                "routing_destination": "paper_production",
+                "writing_basis": writing_basis,
+            },
+        }
+    )
+    _append_event(
+        run_dir,
+        "second_agent_wave_ready",
+        {"roles": list(SECOND_WAVE), "writing_basis": writing_basis},
+    )
+
+
+def _restore_attempt(
+    run_dir: Path, state: dict[str, Any], entry: Mapping[str, Any]
+) -> None:
+    """Bring an archived attempt back to the run root as the manuscript basis."""
+    archive_dir = run_dir / str(entry["archive_dir"])
+    for name in ATTEMPT_SCOPED_ENTRIES:
+        source = archive_dir / name
+        if source.exists() and not source.is_symlink():
+            if (run_dir / name).exists():
+                raise AutoResearchError(f"cannot restore {name}: run root is not clean")
+            shutil.move(str(source), str(run_dir / name))
+    restored_as = int(state.get("attempt") or 1) + 1
+    _write_json(
+        archive_dir / "restored.json",
+        {
+            "schema_version": "gga-research-attempt-restore-v1",
+            "restored_as_attempt": restored_as,
+            "reason": "best available executed pilot after every other direction failed",
+        },
+    )
+    for item in state.get("attempt_history") or []:
+        if item.get("archive_dir") == entry["archive_dir"]:
+            item["restored_as_attempt"] = restored_as
+    state["attempt"] = restored_as
+    state["selected_candidate_id"] = str(entry["candidate_id"])
+
+
+def _writeable_rank(item: Mapping[str, Any]) -> tuple[int, int, int]:
+    outcome_rank = 0 if item.get("pilot_outcome") == "supported_effect" else 1
+    frontier_rank = 0 if item.get("frontier_status") == "needs_verification" else 1
+    return (outcome_rank, frontier_rank, int(item.get("attempt") or 0))
+
+
+def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) -> None:
+    """Turn a run without any executed pilot into a reviewed evidence report.
+
+    Every archived attempt's diagnostic claims, literature verdict and gate
+    receipt become the report's evidence; the acquisition/audit candidates
+    become its recommendation.  The same writer, figure, citation-audit and
+    review roles run, so the deliverable is typeset, cited and independently
+    reviewed -- graded ``evidence_report``, never an empirical article.
+    """
+    attempts_dir = run_dir / "attempts"
+    archives = sorted(
+        path for path in attempts_dir.glob("attempt-*") if path.is_dir()
+    ) if attempts_dir.is_dir() else []
+    if not archives:
+        raise AutoResearchError("evidence report requires at least one archived attempt")
+    attempt_outcomes: list[dict[str, Any]] = []
+    pilot_claims: list[dict[str, Any]] = []
+    verified_citations: list[dict[str, Any]] = []
+    attempt_inputs: dict[str, Path] = {}
+    for archive in archives:
+        manifest = _read_object(archive / "attempt_manifest.json")
+        pilot_path = archive / "agents" / "pilot_analyst" / "result.json"
+        literature_path = archive / "agents" / "literature_researcher" / "result.json"
+        gate_path = archive / "research_gate_receipt.json"
+        outcome: dict[str, Any] = {
+            "attempt": manifest.get("attempt"),
+            "candidate_id": manifest.get("candidate_id"),
+            "research_gate": manifest.get("research_gate"),
+            "archive_dir": archive.relative_to(run_dir).as_posix(),
+        }
+        if pilot_path.is_file():
+            pilot = _read_object(pilot_path)
+            outcome["evidence_summary"] = (
+                (pilot.get("payload") or {}).get("analysis_outcome") or {}
+            ).get("evidence_summary")
+            for claim in (pilot.get("payload") or {}).get("claims", []):
+                if isinstance(claim, Mapping):
+                    pilot_claims.append(
+                        {
+                            **dict(claim),
+                            "claim_id": f"{archive.name}:{claim.get('claim_id')}",
+                            "source_attempt": manifest.get("attempt"),
+                            "source_candidate_id": manifest.get("candidate_id"),
+                            "artifact": f"{archive.relative_to(run_dir).as_posix()}/{claim.get('artifact')}",
+                        }
+                    )
+            attempt_inputs[f"{archive.name}_pilot_result"] = pilot_path
+        if literature_path.is_file():
+            literature = _read_object(literature_path)
+            for citation in (literature.get("payload") or {}).get("citations", []):
+                if isinstance(citation, Mapping):
+                    verified_citations.append(
+                        {**dict(citation), "source_attempt": manifest.get("attempt")}
+                    )
+            attempt_inputs[f"{archive.name}_literature_result"] = literature_path
+        if gate_path.is_file():
+            attempt_inputs[f"{archive.name}_gate_receipt"] = gate_path
+        attempt_outcomes.append(outcome)
+    candidates_document = _read_object(
+        run_dir / "deterministic" / "discovery_candidates.json"
+    )
+    acquisition_candidates = [
+        dict(item)
+        for item in candidates_document.get("discovery_candidates") or []
+        if isinstance(item, Mapping)
+        and str((item.get("research_readiness") or {}).get("paper_track") or "")
+        == "acquisition_or_audit_plan"
+    ]
+    snapshot = _read_object(run_dir / "atlas_snapshot.json")
+    selected = {
+        "candidate_id": "evidence-report",
+        "type": "data_adequacy_and_direction_report",
+        "title": "Data adequacy and research-direction report for the frozen atlas",
+        "question": (
+            "Which empirical directions did the frozen atlas support, why did each "
+            "attempted direction stop at the scientific gate, and which acquisition "
+            "or audit work would unlock an empirical article?"
+        ),
+        "attempted_candidate_ids": [item["candidate_id"] for item in attempt_outcomes],
+        "acquisition_candidate_ids": [
+            item.get("candidate_id") for item in acquisition_candidates
+        ],
+    }
+    _write_json(
+        run_dir / "selected_hypothesis.json",
+        {
+            "schema_version": "gga-selected-hypothesis-v1",
+            "candidate": selected,
+            "selection_status": "evidence_report_after_exhausted_empirical_candidates",
+        },
+    )
+    _write_json(
+        run_dir / "research_claim_registry.json",
+        {
+            "schema_version": "gga-auto-research-claim-registry-v2",
+            "deliverable_mode": "evidence_report",
+            "atlas_claims": snapshot["claim_ledger"]["claims"],
+            "pilot_claims": pilot_claims,
+            "verified_citations": verified_citations,
+            "attempt_outcomes": attempt_outcomes,
+            "acquisition_candidates": acquisition_candidates,
+            "claim_boundary": (
+                "Atlas claims are recomputed from frozen outputs; attempt-prefixed "
+                "pilot claims are diagnostic numbers from directions that could not "
+                "support an empirical article and must be reported as such."
+            ),
+        },
+    )
+    latest_gate = dict(state.get("research_gate") or {})
+    gate_receipt = {
+        "schema_version": "gga-research-gate-receipt-v2",
+        "paper_eligible": True,
+        "executed_pilot": False,
+        "writing_basis": WRITING_BASIS_REPORT,
+        "pilot_outcome": latest_gate.get("pilot_outcome"),
+        "frontier_status": latest_gate.get("frontier_status"),
+        "routing_destination": "evidence_report",
+        "attempted_directions": len(attempt_outcomes),
+        "decision_rule": (
+            "No attempted direction executed a paper-eligible pilot; the run "
+            "delivers a typeset, cited and independently reviewed data-adequacy "
+            "and research-direction report instead of stopping without a product."
+        ),
+    }
+    gate_receipt["receipt_sha256"] = sha256_bytes(canonical_json_bytes(gate_receipt))
+    _write_json(run_dir / "research_gate_receipt.json", gate_receipt)
+    # Contracts for the report: reuse the frozen quality contract, adapt the
+    # paper spine and the figure roles to what a report must show.
+    latest_archive = archives[-1]
+    quality = _read_object(latest_archive / "research_quality_contract.json")
+    quality["deliverable_mode"] = "evidence_report"
+    quality["paper_entry_gate"] = {
+        **dict(quality.get("paper_entry_gate") or {}),
+        "evidence_report_rule": (
+            "When every empirical candidate is exhausted without an executed "
+            "pilot, the run writes an evidence report: a3 judges the value and "
+            "honesty of the data-adequacy finding, a4 judges fit for a data or "
+            "methods venue, and no empirical effect may be claimed."
+        ),
+    }
+    _write_json(run_dir / "research_quality_contract.json", quality)
+    _write_json(
+        run_dir / "paper_spine.json",
+        {
+            "schema_version": "gga-paper-spine-v1",
+            "deliverable_mode": "evidence_report",
+            "status": "planned_from_archived_attempts",
+            "contribution_first": True,
+            "contributions": [],
+            "minimum_supported_contributions": 2,
+            "required_contribution_fields": [
+                "contribution_id",
+                "statement",
+                "claim_ids",
+                "frontier_delta",
+            ],
+            "section_order": [
+                "Findings per attempted direction",
+                "Data adequacy assessment",
+                "Recommended acquisition and audit plan",
+                "Materials and methods",
+                "Introduction",
+                "Abstract",
+                "Title",
+            ],
+            "required_sections": [
+                "Position within the current frontier",
+                "Data and code availability",
+                "Agent disclosure",
+                "Limitations",
+            ],
+            "claim_policy": "every numerical sentence resolves to a claim ID",
+        },
+    )
+    _write_json(
+        run_dir / "figure_contract.json",
+        {
+            "schema_version": "gga-figure-contract-v2",
+            "deliverable_mode": "evidence_report",
+            "status": "planned_from_archived_attempts",
+            "method_figure": {"required": False, "panels": []},
+            "result_figures": {
+                "must_reference_claim_ids": True,
+                "caption_fields": ["cohort", "n", "unit", "uncertainty", "claim_boundary"],
+                "required_roles": sorted(REQUIRED_REPORT_FIGURE_ROLES),
+                "minimum_data_bearing_figures": 3,
+                "storyboard_fields": [
+                    "figure_role",
+                    "question_answered",
+                    "claim_ids",
+                    "visual_encoding",
+                    "artifact_paths",
+                    "render_review",
+                    "candidate_generation",
+                    "source_fidelity",
+                    "editable_source",
+                ],
+            },
+            "formats": ["svg", "pdf", "png"],
+            "candidate_generation": {
+                "minimum_candidates_considered": 2,
+                "rejected_alternatives_must_be_recorded": True,
+            },
+            "source_fidelity": (
+                "every visual element must trace to frozen atlas claims or "
+                "attempt-prefixed pilot diagnostics"
+            ),
+            "role_semantics": {
+                "coverage_and_gaps": "where the frozen atlas has evidence and where it does not",
+                "pilot_diagnostics": "what each attempted direction measured and why it stopped",
+                "acquisition_priority": "which acquisition or audit tasks would unlock an article",
+            },
+            "editable_delivery": (
+                "each figure binds an editable source so reviewers can regenerate it"
+            ),
+            "review_loop": "render_inspect_revise_at_least_once",
+        },
+    )
+    common = {
+        "atlas_snapshot": run_dir / "atlas_snapshot.json",
+        "selected_hypothesis": run_dir / "selected_hypothesis.json",
+        "claim_registry": run_dir / "research_claim_registry.json",
+        "research_gate_receipt": run_dir / "research_gate_receipt.json",
+        "research_quality_contract": run_dir / "research_quality_contract.json",
+        "discovery_candidates": run_dir / "deterministic" / "discovery_candidates.json",
+        **attempt_inputs,
+    }
+    _write_packet(
+        run_dir,
+        role="manuscript_writer",
+        purpose=(
+            "Write a typeset data-adequacy and research-direction report: state what "
+            "each attempted direction measured, why it stopped at the scientific gate, "
+            "what the frozen atlas can and cannot support, and which acquisition or "
+            "audit work would unlock an empirical article. Claim no empirical effect."
+        ),
+        inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
+        required_output={
+            "artifacts": "report source plus a typeset PDF",
+            "claim_ids": "all numerical claims (atlas claims and attempt-prefixed pilot diagnostics)",
+            "contribution_map": (
+                "two to five claim-bound contributions whose frontier_delta states "
+                "the adequacy finding, not a scientific effect"
+            ),
+            "reference_list": (
+                "every cited reference with id, title, ordered authors, "
+                "year, venue and a typed identifier"
+            ),
+            "typeset_manifest": (
+                "source_artifact, pdf_artifact, and a section manifest covering the "
+                "report spine"
+            ),
+            "deliverable_mode": "evidence_report",
+        },
+    )
+    _write_packet(
+        run_dir,
+        role="figure_designer",
+        purpose=(
+            "Design three data-bearing report figures: coverage and gaps of the "
+            "frozen atlas, diagnostics of every attempted pilot, and the ranked "
+            "acquisition or audit priorities; every mark traces to a claim ID."
+        ),
+        inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
+        required_output={
+            "artifacts": "figure generation source and SVG/PDF/PNG renders per figure",
+            "claim_ids": "all plotted claims",
+            "figure_specs": (
+                "coverage_and_gaps, pilot_diagnostics and acquisition_priority "
+                "storyboard with render review, candidate comparison, source-fidelity "
+                "statement and an editable source per figure"
+            ),
+            "deliverable_mode": "evidence_report",
+        },
+    )
+    state.update(
+        {
+            "status": "awaiting_agents",
+            "stage": "manuscript_and_figures",
+            "active_cycle": INITIAL_CYCLE,
+            "required_roles": list(SECOND_WAVE),
+            "revision_count": 0,
+            "deliverable_mode": "evidence_report",
+            "selected_candidate_id": "evidence-report",
+            "attempt": int(state.get("attempt") or 1) + 1,
+            "research_gate": {
+                "paper_eligible": True,
+                "pilot_outcome": latest_gate.get("pilot_outcome"),
+                "frontier_status": latest_gate.get("frontier_status"),
+                "routing_destination": "evidence_report",
+                "writing_basis": WRITING_BASIS_REPORT,
+            },
+        }
+    )
+    _append_event(
+        run_dir,
+        "evidence_report_started",
+        {
+            "reason": reason,
+            "attempted_directions": len(attempt_outcomes),
+            "roles": list(SECOND_WAVE),
+        },
+    )
 
 
 def _prepare_candidate_fallback(
@@ -2605,26 +3194,53 @@ def _prepare_candidate_fallback(
     )
     history = list(state.get("attempt_history") or [])
     if next_candidate is None or str(next_candidate["candidate_id"]) not in by_id:
-        state.update(
-            {
-                "status": "needs_research_redirection",
-                "stage": "research_quality_gate",
-                "required_roles": [],
-                "exhausted_candidate_ids": sorted(exhausted),
-                "attempt_history": history,
-                "fallback": {
-                    "next_candidate_id": None,
-                    "remaining_candidates": 0,
-                    "reason": reason,
-                    "exhausted_candidate_ids": sorted(exhausted),
-                },
-            }
-        )
+        # No untried empirical direction remains.  The run still has to end
+        # with a product: write up the best executed pilot with its frontier
+        # weakness disclosed, or -- when no attempt ever executed -- a reviewed
+        # evidence report built from the archived attempts.
+        state["exhausted_candidate_ids"] = sorted(exhausted)
+        state["attempt_history"] = history
         _append_event(
             run_dir,
             "candidate_fallback_exhausted",
             {"reason": reason, "exhausted_candidate_ids": sorted(exhausted)},
         )
+        current = {
+            "attempt": int(state.get("attempt") or 1),
+            "candidate_id": failed_id,
+            "pilot_outcome": gate.get("pilot_outcome"),
+            "frontier_status": gate.get("frontier_status"),
+            "writeable": gate.get("pilot_outcome") in PAPER_ELIGIBLE_PILOT_OUTCOMES,
+            "archive_dir": None,
+        }
+        writeable = [item for item in history if item.get("writeable")]
+        if current["writeable"]:
+            writeable.append(current)
+        state["fallback"] = {
+            "next_candidate_id": None,
+            "remaining_candidates": 0,
+            "reason": reason,
+            "exhausted_candidate_ids": sorted(exhausted),
+            "decision": (
+                "best_available_executed_pilot" if writeable else "evidence_report"
+            ),
+        }
+        if writeable:
+            best = min(writeable, key=_writeable_rank)
+            if best["archive_dir"] is not None:
+                archived = _archive_attempt(run_dir, state, reason)
+                history.append(archived)
+                state["attempt_history"] = history
+                _restore_attempt(run_dir, state, best)
+            state["fallback"]["written_candidate_id"] = str(best["candidate_id"])
+            _start_paper_production(
+                run_dir, state, writing_basis=WRITING_BASIS_BEST_AVAILABLE
+            )
+            return
+        archived = _archive_attempt(run_dir, state, reason)
+        history.append(archived)
+        state["attempt_history"] = history
+        _start_evidence_report(run_dir, state, reason)
         return
     archived = _archive_attempt(run_dir, state, reason)
     history.append(archived)
@@ -2694,9 +3310,9 @@ def _advance(run_dir: Path) -> dict[str, Any]:
         frontier = _validate_frontier_assessment(
             literature_result["payload"].get("frontier_assessment")
         )
+        executed_pilot = pilot_outcome["status"] in PAPER_ELIGIBLE_PILOT_OUTCOMES
         paper_eligible = (
-            pilot_outcome["status"] in PAPER_ELIGIBLE_PILOT_OUTCOMES
-            and frontier["status"] == "supports_empirical_article"
+            executed_pilot and frontier["status"] == WRITING_BASIS_STRONG
         )
         routing_destination = (
             "paper_production"
@@ -2704,8 +3320,10 @@ def _advance(run_dir: Path) -> dict[str, Any]:
             else str(pilot_outcome.get("routing_destination") or "candidate_selection")
         )
         gate_receipt = {
-            "schema_version": "gga-research-gate-receipt-v1",
+            "schema_version": "gga-research-gate-receipt-v2",
             "paper_eligible": paper_eligible,
+            "executed_pilot": executed_pilot,
+            "writing_basis": WRITING_BASIS_STRONG if paper_eligible else None,
             "pilot_outcome": pilot_outcome["status"],
             "pilot_result_sha256": pilot_result["result_sha256"],
             "frontier_status": frontier["status"],
@@ -2713,7 +3331,12 @@ def _advance(run_dir: Path) -> dict[str, Any]:
             "routing_destination": routing_destination,
             "decision_rule": (
                 "An executed supported effect or null and a verified empirical "
-                "frontier position are both required before writing."
+                "frontier position start writing immediately. An executed pilot "
+                "with a weak or unverified frontier is kept as a writeable "
+                "attempt while other candidates are tried, and becomes the "
+                "manuscript basis with a disclosed frontier finding once no "
+                "stronger direction remains. A run whose attempts never execute "
+                "a pilot still ends with a reviewed evidence report."
             ),
         }
         gate_receipt["receipt_sha256"] = sha256_bytes(
@@ -2759,79 +3382,8 @@ def _advance(run_dir: Path) -> dict[str, Any]:
                 ),
             )
         else:
-            common = {
-                "atlas_snapshot": run_dir / "atlas_snapshot.json",
-                "selected_hypothesis": run_dir / "selected_hypothesis.json",
-                "claim_registry": run_dir / "research_claim_registry.json",
-                "research_gate_receipt": run_dir / "research_gate_receipt.json",
-                "research_quality_contract": run_dir / "research_quality_contract.json",
-                **_result_artifact_inputs(run_dir, "pilot_analyst", pilot_result),
-                **_result_artifact_inputs(
-                    run_dir, "literature_researcher", literature_result
-                ),
-            }
-            _write_packet(
-                run_dir,
-                role="manuscript_writer",
-                purpose=(
-                    "Draft an evidence-first empirical manuscript whose contribution "
-                    "map states the frontier delta and binds every contribution to "
-                    "executed claims, then typeset it into a section-complete PDF."
-                ),
-                inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
-                required_output={
-                    "artifacts": "manuscript source plus a typeset PDF",
-                    "claim_ids": "all numerical claims",
-                    "contribution_map": (
-                        "two to five claim-bound contributions with frontier delta"
-                    ),
-                    "reference_list": (
-                        "every cited reference with id, title, ordered authors, "
-                        "year, venue and a typed identifier"
-                    ),
-                    "typeset_manifest": (
-                        "source_artifact, pdf_artifact, and a section manifest "
-                        "covering the frozen paper spine"
-                    ),
-                },
-            )
-            _write_packet(
-                run_dir,
-                role="figure_designer",
-                purpose=(
-                    "Design a data-bearing visual argument, not a status dashboard: "
-                    "primary result, spatial pattern, and robustness or independent "
-                    "validation must each answer a scientific question after "
-                    "comparing candidate designs and auditing source fidelity."
-                ),
-                inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
-                required_output={
-                    "artifacts": (
-                        "figure generation source and SVG/PDF/PNG renders per figure"
-                    ),
-                    "claim_ids": "all plotted claims",
-                    "figure_specs": (
-                        "primary, spatial, and robustness storyboard with render "
-                        "review, candidate comparison, source-fidelity statement "
-                        "and an editable source per figure"
-                    ),
-                },
-            )
-            state.update(
-                {
-                    "status": "awaiting_agents",
-                    "stage": "manuscript_and_figures",
-                    "required_roles": list(SECOND_WAVE),
-                    "research_gate": {
-                        "paper_eligible": True,
-                        "pilot_outcome": pilot_outcome["status"],
-                        "frontier_status": frontier["status"],
-                        "routing_destination": "paper_production",
-                    },
-                }
-            )
-            _append_event(
-                run_dir, "second_agent_wave_ready", {"roles": list(SECOND_WAVE)}
+            _start_paper_production(
+                run_dir, state, writing_basis=WRITING_BASIS_STRONG
             )
     elif stage == "manuscript_and_figures" and _all_complete(
         run_dir,

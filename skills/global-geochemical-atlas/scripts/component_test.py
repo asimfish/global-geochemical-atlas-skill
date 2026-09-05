@@ -8523,6 +8523,28 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 the quality contract discloses the typography floor and manuscript layout rules to every downstream role",
             checks,
         )
+        quality_schema = json_value(
+            SKILL_DIR / "references" / "research-quality-contract.schema.json"
+        )
+        require(
+            quality_contract["schema_version"] == "gga-research-quality-contract-v2"
+            and quality_schema["properties"]["schema_version"]["const"]
+            == "gga-research-quality-contract-v2"
+            and quality_contract["deliverable_mode"] == "empirical_article"
+            and quality_contract["paper_entry_gate"]["failure_status"]
+            == "chain_then_best_available_or_evidence_report"
+            and quality_schema["properties"]["paper_entry_gate"]["properties"][
+                "failure_status"
+            ]["const"]
+            == "chain_then_best_available_or_evidence_report"
+            and set(quality_schema["properties"]["paper_entry_gate"]["required"])
+            <= set(quality_contract["paper_entry_gate"])
+            and research_gate_receipt["schema_version"] == "gga-research-gate-receipt-v2"
+            and research_gate_receipt["writing_basis"] == "supports_empirical_article"
+            and research_gate_receipt["executed_pilot"] is True,
+            "D3 the quality contract states that a failed gate chains to other candidates and then still ends in a graded deliverable, and the gate receipt records the writing basis",
+            checks,
+        )
         require(
             publication_lint.lint_pdf_bytes(b"%PDF-1.4\n%%EOF\n") != []
             and publication_lint.lint_pdf_bytes(
@@ -9669,53 +9691,87 @@ def check_d3(output_dir: Path) -> list[str]:
 
         dry_runs: list[bool] = []
 
-        def submit_unsupported_first_wave(tag: str) -> dict:
-            pilot_dir = pending_run / "agent_outputs" / "pilot_analyst" / tag
+        def submit_first_wave(
+            target_run: Path,
+            tag: str,
+            pilot_outcome: str = "unsupported_inputs",
+            frontier: str = "supports_empirical_article",
+        ) -> dict:
+            pilot_dir = target_run / "agent_outputs" / "pilot_analyst" / tag
             pilot_dir.mkdir(parents=True)
             pilot_artifact = pilot_dir / "result.json"
             pilot_artifact.write_text(json.dumps({"attempt": tag}) + "\n", encoding="utf-8")
             pilot_relative = f"agent_outputs/pilot_analyst/{tag}/result.json"
+            executed = pilot_outcome in auto_research.PAPER_ELIGIBLE_PILOT_OUTCOMES
+            claims = [
+                {
+                    "claim_id": f"pilot-{tag}-ratio",
+                    "value": 0.97 if executed else "unsupported",
+                    "unit": "ratio" if executed else "status",
+                    "artifact": pilot_relative,
+                    "artifact_sha256": sha256_file(pilot_artifact),
+                },
+                {
+                    "claim_id": f"pilot-{tag}-pairs",
+                    "value": 412,
+                    "unit": "pairs",
+                    "artifact": pilot_relative,
+                    "artifact_sha256": sha256_file(pilot_artifact),
+                },
+            ]
+            outcome: dict = {
+                "status": pilot_outcome,
+                "analysis_executed": executed,
+                "result_claim_ids": [c["claim_id"] for c in claims] if executed else [],
+                "routing_destination": "paper_production" if executed else "candidate_selection",
+                "evidence_summary": (
+                    "Dependence-aware interval crosses 1; direction replicates weakly."
+                    if executed
+                    else "The archive cannot identify the estimand."
+                ),
+            }
+            if executed:
+                outcome["scientific_rigor"] = {
+                    "site_identity": {"basis": "shared identifiers", "residual_risk": "none"},
+                    "spatial_dependence": {
+                        "diagnostic": "Moran's I 0.21",
+                        "finding": "material autocorrelation",
+                        "uncertainty_method": "spatial block bootstrap",
+                    },
+                    "holdout_replication": {
+                        "scheme": "checkerboard split",
+                        "result": "direction replicates",
+                        "consistent": True,
+                    },
+                    "regeneration": {"command": "python run_pilot.py", "deterministic": True},
+                }
             pilot_payload = {
                 "artifacts": [
                     {"path": pilot_relative, "sha256": sha256_file(pilot_artifact)}
                 ],
-                "claims": [
-                    {
-                        "claim_id": f"pilot-input-status-{tag}",
-                        "value": "unsupported",
-                        "unit": "status",
-                        "artifact": pilot_relative,
-                        "artifact_sha256": sha256_file(pilot_artifact),
-                    }
-                ],
-                "analysis_outcome": {
-                    "status": "unsupported_inputs",
-                    "analysis_executed": False,
-                    "result_claim_ids": [],
-                    "routing_destination": "candidate_selection",
-                    "evidence_summary": "The archive cannot identify the estimand.",
-                },
+                "claims": claims,
+                "analysis_outcome": outcome,
             }
             dry_run = auto_research.validate_agent_result(
-                pending_run,
+                target_run,
                 role="pilot_analyst",
-                invocation_id=f"pilot-unsupported-{tag}",
+                invocation_id=f"pilot-{tag}",
                 model_family="family-a",
                 payload=pilot_payload,
             )
             dry_runs.append(
                 dry_run["valid"] is True
                 and dry_run["cycle_id"] == "initial"
-                and not (pending_run / "agents" / "pilot_analyst" / "result.json").exists()
+                and not (target_run / "agents" / "pilot_analyst" / "result.json").exists()
             )
             auto_research.submit_agent_result(
-                pending_run,
+                target_run,
                 role="pilot_analyst",
-                invocation_id=f"pilot-unsupported-{tag}",
+                invocation_id=f"pilot-{tag}",
                 model_family="family-a",
                 payload=pilot_payload,
             )
-            literature_dir = pending_run / "agent_outputs" / "literature_researcher" / tag
+            literature_dir = target_run / "agent_outputs" / "literature_researcher" / tag
             literature_dir.mkdir(parents=True)
             citations_artifact = literature_dir / "citations.json"
             citations_artifact.write_text("{}\n", encoding="utf-8")
@@ -9729,9 +9785,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 f"agent_outputs/literature_researcher/{tag}/retrieval-evidence-1.html"
             )
             return auto_research.submit_agent_result(
-                pending_run,
+                target_run,
                 role="literature_researcher",
-                invocation_id=f"literature-unsupported-{tag}",
+                invocation_id=f"literature-{tag}",
                 model_family="family-b",
                 payload={
                     "artifacts": [
@@ -9766,7 +9822,7 @@ def check_d3(output_dir: Path) -> list[str]:
                         "inclusion_criteria": "Primary empirical sources with registry identifiers.",
                     },
                     "frontier_assessment": {
-                        "status": "supports_empirical_article",
+                        "status": frontier,
                         "open_problem": "The empirical question remains open.",
                         "closest_prior_work": "Prior work defines the expected contrast.",
                         "novelty_delta": "A supported frozen pilot could test it.",
@@ -9775,8 +9831,101 @@ def check_d3(output_dir: Path) -> list[str]:
                 },
             )
 
-        second_redirect = submit_unsupported_first_wave("attempt2")
-        exhausted_state = submit_unsupported_first_wave("attempt3")
+        def drive_second_wave(target_run: Path, tag: str) -> dict:
+            """Submit contract-valid writer, figure, auditor and reviewer results."""
+            state = auto_research._state(target_run)
+            registry = json_value(target_run / "research_claim_registry.json")
+            claim_ids = [item["claim_id"] for item in registry["pilot_claims"]]
+            spine = json_value(target_run / "paper_spine.json")
+            sections = [*spine["section_order"], *spine["required_sections"]]
+            figure_roles = sorted(
+                json_value(target_run / "figure_contract.json")["result_figures"][
+                    "required_roles"
+                ]
+            )
+
+            def artifact(role: str, name: str, data: bytes) -> dict:
+                path = target_run / "agent_outputs" / role / tag / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+                return {"path": path.relative_to(target_run).as_posix(), "sha256": sha256_file(path)}
+
+            guard = 0
+            while state["status"] == "awaiting_agents" and guard < 8:
+                guard += 1
+                for role in list(state["required_roles"]):
+                    if role == "manuscript_writer":
+                        source = artifact(role, "manuscript.md", b"# Report\n")
+                        pdf = artifact(role, "manuscript.pdf", PAGE_BEARING_PDF)
+                        payload = {
+                            "artifacts": [source, pdf],
+                            "claim_ids": claim_ids,
+                            "contribution_map": [
+                                {"contribution_id": "c1", "statement": "First bounded finding.", "frontier_delta": "Disclosed delta.", "claim_ids": claim_ids[:1]},
+                                {"contribution_id": "c2", "statement": "Second bounded finding.", "frontier_delta": "Disclosed delta.", "claim_ids": claim_ids[1:2] or claim_ids[:1]},
+                            ],
+                            "reference_list": [
+                                {"reference_id": "ref-1", "title": "Verified primary source", "authors": ["Researcher"], "year": 2025, "venue": "Journal", "identifier": {"type": "doi", "value": "10.0000/example"}}
+                            ],
+                            "typeset_manifest": {"source_artifact": source["path"], "pdf_artifact": pdf["path"], "section_manifest": sections},
+                        }
+                        family = "family-c"
+                    elif role == "figure_designer":
+                        artifacts, specs = [], []
+                        for index, figure_role in enumerate(figure_roles, 1):
+                            svg = artifact(role, f"figure-{index}.svg", f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><text x='10' y='30' font-size='16'>{figure_role}</text></svg>\n".encode())
+                            pdf = artifact(role, f"figure-{index}.pdf", PAGE_BEARING_PDF)
+                            png = artifact(role, f"figure-{index}.png", minimal_png_bytes())
+                            src = artifact(role, f"figure-{index}.py", b"print('figure')\n")
+                            artifacts.extend([svg, pdf, png, src])
+                            specs.append(
+                                {
+                                    "figure_id": f"figure-{index}",
+                                    "figure_role": figure_role,
+                                    "question_answered": f"What does {figure_role} show?",
+                                    "claim_ids": claim_ids[:1],
+                                    "visual_encoding": "claim-bound marks",
+                                    "artifact_paths": {"svg": svg["path"], "pdf": pdf["path"], "png": png["path"]},
+                                    "candidate_generation": {"candidates_considered": 2, "alternatives_rejected": ["table variant"]},
+                                    "source_fidelity": "Every mark traces to a claim ID.",
+                                    "editable_source": src["path"],
+                                    "render_review": {"iterations": 1, "inspected": True, "findings": ["labels checked"], "revisions_applied": ["labels enlarged"]},
+                                }
+                            )
+                        payload = {"artifacts": artifacts, "claim_ids": claim_ids, "figure_specs": specs}
+                        family = "family-d"
+                    elif role == "citation_auditor":
+                        evidence = artifact(role, "registry-evidence-ref-1.json", b'{"registry":"doi.org"}\n')
+                        checks_all = {field: True for field in auto_research.CITATION_CHECK_FIELDS}
+                        payload = {
+                            "artifacts": [evidence],
+                            "reference_audit": [{"reference_id": "ref-1", "verdict": "verified", "checks": checks_all, "registry_evidence_artifact": evidence["path"], "evidence": "Registry metadata compared."}],
+                            "audit_summary": {"total": 1, "verified": 1, "mismatched": 0, "unverifiable": 0, "all_verified": True},
+                        }
+                        family = "family-e"
+                    elif role == "independent_reviewer":
+                        review = artifact(role, "review.md", b"# Review\n")
+                        payload = {
+                            "artifacts": [review],
+                            "gate_results": [
+                                {"gate_id": gate_id, "gate_name": name, "score": 4, "pass": True, "evidence": [f"{name} verified."]}
+                                for gate_id, name in auto_research.REVIEW_GATE_CONTRACT
+                            ],
+                        }
+                        family = "family-f"
+                    else:
+                        raise AssertionError(f"unexpected role {role}")
+                    state = auto_research.submit_agent_result(
+                        target_run,
+                        role=role,
+                        invocation_id=f"{tag}-{role}",
+                        model_family=family,
+                        payload=payload,
+                    )
+            return state
+
+        second_redirect = submit_first_wave(pending_run, "attempt2")
+        exhausted_state = submit_first_wave(pending_run, "attempt3")
         exhausted_events = [
             json.loads(line)
             for line in (pending_run / "events.jsonl")
@@ -9784,27 +9933,153 @@ def check_d3(output_dir: Path) -> list[str]:
             .splitlines()
             if line.strip()
         ]
+        report_registry = json_value(pending_run / "research_claim_registry.json")
+        report_gate = json_value(pending_run / "research_gate_receipt.json")
+        report_figure_contract = json_value(pending_run / "figure_contract.json")
+        report_writer_packet = json_value(
+            pending_run / "agents" / "manuscript_writer" / "packet.json"
+        )
         require(
             second_redirect["status"] == "awaiting_agents"
             and second_redirect["attempt"] == 3
             and second_redirect["selected_candidate_id"] == "dc-003"
             and second_redirect["fallback"]["remaining_candidates"] == 1
             and (pending_run / "attempts" / "attempt-02-dc-002").is_dir()
-            and exhausted_state["status"] == "needs_research_redirection"
-            and exhausted_state["stage"] == "research_quality_gate"
-            and exhausted_state["attempt"] == 3
-            and exhausted_state["selected_candidate_id"] == "dc-003"
-            and exhausted_state["research_gate"]["pilot_outcome"] == "unsupported_inputs"
+            and exhausted_state["status"] == "awaiting_agents"
+            and exhausted_state["stage"] == "manuscript_and_figures"
+            and exhausted_state["deliverable_mode"] == "evidence_report"
+            and exhausted_state["required_roles"] == list(auto_research.SECOND_WAVE)
+            and exhausted_state["attempt"] == 4
+            and exhausted_state["selected_candidate_id"] == "evidence-report"
+            and exhausted_state["research_gate"]["writing_basis"] == "evidence_report"
             and exhausted_state["exhausted_candidate_ids"]
             == ["dc-002", "dc-003", "dc-004", "user-question"]
-            and exhausted_state["fallback"]["next_candidate_id"] is None
-            and exhausted_state["fallback"]["remaining_candidates"] == 0
-            and len(exhausted_state["attempt_history"]) == 2
-            and (pending_run / "research_gate_receipt.json").is_file()
-            and not (pending_run / "attempts" / "attempt-03-dc-003").exists()
-            and exhausted_events[-1]["event"] == "candidate_fallback_exhausted"
+            and exhausted_state["fallback"]["decision"] == "evidence_report"
+            and len(exhausted_state["attempt_history"]) == 3
+            and all(item["writeable"] is False for item in exhausted_state["attempt_history"])
+            and (pending_run / "attempts" / "attempt-03-dc-003").is_dir()
+            and report_gate["writing_basis"] == "evidence_report"
+            and report_gate["attempted_directions"] == 3
+            and report_registry["deliverable_mode"] == "evidence_report"
+            and len(report_registry["attempt_outcomes"]) == 3
+            and all(
+                item["claim_id"].startswith("attempt-0")
+                for item in report_registry["pilot_claims"]
+            )
+            and len(report_registry["pilot_claims"]) == 5
+            and sorted(report_figure_contract["result_figures"]["required_roles"])
+            == sorted(auto_research.REQUIRED_REPORT_FIGURE_ROLES)
+            and report_writer_packet["required_output"]["deliverable_mode"] == "evidence_report"
+            and "attempt-01-user-question_pilot_result" in report_writer_packet["allowed_inputs"]
+            and "candidate_fallback_exhausted" in [e["event"] for e in exhausted_events]
+            and exhausted_events[-1]["event"] == "evidence_report_started"
             and dry_runs == [True, True],
-            "D3 an unsupported_inputs pilot exhausts its same-data-signature siblings and the chain ends honestly at research redirection once no empirical candidate remains",
+            "D3 when every empirical candidate is exhausted without an executed pilot the run archives the last attempt and opens a reviewed evidence report instead of stopping without a product",
+            checks,
+        )
+        report_final = drive_second_wave(pending_run, "report")
+        report_manifest = json_value(pending_run / "publication_manifest.json")
+        require(
+            report_final["status"] == "completed_evidence_report"
+            and report_final["publication"]["grade"] == "evidence_report"
+            and report_final["publication_allowed"] is True
+            and report_manifest["grade"] == "evidence_report"
+            and report_manifest["deliverable_mode"] == "evidence_report"
+            and report_manifest["writing_basis"] == "evidence_report"
+            and report_manifest["attempted_directions"] == 4
+            and any(
+                item["gate_id"] == "deliverable_mode"
+                for item in report_manifest["disclosed_findings"]
+            )
+            and all(
+                (pending_run / item["path"]).is_file()
+                and sha256_file(pending_run / item["path"]) == item["sha256"]
+                for item in report_manifest["files"]
+            )
+            and json_value(pending_run / "review_receipt.json")["cross_model_status"]
+            == "cross_family",
+            "D3 the evidence report is typeset, cited, audited and independently reviewed, then packaged at grade evidence_report",
+            checks,
+        )
+
+        # Best-available path: an executed supported_null pilot with a weak
+        # frontier is kept, other directions fail, and the run writes it up with
+        # the frontier weakness disclosed.
+        best_root = research_root / "best-available"
+        best_state = auto_research.start_research(
+            output_dir, best_root, {"output_language": "en"}
+        )
+        best_run = best_root / best_state["run_id"]
+        best_candidates_path = best_run / "deterministic" / "discovery_candidates.json"
+        best_document = json_value(best_candidates_path)
+        best_document["discovery_candidates"] = list(
+            best_document["discovery_candidates"]
+        ) + [injected[0]]
+        best_candidates_path.write_text(
+            json.dumps(best_document, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        auto_research.select_research_direction(
+            best_run, question="Is the paired Cu contrast reproducible?"
+        )
+        weak_state = submit_first_wave(
+            best_run, "weak", "supported_null", "weak_frontier_position"
+        )
+        restored_state = submit_first_wave(best_run, "dead", "unsupported_inputs")
+        restored_gate = json_value(best_run / "research_gate_receipt.json")
+        restored_writer_packet = json_value(
+            best_run / "agents" / "manuscript_writer" / "packet.json"
+        )
+        require(
+            weak_state["status"] == "awaiting_agents"
+            and weak_state["stage"] == "pilot_and_literature"
+            and weak_state["attempt"] == 2
+            and weak_state["attempt_history"][0]["writeable"] is True
+            and weak_state["attempt_history"][0]["pilot_outcome"] == "supported_null"
+            and restored_state["status"] == "awaiting_agents"
+            and restored_state["stage"] == "manuscript_and_figures"
+            and restored_state["deliverable_mode"] == "empirical_article"
+            and restored_state["selected_candidate_id"] == "user-question"
+            and restored_state["attempt"] == 3
+            and restored_state["attempt_history"][0]["restored_as_attempt"] == 3
+            and restored_state["attempt_history"][1]["candidate_id"] == "dc-002"
+            and restored_state["fallback"]["decision"] == "best_available_executed_pilot"
+            and restored_state["fallback"]["written_candidate_id"] == "user-question"
+            and restored_state["research_gate"]["writing_basis"]
+            == "best_available_executed_pilot"
+            and restored_gate["paper_eligible"] is True
+            and restored_gate["writing_basis"] == "best_available_executed_pilot"
+            and restored_gate["disclosures"][0]["gate_id"] == "frontier"
+            and (best_run / "attempts" / "attempt-01-user-question" / "restored.json").is_file()
+            and not (
+                best_run / "attempts" / "attempt-01-user-question" / "agents"
+            ).exists()
+            and json_value(best_run / "agents" / "pilot_analyst" / "result.json")[
+                "payload"
+            ]["analysis_outcome"]["status"]
+            == "supported_null"
+            and restored_writer_packet["required_output"]["frontier_disclosure"][
+                "frontier_status"
+            ]
+            == "weak_frontier_position"
+            and "weak_frontier_position" in restored_writer_packet["purpose"],
+            "D3 once no stronger direction remains the best executed pilot is restored from its archive and written up with the frontier weakness disclosed to writer and reviewer",
+            checks,
+        )
+        best_final = drive_second_wave(best_run, "best")
+        best_manifest = json_value(best_run / "publication_manifest.json")
+        require(
+            best_final["status"] == "completed_with_findings"
+            and best_final["publication"]["grade"] == "draft_with_disclosed_findings"
+            and best_manifest["writing_basis"] == "best_available_executed_pilot"
+            and best_manifest["deliverable_mode"] == "empirical_article"
+            and any(
+                item["gate_id"] == "frontier"
+                and item["frontier_status"] == "weak_frontier_position"
+                for item in best_manifest["disclosed_findings"]
+            )
+            and json_value(best_run / "review_receipt.json")["all_seven_gates_pass"] is True,
+            "D3 a manuscript written on a weak-frontier pilot cannot exceed draft_with_disclosed_findings even when every review gate passes",
             checks,
         )
 

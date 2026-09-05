@@ -94,3 +94,9 @@ exhausted together) gets fresh contracts and first-wave packets, and the same
 run returns to `awaiting_agents`; first-wave packets carry a machine-precise
 payload contract and roles can dry-run submissions with `--validate-only`. This
 is recorded in [ADR-0011](docs/adr/0011-in-run-candidate-chaining.md).
+Every run ends with a graded deliverable: once no untried candidate remains,
+the best executed pilot is restored and written up with its frontier weakness
+disclosed (grade capped at `draft_with_disclosed_findings`), or — when no
+direction could execute a pilot — the run writes a reviewed evidence report
+(`evidence_report`). This is recorded in
+[ADR-0012](docs/adr/0012-every-run-ends-with-a-graded-deliverable.md).

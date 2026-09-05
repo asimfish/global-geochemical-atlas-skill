@@ -1,44 +1,96 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:auto-research-state:v4",
+  "$id": "urn:global-geochemical-atlas:auto-research-state:v5",
   "title": "Resumable atlas-to-research state",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version", "run_id", "request_sha256", "atlas_snapshot_sha256",
-    "status", "stage", "required_roles", "completed_roles",
-    "active_cycle", "revision_count", "attempt", "attempt_history",
+    "schema_version",
+    "run_id",
+    "request_sha256",
+    "atlas_snapshot_sha256",
+    "status",
+    "stage",
+    "required_roles",
+    "completed_roles",
+    "active_cycle",
+    "revision_count",
+    "attempt",
+    "attempt_history",
     "exhausted_candidate_ids",
-    "selected_candidate_id", "human_approval_required", "publication_allowed",
-    "claim_boundary", "created_at", "updated_at"
+    "selected_candidate_id",
+    "human_approval_required",
+    "publication_allowed",
+    "claim_boundary",
+    "created_at",
+    "updated_at"
   ],
   "properties": {
-    "schema_version": {"const": "gga-auto-research-state-v4"},
-    "run_id": {"type": "string", "pattern": "^run-[0-9a-f]{20}$"},
-    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "atlas_snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "schema_version": {
+      "const": "gga-auto-research-state-v5"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^run-[0-9a-f]{20}$"
+    },
+    "request_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "atlas_snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
     "status": {
       "enum": [
-        "awaiting_selection", "awaiting_agents", "revision_required",
-        "completed_published", "completed_with_findings",
+        "awaiting_selection",
+        "awaiting_agents",
+        "revision_required",
+        "completed_published",
+        "completed_with_findings",
+        "completed_evidence_report",
         "needs_research_redirection"
       ]
     },
     "stage": {
       "enum": [
-        "candidate_selection", "pilot_and_literature",
+        "candidate_selection",
+        "pilot_and_literature",
         "research_quality_gate",
-        "manuscript_and_figures", "citation_audit", "independent_review",
-        "feedback_revision", "publication"
+        "manuscript_and_figures",
+        "citation_audit",
+        "independent_review",
+        "feedback_revision",
+        "publication"
       ]
     },
-    "required_roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-    "completed_roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-    "active_cycle": {"type": "string", "pattern": "^(initial|revision-[0-9]{2})$"},
-    "revision_count": {"type": "integer", "minimum": 0, "maximum": 3},
+    "required_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "completed_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "active_cycle": {
+      "type": "string",
+      "pattern": "^(initial|revision-[0-9]{2})$"
+    },
+    "revision_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
     "attempt": {
       "description": "1-based index of the research direction currently being pursued inside this run; every earlier attempt is archived under attempts/.",
-      "type": "integer", "minimum": 1
+      "type": "integer",
+      "minimum": 1
     },
     "attempt_history": {
       "description": "Archived directions that failed the scientific opportunity gate, in order.",
@@ -46,77 +98,234 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["attempt", "candidate_id", "archive_dir", "manifest_sha256", "reason"],
+        "required": [
+          "attempt",
+          "candidate_id",
+          "archive_dir",
+          "manifest_sha256",
+          "reason"
+        ],
         "properties": {
-          "attempt": {"type": "integer", "minimum": 1},
-          "candidate_id": {"type": "string", "minLength": 1},
-          "archive_dir": {"type": "string", "pattern": "^attempts/attempt-[0-9]{2}-.+$"},
-          "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-          "pilot_outcome": {"type": ["string", "null"]},
-          "frontier_status": {"type": ["string", "null"]},
-          "reason": {"type": "string", "minLength": 1}
+          "attempt": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "candidate_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "archive_dir": {
+            "type": "string",
+            "pattern": "^attempts/attempt-[0-9]{2}-.+$"
+          },
+          "manifest_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "pilot_outcome": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "frontier_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "writeable": {
+            "description": "true when the archived pilot executed a paper-eligible outcome; such attempts can be restored as the manuscript basis once no stronger direction remains.",
+            "type": "boolean"
+          },
+          "restored_as_attempt": {
+            "type": "integer",
+            "minimum": 2
+          }
         }
       }
     },
     "exhausted_candidate_ids": {
       "description": "Candidates that were attempted or share a dead-end data signature with an unsupported_inputs attempt; they never re-enter the fallback queue.",
-      "type": "array", "items": {"type": "string"}, "uniqueItems": true
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
     },
-    "selected_candidate_id": {"type": ["string", "null"]},
+    "selected_candidate_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "research_gate": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "paper_eligible", "pilot_outcome", "frontier_status",
+        "paper_eligible",
+        "pilot_outcome",
+        "frontier_status",
         "routing_destination"
       ],
       "properties": {
-        "paper_eligible": {"type": "boolean"},
-        "pilot_outcome": {"enum": [
-          "supported_effect", "supported_null", "unsupported_inputs",
-          "acquisition_required", "invalid_analysis"
-        ]},
-        "frontier_status": {"enum": [
-          "supports_empirical_article", "weak_frontier_position",
-          "needs_verification"
-        ]},
-        "routing_destination": {"type": "string", "minLength": 1}
+        "paper_eligible": {
+          "type": "boolean"
+        },
+        "pilot_outcome": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "supported_effect",
+            "supported_null",
+            "unsupported_inputs",
+            "acquisition_required",
+            "invalid_analysis",
+            null
+          ]
+        },
+        "frontier_status": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "supports_empirical_article",
+            "weak_frontier_position",
+            "needs_verification",
+            null
+          ]
+        },
+        "routing_destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "writing_basis": {
+          "enum": [
+            "supports_empirical_article",
+            "best_available_executed_pilot",
+            "evidence_report"
+          ]
+        }
       }
     },
     "publication": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "grade", "package_dir", "manifest_sha256", "packaged_cycle",
+        "grade",
+        "package_dir",
+        "manifest_sha256",
+        "packaged_cycle",
         "disclosed_finding_count"
       ],
       "properties": {
-        "grade": {"enum": ["camera_ready", "draft_with_disclosed_findings"]},
-        "package_dir": {"const": "publication"},
-        "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "packaged_cycle": {"type": "string", "pattern": "^(initial|revision-[0-9]{2})$"},
-        "disclosed_finding_count": {"type": "integer", "minimum": 0}
+        "grade": {
+          "enum": [
+            "camera_ready",
+            "draft_with_disclosed_findings",
+            "evidence_report"
+          ]
+        },
+        "package_dir": {
+          "const": "publication"
+        },
+        "manifest_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "packaged_cycle": {
+          "type": "string",
+          "pattern": "^(initial|revision-[0-9]{2})$"
+        },
+        "disclosed_finding_count": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     },
     "fallback": {
       "description": "Most recent in-run redirect. next_candidate_id is null only when the queue was exhausted and the run ended at needs_research_redirection.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["next_candidate_id", "remaining_candidates", "reason"],
+      "required": [
+        "next_candidate_id",
+        "remaining_candidates",
+        "reason"
+      ],
       "properties": {
-        "next_candidate_id": {"type": ["string", "null"], "pattern": "^dc-[0-9]{3}$"},
-        "next_candidate_title": {"type": "string"},
-        "remaining_candidates": {"type": "integer", "minimum": 0},
-        "reason": {"type": "string", "minLength": 1},
-        "from_candidate_id": {"type": "string"},
-        "archived_attempt": {"type": "string", "pattern": "^attempts/attempt-[0-9]{2}-.+$"},
-        "exhausted_candidate_ids": {"type": "array", "items": {"type": "string"}}
+        "next_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^dc-[0-9]{3}$"
+        },
+        "next_candidate_title": {
+          "type": "string"
+        },
+        "remaining_candidates": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "from_candidate_id": {
+          "type": "string"
+        },
+        "archived_attempt": {
+          "type": "string",
+          "pattern": "^attempts/attempt-[0-9]{2}-.+$"
+        },
+        "exhausted_candidate_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision": {
+          "enum": [
+            "best_available_executed_pilot",
+            "evidence_report"
+          ]
+        },
+        "written_candidate_id": {
+          "type": "string"
+        }
       }
     },
-    "human_approval_required": {"const": false},
-    "publication_allowed": {"type": "boolean"},
-    "claim_boundary": {"type": "string", "minLength": 1},
-    "created_at": {"type": "string", "minLength": 1},
-    "updated_at": {"type": "string", "minLength": 1}
+    "human_approval_required": {
+      "const": false
+    },
+    "publication_allowed": {
+      "type": "boolean"
+    },
+    "claim_boundary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "updated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deliverable_mode": {
+      "description": "empirical_article by default; evidence_report once every empirical candidate was exhausted without an executed pilot and the run writes a reviewed data-adequacy report instead.",
+      "enum": [
+        "empirical_article",
+        "evidence_report"
+      ]
+    }
   }
 }

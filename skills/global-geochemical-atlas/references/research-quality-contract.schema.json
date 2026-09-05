@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:research-quality-contract:v1",
+  "$id": "urn:global-geochemical-atlas:research-quality-contract:v2",
   "title": "Controller-owned scientific quality contract",
   "type": "object",
   "additionalProperties": false,
@@ -17,7 +17,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "gga-research-quality-contract-v1"
+      "const": "gga-research-quality-contract-v2"
     },
     "paper_entry_gate": {
       "type": "object",
@@ -26,6 +26,8 @@
         "eligible_pilot_outcomes",
         "required_frontier_status",
         "failure_status",
+        "weak_frontier_policy",
+        "no_executed_pilot_policy",
         "rule"
       ],
       "properties": {
@@ -45,9 +47,21 @@
           "const": "supports_empirical_article"
         },
         "failure_status": {
-          "const": "candidate_fallback_or_research_redirection"
+          "const": "chain_then_best_available_or_evidence_report"
         },
         "rule": {
+          "type": "string",
+          "minLength": 1
+        },
+        "weak_frontier_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "no_executed_pilot_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_report_rule": {
           "type": "string",
           "minLength": 1
         }
@@ -325,6 +339,12 @@
           "minLength": 1
         }
       }
+    },
+    "deliverable_mode": {
+      "enum": [
+        "empirical_article",
+        "evidence_report"
+      ]
     }
   }
 }

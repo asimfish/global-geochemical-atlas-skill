@@ -28,7 +28,7 @@ description: 构建全球或区域地球化学元素图谱；用于从公开来�
 7. 生成数据库、证据说明、异常结果和交互地图；
 8. 校验十八文件、逐声明 hash、充分性与 Skill 快照；
 9. 若仍有可修复缺口且预算允许，生成本轮隔离的侦察/质疑 packet，按修复队列继续；否则诚实交付检查点；
-10. 图谱完成后只在用户选择方向时启动 Auto-Research；选方向是唯一人工决策，此后控制器全自动推进到打包好的最终论文，发布分级（camera_ready / draft_with_disclosed_findings）如实披露评审结果。
+10. 图谱完成后只在用户选择方向时启动 Auto-Research；选方向是唯一人工决策，此后控制器全自动推进，**每次运行必以打包好的最终产物结束**，发布分级如实披露基础：camera_ready（前沿有力且七门全过）/ draft_with_disclosed_findings（修订预算用尽，或建立在文献判前沿弱的最佳可写试点上）/ evidence_report（所有方向都无法执行试点时的数据充分性与研究方向报告）。
 
 不得用地图补造上游证据，也不得用总记录数掩盖元素、介质、来源或区域缺口。hash 只证明字节一致，规则通过只证明该规则满足，二者都不证明测量值或科学解释正确。
 
@@ -274,7 +274,7 @@ python scripts/build_research_products.py --output-dir OUTPUT_DIR --minimum-conf
 
 ## 10. 图谱内 Auto-Research（discovery_mode）
 
-五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户也可在 `interactive_map.html` 的 Auto-Research 选项直接填写问题或候选 ID。用户不回应则不启动；一旦明确启动，选方向就是唯一人工输入，控制器全自动推进直至产出打包发布件：独立评审通过 → `completed_published`（camera_ready）；三轮修订或引用修复用尽 → `completed_with_findings`（draft_with_disclosed_findings，遗留问题逐条披露在发布清单）；科研质量门失败 → 控制器把本次尝试归档到 `attempts/attempt-NN-<candidate>/`，在**同一 run 内**改道 `candidate_fallback_queue.json` 的下一个实证候选（按模板类型轮转排序，失败类型排最后；Pilot 判 `unsupported_inputs` 时同数据签名的兄弟候选一并耗尽），重建契约与首波 packet 后回到 `awaiting_agents`，宿主只需继续按 `required_roles` 开新会话；队列耗尽才落到 `needs_research_redirection`。运行中途只会因缺少外部 agent 会话而等待，不再存在人工批准门。角色提交前应先用 `auto_research.py submit ... --validate-only` 按 packet 中的 `payload_contract` 自检。
+五项交付验证通过并交付后，agent 必须追加一个问题：「是否基于本次产物继续进行科学发现（选题 → 试点 → 论文草稿）？」用户也可在 `interactive_map.html` 的 Auto-Research 选项直接填写问题或候选 ID。用户不回应则不启动；一旦明确启动，选方向就是唯一人工输入，控制器全自动推进直至产出打包发布件：独立评审通过 → `completed_published`（camera_ready）；三轮修订或引用修复用尽 → `completed_with_findings`（draft_with_disclosed_findings，遗留问题逐条披露在发布清单）；科研质量门失败 → 控制器把本次尝试归档到 `attempts/attempt-NN-<candidate>/`，在**同一 run 内**改道 `candidate_fallback_queue.json` 的下一个实证候选（按模板类型轮转排序，失败类型排最后；Pilot 判 `unsupported_inputs` 时同数据签名的兄弟候选一并耗尽），重建契约与首波 packet 后回到 `awaiting_agents`，宿主只需继续按 `required_roles` 开新会话。候选耗尽也**绝不空手**：若有任一已执行的 `supported_effect/supported_null` 试点（哪怕文献判前沿弱），控制器还原最佳一次作为写作基础，`frontier` 披露项写进门收据、写作/绘图 packet 与发布清单，等级上限 `draft_with_disclosed_findings`；若所有方向都无法执行试点，则自动切到证据报告模式（报告骨架 + `coverage_and_gaps`/`pilot_diagnostics`/`acquisition_priority` 三类图），同样经写作、绘图、引用审计、独立评审后打包为 `evidence_report`。运行中途只会因缺少外部 agent 会话而等待，不再存在人工批准门。角色提交前应先用 `auto_research.py submit ... --validate-only` 按 packet 中的 `payload_contract` 自检。
 
 本仓库只发布一个 production Skill；Auto-Research 是该 Skill 的图谱后续状态机，不是第二个宣称。浏览器真实启动方式：
 
