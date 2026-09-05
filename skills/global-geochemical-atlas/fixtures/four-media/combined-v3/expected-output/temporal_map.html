@@ -65,6 +65,10 @@ button,select,input{font:inherit}
 .chip.active small{color:#6fd8c3}
 .chip.ghost i{background:#5a6f78;box-shadow:none}
 .map-wrap{position:relative;height:min(62vh,640px);min-height:430px;background:#03101a;isolation:isolate}
+html.embedded,html.embedded body{overflow:hidden}
+html.embedded .map-wrap{height:600px}
+.wheel-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:8;padding:10px 16px;border-radius:12px;background:rgba(3,17,26,.88);border:1px solid rgba(117,237,220,.35);color:#effffc;font-size:12px;font-weight:700;pointer-events:none;opacity:0;transition:opacity .25s}
+.wheel-hint.show{opacity:1}
 .map-wrap:after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 80px rgba(0,0,0,.45);z-index:3}
 #map{width:100%;height:100%;display:block;cursor:grab;position:relative;z-index:1}
 #map.dragging{cursor:grabbing}
@@ -181,6 +185,7 @@ button,select,input{font:inherit}
       <div class="hud legend" id="mapLegend"></div>
       <div class="map-tools"><button id="zoomIn" title="放大">＋</button><button id="zoomOut" title="缩小">−</button><button id="zoomReset" title="重置视野">◎</button></div>
       <div class="tooltip" id="tooltip"></div>
+      <div class="wheel-hint" id="wheelHint">点击地图后滚轮缩放 · 或按住 Ctrl / ⌘ 滚动 · 直接滚动为翻页</div>
       <div class="map-empty" id="mapEmpty"></div>
       <div class="popup" id="stationPopup">
         <div class="p-head"><b id="popupTitle">—</b><span id="popupCoords"></span><button class="p-close" id="popupClose" title="关闭">✕</button></div>
@@ -410,7 +415,13 @@ function bestCompareElement() {
     groups.forEach(c => { if (c[0] >= 2 && c[1] >= 2) n++; });
     if (n > bestN) { bestN = n; best = el; }
   }
-  return best || (ELEMENTS.length ? ELEMENTS[0] : "ALL");
+  if (bestN > 0 && best) return best;
+  /* 没有任何元素有可比网格时，退回带时间记录最多的元素，而不是字母序第一个 */
+  const datedCounts = new Map();
+  for (const r of REC) datedCounts.set(ELEMENTS[r[2]], (datedCounts.get(ELEMENTS[r[2]]) || 0) + 1);
+  let most = null, mostN = -1;
+  for (const el of ELEMENTS) { const n = datedCounts.get(el) || 0; if (n > mostN) { mostN = n; most = el; } }
+  return most || "ALL";
 }
 
 /* ====== 全局状态 ====== */
@@ -1271,7 +1282,20 @@ mapCanvas.addEventListener("pointerleave", () => {
   tooltip.style.display = "none";
   scheduleDraw();
 });
+/* 页面滚动与地图缩放分离：只有点击过地图（激活）或按住 Ctrl/⌘ 时滚轮才缩放，
+   否则滚轮照常滚动页面并短暂提示；离开地图或按 Esc 取消激活 */
+let wheelArmed = false, wheelHintTimer = 0;
+function showWheelHint() {
+  const hint = $("wheelHint");
+  hint.classList.add("show");
+  clearTimeout(wheelHintTimer);
+  wheelHintTimer = setTimeout(() => hint.classList.remove("show"), 1600);
+}
+mapCanvas.addEventListener("pointerdown", () => { wheelArmed = true; $("wheelHint").classList.remove("show"); });
+mapCanvas.addEventListener("pointerleave", () => { wheelArmed = false; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") wheelArmed = false; });
 mapCanvas.addEventListener("wheel", e => {
+  if (!(wheelArmed || e.ctrlKey || e.metaKey)) { showWheelHint(); return; }
   e.preventDefault();
   const rect = mapCanvas.getBoundingClientRect();
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
@@ -1739,11 +1763,18 @@ function setMode(m) {
 function initialTemporalMode() {
   /* Do not open on an analytically empty comparison panel when real dated
      observations exist.  Prefer the strongest supported view: two-period
-     regional comparison when available, otherwise the honest sampling replay. */
+     regional comparison when available, otherwise the honest sampling replay.
+     The comparison probe must not leave a single element selected when the
+     page falls back to replay: replay shows every dated record by default. */
   if (!HAS_DATED) return "replay";
-  if (state.element === "ALL") selectElement(bestCompareElement());
+  const previous = state.element;
+  const candidate = state.element === "ALL" ? bestCompareElement() : state.element;
+  state.element = candidate;
   computeCells();
-  return compareSummary.comparable > 0 ? "compare" : "replay";
+  if (compareSummary.comparable > 0) { selectElement(candidate); return "compare"; }
+  state.element = previous;
+  computeCells();
+  return "replay";
 }
 $("modeCompare").addEventListener("click", () => setMode("compare"));
 $("modeProvenance").addEventListener("click", () => setMode("provenance"));
@@ -1830,6 +1861,20 @@ function renderFooter() {
     `<b>时间层级</b>：逐样时刻 ${(STATS.dated_tiers || {}).point || 0} 条、出版方文档的采集时段 ${(STATS.dated_tiers || {}).window || 0} 条（如整份数据集声明的采样月份或年段，按区间处理）；发表年、汇编年一律不算采样时间。` +
     `<b>制图</b>：海岸线 Natural Earth 1:110m Land、国界 Natural Earth 1:110m Admin-0${BOUNDARIES && BOUNDARIES.admin1 ? "、省界 Natural Earth 1:50m Admin-1" : ""}（均公有领域）· WGS84 等经纬投影 · 边界仅供定位示意，不作法定边界依据。` +
     `数据集：${PAYLOAD.source_dataset} · 模板 temporal-atlas-v1 · payload v2。`;
+}
+
+/* ====== 嵌入模式：向宿主页面上报内容高度，避免 iframe 内外双滚动条 ====== */
+const EMBEDDED = window.self !== window.top;
+if (EMBEDDED) {
+  document.documentElement.classList.add("embedded");
+  const postHeight = () => {
+    try {
+      window.parent.postMessage({ type: "gga-temporal-height", height: Math.ceil(document.documentElement.scrollHeight) }, "*");
+    } catch (error) { /* 宿主不监听时静默 */ }
+  };
+  if (typeof ResizeObserver === "function") new ResizeObserver(postHeight).observe(document.body);
+  window.addEventListener("load", postHeight);
+  setTimeout(postHeight, 0);
 }
 
 /* ====== 启动 ====== */

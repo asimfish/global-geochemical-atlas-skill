@@ -7813,6 +7813,36 @@ def check_d3(output_dir: Path) -> list[str]:
         " and pins the viewport inside the frozen region",
         checks,
     )
+    interactive_template_html = (
+        SKILL_DIR / "assets" / "interactive-atlas-v3.html"
+    ).read_text(encoding="utf-8")
+    require(
+        # Replay never inherits the comparison probe's single element.
+        "state.element = previous;" in temporal_html
+        and "const candidate = state.element === \"ALL\" ? bestCompareElement() : state.element;"
+        in temporal_html
+        and "if (bestN > 0 && best) return best;" in temporal_html
+        # Wheel zoom is opt-in (click or Ctrl/Meta); otherwise the page scrolls.
+        and "if (!(wheelArmed || e.ctrlKey || e.metaKey)) { showWheelHint(); return; }"
+        in temporal_html
+        and 'id="wheelHint"' in temporal_html
+        and 'mapCanvas.addEventListener("pointerleave", () => { wheelArmed = false; });'
+        in temporal_html
+        # Embedded documents report their height and never scroll internally.
+        and 'type: "gga-temporal-height"' in temporal_html
+        and "html.embedded,html.embedded body{overflow:hidden}" in temporal_html
+        and "html.embedded .map-wrap{height:600px}" in temporal_html
+        and 'data.type!=="gga-temporal-height"' in interactive_template_html
+        and "frame.classList.add(\"auto-height\")" in interactive_template_html
+        and ".embedded-app-frame.auto-height{height:auto;min-height:0}"
+        in interactive_template_html
+        and "if(!(mapWheelArmed||event.ctrlKey||event.metaKey)){showMapWheelHint();return}"
+        in interactive_template_html
+        and interactive_template_html.count("showMapWheelHint();return}") == 2
+        and 'id="mapWheelHint"' in interactive_template_html,
+        "D3 map wheel zoom is opt-in (click or Ctrl/Meta) so page scrolling never fights the canvases, the embedded temporal document auto-sizes its frame instead of nesting a second scrollbar, and replay opens on every dated record",
+        checks,
+    )
     good_temporal_errors: list[str] = []
     output_validator.validate_temporal_html(
         output_dir / "temporal_map.html", good_temporal_errors
@@ -10515,7 +10545,7 @@ def check_d3(output_dir: Path) -> list[str]:
             for marker in (
                 'id="backView"',
                 "rememberView",
-                "canvas.onpointerdown=event=>{drag=",
+                "canvas.onpointerdown=event=>{mapWheelArmed=true;",
                 "basisLabel",
                 "全部测量基准",
                 'id="databaseEditor"',

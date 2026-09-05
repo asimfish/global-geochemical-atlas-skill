@@ -42,9 +42,9 @@
         "sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839"
       },
       "interactive_map": {
-        "bytes": 2372873,
+        "bytes": 2377977,
         "filename": "interactive_map.html",
-        "sha256": "6eef04a69c7006a42e432b414fdaffff1a47136f2a73f923976c25accb2ff50a"
+        "sha256": "ac1becfc8624c26839a8ef934a617f9230964fdd0dc7d7d26cde56eb6258d309"
       },
       "iteration_backlog": {
         "bytes": 703571,
@@ -82,9 +82,9 @@
         "sha256": "0bdb2c92476c7b19de6f0d6c55c58a76954664489adf87d8bc372e3fe2fd634f"
       },
       "temporal_map": {
-        "bytes": 499766,
+        "bytes": 502445,
         "filename": "temporal_map.html",
-        "sha256": "c32ae2bad7a85ffa2d25d3834a4fefe5f30acaa566ccbfdb46f7c0de2749bd63"
+        "sha256": "14fad8f7aa145c0f0de9a58e18d0a8fee03a946116f4be46f927feec0e96f2d7"
       }
     },
     "commit_marker": "run_summary.json",
@@ -154,9 +154,9 @@
     "artifact_bindings": {
       "anomalies_sha256": "9221a087e73e8cf794b15a29c86c1880cfc5ccf24da821723c381c8689f29702",
       "database_sha256": "65d44887849fcc7bcb33f6d0fbe489b48a2a5ade58d3998bac46c333d8af9839",
-      "interactive_map_sha256": "6eef04a69c7006a42e432b414fdaffff1a47136f2a73f923976c25accb2ff50a",
+      "interactive_map_sha256": "ac1becfc8624c26839a8ef934a617f9230964fdd0dc7d7d26cde56eb6258d309",
       "samples_geojson_sha256": "def25bec1ef1241c7e8784f65f082e4a8855295f8a5f65dd59489e361f74c170",
-      "temporal_map_sha256": "c32ae2bad7a85ffa2d25d3834a4fefe5f30acaa566ccbfdb46f7c0de2749bd63"
+      "temporal_map_sha256": "14fad8f7aa145c0f0de9a58e18d0a8fee03a946116f4be46f927feec0e96f2d7"
     },
     "basemap": {
       "archive_sha256": "1926c621afd6ac67c3f36639bb1236134a48d82226dc675d3e3df53d02d2a3de",
@@ -310,7 +310,7 @@
     "display_sample_count": 274,
     "embedded_payload_schema": "d3-compact-payload-v1",
     "external_assets": 0,
-    "html_bytes": 2372873,
+    "html_bytes": 2377977,
     "interpolation": false,
     "map_preview_sampling": {
       "applied": false,
@@ -513,7 +513,7 @@
       "region_label": "全球"
     },
     "template_contract_version": "d3-domain-confidence-atlas-v5",
-    "template_sha256": "4e0ddfaa1d69806a193aee707fafdf528e158288b2181b3ed0b112e49fd7d639",
+    "template_sha256": "5a19a2ceca9fc09acddaa067e7de1906d05475329f0c9fafcc98a6163d519ee4",
     "template_variant": "global_globe",
     "terminology_contract": "competition-geochemistry-v1",
     "ui_hierarchy_version": "atlas-progressive-disclosure-v2",
