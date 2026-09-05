@@ -12,10 +12,10 @@ and every exhausted revision or citation-repair budget stopped at
 at `needs_research_redirection` and waited for a new human request. All three
 terminals required the user to return and act. The operating model asked for
 the opposite: the user picks a research direction once, and the run must end
-with a packaged deliverable — a full paper when the gates pass, an honestly
+with a packaged deliverable â€” a full paper when the gates pass, an honestly
 labeled draft when the budget runs out, or an automatic retarget to the next
 viable candidate when the chosen direction cannot support a paper. The
-scientific gates themselves (a1–a7, citation audit, publication lint,
+scientific gates themselves (a1â€“a7, citation audit, publication lint,
 front-loaded pilot rigor) were already deterministic and adversarial; only the
 final decision to package, disclose, or retarget still depended on a human.
 
@@ -51,7 +51,7 @@ final decision to package, disclose, or retarget still depended on a human.
    controller pops the next entry, records it in the state `fallback` block,
    writes a ready-to-run `next_request.json` preserving the original language
    and venue, and ends at `redirected_next_candidate`. An empty queue ends at
-   `needs_research_redirection` — the controller never fabricates a direction.
+   `needs_research_redirection` â€” the controller never fabricates a direction.
 4. **State schema v3 encodes the new terminals.**
    `gga-auto-research-state-v3` removes `awaiting_human_approval` and
    `needs_human_intervention`, adds `completed_published`,
@@ -68,7 +68,7 @@ final decision to package, disclose, or retarget still depended on a human.
 - Same-family review remains labeled `provisional_same_family` inside the
   receipt; autonomy changes who presses publish, not what the receipt claims.
 - A `draft_with_disclosed_findings` package can be shipped, criticized, or
-  discarded — the disclosure list makes its weaknesses explicit instead of
+  discarded â€” the disclosure list makes its weaknesses explicit instead of
   hiding them behind a stalled state.
 - Downstream tooling that polled for `awaiting_human_approval` must migrate
   to the v3 terminals; the schema bump makes stale integrations fail loudly

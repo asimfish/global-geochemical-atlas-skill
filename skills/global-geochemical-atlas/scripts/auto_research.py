@@ -30,12 +30,27 @@ from pathlib import Path
 from typing import Any
 
 import claim_ledger
+import manuscript_kit
 import publication_lint
 import validate_outputs
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+SKILL_ASSETS_DIR = SCRIPT_DIR.parent / "assets"
 BUILD_RESEARCH_PRODUCTS = SCRIPT_DIR / "build_research_products.py"
 BUILD_DISCOVERY_CANDIDATES = SCRIPT_DIR / "build_discovery_candidates.py"
+# Deliverable kits copied into every run so the writer and figure roles work
+# from the same frozen style, claim ledger, bibliography seed, plotting
+# toolkit and offline basemap the gates later check against.
+PAPER_KIT_DIR = "paper_kit"
+FIGURE_KIT_DIR = "figure_kit"
+FIGURE_KIT_FILES = ("paper_figures.py", "render_figure.py")
+FIGURE_KIT_ASSETS = (
+    "natural-earth-110m-land.json",
+    "natural-earth-110m-admin0.json",
+    "natural-earth-50m-admin1-china-visual.json",
+)
+# Figure roles whose SVG must carry the offline geographic frame.
+SPATIAL_FIGURE_ROLES = {"spatial_pattern", "coverage_and_gaps"}
 STATE_VERSION = "gga-auto-research-state-v5"
 PUBLICATION_GRADES = (
     "camera_ready",
@@ -725,8 +740,28 @@ def _build_research_contracts(
             ),
         },
         "typesetting_gate": {
-            "required_artifacts": ["manuscript source", "typeset PDF"],
+            "required_artifacts": [
+                "LaTeX manuscript source built on gga-paper.sty",
+                "references.bib loaded by \\bibliography",
+                "typeset PDF produced by a TeX engine",
+            ],
             "section_manifest_must_cover_spine": True,
+            "typesetting_contract": {
+                "contract": manuscript_kit.CONTRACT_ID,
+                "paper_kit_dir": PAPER_KIT_DIR,
+                "figure_kit_contract": "gga-figure-kit-v1",
+                "min_pdf_pages": manuscript_kit.MIN_PDF_PAGES,
+                "pdf_engines": ["pdfTeX", "XeTeX", "LuaTeX"],
+                "claim_marks": (
+                    "numbers are cited only through \\claimref{claim_id} marks that "
+                    "resolve to the controller-generated claim ledger; legacy inline "
+                    "\\claim{...} tags and typewriter identifiers in prose fail the gate"
+                ),
+                "figure_placement": (
+                    "full-width (width=\\linewidth) figures with caption and label, "
+                    "placed in the body before the bibliography and referenced in the text"
+                ),
+            },
             "layout_rules": [
                 "Section and subsection headings are noun phrases; "
                 "three-way coordinated headings of the form 'A, B and C' "
@@ -738,8 +773,9 @@ def _build_research_contracts(
                 "text below the print-equivalent font floor.",
             ],
             "rule": (
-                "The manuscript must ship a typeset PDF whose section manifest covers "
-                "the frozen paper spine; prose without a compilable delivery fails."
+                "The manuscript must ship a LaTeX source on the frozen paper kit, its "
+                "bibliography and a TeX-produced PDF whose section manifest covers the "
+                "frozen paper spine; prose without a compilable delivery fails."
             ),
         },
         "review_gates": [
@@ -844,6 +880,7 @@ def _build_research_contracts(
             "vector) so reviewers and readers can regenerate and adapt it"
         ),
         "review_loop": "render_inspect_revise_at_least_once",
+        "figure_kit": _figure_kit_contract(),
     }
     _write_json(run_dir / "figure_contract.json", figure)
     all_candidates = [
@@ -1567,6 +1604,33 @@ def _validate_typeset_manifest(
             "typeset section manifest misses spine sections: "
             + ", ".join(sorted(missing))
         )
+    # Typesetting contract gga-paper-v1: the source must be a LaTeX manuscript
+    # built on the frozen style, cite numbers only through registered claim
+    # marks, keep figures in the body, and the PDF must be a TeX product.
+    source_text = (run_dir / source_artifact).read_text(encoding="utf-8", errors="replace")
+    bib_artifact = str(value.get("bib_artifact") or "")
+    available_bib_keys: set[str] | None = None
+    if re.search(r"\\bibliography\{[^}]+\}", source_text):
+        if (
+            not bib_artifact
+            or bib_artifact not in declared_artifact_paths
+            or not bib_artifact.lower().endswith(".bib")
+        ):
+            raise AutoResearchError(
+                "typeset_manifest.bib_artifact must name the submitted .bib file that "
+                "\\bibliography loads"
+            )
+        available_bib_keys = manuscript_kit.bib_keys(
+            (run_dir / bib_artifact).read_text(encoding="utf-8", errors="replace")
+        )
+    errors = manuscript_kit.lint_manuscript_source(
+        source_text,
+        bib_keys_available=available_bib_keys,
+        registered_claim_ids=_allowed_claim_ids(run_dir),
+    )
+    errors.extend(manuscript_kit.lint_manuscript_pdf(run_dir / pdf_artifact))
+    if errors:
+        raise AutoResearchError("manuscript typesetting gate failed: " + "; ".join(errors))
 
 
 def _reference_manifest_path(run_dir: Path, cycle_id: str) -> Path:
@@ -1791,6 +1855,18 @@ def _validate_figure_storyboard(
                 )
             _validate_render_artifact(run_dir, relative, output_format)
             seen_render_paths.add(relative)
+        # Cross-format fidelity: the PDF and PNG must show the whole SVG (same
+        # aspect), and spatial roles must carry the offline geographic frame.
+        render_errors = publication_lint.lint_figure_renders(
+            run_dir / str(artifact_paths["svg"]),
+            run_dir / str(artifact_paths["pdf"]),
+            run_dir / str(artifact_paths["png"]),
+            requires_basemap=role in SPATIAL_FIGURE_ROLES,
+        )
+        if render_errors:
+            raise AutoResearchError(
+                f"figure {figure_id} failed render fidelity: " + "; ".join(render_errors)
+            )
         figure_ids.append(figure_id)
         seen_roles.add(role)
     if len(figure_ids) != len(set(figure_ids)):
@@ -1873,10 +1949,21 @@ def _validate_role_payload(
             raise AutoResearchError(f"{role} references an unsupported claim ID")
         if role == "manuscript_writer":
             _validate_contribution_map(payload.get("contribution_map"), allowed_ids)
-            _validate_reference_list(payload.get("reference_list"))
+            references = _validate_reference_list(payload.get("reference_list"))
             _validate_typeset_manifest(
                 run_dir, payload.get("typeset_manifest"), set(artifacts_by_path)
             )
+            source_text = (
+                run_dir / str(payload["typeset_manifest"]["source_artifact"])
+            ).read_text(encoding="utf-8", errors="replace")
+            cited = manuscript_kit.cited_keys(source_text)
+            listed = {item["reference_id"] for item in references}
+            if cited != listed:
+                raise AutoResearchError(
+                    "reference_list must list exactly the bib keys the manuscript cites "
+                    f"(cited but unlisted: {sorted(cited - listed)[:4]}; listed but "
+                    f"uncited: {sorted(listed - cited)[:4]})"
+                )
         else:
             _validate_figure_storyboard(
                 run_dir,
@@ -2487,7 +2574,21 @@ def _finalize_publication(
                 raise AutoResearchError(
                     f"publication packaging found a hash drift in {relative}"
                 )
-            destination = package_dir / role / Path(relative).name
+            # Keep the artifact's own sub-path below its role directory so two
+            # deliverables that share a basename (e.g. figures/fig1.svg and
+            # canonical/fig1.svg) never collapse onto one packaged file.
+            artifact_root = f"agent_outputs/{role}/"
+            marker = relative.find(artifact_root)
+            packaged_name = (
+                relative[marker + len(artifact_root) :]
+                if marker >= 0
+                else Path(relative).name
+            )
+            destination = package_dir / role / packaged_name
+            if destination.exists():
+                raise AutoResearchError(
+                    f"publication packaging collides on {destination.relative_to(run_dir)}"
+                )
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, destination)
             files.append(
@@ -2670,6 +2771,150 @@ def _frontier_disclosure(
     }
 
 
+def _figure_kit_contract() -> dict[str, Any]:
+    """What the figure gate checks beyond the storyboard, stated in the contract."""
+    return {
+        "contract": "gga-figure-kit-v1",
+        "toolkit": f"{FIGURE_KIT_DIR}/paper_figures.py",
+        "renderer": f"{FIGURE_KIT_DIR}/render_figure.py",
+        "basemap_assets": list(FIGURE_KIT_ASSETS),
+        "spatial_roles_require_basemap": sorted(SPATIAL_FIGURE_ROLES),
+        "render_fidelity": (
+            "SVG, PDF and PNG of one figure must share the SVG aspect ratio within "
+            f"{publication_lint.ASPECT_TOLERANCE:.0%}; clipped or letter-boxed exports fail"
+        ),
+        "typography": {
+            "min_print_font_pt": publication_lint.MIN_PRINT_FONT_PT,
+            "max_text_run_chars": publication_lint.MAX_TEXT_RUN_CHARS,
+            "rule": (
+                "no in-figure captions or disclaimer boxes; caveats go in the manuscript "
+                "caption; no gradients, glow or drop shadows"
+            ),
+        },
+    }
+
+
+def _install_deliverable_kits(
+    run_dir: Path, citations: Sequence[Mapping[str, Any]]
+) -> tuple[dict[str, Path], dict[str, Path]]:
+    """Write the paper kit and figure kit into the run; return packet inputs.
+
+    The paper kit is the style, the skeleton, the claim ledger generated from
+    the frozen registry and a bibliography seeded from the verified
+    citations.  The figure kit is the dependency-free plotting toolkit, the
+    SVG->PDF/PNG renderer and the offline basemap assets.  Both are re-written
+    from the skill on every call so a run can never carry a stale kit.
+    """
+    paper_dir = run_dir / PAPER_KIT_DIR
+    figure_dir = run_dir / FIGURE_KIT_DIR
+    if paper_dir.exists():
+        shutil.rmtree(paper_dir)
+    if figure_dir.exists():
+        shutil.rmtree(figure_dir)
+    paper_files = manuscript_kit.install_kit(paper_dir, SKILL_ASSETS_DIR / "paper")
+    registry = _read_object(run_dir / "research_claim_registry.json")
+    (paper_dir / manuscript_kit.CLAIMS_FILE).write_text(
+        manuscript_kit.claims_tex(registry), encoding="utf-8"
+    )
+    bib_text, seeded_references = manuscript_kit.references_bib(citations)
+    (paper_dir / manuscript_kit.BIB_FILE).write_text(bib_text, encoding="utf-8")
+    _write_json(
+        paper_dir / "seeded_reference_list.json",
+        {
+            "schema_version": "gga-seeded-reference-list-v1",
+            "contract": manuscript_kit.CONTRACT_ID,
+            "references": seeded_references,
+            "rule": (
+                "These reference_ids are the bib keys of references.bib. Cite them "
+                "with \\cite{key}; report exactly the bib keys you cite as the "
+                "manuscript reference_list (add verified references to the bib and "
+                "the list together)."
+            ),
+        },
+    )
+    figure_dir.mkdir(parents=True, exist_ok=True)
+    for name in FIGURE_KIT_FILES:
+        shutil.copyfile(SCRIPT_DIR / name, figure_dir / name)
+    for name in FIGURE_KIT_ASSETS:
+        shutil.copyfile(SKILL_ASSETS_DIR / name, figure_dir / name)
+    (figure_dir / "publication_lint.py").write_bytes((SCRIPT_DIR / "publication_lint.py").read_bytes())
+    paper_inputs = {
+        "paper_style": paper_files[manuscript_kit.STYLE_FILE],
+        "paper_template": paper_files[manuscript_kit.TEMPLATE_FILE],
+        "claims_tex": paper_dir / manuscript_kit.CLAIMS_FILE,
+        "references_bib": paper_dir / manuscript_kit.BIB_FILE,
+        "seeded_reference_list": paper_dir / "seeded_reference_list.json",
+    }
+    figure_inputs = {
+        "figure_toolkit": figure_dir / "paper_figures.py",
+        "figure_renderer": figure_dir / "render_figure.py",
+        "figure_lint": figure_dir / "publication_lint.py",
+        **{f"basemap_{index:02d}": figure_dir / name for index, name in enumerate(FIGURE_KIT_ASSETS, 1)},
+    }
+    return paper_inputs, figure_inputs
+
+
+def _manuscript_payload_contract() -> dict[str, Any]:
+    return {
+        "artifact_path_rule": ARTIFACT_PATH_RULE,
+        "self_check": SELF_CHECK_RULE,
+        "typesetting": {
+            "contract": manuscript_kit.CONTRACT_ID,
+            "start_from": f"{PAPER_KIT_DIR}/{manuscript_kit.TEMPLATE_FILE}",
+            "must_load": "\\usepackage{gga-paper} (copy gga-paper.sty next to the source)",
+            "claims": (
+                "\\input{claims} from the paper kit; cite every number with "
+                "\\claimref{claim_id}; \\claim{...} inline tags and \\texttt identifiers "
+                "in prose are rejected; finish with \\printclaimledger"
+            ),
+            "references": (
+                "\\bibliography{references} with a submitted references.bib (start from the "
+                "seeded file); every \\cite key must exist in the bib and the payload "
+                "reference_list must list exactly the bib keys you cite"
+            ),
+            "figures": (
+                "\\includegraphics[width=\\linewidth]{...pdf} inside \\begin{figure}[t] with "
+                "\\caption and \\label, placed in the body before the bibliography and "
+                "referenced in the text; never fix a height"
+            ),
+            "pdf": (
+                "compile with latexmk -pdf (or pdflatex+bibtex); the PDF must be a TeX "
+                "product with an Abstract on page one, numbered sections and at least "
+                f"{manuscript_kit.MIN_PDF_PAGES} pages"
+            ),
+        },
+        "required_keys": ["artifacts", "claim_ids", "contribution_map", "reference_list", "typeset_manifest"],
+        "typeset_manifest_keys": ["source_artifact", "pdf_artifact", "section_manifest", "bib_artifact"],
+    }
+
+
+def _figure_payload_contract() -> dict[str, Any]:
+    return {
+        "artifact_path_rule": ARTIFACT_PATH_RULE,
+        "self_check": SELF_CHECK_RULE,
+        "figure_kit": {
+            "contract": "gga-figure-kit-v1",
+            "toolkit": f"{FIGURE_KIT_DIR}/paper_figures.py (Figure, Axes, MapPanel; Okabe-Ito palette; pt-based typography)",
+            "renderer": (
+                f"python {FIGURE_KIT_DIR}/render_figure.py --svg fig.svg --pdf fig.pdf --png fig.png "
+                "exports same-size vector PDF and 288 dpi PNG and verifies their aspect"
+            ),
+            "basemap": (
+                f"{FIGURE_KIT_DIR}/natural-earth-*.json; MapPanel draws coastline, Admin-0 and "
+                "China Admin-1 and tags the group data-gga-layer=\"basemap\""
+            ),
+        },
+        "rules": [
+            "one figure = one SVG source + PDF + PNG with identical aspect ratio (lint compares them)",
+            f"spatial roles ({', '.join(sorted(SPATIAL_FIGURE_ROLES))}) must contain the basemap layer",
+            "no text below the print font floor; no text run longer than 120 characters -- caveats go in the manuscript caption",
+            "no gradients, glow, drop shadows or decorative boxes; grayscale must remain readable",
+            "every plotted number traces to a claim id listed in figure_specs[].claim_ids",
+        ],
+        "required_keys": ["artifacts", "claim_ids", "figure_specs"],
+    }
+
+
 def _start_paper_production(
     run_dir: Path, state: dict[str, Any], *, writing_basis: str
 ) -> None:
@@ -2722,6 +2967,14 @@ def _start_paper_production(
         }
         gate_receipt["receipt_sha256"] = sha256_bytes(canonical_json_bytes(gate_receipt))
         _write_json(run_dir / "research_gate_receipt.json", gate_receipt)
+    paper_inputs, figure_inputs = _install_deliverable_kits(
+        run_dir,
+        [
+            item
+            for item in literature_result["payload"].get("citations", [])
+            if isinstance(item, Mapping)
+        ],
+    )
     common = {
         "atlas_snapshot": run_dir / "atlas_snapshot.json",
         "selected_hypothesis": run_dir / "selected_hypothesis.json",
@@ -2763,6 +3016,8 @@ def _start_paper_production(
             "and an editable source per figure"
         ),
     }
+    writer_output["payload_contract"] = _manuscript_payload_contract()
+    figure_output["payload_contract"] = _figure_payload_contract()
     if disclosure is not None:
         writer_output["frontier_disclosure"] = disclosure
         figure_output["frontier_disclosure"] = disclosure
@@ -2772,9 +3027,10 @@ def _start_paper_production(
         purpose=(
             "Draft an evidence-first empirical manuscript whose contribution "
             "map states the frontier delta and binds every contribution to "
-            "executed claims, then typeset it into a section-complete PDF." + framing
+            "executed claims, then typeset it with the frozen gga-paper style into "
+            "a section-complete PDF." + framing
         ),
-        inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
+        inputs={**common, **paper_inputs, "paper_spine": run_dir / "paper_spine.json"},
         required_output=writer_output,
     )
     _write_packet(
@@ -2784,9 +3040,11 @@ def _start_paper_production(
             "Design a data-bearing visual argument, not a status dashboard: "
             "primary result, spatial pattern, and robustness or independent "
             "validation must each answer a scientific question after "
-            "comparing candidate designs and auditing source fidelity."
+            "comparing candidate designs and auditing source fidelity. Draw with "
+            "the frozen figure kit (offline basemap, print typography, same-size "
+            "PDF/PNG export); caveats belong in captions, never inside the figure."
         ),
-        inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
+        inputs={**common, **figure_inputs, "figure_contract": run_dir / "figure_contract.json"},
         required_output=figure_output,
     )
     state.update(
@@ -2816,20 +3074,32 @@ def _start_paper_production(
 def _restore_attempt(
     run_dir: Path, state: dict[str, Any], entry: Mapping[str, Any]
 ) -> None:
-    """Bring an archived attempt back to the run root as the manuscript basis."""
+    """Bring an archived attempt back to the run root as the manuscript basis.
+
+    The archive stays byte-complete (its manifest keeps pointing at real
+    files); the run root receives a copy, and ``restored.json`` records the
+    correspondence so auditors can verify both sides by hash.
+    """
     archive_dir = run_dir / str(entry["archive_dir"])
+    copied: list[str] = []
     for name in ATTEMPT_SCOPED_ENTRIES:
         source = archive_dir / name
         if source.exists() and not source.is_symlink():
             if (run_dir / name).exists():
                 raise AutoResearchError(f"cannot restore {name}: run root is not clean")
-            shutil.move(str(source), str(run_dir / name))
+            if source.is_dir():
+                shutil.copytree(source, run_dir / name, symlinks=False)
+            else:
+                shutil.copyfile(source, run_dir / name)
+            copied.append(name)
     restored_as = int(state.get("attempt") or 1) + 1
     _write_json(
         archive_dir / "restored.json",
         {
-            "schema_version": "gga-research-attempt-restore-v1",
+            "schema_version": "gga-research-attempt-restore-v2",
             "restored_as_attempt": restored_as,
+            "copied_entries": copied,
+            "archive_retained": True,
             "reason": "best available executed pilot after every other direction failed",
         },
     )
@@ -3062,8 +3332,10 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
                 "each figure binds an editable source so reviewers can regenerate it"
             ),
             "review_loop": "render_inspect_revise_at_least_once",
+            "figure_kit": _figure_kit_contract(),
         },
     )
+    paper_inputs, figure_inputs = _install_deliverable_kits(run_dir, verified_citations)
     common = {
         "atlas_snapshot": run_dir / "atlas_snapshot.json",
         "selected_hypothesis": run_dir / "selected_hypothesis.json",
@@ -3080,9 +3352,10 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
             "Write a typeset data-adequacy and research-direction report: state what "
             "each attempted direction measured, why it stopped at the scientific gate, "
             "what the frozen atlas can and cannot support, and which acquisition or "
-            "audit work would unlock an empirical article. Claim no empirical effect."
+            "audit work would unlock an empirical article. Claim no empirical effect. "
+            "Typeset with the frozen gga-paper style from the paper kit."
         ),
-        inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
+        inputs={**common, **paper_inputs, "paper_spine": run_dir / "paper_spine.json"},
         required_output={
             "artifacts": "report source plus a typeset PDF",
             "claim_ids": "all numerical claims (atlas claims and attempt-prefixed pilot diagnostics)",
@@ -3095,10 +3368,11 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
                 "year, venue and a typed identifier"
             ),
             "typeset_manifest": (
-                "source_artifact, pdf_artifact, and a section manifest covering the "
-                "report spine"
+                "source_artifact, pdf_artifact, bib_artifact and a section manifest "
+                "covering the report spine"
             ),
             "deliverable_mode": "evidence_report",
+            "payload_contract": _manuscript_payload_contract(),
         },
     )
     _write_packet(
@@ -3107,9 +3381,11 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
         purpose=(
             "Design three data-bearing report figures: coverage and gaps of the "
             "frozen atlas, diagnostics of every attempted pilot, and the ranked "
-            "acquisition or audit priorities; every mark traces to a claim ID."
+            "acquisition or audit priorities; every mark traces to a claim ID. Draw "
+            "with the frozen figure kit (offline basemap, print typography, same-size "
+            "PDF/PNG export)."
         ),
-        inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
+        inputs={**common, **figure_inputs, "figure_contract": run_dir / "figure_contract.json"},
         required_output={
             "artifacts": "figure generation source and SVG/PDF/PNG renders per figure",
             "claim_ids": "all plotted claims",
@@ -3119,6 +3395,7 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
                 "statement and an editable source per figure"
             ),
             "deliverable_mode": "evidence_report",
+            "payload_contract": _figure_payload_contract(),
         },
     )
     state.update(

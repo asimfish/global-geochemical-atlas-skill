@@ -100,3 +100,11 @@ disclosed (grade capped at `draft_with_disclosed_findings`), or — when no
 direction could execute a pilot — the run writes a reviewed evidence report
 (`evidence_report`). This is recorded in
 [ADR-0012](docs/adr/0012-every-run-ends-with-a-graded-deliverable.md).
+The deliverable itself is held to a typesetting contract: the controller installs a
+paper kit (fixed LaTeX style, skeleton, controller-generated claim ledger, seeded
+bibliography) and a figure kit (dependency-free SVG toolkit with offline basemaps,
+same-size PDF/PNG renderer) into every manuscript wave, and the gate rejects
+manuscripts that leave the kit (inline claim tags, fixed figure heights, figures
+behind the bibliography, non-TeX PDFs) and figures whose renders are clipped or
+whose spatial panels lack a geographic frame. This is recorded in
+[ADR-0013](docs/adr/0013-typesetting-and-figure-quality-contract.md).

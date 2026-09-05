@@ -1,0 +1,132 @@
+%% gga-paper.sty -- typesetting contract for Global Geochemical Atlas manuscripts
+%%
+%% Version: gga-paper-v1
+%% Requires only packages shipped by a minimal TeX Live / TinyTeX install:
+%% geometry, amsmath, newtxtext, newtxmath, microtype, graphicx, booktabs,
+%% tabularx, array, enumitem, caption, subcaption, placeins, fancyhdr,
+%% xcolor, hyperref, natbib.  No titlesec, tcolorbox or siunitx.
+%%
+%% Load order matters for the Times stack: amsmath -> newtxtext -> newtxmath;
+%% never load amssymb next to newtxmath.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{gga-paper}[2026/09/06 v1 GGA manuscript typesetting contract]
+
+\RequirePackage[a4paper,margin=24mm,headheight=14pt]{geometry}
+\RequirePackage{amsmath}
+%% Times stack with graceful degradation: newtx (needs centernot) -> mathptmx
+%% -> Latin Modern.  The chosen stack is recorded in \ggafontstack so the
+%% typesetting gate can read it from the log.
+\newcommand{\ggafontstack}{unknown}
+\IfFileExists{newtxtext.sty}{%
+  \IfFileExists{centernot.sty}{%
+    \RequirePackage{newtxtext}\RequirePackage{newtxmath}%
+    \renewcommand{\ggafontstack}{newtx}}{%
+    \IfFileExists{mathptmx.sty}{\RequirePackage{mathptmx}\renewcommand{\ggafontstack}{mathptmx}}%
+      {\RequirePackage{lmodern}\renewcommand{\ggafontstack}{lmodern}}}}{%
+  \IfFileExists{mathptmx.sty}{\RequirePackage{mathptmx}\renewcommand{\ggafontstack}{mathptmx}}%
+    {\RequirePackage{lmodern}\renewcommand{\ggafontstack}{lmodern}}}
+\RequirePackage[T1]{fontenc}
+\typeout{gga-paper: font stack = \ggafontstack}
+\RequirePackage{microtype}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{enumitem}
+\RequirePackage[font=small,labelfont=bf,skip=6pt,width=0.96\textwidth]{caption}
+\RequirePackage[font=small,labelfont=bf]{subcaption}
+\RequirePackage[section]{placeins}
+\RequirePackage{fancyhdr}
+\RequirePackage{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=ggablue,citecolor=ggablue,urlcolor=ggablue,breaklinks=true]{hyperref}
+\RequirePackage[numbers,sort&compress]{natbib}
+
+\definecolor{ggablue}{RGB}{31,84,140}
+\definecolor{ggaink}{RGB}{31,41,51}
+\definecolor{ggamuted}{RGB}{82,97,107}
+\definecolor{ggarule}{RGB}{190,200,206}
+
+%% Compact journal-style headings without titlesec.
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-14pt plus -3pt minus -2pt}{6pt plus 1pt}{\normalfont\large\bfseries\color{ggaink}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-10pt plus -2pt minus -2pt}{4pt plus 1pt}{\normalfont\normalsize\bfseries\color{ggaink}}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+  {-8pt plus -2pt minus -1pt}{3pt}{\normalfont\normalsize\itshape\color{ggaink}}}
+
+\setlist{itemsep=2pt,topsep=4pt,parsep=0pt}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.15}
+\emergencystretch=1.5em
+\clubpenalty=10000
+\widowpenalty=10000
+
+%% Running head: \shorttitle{...} sets the italic short title.
+\newcommand{\gga@shorttitle}{Global Geochemical Atlas manuscript}
+\newcommand{\shorttitle}[1]{\renewcommand{\gga@shorttitle}{#1}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\itshape\gga@shorttitle}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+%% Deliverable grade line under the author block (set by the controller receipt).
+\newcommand{\gga@grade}{}
+\newcommand{\deliverablegrade}[1]{\renewcommand{\gga@grade}{#1}}
+\newcommand{\gradeline}{\ifx\gga@grade\empty\else\begin{center}\small\color{ggamuted}\gga@grade\end{center}\fi}
+
+%% Claim ledger -----------------------------------------------------------
+%% The controller writes claims.tex with one \registerclaim per registry
+%% claim.  \claimref{id} typesets a small hyperlinked superscript mark and
+%% fails the compile on an unregistered id, so a manuscript cannot cite a
+%% number that is not in the frozen registry.
+\newcounter{ggaclaim}
+\newcommand{\registerclaim}[4]{%
+  % #1 claim id, #2 value, #3 unit, #4 source
+  \stepcounter{ggaclaim}%
+  \expandafter\xdef\csname gga@claim@#1\endcsname{\thegggaclaim}%
+  % Freeze the mark number now; the row text itself stays unexpanded.
+  \edef\gga@tmprow{\noexpand\gga@ledgerrow{\thegggaclaim}{\unexpanded{#1}}{\unexpanded{#2}}{\unexpanded{#3}}{\unexpanded{#4}}}%
+  \expandafter\g@addto@macro\expandafter\gga@ledgerrows\expandafter{\gga@tmprow}%
+}
+\def\thegggaclaim{\arabic{ggaclaim}}
+\def\gga@ledgerrows{}
+\newcommand{\gga@ledgerrow}[5]{\hypertarget{gga.claim.#1}{C#1} & {\small\path{#2}} & {\small #3} & {\small #4} & {\small #5} \\[1pt]}
+\DeclareRobustCommand{\claimref}[1]{%
+  \@ifundefined{gga@claim@#1}%
+    {\GenericError{}{gga-paper: claim id `#1' is not registered in claims.tex}{}{}}%
+    {\textsuperscript{\hyperlink{gga.claim.\csname gga@claim@#1\endcsname}{\scriptsize\color{ggablue}C\csname gga@claim@#1\endcsname}}}%
+}
+\newcommand{\printclaimledger}{%
+  \section*{Appendix: Claim ledger}%
+  \addcontentsline{toc}{section}{Claim ledger}%
+  \small Every numerical statement in this manuscript carries a superscript
+  mark C$n$ that resolves to one registered claim below. Values are recomputed
+  from the frozen atlas snapshot or bound by SHA-256 to a pilot artifact; the
+  ledger is generated by the controller and cannot be edited by the writer.\par\medskip
+  \noindent\begin{tabularx}{\textwidth}{@{}l P{0.30\textwidth} P{0.14\textwidth} P{0.18\textwidth} X@{}}
+  \toprule
+  Mark & Claim id & Value & Unit & Source \\
+  \midrule
+  \gga@ledgerrows
+  \bottomrule
+  \end{tabularx}%
+}
+
+%% Interpretation boundary: a quiet, ruled paragraph -- never a coloured box.
+\newenvironment{boundary}{%
+  \par\medskip\noindent
+  \begin{minipage}{\linewidth}\small\color{ggaink}%
+  \setlength{\parindent}{0pt}\textbf{Interpretation boundary.}\ }
+  {\end{minipage}\par\medskip}
+
+%% Figure conventions: full-width, placed near first mention, no fixed height.
+\newcommand{\ggafigure}[4]{%
+  % #1 label, #2 graphics file (PDF), #3 caption, #4 placement (default t)
+  \begin{figure}[#4]\centering
+  \includegraphics[width=\linewidth]{#2}%
+  \caption{#3}\label{#1}%
+  \end{figure}}
+
+\endinput

@@ -23,6 +23,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import warnings
+import xml.etree.ElementTree as ElementTree
 import zipfile
 import zlib
 from collections import Counter
@@ -32,7 +33,10 @@ from typing import Any
 
 import acquire_gemstat_arsenic as gemstat_acquisition
 import auto_research
+import manuscript_kit
+import paper_figures
 import publication_lint
+import render_figure
 import benchmark_workflow
 import build_china_demo
 import build_evidence_bundle as evidence_builder
@@ -8137,7 +8141,128 @@ def check_d3(output_dir: Path) -> list[str]:
                 + chunk(b"IEND", b"")
             )
 
-        PAGE_BEARING_PDF = b"%PDF-1.4\n1 0 obj\n<</Type /Page>>\nendobj\n%%EOF\n"
+        def synthetic_pdf(
+            *,
+            pages: int = 1,
+            media_box: tuple[float, float] = (480.0, 360.0),
+            producer: str | None = None,
+            first_page_text: str | None = None,
+        ) -> bytes:
+            """A structurally valid PDF (xref, catalog, page tree) poppler can read.
+
+            Figure renders use one page whose MediaBox carries the SVG aspect;
+            manuscripts use several A4 pages, a TeX producer string and a
+            Times text run so the typesetting gate sees what latexmk emits.
+            """
+            objects: list[bytes] = []
+
+            def add(body: bytes) -> int:
+                objects.append(body)
+                return len(objects)
+
+            catalog = add(b"")  # patched once the page tree id is known
+            pages_id = add(b"")
+            font_id = add(b"<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman >>")
+            page_ids: list[int] = []
+            width, height = media_box
+            for index in range(pages):
+                text = first_page_text if index == 0 and first_page_text else None
+                content = (
+                    f"BT /F1 12 Tf 72 {height - 72:.2f} Td ({text}) Tj ET".encode()
+                    if text
+                    else b""
+                )
+                content_id = add(
+                    b"<< /Length %d >>\nstream\n" % len(content) + content + b"\nendstream"
+                )
+                page_ids.append(
+                    add(
+                        (
+                            f"<< /Type /Page /Parent {pages_id} 0 R "
+                            f"/MediaBox [0 0 {width:.3f} {height:.3f}] "
+                            f"/Resources << /Font << /F1 {font_id} 0 R >> >> "
+                            f"/Contents {content_id} 0 R >>"
+                        ).encode()
+                    )
+                )
+            objects[catalog - 1] = f"<< /Type /Catalog /Pages {pages_id} 0 R >>".encode()
+            objects[pages_id - 1] = (
+                f"<< /Type /Pages /Kids [{' '.join(f'{pid} 0 R' for pid in page_ids)}] "
+                f"/Count {len(page_ids)} >>"
+            ).encode()
+            info_id = None
+            if producer:
+                info_id = add(f"<< /Producer ({producer}) /Creator (TeX) >>".encode())
+            out = bytearray(b"%PDF-1.5\n%\xe2\xe3\xcf\xd3\n")
+            offsets: list[int] = []
+            for number, body in enumerate(objects, 1):
+                offsets.append(len(out))
+                out += f"{number} 0 obj\n".encode() + body + b"\nendobj\n"
+            xref_at = len(out)
+            out += f"xref\n0 {len(objects) + 1}\n".encode()
+            out += b"0000000000 65535 f \n"
+            for offset in offsets:
+                out += f"{offset:010d} 00000 n \n".encode()
+            trailer = f"<< /Size {len(objects) + 1} /Root {catalog} 0 R"
+            if info_id:
+                trailer += f" /Info {info_id} 0 R"
+            trailer += " >>"
+            out += f"trailer\n{trailer}\nstartxref\n{xref_at}\n%%EOF\n".encode()
+            return bytes(out)
+
+        def object_stream_pdf(media_box: tuple[float, float] = (480.0, 360.0)) -> bytes:
+            """PDF 1.5 file whose page dictionary is packed into a Flate object stream.
+
+            This is what pdfTeX (TeX Live 2026, objcompresslevel 2) writes: no
+            ``/Type /Page`` or ``/MediaBox`` is visible in the raw bytes.
+            """
+            width, height = media_box
+            inner_objects = [
+                (1, b"<< /Type /Catalog /Pages 2 0 R >>"),
+                (2, b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>"),
+                (3, f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {width:.3f} {height:.3f}] >>".encode()),
+                (5, b"<< /Producer (pdfTeX-1.40.26) /Creator (TeX) >>"),
+            ]
+            offsets_part = b""
+            body_part = b""
+            for number, body in inner_objects:
+                offsets_part += f"{number} {len(body_part)} ".encode()
+                body_part += body + b"\n"
+            raw = offsets_part + body_part
+            compressed = zlib.compress(raw)
+            out = bytearray(b"%PDF-1.5\n")
+            out += (
+                f"4 0 obj\n<< /Type /ObjStm /N {len(inner_objects)} /First {len(offsets_part)} "
+                f"/Length {len(compressed)} /Filter /FlateDecode >>\nstream\n"
+            ).encode()
+            out += compressed + b"\nendstream\nendobj\n"
+            out += b"trailer\n<< /Root 1 0 R /Info 5 0 R >>\n%%EOF\n"
+            return bytes(out)
+
+        # One-page 4:3 render matching the 800x600 SVG fixtures.
+        PAGE_BEARING_PDF = synthetic_pdf()
+        OBJECT_STREAM_PDF = object_stream_pdf()
+        # What latexmk -pdf produces: several A4 pages, TeX producer, Times text.
+        TEX_MANUSCRIPT_PDF = synthetic_pdf(
+            pages=4,
+            media_box=(595.276, 841.89),
+            producer="pdfTeX-1.40.26",
+            first_page_text="Abstract",
+        )
+
+        def figure_svg_bytes(role: str, *, basemap: bool = False) -> bytes:
+            """Contract-shaped SVG: 4:3 viewBox, readable text, optional basemap group."""
+            layers = (
+                "<g data-gga-layer='basemap'><path d='M40 300 L760 300' "
+                "stroke='#999' fill='none'/></g>"
+                if basemap
+                else ""
+            )
+            return (
+                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>"
+                f"{layers}<text x='10' y='30' font-size='16'>{role}</text>"
+                "</svg>\n"
+            ).encode()
 
         def empirical_figure_package(
             cycle_id: str = auto_research.INITIAL_CYCLE,
@@ -8168,12 +8293,9 @@ def check_d3(output_dir: Path) -> list[str]:
                     "svg": agent_binary_artifact(
                         "figure_designer",
                         f"{prefix}.svg",
-                        (
-                            "<svg xmlns='http://www.w3.org/2000/svg' "
-                            "viewBox='0 0 800 600'>"
-                            f"<text x='10' y='30' font-size='16'>{role}</text>"
-                            "</svg>\n"
-                        ).encode(),
+                        figure_svg_bytes(
+                            role, basemap=role in auto_research.SPATIAL_FIGURE_ROLES
+                        ),
                         cycle_id,
                     ),
                     "pdf": agent_binary_artifact(
@@ -8240,22 +8362,85 @@ def check_d3(output_dir: Path) -> list[str]:
             *spine_document["required_sections"],
         ]
 
+        def manuscript_tex(
+            title: str,
+            *,
+            claim_id: str = "pilot-null-effect",
+            cite_keys: tuple[str, ...] = ("ref-1",),
+        ) -> str:
+            """A manuscript that satisfies typesetting contract gga-paper-v1."""
+            cites = ", ".join(cite_keys)
+            return (
+                "\\documentclass[11pt]{article}\n"
+                "\\usepackage{gga-paper}\n"
+                "\\input{claims}\n"
+                f"\\title{{{title}}}\n"
+                "\\shorttitle{Screening result}\n"
+                "\\author{GGA Auto-Research}\n"
+                "\\begin{document}\n"
+                "\\maketitle\n"
+                "\\begin{abstract}\n"
+                "The frozen cohort supports a bounded null effect.\n"
+                "\\end{abstract}\n"
+                "\\section{Introduction}\n"
+                f"Prior work defines the expected contrast \\cite{{{cites}}}.\n"
+                "\\section{Results}\n"
+                f"The pooled contrast is null\\claimref{{{claim_id}}} "
+                "(Fig.~\\ref{fig:primary}).\n"
+                "\\begin{figure}[t]\n"
+                "\\centering\n"
+                "\\includegraphics[width=\\linewidth]{figures/fig1_primary.pdf}\n"
+                "\\caption{Effect point and uncertainty for the frozen pilot.}\n"
+                "\\label{fig:primary}\n"
+                "\\end{figure}\n"
+                "\\section{Methods}\n"
+                "Frozen atlas snapshot and pre-registered pilot.\n"
+                "\\section{Discussion}\n"
+                "\\subsection{Limitations}\n"
+                "The evidence boundary is explicit.\n"
+                "\\bibliographystyle{unsrtnat}\n"
+                "\\bibliography{references}\n"
+                "\\appendix\n"
+                "\\printclaimledger\n"
+                "\\end{document}\n"
+            )
+
+        def manuscript_bib(keys: tuple[str, ...] = ("ref-1",)) -> str:
+            return "".join(
+                f"@article{{{key},\n  title = {{Verified primary source}},\n"
+                "  author = {Researcher},\n  year = {2025},\n  journal = {Journal},\n"
+                "  doi = {10.0000/example}\n}\n"
+                for key in keys
+            )
+
         def manuscript_delivery(
             cycle_id: str = auto_research.INITIAL_CYCLE,
-            body: str = "# Screening result\n",
+            title: str = "Screening result",
         ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
             source = agent_artifact(
-                "manuscript_writer", "manuscript.md", body, cycle_id
+                "manuscript_writer", "manuscript.tex", manuscript_tex(title), cycle_id
+            )
+            bib = agent_artifact(
+                "manuscript_writer", "references.bib", manuscript_bib(), cycle_id
             )
             pdf = agent_binary_artifact(
-                "manuscript_writer", "manuscript.pdf", PAGE_BEARING_PDF, cycle_id
+                "manuscript_writer", "manuscript.pdf", TEX_MANUSCRIPT_PDF, cycle_id
+            )
+            # The embedded figure travels with the source under its own sub-path,
+            # exactly as \includegraphics{figures/...} expects it.
+            embedded_figure = agent_binary_artifact(
+                "manuscript_writer",
+                "figures/fig1_primary.pdf",
+                PAGE_BEARING_PDF,
+                cycle_id,
             )
             typeset = {
                 "source_artifact": source["path"],
                 "pdf_artifact": pdf["path"],
+                "bib_artifact": bib["path"],
                 "section_manifest": list(spine_sections),
             }
-            return [source, pdf], typeset
+            return [source, bib, pdf, embedded_figure], typeset
 
         manuscript_reference_list = [
             {
@@ -8599,6 +8784,288 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 publication lint deterministically enforces page structure, raster width and vector font floors",
             checks,
         )
+        typesetting_contract = quality_contract["typesetting_gate"]["typesetting_contract"]
+        typesetting_schema = quality_schema["properties"]["typesetting_gate"]["properties"][
+            "typesetting_contract"
+        ]
+        require(
+            typesetting_contract["contract"] == manuscript_kit.CONTRACT_ID == "gga-paper-v1"
+            and typesetting_schema["properties"]["contract"]["const"] == manuscript_kit.CONTRACT_ID
+            and typesetting_contract["paper_kit_dir"] == auto_research.PAPER_KIT_DIR
+            and typesetting_contract["figure_kit_contract"] == paper_figures.CONTRACT_ID == render_figure.CONTRACT_ID
+            and typesetting_contract["min_pdf_pages"] == manuscript_kit.MIN_PDF_PAGES
+            and set(typesetting_schema["required"]) == set(typesetting_contract)
+            and len(quality_contract["typesetting_gate"]["required_artifacts"]) == 3,
+            "D3 the quality contract pins the gga-paper-v1 typesetting contract and the figure-kit contract that the gates enforce",
+            checks,
+        )
+        writer_packet = json_value(run_dir / "agents" / "manuscript_writer" / "packet.json")
+        figure_packet = json_value(run_dir / "agents" / "figure_designer" / "packet.json")
+        paper_kit_dir = run_dir / auto_research.PAPER_KIT_DIR
+        figure_kit_dir = run_dir / auto_research.FIGURE_KIT_DIR
+        claims_tex_text = (paper_kit_dir / manuscript_kit.CLAIMS_FILE).read_text(encoding="utf-8")
+        seeded_bib_text = (paper_kit_dir / manuscript_kit.BIB_FILE).read_text(encoding="utf-8")
+        seeded_reference_list = json_value(paper_kit_dir / "seeded_reference_list.json")
+        registry_document = json_value(run_dir / "research_claim_registry.json")
+        registered_claim_count = len(registry_document["atlas_claims"]) + len(
+            registry_document["pilot_claims"]
+        )
+        first_atlas_claim_id = sorted(
+            item["claim_id"] for item in registry_document["atlas_claims"]
+        )[0]
+        kit_inputs_bound = all(
+            (run_dir / item["path"]).is_file()
+            and sha256_file(run_dir / item["path"]) == item["sha256"]
+            for packet in (writer_packet, figure_packet)
+            for item in packet["allowed_inputs"].values()
+        )
+        require(
+            {"paper_style", "paper_template", "claims_tex", "references_bib", "seeded_reference_list"}
+            <= set(writer_packet["allowed_inputs"])
+            and writer_packet["allowed_inputs"]["paper_style"]["path"]
+            == f"{auto_research.PAPER_KIT_DIR}/{manuscript_kit.STYLE_FILE}"
+            and sha256_file(paper_kit_dir / manuscript_kit.STYLE_FILE)
+            == sha256_file(SKILL_DIR / "assets" / "paper" / manuscript_kit.STYLE_FILE)
+            and "\\registerclaim{pilot-null-effect}" in claims_tex_text
+            and registered_claim_count >= 2
+            and claims_tex_text.count("\\registerclaim{") == registered_claim_count
+            and manuscript_kit.bib_keys(seeded_bib_text) == {"lit01"}
+            and seeded_reference_list["references"][0]["reference_id"] == "lit01"
+            and seeded_reference_list["references"][0]["identifier"]["type"] == "doi"
+            and writer_packet["required_output"]["payload_contract"]["typesetting"]["contract"]
+            == manuscript_kit.CONTRACT_ID
+            and "bib_artifact"
+            in writer_packet["required_output"]["payload_contract"]["typeset_manifest_keys"]
+            and {"figure_toolkit", "figure_renderer", "figure_lint", "basemap_01", "basemap_02", "basemap_03"}
+            <= set(figure_packet["allowed_inputs"])
+            and figure_packet["allowed_inputs"]["figure_toolkit"]["path"]
+            == f"{auto_research.FIGURE_KIT_DIR}/paper_figures.py"
+            and sha256_file(figure_kit_dir / "paper_figures.py") == sha256_file(SCRIPT_DIR / "paper_figures.py")
+            and sha256_file(figure_kit_dir / "render_figure.py") == sha256_file(SCRIPT_DIR / "render_figure.py")
+            and figure_packet["required_output"]["payload_contract"]["figure_kit"]["contract"]
+            == paper_figures.CONTRACT_ID
+            and json_value(run_dir / "figure_contract.json")["figure_kit"]["contract"]
+            == paper_figures.CONTRACT_ID
+            and kit_inputs_bound,
+            "D3 the second wave ships the paper kit (style, skeleton, frozen claim ledger, seeded bibliography) and the figure kit (toolkit, renderer, lint, basemaps) as hash-bound packet inputs",
+            checks,
+        )
+        template_text = (SKILL_DIR / "assets" / "paper" / manuscript_kit.TEMPLATE_FILE).read_text(
+            encoding="utf-8"
+        )
+        style_text = (SKILL_DIR / "assets" / "paper" / manuscript_kit.STYLE_FILE).read_text(
+            encoding="utf-8"
+        )
+        template_lint = manuscript_kit.lint_manuscript_source(
+            template_text,
+            bib_keys_available={"lit01"},
+            registered_claim_ids={"example.claim.id"},
+        )
+        rendered_claims = manuscript_kit.claims_tex(registry_document)
+        rendered_bib, rendered_records = manuscript_kit.references_bib(
+            [
+                {
+                    "title": "Verified {primary} source & method",
+                    "authors": ["Researcher, A.", "Analyst, B."],
+                    "year": 2025,
+                    "venue": "Journal",
+                    "doi_or_official_url": "https://doi.org/10.0000/example.1",
+                },
+                {
+                    "title": "Official report",
+                    "authors": ["Agency"],
+                    "year": 2024,
+                    "venue": "Survey",
+                    "doi_or_official_url": "https://example.org/report",
+                },
+            ]
+        )
+        with tempfile.TemporaryDirectory() as pdf_temp:
+            tex_pdf_path = Path(pdf_temp) / "tex.pdf"
+            tex_pdf_path.write_bytes(TEX_MANUSCRIPT_PDF)
+            browser_pdf_path = Path(pdf_temp) / "browser.pdf"
+            browser_pdf_path.write_bytes(PAGE_BEARING_PDF)
+            tex_pdf_lint = manuscript_kit.lint_manuscript_pdf(tex_pdf_path)
+            browser_pdf_lint = manuscript_kit.lint_manuscript_pdf(browser_pdf_path)
+        require(
+            template_lint == []
+            and all(
+                macro in style_text
+                for macro in (
+                    "\\newcommand{\\registerclaim}",
+                    "\\DeclareRobustCommand{\\claimref}",
+                    "\\newcommand{\\printclaimledger}",
+                    "\\newenvironment{boundary}",
+                    "\\newcommand{\\ggafigure}",
+                    "\\newcommand{\\shorttitle}",
+                    "\\newcommand{\\deliverablegrade}",
+                )
+            )
+            and "newtxtext" in style_text
+            and "mathptmx" in style_text
+            and rendered_claims == claims_tex_text
+            and rendered_claims.count("\\registerclaim{") == registered_claim_count
+            # atlas claims (recomputed) are registered before pilot claims (hash-bound)
+            and rendered_claims.index(f"\\registerclaim{{{first_atlas_claim_id}}}")
+            < rendered_claims.index("\\registerclaim{pilot-null-effect}")
+            and manuscript_kit.bib_keys(rendered_bib) == {"lit01", "lit02"}
+            and "doi = {10.0000/example.1}" in rendered_bib
+            and "title = {Verified \\{primary\\} source & method}" in rendered_bib
+            and rendered_records[0]["identifier"] == {"type": "doi", "value": "10.0000/example.1"}
+            and rendered_records[1]["identifier"] == {"type": "official_url", "value": "https://example.org/report"}
+            and tex_pdf_lint == []
+            and any("TeX engine" in message for message in browser_pdf_lint)
+            and any("at least 4" in message for message in browser_pdf_lint),
+            "D3 the shipped manuscript skeleton passes its own typesetting lint, the style defines the claim-ledger macros, and the kit renders the frozen registry and verified literature deterministically",
+            checks,
+        )
+        source_lint = manuscript_kit.lint_manuscript_source(
+            template_text.replace("\\claimref{example.claim.id}", "\\claimref{example.claim.id}\\texttt{a}\\texttt{b}\\texttt{c}\\texttt{d}\\texttt{e}\\texttt{f}\\texttt{g}\\texttt{h}"),
+            bib_keys_available={"lit01"},
+            registered_claim_ids={"other.claim"},
+        )
+        require(
+            any("unregistered" in message for message in source_lint)
+            and any("typewriter" in message for message in source_lint)
+            and manuscript_kit.cited_keys("\\cite{a, b}\\citep[p.~3]{c}% \\cite{ignored}\n\\citet{d}") == {"a", "b", "c", "d"},
+            "D3 manuscript lint flags unregistered claim marks and typewriter-identifier leakage, and cite-key extraction ignores comments",
+            checks,
+        )
+        wide_svg = (
+            b"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2400 1800'>"
+            b"<style>.tick{font-size:9px}.big{font-size:40px}</style>"
+            b"<text x='1' y='1' class='big'>readable</text>"
+            b"<text x='1' y='2'>default medium</text>"
+            b"<text x='1' y='3' class='tick'>tiny tick</text></svg>"
+        )
+        wide_svg_lint = publication_lint.lint_svg_bytes(wide_svg)
+        with tempfile.TemporaryDirectory() as render_temp:
+            render_root = Path(render_temp)
+            (render_root / "fig.svg").write_bytes(figure_svg_bytes("spatial_pattern", basemap=True))
+            (render_root / "fig.pdf").write_bytes(PAGE_BEARING_PDF)
+            (render_root / "fig.png").write_bytes(minimal_png_bytes())
+            (render_root / "wide.pdf").write_bytes(synthetic_pdf(media_box=(480.0, 300.0)))
+            (render_root / "tall.png").write_bytes(minimal_png_bytes(1200, 1200))
+            (render_root / "plain.svg").write_bytes(figure_svg_bytes("spatial_pattern", basemap=False))
+            matched = publication_lint.lint_figure_renders(
+                render_root / "fig.svg", render_root / "fig.pdf", render_root / "fig.png", requires_basemap=True
+            )
+            mismatched = publication_lint.lint_figure_renders(
+                render_root / "fig.svg", render_root / "wide.pdf", render_root / "tall.png", requires_basemap=False
+            )
+            frameless = publication_lint.lint_figure_renders(
+                render_root / "plain.svg", render_root / "fig.pdf", render_root / "fig.png", requires_basemap=True
+            )
+        require(
+            len(wide_svg_lint) == 2
+            and any("'default medium'" in message for message in wide_svg_lint)
+            and any("'tiny tick'" in message for message in wide_svg_lint)
+            and not any("'readable'" in message for message in wide_svg_lint)
+            and matched == []
+            and len(mismatched) == 2
+            and all("aspect" in message for message in mismatched)
+            and len(frameless) == 1
+            and "basemap" in frameless[0]
+            and abs(publication_lint.pdf_aspect(PAGE_BEARING_PDF) - 4 / 3) < 1e-6
+            and abs(publication_lint.png_aspect(minimal_png_bytes()) - 4 / 3) < 1e-6,
+            "D3 figure lint treats undeclared SVG text as 16 px, honours stylesheet class sizes, and compares PDF/PNG aspect and basemap presence across the three renders",
+            checks,
+        )
+        require(
+            b"/Type /Page" not in OBJECT_STREAM_PDF
+            and b"/MediaBox" not in OBJECT_STREAM_PDF
+            and publication_lint.pdf_page_count(OBJECT_STREAM_PDF) == 1
+            and publication_lint.lint_pdf_bytes(OBJECT_STREAM_PDF) == []
+            and abs(publication_lint.pdf_aspect(OBJECT_STREAM_PDF) - 4 / 3) < 1e-6
+            and render_figure.pdf_media_box(OBJECT_STREAM_PDF) == (480.0, 360.0)
+            and publication_lint.lint_pdf_bytes(b"%PDF-1.5\n4 0 obj\n<< /Type /ObjStm /Filter /FlateDecode /Length 2 >>\nstream\nxx\nendstream\nendobj\n%%EOF\n") != [],
+            "D3 PDF lint sees page dictionaries and MediaBox inside Flate object streams (pdfTeX 1.5 output) and still rejects files without any page",
+            checks,
+        )
+        kit_figure = paper_figures.Figure(width_mm=180, height_mm=70)
+        kit_axes = kit_figure.add_axes(
+            14, 12, 70, 48, xlabel="Bulk Cr (mg/kg)", ylabel="Residue Cr (mg/kg)", xlog=True, ylog=True, label="A"
+        )
+        kit_axes.scatter([10, 40, 160, 640], [12, 35, 170, 700], color=paper_figures.PALETTE["blue"])
+        kit_axes.diagonal(dash=True)
+        kit_axes.errorbar(100, 100, 60, 150)
+        kit_map = kit_figure.add_map(
+            100, 12, 70, 48, (73.7, 18.2, 135.0, 53.5), label="B", focus_codes=["CHN", "TWN"]
+        )
+        kit_map.points([116.4, 121.5, 104.1, 91.1], [39.9, 31.2, 30.7, 29.7], [1.0, 2.0, 3.0, 4.0], legend_title="Cr (mg/kg)")
+        kit_figure.bind_claims(["pilot-null-effect", "atlas.record_count"])
+        kit_svg_text = kit_figure.render()
+        kit_svg_bytes = kit_svg_text.encode("utf-8")
+        kit_root = ElementTree.fromstring(kit_svg_bytes)
+        kit_layers = {element.get("data-gga-layer") for element in kit_root.iter() if element.get("data-gga-layer")}
+        kit_font_sizes = {
+            float(element.get("font-size"))
+            for element in kit_root.iter()
+            if element.tag.endswith("text") and element.get("font-size")
+        }
+        second_render = paper_figures.Figure(width_mm=180, height_mm=70)
+        second_render.add_map(100, 12, 70, 48, (73.7, 18.2, 135.0, 53.5), label="B", focus_codes=["CHN", "TWN"]).points(
+            [116.4], [39.9], [1.0]
+        )
+        require(
+            kit_root.get("data-gga-figure-kit") == paper_figures.CONTRACT_ID
+            and kit_root.get("data-gga-claims") == "atlas.record_count;pilot-null-effect"
+            and {"basemap", "graticule", "data"} <= kit_layers
+            and publication_lint.svg_has_basemap(kit_svg_bytes)
+            and publication_lint.lint_svg_bytes(kit_svg_bytes) == []
+            and abs(publication_lint.svg_aspect(kit_svg_bytes) - 180 / 70) < 1e-4
+            and min(kit_font_sizes) >= paper_figures.FONT_PT["tick"]
+            and 'clip-map-1' in second_render.render()
+            and second_render.render() == second_render.render()
+            and "url(#gradient" not in kit_svg_text
+            and "filter=" not in kit_svg_text
+            and render_figure.svg_size_mm(kit_svg_text) == (180.0, 70.0),
+            "D3 the figure toolkit emits contract-tagged SVG with basemap, graticule and data layers, pt typography above the print floor, deterministic ids and no gradients or filters",
+            checks,
+        )
+        with tempfile.TemporaryDirectory() as kit_temp:
+            kit_dir = Path(kit_temp)
+            kit_svg_path = kit_dir / "fig1.svg"
+            kit_svg_path.write_text(kit_svg_text, encoding="utf-8")
+            no_renderer = subprocess.run(
+                [sys.executable, str(SCRIPT_DIR / "render_figure.py"), "--svg", str(kit_svg_path), "--pdf", str(kit_dir / "none.pdf")],
+                capture_output=True,
+                text=True,
+                check=False,
+                env={**os.environ, render_figure.BROWSER_ENV: "", "PATH": str(kit_dir)},
+            )
+            require(
+                no_renderer.returncode == 3
+                and json.loads(no_renderer.stderr.strip().splitlines()[-1])["status"] == "failed"
+                and not (kit_dir / "none.pdf").exists(),
+                "D3 the figure renderer exits 3 with a structured error instead of faking a render when no SVG renderer is available",
+                checks,
+            )
+            cropped_png = render_figure.crop_png_rows(minimal_png_bytes(1200, 900), 600)
+            cropped_idat = b"".join(body for kind, body in render_figure._png_chunks(cropped_png) if kind == b"IDAT")
+            require(
+                publication_lint.png_aspect(cropped_png) == 2.0
+                and zlib.decompress(cropped_idat) == b"\x00" * (600 * 1201)
+                and publication_lint.lint_png_bytes(cropped_png) == []
+                and render_figure.HEADLESS_UI_ALLOWANCE_PX >= 100,
+                "D3 the renderer crops headless-browser screenshots to the exact figure box (the new headless viewport is shorter than the requested window)",
+                checks,
+            )
+            if render_figure.find_chrome():
+                kit_report = render_figure.render(kit_svg_path, kit_dir / "fig1.pdf", kit_dir / "fig1.png", scale=2)
+                kit_render_lint = publication_lint.lint_figure_renders(
+                    kit_svg_path, kit_dir / "fig1.pdf", kit_dir / "fig1.png", requires_basemap=True
+                )
+                require(
+                    kit_report["backend"] == "chrome"
+                    and kit_report["png"]["backend"] in {"chrome-pdf+pdftoppm", "chrome-screenshot-cropped"}
+                    and kit_render_lint == []
+                    and publication_lint.lint_pdf_bytes((kit_dir / "fig1.pdf").read_bytes()) == []
+                    and publication_lint.lint_png_bytes((kit_dir / "fig1.png").read_bytes()) == []
+                    and kit_report["png"]["dpi"] >= 180,
+                    "D3 the figure renderer exports a same-aspect vector PDF and a print-resolution PNG from the toolkit SVG in a real headless browser",
+                    checks,
+                )
         contribution_map_fixture = [
             {
                 "contribution_id": "c1",
@@ -8721,6 +9188,129 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 publication lint rejects a typeset PDF that declares no page object",
             checks,
         )
+
+        def typesetting_rejection(
+            invocation_id: str,
+            *,
+            artifacts: list[dict[str, Any]] | None = None,
+            typeset: dict[str, Any] | None = None,
+            reference_list: list[dict[str, Any]] | None = None,
+        ) -> str:
+            try:
+                auto_research.submit_agent_result(
+                    run_dir,
+                    role="manuscript_writer",
+                    invocation_id=invocation_id,
+                    model_family="family-c",
+                    payload={
+                        "artifacts": artifacts or manuscript_artifacts,
+                        "claim_ids": ["pilot-null-effect"],
+                        "contribution_map": contribution_map_fixture,
+                        "reference_list": reference_list or manuscript_reference_list,
+                        "typeset_manifest": typeset or manuscript_typeset,
+                    },
+                )
+            except auto_research.AutoResearchError as exc:
+                return str(exc)
+            return ""
+
+        legacy_source = agent_artifact(
+            "manuscript_writer",
+            "legacy-manuscript.tex",
+            manuscript_tex("Legacy draft")
+            .replace("\\claimref{pilot-null-effect}", " \\claim{pilot-null-effect}")
+            .replace("\\usepackage{gga-paper}", "\\usepackage{times}"),
+        )
+        legacy_error = typesetting_rejection(
+            "writer-legacy-claim-tags",
+            artifacts=[*manuscript_artifacts, legacy_source],
+            typeset={**manuscript_typeset, "source_artifact": legacy_source["path"]},
+        )
+        require(
+            "typesetting gate" in legacy_error
+            and "gga-paper" in legacy_error
+            and "\\claim{...}" in legacy_error,
+            "D3 typesetting gate rejects a manuscript that skips the controller style and marks numbers with legacy inline claim tags",
+            checks,
+        )
+        html_rendered_pdf = agent_binary_artifact(
+            "manuscript_writer", "html-render.pdf", PAGE_BEARING_PDF
+        )
+        html_pdf_error = typesetting_rejection(
+            "writer-html-pdf",
+            artifacts=[*manuscript_artifacts, html_rendered_pdf],
+            typeset={**manuscript_typeset, "pdf_artifact": html_rendered_pdf["path"]},
+        )
+        require(
+            "typesetting gate" in html_pdf_error and "TeX engine" in html_pdf_error,
+            "D3 typesetting gate rejects a manuscript PDF that no TeX engine produced (one-page browser/office export)",
+            checks,
+        )
+        missing_bib_error = typesetting_rejection(
+            "writer-missing-bib",
+            typeset={
+                key: value
+                for key, value in manuscript_typeset.items()
+                if key != "bib_artifact"
+            },
+        )
+        require(
+            "bib_artifact" in missing_bib_error,
+            "D3 typesetting gate requires the submitted references.bib that \\bibliography loads",
+            checks,
+        )
+        tall_figure_source = agent_artifact(
+            "manuscript_writer",
+            "tall-figure.tex",
+            manuscript_tex("Tall figure draft").replace(
+                "[width=\\linewidth]", "[width=\\linewidth,height=0.68\\textheight]"
+            ),
+        )
+        tall_figure_error = typesetting_rejection(
+            "writer-fixed-figure-height",
+            artifacts=[*manuscript_artifacts, tall_figure_source],
+            typeset={**manuscript_typeset, "source_artifact": tall_figure_source["path"]},
+        )
+        appended_figure_source = agent_artifact(
+            "manuscript_writer",
+            "appended-figures.tex",
+            manuscript_tex("Appended figures draft")
+            .replace(
+                "\\begin{figure}[t]\n\\centering\n\\includegraphics[width=\\linewidth]"
+                "{figures/fig1_primary.pdf}\n\\caption{Effect point and uncertainty "
+                "for the frozen pilot.}\n\\label{fig:primary}\n\\end{figure}\n",
+                "",
+            )
+            .replace(
+                "\\appendix\n",
+                "\\appendix\n\\begin{figure}[t]\n\\centering\n\\includegraphics"
+                "[width=\\linewidth]{figures/fig1_primary.pdf}\n\\caption{Effect.}\n"
+                "\\label{fig:primary}\n\\end{figure}\n",
+            ),
+        )
+        appended_figure_error = typesetting_rejection(
+            "writer-figures-after-bibliography",
+            artifacts=[*manuscript_artifacts, appended_figure_source],
+            typeset={**manuscript_typeset, "source_artifact": appended_figure_source["path"]},
+        )
+        require(
+            "fix a height" in tall_figure_error
+            and "before the bibliography" in appended_figure_error,
+            "D3 typesetting gate rejects fixed figure heights and figures appended after the bibliography",
+            checks,
+        )
+        drift_error = typesetting_rejection(
+            "writer-reference-list-drift",
+            reference_list=[
+                *manuscript_reference_list,
+                {**manuscript_reference_list[0], "reference_id": "ref-2"},
+            ],
+        )
+        require(
+            "exactly the bib keys" in drift_error and "ref-2" in drift_error,
+            "D3 manuscript reference_list must match exactly the bib keys the LaTeX source cites",
+            checks,
+        )
         auto_research.submit_agent_result(
             run_dir,
             role="manuscript_writer",
@@ -8824,6 +9414,69 @@ def check_d3(output_dir: Path) -> list[str]:
         require(
             tiny_font_blocked,
             "D3 publication lint rejects vector text below the print-equivalent font floor",
+            checks,
+        )
+
+        def figure_rejection(invocation_id: str, artifacts: list[dict[str, Any]], specs: list[dict[str, Any]]) -> str:
+            try:
+                auto_research.submit_agent_result(
+                    run_dir,
+                    role="figure_designer",
+                    invocation_id=invocation_id,
+                    model_family="family-d",
+                    payload={"artifacts": artifacts, "claim_ids": ["pilot-null-effect"], "figure_specs": specs},
+                )
+            except auto_research.AutoResearchError as exc:
+                return str(exc)
+            return ""
+
+        clipped_artifacts, clipped_specs = empirical_figure_package()
+        clipped_pdf = agent_binary_artifact(
+            "figure_designer",
+            "clipped-export.pdf",
+            synthetic_pdf(media_box=(480.0, 300.0)),
+        )
+        clipped_specs[0]["artifact_paths"]["pdf"] = clipped_pdf["path"]
+        clipped_error = figure_rejection(
+            "figure-clipped-export", [*clipped_artifacts, clipped_pdf], clipped_specs
+        )
+        require(
+            "render fidelity" in clipped_error and "aspect" in clipped_error,
+            "D3 figure gate rejects a PDF export whose page box does not match the SVG aspect (clipped or letter-boxed render)",
+            checks,
+        )
+        frameless_artifacts, frameless_specs = empirical_figure_package()
+        frameless_svg = agent_binary_artifact(
+            "figure_designer",
+            "frameless-spatial.svg",
+            figure_svg_bytes("spatial_pattern", basemap=False),
+        )
+        frameless_specs[1]["artifact_paths"]["svg"] = frameless_svg["path"]
+        frameless_error = figure_rejection(
+            "figure-spatial-without-basemap", [*frameless_artifacts, frameless_svg], frameless_specs
+        )
+        prose_artifacts, prose_specs = empirical_figure_package()
+        prose_svg = agent_binary_artifact(
+            "figure_designer",
+            "prose-in-figure.svg",
+            (
+                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>"
+                "<text x='10' y='30'>"
+                + "Disclaimer: this figure summarises a bounded pilot and must not be read "
+                "as a regional effect estimate; see the manuscript limitations for details."
+                + "</text></svg>\n"
+            ).encode(),
+        )
+        prose_specs[0]["artifact_paths"]["svg"] = prose_svg["path"]
+        prose_error = figure_rejection(
+            "figure-disclaimer-prose", [*prose_artifacts, prose_svg], prose_specs
+        )
+        require(
+            "basemap" in frameless_error
+            and "spatial" in frameless_error
+            and "publication lint" in prose_error
+            and "belongs in the manuscript caption" in prose_error,
+            "D3 figure gate rejects spatial figures without the offline basemap layer and figures that carry caption-length disclaimer prose",
             checks,
         )
         figure_artifacts, figure_specs = empirical_figure_package()
@@ -9008,7 +9661,7 @@ def check_d3(output_dir: Path) -> list[str]:
         (
             revised_manuscript_artifacts,
             revised_manuscript_typeset,
-        ) = manuscript_delivery(revision_cycle, "# Revised screening result\n")
+        ) = manuscript_delivery(revision_cycle, "Revised screening result")
         try:
             auto_research.submit_agent_result(
                 run_dir,
@@ -9283,6 +9936,7 @@ def check_d3(output_dir: Path) -> list[str]:
             for item in publication_manifest["files"]
         )
         packaged_roles = {item["source_role"] for item in publication_manifest["files"]}
+        packaged_paths = [item["path"] for item in publication_manifest["files"]]
         require(
             publication_manifest["grade"] == "camera_ready"
             and publication_manifest["packaged_cycle"] == "revision-02"
@@ -9298,6 +9952,25 @@ def check_d3(output_dir: Path) -> list[str]:
             <= packaged_roles
             and (run_dir / "publication" / "receipts" / "review_receipt.json").is_file(),
             "D3 the publication package is hash-bound, carries manuscript, figure and receipt files, and matches the state manifest",
+            checks,
+        )
+        require(
+            len(packaged_paths) == len(set(packaged_paths))
+            and "publication/manuscript_writer/manuscript.tex" in packaged_paths
+            and "publication/manuscript_writer/references.bib" in packaged_paths
+            and "publication/manuscript_writer/figures/fig1_primary.pdf" in packaged_paths
+            and (run_dir / "publication" / "manuscript_writer" / "figures" / "fig1_primary.pdf").is_file()
+            and all(
+                item["source_cycle"] == "revision-01"
+                for item in publication_manifest["files"]
+                if item["source_role"] == "manuscript_writer"
+            )
+            and all(
+                item["source_cycle"] == "revision-02"
+                for item in publication_manifest["files"]
+                if item["source_role"] == "figure_designer"
+            ),
+            "D3 publication packaging keeps each deliverable's sub-path below its role directory, so same-basename artifacts never collide and the manifest lists every packaged path once",
             checks,
         )
         try:
@@ -9885,10 +10558,15 @@ def check_d3(output_dir: Path) -> list[str]:
                 guard += 1
                 for role in list(state["required_roles"]):
                     if role == "manuscript_writer":
-                        source = artifact(role, "manuscript.md", b"# Report\n")
-                        pdf = artifact(role, "manuscript.pdf", PAGE_BEARING_PDF)
+                        source = artifact(
+                            role,
+                            "manuscript.tex",
+                            manuscript_tex(f"Report {tag}", claim_id=claim_ids[0]).encode(),
+                        )
+                        bib = artifact(role, "references.bib", manuscript_bib().encode())
+                        pdf = artifact(role, "manuscript.pdf", TEX_MANUSCRIPT_PDF)
                         payload = {
-                            "artifacts": [source, pdf],
+                            "artifacts": [source, bib, pdf],
                             "claim_ids": claim_ids,
                             "contribution_map": [
                                 {"contribution_id": "c1", "statement": "First bounded finding.", "frontier_delta": "Disclosed delta.", "claim_ids": claim_ids[:1]},
@@ -9897,13 +10575,13 @@ def check_d3(output_dir: Path) -> list[str]:
                             "reference_list": [
                                 {"reference_id": "ref-1", "title": "Verified primary source", "authors": ["Researcher"], "year": 2025, "venue": "Journal", "identifier": {"type": "doi", "value": "10.0000/example"}}
                             ],
-                            "typeset_manifest": {"source_artifact": source["path"], "pdf_artifact": pdf["path"], "section_manifest": sections},
+                            "typeset_manifest": {"source_artifact": source["path"], "pdf_artifact": pdf["path"], "bib_artifact": bib["path"], "section_manifest": sections},
                         }
                         family = "family-c"
                     elif role == "figure_designer":
                         artifacts, specs = [], []
                         for index, figure_role in enumerate(figure_roles, 1):
-                            svg = artifact(role, f"figure-{index}.svg", f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><text x='10' y='30' font-size='16'>{figure_role}</text></svg>\n".encode())
+                            svg = artifact(role, f"figure-{index}.svg", figure_svg_bytes(figure_role, basemap=figure_role in auto_research.SPATIAL_FIGURE_ROLES))
                             pdf = artifact(role, f"figure-{index}.pdf", PAGE_BEARING_PDF)
                             png = artifact(role, f"figure-{index}.png", minimal_png_bytes())
                             src = artifact(role, f"figure-{index}.py", b"print('figure')\n")
@@ -10081,9 +10759,31 @@ def check_d3(output_dir: Path) -> list[str]:
             and restored_gate["writing_basis"] == "best_available_executed_pilot"
             and restored_gate["disclosures"][0]["gate_id"] == "frontier"
             and (best_run / "attempts" / "attempt-01-user-question" / "restored.json").is_file()
-            and not (
+            and json_value(
+                best_run / "attempts" / "attempt-01-user-question" / "restored.json"
+            )["schema_version"]
+            == "gga-research-attempt-restore-v2"
+            and json_value(
+                best_run / "attempts" / "attempt-01-user-question" / "restored.json"
+            )["archive_retained"]
+            is True
+            and "agents"
+            in json_value(
+                best_run / "attempts" / "attempt-01-user-question" / "restored.json"
+            )["copied_entries"]
+            # The archive stays byte-complete: its manifest still points at real files.
+            and (
                 best_run / "attempts" / "attempt-01-user-question" / "agents"
-            ).exists()
+            ).is_dir()
+            and sha256_file(
+                best_run
+                / "attempts"
+                / "attempt-01-user-question"
+                / "agents"
+                / "pilot_analyst"
+                / "result.json"
+            )
+            == sha256_file(best_run / "agents" / "pilot_analyst" / "result.json")
             and json_value(best_run / "agents" / "pilot_analyst" / "result.json")[
                 "payload"
             ]["analysis_outcome"]["status"]

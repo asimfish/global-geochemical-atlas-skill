@@ -116,30 +116,69 @@ and `state.json` expose the next incomplete gate.
    figure roles (`coverage_and_gaps`, `pilot_diagnostics`,
    `acquisition_priority`). No manuscript/figure packets are created for a
    direction while a stronger one may still be found.
-6. Start `manuscript_writer` and `figure_designer` only after that gate. Every
-   contribution and plotted result must cite an atlas or pilot claim ID. The
-   manuscript delivers a typed reference list (unique reference IDs, titles,
-   ordered authors, years, venues and one resolvable DOI/arXiv/official-URL
-   identifier each) plus a typeset manifest binding a distinct manuscript
-   source artifact and a rendered PDF whose section manifest covers every
-   frozen paper-spine section.    The empirical visual storyboard must contain
-   primary-result, spatial-pattern, and robustness/external-validation roles;
-   a methods diagram cannot replace them. The spatial-pattern figure must
-   encode the claimed effect or measured values in space; per the frozen figure
-   contract a data-availability or cohort-coverage map does not satisfy the
-   role and fails review gate a6. Each figure binds distinct
-   SVG/PDF/PNG artifacts by SHA-256, records non-empty inspection findings
-   plus the revisions actually applied, documents at least two candidate
-   designs with the rejected alternatives, states how the rendered figure
-   stays faithful to its source data, and binds an editable source artifact
-   that is neither the PDF nor the PNG render. On submission the controller
-   additionally runs a deterministic publication lint over every declared
-   SVG/PNG/PDF artifact of both roles: vector text below the 4.5 pt
-   print-equivalent font floor, rasters narrower than 1000 px, page-less or
-   malformed PDFs and non-well-formed SVGs are rejected at the gate instead of
-   relying on self-attested render inspection. The quality contract also fixes
-   manuscript layout rules (noun-phrase headings, structured inline lists,
-   figure typography hierarchy) that the a5/a6 reviewer gates enforce.
+6. Start `manuscript_writer` and `figure_designer` only after that gate. When
+   the wave opens, the controller installs two kits into the run and binds them
+   into the packets by hash:
+   - **Paper kit** (`paper_kit/`, contract `gga-paper-v1`): the fixed LaTeX
+     style `gga-paper.sty` (Times stack with fallbacks, compact journal
+     headings, running head, caption and float rules), the manuscript skeleton
+     `manuscript-template.tex`, a controller-generated `claims.tex` that
+     registers every atlas and pilot claim of the frozen registry as a
+     `\registerclaim` line, a `references.bib` seeded from the verified
+     literature (keys `lit01`, `lit02`, ...) and `seeded_reference_list.json`
+     with the matching reference records.
+   - **Figure kit** (`figure_kit/`, contract `gga-figure-kit-v1`): the
+     dependency-free SVG toolkit `paper_figures.py` (`Figure`, `Axes`,
+     `MapPanel`; Okabe-Ito palette; point-based typography above the print
+     floor), the renderer `render_figure.py` (same-size vector PDF and
+     288 dpi PNG through headless Chrome or rsvg/inkscape/cairosvg, aspect
+     verified; exits 3 rather than faking a render), `publication_lint.py`
+     for self-checks, and the offline Natural Earth land / Admin-0 / China
+     Admin-1 basemaps that `MapPanel` draws inside a group tagged
+     `data-gga-layer="basemap"`.
+
+   Every contribution and plotted result must cite an atlas or pilot claim ID.
+   The manuscript delivers a typed reference list (unique reference IDs,
+   titles, ordered authors, years, venues and one resolvable
+   DOI/arXiv/official-URL identifier each) plus a typeset manifest binding the
+   LaTeX source, the `.bib` it loads and the rendered PDF, whose section
+   manifest covers every frozen paper-spine section. The **typesetting gate**
+   then lints the source and the PDF deterministically: the source must load
+   `gga-paper`, `\input{claims}`, cite every number only through
+   `\claimref{claim_id}` marks that resolve to registered ids (legacy inline
+   `\claim{...}` tags and typewriter identifiers in prose are rejected), keep
+   every figure full-width (`width=\linewidth`, never a fixed height) with
+   caption and label, referenced in the text and placed before the
+   bibliography, cite only keys that exist in the submitted `.bib`, and end
+   with `\printclaimledger`; the `reference_list` must list exactly the bib
+   keys the source cites. The PDF must be a TeX-engine product (pdfTeX, XeTeX
+   or LuaTeX; browser or office exports fail), at least four pages, with an
+   Abstract on page one and the template font families embedded. The lint
+   reads page objects and MediaBoxes inside PDF 1.5 object streams, so
+   compressed pdfTeX output is judged correctly.
+
+   The empirical visual storyboard must contain primary-result,
+   spatial-pattern, and robustness/external-validation roles; a methods
+   diagram cannot replace them. The spatial-pattern figure must encode the
+   claimed effect or measured values in space; per the frozen figure contract
+   a data-availability or cohort-coverage map does not satisfy the role and
+   fails review gate a6. Each figure binds distinct SVG/PDF/PNG artifacts by
+   SHA-256, records non-empty inspection findings plus the revisions actually
+   applied, documents at least two candidate designs with the rejected
+   alternatives, states how the rendered figure stays faithful to its source
+   data, and binds an editable source artifact that is neither the PDF nor the
+   PNG render. On submission the controller runs a deterministic publication
+   lint over every declared SVG/PNG/PDF artifact of both roles: vector text
+   below the 4.5 pt print-equivalent floor (undeclared SVG text counts as
+   16 px), text runs longer than 120 characters (captions and disclaimers
+   belong in the manuscript caption), rasters narrower than 1000 px, page-less
+   or malformed PDFs and non-well-formed SVGs are rejected. The **render
+   fidelity** check compares each figure's PDF page box and PNG pixel box with
+   the SVG aspect (2 % tolerance, so clipped or letter-boxed exports fail) and
+   requires the basemap layer in the spatial roles (`spatial_pattern`,
+   `coverage_and_gaps`). The quality contract also fixes manuscript layout
+   rules (noun-phrase headings, structured inline lists, figure typography
+   hierarchy) that the a5/a6 reviewer gates enforce.
 7. Finished manuscript and figures route into a fresh `citation_auditor`
    session before any review. The controller freezes the manuscript reference
    list into a cycle-level reference manifest; the auditor must return one
@@ -224,7 +263,23 @@ Every first-wave packet carries `required_output.payload_contract`: the exact
 field names, enum values (`analysis_outcome.status`,
 `frontier_assessment.status`), the retrieval field name `retrieved_at`, the
 `search_coverage` shape and the artifact path rule (paths are relative to the
-run root and start with `artifact_output_dir`). Roles should dry-run their
-payload with `submit ... --validate-only`, which executes the identical
-acceptance checks without recording a result or advancing the run, and only
-then submit.
+run root and start with `artifact_output_dir`). Second-wave packets carry the
+same block with the typesetting contract (`payload_contract.typesetting`:
+start from `paper_kit/manuscript-template.tex`, claim marks, bibliography,
+figure placement and PDF rules; `typeset_manifest_keys` includes
+`bib_artifact`) or the figure-kit contract (`payload_contract.figure_kit` and
+`rules`). Roles should dry-run their payload with `submit ... --validate-only`,
+which executes the identical acceptance checks without recording a result or
+advancing the run, and only then submit.
+
+A writer's shortest compliant path is: copy `paper_kit/gga-paper.sty`,
+`claims.tex` and `references.bib` next to `manuscript.tex`, start from the
+template, cite numbers with `\claimref{...}` and literature with `\cite{lit01}`
+(extend the bib and the `reference_list` together for new verified
+references), embed the figure kit PDFs with
+`\includegraphics[width=\linewidth]`, and compile with
+`latexmk -pdf -interaction=nonstopmode manuscript.tex`. A figure designer's
+shortest compliant path is: build each figure with `figure_kit/paper_figures.py`
+(`MapPanel` for spatial roles), save the SVG as the editable source, and export
+with `python figure_kit/render_figure.py --svg fig.svg --pdf fig.pdf --png
+fig.png`, which verifies the aspect the gate later checks.

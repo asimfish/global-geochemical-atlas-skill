@@ -12,8 +12,8 @@ final product. ADR-0009 removed the human approval terminal and ADR-0011 made
 the run chain through candidates inside one run, but the design still allowed
 an honest dead end: when every empirical candidate was exhausted the run
 ended at `needs_research_redirection` with archives and receipts but no paper.
-The operating requirement is explicit — after the single direction selection
-the pipeline must run to a paper-like deliverable — while the scientific
+The operating requirement is explicit â€” after the single direction selection
+the pipeline must run to a paper-like deliverable â€” while the scientific
 doctrine is equally explicit that no empirical effect may be claimed without an
 executed pilot and that a weak frontier position may not be dressed up as
 novelty.

@@ -11,7 +11,7 @@ and temporal maps showed no emphasised national outline because the D3 profile
 had `country_code = null`: a named-country request that admits adjacent-marine
 rows must not clip on the Admin-0 polygon, and the profile conflated "clip on
 this country" with "frame this country". Regional navigation allowed zooming
-out to `max(70°, 1.35 x region width)` and panning the centre 30 % of the
+out to `max(70Â°, 1.35 x region width)` and panning the centre 30 % of the
 region outside it, so the China atlas could be scrolled to Kazakhstan, India or
 Japan. Finally the temporal view dated only 223 of 42,645 records (0.5 %),
 which readers could not distinguish from a parsing bug: ten of the twelve China
@@ -42,7 +42,7 @@ that dates papers rather than samples.
 2. **Regional navigation is locked to the fitted frame.** In both templates the
    zoom-out limit equals the region's fitted view span and the viewport
    rectangle may not leave the frame (3-4 % slack per axis); deeper zoom inside
-   the region remains free. The old 70° floor, 1.35x factor and 30 % centre
+   the region remains free. The old 70Â° floor, 1.35x factor and 30 % centre
    drift are removed.
 3. **Publisher-documented dataset collection windows are a first-class time
    tier.** `sampling_time.PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS` lists whole-
