@@ -1893,6 +1893,99 @@ def _required_figure_roles(run_dir: Path) -> set[str]:
     return set(REQUIRED_EMPIRICAL_FIGURE_ROLES)
 
 
+FEEDBACK_SCHEMA_PREFIX = "gga-research-feedback-tasks"
+# Names that belong exclusively to review provenance; a deliverable never
+# carries them, whatever its content.
+NON_DELIVERABLE_BASENAMES = {"feedback_tasks.json", "review_receipt.json"}
+
+
+def _review_provenance_hashes(run_dir: Path) -> dict[str, str]:
+    """SHA-256 -> description for every feedback task file and review product.
+
+    A later reviewer must never receive these, even re-declared as a role's
+    artifact; the hash set makes byte-identical copies detectable wherever
+    they are placed.
+    """
+    hashes: dict[str, str] = {}
+    roots = [run_dir, *sorted(path for path in (run_dir / "revisions").glob("revision-*") if path.is_dir())] if (
+        run_dir / "revisions"
+    ).is_dir() else [run_dir]
+    for root in roots:
+        for name in ("feedback_tasks.json", "review_receipt.json"):
+            path = root / name
+            if path.is_file():
+                hashes[sha256_file(path)] = path.relative_to(run_dir).as_posix()
+        review_result = root / "agents" / "independent_reviewer" / "result.json"
+        if review_result.is_file():
+            hashes[sha256_file(review_result)] = review_result.relative_to(run_dir).as_posix()
+            envelope = _read_object(review_result)
+            for item in (envelope.get("payload") or {}).get("artifacts") or []:
+                if isinstance(item, Mapping) and item.get("sha256"):
+                    hashes[str(item["sha256"])] = str(item.get("path"))
+    return hashes
+
+
+def _reject_input_copies_as_artifacts(
+    run_dir: Path, role: str, artifacts: Sequence[Mapping[str, Any]], cycle_id: str
+) -> None:
+    """Deliverables must be the role's own work, not review provenance or old work.
+
+    A role that vendors its packet inputs as artifacts (observed: a figure
+    designer re-declaring ``feedback_tasks.json`` and the previous cycle's SVGs
+    under ``frozen_inputs/``) leaks feedback into the next reviewer's packet
+    and creates same-basename collisions in the publication package, so the
+    submission fails closed. Controller kit files (style, claim ledger, seeded
+    bibliography) may be re-shipped unchanged: they carry no review
+    provenance and make the package self-contained.
+    """
+    if role == "independent_reviewer":
+        return
+    packet_path = _role_root(run_dir, cycle_id, role) / "packet.json"
+    previous_hashes: dict[str, str] = {}
+    if packet_path.is_file():
+        for key, item in (_read_object(packet_path).get("allowed_inputs") or {}).items():
+            if str(key).startswith("previous_") and isinstance(item, Mapping) and item.get("sha256"):
+                previous_hashes[str(item["sha256"])] = f"packet input {key}"
+    provenance = _review_provenance_hashes(run_dir)
+    digests_by_basename: dict[str, set[str]] = {}
+    for item in artifacts:
+        digests_by_basename.setdefault(Path(str(item["path"])).name, set()).add(str(item["sha256"]))
+    for item in artifacts:
+        relative = str(item["path"])
+        digest = str(item["sha256"])
+        basename = Path(relative).name
+        # An unchanged file may be re-submitted; a stale copy of the previous
+        # cycle's file declared next to its revised namesake may not.
+        if digest in previous_hashes and len(digests_by_basename.get(basename, set())) > 1:
+            raise AutoResearchError(
+                f"{role} artifact {relative} is a byte-identical copy of {previous_hashes[digest]} "
+                f"declared alongside a revised {basename}; the previous cycle's deliverables carry "
+                "forward by hash and stale copies must not be re-declared"
+            )
+        if digest in provenance:
+            raise AutoResearchError(
+                f"{role} artifact {relative} duplicates review provenance ({provenance[digest]}); "
+                "feedback tasks and review prose must never reach the next reviewer"
+            )
+        if basename in NON_DELIVERABLE_BASENAMES:
+            raise AutoResearchError(
+                f"{role} artifact {relative} is named like review provenance ({basename}); "
+                "deliverables must carry their own names"
+            )
+        if basename.lower().endswith(".json"):
+            try:
+                document = json.loads((run_dir / relative).read_text(encoding="utf-8"))
+            except (OSError, UnicodeError, json.JSONDecodeError):
+                continue
+            if isinstance(document, Mapping) and str(document.get("schema_version") or "").startswith(
+                FEEDBACK_SCHEMA_PREFIX
+            ):
+                raise AutoResearchError(
+                    f"{role} artifact {relative} carries the feedback-task schema; "
+                    "review feedback must not be re-emitted as a deliverable"
+                )
+
+
 def _validate_role_payload(
     run_dir: Path,
     role: str,
@@ -1901,6 +1994,7 @@ def _validate_role_payload(
 ) -> None:
     artifacts = _validate_agent_artifacts(run_dir, role, payload, cycle_id)
     artifacts_by_path = {item["path"]: item["sha256"] for item in artifacts}
+    _reject_input_copies_as_artifacts(run_dir, role, artifacts, cycle_id)
     if role == "pilot_analyst":
         claims = payload.get("claims")
         if not isinstance(claims, list):
@@ -2348,6 +2442,36 @@ def _prepare_reviewer(run_dir: Path, state: dict[str, Any], cycle_id: str) -> No
     manuscript_result = _read_valid_result(run_dir, "manuscript_writer", writer_cycle)
     figure_result = _read_valid_result(run_dir, "figure_designer", figure_cycle)
     citation_result = _read_valid_result(run_dir, "citation_auditor", audit_cycle)
+    reviewer_inputs = {
+        "atlas_snapshot": run_dir / "atlas_snapshot.json",
+        "claim_registry": run_dir / "research_claim_registry.json",
+        "research_gate_receipt": run_dir / "research_gate_receipt.json",
+        "research_quality_contract": run_dir / "research_quality_contract.json",
+        "paper_spine": run_dir / "paper_spine.json",
+        "figure_contract": run_dir / "figure_contract.json",
+        "reference_manifest": _reference_manifest_path(run_dir, audit_cycle),
+        "citation_audit_receipt": _cycle_root(run_dir, audit_cycle)
+        / "citation_audit_receipt.json",
+        **_result_artifact_inputs(
+            run_dir, "manuscript_writer", manuscript_result, writer_cycle
+        ),
+        **_result_artifact_inputs(
+            run_dir, "figure_designer", figure_result, figure_cycle
+        ),
+        **_result_artifact_inputs(
+            run_dir, "citation_auditor", citation_result, audit_cycle
+        ),
+    }
+    # Isolation invariant: nothing the reviewer receives may be feedback or
+    # earlier review material, whatever path it was re-declared under.
+    provenance = _review_provenance_hashes(run_dir)
+    for key, path in reviewer_inputs.items():
+        digest = sha256_file(path)
+        if digest in provenance or path.name in {"feedback_tasks.json", "review_receipt.json"}:
+            raise AutoResearchError(
+                f"reviewer isolation violated: input {key} ({path.relative_to(run_dir).as_posix()}) "
+                f"is review provenance ({provenance.get(digest, path.name)})"
+            )
     _write_packet(
         run_dir,
         role="independent_reviewer",
@@ -2356,26 +2480,7 @@ def _prepare_reviewer(run_dir: Path, state: dict[str, Any], cycle_id: str) -> No
             "Audit canonical manuscript, figures, claim bindings and seven release gates "
             "in a fresh session; do not inherit executor summaries or prior review prose."
         ),
-        inputs={
-            "atlas_snapshot": run_dir / "atlas_snapshot.json",
-            "claim_registry": run_dir / "research_claim_registry.json",
-            "research_gate_receipt": run_dir / "research_gate_receipt.json",
-            "research_quality_contract": run_dir / "research_quality_contract.json",
-            "paper_spine": run_dir / "paper_spine.json",
-            "figure_contract": run_dir / "figure_contract.json",
-            "reference_manifest": _reference_manifest_path(run_dir, audit_cycle),
-            "citation_audit_receipt": _cycle_root(run_dir, audit_cycle)
-            / "citation_audit_receipt.json",
-            **_result_artifact_inputs(
-                run_dir, "manuscript_writer", manuscript_result, writer_cycle
-            ),
-            **_result_artifact_inputs(
-                run_dir, "figure_designer", figure_result, figure_cycle
-            ),
-            **_result_artifact_inputs(
-                run_dir, "citation_auditor", citation_result, audit_cycle
-            ),
-        },
+        inputs=reviewer_inputs,
         required_output={
             "artifacts": "review report",
             "gate_results": (
@@ -2450,15 +2555,20 @@ def _prepare_revision_cycle(
             ).items()
         },
     }
+    paper_inputs, figure_inputs = _deliverable_kit_inputs(run_dir)
     if "manuscript_writer" in reopened:
         _write_packet(
             run_dir,
             role="manuscript_writer",
             cycle_id=cycle_id,
-            purpose="Revise the manuscript only against enumerated review tasks and frozen claims.",
-            inputs={**common, "paper_spine": run_dir / "paper_spine.json"},
+            purpose=(
+                "Revise the manuscript only against enumerated review tasks and frozen "
+                "claims, on the same paper kit; re-submit the complete LaTeX source, "
+                "bibliography and TeX-compiled PDF, never copies of the inputs."
+            ),
+            inputs={**common, **paper_inputs, "paper_spine": run_dir / "paper_spine.json"},
             required_output={
-                "artifacts": "revised manuscript source plus a typeset PDF",
+                "artifacts": "revised LaTeX manuscript source, references.bib and typeset PDF",
                 "claim_ids": "all numerical claims",
                 "contribution_map": "two to five claim-bound frontier contributions",
                 "reference_list": (
@@ -2466,9 +2576,10 @@ def _prepare_revision_cycle(
                     "venue and a typed identifier"
                 ),
                 "typeset_manifest": (
-                    "source_artifact, pdf_artifact, and a section manifest covering "
-                    "the frozen paper spine"
+                    "source_artifact, pdf_artifact, bib_artifact and a section manifest "
+                    "covering the frozen paper spine"
                 ),
+                "payload_contract": _manuscript_payload_contract(),
             },
         )
     if "figure_designer" in reopened:
@@ -2476,8 +2587,12 @@ def _prepare_revision_cycle(
             run_dir,
             role="figure_designer",
             cycle_id=cycle_id,
-            purpose="Revise figures only against enumerated review tasks and frozen claims.",
-            inputs={**common, "figure_contract": run_dir / "figure_contract.json"},
+            purpose=(
+                "Revise figures only against enumerated review tasks and frozen claims, "
+                "with the same figure kit; re-submit every storyboard figure as your own "
+                "SVG source plus renders, never copies of the previous cycle's files."
+            ),
+            inputs={**common, **figure_inputs, "figure_contract": run_dir / "figure_contract.json"},
             required_output={
                 "artifacts": "revised figure generation source and renders",
                 "claim_ids": "all plotted claims",
@@ -2486,6 +2601,7 @@ def _prepare_revision_cycle(
                     "render-inspect-revise evidence, candidate comparison, "
                     "source-fidelity statement and an editable source per figure"
                 ),
+                "payload_contract": _figure_payload_contract(),
             },
         )
     state.update(
@@ -2854,9 +2970,48 @@ def _install_deliverable_kits(
     return paper_inputs, figure_inputs
 
 
+def _deliverable_kit_inputs(run_dir: Path) -> tuple[dict[str, Path], dict[str, Path]]:
+    """Packet inputs for the kits already installed at the start of the wave.
+
+    Revision cycles re-bind the same files (the registry and citations are
+    frozen for the run), so a revising writer or designer may read the kit
+    without the controller re-installing it.
+    """
+    paper_dir = run_dir / PAPER_KIT_DIR
+    figure_dir = run_dir / FIGURE_KIT_DIR
+    paper_inputs = {
+        "paper_style": paper_dir / manuscript_kit.STYLE_FILE,
+        "paper_template": paper_dir / manuscript_kit.TEMPLATE_FILE,
+        "claims_tex": paper_dir / manuscript_kit.CLAIMS_FILE,
+        "references_bib": paper_dir / manuscript_kit.BIB_FILE,
+        "seeded_reference_list": paper_dir / "seeded_reference_list.json",
+    }
+    figure_inputs = {
+        "figure_toolkit": figure_dir / "paper_figures.py",
+        "figure_renderer": figure_dir / "render_figure.py",
+        "figure_lint": figure_dir / "publication_lint.py",
+        **{f"basemap_{index:02d}": figure_dir / name for index, name in enumerate(FIGURE_KIT_ASSETS, 1)},
+    }
+    missing = [str(path.relative_to(run_dir)) for path in (*paper_inputs.values(), *figure_inputs.values()) if not path.is_file()]
+    if missing:
+        raise AutoResearchError("deliverable kits are incomplete: " + ", ".join(missing))
+    return paper_inputs, figure_inputs
+
+
+DELIVERABLE_RULE = (
+    "Declare only your own deliverables as artifacts. Never re-declare packet inputs "
+    "that are review provenance or earlier work: feedback_tasks.json, review prose or "
+    "receipts, and the previous cycle's manuscript or figure files (vendored copies "
+    "under frozen_inputs/ or similar are rejected by hash and would leak feedback into "
+    "the next reviewer's packet). Kit files you ship unchanged (gga-paper.sty, "
+    "claims.tex, references.bib) may be declared."
+)
+
+
 def _manuscript_payload_contract() -> dict[str, Any]:
     return {
         "artifact_path_rule": ARTIFACT_PATH_RULE,
+        "deliverable_rule": DELIVERABLE_RULE,
         "self_check": SELF_CHECK_RULE,
         "typesetting": {
             "contract": manuscript_kit.CONTRACT_ID,
@@ -2891,6 +3046,7 @@ def _manuscript_payload_contract() -> dict[str, Any]:
 def _figure_payload_contract() -> dict[str, Any]:
     return {
         "artifact_path_rule": ARTIFACT_PATH_RULE,
+        "deliverable_rule": DELIVERABLE_RULE,
         "self_check": SELF_CHECK_RULE,
         "figure_kit": {
             "contract": "gga-figure-kit-v1",

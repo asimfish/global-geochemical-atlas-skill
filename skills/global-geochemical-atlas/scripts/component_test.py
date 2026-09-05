@@ -9682,6 +9682,80 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 Auto-Research rejects invocation reuse across immutable revision cycles",
             checks,
         )
+        require(
+            {"paper_style", "claims_tex", "references_bib", "seeded_reference_list"}
+            <= set(revision_writer_packet["allowed_inputs"])
+            and revision_writer_packet["allowed_inputs"]["paper_style"]["sha256"]
+            == sha256_file(run_dir / auto_research.PAPER_KIT_DIR / manuscript_kit.STYLE_FILE)
+            and revision_writer_packet["required_output"]["payload_contract"]["typesetting"]["contract"]
+            == manuscript_kit.CONTRACT_ID
+            and "frozen_inputs" in revision_writer_packet["required_output"]["payload_contract"]["deliverable_rule"]
+            and any(key.startswith("previous_manuscript_writer_artifact") for key in revision_writer_packet["allowed_inputs"]),
+            "D3 revision packets re-bind the installed paper kit, carry the typesetting contract and state the deliverable rule alongside the previous cycle's artifacts",
+            checks,
+        )
+
+        def vendored_rejection(invocation_id: str, extra: dict[str, Any]) -> str:
+            try:
+                auto_research.submit_agent_result(
+                    run_dir,
+                    role="manuscript_writer",
+                    invocation_id=invocation_id,
+                    model_family="family-f",
+                    payload={
+                        "artifacts": [*revised_manuscript_artifacts, extra],
+                        "claim_ids": ["pilot-null-effect"],
+                        "contribution_map": contribution_map_fixture,
+                        "reference_list": manuscript_reference_list,
+                        "typeset_manifest": revised_manuscript_typeset,
+                    },
+                )
+            except auto_research.AutoResearchError as exc:
+                return str(exc)
+            return ""
+
+        feedback_copy = agent_binary_artifact(
+            "manuscript_writer",
+            "frozen_inputs/feedback_tasks.json",
+            (run_dir / "revisions" / revision_cycle / "feedback_tasks.json").read_bytes(),
+            revision_cycle,
+        )
+        previous_source_copy = agent_binary_artifact(
+            "manuscript_writer",
+            "frozen_inputs/manuscript.tex",
+            (run_dir / "agent_outputs" / "manuscript_writer" / "manuscript.tex").read_bytes(),
+            revision_cycle,
+        )
+        ledger_named = agent_artifact(
+            "manuscript_writer", "notes/review_receipt.json", '{"note": "my own file"}\n', revision_cycle
+        )
+        renamed_feedback = agent_artifact(
+            "manuscript_writer",
+            "frozen_inputs/tasks-we-addressed.json",
+            json.dumps({"schema_version": "gga-research-feedback-tasks-v1", "tasks": [{"gate_id": "citation_audit"}]}),
+            revision_cycle,
+        )
+        vendored_feedback_error = vendored_rejection("writer-vendored-feedback", feedback_copy)
+        vendored_previous_error = vendored_rejection("writer-vendored-previous-source", previous_source_copy)
+        ledger_name_error = vendored_rejection("writer-ledger-named-artifact", ledger_named)
+        renamed_feedback_error = vendored_rejection("writer-renamed-feedback", renamed_feedback)
+        unchanged_bib_resubmitted = any(
+            item["path"].endswith("references.bib")
+            and item["sha256"] == sha256_file(run_dir / "agent_outputs" / "manuscript_writer" / "references.bib")
+            for item in revised_manuscript_artifacts
+        )
+        require(
+            "review provenance" in vendored_feedback_error
+            and "feedback_tasks.json" in vendored_feedback_error
+            and "stale copies" in vendored_previous_error
+            and "previous_manuscript_writer_artifact" in vendored_previous_error
+            and "named like review provenance" in ledger_name_error
+            and "feedback-task schema" in renamed_feedback_error
+            and unchanged_bib_resubmitted
+            and not (run_dir / "revisions" / revision_cycle / "agents" / "manuscript_writer" / "result.json").exists(),
+            "D3 a revising role cannot re-declare feedback tasks, review receipts or a stale copy of the previous cycle's file next to its revision, while unchanged files (the bibliography) may be re-submitted",
+            checks,
+        )
         revised_writer_state = auto_research.submit_agent_result(
             run_dir,
             role="manuscript_writer",
@@ -9758,6 +9832,25 @@ def check_d3(output_dir: Path) -> list[str]:
                 for key in revision_reviewer_packet["allowed_inputs"]
             ),
             "D3 revision reviewer sees only revised canonical artifacts and never inherits feedback or previous artifacts",
+            checks,
+        )
+        review_provenance_hashes = {
+            sha256_file(path)
+            for path in (
+                run_dir / "revisions" / revision_cycle / "feedback_tasks.json",
+                run_dir / "review_receipt.json",
+                run_dir / "agents" / "independent_reviewer" / "result.json",
+            )
+            if path.is_file()
+        }
+        require(
+            (run_dir / "revisions" / revision_cycle / "feedback_tasks.json").is_file()
+            and all(
+                item["sha256"] not in review_provenance_hashes
+                and not item["path"].endswith(("feedback_tasks.json", "review_receipt.json"))
+                for item in revision_reviewer_packet["allowed_inputs"].values()
+            ),
+            "D3 no hash or path of feedback tasks or earlier review material appears among the revision reviewer's allowed inputs",
             checks,
         )
         review_artifact = agent_artifact(

@@ -191,14 +191,25 @@ and `state.json` expose the next incomplete gate.
    citation-repair revision cycle with enumerated feedback tasks.
 8. Start `independent_reviewer` with canonical artifacts, the receipted
    citation audit, the reference manifest and the fixed a1-a7 rubric,
-   excluding executor summaries and all previous review prose.
+   excluding executor summaries and all previous review prose. Isolation is
+   enforced on both sides: a writer, designer or auditor cannot declare as an
+   artifact any byte-identical copy of feedback tasks, review receipts or
+   reviewer output (hash-matched wherever the copy is placed), any file named
+   `feedback_tasks.json`/`review_receipt.json`, any JSON carrying the
+   feedback-task schema, or a stale copy of the previous cycle's file declared
+   next to its revised namesake; and the reviewer packet itself fails closed if
+   any allowed input hashes to review provenance. Unchanged files (an
+   untouched `references.bib`, an unrevised figure) may be re-submitted.
 9. Failed gates create an immutable `revision-NN` cycle routed to the roles
    that own the failing gates: citation-audit and manuscript-argument failures
    reopen only `manuscript_writer`, figure-evidence failures reopen only
    `figure_designer`, and shared-evidence gates (a1, a2, a7) reopen both. Each
    feedback task records its `owner_roles`; a role outside the targeted set
    cannot submit into the cycle, and its newest accepted artifacts carry
-   forward by hash into the next audit and review packets. A revision that
+   forward by hash into the next audit and review packets. Revision packets
+   re-bind the installed paper kit or figure kit and carry the same
+   `payload_contract` (including the deliverable rule) as the initial wave, so
+   a revising role works on the same style, ledger and toolkit. A revision that
    touches the manuscript repeats the fresh citation audit; a figure-only
    revision carries the already-verified audit receipt forward instead of
    re-auditing an unchanged reference list. The next reviewer sees only the

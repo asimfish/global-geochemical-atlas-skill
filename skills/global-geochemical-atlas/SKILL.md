@@ -296,7 +296,7 @@ python scripts/auto_research.py select \
   --run-dir RESEARCH_ROOT/run-... --candidate-id dc-001
 ```
 
-当 `state.json.status=awaiting_agents` 时，宿主 MUST 为 `required_roles` 中每个角色启动独立全新会话，只向其提供 `agents/<role>/packet.json` 或 `revisions/revision-NN/agents/<role>/packet.json`，把产物写到 packet 声明的 `artifact_output_dir`，再用 `auto_research.py submit` 提交。同一波次的多个角色会话可以并行执行：各角色只写自己的 `artifact_output_dir`，controller 用 `state.lock` 排它锁串行化全部状态转移，并行提交不会交错破坏账本。不得把当前聊天、其他角色 scratch、executor summary 或旧 reviewer 文本注入新 reviewer。模型宿主不可用时必须保持 `awaiting_agents`，禁止伪造论文或后台任务。完整运行合同见 [auto-research.md](references/auto-research.md)。
+当 `state.json.status=awaiting_agents` 时，宿主 MUST 为 `required_roles` 中每个角色启动独立全新会话，只向其提供 `agents/<role>/packet.json` 或 `revisions/revision-NN/agents/<role>/packet.json`，把产物写到 packet 声明的 `artifact_output_dir`，再用 `auto_research.py submit` 提交。同一波次的多个角色会话可以并行执行：各角色只写自己的 `artifact_output_dir`，controller 用 `state.lock` 排它锁串行化全部状态转移，并行提交不会交错破坏账本。不得把当前聊天、其他角色 scratch、executor summary 或旧 reviewer 文本注入新 reviewer；角色也不得把 packet 输入（反馈任务、评审收据、上一轮手稿/图件）复制后声明为自己的 artifacts——controller 按哈希/文件名/schema 在提交门口拒绝，并在生成 reviewer packet 时再次核验其 allowed_inputs 不含任何评审来源。模型宿主不可用时必须保持 `awaiting_agents`，禁止伪造论文或后台任务。完整运行合同见 [auto-research.md](references/auto-research.md)。
 
 候选选题由控制器调用确定性脚本从 research_mode 产物生成；agent 可在其上补充建议，但必须区分「脚本证据」与「agent 推测」：
 

@@ -17,11 +17,16 @@ Every one of these passed the gates of ADR-0007: the publication lint only
 checked well-formedness, a font floor and page-bearing PDFs, and the reviewer
 gates a5/a6 rely on judgement that a same-family reviewer did not exercise.
 
-Two controller defects surfaced in the same run: the publication manifest
-listed four SVG paths twice with conflicting hashes (artifacts from different
-cycles with the same basename collapsed onto one packaged file), and restoring
-an archived attempt moved its files, leaving the archive manifest pointing at
-nothing.
+Three controller defects surfaced in the same run. The publication manifest
+listed four SVG paths twice with conflicting hashes; restoring an archived
+attempt moved its files, leaving the archive manifest pointing at nothing; and
+the final reviewer packet listed the path and hash of a
+`frozen_inputs/feedback_tasks.json`. The first and third share one root cause:
+in revision-03 the figure designer copied every packet input (feedback tasks,
+contracts, the previous cycle's SVGs) under `frozen_inputs/` and declared them
+as artifacts, the controller accepted them, and the reviewer packet then
+inherited review provenance while the package received two files per figure
+basename.
 
 ## Decision drivers
 
@@ -80,6 +85,15 @@ nothing.
    `agent_outputs/<role>/`, and a collision raises instead of overwriting.
    Restoring an archived attempt copies it; the archive stays byte-complete
    and `restored.json` (v2) records the copied entries.
+6. **Deliverable isolation.** A submission fails closed when any declared
+   artifact is a byte-identical copy of feedback tasks, review receipts or
+   reviewer output (hash set over every cycle), is named
+   `feedback_tasks.json`/`review_receipt.json`, carries the feedback-task
+   schema, or is a stale copy of the previous cycle's file declared next to its
+   revised namesake. The reviewer packet re-checks every allowed input against
+   the same hash set. Revision packets re-bind the kits and carry the payload
+   contract with an explicit deliverable rule; unchanged files may still be
+   re-submitted.
 
 ## Consequences
 
