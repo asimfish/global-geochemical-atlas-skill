@@ -32,6 +32,7 @@ from typing import Any
 import claim_ledger
 import manuscript_kit
 import publication_lint
+import render_figure
 import validate_outputs
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -3008,6 +3009,12 @@ def _deliverable_kit_inputs(run_dir: Path) -> tuple[dict[str, Path], dict[str, P
     return paper_inputs, figure_inputs
 
 
+PREFLIGHT_RULE = (
+    "Before compiling or rendering, run python scripts/auto_research.py doctor: exit 0 means "
+    "this host has a TeX engine, a usable font stack, every LaTeX package gga-paper.sty needs, "
+    "an SVG renderer and (ideally) poppler; exit 2 lists the blockers to report to the host "
+    "instead of substituting a browser or office export."
+)
 DELIVERABLE_RULE = (
     "Declare only your own deliverables as artifacts. Never re-declare packet inputs "
     "that are review provenance or earlier work: feedback_tasks.json, review prose or "
@@ -3022,6 +3029,7 @@ def _manuscript_payload_contract() -> dict[str, Any]:
     return {
         "artifact_path_rule": ARTIFACT_PATH_RULE,
         "deliverable_rule": DELIVERABLE_RULE,
+        "preflight": PREFLIGHT_RULE,
         "self_check": SELF_CHECK_RULE,
         "typesetting": {
             "contract": manuscript_kit.CONTRACT_ID,
@@ -3070,6 +3078,7 @@ def _figure_payload_contract() -> dict[str, Any]:
     return {
         "artifact_path_rule": ARTIFACT_PATH_RULE,
         "deliverable_rule": DELIVERABLE_RULE,
+        "preflight": PREFLIGHT_RULE,
         "self_check": SELF_CHECK_RULE,
         "figure_kit": {
             "contract": "gga-figure-kit-v1",
@@ -4021,9 +4030,112 @@ def _advance(run_dir: Path) -> dict[str, Any]:
     return _write_state(run_dir, state)
 
 
+# LaTeX packages gga-paper.sty requires unconditionally (the Times stack is
+# probed separately because it degrades newtx -> mathptmx -> lmodern).
+REQUIRED_LATEX_PACKAGES = (
+    "geometry",
+    "amsmath",
+    "fontenc",
+    "microtype",
+    "graphicx",
+    "booktabs",
+    "array",
+    "tabularx",
+    "enumitem",
+    "caption",
+    "subcaption",
+    "placeins",
+    "fancyhdr",
+    "xcolor",
+    "hyperref",
+    "natbib",
+)
+FONT_STACKS = (("newtx", ("newtxtext", "newtxmath", "centernot")), ("mathptmx", ("mathptmx",)), ("lmodern", ("lmodern",)))
+TOOLCHAIN_REPORT_VERSION = "gga-deliverable-toolchain-v1"
+
+
+def _which_with_user_bin(*names: str) -> str | None:
+    """PATH lookup that also sees ~/.local/bin (TinyTeX) in non-login shells."""
+    user_bin = Path.home() / ".local" / "bin"
+    for name in names:
+        found = shutil.which(name) or shutil.which(name, path=str(user_bin))
+        if found:
+            return found
+    return None
+
+
+def _kpsewhich(kpsewhich: str, filename: str) -> bool:
+    try:
+        completed = subprocess.run(
+            [kpsewhich, filename], capture_output=True, text=True, timeout=30, check=False
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return completed.returncode == 0 and bool(completed.stdout.strip())
+
+
+def toolchain_report() -> dict[str, Any]:
+    """Pre-flight for the manuscript and figure waves: what the host can compile and render.
+
+    Hosts run this before opening writer/figure sessions so a missing TeX
+    engine, font stack, LaTeX package or browser surfaces as an explicit
+    blocker instead of a run that waits on a packet forever.
+    """
+    tex_engine = _which_with_user_bin("latexmk", "pdflatex", "xelatex", "lualatex")
+    kpsewhich = _which_with_user_bin("kpsewhich")
+    font_stack = None
+    packages: dict[str, bool] = {}
+    if kpsewhich:
+        for stack_name, styles in FONT_STACKS:
+            if all(_kpsewhich(kpsewhich, f"{style}.sty") for style in styles):
+                font_stack = stack_name
+                break
+        packages = {name: _kpsewhich(kpsewhich, f"{name}.sty") for name in REQUIRED_LATEX_PACKAGES}
+    missing_packages = sorted(name for name, present in packages.items() if not present)
+    browser = render_figure.find_chrome()
+    svg_renderer = (
+        "chrome" if browser else "rsvg-convert" if shutil.which("rsvg-convert") else "inkscape" if shutil.which("inkscape") else None
+    )
+    poppler = {name: bool(shutil.which(name)) for name in ("pdfinfo", "pdftotext", "pdffonts", "pdftoppm")}
+    blockers: list[str] = []
+    if not tex_engine:
+        blockers.append("no TeX engine (latexmk/pdflatex) on PATH or in ~/.local/bin; the manuscript cannot be compiled")
+    if tex_engine and not kpsewhich:
+        blockers.append("kpsewhich not found; LaTeX package availability cannot be verified")
+    if kpsewhich and font_stack is None:
+        blockers.append("no usable Times stack (newtx, mathptmx) nor lmodern; gga-paper.sty cannot load")
+    if missing_packages:
+        blockers.append("missing LaTeX packages: " + ", ".join(missing_packages))
+    if svg_renderer is None:
+        blockers.append("no SVG renderer (Chrome/Chromium, rsvg-convert or inkscape); figures cannot be exported")
+    notes: list[str] = []
+    if not poppler["pdftoppm"]:
+        notes.append("pdftoppm absent: figure PNGs fall back to cropped browser screenshots")
+    if not (poppler["pdfinfo"] and poppler["pdftotext"] and poppler["pdffonts"]):
+        notes.append("poppler text/font probes absent: manuscript PDF checks degrade to byte-level producer and page-count checks")
+    return {
+        "schema_version": TOOLCHAIN_REPORT_VERSION,
+        "ready": not blockers,
+        "tex_engine": tex_engine,
+        "kpsewhich": kpsewhich,
+        "font_stack": font_stack,
+        "latex_packages": packages,
+        "missing_latex_packages": missing_packages,
+        "browser": browser,
+        "svg_renderer": svg_renderer,
+        "poppler": poppler,
+        "blockers": blockers,
+        "notes": notes,
+    }
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser(
+        "doctor",
+        help="report whether this host can compile the manuscript and render the figures (exit 2 when blocked)",
+    )
     start = sub.add_parser("start")
     start.add_argument("--atlas-dir", type=Path, required=True)
     start.add_argument("--research-root", type=Path, required=True)
@@ -4056,6 +4168,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     try:
+        if args.command == "doctor":
+            result = toolchain_report()
+            print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+            return 0 if result["ready"] else 2
         if args.command == "start":
             result = start_research(
                 args.atlas_dir,

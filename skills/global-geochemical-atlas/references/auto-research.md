@@ -49,6 +49,19 @@ python scripts/auto_research.py select \
 `--question` is the mutually exclusive alternative. The local API exposes the
 same transition at `POST /api/v1/research-runs/<run-id>/selection`.
 
+Before opening the manuscript and figure sessions, check that the host can
+actually compile and render the deliverables:
+
+```bash
+python scripts/auto_research.py doctor
+```
+
+It prints a `gga-deliverable-toolchain-v1` report (TeX engine, font stack,
+each LaTeX package `gga-paper.sty` needs, SVG renderer, poppler) and exits 0
+when `ready` or 2 with the list of `blockers`. A blocked host must be reported
+as such; substituting a browser or office export for the TeX PDF fails the
+typesetting gate anyway.
+
 ## State and gates
 
 One request and atlas snapshot deterministically map to one `run-<hash>`

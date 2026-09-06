@@ -8870,6 +8870,36 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 the second wave ships the paper kit (style, skeleton, frozen claim ledger, seeded bibliography) and the figure kit (toolkit, renderer, lint, basemaps) as hash-bound packet inputs",
             checks,
         )
+        toolchain = auto_research.toolchain_report()
+        with tempfile.TemporaryDirectory() as bare_home:
+            bare_doctor = subprocess.run(
+                [sys.executable, str(SCRIPT_DIR / "auto_research.py"), "doctor"],
+                capture_output=True,
+                text=True,
+                check=False,
+                env={
+                    **os.environ,
+                    "PATH": bare_home,
+                    "HOME": bare_home,
+                    render_figure.BROWSER_ENV: "",
+                },
+            )
+        bare_report = json.loads(bare_doctor.stdout)
+        require(
+            toolchain["schema_version"] == "gga-deliverable-toolchain-v1"
+            and toolchain["ready"] == (not toolchain["blockers"])
+            and set(toolchain["latex_packages"]) <= set(auto_research.REQUIRED_LATEX_PACKAGES)
+            and (toolchain["font_stack"] in {"newtx", "mathptmx", "lmodern", None})
+            and bare_doctor.returncode == 2
+            and bare_report["ready"] is False
+            and bare_report["tex_engine"] is None
+            and any("no TeX engine" in item for item in bare_report["blockers"])
+            and any("no SVG renderer" in item for item in bare_report["blockers"])
+            and writer_packet["required_output"]["payload_contract"]["preflight"].startswith("Before compiling")
+            and "doctor" in figure_packet["required_output"]["payload_contract"]["preflight"],
+            "D3 the doctor pre-flight reports TeX engine, font stack, LaTeX packages, renderer and poppler with an explicit blocked exit on a bare host, and both second-wave packets point roles at it",
+            checks,
+        )
         template_text = (SKILL_DIR / "assets" / "paper" / manuscript_kit.TEMPLATE_FILE).read_text(
             encoding="utf-8"
         )

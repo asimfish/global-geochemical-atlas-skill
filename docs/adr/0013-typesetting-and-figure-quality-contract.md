@@ -99,6 +99,11 @@ basename.
    the same hash set. Revision packets re-bind the kits and carry the payload
    contract with an explicit deliverable rule; unchanged files may still be
    re-submitted.
+7. **Toolchain pre-flight.** `auto_research.py doctor` reports the TeX engine,
+   font stack (newtx -> mathptmx -> lmodern), every LaTeX package the style
+   needs, the SVG renderer and poppler, exiting 2 with explicit blockers; both
+   second-wave payload contracts point roles at it so a host that cannot
+   compile is reported instead of a lesser deliverable being produced.
 
 ## Consequences
 
