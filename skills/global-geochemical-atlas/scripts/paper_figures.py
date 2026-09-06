@@ -35,7 +35,7 @@ from __future__ import annotations
 
 import json
 import math
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -150,7 +150,12 @@ def color_ramp(t: float, name: str = "viridis_lite") -> str:
 
 
 class Axes:
-    """A Cartesian panel with optional log scales; coordinates in pt."""
+    """A Cartesian panel with optional log scales; coordinates in pt.
+
+    Marks are recorded lazily and positioned at render time, so a reference
+    line or a later series may still widen auto-derived limits without
+    misplacing anything drawn earlier; the panel body is clipped to its frame.
+    """
 
     def __init__(self, fig: "Figure", x: float, y: float, w: float, h: float, *, xlabel: str = "", ylabel: str = "",
                  xlog: bool = False, ylog: bool = False, label: str = "", title: str = "",
@@ -161,15 +166,21 @@ class Axes:
         self.legend_loc = legend_loc
         self.xlim: tuple[float, float] | None = None
         self.ylim: tuple[float, float] | None = None
-        self.body: list[str] = []
+        self._explicit_xlim = False
+        self._explicit_ylim = False
+        self.body: list[Callable[[], str]] = []
         self.legend_items: list[tuple[str, str, str]] = []
+        self.clip_id = f"clip-axes-{len(fig.panels) + 1}"
+        self._category_labels: list[str] = []
 
     def set_xlim(self, lo: float, hi: float) -> "Axes":
         self.xlim = (lo, hi)
+        self._explicit_xlim = True
         return self
 
     def set_ylim(self, lo: float, hi: float) -> "Axes":
         self.ylim = (lo, hi)
+        self._explicit_ylim = True
         return self
 
     def _auto_limits(self, values: Sequence[float], log: bool) -> tuple[float, float]:
@@ -187,6 +198,26 @@ class Axes:
             self.xlim = self._auto_limits(xs, self.xlog)
         if self.ylim is None:
             self.ylim = self._auto_limits(ys, self.ylog)
+
+    def _include(self, axis: str, value: float) -> None:
+        """Widen an auto-derived limit so a reference value stays inside the frame."""
+        lim = self.xlim if axis == "x" else self.ylim
+        explicit = self._explicit_xlim if axis == "x" else self._explicit_ylim
+        log = self.xlog if axis == "x" else self.ylog
+        if lim is None or explicit or not math.isfinite(value) or lim[0] <= value <= lim[1]:
+            return
+        lo, hi = lim
+        if log:
+            if value <= 0:
+                return
+            lo, hi = min(lo, value / 1.15), max(hi, value * 1.15)
+        else:
+            pad = 0.04 * ((hi - lo) or abs(value) or 1.0)
+            lo, hi = min(lo, value - pad), max(hi, value + pad)
+        if axis == "x":
+            self.xlim = (lo, hi)
+        else:
+            self.ylim = (lo, hi)
 
     def px(self, value: float) -> float:
         assert self.xlim is not None
@@ -206,18 +237,21 @@ class Axes:
             frac = (value - lo) / (hi - lo)
         return self.y + self.h - frac * self.h
 
-    # --- marks -----------------------------------------------------------
+    # --- marks (recorded lazily) --------------------------------------------
     def scatter(self, xs: Sequence[float], ys: Sequence[float], *, color: str = PALETTE["blue"], size: float = 2.2,
                 alpha: float = 0.85, colors: Sequence[str] | None = None, legend: str = "") -> "Axes":
         self._ensure_limits(xs, ys)
-        for index, (xv, yv) in enumerate(zip(xs, ys)):
-            if not (math.isfinite(xv) and math.isfinite(yv)):
-                continue
-            fill = colors[index] if colors is not None else color
-            self.body.append(
+        points = [(float(xv), float(yv), colors[i] if colors is not None else color)
+                  for i, (xv, yv) in enumerate(zip(xs, ys)) if math.isfinite(xv) and math.isfinite(yv)]
+
+        def draw() -> str:
+            return "\n".join(
                 f'<circle cx="{_fmt(self.px(xv))}" cy="{_fmt(self.py(yv))}" r="{_fmt(size)}" fill="{fill}" '
                 f'fill-opacity="{alpha}" stroke="{INK}" stroke-opacity="0.35" stroke-width="0.3"/>'
+                for xv, yv, fill in points
             )
+
+        self.body.append(draw)
         if legend:
             self.legend_items.append(("circle", color, legend))
         return self
@@ -225,51 +259,85 @@ class Axes:
     def line(self, xs: Sequence[float], ys: Sequence[float], *, color: str = INK, width: float = 1.0,
              dash: bool = False, legend: str = "") -> "Axes":
         self._ensure_limits(xs, ys)
-        points = " ".join(f"{_fmt(self.px(xv))},{_fmt(self.py(yv))}" for xv, yv in zip(xs, ys))
+        pairs = [(float(xv), float(yv)) for xv, yv in zip(xs, ys)]
         dash_attr = ' stroke-dasharray="3 2"' if dash else ""
-        self.body.append(f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="{width}"{dash_attr}/>')
+        self.body.append(lambda: (
+            '<polyline points="' + " ".join(f"{_fmt(self.px(xv))},{_fmt(self.py(yv))}" for xv, yv in pairs)
+            + f'" fill="none" stroke="{color}" stroke-width="{width}"{dash_attr}/>'
+        ))
         if legend:
             self.legend_items.append(("line", color, legend))
         return self
 
     def hline(self, yv: float, *, color: str = MUTED, dash: bool = True, width: float = 0.8, text: str = "") -> "Axes":
         self._ensure_limits((), (yv,))
-        yp = self.py(yv)
+        self._include("y", yv)
         dash_attr = ' stroke-dasharray="3 2"' if dash else ""
-        self.body.append(f'<line x1="{_fmt(self.x)}" x2="{_fmt(self.x + self.w)}" y1="{_fmt(yp)}" y2="{_fmt(yp)}" stroke="{color}" stroke-width="{width}"{dash_attr}/>')
-        if text:
-            offset = 8 if yp - self.y < 10 else -2.5
-            self.body.append(self.fig._text(self.x + self.w - 2, yp + offset, text, FONT_PT["annotation"], anchor="end", color=MUTED))
+
+        def draw() -> str:
+            yp = self.py(yv)
+            parts = [f'<line x1="{_fmt(self.x)}" x2="{_fmt(self.x + self.w)}" y1="{_fmt(yp)}" y2="{_fmt(yp)}" stroke="{color}" stroke-width="{width}"{dash_attr}/>']
+            if text:
+                offset = 8 if yp - self.y < 10 else -2.5
+                parts.append(self.fig._text(self.x + self.w - 2, yp + offset, text, FONT_PT["annotation"], anchor="end", color=MUTED))
+            return "\n".join(parts)
+
+        self.body.append(draw)
         return self
 
-    def vline(self, xv: float, *, color: str = MUTED, dash: bool = True, width: float = 0.8) -> "Axes":
+    def vline(self, xv: float, *, color: str = MUTED, dash: bool = True, width: float = 0.8, text: str = "") -> "Axes":
         self._ensure_limits((xv,), ())
-        xp = self.px(xv)
+        self._include("x", xv)
         dash_attr = ' stroke-dasharray="3 2"' if dash else ""
-        self.body.append(f'<line x1="{_fmt(xp)}" x2="{_fmt(xp)}" y1="{_fmt(self.y)}" y2="{_fmt(self.y + self.h)}" stroke="{color}" stroke-width="{width}"{dash_attr}/>')
+
+        def draw() -> str:
+            xp = self.px(xv)
+            parts = [f'<line x1="{_fmt(xp)}" x2="{_fmt(xp)}" y1="{_fmt(self.y)}" y2="{_fmt(self.y + self.h)}" stroke="{color}" stroke-width="{width}"{dash_attr}/>']
+            if text:
+                # keep the label inside the frame when the line sits near the right edge
+                near_right = xp > self.x + 0.75 * self.w
+                parts.append(self.fig._text(xp - 2.5 if near_right else xp + 2.5, self.y + 8, text, FONT_PT["annotation"],
+                                            anchor="end" if near_right else "start", color=MUTED))
+            return "\n".join(parts)
+
+        self.body.append(draw)
         return self
 
     def diagonal(self, *, dash: bool = True, color: str = MUTED, text: str = "") -> "Axes":
         """The y = x reference line across the common range of both axes."""
         self._ensure_limits()
-        assert self.xlim and self.ylim
-        lo = max(self.xlim[0], self.ylim[0])
-        hi = min(self.xlim[1], self.ylim[1])
-        if hi > lo:
-            self.line([lo, hi], [lo, hi], color=color, width=0.8, dash=dash)
+        dash_attr = ' stroke-dasharray="3 2"' if dash else ""
+
+        def draw() -> str:
+            assert self.xlim and self.ylim
+            lo = max(self.xlim[0], self.ylim[0])
+            hi = min(self.xlim[1], self.ylim[1])
+            if hi <= lo:
+                return ""
+            parts = [f'<polyline points="{_fmt(self.px(lo))},{_fmt(self.py(lo))} {_fmt(self.px(hi))},{_fmt(self.py(hi))}" fill="none" stroke="{color}" stroke-width="0.8"{dash_attr}/>']
             if text:
-                # label sits inside the panel, just under the top edge, left of the line end
-                self.body.append(self.fig._text(self.px(hi) - 4, self.py(hi) + 9, text, FONT_PT["annotation"], anchor="end", color=MUTED))
+                parts.append(self.fig._text(self.px(hi) - 4, self.py(hi) + 9, text, FONT_PT["annotation"], anchor="end", color=MUTED))
+            return "\n".join(parts)
+
+        self.body.append(draw)
         return self
 
     def errorbar(self, xv: float, yv: float, lo: float, hi: float, *, color: str = PALETTE["vermilion"],
                  cap: float = 2.5, marker: float = 2.6, legend: str = "") -> "Axes":
         self._ensure_limits((xv,), (lo, hi, yv))
-        xp, yp, ylo, yhi = self.px(xv), self.py(yv), self.py(lo), self.py(hi)
-        self.body.append(f'<line x1="{_fmt(xp)}" x2="{_fmt(xp)}" y1="{_fmt(ylo)}" y2="{_fmt(yhi)}" stroke="{color}" stroke-width="1"/>')
-        for yy in (ylo, yhi):
-            self.body.append(f'<line x1="{_fmt(xp - cap)}" x2="{_fmt(xp + cap)}" y1="{_fmt(yy)}" y2="{_fmt(yy)}" stroke="{color}" stroke-width="1"/>')
-        self.body.append(f'<circle cx="{_fmt(xp)}" cy="{_fmt(yp)}" r="{marker}" fill="{color}"/>')
+        for value in (lo, hi, yv):
+            self._include("y", value)
+        self._include("x", xv)
+
+        def draw() -> str:
+            xp, yp, ylo, yhi = self.px(xv), self.py(yv), self.py(lo), self.py(hi)
+            parts = [f'<line x1="{_fmt(xp)}" x2="{_fmt(xp)}" y1="{_fmt(ylo)}" y2="{_fmt(yhi)}" stroke="{color}" stroke-width="1"/>']
+            for yy in (ylo, yhi):
+                parts.append(f'<line x1="{_fmt(xp - cap)}" x2="{_fmt(xp + cap)}" y1="{_fmt(yy)}" y2="{_fmt(yy)}" stroke="{color}" stroke-width="1"/>')
+            parts.append(f'<circle cx="{_fmt(xp)}" cy="{_fmt(yp)}" r="{marker}" fill="{color}"/>')
+            return "\n".join(parts)
+
+        self.body.append(draw)
         if legend:
             self.legend_items.append(("circle", color, legend))
         return self
@@ -278,28 +346,124 @@ class Axes:
              errors: Sequence[tuple[float, float]] | None = None, baseline: float = 0.0) -> "Axes":
         n = len(values)
         self.xlim = (0.0, float(n))
+        self._explicit_xlim = True
         ys = list(values) + [baseline]
         if errors:
             ys += [e for pair in errors for e in pair]
         if self.ylim is None:
             self.ylim = self._auto_limits(ys, self.ylog)
-        slot = self.w / max(n, 1)
-        for index, (label, value) in enumerate(zip(labels, values)):
-            x0 = self.x + index * slot + slot * 0.18
-            width = slot * 0.64
-            y_top, y_base = self.py(value), self.py(baseline)
-            self.body.append(f'<rect x="{_fmt(x0)}" y="{_fmt(min(y_top, y_base))}" width="{_fmt(width)}" height="{_fmt(abs(y_base - y_top))}" fill="{color}" fill-opacity="0.9"/>')
-            if errors:
-                lo, hi = errors[index]
-                xc = x0 + width / 2
-                self.body.append(f'<line x1="{_fmt(xc)}" x2="{_fmt(xc)}" y1="{_fmt(self.py(lo))}" y2="{_fmt(self.py(hi))}" stroke="{INK}" stroke-width="0.9"/>')
-            self.body.append(self.fig._text(x0 + width / 2, self.y + self.h + 9, label, FONT_PT["tick"], anchor="middle"))
-        self._category_axis = True
+        self._category_labels = [str(label) for label in labels]
+        values_ = [float(v) for v in values]
+        errors_ = [tuple(pair) for pair in errors] if errors else None
+
+        def draw() -> str:
+            slot = self.w / max(n, 1)
+            parts = []
+            for index, value in enumerate(values_):
+                x0 = self.x + index * slot + slot * 0.18
+                width = slot * 0.64
+                y_top, y_base = self.py(value), self.py(baseline)
+                parts.append(f'<rect x="{_fmt(x0)}" y="{_fmt(min(y_top, y_base))}" width="{_fmt(width)}" height="{_fmt(abs(y_base - y_top))}" fill="{color}" fill-opacity="0.9"/>')
+                if errors_:
+                    lo, hi = errors_[index]
+                    xc = x0 + width / 2
+                    parts.append(f'<line x1="{_fmt(xc)}" x2="{_fmt(xc)}" y1="{_fmt(self.py(lo))}" y2="{_fmt(self.py(hi))}" stroke="{INK}" stroke-width="0.9"/>')
+            return "\n".join(parts)
+
+        self.body.append(draw)
+        return self
+
+    def hist(self, values: Sequence[float], *, bins: int = 12, color: str = PALETTE["blue"],
+             density: bool = False, legend: str = "") -> "Axes":
+        """Equal-width histogram (counts or density) over the finite values."""
+        finite = sorted(v for v in values if v is not None and math.isfinite(v))
+        if not finite:
+            return self
+        lo, hi = (self.xlim if self.xlim else (min(finite), max(finite)))
+        if hi <= lo:
+            hi = lo + 1.0
+        width = (hi - lo) / max(bins, 1)
+        counts = [0] * bins
+        for v in finite:
+            index = min(int((v - lo) / width), bins - 1) if v >= lo else -1
+            if 0 <= index < bins:
+                counts[index] += 1
+        heights = [c / (len(finite) * width) for c in counts] if density else [float(c) for c in counts]
+        if self.xlim is None:
+            self.xlim = (lo, hi)
+        if self.ylim is None:
+            self.ylim = (0.0, (max(heights) or 1.0) * 1.08)
+        if self.legend_loc == "lower right":
+            self.legend_loc = "upper right"
+
+        def draw() -> str:
+            parts = []
+            for index, h in enumerate(heights):
+                if h <= 0:
+                    continue
+                x0, x1 = self.px(lo + index * width), self.px(lo + (index + 1) * width)
+                y_top, y_base = self.py(h), self.py(0.0)
+                parts.append(
+                    f'<rect x="{_fmt(x0)}" y="{_fmt(y_top)}" width="{_fmt(max(x1 - x0 - 0.4, 0.2))}" '
+                    f'height="{_fmt(y_base - y_top)}" fill="{color}" fill-opacity="0.85" stroke="{INK}" stroke-width="0.25"/>'
+                )
+            return "\n".join(parts)
+
+        self.body.append(draw)
+        if legend:
+            self.legend_items.append(("rect", color, legend))
+        return self
+
+    def boxplot(self, groups: Sequence[Sequence[float]], labels: Sequence[str], *, color: str = PALETTE["blue"],
+                show_points: bool = True) -> "Axes":
+        """Tukey box plots (median, quartiles, 1.5 IQR whiskers, outliers) per category."""
+        n = len(groups)
+        self.xlim = (0.0, float(max(n, 1)))
+        self._explicit_xlim = True
+        cleaned = [sorted(v for v in group if v is not None and math.isfinite(v)) for group in groups]
+        pooled = [v for group in cleaned for v in group]
+        if self.ylim is None and pooled:
+            self.ylim = self._auto_limits(pooled, self.ylog)
+        self._category_labels = [str(label) for label in labels]
+
+        def quantile(data: Sequence[float], q: float) -> float:
+            position = (len(data) - 1) * q
+            lower = int(math.floor(position))
+            upper = min(lower + 1, len(data) - 1)
+            return data[lower] + (data[upper] - data[lower]) * (position - lower)
+
+        def draw() -> str:
+            slot = self.w / max(n, 1)
+            parts = []
+            for index, data in enumerate(cleaned):
+                if not data:
+                    continue
+                xc = self.x + index * slot + slot / 2
+                half = slot * 0.28
+                q1, med, q3 = quantile(data, 0.25), quantile(data, 0.5), quantile(data, 0.75)
+                iqr = q3 - q1
+                inside = [v for v in data if q1 - 1.5 * iqr <= v <= q3 + 1.5 * iqr]
+                lo_w, hi_w = (min(inside), max(inside)) if inside else (q1, q3)
+                parts.append(
+                    f'<rect x="{_fmt(xc - half)}" y="{_fmt(self.py(q3))}" width="{_fmt(2 * half)}" '
+                    f'height="{_fmt(self.py(q1) - self.py(q3))}" fill="{color}" fill-opacity="0.25" stroke="{INK}" stroke-width="0.6"/>'
+                )
+                parts.append(f'<line x1="{_fmt(xc - half)}" x2="{_fmt(xc + half)}" y1="{_fmt(self.py(med))}" y2="{_fmt(self.py(med))}" stroke="{INK}" stroke-width="1.1"/>')
+                for yv, yq in ((lo_w, q1), (hi_w, q3)):
+                    parts.append(f'<line x1="{_fmt(xc)}" x2="{_fmt(xc)}" y1="{_fmt(self.py(yq))}" y2="{_fmt(self.py(yv))}" stroke="{INK}" stroke-width="0.6"/>')
+                    parts.append(f'<line x1="{_fmt(xc - half * 0.5)}" x2="{_fmt(xc + half * 0.5)}" y1="{_fmt(self.py(yv))}" y2="{_fmt(self.py(yv))}" stroke="{INK}" stroke-width="0.6"/>')
+                if show_points:
+                    for v in data:
+                        if v < lo_w or v > hi_w:
+                            parts.append(f'<circle cx="{_fmt(xc)}" cy="{_fmt(self.py(v))}" r="1.4" fill="none" stroke="{INK}" stroke-width="0.5"/>')
+            return "\n".join(parts)
+
+        self.body.append(draw)
         return self
 
     def annotate(self, xv: float, yv: float, text: str, *, dx: float = 3, dy: float = -3, color: str = INK, anchor: str = "start") -> "Axes":
         self._ensure_limits((xv,), (yv,))
-        self.body.append(self.fig._text(self.px(xv) + dx, self.py(yv) + dy, text, FONT_PT["annotation"], anchor=anchor, color=color))
+        self.body.append(lambda: self.fig._text(self.px(xv) + dx, self.py(yv) + dy, text, FONT_PT["annotation"], anchor=anchor, color=color))
         return self
 
     # --- rendering -------------------------------------------------------
@@ -308,28 +472,41 @@ class Axes:
 
     def render(self) -> str:
         self._ensure_limits()
-        assert self.xlim and self.ylim
+        assert self.xlim is not None and self.ylim is not None
         out = [f'<g data-gga-panel="{_esc(self.label or self.title or "axes")}">']
+        out.append(f'<defs><clipPath id="{self.clip_id}"><rect x="{_fmt(self.x - 0.5)}" y="{_fmt(self.y - 0.5)}" width="{_fmt(self.w + 1)}" height="{_fmt(self.h + 1)}"/></clipPath></defs>')
         out.append(f'<rect x="{_fmt(self.x)}" y="{_fmt(self.y)}" width="{_fmt(self.w)}" height="{_fmt(self.h)}" fill="{WATER}" stroke="none"/>')
         # grid + ticks
-        if not getattr(self, "_category_axis", False):
+        y_tick_labels: list[str] = []
+        if self._category_labels:
+            slot = self.w / max(len(self._category_labels), 1)
+            for index, label in enumerate(self._category_labels):
+                out.append(self.fig._text(self.x + index * slot + slot / 2, self.y + self.h + 9, label, FONT_PT["tick"], anchor="middle"))
+        else:
             for tick in self._axis_ticks(self.xlim, self.xlog):
                 xp = self.px(tick)
                 out.append(f'<line x1="{_fmt(xp)}" x2="{_fmt(xp)}" y1="{_fmt(self.y + self.h)}" y2="{_fmt(self.y + self.h + 2.5)}" stroke="{INK}" stroke-width="0.6"/>')
                 out.append(self.fig._text(xp, self.y + self.h + 9.5, tick_label(tick), FONT_PT["tick"], anchor="middle"))
         for tick in self._axis_ticks(self.ylim, self.ylog):
             yp = self.py(tick)
+            label = tick_label(tick)
+            y_tick_labels.append(label)
             out.append(f'<line x1="{_fmt(self.x)}" x2="{_fmt(self.x + self.w)}" y1="{_fmt(yp)}" y2="{_fmt(yp)}" stroke="{RULE}" stroke-width="0.35"/>')
             out.append(f'<line x1="{_fmt(self.x - 2.5)}" x2="{_fmt(self.x)}" y1="{_fmt(yp)}" y2="{_fmt(yp)}" stroke="{INK}" stroke-width="0.6"/>')
-            out.append(self.fig._text(self.x - 4, yp + 2.4, tick_label(tick), FONT_PT["tick"], anchor="end"))
-        out.extend(self.body)
+            out.append(self.fig._text(self.x - 4, yp + 2.4, label, FONT_PT["tick"], anchor="end"))
+        # body, clipped to the frame so out-of-range marks never spill into a neighbour
+        out.append(f'<g data-gga-layer="data" clip-path="url(#{self.clip_id})">')
+        out.extend(part for part in (draw() for draw in self.body) if part)
+        out.append("</g>")
         # frame (left + bottom spines)
         out.append(f'<path d="M{_fmt(self.x)},{_fmt(self.y)} V{_fmt(self.y + self.h)} H{_fmt(self.x + self.w)}" fill="none" stroke="{INK}" stroke-width="0.8"/>')
         if self.xlabel:
             out.append(self.fig._text(self.x + self.w / 2, self.y + self.h + 19, self.xlabel, FONT_PT["axis"], anchor="middle"))
         if self.ylabel:
-            cx, cy = self.x - 20, self.y + self.h / 2
-            out.append(self.fig._text(cx, cy, self.ylabel, FONT_PT["axis"], anchor="middle", rotate=-90))
+            # keep the axis label clear of the widest tick label (~0.55 em per character)
+            widest = max((len(label) for label in y_tick_labels), default=1)
+            offset = 6 + widest * FONT_PT["tick"] * 0.55 + 6
+            out.append(self.fig._text(self.x - offset, self.y + self.h / 2, self.ylabel, FONT_PT["axis"], anchor="middle", rotate=-90))
         if self.title:
             out.append(self.fig._text(self.x + self.w / 2, self.y - 4, self.title, FONT_PT["title"], anchor="middle", weight="600"))
         if self.label:
@@ -345,6 +522,8 @@ class Axes:
                 marker_x = lx - 3 if right else lx - 10
                 if kind == "circle":
                     out.append(f'<circle cx="{_fmt(marker_x)}" cy="{_fmt(ly - 2.4)}" r="2.2" fill="{color}"/>')
+                elif kind == "rect":
+                    out.append(f'<rect x="{_fmt(marker_x - 3)}" y="{_fmt(ly - 5)}" width="6" height="5" fill="{color}" fill-opacity="0.85" stroke="{INK}" stroke-width="0.25"/>')
                 else:
                     out.append(f'<line x1="{_fmt(marker_x - 4)}" x2="{_fmt(marker_x + 4)}" y1="{_fmt(ly - 2.4)}" y2="{_fmt(ly - 2.4)}" stroke="{color}" stroke-width="1.2"/>')
                 if right:

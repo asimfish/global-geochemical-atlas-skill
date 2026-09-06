@@ -751,6 +751,8 @@ def _build_research_contracts(
                 "paper_kit_dir": PAPER_KIT_DIR,
                 "figure_kit_contract": "gga-figure-kit-v1",
                 "min_pdf_pages": manuscript_kit.MIN_PDF_PAGES,
+                "min_caption_chars": manuscript_kit.MIN_CAPTION_CHARS,
+                "spine_headings_checked_in_source": True,
                 "pdf_engines": ["pdfTeX", "XeTeX", "LuaTeX"],
                 "claim_marks": (
                     "numbers are cited only through \\claimref{claim_id} marks that "
@@ -1576,7 +1578,10 @@ def _spine_required_sections(run_dir: Path) -> set[str]:
 
 
 def _validate_typeset_manifest(
-    run_dir: Path, value: Any, declared_artifact_paths: set[str]
+    run_dir: Path,
+    value: Any,
+    declared_artifact_paths: set[str],
+    declared_claim_ids: Sequence[str] = (),
 ) -> None:
     if not isinstance(value, Mapping):
         raise AutoResearchError("manuscript_writer must return typeset_manifest")
@@ -1627,6 +1632,8 @@ def _validate_typeset_manifest(
         source_text,
         bib_keys_available=available_bib_keys,
         registered_claim_ids=_allowed_claim_ids(run_dir),
+        required_headings=_spine_required_sections(run_dir),
+        declared_claim_ids=[str(item) for item in declared_claim_ids],
     )
     errors.extend(manuscript_kit.lint_manuscript_pdf(run_dir / pdf_artifact))
     if errors:
@@ -2045,7 +2052,10 @@ def _validate_role_payload(
             _validate_contribution_map(payload.get("contribution_map"), allowed_ids)
             references = _validate_reference_list(payload.get("reference_list"))
             _validate_typeset_manifest(
-                run_dir, payload.get("typeset_manifest"), set(artifacts_by_path)
+                run_dir,
+                payload.get("typeset_manifest"),
+                set(artifacts_by_path),
+                declared_claim_ids=[str(item) for item in claim_ids],
             )
             source_text = (
                 run_dir / str(payload["typeset_manifest"]["source_artifact"])
@@ -2566,7 +2576,7 @@ def _prepare_revision_cycle(
                 "claims, on the same paper kit; re-submit the complete LaTeX source, "
                 "bibliography and TeX-compiled PDF, never copies of the inputs."
             ),
-            inputs={**common, **paper_inputs, "paper_spine": run_dir / "paper_spine.json"},
+            inputs={**common, **paper_inputs, **figure_inputs, "paper_spine": run_dir / "paper_spine.json"},
             required_output={
                 "artifacts": "revised LaTeX manuscript source, references.bib and typeset PDF",
                 "claim_ids": "all numerical claims",
@@ -3019,8 +3029,18 @@ def _manuscript_payload_contract() -> dict[str, Any]:
             "must_load": "\\usepackage{gga-paper} (copy gga-paper.sty next to the source)",
             "claims": (
                 "\\input{claims} from the paper kit; cite every number with "
-                "\\claimref{claim_id}; \\claim{...} inline tags and \\texttt identifiers "
+                "\\claimref{claim_id}; every id listed in payload claim_ids must appear as a "
+                "mark in the source; \\claim{...} inline tags and \\texttt identifiers "
                 "in prose are rejected; finish with \\printclaimledger"
+            ),
+            "sections": (
+                "every frozen paper-spine section (except Title/Abstract) must exist as a "
+                "\\section or \\subsection heading in the source; the section_manifest is "
+                "checked against the headings, not trusted on its own"
+            ),
+            "captions": (
+                f"each figure caption states the takeaway, then the encoding, then what is a "
+                f"diagnostic rather than an effect (at least {manuscript_kit.MIN_CAPTION_CHARS} characters)"
             ),
             "references": (
                 "\\bibliography{references} with a submitted references.bib (start from the "
@@ -3030,7 +3050,10 @@ def _manuscript_payload_contract() -> dict[str, Any]:
             "figures": (
                 "\\includegraphics[width=\\linewidth]{...pdf} inside \\begin{figure}[t] with "
                 "\\caption and \\label, placed in the body before the bibliography and "
-                "referenced in the text; never fix a height"
+                "referenced in the text; never fix a height. Draw embedded figures with the "
+                f"bound figure kit ({FIGURE_KIT_DIR}/paper_figures.py + render_figure.py) so they "
+                "share the storyboard's visual language; in revision cycles embed the figure "
+                "designer's canonical renders (previous_figure_designer_artifact_* inputs)"
             ),
             "pdf": (
                 "compile with latexmk -pdf (or pdflatex+bibtex); the PDF must be a TeX "
@@ -3186,7 +3209,7 @@ def _start_paper_production(
             "executed claims, then typeset it with the frozen gga-paper style into "
             "a section-complete PDF." + framing
         ),
-        inputs={**common, **paper_inputs, "paper_spine": run_dir / "paper_spine.json"},
+        inputs={**common, **paper_inputs, **figure_inputs, "paper_spine": run_dir / "paper_spine.json"},
         required_output=writer_output,
     )
     _write_packet(
@@ -3511,7 +3534,7 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
             "audit work would unlock an empirical article. Claim no empirical effect. "
             "Typeset with the frozen gga-paper style from the paper kit."
         ),
-        inputs={**common, **paper_inputs, "paper_spine": run_dir / "paper_spine.json"},
+        inputs={**common, **paper_inputs, **figure_inputs, "paper_spine": run_dir / "paper_spine.json"},
         required_output={
             "artifacts": "report source plus a typeset PDF",
             "claim_ids": "all numerical claims (atlas claims and attempt-prefixed pilot diagnostics)",

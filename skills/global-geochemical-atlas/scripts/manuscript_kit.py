@@ -36,6 +36,34 @@ BIB_FILE = "references.bib"
 # into prose is the classic sign of an unedited machine draft.
 MAX_TEXTTT_PER_1000_CHARS = 1.5
 MIN_PDF_PAGES = 4
+# A caption must state the reader takeaway and the encoding, not just a label.
+MIN_CAPTION_CHARS = 80
+# Spine entries that are front matter, not headings.
+NON_HEADING_SECTIONS = {"Title", "Abstract"}
+_HEADING = re.compile(r"\\(?:section|subsection|subsubsection)\*?\s*(?:\[[^\]]*\])?\s*\{((?:[^{}]|\{[^{}]*\})*)\}")
+_CAPTION = re.compile(r"\\caption\s*(?:\[[^\]]*\])?\s*\{((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}", re.S)
+_GGAFIGURE_CAPTION = re.compile(
+    r"\\ggafigure\{[^}]*\}\{[^}]*\}\{((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}", re.S
+)
+
+
+def _plain(text: str) -> str:
+    """Heading/caption text with LaTeX commands and braces removed, whitespace folded."""
+    text = re.sub(r"\\[A-Za-z@]+\*?(?:\[[^\]]*\])?", " ", text)
+    text = re.sub(r"[{}~]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def headings(tex_text: str) -> list[str]:
+    """Plain text of every \\section/\\subsection/\\subsubsection heading, comments stripped."""
+    return [_plain(match.group(1)) for match in _HEADING.finditer(_strip_comments(tex_text))]
+
+
+def captions(tex_text: str) -> list[str]:
+    text = _strip_comments(tex_text)
+    return [_plain(m.group(1)) for m in _CAPTION.finditer(text)] + [
+        _plain(m.group(1)) for m in _GGAFIGURE_CAPTION.finditer(text)
+    ]
 TEX_PRODUCERS = re.compile(rb"pdfTeX|XeTeX|LuaTeX|LuaHBTeX|dvipdfmx|TeX Live", re.I)
 TEMPLATE_FONTS = re.compile(
     r"NewTX|TeXGyreTermes|TeX Gyre Termes|Termes|Nimbus|Times|NimbusRom|CM|LM|LatinModern",
@@ -199,10 +227,37 @@ def lint_manuscript_source(
     *,
     bib_keys_available: Iterable[str] | None,
     registered_claim_ids: Iterable[str] | None,
+    required_headings: Iterable[str] | None = None,
+    declared_claim_ids: Iterable[str] | None = None,
 ) -> list[str]:
-    """Deterministic typesetting-contract checks on the manuscript source."""
+    """Deterministic typesetting-contract checks on the manuscript source.
+
+    ``required_headings`` are the frozen spine sections that must exist as
+    headings in the source (the writer's section manifest is not trusted on
+    its own); ``declared_claim_ids`` are the claims the payload says the
+    manuscript uses, each of which must actually be marked in the text.
+    """
     errors: list[str] = []
     text = _strip_comments(tex_text)
+    if required_headings is not None:
+        present = [heading.lower() for heading in headings(tex_text)]
+        missing_headings = sorted(
+            name
+            for name in {str(item).strip() for item in required_headings}
+            if name and name not in NON_HEADING_SECTIONS
+            and not any(name.lower() in heading for heading in present)
+        )
+        if missing_headings:
+            errors.append(
+                "manuscript source lacks the frozen spine headings: " + ", ".join(missing_headings[:6])
+            )
+    for caption in captions(tex_text):
+        if len(caption) < MIN_CAPTION_CHARS:
+            errors.append(
+                f"figure caption {caption[:40]!r} has {len(caption)} characters; a caption states the "
+                f"takeaway and the encoding (at least {MIN_CAPTION_CHARS})"
+            )
+            break
     if not re.search(r"\\usepackage(\[[^\]]*\])?\{gga-paper\}", text):
         errors.append("manuscript must load the controller style with \\usepackage{gga-paper}")
     if "\\input{claims}" not in text and "\\input{claims.tex}" not in text:
@@ -222,6 +277,12 @@ def lint_manuscript_source(
         unknown = sorted({ref for ref in claim_refs if ref not in set(registered_claim_ids)})
         if unknown:
             errors.append("claim marks reference unregistered ids: " + ", ".join(unknown[:6]))
+    if declared_claim_ids is not None:
+        unmarked = sorted({str(item) for item in declared_claim_ids} - set(claim_refs))
+        if unmarked:
+            errors.append(
+                "declared claim_ids never appear as \\claimref marks in the source: " + ", ".join(unmarked[:6])
+            )
     texttt_count = len(re.findall(r"\\texttt\{", text))
     density = texttt_count / max(len(text) / 1000.0, 1e-9)
     if texttt_count >= 3 and density > MAX_TEXTTT_PER_1000_CHARS:

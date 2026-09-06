@@ -276,6 +276,8 @@
             "paper_kit_dir",
             "figure_kit_contract",
             "min_pdf_pages",
+            "min_caption_chars",
+            "spine_headings_checked_in_source",
             "pdf_engines",
             "claim_marks",
             "figure_placement"
@@ -293,6 +295,13 @@
             "min_pdf_pages": {
               "type": "integer",
               "minimum": 4
+            },
+            "min_caption_chars": {
+              "type": "integer",
+              "minimum": 40
+            },
+            "spine_headings_checked_in_source": {
+              "const": true
             },
             "pdf_engines": {
               "type": "array",

@@ -151,11 +151,19 @@ and `state.json` expose the next incomplete gate.
    caption and label, referenced in the text and placed before the
    bibliography, cite only keys that exist in the submitted `.bib`, and end
    with `\printclaimledger`; the `reference_list` must list exactly the bib
-   keys the source cites. The PDF must be a TeX-engine product (pdfTeX, XeTeX
+   keys the source cites. The section manifest is not trusted on its own:
+   every frozen spine section (except Title and Abstract) must exist as a
+   `\section`/`\subsection` heading in the source, every id in the payload's
+   `claim_ids` must actually appear as a `\claimref` mark, and each figure
+   caption must be long enough to state the takeaway and the encoding (at
+   least 80 characters). The PDF must be a TeX-engine product (pdfTeX, XeTeX
    or LuaTeX; browser or office exports fail), at least four pages, with an
    Abstract on page one and the template font families embedded. The lint
    reads page objects and MediaBoxes inside PDF 1.5 object streams, so
-   compressed pdfTeX output is judged correctly.
+   compressed pdfTeX output is judged correctly. The writer packet also binds
+   the figure kit, so figures embedded in the manuscript are drawn with the
+   same toolkit as the storyboard; in revision cycles the writer embeds the
+   figure designer's canonical renders carried in as `previous_*` inputs.
 
    The empirical visual storyboard must contain primary-result,
    spatial-pattern, and robustness/external-validation roles; a methods

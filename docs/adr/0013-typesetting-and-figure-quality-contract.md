@@ -62,8 +62,13 @@ basename.
    `bib_artifact`, `\printclaimledger`) and the PDF (TeX-engine producer,
    at least four pages, Abstract on page one, template fonts, using poppler
    when present and byte checks otherwise). The manuscript `reference_list`
-   must equal the set of cited bib keys. The quality contract exposes the same
-   rules as `typesetting_gate.typesetting_contract`.
+   must equal the set of cited bib keys; every frozen spine section must exist
+   as a heading in the source (the section manifest alone is not trusted);
+   every declared `claim_ids` entry must appear as a `\claimref` mark; and
+   captions must reach 80 characters so they state the takeaway and encoding.
+   The writer packet binds the figure kit as well, so embedded figures share
+   the storyboard's toolkit. The quality contract exposes the same rules as
+   `typesetting_gate.typesetting_contract`.
 3. **Figure kit (`gga-figure-kit-v1`).** `figure_kit/` ships
    `paper_figures.py` (pure-Python SVG `Figure`/`Axes`/`MapPanel`, Okabe-Ito
    palette, point-sized typography above the print floor, offline Natural

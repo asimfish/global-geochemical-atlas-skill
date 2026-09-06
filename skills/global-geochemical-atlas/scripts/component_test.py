@@ -8362,14 +8362,49 @@ def check_d3(output_dir: Path) -> list[str]:
             *spine_document["required_sections"],
         ]
 
+        FIXTURE_CAPTION = (
+            "Effect point and dependence-aware uncertainty for the frozen pilot; the "
+            "interval is a diagnostic of the matched cohort, not a regional effect estimate."
+        )
+
         def manuscript_tex(
             title: str,
             *,
-            claim_id: str = "pilot-null-effect",
+            claim_ids: Sequence[str] = ("pilot-null-effect",),
             cite_keys: tuple[str, ...] = ("ref-1",),
+            sections: Sequence[str] | None = None,
+            caption: str = FIXTURE_CAPTION,
         ) -> str:
-            """A manuscript that satisfies typesetting contract gga-paper-v1."""
+            """A manuscript that satisfies typesetting contract gga-paper-v1.
+
+            Body headings are generated from the frozen spine (``sections`` =
+            section_order + required_sections) so the source covers exactly what
+            the typesetting gate checks for the run's deliverable mode.
+            """
             cites = ", ".join(cite_keys)
+            spine_list = list(sections if sections is not None else spine_sections)
+            headings = [
+                name for name in spine_list if name not in manuscript_kit.NON_HEADING_SECTIONS
+            ]
+            body: list[str] = []
+            first_heading = True
+            for name in headings:
+                body.append(f"\\section{{{name}}}")
+                if first_heading:
+                    marks = "".join(f"\\claimref{{{cid}}}" for cid in claim_ids)
+                    body.append(
+                        f"The pooled contrast is null{marks} "
+                        "(Fig.~\\ref{fig:primary}); prior work defines the expected "
+                        f"contrast \\cite{{{cites}}}."
+                    )
+                    body.append(
+                        "\\begin{figure}[t]\n\\centering\n"
+                        "\\includegraphics[width=\\linewidth]{figures/fig1_primary.pdf}\n"
+                        f"\\caption{{{caption}}}\n\\label{{fig:primary}}\n\\end{{figure}}"
+                    )
+                    first_heading = False
+                else:
+                    body.append(f"{name}: bounded statement within the frozen evidence.")
             return (
                 "\\documentclass[11pt]{article}\n"
                 "\\usepackage{gga-paper}\n"
@@ -8382,23 +8417,8 @@ def check_d3(output_dir: Path) -> list[str]:
                 "\\begin{abstract}\n"
                 "The frozen cohort supports a bounded null effect.\n"
                 "\\end{abstract}\n"
-                "\\section{Introduction}\n"
-                f"Prior work defines the expected contrast \\cite{{{cites}}}.\n"
-                "\\section{Results}\n"
-                f"The pooled contrast is null\\claimref{{{claim_id}}} "
-                "(Fig.~\\ref{fig:primary}).\n"
-                "\\begin{figure}[t]\n"
-                "\\centering\n"
-                "\\includegraphics[width=\\linewidth]{figures/fig1_primary.pdf}\n"
-                "\\caption{Effect point and uncertainty for the frozen pilot.}\n"
-                "\\label{fig:primary}\n"
-                "\\end{figure}\n"
-                "\\section{Methods}\n"
-                "Frozen atlas snapshot and pre-registered pilot.\n"
-                "\\section{Discussion}\n"
-                "\\subsection{Limitations}\n"
-                "The evidence boundary is explicit.\n"
-                "\\bibliographystyle{unsrtnat}\n"
+                + "\n".join(body)
+                + "\n\\bibliographystyle{unsrtnat}\n"
                 "\\bibliography{references}\n"
                 "\\appendix\n"
                 "\\printclaimledger\n"
@@ -8860,6 +8880,8 @@ def check_d3(output_dir: Path) -> list[str]:
             template_text,
             bib_keys_available={"lit01"},
             registered_claim_ids={"example.claim.id"},
+            required_headings=spine_sections,
+            declared_claim_ids=["example.claim.id"],
         )
         rendered_claims = manuscript_kit.claims_tex(registry_document)
         rendered_bib, rendered_records = manuscript_kit.references_bib(
@@ -9006,6 +9028,33 @@ def check_d3(output_dir: Path) -> list[str]:
         second_render = paper_figures.Figure(width_mm=180, height_mm=70)
         second_render.add_map(100, 12, 70, 48, (73.7, 18.2, 135.0, 53.5), label="B", focus_codes=["CHN", "TWN"]).points(
             [116.4], [39.9], [1.0]
+        )
+        stats_figure = paper_figures.Figure(width_mm=180, height_mm=70)
+        stats_axes = stats_figure.add_axes(14, 12, 70, 48, xlabel="Ratio", ylabel="Pairs", label="A")
+        stats_axes.hist([0.5, 0.6, 0.62, 0.7, 0.71, 0.8, 0.85], bins=5, legend="all pairs")
+        stats_axes.vline(1.0, text="1:1")
+        box_axes = stats_figure.add_axes(108, 12, 62, 48, ylabel="Ratio", label="B")
+        box_axes.boxplot([[0.6, 0.65, 0.7, 0.72, 0.9], [0.55, 0.6, 0.66, 0.7]], ["all", "hold-out"])
+        box_axes.hline(1.0, text="null")
+        stats_svg = stats_figure.render().encode("utf-8")
+        stats_root = ElementTree.fromstring(stats_svg)
+        panel_frames = [
+            element for element in stats_root.iter() if element.tag.endswith("clipPath")
+        ]
+        require(
+            stats_axes.xlim is not None
+            and stats_axes.xlim[1] >= 1.0
+            and box_axes.ylim is not None
+            and box_axes.ylim[1] >= 1.0
+            and stats_axes.legend_loc == "upper right"
+            and len(panel_frames) == 2
+            and stats_svg.count(b'data-gga-layer="data"') == 2
+            and stats_svg.count(b"<rect") >= 7
+            and publication_lint.lint_svg_bytes(stats_svg) == []
+            and b"hold-out" in stats_svg
+            and b"null" in stats_svg,
+            "D3 the figure toolkit draws histograms and box plots, widens auto limits so reference lines stay inside the frame, and clips every panel body",
+            checks,
         )
         require(
             kit_root.get("data-gga-figure-kit") == paper_figures.CONTRACT_ID
@@ -9271,21 +9320,22 @@ def check_d3(output_dir: Path) -> list[str]:
             artifacts=[*manuscript_artifacts, tall_figure_source],
             typeset={**manuscript_typeset, "source_artifact": tall_figure_source["path"]},
         )
+        fixture_figure_block = (
+            "\\begin{figure}[t]\n\\centering\n"
+            "\\includegraphics[width=\\linewidth]{figures/fig1_primary.pdf}\n"
+            f"\\caption{{{FIXTURE_CAPTION}}}\n\\label{{fig:primary}}\n\\end{{figure}}\n"
+        )
+        appended_source_text = manuscript_tex("Appended figures draft")
+        require(
+            fixture_figure_block in appended_source_text,
+            "D3 fixture self-check: the manuscript fixture contains the figure block the negative tests relocate",
+            checks,
+        )
         appended_figure_source = agent_artifact(
             "manuscript_writer",
             "appended-figures.tex",
-            manuscript_tex("Appended figures draft")
-            .replace(
-                "\\begin{figure}[t]\n\\centering\n\\includegraphics[width=\\linewidth]"
-                "{figures/fig1_primary.pdf}\n\\caption{Effect point and uncertainty "
-                "for the frozen pilot.}\n\\label{fig:primary}\n\\end{figure}\n",
-                "",
-            )
-            .replace(
-                "\\appendix\n",
-                "\\appendix\n\\begin{figure}[t]\n\\centering\n\\includegraphics"
-                "[width=\\linewidth]{figures/fig1_primary.pdf}\n\\caption{Effect.}\n"
-                "\\label{fig:primary}\n\\end{figure}\n",
+            appended_source_text.replace(fixture_figure_block, "").replace(
+                "\\appendix\n", "\\appendix\n" + fixture_figure_block
             ),
         )
         appended_figure_error = typesetting_rejection(
@@ -9309,6 +9359,56 @@ def check_d3(output_dir: Path) -> list[str]:
         require(
             "exactly the bib keys" in drift_error and "ref-2" in drift_error,
             "D3 manuscript reference_list must match exactly the bib keys the LaTeX source cites",
+            checks,
+        )
+        headless_source = agent_artifact(
+            "manuscript_writer",
+            "missing-heading.tex",
+            manuscript_tex("Missing heading draft").replace(
+                "\\section{Agent disclosure}", "\\section{Closing remarks}"
+            ),
+        )
+        missing_heading_error = typesetting_rejection(
+            "writer-missing-spine-heading",
+            artifacts=[*manuscript_artifacts, headless_source],
+            typeset={**manuscript_typeset, "source_artifact": headless_source["path"]},
+        )
+        short_caption_source = agent_artifact(
+            "manuscript_writer",
+            "short-caption.tex",
+            manuscript_tex("Short caption draft", caption="Figure 1."),
+        )
+        short_caption_error = typesetting_rejection(
+            "writer-short-caption",
+            artifacts=[*manuscript_artifacts, short_caption_source],
+            typeset={**manuscript_typeset, "source_artifact": short_caption_source["path"]},
+        )
+        try:
+            auto_research.submit_agent_result(
+                run_dir,
+                role="manuscript_writer",
+                invocation_id="writer-unmarked-declared-claim",
+                model_family="family-c",
+                payload={
+                    "artifacts": manuscript_artifacts,
+                    "claim_ids": ["pilot-null-effect", "standardized_measurement_record_count"],
+                    "contribution_map": contribution_map_fixture,
+                    "reference_list": manuscript_reference_list,
+                    "typeset_manifest": manuscript_typeset,
+                },
+            )
+        except auto_research.AutoResearchError as exc:
+            unmarked_claim_error = str(exc)
+        else:
+            unmarked_claim_error = ""
+        require(
+            "lacks the frozen spine headings" in missing_heading_error
+            and "Agent disclosure" in missing_heading_error
+            and "caption" in short_caption_error
+            and "at least" in short_caption_error
+            and "never appear as \\claimref" in unmarked_claim_error
+            and "standardized_measurement_record_count" in unmarked_claim_error,
+            "D3 typesetting gate checks the frozen spine headings in the LaTeX source itself, requires every declared claim id to be marked in the text, and rejects label-only captions",
             checks,
         )
         auto_research.submit_agent_result(
@@ -10654,7 +10754,7 @@ def check_d3(output_dir: Path) -> list[str]:
                         source = artifact(
                             role,
                             "manuscript.tex",
-                            manuscript_tex(f"Report {tag}", claim_id=claim_ids[0]).encode(),
+                            manuscript_tex(f"Report {tag}", claim_ids=claim_ids, sections=sections).encode(),
                         )
                         bib = artifact(role, "references.bib", manuscript_bib().encode())
                         pdf = artifact(role, "manuscript.pdf", TEX_MANUSCRIPT_PDF)
