@@ -30,6 +30,8 @@
 
 <a href="https://synmatai.cn/hackathon/"><img src="docs/readme/synmatai-champion.png" alt="新研智材 SynMatAI · AI4S Future ScienceSkills Hackathon 冠军 · 词元代理人队" width="640"></a>
 
+<p><img src="docs/readme/orgs-banner.png" alt="上海交通大学 · 北京中关村学院 · 北京航空航天大学 · 浙江大学" width="720"></p>
+
 <img src="docs/readme/atlas-world-map.png" alt="全球地球化学元素图谱交互界面实拍：198,445 条可显示测定的全球分布、异常候选环标与介质覆盖侧栏" width="100%">
 
 <sub>2026-08-19 全球在线生产运行界面实拍：全库 <b>199,730</b> 条测定正式入库 · <b>45,753</b> 个独立物理样品 · <b>35</b> 个公开来源 · <b>3,721</b> 个异常筛查候选（robust-z 筛查候选，非成因结论）。空白区域如实显示数据缺口。<b><a href="https://asimfish.github.io/global-geochemical-atlas-demo/">在线演示 ↗</a></b></sub>
@@ -512,10 +514,6 @@ python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
 | 郭欣睿 | 北京航空航天大学 | 人工智能；材料与 AI 交叉背景 |
 | 白丰硕 | 上海交通大学 | PAIR-Lab；师从杨耀东、温颖两位教授 |
 | 李明伟 | 浙江大学 | 三维（3D）与四维（4D）场景重建及生成式模型 |
-
-<div align="center">
-<img src="docs/readme/orgs-banner.png" alt="上海交通大学 · 北京中关村学院 · 北京航空航天大学 · 浙江大学" width="720">
-</div>
 
 团队主页：[chembot.zgca.com](https://chembot.zgca.com/)
 

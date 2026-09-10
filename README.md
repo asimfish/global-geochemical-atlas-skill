@@ -28,6 +28,8 @@
 
 <a href="https://synmatai.cn/hackathon/"><img src="docs/readme/synmatai-champion.png" alt="Champion of the SynMatAI AI4S Future ScienceSkills Hackathon — Team Token Agents" width="640"></a>
 
+<p><img src="docs/readme/orgs-banner.png" alt="Shanghai Jiao Tong University · Zhongguancun Academy · Beihang University · Zhejiang University" width="720"></p>
+
 <img src="docs/readme/atlas-world-map.png" alt="Interactive world atlas from a real production run: 198,445 displayable measurements, anomaly-candidate rings, and a media-coverage sidebar" width="100%">
 
 <sub>Interface capture from the 2026-08-19 global online production run: <b>199,730</b> measurements admitted to the database · <b>45,753</b> distinct physical samples · <b>35</b> public sources · <b>3,721</b> anomaly screening candidates (robust-z candidates, not genetic conclusions). Blank areas honestly show data gaps. <b><a href="https://asimfish.github.io/global-geochemical-atlas-demo/en.html">Live demo ↗</a></b></sub>
@@ -510,10 +512,6 @@ Evaluation and production sandboxes are uncontrollable environments. Pure stdlib
 | Xinrui Guo | Beihang University | Artificial intelligence, with a materials-science background |
 | Fengshuo Bai | Shanghai Jiao Tong University | PAIR-Lab; advised by Profs. Yaodong Yang and Ying Wen |
 | Mingwei Li | Zhejiang University | 3D/4D scene reconstruction and generative models |
-
-<div align="center">
-<img src="docs/readme/orgs-banner.png" alt="Shanghai Jiao Tong University · Zhongguancun Academy · Beihang University · Zhejiang University" width="720">
-</div>
 
 Team homepage: [chembot.zgca.com](https://chembot.zgca.com/)
 
