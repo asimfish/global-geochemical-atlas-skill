@@ -52,7 +52,14 @@ def svg_size_mm(svg_text: str) -> tuple[float, float]:
         if match is None:
             return None
         value, unit = float(match.group(1)), match.group(2)
-        factor = {"mm": 1.0, "cm": 10.0, "in": MM_PER_INCH, "pt": MM_PER_INCH / PT_PER_INCH, "px": MM_PER_INCH / CSS_PX_PER_INCH, "": MM_PER_INCH / CSS_PX_PER_INCH}
+        factor = {
+            "mm": 1.0,
+            "cm": 10.0,
+            "in": MM_PER_INCH,
+            "pt": MM_PER_INCH / PT_PER_INCH,
+            "px": MM_PER_INCH / CSS_PX_PER_INCH,
+            "": MM_PER_INCH / CSS_PX_PER_INCH,
+        }
         if unit not in factor:
             return None
         return value * factor[unit]
@@ -91,8 +98,16 @@ def find_chrome() -> str | None:
     if override is not None:
         if override.strip() == "":
             return None
-        return override if (shutil.which(override) or os.path.exists(override)) else None
-    for name in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "chrome"):
+        return (
+            override if (shutil.which(override) or os.path.exists(override)) else None
+        )
+    for name in (
+        "google-chrome",
+        "google-chrome-stable",
+        "chromium",
+        "chromium-browser",
+        "chrome",
+    ):
         path = shutil.which(name)
         if path:
             return path
@@ -101,9 +116,13 @@ def find_chrome() -> str | None:
 
 
 def run(command: list[str], timeout: int = 180) -> None:
-    completed = subprocess.run(command, capture_output=True, text=True, timeout=timeout, check=False)
+    completed = subprocess.run(
+        command, capture_output=True, text=True, timeout=timeout, check=False
+    )
     if completed.returncode != 0:
-        raise RenderError(f"{command[0]} failed ({completed.returncode}): {completed.stderr[-400:]}")
+        raise RenderError(
+            f"{command[0]} failed ({completed.returncode}): {completed.stderr[-400:]}"
+        )
 
 
 def run_until_output(command: list[str], output: Path, timeout: int = 120) -> None:
@@ -117,7 +136,12 @@ def run_until_output(command: list[str], output: Path, timeout: int = 120) -> No
 
     if output.exists():
         output.unlink()
-    process = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, start_new_session=True)
+    process = subprocess.Popen(
+        command,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
+        start_new_session=True,
+    )
     deadline = time.monotonic() + timeout
     last_size, stable_since = -1, None
     try:
@@ -125,15 +149,24 @@ def run_until_output(command: list[str], output: Path, timeout: int = 120) -> No
             if output.exists():
                 size = output.stat().st_size
                 if size > 0 and size == last_size:
-                    if stable_since is not None and time.monotonic() - stable_since >= 1.0:
+                    if (
+                        stable_since is not None
+                        and time.monotonic() - stable_since >= 1.0
+                    ):
                         return
                 else:
                     last_size, stable_since = size, time.monotonic()
             if process.poll() is not None:
                 if output.exists() and output.stat().st_size > 0:
                     return
-                stderr = process.stderr.read().decode("utf-8", "replace") if process.stderr else ""
-                raise RenderError(f"{command[0]} exited {process.returncode} without output: {stderr[-400:]}")
+                stderr = (
+                    process.stderr.read().decode("utf-8", "replace")
+                    if process.stderr
+                    else ""
+                )
+                raise RenderError(
+                    f"{command[0]} exited {process.returncode} without output: {stderr[-400:]}"
+                )
             time.sleep(0.2)
         raise RenderError(f"{command[0]} produced no output within {timeout}s")
     finally:
@@ -152,32 +185,72 @@ def run_until_output(command: list[str], output: Path, timeout: int = 120) -> No
 HEADLESS_UI_ALLOWANCE_PX = 160
 
 
-def export_with_chrome(chrome: str, svg_text: str, width_mm: float, height_mm: float, pdf: Path | None, png: Path | None, scale: int) -> str:
+def export_with_chrome(
+    chrome: str,
+    svg_text: str,
+    width_mm: float,
+    height_mm: float,
+    pdf: Path | None,
+    png: Path | None,
+    scale: int,
+) -> str:
     """Export via Chrome; returns the PNG backend actually used ("" when no PNG)."""
     png_backend = ""
     with tempfile.TemporaryDirectory() as temp:
         html = Path(temp) / "figure.html"
         html.write_text(wrapper_html(svg_text, width_mm, height_mm), encoding="utf-8")
         common = [
-            chrome, "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars", "--disable-extensions",
-            "--no-first-run", "--no-default-browser-check", "--disable-background-networking",
+            chrome,
+            "--headless=new",
+            "--disable-gpu",
+            "--no-sandbox",
+            "--hide-scrollbars",
+            "--disable-extensions",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-background-networking",
             f"--user-data-dir={Path(temp) / 'profile'}",
         ]
         # The PDF page box comes from @page, so it is exact; the PNG is best
         # rasterised from that page (poppler) rather than screenshotted.
-        pdf_target = pdf if pdf is not None else (Path(temp) / "figure.pdf" if png is not None and shutil.which("pdftoppm") else None)
+        pdf_target = (
+            pdf
+            if pdf is not None
+            else (
+                Path(temp) / "figure.pdf"
+                if png is not None and shutil.which("pdftoppm")
+                else None
+            )
+        )
         if pdf_target is not None:
-            run_until_output(common + ["--no-pdf-header-footer", "--print-to-pdf-no-header", f"--print-to-pdf={pdf_target}", html.as_uri()], pdf_target)
+            run_until_output(
+                common
+                + [
+                    "--no-pdf-header-footer",
+                    "--print-to-pdf-no-header",
+                    f"--print-to-pdf={pdf_target}",
+                    html.as_uri(),
+                ],
+                pdf_target,
+            )
         if png is not None:
             if pdf_target is not None and shutil.which("pdftoppm"):
-                rasterize_pdf_with_poppler(pdf_target, png, dpi=round(CSS_PX_PER_INCH * scale))
+                rasterize_pdf_with_poppler(
+                    pdf_target, png, dpi=round(CSS_PX_PER_INCH * scale)
+                )
                 png_backend = "chrome-pdf+pdftoppm"
             else:
                 css_w = round(width_mm / MM_PER_INCH * CSS_PX_PER_INCH)
                 css_h = round(height_mm / MM_PER_INCH * CSS_PX_PER_INCH)
                 shot = Path(temp) / "shot.png"
                 run_until_output(
-                    common + [f"--force-device-scale-factor={scale}", f"--window-size={css_w},{css_h + HEADLESS_UI_ALLOWANCE_PX}", f"--screenshot={shot}", html.as_uri()],
+                    common
+                    + [
+                        f"--force-device-scale-factor={scale}",
+                        f"--window-size={css_w},{css_h + HEADLESS_UI_ALLOWANCE_PX}",
+                        f"--screenshot={shot}",
+                        html.as_uri(),
+                    ],
                     shot,
                 )
                 png.write_bytes(crop_png_rows(shot.read_bytes(), css_h * scale))
@@ -219,7 +292,9 @@ def crop_png_rows(data: bytes, keep_rows: int) -> bytes:
     """
     chunks = _png_chunks(data)
     header = dict(chunks)[b"IHDR"]
-    width, height, bit_depth, colour_type, _, _, interlace = struct.unpack(">IIBBBBB", header)
+    width, height, bit_depth, colour_type, _, _, interlace = struct.unpack(
+        ">IIBBBBB", header
+    )
     channels = {0: 1, 2: 3, 4: 2, 6: 4}.get(colour_type)
     if bit_depth != 8 or channels is None or interlace != 0:
         raise RenderError("screenshot PNG layout is not supported for cropping")
@@ -257,7 +332,12 @@ def crop_png_rows(data: bytes, keep_rows: int) -> bytes:
         previous = line
 
     def chunk(kind: bytes, body: bytes) -> bytes:
-        return struct.pack(">I", len(body)) + kind + body + struct.pack(">I", zlib.crc32(kind + body) & 0xFFFFFFFF)
+        return (
+            struct.pack(">I", len(body))
+            + kind
+            + body
+            + struct.pack(">I", zlib.crc32(kind + body) & 0xFFFFFFFF)
+        )
 
     new_header = struct.pack(">IIBBBBB", width, keep_rows, 8, colour_type, 0, 0, 0)
     return (
@@ -268,7 +348,9 @@ def crop_png_rows(data: bytes, keep_rows: int) -> bytes:
     )
 
 
-def export_with_rsvg(svg_path: Path, width_mm: float, pdf: Path | None, png: Path | None, scale: int) -> None:
+def export_with_rsvg(
+    svg_path: Path, width_mm: float, pdf: Path | None, png: Path | None, scale: int
+) -> None:
     if pdf is not None:
         run(["rsvg-convert", "-f", "pdf", "-o", str(pdf), str(svg_path)])
     if png is not None:
@@ -276,22 +358,38 @@ def export_with_rsvg(svg_path: Path, width_mm: float, pdf: Path | None, png: Pat
         run(["rsvg-convert", "-f", "png", "-w", str(px), "-o", str(png), str(svg_path)])
 
 
-def export_with_inkscape(svg_path: Path, width_mm: float, pdf: Path | None, png: Path | None, scale: int) -> None:
+def export_with_inkscape(
+    svg_path: Path, width_mm: float, pdf: Path | None, png: Path | None, scale: int
+) -> None:
     if pdf is not None:
-        run(["inkscape", str(svg_path), "--export-type=pdf", f"--export-filename={pdf}"])
+        run(
+            ["inkscape", str(svg_path), "--export-type=pdf", f"--export-filename={pdf}"]
+        )
     if png is not None:
         px = round(width_mm / MM_PER_INCH * CSS_PX_PER_INCH * scale)
-        run(["inkscape", str(svg_path), "--export-type=png", f"--export-width={px}", f"--export-filename={png}"])
+        run(
+            [
+                "inkscape",
+                str(svg_path),
+                "--export-type=png",
+                f"--export-width={px}",
+                f"--export-filename={png}",
+            ]
+        )
 
 
-def export_with_cairosvg(svg_text: str, width_mm: float, pdf: Path | None, png: Path | None, scale: int) -> None:
+def export_with_cairosvg(
+    svg_text: str, width_mm: float, pdf: Path | None, png: Path | None, scale: int
+) -> None:
     import cairosvg  # type: ignore
 
     if pdf is not None:
         cairosvg.svg2pdf(bytestring=svg_text.encode("utf-8"), write_to=str(pdf))
     if png is not None:
         px = round(width_mm / MM_PER_INCH * CSS_PX_PER_INCH * scale)
-        cairosvg.svg2png(bytestring=svg_text.encode("utf-8"), write_to=str(png), output_width=px)
+        cairosvg.svg2png(
+            bytestring=svg_text.encode("utf-8"), write_to=str(png), output_width=px
+        )
 
 
 def _inflated_object_streams(pdf_bytes: bytes) -> bytes:
@@ -337,13 +435,17 @@ def verify(svg_aspect: float, pdf: Path | None, png: Path | None) -> list[str]:
         if box is None or box[1] == 0:
             problems.append("PDF has no readable MediaBox")
         elif abs(box[0] / box[1] - svg_aspect) / svg_aspect > ASPECT_TOLERANCE:
-            problems.append(f"PDF page aspect {box[0] / box[1]:.3f} differs from SVG aspect {svg_aspect:.3f}: the render is clipped or letter-boxed")
+            problems.append(
+                f"PDF page aspect {box[0] / box[1]:.3f} differs from SVG aspect {svg_aspect:.3f}: the render is clipped or letter-boxed"
+            )
     if png is not None:
         size = png_size(png.read_bytes())
         if size is None or size[1] == 0:
             problems.append("PNG header unreadable")
         elif abs(size[0] / size[1] - svg_aspect) / svg_aspect > ASPECT_TOLERANCE:
-            problems.append(f"PNG aspect {size[0] / size[1]:.3f} differs from SVG aspect {svg_aspect:.3f}")
+            problems.append(
+                f"PNG aspect {size[0] / size[1]:.3f} differs from SVG aspect {svg_aspect:.3f}"
+            )
     return problems
 
 
@@ -359,7 +461,9 @@ def render(svg_path: Path, pdf: Path | None, png: Path | None, scale: int = 3) -
     png_backend = ""
     chrome = find_chrome()
     if chrome:
-        png_backend = export_with_chrome(chrome, svg_text, width_mm, height_mm, pdf, png, scale)
+        png_backend = export_with_chrome(
+            chrome, svg_text, width_mm, height_mm, pdf, png, scale
+        )
         backend = "chrome"
     elif shutil.which("rsvg-convert"):
         export_with_rsvg(svg_path, width_mm, pdf, png, scale)
@@ -372,17 +476,28 @@ def render(svg_path: Path, pdf: Path | None, png: Path | None, scale: int = 3) -
             export_with_cairosvg(svg_text, width_mm, pdf, png, scale)
             backend = "cairosvg"
         except ImportError as exc:
-            raise RenderError("no SVG renderer available (Chrome/Chromium, rsvg-convert, inkscape or cairosvg)") from exc
+            raise RenderError(
+                "no SVG renderer available (Chrome/Chromium, rsvg-convert, inkscape or cairosvg)"
+            ) from exc
     problems = verify(aspect, pdf, png)
     if problems:
         raise RenderError("; ".join(problems))
     report = {
         "contract": CONTRACT_ID,
         "backend": backend,
-        "svg": {"path": str(svg_path), "sha256": sha256(svg_path), "width_mm": round(width_mm, 3), "height_mm": round(height_mm, 3)},
+        "svg": {
+            "path": str(svg_path),
+            "sha256": sha256(svg_path),
+            "width_mm": round(width_mm, 3),
+            "height_mm": round(height_mm, 3),
+        },
     }
     if pdf is not None:
-        report["pdf"] = {"path": str(pdf), "sha256": sha256(pdf), "media_box_pt": pdf_media_box(pdf.read_bytes())}
+        report["pdf"] = {
+            "path": str(pdf),
+            "sha256": sha256(pdf),
+            "media_box_pt": pdf_media_box(pdf.read_bytes()),
+        }
     if png is not None:
         size = png_size(png.read_bytes())
         report["png"] = {
@@ -400,7 +515,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--svg", type=Path, required=True)
     parser.add_argument("--pdf", type=Path)
     parser.add_argument("--png", type=Path)
-    parser.add_argument("--scale", type=int, default=3, help="PNG device scale factor over 96 dpi (3 = 288 dpi)")
+    parser.add_argument(
+        "--scale",
+        type=int,
+        default=3,
+        help="PNG device scale factor over 96 dpi (3 = 288 dpi)",
+    )
     args = parser.parse_args(argv)
     if args.pdf is None and args.png is None:
         args.pdf = args.svg.with_suffix(".pdf")

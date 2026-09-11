@@ -3,8 +3,11 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle
+import os
+# Data root for the paper demo; override with GGA_HACKATHON_ROOT when reproducing.
+ROOT = os.environ.get("GGA_HACKATHON_ROOT", os.path.expanduser("~/hackathon"))
 
-OUT = '/mnt/nas/data/lyf/hackathon/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
+OUT = ROOT + '/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
 GREY = '#4d4d4d'; BLUE = '#2166ac'; RED = '#b2182b'; LIGHT = '#f0f0f0'; LBLUE = '#d1e5f0'
 
 fig, ax = plt.subplots(figsize=(7.2, 4.9))

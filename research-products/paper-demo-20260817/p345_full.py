@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 
 SEED = 20260819
 RNG = np.random.default_rng(SEED)
-DB = '/mnt/nas/data/lyf/hackathon/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
-LAND = '/mnt/nas/data/lyf/hackathon/gga-acquisition-coverage-v12/skills/global-geochemical-atlas/assets/natural-earth-110m-land.json'
-OUT = '/mnt/nas/data/lyf/hackathon/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
+DB = ROOT + '/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
+LAND = ROOT + '/gga-acquisition-coverage-v12/skills/global-geochemical-atlas/assets/natural-earth-110m-land.json'
+OUT = ROOT + '/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
 
 INK = '#3a3a3a'; BLUE = '#2166ac'; RED = '#b2182b'; GREY = '#9a9a9a'; GOLD = '#b8860b'
 plt.rcParams.update({'font.size': 8, 'axes.titlesize': 9, 'axes.labelsize': 8,
@@ -117,6 +117,9 @@ ax2.set_xscale('log')
 ax2.set_xticks([0.8, 1.0, 1.5, 2.0, 3.0])
 ax2.set_xticklabels(['0.8', '1.0', '1.5', '2.0', '3.0'])
 from matplotlib.lines import Line2D
+import os
+# Data root for the paper demo; override with GGA_HACKATHON_ROOT when reproducing.
+ROOT = os.environ.get("GGA_HACKATHON_ROOT", os.path.expanduser("~/hackathon"))
 ax2.legend(handles=[
     Line2D([0], [0], color=BLUE, marker='o', lw=2, label='GEMAS XRF/ICP-MS (ratio > 1)'),
     Line2D([0], [0], color=RED, marker='o', lw=2, label='GEMAS Cu: direction reversed'),

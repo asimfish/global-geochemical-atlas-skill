@@ -293,9 +293,11 @@ def main() -> int:
             maximum_file = max((item.file_size for item in entries), default=0)
         require(
             skill_documents == ["skills/global-geochemical-atlas/SKILL.md"]
-            and submission.stat().st_size < 200_000_000
-            and maximum_file < 100_000_000,
-            "the submission package contains one Skill and stays below strict size limits",
+            # Live submission guide (synmatai.cn/hackathon/submission-guide.md):
+            # package <= 50 MB, any single file <= 10 MB.
+            and submission.stat().st_size <= 50_000_000
+            and maximum_file <= 10_000_000,
+            "the submission package contains one Skill and stays within the live 50 MB / 10 MB limits",
             checks,
         )
         screenshot = capture_screenshot(root, atlas_dir, checks)

@@ -40,8 +40,12 @@ MIN_PDF_PAGES = 4
 MIN_CAPTION_CHARS = 80
 # Spine entries that are front matter, not headings.
 NON_HEADING_SECTIONS = {"Title", "Abstract"}
-_HEADING = re.compile(r"\\(?:section|subsection|subsubsection)\*?\s*(?:\[[^\]]*\])?\s*\{((?:[^{}]|\{[^{}]*\})*)\}")
-_CAPTION = re.compile(r"\\caption\s*(?:\[[^\]]*\])?\s*\{((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}", re.S)
+_HEADING = re.compile(
+    r"\\(?:section|subsection|subsubsection)\*?\s*(?:\[[^\]]*\])?\s*\{((?:[^{}]|\{[^{}]*\})*)\}"
+)
+_CAPTION = re.compile(
+    r"\\caption\s*(?:\[[^\]]*\])?\s*\{((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}", re.S
+)
 _GGAFIGURE_CAPTION = re.compile(
     r"\\ggafigure\{[^}]*\}\{[^}]*\}\{((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}", re.S
 )
@@ -56,7 +60,9 @@ def _plain(text: str) -> str:
 
 def headings(tex_text: str) -> list[str]:
     """Plain text of every \\section/\\subsection/\\subsubsection heading, comments stripped."""
-    return [_plain(match.group(1)) for match in _HEADING.finditer(_strip_comments(tex_text))]
+    return [
+        _plain(match.group(1)) for match in _HEADING.finditer(_strip_comments(tex_text))
+    ]
 
 
 def captions(tex_text: str) -> list[str]:
@@ -64,6 +70,8 @@ def captions(tex_text: str) -> list[str]:
     return [_plain(m.group(1)) for m in _CAPTION.finditer(text)] + [
         _plain(m.group(1)) for m in _GGAFIGURE_CAPTION.finditer(text)
     ]
+
+
 TEX_PRODUCERS = re.compile(rb"pdfTeX|XeTeX|LuaTeX|LuaHBTeX|dvipdfmx|TeX Live", re.I)
 TEMPLATE_FONTS = re.compile(
     r"NewTX|TeXGyreTermes|TeX Gyre Termes|Termes|Nimbus|Times|NimbusRom|CM|LM|LatinModern",
@@ -94,7 +102,9 @@ def _format_value(value: Any) -> str:
     if isinstance(value, (int, float)):
         return latex_escape(f"{value:g}" if isinstance(value, float) else str(value))
     if isinstance(value, (list, tuple)):
-        return latex_escape(", ".join(f"{v:g}" if isinstance(v, float) else str(v) for v in value))
+        return latex_escape(
+            ", ".join(f"{v:g}" if isinstance(v, float) else str(v) for v in value)
+        )
     if isinstance(value, Mapping):
         return latex_escape("; ".join(f"{k}={v}" for k, v in value.items()))
     return latex_escape(str(value))
@@ -113,11 +123,19 @@ def claims_tex(registry: Mapping[str, Any]) -> str:
         f"% contract: {CONTRACT_ID}",
     ]
     atlas = sorted(
-        (item for item in registry.get("atlas_claims", []) if isinstance(item, Mapping)),
+        (
+            item
+            for item in registry.get("atlas_claims", [])
+            if isinstance(item, Mapping)
+        ),
         key=lambda item: str(item.get("claim_id")),
     )
     pilot = sorted(
-        (item for item in registry.get("pilot_claims", []) if isinstance(item, Mapping)),
+        (
+            item
+            for item in registry.get("pilot_claims", [])
+            if isinstance(item, Mapping)
+        ),
         key=lambda item: str(item.get("claim_id")),
     )
     for group, items in (("atlas", atlas), ("pilot", pilot)):
@@ -131,7 +149,9 @@ def claims_tex(registry: Mapping[str, Any]) -> str:
                     claim_id,
                     _format_value(item.get("value")),
                     # snake_case units must be allowed to break inside the ledger column
-                    latex_escape(item.get("unit") or "").replace("\\_", "\\_\\allowbreak{}"),
+                    latex_escape(item.get("unit") or "").replace(
+                        "\\_", "\\_\\allowbreak{}"
+                    ),
                     latex_escape(_source_label(item, group)),
                 )
             )
@@ -158,7 +178,9 @@ def _bib_escape(text: Any) -> str:
     return str(text).replace("{", "\\{").replace("}", "\\}")
 
 
-def references_bib(citations: Sequence[Mapping[str, Any]]) -> tuple[str, list[dict[str, Any]]]:
+def references_bib(
+    citations: Sequence[Mapping[str, Any]],
+) -> tuple[str, list[dict[str, Any]]]:
     """Seed a BibTeX file from verified literature citations.
 
     Returns the bib text and the matching ``reference_list`` records (same
@@ -173,7 +195,9 @@ def references_bib(citations: Sequence[Mapping[str, Any]]) -> tuple[str, list[di
     records: list[dict[str, Any]] = []
     for index, item in enumerate(citations, 1):
         key = f"lit{index:02d}"
-        authors = [str(a).strip() for a in (item.get("authors") or []) if str(a).strip()]
+        authors = [
+            str(a).strip() for a in (item.get("authors") or []) if str(a).strip()
+        ]
         title = str(item.get("title") or "").strip()
         year = item.get("year")
         venue = str(item.get("venue") or "").strip()
@@ -215,7 +239,9 @@ def references_bib(citations: Sequence[Mapping[str, Any]]) -> tuple[str, list[di
 
 
 def bib_keys(bib_text: str) -> set[str]:
-    return {match.group(1) for match in re.finditer(r"@\w+\s*\{\s*([^,\s]+)\s*,", bib_text)}
+    return {
+        match.group(1) for match in re.finditer(r"@\w+\s*\{\s*([^,\s]+)\s*,", bib_text)
+    }
 
 
 def _strip_comments(text: str) -> str:
@@ -244,12 +270,14 @@ def lint_manuscript_source(
         missing_headings = sorted(
             name
             for name in {str(item).strip() for item in required_headings}
-            if name and name not in NON_HEADING_SECTIONS
+            if name
+            and name not in NON_HEADING_SECTIONS
             and not any(name.lower() in heading for heading in present)
         )
         if missing_headings:
             errors.append(
-                "manuscript source lacks the frozen spine headings: " + ", ".join(missing_headings[:6])
+                "manuscript source lacks the frozen spine headings: "
+                + ", ".join(missing_headings[:6])
             )
     for caption in captions(tex_text):
         if len(caption) < MIN_CAPTION_CHARS:
@@ -259,29 +287,42 @@ def lint_manuscript_source(
             )
             break
     if not re.search(r"\\usepackage(\[[^\]]*\])?\{gga-paper\}", text):
-        errors.append("manuscript must load the controller style with \\usepackage{gga-paper}")
+        errors.append(
+            "manuscript must load the controller style with \\usepackage{gga-paper}"
+        )
     if "\\input{claims}" not in text and "\\input{claims.tex}" not in text:
-        errors.append("manuscript must \\input{claims} so claim marks resolve to the frozen ledger")
+        errors.append(
+            "manuscript must \\input{claims} so claim marks resolve to the frozen ledger"
+        )
     if "\\printclaimledger" not in text:
-        errors.append("manuscript must print the claim ledger appendix with \\printclaimledger")
+        errors.append(
+            "manuscript must print the claim ledger appendix with \\printclaimledger"
+        )
     if "\\begin{abstract}" not in text:
         errors.append("manuscript lacks an abstract environment")
     if "\\maketitle" not in text:
         errors.append("manuscript lacks \\maketitle")
     if re.search(r"\\claim\{", text):
-        errors.append("legacy inline \\claim{...} tags are forbidden; use \\claimref{id}")
+        errors.append(
+            "legacy inline \\claim{...} tags are forbidden; use \\claimref{id}"
+        )
     claim_refs = re.findall(r"\\claimref\{([^}]+)\}", text)
     if not claim_refs:
         errors.append("manuscript cites no registered claim (\\claimref) at all")
     if registered_claim_ids is not None:
-        unknown = sorted({ref for ref in claim_refs if ref not in set(registered_claim_ids)})
+        unknown = sorted(
+            {ref for ref in claim_refs if ref not in set(registered_claim_ids)}
+        )
         if unknown:
-            errors.append("claim marks reference unregistered ids: " + ", ".join(unknown[:6]))
+            errors.append(
+                "claim marks reference unregistered ids: " + ", ".join(unknown[:6])
+            )
     if declared_claim_ids is not None:
         unmarked = sorted({str(item) for item in declared_claim_ids} - set(claim_refs))
         if unmarked:
             errors.append(
-                "declared claim_ids never appear as \\claimref marks in the source: " + ", ".join(unmarked[:6])
+                "declared claim_ids never appear as \\claimref marks in the source: "
+                + ", ".join(unmarked[:6])
             )
     texttt_count = len(re.findall(r"\\texttt\{", text))
     density = texttt_count / max(len(text) / 1000.0, 1e-9)
@@ -295,41 +336,67 @@ def lint_manuscript_source(
         if "height=" in options.replace(" ", ""):
             errors.append("figures must not fix a height; use width=\\linewidth only")
             break
-        if not re.search(r"width\s*=\s*(?:[0-9.]*\s*\\(linewidth|columnwidth|textwidth))", options):
-            errors.append("every \\includegraphics must set width relative to \\linewidth")
+        if not re.search(
+            r"width\s*=\s*(?:[0-9.]*\s*\\(linewidth|columnwidth|textwidth))", options
+        ):
+            errors.append(
+                "every \\includegraphics must set width relative to \\linewidth"
+            )
             break
     bibliography_at = min(
-        [pos for pos in (text.find("\\bibliography{"), text.find("\\begin{thebibliography}")) if pos >= 0]
+        [
+            pos
+            for pos in (
+                text.find("\\bibliography{"),
+                text.find("\\begin{thebibliography}"),
+            )
+            if pos >= 0
+        ]
         or [len(text)]
     )
     figure_starts = [m.start() for m in re.finditer(r"\\begin\{figure\*?\}", text)]
     ggafigure_starts = [m.start() for m in re.finditer(r"\\ggafigure\{", text)]
     if any(pos > bibliography_at for pos in figure_starts + ggafigure_starts):
-        errors.append("figures must be placed in the body before the bibliography, not appended after it")
+        errors.append(
+            "figures must be placed in the body before the bibliography, not appended after it"
+        )
     if not figure_starts and not ggafigure_starts:
         errors.append("manuscript embeds no figure")
-    for match in re.finditer(r"\\begin\{figure\*?\}(.*?)\\end\{figure\*?\}", text, re.S):
+    for match in re.finditer(
+        r"\\begin\{figure\*?\}(.*?)\\end\{figure\*?\}", text, re.S
+    ):
         body = match.group(1)
         if "\\caption" not in body or "\\label" not in body:
             errors.append("every figure needs a caption and a label")
             break
     labels = set(re.findall(r"\\label\{(fig:[^}]+)\}", text))
     labels.update(re.findall(r"\\ggafigure\{(fig:[^}]+)\}", text))
-    referenced = set(re.findall(r"\\(?:ref|autoref|cref|Cref|eqref)\*?\{(fig:[^}]+)\}", text))
+    referenced = set(
+        re.findall(r"\\(?:ref|autoref|cref|Cref|eqref)\*?\{(fig:[^}]+)\}", text)
+    )
     orphans = sorted(labels - referenced)
     if orphans:
-        errors.append("figures are never referenced in the text: " + ", ".join(orphans[:4]))
+        errors.append(
+            "figures are never referenced in the text: " + ", ".join(orphans[:4])
+        )
     cite_keys: set[str] = set()
     for match in re.finditer(r"\\cite[tp]?\*?(?:\[[^\]]*\])*\{([^}]+)\}", text):
-        cite_keys.update(key.strip() for key in match.group(1).split(",") if key.strip())
+        cite_keys.update(
+            key.strip() for key in match.group(1).split(",") if key.strip()
+        )
     if not cite_keys:
         errors.append("manuscript cites no reference")
     if bib_keys_available is not None:
         missing = sorted(cite_keys - set(bib_keys_available))
         if missing:
-            errors.append("\\cite keys missing from the submitted bibliography: " + ", ".join(missing[:6]))
+            errors.append(
+                "\\cite keys missing from the submitted bibliography: "
+                + ", ".join(missing[:6])
+            )
     if "\\bibliography{" not in text and "\\begin{thebibliography}" not in text:
-        errors.append("manuscript must produce a bibliography (\\bibliography{references})")
+        errors.append(
+            "manuscript must produce a bibliography (\\bibliography{references})"
+        )
     return errors
 
 
@@ -344,7 +411,9 @@ def cited_keys(tex_text: str) -> set[str]:
 
 def _run(command: list[str]) -> str:
     try:
-        completed = subprocess.run(command, capture_output=True, text=True, timeout=60, check=False)
+        completed = subprocess.run(
+            command, capture_output=True, text=True, timeout=60, check=False
+        )
     except (OSError, subprocess.SubprocessError):
         return ""
     return completed.stdout
@@ -370,7 +439,11 @@ def pdf_metadata(pdf_path: Path) -> dict[str, Any]:
         info = _run(["pdfinfo", str(pdf_path)])
         if info.strip():
             meta["poppler"] = True
-            fields = {k.strip(): v.strip() for k, _, v in (line.partition(":") for line in info.splitlines()) if k}
+            fields = {
+                k.strip(): v.strip()
+                for k, _, v in (line.partition(":") for line in info.splitlines())
+                if k
+            }
             meta["producer"] = fields.get("Producer", "")
             meta["creator"] = fields.get("Creator", "")
             try:
@@ -378,10 +451,14 @@ def pdf_metadata(pdf_path: Path) -> dict[str, Any]:
             except ValueError:
                 pass
     if shutil.which("pdftotext"):
-        meta["first_page_text"] = _run(["pdftotext", "-f", "1", "-l", "1", "-layout", str(pdf_path), "-"])
+        meta["first_page_text"] = _run(
+            ["pdftotext", "-f", "1", "-l", "1", "-layout", str(pdf_path), "-"]
+        )
     if shutil.which("pdffonts"):
         fonts = _run(["pdffonts", str(pdf_path)])
-        meta["fonts"] = [line.split()[0] for line in fonts.splitlines()[2:] if line.strip()]
+        meta["fonts"] = [
+            line.split()[0] for line in fonts.splitlines()[2:] if line.strip()
+        ]
     return meta
 
 
@@ -396,11 +473,19 @@ def lint_manuscript_pdf(pdf_path: Path) -> list[str]:
             "HTML or office renderers are not accepted"
         )
     if meta["pages"] and meta["pages"] < MIN_PDF_PAGES:
-        errors.append(f"manuscript PDF has {meta['pages']} pages; a complete article needs at least {MIN_PDF_PAGES}")
-    if meta["first_page_text"] and not re.search(r"\bAbstract\b", meta["first_page_text"]):
-        errors.append("first PDF page shows no Abstract heading; the abstract block is missing or mis-set")
+        errors.append(
+            f"manuscript PDF has {meta['pages']} pages; a complete article needs at least {MIN_PDF_PAGES}"
+        )
+    if meta["first_page_text"] and not re.search(
+        r"\bAbstract\b", meta["first_page_text"]
+    ):
+        errors.append(
+            "first PDF page shows no Abstract heading; the abstract block is missing or mis-set"
+        )
     if meta["fonts"] and not any(TEMPLATE_FONTS.search(name) for name in meta["fonts"]):
-        errors.append("PDF embeds none of the template font families (NewTX/Termes/Times/CM)")
+        errors.append(
+            "PDF embeds none of the template font families (NewTX/Termes/Times/CM)"
+        )
     return errors
 
 

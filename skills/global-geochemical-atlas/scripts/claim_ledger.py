@@ -1,297 +1,542 @@
-#!/usr/bin/env python3
-"""Build and verify report claims against exact content-addressed artifacts."""
+"""Result-to-claim ledger with draft-answer cross-checking.
+
+Two failure modes survive every deterministic pipeline check:
+
+- a number in the final chat answer that no artifact supports (a phantom
+  result), and
+- a true number reported without the scope sentence that licenses it (an
+  overstated claim).
+
+This module closes both gaps with a two-stage discipline:
+
+``build``         derive every reportable claim from the run artifacts,
+                  re-verify each against its evidence file (recomputing the
+                  value where possible) and grade it:
+
+                  - ``pass``             evidence re-verified,
+                  - ``warn_scope``       true only together with an explicit
+                                         scope sentence,
+                  - ``fail_unsupported`` evidence missing or recompute
+                                         mismatch.
+
+``check-answer``  cross-check a draft final answer against the ledger: every
+                  load-bearing number must trace back to a licensed claim
+                  value, and every quoted ``warn_scope`` claim must carry its
+                  scope keywords.
+
+The executor can build the ledger but can never edit a verdict: integrity
+grades are recomputed from evidence on every invocation. A scoped claim
+narrows; it must not silently widen.
+"""
 
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import json
-from collections.abc import Mapping
+import re
+import sys
 from pathlib import Path
 from typing import Any
 
-LEDGER_VERSION = "atlas-report-claim-ledger-v1"
-CLAIM_VERSION = "atlas-report-claim-v1"
+LEDGER_VERSION = "atlas-claim-ledger-v1"
+LEDGER_SCHEMA = "claim-ledger.schema.json"
+
+# Scope keywords accept English or Chinese drafts (CJK spelled as escapes to
+# keep this file ASCII-safe).
+SCOPE_KEYWORDS = {
+    "confidence": (
+        "not a probability",
+        "usability",
+        "\u975e\u6982\u7387",  # fei gailv
+        "\u4e0d\u662f\u6982\u7387",  # bushi gailv
+        "\u53ef\u7528\u6027",  # keyongxing
+    ),
+    "anomaly_candidates": (
+        "candidate",
+        "\u5019\u9009",  # houxuan
+    ),
+    "censored_records": (
+        "detection limit",
+        "censored",
+        "\u68c0\u51fa\u9650",  # jianchuxian
+    ),
+}
 
 
-class ClaimLedgerError(RuntimeError):
-    """Raised when a claim cannot be recomputed from its declared artifact."""
+class LedgerError(RuntimeError):
+    """Raised when the run directory cannot support a ledger at all."""
 
 
-def canonical_json_bytes(value: Any) -> bytes:
-    return json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-        allow_nan=False,
-    ).encode("utf-8")
-
-
-def sha256_bytes(value: bytes) -> str:
-    return hashlib.sha256(value).hexdigest()
-
-
-def sha256_file(path: Path) -> str:
+def sha256_of(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
             digest.update(chunk)
     return digest.hexdigest()
 
 
+def load_json(path: Path) -> Any:
+    if not path.is_file():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+
+
 def _read_rows(path: Path) -> list[dict[str, str]]:
-    try:
-        with path.open("r", encoding="utf-8-sig", newline="") as handle:
-            reader = csv.DictReader(handle)
-            if reader.fieldnames is None:
-                raise ClaimLedgerError("geochemistry.csv has no header")
-            required = {
-                "element_or_analyte",
-                "medium",
-                "source_id",
-                "value_qualifier",
-                "latitude",
-                "longitude",
-            }
-            missing = sorted(required - set(reader.fieldnames))
-            if missing:
-                raise ClaimLedgerError(
-                    "geochemistry.csv lacks claim fields: " + ", ".join(missing)
-                )
-            rows = [dict(row) for row in reader]
-    except (OSError, UnicodeError, csv.Error) as exc:
-        raise ClaimLedgerError(f"cannot read geochemistry.csv: {exc}") from exc
-    if len(rows) > 200_000:
-        raise ClaimLedgerError("claim ledger refuses more than 200000 CSV rows")
-    return rows
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
 
 
-def _read_feature_count(path: Path) -> int:
-    try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise ClaimLedgerError(f"cannot read {path.name}: {exc}") from exc
-    if not isinstance(value, Mapping) or value.get("type") != "FeatureCollection":
-        raise ClaimLedgerError(f"{path.name} must be a GeoJSON FeatureCollection")
-    features = value.get("features")
-    if not isinstance(features, list):
-        raise ClaimLedgerError(f"{path.name}.features must be an array")
-    return len(features)
+def _evidence(run_dir: Path, filename: str, pointer: str) -> dict[str, Any]:
+    path = run_dir / filename
+    return {
+        "file": filename,
+        "pointer": pointer,
+        "sha256": sha256_of(path) if path.is_file() else None,
+    }
 
 
 def _claim(
-    *,
     claim_id: str,
+    statement: str,
     value: Any,
-    value_type: str,
-    unit: str,
-    statement_boundary: str,
-    artifact: Path,
-    locator: str,
-    recompute_method: str,
+    evidence: dict[str, Any],
+    *,
+    recompute: dict[str, Any] | None = None,
+    integrity: str = "pass",
+    scope: str | None = None,
 ) -> dict[str, Any]:
-    body = {
-        "schema_version": CLAIM_VERSION,
+    return {
         "claim_id": claim_id,
+        "statement": statement,
         "value": value,
-        "value_type": value_type,
-        "unit": unit,
-        "statement_boundary": statement_boundary,
-        "evidence": {
-            "artifact": artifact.name,
-            "artifact_sha256": sha256_file(artifact),
-            "locator": locator,
-            "recompute_method": recompute_method,
-        },
-        "verification_status": "recomputed",
+        "evidence": evidence,
+        "recompute": recompute,
+        "integrity": integrity,
+        "scope": scope,
+        "scope_keywords": list(SCOPE_KEYWORDS.get(claim_id, ())),
     }
-    return {**body, "claim_sha256": sha256_bytes(canonical_json_bytes(body))}
 
 
-def build_claim_ledger(output_dir: Path) -> dict[str, Any]:
-    """Return the fixed, independently recomputable claim set for one atlas."""
+def build_claims(run_dir: Path) -> list[dict[str, Any]]:
+    run_summary = load_json(run_dir / "run_summary.json")
+    if not isinstance(run_summary, dict):
+        raise LedgerError("run_summary.json missing; cannot derive claims")
+    metrics = run_summary.get("metrics") or {}
+    coverage = run_summary.get("coverage") or {}
+    rows: list[dict[str, str]] | None = None
+    geochem = run_dir / "geochemistry.csv"
+    if geochem.is_file():
+        rows = _read_rows(geochem)
 
-    database = output_dir / "geochemistry.csv"
-    anomalies = output_dir / "anomalies.geojson"
-    regions = output_dir / "anomaly_regions.geojson"
-    rows = _read_rows(database)
-    elements = sorted(
-        {str(row.get("element_or_analyte") or "").strip() for row in rows} - {""}
+    claims: list[dict[str, Any]] = []
+
+    # -- record count: recomputed from the shipped CSV, exact match required.
+    claimed_records = metrics.get("standardized_record_count")
+    recomputed_records = len(rows) if rows is not None else None
+    match = recomputed_records is not None and recomputed_records == claimed_records
+    claims.append(
+        _claim(
+            "records",
+            "standardized measurement records shipped in geochemistry.csv",
+            claimed_records,
+            _evidence(
+                run_dir, "run_summary.json", "/metrics/standardized_record_count"
+            ),
+            recompute={
+                "method": "row count of geochemistry.csv",
+                "value": recomputed_records,
+                "match": match,
+            },
+            integrity="pass" if match else "fail_unsupported",
+        )
     )
-    media = sorted({str(row.get("medium") or "").strip() for row in rows} - {""})
-    sources = sorted({str(row.get("source_id") or "").strip() for row in rows} - {""})
-    censored = sum(
-        str(row.get("value_qualifier") or "").strip().casefold()
-        in {"lt", "le", "gt", "ge"}
-        for row in rows
+
+    # -- covered elements and media: claimed lists must exist in the data.
+    for claim_id, column, claimed in (
+        ("elements", "element_or_analyte", coverage.get("elements")),
+        ("media", "medium", coverage.get("media")),
+    ):
+        observed = (
+            sorted({row.get(column, "") for row in rows} - {""})
+            if rows is not None
+            else None
+        )
+        subset = (
+            observed is not None
+            and isinstance(claimed, list)
+            and set(claimed) <= set(observed)
+        )
+        claims.append(
+            _claim(
+                claim_id,
+                f"covered {claim_id} listed in run_summary coverage",
+                claimed,
+                _evidence(run_dir, "run_summary.json", f"/coverage/{claim_id}"),
+                recompute={
+                    "method": f"distinct {column} values in geochemistry.csv",
+                    "value": observed,
+                    "match": subset,
+                },
+                integrity="pass" if subset else "fail_unsupported",
+            )
+        )
+
+    # -- coordinate rate: recomputed from latitude/longitude columns.
+    claimed_rate = coverage.get("coordinate_rate")
+    recomputed_rate = None
+    if rows:
+        located = sum(
+            1
+            for row in rows
+            if (row.get("latitude") or "").strip()
+            and (row.get("longitude") or "").strip()
+        )
+        recomputed_rate = round(located / len(rows), 4)
+    rate_match = (
+        recomputed_rate is not None
+        and claimed_rate is not None
+        and abs(float(claimed_rate) - recomputed_rate) <= 0.005
     )
-    coordinate_pairs = sum(
-        bool(str(row.get("latitude") or "").strip())
-        and bool(str(row.get("longitude") or "").strip())
-        for row in rows
+    claims.append(
+        _claim(
+            "coordinate_rate",
+            "fraction of records with usable coordinates",
+            claimed_rate,
+            _evidence(run_dir, "run_summary.json", "/coverage/coordinate_rate"),
+            recompute={
+                "method": "non-empty latitude and longitude fraction in geochemistry.csv",
+                "value": recomputed_rate,
+                "match": rate_match,
+            },
+            integrity="pass" if rate_match else "fail_unsupported",
+        )
     )
-    coordinate_rate = round(coordinate_pairs / len(rows), 12) if rows else 0.0
-    claims = [
+
+    # -- workflow confidence: verified by quotation, licensed only with scope.
+    sc = load_json(run_dir / "sources_and_confidence.json")
+    if isinstance(sc, dict):
+        claims.append(
+            _claim(
+                "confidence",
+                "overall workflow confidence from sources_and_confidence.json",
+                sc.get("overall_workflow_confidence"),
+                _evidence(
+                    run_dir,
+                    "sources_and_confidence.json",
+                    "/overall_workflow_confidence",
+                ),
+                integrity="warn_scope",
+                scope=(
+                    "workflow-usability signal, not a probability and not a "
+                    "single quality label for the dataset"
+                ),
+            )
+        )
+
+    # -- anomaly candidates: cross-checked against the anomaly report,
+    #    licensed only as statistical candidates.
+    anomaly_report = load_json(run_dir / "anomaly_report.json")
+    claimed_anomalies = metrics.get("candidate_anomaly_count")
+    reported = (
+        anomaly_report.get("candidate_count")
+        if isinstance(anomaly_report, dict)
+        else None
+    )
+    anomaly_match = reported is not None and reported == claimed_anomalies
+    claims.append(
         _claim(
-            claim_id="standardized_measurement_record_count",
-            value=len(rows),
-            value_type="integer",
-            unit="measurement_records",
-            statement_boundary="CSV data rows, excluding the header; not physical samples.",
-            artifact=database,
-            locator="all data rows",
-            recompute_method="csv_data_row_count_v1",
-        ),
+            "anomaly_candidates",
+            "candidate anomalies flagged by the robust-z screen",
+            claimed_anomalies,
+            _evidence(run_dir, "anomaly_report.json", "/candidate_count"),
+            recompute={
+                "method": "candidate_count in anomaly_report.json",
+                "value": reported,
+                "match": anomaly_match,
+            },
+            integrity="warn_scope" if anomaly_match else "fail_unsupported",
+            scope=(
+                "statistical candidates under the documented robust-z screen, "
+                "not confirmed geochemical anomalies"
+            ),
+        )
+    )
+
+    # -- censored records: recomputed; a nonzero count narrows the claim.
+    claimed_censored = metrics.get("censored_record_count")
+    recomputed_censored = (
+        sum(1 for row in rows if (row.get("censored") or "").strip().lower() == "true")
+        if rows is not None
+        else None
+    )
+    censored_match = (
+        recomputed_censored is not None and recomputed_censored == claimed_censored
+    )
+    claims.append(
         _claim(
-            claim_id="covered_element_symbols",
-            value=elements,
-            value_type="sorted_string_array",
-            unit="element_symbols",
-            statement_boundary="Distinct non-empty element_or_analyte values in the CSV.",
-            artifact=database,
-            locator="column:element_or_analyte",
-            recompute_method="csv_distinct_nonempty_sorted_v1",
+            "censored_records",
+            "records carrying a detection-limit censoring flag",
+            claimed_censored,
+            _evidence(run_dir, "run_summary.json", "/metrics/censored_record_count"),
+            recompute={
+                "method": "censored == true rows in geochemistry.csv",
+                "value": recomputed_censored,
+                "match": censored_match,
+            },
+            integrity=(
+                "fail_unsupported"
+                if not censored_match
+                else ("warn_scope" if (claimed_censored or 0) > 0 else "pass")
+            ),
+            scope=(
+                "summary statistics include detection-limit-censored values; "
+                "report them as censored, not as measured concentrations"
+            )
+            if (claimed_censored or 0) > 0
+            else None,
+        )
+    )
+
+    # -- source count: manifest self-consistency.
+    manifest = load_json(run_dir / "source_manifest.json")
+    if isinstance(manifest, dict):
+        declared = manifest.get("source_count")
+        listed = len(manifest.get("sources") or [])
+        source_match = declared == listed
+        claims.append(
+            _claim(
+                "sources",
+                "adopted sources listed in source_manifest.json",
+                declared,
+                _evidence(run_dir, "source_manifest.json", "/source_count"),
+                recompute={
+                    "method": "length of sources array",
+                    "value": listed,
+                    "match": source_match,
+                },
+                integrity="pass" if source_match else "fail_unsupported",
+            )
+        )
+
+    # -- loop facts, when the run went through the self-correction loop.
+    loop_report = load_json(run_dir / "loop_report.json")
+    if isinstance(loop_report, dict):
+        claims.append(
+            _claim(
+                "loop",
+                "self-correction loop rounds and stop reason",
+                {
+                    "rounds": loop_report.get("round_count")
+                    or loop_report.get("rounds_completed"),
+                    "stop_reason": loop_report.get("stop_reason"),
+                },
+                _evidence(run_dir, "loop_report.json", "/stop_reason"),
+            )
+        )
+
+    return claims
+
+
+def build_ledger(run_dir: Path) -> dict[str, Any]:
+    claims = build_claims(run_dir)
+    summary = {
+        "pass": sum(1 for c in claims if c["integrity"] == "pass"),
+        "warn_scope": sum(1 for c in claims if c["integrity"] == "warn_scope"),
+        "fail_unsupported": sum(
+            1 for c in claims if c["integrity"] == "fail_unsupported"
         ),
-        _claim(
-            claim_id="covered_media",
-            value=media,
-            value_type="sorted_string_array",
-            unit="controlled_media",
-            statement_boundary="Distinct non-empty medium values; not equal coverage.",
-            artifact=database,
-            locator="column:medium",
-            recompute_method="csv_distinct_nonempty_sorted_v1",
-        ),
-        _claim(
-            claim_id="adopted_source_count",
-            value=len(sources),
-            value_type="integer",
-            unit="source_ids",
-            statement_boundary="Distinct non-empty source_id values represented by CSV rows.",
-            artifact=database,
-            locator="column:source_id",
-            recompute_method="csv_distinct_nonempty_count_v1",
-        ),
-        _claim(
-            claim_id="censored_measurement_record_count",
-            value=censored,
-            value_type="integer",
-            unit="measurement_records",
-            statement_boundary="Rows whose controlled value_qualifier is lt/le/gt/ge; retained, not deleted.",
-            artifact=database,
-            locator="column:value_qualifier",
-            recompute_method="csv_controlled_censor_qualifier_count_v1",
-        ),
-        _claim(
-            claim_id="nonempty_coordinate_pair_count",
-            value=coordinate_pairs,
-            value_type="integer",
-            unit="measurement_records",
-            statement_boundary="Rows with both coordinate text fields non-empty; this does not prove datum validity.",
-            artifact=database,
-            locator="columns:latitude,longitude",
-            recompute_method="csv_nonempty_coordinate_pair_count_v1",
-        ),
-        _claim(
-            claim_id="nonempty_coordinate_pair_rate",
-            value=coordinate_rate,
-            value_type="number",
-            unit="fraction_of_measurement_records",
-            statement_boundary="Non-empty coordinate pairs divided by CSV rows; not positional accuracy.",
-            artifact=database,
-            locator="columns:latitude,longitude; all data rows",
-            recompute_method="csv_nonempty_coordinate_pair_rate_v1",
-        ),
-        _claim(
-            claim_id="candidate_anomaly_feature_count",
-            value=_read_feature_count(anomalies),
-            value_type="integer",
-            unit="geojson_features",
-            statement_boundary="Record-level statistical screening candidates; not causal conclusions.",
-            artifact=anomalies,
-            locator="$.features",
-            recompute_method="geojson_feature_count_v1",
-        ),
-        _claim(
-            claim_id="fdr_screened_anomaly_region_count",
-            value=_read_feature_count(regions),
-            value_type="integer",
-            unit="geojson_features",
-            statement_boundary="Regions passing the declared spatial screening gate; not pollution or ore claims.",
-            artifact=regions,
-            locator="$.features",
-            recompute_method="geojson_feature_count_v1",
-        ),
-    ]
-    body = {
-        "schema_version": LEDGER_VERSION,
-        "algorithm": "canonical-json-sha256-v1",
+    }
+    return {
+        "ledger_schema": LEDGER_SCHEMA,
+        "ledger_version": LEDGER_VERSION,
+        "run_dir": str(run_dir),
         "claims": claims,
-        "claim_count": len(claims),
-        "claim_boundary": (
-            "SHA-256 proves byte identity and the declared claim-to-artifact binding. "
-            "It does not prove publisher accuracy, representativeness, causality or scientific truth."
+        "summary": summary,
+        "principle": (
+            "every reportable number must trace to evidence; a scoped claim "
+            "narrows, it must not silently widen"
         ),
     }
-    return {**body, "ledger_sha256": sha256_bytes(canonical_json_bytes(body))}
 
 
-def validate_claim_ledger(output_dir: Path, ledger: Any) -> list[str]:
-    """Return exact mismatch messages after independently rebuilding the ledger."""
+# ---------------------------------------------------------------------------
+# Draft-answer cross-check
+# ---------------------------------------------------------------------------
 
-    if not isinstance(ledger, Mapping):
-        return ["receipt claim_ledger must be an object"]
-    try:
-        expected = build_claim_ledger(output_dir)
-    except ClaimLedgerError as exc:
-        return [f"cannot recompute claim ledger: {exc}"]
-    errors: list[str] = []
-    if ledger.get("schema_version") != LEDGER_VERSION:
-        errors.append("unsupported claim ledger version")
-    supplied_claims = ledger.get("claims")
-    expected_claims = expected["claims"]
-    if not isinstance(supplied_claims, list):
-        return errors + ["claim ledger claims must be an array"]
-    supplied_by_id = {
-        item.get("claim_id"): item
-        for item in supplied_claims
-        if isinstance(item, Mapping) and isinstance(item.get("claim_id"), str)
+NUMBER_TOKEN = re.compile(r"\d[\d,]*(?:\.\d+)?%?")
+HEX_RUN = re.compile(r"\b[0-9a-f]{8,}\b")
+
+
+def _licensed_floats(ledger: dict[str, Any]) -> list[float]:
+    values: list[float] = []
+
+    def _collect(raw: Any) -> None:
+        if isinstance(raw, bool):
+            return
+        if isinstance(raw, (int, float)):
+            values.append(float(raw))
+        elif isinstance(raw, dict):
+            for item in raw.values():
+                _collect(item)
+        elif isinstance(raw, list):
+            for item in raw:
+                _collect(item)
+
+    for claim in ledger.get("claims", []):
+        _collect(claim.get("value"))
+        recompute = claim.get("recompute")
+        if isinstance(recompute, dict):
+            _collect(recompute.get("value"))
+    return values
+
+
+def _token_matches(token_value: float, licensed: list[float]) -> bool:
+    for value in licensed:
+        if abs(token_value - value) <= 0.005 * max(1.0, abs(value)):
+            return True
+        # Percent renderings of a rate (0.87 quoted as 87 or 87%).
+        if 0.0 <= value <= 1.0 and abs(token_value - value * 100.0) <= 0.05:
+            return True
+    return False
+
+
+def check_answer(ledger: dict[str, Any], answer_text: str) -> dict[str, Any]:
+    text = HEX_RUN.sub(" ", answer_text)
+    licensed = _licensed_floats(ledger)
+    phantom: list[dict[str, str]] = []
+    matched_tokens = 0
+    for match in NUMBER_TOKEN.finditer(text):
+        token = match.group(0)
+        numeric = float(token.rstrip("%").replace(",", ""))
+        if numeric == int(numeric) and 0 <= numeric <= 12 and not token.endswith("%"):
+            continue  # small enumerators (list positions, section numbers)
+        if numeric == int(numeric) and 1900 <= numeric <= 2100:
+            continue  # calendar years
+        if _token_matches(numeric, licensed):
+            matched_tokens += 1
+        else:
+            start = max(0, match.start() - 40)
+            phantom.append(
+                {"token": token, "context": text[start : match.end() + 40].strip()}
+            )
+
+    scope_violations: list[dict[str, str]] = []
+    lowered = answer_text.lower()
+    for claim in ledger.get("claims", []):
+        if claim["integrity"] != "warn_scope":
+            continue
+        value = claim.get("value")
+        quoted = (
+            isinstance(value, (int, float))
+            and not isinstance(value, bool)
+            and _value_quoted(float(value), lowered)
+        )
+        if quoted and not any(
+            keyword.lower() in lowered for keyword in claim.get("scope_keywords", ())
+        ):
+            scope_violations.append(
+                {"claim_id": claim["claim_id"], "required_scope": claim["scope"] or ""}
+            )
+
+    verdict = (
+        "answer_bound" if not phantom and not scope_violations else "answer_unbound"
+    )
+    return {
+        "check_version": LEDGER_VERSION,
+        "licensed_value_count": len(licensed),
+        "matched_token_count": matched_tokens,
+        "phantom_numbers": phantom,
+        "scope_violations": scope_violations,
+        "verdict": verdict,
     }
-    expected_by_id = {item["claim_id"]: item for item in expected_claims}
-    if set(supplied_by_id) != set(expected_by_id):
-        errors.append("claim ledger fixed claim IDs differ from recomputed claims")
-    for claim_id in sorted(set(supplied_by_id) & set(expected_by_id)):
-        supplied = supplied_by_id[claim_id]
-        recomputed = expected_by_id[claim_id]
-        if canonical_json_bytes(supplied) != canonical_json_bytes(recomputed):
-            errors.append(f"claim mismatch for {claim_id}")
-    if ledger.get("claim_count") != len(supplied_claims):
-        errors.append("claim ledger claim_count does not match claims")
-    if not isinstance(ledger.get("ledger_sha256"), str):
-        errors.append("claim ledger lacks ledger_sha256")
-    else:
-        unsigned = dict(ledger)
-        supplied_hash = unsigned.pop("ledger_sha256")
-        if supplied_hash != sha256_bytes(canonical_json_bytes(unsigned)):
-            errors.append("claim ledger self-hash mismatch")
-        if supplied_hash != expected["ledger_sha256"]:
-            errors.append("claim ledger hash differs from recomputed artifacts")
-    return errors
+
+
+def _value_quoted(value: float, lowered_text: str) -> bool:
+    for match in NUMBER_TOKEN.finditer(lowered_text):
+        numeric = float(match.group(0).rstrip("%").replace(",", ""))
+        if abs(numeric - value) <= 0.005 * max(1.0, abs(value)):
+            return True
+        if 0.0 <= value <= 1.0 and abs(numeric - value * 100.0) <= 0.05:
+            return True
+    return False
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 
 
 def main() -> int:
-    import argparse
-
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--run-dir", required=True, type=Path)
+    parser.add_argument(
+        "--ledger",
+        type=Path,
+        default=None,
+        help="ledger path; defaults to <run>_audit/claim_ledger.json",
+    )
+    parser.add_argument(
+        "--check-answer",
+        type=Path,
+        default=None,
+        help="draft answer file to cross-check against the ledger",
+    )
     args = parser.parse_args()
+
+    run_dir: Path = args.run_dir.resolve()
+    ledger_path: Path = (
+        args.ledger.resolve()
+        if args.ledger
+        else run_dir.parent / (run_dir.name + "_audit") / "claim_ledger.json"
+    )
+    ledger_path.parent.mkdir(parents=True, exist_ok=True)
+
     try:
-        ledger = build_claim_ledger(args.output_dir)
-    except ClaimLedgerError as exc:
-        parser.error(str(exc))
-    print(json.dumps(ledger, ensure_ascii=False, indent=2, sort_keys=True))
-    return 0
+        ledger = build_ledger(run_dir)
+    except LedgerError as exc:
+        print(json.dumps({"error": str(exc)}), file=sys.stderr)
+        return 3
+    ledger_path.write_text(
+        json.dumps(ledger, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+    if args.check_answer is not None:
+        answer_text = args.check_answer.read_text(encoding="utf-8")
+        result = check_answer(ledger, answer_text)
+        result_path = ledger_path.parent / "answer_check.json"
+        result_path.write_text(
+            json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        print(
+            json.dumps(
+                {
+                    "verdict": result["verdict"],
+                    "phantom_count": len(result["phantom_numbers"]),
+                    "scope_violation_count": len(result["scope_violations"]),
+                    "ledger": str(ledger_path),
+                    "answer_check": str(result_path),
+                },
+                ensure_ascii=False,
+            )
+        )
+        return 0 if result["verdict"] == "answer_bound" else 1
+
+    print(
+        json.dumps(
+            {
+                "ledger": str(ledger_path),
+                "summary": ledger["summary"],
+                "claim_count": len(ledger["claims"]),
+            },
+            ensure_ascii=False,
+        )
+    )
+    return 0 if ledger["summary"]["fail_unsupported"] == 0 else 1
 
 
 if __name__ == "__main__":

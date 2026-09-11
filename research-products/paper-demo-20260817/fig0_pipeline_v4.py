@@ -6,8 +6,11 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle, Polygon
+import os
+# Data root for the paper demo; override with GGA_HACKATHON_ROOT when reproducing.
+ROOT = os.environ.get("GGA_HACKATHON_ROOT", os.path.expanduser("~/hackathon"))
 
-OUT = '/mnt/nas/data/lyf/hackathon/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
+OUT = ROOT + '/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
 INK = '#3a3a3a'; BLUE = '#2166ac'; RED = '#b2182b'; GREY = '#6f6f6f'
 SKY = '#eaf2f9'; HUMUS = '#3d2b1f'; TOPS = '#7a5c40'; SUBS = '#c9b391'
 GREEN = '#2d6a4f'; TRUNK = '#5e4630'

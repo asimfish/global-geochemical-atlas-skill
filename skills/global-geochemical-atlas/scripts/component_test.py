@@ -48,7 +48,7 @@ import build_index as index_builder
 import benchmark_index
 import agent_audit
 import cache_control
-import claim_ledger
+import report_claim_ledger
 import coverage_report
 import download_data as downloader
 import evaluate_batch_qc as batch_qc
@@ -6410,17 +6410,15 @@ def check_d2(output_dir: Path) -> list[str]:
             for source_id, window in sampling_time.PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS.items()
         )
         and all(
-            sampling_time.SOURCE_SAMPLING_TIME[source_id].get("evidence", "").startswith(
-                "https://doi.org/"
-            )
+            sampling_time.SOURCE_SAMPLING_TIME[source_id]
+            .get("evidence", "")
+            .startswith("https://doi.org/")
             for source_id in ("eidc-ningbo-soil", "tpdc-china-mountain-soil")
         )
-        and "PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS.get(" in (
-            SCRIPT_DIR / "generate_demo_data.py"
-        ).read_text(encoding="utf-8")
-        and '"2008/2009" if record.source_id == "gemas-europe"' not in (
-            SCRIPT_DIR / "generate_demo_data.py"
-        ).read_text(encoding="utf-8"),
+        and "PUBLISHER_DOCUMENTED_SAMPLING_WINDOWS.get("
+        in (SCRIPT_DIR / "generate_demo_data.py").read_text(encoding="utf-8")
+        and '"2008/2009" if record.source_id == "gemas-europe"'
+        not in (SCRIPT_DIR / "generate_demo_data.py").read_text(encoding="utf-8"),
         "D1 attaches publisher-documented dataset collection windows (GEMAS campaign, EIDC Ningbo month, TPDC temporal coverage) from one cited table instead of hard-coding a single source",
         checks,
     )
@@ -7720,7 +7718,8 @@ def check_d3(output_dir: Path) -> list[str]:
     }
     require(
         temporal_stats["dated_tiers"] == {"point": 308, "window": 160}
-        and temporal_stats["dated_tiers"]["point"] + temporal_stats["dated_tiers"]["window"]
+        and temporal_stats["dated_tiers"]["point"]
+        + temporal_stats["dated_tiers"]["window"]
         == temporal_stats["dated_records"]
         and sum(temporal_stats["undated_by_reason"].values())
         == temporal_stats["undated_records"]
@@ -7763,8 +7762,7 @@ def check_d3(output_dir: Path) -> list[str]:
     temporal_boundaries = temporal_payload["boundaries"]
     temporal_region_boundaries = temporal_region_payload["boundaries"]
     require(
-        temporal_boundaries["admin0"]["asset_version"]
-        == "ai4s-natural-earth-admin0-v2"
+        temporal_boundaries["admin0"]["asset_version"] == "ai4s-natural-earth-admin0-v2"
         and len(temporal_boundaries["admin0"]["rings"]) >= 177
         and temporal_boundaries["admin1"] is None
         and temporal_region_boundaries["admin0"]["asset_version"]
@@ -7823,7 +7821,7 @@ def check_d3(output_dir: Path) -> list[str]:
     require(
         # Replay never inherits the comparison probe's single element.
         "state.element = previous;" in temporal_html
-        and "const candidate = state.element === \"ALL\" ? bestCompareElement() : state.element;"
+        and 'const candidate = state.element === "ALL" ? bestCompareElement() : state.element;'
         in temporal_html
         and "if (bestN > 0 && best) return best;" in temporal_html
         # Wheel zoom is opt-in (click or Ctrl/Meta); otherwise the page scrolls.
@@ -7837,7 +7835,7 @@ def check_d3(output_dir: Path) -> list[str]:
         and "html.embedded,html.embedded body{overflow:hidden}" in temporal_html
         and "html.embedded .map-wrap{height:600px}" in temporal_html
         and 'data.type!=="gga-temporal-height"' in interactive_template_html
-        and "frame.classList.add(\"auto-height\")" in interactive_template_html
+        and 'frame.classList.add("auto-height")' in interactive_template_html
         and ".embedded-app-frame.auto-height{height:auto;min-height:0}"
         in interactive_template_html
         and "if(!(mapWheelArmed||event.ctrlKey||event.metaKey)){showMapWheelHint();return}"
@@ -7879,9 +7877,9 @@ def check_d3(output_dir: Path) -> list[str]:
         "D3 integrated outputs pass the public validator",
         checks,
     )
-    ledger = claim_ledger.build_claim_ledger(output_dir)
+    ledger = report_claim_ledger.build_claim_ledger(output_dir)
     require(
-        not claim_ledger.validate_claim_ledger(output_dir, ledger)
+        not report_claim_ledger.validate_claim_ledger(output_dir, ledger)
         and ledger["claim_count"] == 9
         and all(
             item["evidence"]["artifact_sha256"]
@@ -7897,7 +7895,9 @@ def check_d3(output_dir: Path) -> list[str]:
         any(
             "standardized_measurement_record_count" in error
             or "self-hash mismatch" in error
-            for error in claim_ledger.validate_claim_ledger(output_dir, tampered_ledger)
+            for error in report_claim_ledger.validate_claim_ledger(
+                output_dir, tampered_ledger
+            )
         ),
         "D3 claim-ledger validation blocks a changed number even when the evidence file is unchanged",
         checks,
@@ -8015,9 +8015,7 @@ def check_d3(output_dir: Path) -> list[str]:
             == "empirical_candidate"
             and fraction_items[0]["research_readiness"]["routing_if_unsupported"]
             == "candidate_selection"
-            and discovery_doc["receipt"]["parameters"][
-                "paired_fraction_min_samples"
-            ]
+            and discovery_doc["receipt"]["parameters"]["paired_fraction_min_samples"]
             == 40,
             "D3 discovery T6 pairs same-family bulk/leach-residue cohorts into an"
             " empirical candidate while rejecting mixed method families and"
@@ -8062,8 +8060,7 @@ def check_d3(output_dir: Path) -> list[str]:
                 "regeneration",
             }
             and figure_contract_doc["schema_version"] == "gga-figure-contract-v2"
-            and "fails gate a6"
-            in figure_contract_doc["spatial_pattern_semantics"],
+            and "fails gate a6" in figure_contract_doc["spatial_pattern_semantics"],
             "D3 pilot contract freezes spatial-inference rigor and the figure contract pins empirical spatial-pattern semantics",
             checks,
         )
@@ -8133,7 +8130,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 )
 
             header = struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0)
-            raster = zlib.compress(b"".join(b"\x00" * (width + 1) for _ in range(height)))
+            raster = zlib.compress(
+                b"".join(b"\x00" * (width + 1) for _ in range(height))
+            )
             return (
                 b"\x89PNG\r\n\x1a\n"
                 + chunk(b"IHDR", header)
@@ -8173,7 +8172,9 @@ def check_d3(output_dir: Path) -> list[str]:
                     else b""
                 )
                 content_id = add(
-                    b"<< /Length %d >>\nstream\n" % len(content) + content + b"\nendstream"
+                    b"<< /Length %d >>\nstream\n" % len(content)
+                    + content
+                    + b"\nendstream"
                 )
                 page_ids.append(
                     add(
@@ -8185,7 +8186,9 @@ def check_d3(output_dir: Path) -> list[str]:
                         ).encode()
                     )
                 )
-            objects[catalog - 1] = f"<< /Type /Catalog /Pages {pages_id} 0 R >>".encode()
+            objects[catalog - 1] = (
+                f"<< /Type /Catalog /Pages {pages_id} 0 R >>".encode()
+            )
             objects[pages_id - 1] = (
                 f"<< /Type /Pages /Kids [{' '.join(f'{pid} 0 R' for pid in page_ids)}] "
                 f"/Count {len(page_ids)} >>"
@@ -8220,7 +8223,10 @@ def check_d3(output_dir: Path) -> list[str]:
             inner_objects = [
                 (1, b"<< /Type /Catalog /Pages 2 0 R >>"),
                 (2, b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>"),
-                (3, f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {width:.3f} {height:.3f}] >>".encode()),
+                (
+                    3,
+                    f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {width:.3f} {height:.3f}] >>".encode(),
+                ),
                 (5, b"<< /Producer (pdfTeX-1.40.26) /Creator (TeX) >>"),
             ]
             offsets_part = b""
@@ -8384,7 +8390,9 @@ def check_d3(output_dir: Path) -> list[str]:
             cites = ", ".join(cite_keys)
             spine_list = list(sections if sections is not None else spine_sections)
             headings = [
-                name for name in spine_list if name not in manuscript_kit.NON_HEADING_SECTIONS
+                name
+                for name in spine_list
+                if name not in manuscript_kit.NON_HEADING_SECTIONS
             ]
             body: list[str] = []
             first_heading = True
@@ -8404,7 +8412,9 @@ def check_d3(output_dir: Path) -> list[str]:
                     )
                     first_heading = False
                 else:
-                    body.append(f"{name}: bounded statement within the frozen evidence.")
+                    body.append(
+                        f"{name}: bounded statement within the frozen evidence."
+                    )
             return (
                 "\\documentclass[11pt]{article}\n"
                 "\\usepackage{gga-paper}\n"
@@ -8508,12 +8518,8 @@ def check_d3(output_dir: Path) -> list[str]:
             ]
             summary = {
                 "total": len(audit),
-                "verified": sum(
-                    1 for item in audit if item["verdict"] == "verified"
-                ),
-                "mismatched": sum(
-                    1 for item in audit if item["verdict"] == "mismatch"
-                ),
+                "verified": sum(1 for item in audit if item["verdict"] == "verified"),
+                "mismatched": sum(1 for item in audit if item["verdict"] == "mismatch"),
                 "unverifiable": sum(
                     1 for item in audit if item["verdict"] == "unverifiable"
                 ),
@@ -8750,8 +8756,7 @@ def check_d3(output_dir: Path) -> list[str]:
             "typography_floor"
         ]
         require(
-            typography_floor["min_print_font_pt"]
-            == publication_lint.MIN_PRINT_FONT_PT
+            typography_floor["min_print_font_pt"] == publication_lint.MIN_PRINT_FONT_PT
             and typography_floor["min_raster_width_px"]
             == publication_lint.MIN_RASTER_WIDTH_PX
             and len(quality_contract["typesetting_gate"]["layout_rules"]) == 3,
@@ -8774,7 +8779,8 @@ def check_d3(output_dir: Path) -> list[str]:
             == "chain_then_best_available_or_evidence_report"
             and set(quality_schema["properties"]["paper_entry_gate"]["required"])
             <= set(quality_contract["paper_entry_gate"])
-            and research_gate_receipt["schema_version"] == "gga-research-gate-receipt-v2"
+            and research_gate_receipt["schema_version"]
+            == "gga-research-gate-receipt-v2"
             and research_gate_receipt["writing_basis"] == "supports_empirical_article"
             and research_gate_receipt["executed_pilot"] is True,
             "D3 the quality contract states that a failed gate chains to other candidates and then still ends in a graded deliverable, and the gate receipt records the writing basis",
@@ -8804,27 +8810,42 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 publication lint deterministically enforces page structure, raster width and vector font floors",
             checks,
         )
-        typesetting_contract = quality_contract["typesetting_gate"]["typesetting_contract"]
-        typesetting_schema = quality_schema["properties"]["typesetting_gate"]["properties"][
+        typesetting_contract = quality_contract["typesetting_gate"][
             "typesetting_contract"
         ]
+        typesetting_schema = quality_schema["properties"]["typesetting_gate"][
+            "properties"
+        ]["typesetting_contract"]
         require(
-            typesetting_contract["contract"] == manuscript_kit.CONTRACT_ID == "gga-paper-v1"
-            and typesetting_schema["properties"]["contract"]["const"] == manuscript_kit.CONTRACT_ID
+            typesetting_contract["contract"]
+            == manuscript_kit.CONTRACT_ID
+            == "gga-paper-v1"
+            and typesetting_schema["properties"]["contract"]["const"]
+            == manuscript_kit.CONTRACT_ID
             and typesetting_contract["paper_kit_dir"] == auto_research.PAPER_KIT_DIR
-            and typesetting_contract["figure_kit_contract"] == paper_figures.CONTRACT_ID == render_figure.CONTRACT_ID
+            and typesetting_contract["figure_kit_contract"]
+            == paper_figures.CONTRACT_ID
+            == render_figure.CONTRACT_ID
             and typesetting_contract["min_pdf_pages"] == manuscript_kit.MIN_PDF_PAGES
             and set(typesetting_schema["required"]) == set(typesetting_contract)
             and len(quality_contract["typesetting_gate"]["required_artifacts"]) == 3,
             "D3 the quality contract pins the gga-paper-v1 typesetting contract and the figure-kit contract that the gates enforce",
             checks,
         )
-        writer_packet = json_value(run_dir / "agents" / "manuscript_writer" / "packet.json")
-        figure_packet = json_value(run_dir / "agents" / "figure_designer" / "packet.json")
+        writer_packet = json_value(
+            run_dir / "agents" / "manuscript_writer" / "packet.json"
+        )
+        figure_packet = json_value(
+            run_dir / "agents" / "figure_designer" / "packet.json"
+        )
         paper_kit_dir = run_dir / auto_research.PAPER_KIT_DIR
         figure_kit_dir = run_dir / auto_research.FIGURE_KIT_DIR
-        claims_tex_text = (paper_kit_dir / manuscript_kit.CLAIMS_FILE).read_text(encoding="utf-8")
-        seeded_bib_text = (paper_kit_dir / manuscript_kit.BIB_FILE).read_text(encoding="utf-8")
+        claims_tex_text = (paper_kit_dir / manuscript_kit.CLAIMS_FILE).read_text(
+            encoding="utf-8"
+        )
+        seeded_bib_text = (paper_kit_dir / manuscript_kit.BIB_FILE).read_text(
+            encoding="utf-8"
+        )
         seeded_reference_list = json_value(paper_kit_dir / "seeded_reference_list.json")
         registry_document = json_value(run_dir / "research_claim_registry.json")
         registered_claim_count = len(registry_document["atlas_claims"]) + len(
@@ -8840,7 +8861,13 @@ def check_d3(output_dir: Path) -> list[str]:
             for item in packet["allowed_inputs"].values()
         )
         require(
-            {"paper_style", "paper_template", "claims_tex", "references_bib", "seeded_reference_list"}
+            {
+                "paper_style",
+                "paper_template",
+                "claims_tex",
+                "references_bib",
+                "seeded_reference_list",
+            }
             <= set(writer_packet["allowed_inputs"])
             and writer_packet["allowed_inputs"]["paper_style"]["path"]
             == f"{auto_research.PAPER_KIT_DIR}/{manuscript_kit.STYLE_FILE}"
@@ -8852,17 +8879,32 @@ def check_d3(output_dir: Path) -> list[str]:
             and manuscript_kit.bib_keys(seeded_bib_text) == {"lit01"}
             and seeded_reference_list["references"][0]["reference_id"] == "lit01"
             and seeded_reference_list["references"][0]["identifier"]["type"] == "doi"
-            and writer_packet["required_output"]["payload_contract"]["typesetting"]["contract"]
+            and writer_packet["required_output"]["payload_contract"]["typesetting"][
+                "contract"
+            ]
             == manuscript_kit.CONTRACT_ID
             and "bib_artifact"
-            in writer_packet["required_output"]["payload_contract"]["typeset_manifest_keys"]
-            and {"figure_toolkit", "figure_renderer", "figure_lint", "basemap_01", "basemap_02", "basemap_03"}
+            in writer_packet["required_output"]["payload_contract"][
+                "typeset_manifest_keys"
+            ]
+            and {
+                "figure_toolkit",
+                "figure_renderer",
+                "figure_lint",
+                "basemap_01",
+                "basemap_02",
+                "basemap_03",
+            }
             <= set(figure_packet["allowed_inputs"])
             and figure_packet["allowed_inputs"]["figure_toolkit"]["path"]
             == f"{auto_research.FIGURE_KIT_DIR}/paper_figures.py"
-            and sha256_file(figure_kit_dir / "paper_figures.py") == sha256_file(SCRIPT_DIR / "paper_figures.py")
-            and sha256_file(figure_kit_dir / "render_figure.py") == sha256_file(SCRIPT_DIR / "render_figure.py")
-            and figure_packet["required_output"]["payload_contract"]["figure_kit"]["contract"]
+            and sha256_file(figure_kit_dir / "paper_figures.py")
+            == sha256_file(SCRIPT_DIR / "paper_figures.py")
+            and sha256_file(figure_kit_dir / "render_figure.py")
+            == sha256_file(SCRIPT_DIR / "render_figure.py")
+            and figure_packet["required_output"]["payload_contract"]["figure_kit"][
+                "contract"
+            ]
             == paper_figures.CONTRACT_ID
             and json_value(run_dir / "figure_contract.json")["figure_kit"]["contract"]
             == paper_figures.CONTRACT_ID
@@ -8888,24 +8930,28 @@ def check_d3(output_dir: Path) -> list[str]:
         require(
             toolchain["schema_version"] == "gga-deliverable-toolchain-v1"
             and toolchain["ready"] == (not toolchain["blockers"])
-            and set(toolchain["latex_packages"]) <= set(auto_research.REQUIRED_LATEX_PACKAGES)
+            and set(toolchain["latex_packages"])
+            <= set(auto_research.REQUIRED_LATEX_PACKAGES)
             and (toolchain["font_stack"] in {"newtx", "mathptmx", "lmodern", None})
             and bare_doctor.returncode == 2
             and bare_report["ready"] is False
             and bare_report["tex_engine"] is None
             and any("no TeX engine" in item for item in bare_report["blockers"])
             and any("no SVG renderer" in item for item in bare_report["blockers"])
-            and writer_packet["required_output"]["payload_contract"]["preflight"].startswith("Before compiling")
-            and "doctor" in figure_packet["required_output"]["payload_contract"]["preflight"],
+            and writer_packet["required_output"]["payload_contract"][
+                "preflight"
+            ].startswith("Before compiling")
+            and "doctor"
+            in figure_packet["required_output"]["payload_contract"]["preflight"],
             "D3 the doctor pre-flight reports TeX engine, font stack, LaTeX packages, renderer and poppler with an explicit blocked exit on a bare host, and both second-wave packets point roles at it",
             checks,
         )
-        template_text = (SKILL_DIR / "assets" / "paper" / manuscript_kit.TEMPLATE_FILE).read_text(
-            encoding="utf-8"
-        )
-        style_text = (SKILL_DIR / "assets" / "paper" / manuscript_kit.STYLE_FILE).read_text(
-            encoding="utf-8"
-        )
+        template_text = (
+            SKILL_DIR / "assets" / "paper" / manuscript_kit.TEMPLATE_FILE
+        ).read_text(encoding="utf-8")
+        style_text = (
+            SKILL_DIR / "assets" / "paper" / manuscript_kit.STYLE_FILE
+        ).read_text(encoding="utf-8")
         template_lint = manuscript_kit.lint_manuscript_source(
             template_text,
             bib_keys_available={"lit01"},
@@ -8963,8 +9009,10 @@ def check_d3(output_dir: Path) -> list[str]:
             and manuscript_kit.bib_keys(rendered_bib) == {"lit01", "lit02"}
             and "doi = {10.0000/example.1}" in rendered_bib
             and "title = {Verified \\{primary\\} source & method}" in rendered_bib
-            and rendered_records[0]["identifier"] == {"type": "doi", "value": "10.0000/example.1"}
-            and rendered_records[1]["identifier"] == {"type": "official_url", "value": "https://example.org/report"}
+            and rendered_records[0]["identifier"]
+            == {"type": "doi", "value": "10.0000/example.1"}
+            and rendered_records[1]["identifier"]
+            == {"type": "official_url", "value": "https://example.org/report"}
             and tex_pdf_lint == []
             and any("TeX engine" in message for message in browser_pdf_lint)
             and any("at least 4" in message for message in browser_pdf_lint),
@@ -8972,14 +9020,20 @@ def check_d3(output_dir: Path) -> list[str]:
             checks,
         )
         source_lint = manuscript_kit.lint_manuscript_source(
-            template_text.replace("\\claimref{example.claim.id}", "\\claimref{example.claim.id}\\texttt{a}\\texttt{b}\\texttt{c}\\texttt{d}\\texttt{e}\\texttt{f}\\texttt{g}\\texttt{h}"),
+            template_text.replace(
+                "\\claimref{example.claim.id}",
+                "\\claimref{example.claim.id}\\texttt{a}\\texttt{b}\\texttt{c}\\texttt{d}\\texttt{e}\\texttt{f}\\texttt{g}\\texttt{h}",
+            ),
             bib_keys_available={"lit01"},
             registered_claim_ids={"other.claim"},
         )
         require(
             any("unregistered" in message for message in source_lint)
             and any("typewriter" in message for message in source_lint)
-            and manuscript_kit.cited_keys("\\cite{a, b}\\citep[p.~3]{c}% \\cite{ignored}\n\\citet{d}") == {"a", "b", "c", "d"},
+            and manuscript_kit.cited_keys(
+                "\\cite{a, b}\\citep[p.~3]{c}% \\cite{ignored}\n\\citet{d}"
+            )
+            == {"a", "b", "c", "d"},
             "D3 manuscript lint flags unregistered claim marks and typewriter-identifier leakage, and cite-key extraction ignores comments",
             checks,
         )
@@ -8993,20 +9047,35 @@ def check_d3(output_dir: Path) -> list[str]:
         wide_svg_lint = publication_lint.lint_svg_bytes(wide_svg)
         with tempfile.TemporaryDirectory() as render_temp:
             render_root = Path(render_temp)
-            (render_root / "fig.svg").write_bytes(figure_svg_bytes("spatial_pattern", basemap=True))
+            (render_root / "fig.svg").write_bytes(
+                figure_svg_bytes("spatial_pattern", basemap=True)
+            )
             (render_root / "fig.pdf").write_bytes(PAGE_BEARING_PDF)
             (render_root / "fig.png").write_bytes(minimal_png_bytes())
-            (render_root / "wide.pdf").write_bytes(synthetic_pdf(media_box=(480.0, 300.0)))
+            (render_root / "wide.pdf").write_bytes(
+                synthetic_pdf(media_box=(480.0, 300.0))
+            )
             (render_root / "tall.png").write_bytes(minimal_png_bytes(1200, 1200))
-            (render_root / "plain.svg").write_bytes(figure_svg_bytes("spatial_pattern", basemap=False))
+            (render_root / "plain.svg").write_bytes(
+                figure_svg_bytes("spatial_pattern", basemap=False)
+            )
             matched = publication_lint.lint_figure_renders(
-                render_root / "fig.svg", render_root / "fig.pdf", render_root / "fig.png", requires_basemap=True
+                render_root / "fig.svg",
+                render_root / "fig.pdf",
+                render_root / "fig.png",
+                requires_basemap=True,
             )
             mismatched = publication_lint.lint_figure_renders(
-                render_root / "fig.svg", render_root / "wide.pdf", render_root / "tall.png", requires_basemap=False
+                render_root / "fig.svg",
+                render_root / "wide.pdf",
+                render_root / "tall.png",
+                requires_basemap=False,
             )
             frameless = publication_lint.lint_figure_renders(
-                render_root / "plain.svg", render_root / "fig.pdf", render_root / "fig.png", requires_basemap=True
+                render_root / "plain.svg",
+                render_root / "fig.pdf",
+                render_root / "fig.png",
+                requires_basemap=True,
             )
         require(
             len(wide_svg_lint) == 2
@@ -9030,41 +9099,81 @@ def check_d3(output_dir: Path) -> list[str]:
             and publication_lint.lint_pdf_bytes(OBJECT_STREAM_PDF) == []
             and abs(publication_lint.pdf_aspect(OBJECT_STREAM_PDF) - 4 / 3) < 1e-6
             and render_figure.pdf_media_box(OBJECT_STREAM_PDF) == (480.0, 360.0)
-            and publication_lint.lint_pdf_bytes(b"%PDF-1.5\n4 0 obj\n<< /Type /ObjStm /Filter /FlateDecode /Length 2 >>\nstream\nxx\nendstream\nendobj\n%%EOF\n") != [],
+            and publication_lint.lint_pdf_bytes(
+                b"%PDF-1.5\n4 0 obj\n<< /Type /ObjStm /Filter /FlateDecode /Length 2 >>\nstream\nxx\nendstream\nendobj\n%%EOF\n"
+            )
+            != [],
             "D3 PDF lint sees page dictionaries and MediaBox inside Flate object streams (pdfTeX 1.5 output) and still rejects files without any page",
             checks,
         )
         kit_figure = paper_figures.Figure(width_mm=180, height_mm=70)
         kit_axes = kit_figure.add_axes(
-            14, 12, 70, 48, xlabel="Bulk Cr (mg/kg)", ylabel="Residue Cr (mg/kg)", xlog=True, ylog=True, label="A"
+            14,
+            12,
+            70,
+            48,
+            xlabel="Bulk Cr (mg/kg)",
+            ylabel="Residue Cr (mg/kg)",
+            xlog=True,
+            ylog=True,
+            label="A",
         )
-        kit_axes.scatter([10, 40, 160, 640], [12, 35, 170, 700], color=paper_figures.PALETTE["blue"])
+        kit_axes.scatter(
+            [10, 40, 160, 640], [12, 35, 170, 700], color=paper_figures.PALETTE["blue"]
+        )
         kit_axes.diagonal(dash=True)
         kit_axes.errorbar(100, 100, 60, 150)
         kit_map = kit_figure.add_map(
-            100, 12, 70, 48, (73.7, 18.2, 135.0, 53.5), label="B", focus_codes=["CHN", "TWN"]
+            100,
+            12,
+            70,
+            48,
+            (73.7, 18.2, 135.0, 53.5),
+            label="B",
+            focus_codes=["CHN", "TWN"],
         )
-        kit_map.points([116.4, 121.5, 104.1, 91.1], [39.9, 31.2, 30.7, 29.7], [1.0, 2.0, 3.0, 4.0], legend_title="Cr (mg/kg)")
+        kit_map.points(
+            [116.4, 121.5, 104.1, 91.1],
+            [39.9, 31.2, 30.7, 29.7],
+            [1.0, 2.0, 3.0, 4.0],
+            legend_title="Cr (mg/kg)",
+        )
         kit_figure.bind_claims(["pilot-null-effect", "atlas.record_count"])
         kit_svg_text = kit_figure.render()
         kit_svg_bytes = kit_svg_text.encode("utf-8")
         kit_root = ElementTree.fromstring(kit_svg_bytes)
-        kit_layers = {element.get("data-gga-layer") for element in kit_root.iter() if element.get("data-gga-layer")}
+        kit_layers = {
+            element.get("data-gga-layer")
+            for element in kit_root.iter()
+            if element.get("data-gga-layer")
+        }
         kit_font_sizes = {
             float(element.get("font-size"))
             for element in kit_root.iter()
             if element.tag.endswith("text") and element.get("font-size")
         }
         second_render = paper_figures.Figure(width_mm=180, height_mm=70)
-        second_render.add_map(100, 12, 70, 48, (73.7, 18.2, 135.0, 53.5), label="B", focus_codes=["CHN", "TWN"]).points(
-            [116.4], [39.9], [1.0]
-        )
+        second_render.add_map(
+            100,
+            12,
+            70,
+            48,
+            (73.7, 18.2, 135.0, 53.5),
+            label="B",
+            focus_codes=["CHN", "TWN"],
+        ).points([116.4], [39.9], [1.0])
         stats_figure = paper_figures.Figure(width_mm=180, height_mm=70)
-        stats_axes = stats_figure.add_axes(14, 12, 70, 48, xlabel="Ratio", ylabel="Pairs", label="A")
-        stats_axes.hist([0.5, 0.6, 0.62, 0.7, 0.71, 0.8, 0.85], bins=5, legend="all pairs")
+        stats_axes = stats_figure.add_axes(
+            14, 12, 70, 48, xlabel="Ratio", ylabel="Pairs", label="A"
+        )
+        stats_axes.hist(
+            [0.5, 0.6, 0.62, 0.7, 0.71, 0.8, 0.85], bins=5, legend="all pairs"
+        )
         stats_axes.vline(1.0, text="1:1")
         box_axes = stats_figure.add_axes(108, 12, 62, 48, ylabel="Ratio", label="B")
-        box_axes.boxplot([[0.6, 0.65, 0.7, 0.72, 0.9], [0.55, 0.6, 0.66, 0.7]], ["all", "hold-out"])
+        box_axes.boxplot(
+            [[0.6, 0.65, 0.7, 0.72, 0.9], [0.55, 0.6, 0.66, 0.7]], ["all", "hold-out"]
+        )
         box_axes.hline(1.0, text="null")
         stats_svg = stats_figure.render().encode("utf-8")
         stats_root = ElementTree.fromstring(stats_svg)
@@ -9088,13 +9197,14 @@ def check_d3(output_dir: Path) -> list[str]:
         )
         require(
             kit_root.get("data-gga-figure-kit") == paper_figures.CONTRACT_ID
-            and kit_root.get("data-gga-claims") == "atlas.record_count;pilot-null-effect"
+            and kit_root.get("data-gga-claims")
+            == "atlas.record_count;pilot-null-effect"
             and {"basemap", "graticule", "data"} <= kit_layers
             and publication_lint.svg_has_basemap(kit_svg_bytes)
             and publication_lint.lint_svg_bytes(kit_svg_bytes) == []
             and abs(publication_lint.svg_aspect(kit_svg_bytes) - 180 / 70) < 1e-4
             and min(kit_font_sizes) >= paper_figures.FONT_PT["tick"]
-            and 'clip-map-1' in second_render.render()
+            and "clip-map-1" in second_render.render()
             and second_render.render() == second_render.render()
             and "url(#gradient" not in kit_svg_text
             and "filter=" not in kit_svg_text
@@ -9107,7 +9217,14 @@ def check_d3(output_dir: Path) -> list[str]:
             kit_svg_path = kit_dir / "fig1.svg"
             kit_svg_path.write_text(kit_svg_text, encoding="utf-8")
             no_renderer = subprocess.run(
-                [sys.executable, str(SCRIPT_DIR / "render_figure.py"), "--svg", str(kit_svg_path), "--pdf", str(kit_dir / "none.pdf")],
+                [
+                    sys.executable,
+                    str(SCRIPT_DIR / "render_figure.py"),
+                    "--svg",
+                    str(kit_svg_path),
+                    "--pdf",
+                    str(kit_dir / "none.pdf"),
+                ],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -9115,13 +9232,18 @@ def check_d3(output_dir: Path) -> list[str]:
             )
             require(
                 no_renderer.returncode == 3
-                and json.loads(no_renderer.stderr.strip().splitlines()[-1])["status"] == "failed"
+                and json.loads(no_renderer.stderr.strip().splitlines()[-1])["status"]
+                == "failed"
                 and not (kit_dir / "none.pdf").exists(),
                 "D3 the figure renderer exits 3 with a structured error instead of faking a render when no SVG renderer is available",
                 checks,
             )
             cropped_png = render_figure.crop_png_rows(minimal_png_bytes(1200, 900), 600)
-            cropped_idat = b"".join(body for kind, body in render_figure._png_chunks(cropped_png) if kind == b"IDAT")
+            cropped_idat = b"".join(
+                body
+                for kind, body in render_figure._png_chunks(cropped_png)
+                if kind == b"IDAT"
+            )
             require(
                 publication_lint.png_aspect(cropped_png) == 2.0
                 and zlib.decompress(cropped_idat) == b"\x00" * (600 * 1201)
@@ -9131,16 +9253,28 @@ def check_d3(output_dir: Path) -> list[str]:
                 checks,
             )
             if render_figure.find_chrome():
-                kit_report = render_figure.render(kit_svg_path, kit_dir / "fig1.pdf", kit_dir / "fig1.png", scale=2)
+                kit_report = render_figure.render(
+                    kit_svg_path, kit_dir / "fig1.pdf", kit_dir / "fig1.png", scale=2
+                )
                 kit_render_lint = publication_lint.lint_figure_renders(
-                    kit_svg_path, kit_dir / "fig1.pdf", kit_dir / "fig1.png", requires_basemap=True
+                    kit_svg_path,
+                    kit_dir / "fig1.pdf",
+                    kit_dir / "fig1.png",
+                    requires_basemap=True,
                 )
                 require(
                     kit_report["backend"] == "chrome"
-                    and kit_report["png"]["backend"] in {"chrome-pdf+pdftoppm", "chrome-screenshot-cropped"}
+                    and kit_report["png"]["backend"]
+                    in {"chrome-pdf+pdftoppm", "chrome-screenshot-cropped"}
                     and kit_render_lint == []
-                    and publication_lint.lint_pdf_bytes((kit_dir / "fig1.pdf").read_bytes()) == []
-                    and publication_lint.lint_png_bytes((kit_dir / "fig1.png").read_bytes()) == []
+                    and publication_lint.lint_pdf_bytes(
+                        (kit_dir / "fig1.pdf").read_bytes()
+                    )
+                    == []
+                    and publication_lint.lint_png_bytes(
+                        (kit_dir / "fig1.png").read_bytes()
+                    )
+                    == []
                     and kit_report["png"]["dpi"] >= 180,
                     "D3 the figure renderer exports a same-aspect vector PDF and a print-resolution PNG from the toolkit SVG in a real headless browser",
                     checks,
@@ -9348,7 +9482,10 @@ def check_d3(output_dir: Path) -> list[str]:
         tall_figure_error = typesetting_rejection(
             "writer-fixed-figure-height",
             artifacts=[*manuscript_artifacts, tall_figure_source],
-            typeset={**manuscript_typeset, "source_artifact": tall_figure_source["path"]},
+            typeset={
+                **manuscript_typeset,
+                "source_artifact": tall_figure_source["path"],
+            },
         )
         fixture_figure_block = (
             "\\begin{figure}[t]\n\\centering\n"
@@ -9371,7 +9508,10 @@ def check_d3(output_dir: Path) -> list[str]:
         appended_figure_error = typesetting_rejection(
             "writer-figures-after-bibliography",
             artifacts=[*manuscript_artifacts, appended_figure_source],
-            typeset={**manuscript_typeset, "source_artifact": appended_figure_source["path"]},
+            typeset={
+                **manuscript_typeset,
+                "source_artifact": appended_figure_source["path"],
+            },
         )
         require(
             "fix a height" in tall_figure_error
@@ -9411,7 +9551,10 @@ def check_d3(output_dir: Path) -> list[str]:
         short_caption_error = typesetting_rejection(
             "writer-short-caption",
             artifacts=[*manuscript_artifacts, short_caption_source],
-            typeset={**manuscript_typeset, "source_artifact": short_caption_source["path"]},
+            typeset={
+                **manuscript_typeset,
+                "source_artifact": short_caption_source["path"],
+            },
         )
         try:
             auto_research.submit_agent_result(
@@ -9421,7 +9564,10 @@ def check_d3(output_dir: Path) -> list[str]:
                 model_family="family-c",
                 payload={
                     "artifacts": manuscript_artifacts,
-                    "claim_ids": ["pilot-null-effect", "standardized_measurement_record_count"],
+                    "claim_ids": [
+                        "pilot-null-effect",
+                        "standardized_measurement_record_count",
+                    ],
                     "contribution_map": contribution_map_fixture,
                     "reference_list": manuscript_reference_list,
                     "typeset_manifest": manuscript_typeset,
@@ -9547,14 +9693,22 @@ def check_d3(output_dir: Path) -> list[str]:
             checks,
         )
 
-        def figure_rejection(invocation_id: str, artifacts: list[dict[str, Any]], specs: list[dict[str, Any]]) -> str:
+        def figure_rejection(
+            invocation_id: str,
+            artifacts: list[dict[str, Any]],
+            specs: list[dict[str, Any]],
+        ) -> str:
             try:
                 auto_research.submit_agent_result(
                     run_dir,
                     role="figure_designer",
                     invocation_id=invocation_id,
                     model_family="family-d",
-                    payload={"artifacts": artifacts, "claim_ids": ["pilot-null-effect"], "figure_specs": specs},
+                    payload={
+                        "artifacts": artifacts,
+                        "claim_ids": ["pilot-null-effect"],
+                        "figure_specs": specs,
+                    },
                 )
             except auto_research.AutoResearchError as exc:
                 return str(exc)
@@ -9583,7 +9737,9 @@ def check_d3(output_dir: Path) -> list[str]:
         )
         frameless_specs[1]["artifact_paths"]["svg"] = frameless_svg["path"]
         frameless_error = figure_rejection(
-            "figure-spatial-without-basemap", [*frameless_artifacts, frameless_svg], frameless_specs
+            "figure-spatial-without-basemap",
+            [*frameless_artifacts, frameless_svg],
+            frameless_specs,
         )
         prose_artifacts, prose_specs = empirical_figure_package()
         prose_svg = agent_binary_artifact(
@@ -9708,14 +9864,10 @@ def check_d3(output_dir: Path) -> list[str]:
             model_family="family-h",
             payload=citation_audit_payload(
                 verdict="mismatch",
-                checks=citation_checks(
-                    authors_match=False, author_order_match=False
-                ),
+                checks=citation_checks(authors_match=False, author_order_match=False),
             ),
         )
-        initial_citation_receipt = json_value(
-            run_dir / "citation_audit_receipt.json"
-        )
+        initial_citation_receipt = json_value(run_dir / "citation_audit_receipt.json")
         revision_cycle = citation_mismatch_state["active_cycle"]
         citation_feedback = json_value(
             run_dir / "revisions" / revision_cycle / "feedback_tasks.json"
@@ -9746,8 +9898,7 @@ def check_d3(output_dir: Path) -> list[str]:
         require(
             citation_mismatch_state["required_roles"] == ["manuscript_writer"]
             and citation_feedback["reopened_roles"] == ["manuscript_writer"]
-            and citation_feedback["tasks"][0]["owner_roles"]
-            == ["manuscript_writer"]
+            and citation_feedback["tasks"][0]["owner_roles"] == ["manuscript_writer"]
             and not (
                 run_dir
                 / "revisions"
@@ -9816,11 +9967,21 @@ def check_d3(output_dir: Path) -> list[str]:
             {"paper_style", "claims_tex", "references_bib", "seeded_reference_list"}
             <= set(revision_writer_packet["allowed_inputs"])
             and revision_writer_packet["allowed_inputs"]["paper_style"]["sha256"]
-            == sha256_file(run_dir / auto_research.PAPER_KIT_DIR / manuscript_kit.STYLE_FILE)
-            and revision_writer_packet["required_output"]["payload_contract"]["typesetting"]["contract"]
+            == sha256_file(
+                run_dir / auto_research.PAPER_KIT_DIR / manuscript_kit.STYLE_FILE
+            )
+            and revision_writer_packet["required_output"]["payload_contract"][
+                "typesetting"
+            ]["contract"]
             == manuscript_kit.CONTRACT_ID
-            and "frozen_inputs" in revision_writer_packet["required_output"]["payload_contract"]["deliverable_rule"]
-            and any(key.startswith("previous_manuscript_writer_artifact") for key in revision_writer_packet["allowed_inputs"]),
+            and "frozen_inputs"
+            in revision_writer_packet["required_output"]["payload_contract"][
+                "deliverable_rule"
+            ]
+            and any(
+                key.startswith("previous_manuscript_writer_artifact")
+                for key in revision_writer_packet["allowed_inputs"]
+            ),
             "D3 revision packets re-bind the installed paper kit, carry the typesetting contract and state the deliverable rule alongside the previous cycle's artifacts",
             checks,
         )
@@ -9847,31 +10008,54 @@ def check_d3(output_dir: Path) -> list[str]:
         feedback_copy = agent_binary_artifact(
             "manuscript_writer",
             "frozen_inputs/feedback_tasks.json",
-            (run_dir / "revisions" / revision_cycle / "feedback_tasks.json").read_bytes(),
+            (
+                run_dir / "revisions" / revision_cycle / "feedback_tasks.json"
+            ).read_bytes(),
             revision_cycle,
         )
         previous_source_copy = agent_binary_artifact(
             "manuscript_writer",
             "frozen_inputs/manuscript.tex",
-            (run_dir / "agent_outputs" / "manuscript_writer" / "manuscript.tex").read_bytes(),
+            (
+                run_dir / "agent_outputs" / "manuscript_writer" / "manuscript.tex"
+            ).read_bytes(),
             revision_cycle,
         )
         ledger_named = agent_artifact(
-            "manuscript_writer", "notes/review_receipt.json", '{"note": "my own file"}\n', revision_cycle
+            "manuscript_writer",
+            "notes/review_receipt.json",
+            '{"note": "my own file"}\n',
+            revision_cycle,
         )
         renamed_feedback = agent_artifact(
             "manuscript_writer",
             "frozen_inputs/tasks-we-addressed.json",
-            json.dumps({"schema_version": "gga-research-feedback-tasks-v1", "tasks": [{"gate_id": "citation_audit"}]}),
+            json.dumps(
+                {
+                    "schema_version": "gga-research-feedback-tasks-v1",
+                    "tasks": [{"gate_id": "citation_audit"}],
+                }
+            ),
             revision_cycle,
         )
-        vendored_feedback_error = vendored_rejection("writer-vendored-feedback", feedback_copy)
-        vendored_previous_error = vendored_rejection("writer-vendored-previous-source", previous_source_copy)
-        ledger_name_error = vendored_rejection("writer-ledger-named-artifact", ledger_named)
-        renamed_feedback_error = vendored_rejection("writer-renamed-feedback", renamed_feedback)
+        vendored_feedback_error = vendored_rejection(
+            "writer-vendored-feedback", feedback_copy
+        )
+        vendored_previous_error = vendored_rejection(
+            "writer-vendored-previous-source", previous_source_copy
+        )
+        ledger_name_error = vendored_rejection(
+            "writer-ledger-named-artifact", ledger_named
+        )
+        renamed_feedback_error = vendored_rejection(
+            "writer-renamed-feedback", renamed_feedback
+        )
         unchanged_bib_resubmitted = any(
             item["path"].endswith("references.bib")
-            and item["sha256"] == sha256_file(run_dir / "agent_outputs" / "manuscript_writer" / "references.bib")
+            and item["sha256"]
+            == sha256_file(
+                run_dir / "agent_outputs" / "manuscript_writer" / "references.bib"
+            )
             for item in revised_manuscript_artifacts
         )
         require(
@@ -9882,7 +10066,14 @@ def check_d3(output_dir: Path) -> list[str]:
             and "named like review provenance" in ledger_name_error
             and "feedback-task schema" in renamed_feedback_error
             and unchanged_bib_resubmitted
-            and not (run_dir / "revisions" / revision_cycle / "agents" / "manuscript_writer" / "result.json").exists(),
+            and not (
+                run_dir
+                / "revisions"
+                / revision_cycle
+                / "agents"
+                / "manuscript_writer"
+                / "result.json"
+            ).exists(),
             "D3 a revising role cannot re-declare feedback tasks, review receipts or a stale copy of the previous cycle's file next to its revision, while unchanged files (the bibliography) may be re-submitted",
             checks,
         )
@@ -9915,9 +10106,7 @@ def check_d3(output_dir: Path) -> list[str]:
         revision_citation_receipt = json_value(
             run_dir / "revisions" / revision_cycle / "citation_audit_receipt.json"
         )
-        latest_citation_receipt = json_value(
-            run_dir / "citation_audit_receipt.json"
-        )
+        latest_citation_receipt = json_value(run_dir / "citation_audit_receipt.json")
         revision_reviewer_packet = json_value(
             run_dir
             / "revisions"
@@ -9935,8 +10124,7 @@ def check_d3(output_dir: Path) -> list[str]:
             revision_citation_state["stage"] == "independent_review"
             and revision_citation_receipt["all_references_verified"] is True
             and latest_citation_receipt["cycle_id"] == revision_cycle
-            and "citation_audit_receipt"
-            in revision_reviewer_packet["allowed_inputs"]
+            and "citation_audit_receipt" in revision_reviewer_packet["allowed_inputs"]
             and "reference_manifest" in revision_reviewer_packet["allowed_inputs"],
             "D3 a fully verified citation audit is receipted and bound into the fresh reviewer packet",
             checks,
@@ -9954,8 +10142,7 @@ def check_d3(output_dir: Path) -> list[str]:
             and revision_reviewer_packet["previous_review_allowed"] is False
             and revision_reviewer_packet["executor_summary_allowed"] is False
             and "previous_review" not in revision_reviewer_packet["allowed_inputs"]
-            and "executor_summary"
-            not in revision_reviewer_packet["allowed_inputs"]
+            and "executor_summary" not in revision_reviewer_packet["allowed_inputs"]
             and "feedback_tasks" not in revision_reviewer_packet["allowed_inputs"]
             and all(
                 not key.startswith("previous_")
@@ -9977,7 +10164,9 @@ def check_d3(output_dir: Path) -> list[str]:
             (run_dir / "revisions" / revision_cycle / "feedback_tasks.json").is_file()
             and all(
                 item["sha256"] not in review_provenance_hashes
-                and not item["path"].endswith(("feedback_tasks.json", "review_receipt.json"))
+                and not item["path"].endswith(
+                    ("feedback_tasks.json", "review_receipt.json")
+                )
                 for item in revision_reviewer_packet["allowed_inputs"].values()
             ),
             "D3 no hash or path of feedback tasks or earlier review material appears among the revision reviewer's allowed inputs",
@@ -10145,8 +10334,7 @@ def check_d3(output_dir: Path) -> list[str]:
             and review_receipt["cross_model_status"] == "provisional_same_family"
             and review_receipt["cycle_id"] == "revision-02"
             and review_receipt["human_approval_required"] is False
-            and review_receipt["publication_decision"]
-            == "auto_publish_camera_ready",
+            and review_receipt["publication_decision"] == "auto_publish_camera_ready",
             "D3 Auto-Research repairs failed gates, re-reviews independently, then auto-publishes a camera-ready package with same-family status provisional",
             checks,
         )
@@ -10171,9 +10359,10 @@ def check_d3(output_dir: Path) -> list[str]:
             and manifest_sha256
             == final_research_state["publication"]["manifest_sha256"]
             and packaged_files_intact
-            and {"manuscript_writer", "figure_designer", "controller"}
-            <= packaged_roles
-            and (run_dir / "publication" / "receipts" / "review_receipt.json").is_file(),
+            and {"manuscript_writer", "figure_designer", "controller"} <= packaged_roles
+            and (
+                run_dir / "publication" / "receipts" / "review_receipt.json"
+            ).is_file(),
             "D3 the publication package is hash-bound, carries manuscript, figure and receipt files, and matches the state manifest",
             checks,
         )
@@ -10181,8 +10370,15 @@ def check_d3(output_dir: Path) -> list[str]:
             len(packaged_paths) == len(set(packaged_paths))
             and "publication/manuscript_writer/manuscript.tex" in packaged_paths
             and "publication/manuscript_writer/references.bib" in packaged_paths
-            and "publication/manuscript_writer/figures/fig1_primary.pdf" in packaged_paths
-            and (run_dir / "publication" / "manuscript_writer" / "figures" / "fig1_primary.pdf").is_file()
+            and "publication/manuscript_writer/figures/fig1_primary.pdf"
+            in packaged_paths
+            and (
+                run_dir
+                / "publication"
+                / "manuscript_writer"
+                / "figures"
+                / "fig1_primary.pdf"
+            ).is_file()
             and all(
                 item["source_cycle"] == "revision-01"
                 for item in publication_manifest["files"]
@@ -10329,12 +10525,16 @@ def check_d3(output_dir: Path) -> list[str]:
             "D3 Auto-Research can pause for deterministic candidate selection and resume from an explicit user choice",
             checks,
         )
-        pilot_packet = json_value(pending_run / "agents" / "pilot_analyst" / "packet.json")
+        pilot_packet = json_value(
+            pending_run / "agents" / "pilot_analyst" / "packet.json"
+        )
         literature_packet = json_value(
             pending_run / "agents" / "literature_researcher" / "packet.json"
         )
         pilot_contract_doc = pilot_packet["required_output"]["payload_contract"]
-        literature_contract_doc = literature_packet["required_output"]["payload_contract"]
+        literature_contract_doc = literature_packet["required_output"][
+            "payload_contract"
+        ]
         try:
             auto_research.validate_agent_result(
                 pending_run,
@@ -10563,7 +10763,8 @@ def check_d3(output_dir: Path) -> list[str]:
             and redirected_state["selected_candidate_id"] == "dc-002"
             and "research_gate" not in redirected_state
             and redirected_state["completed_roles"] == []
-            and redirected_state["attempt_history"][0]["candidate_id"] == "user-question"
+            and redirected_state["attempt_history"][0]["candidate_id"]
+            == "user-question"
             and redirected_state["attempt_history"][0]["pilot_outcome"]
             == "unsupported_inputs"
             and redirected_state["attempt_history"][0]["archive_dir"]
@@ -10626,7 +10827,9 @@ def check_d3(output_dir: Path) -> list[str]:
             pilot_dir = target_run / "agent_outputs" / "pilot_analyst" / tag
             pilot_dir.mkdir(parents=True)
             pilot_artifact = pilot_dir / "result.json"
-            pilot_artifact.write_text(json.dumps({"attempt": tag}) + "\n", encoding="utf-8")
+            pilot_artifact.write_text(
+                json.dumps({"attempt": tag}) + "\n", encoding="utf-8"
+            )
             pilot_relative = f"agent_outputs/pilot_analyst/{tag}/result.json"
             executed = pilot_outcome in auto_research.PAPER_ELIGIBLE_PILOT_OUTCOMES
             claims = [
@@ -10649,7 +10852,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 "status": pilot_outcome,
                 "analysis_executed": executed,
                 "result_claim_ids": [c["claim_id"] for c in claims] if executed else [],
-                "routing_destination": "paper_production" if executed else "candidate_selection",
+                "routing_destination": "paper_production"
+                if executed
+                else "candidate_selection",
                 "evidence_summary": (
                     "Dependence-aware interval crosses 1; direction replicates weakly."
                     if executed
@@ -10658,7 +10863,10 @@ def check_d3(output_dir: Path) -> list[str]:
             }
             if executed:
                 outcome["scientific_rigor"] = {
-                    "site_identity": {"basis": "shared identifiers", "residual_risk": "none"},
+                    "site_identity": {
+                        "basis": "shared identifiers",
+                        "residual_risk": "none",
+                    },
                     "spatial_dependence": {
                         "diagnostic": "Moran's I 0.21",
                         "finding": "material autocorrelation",
@@ -10669,7 +10877,10 @@ def check_d3(output_dir: Path) -> list[str]:
                         "result": "direction replicates",
                         "consistent": True,
                     },
-                    "regeneration": {"command": "python run_pilot.py", "deterministic": True},
+                    "regeneration": {
+                        "command": "python run_pilot.py",
+                        "deterministic": True,
+                    },
                 }
             pilot_payload = {
                 "artifacts": [
@@ -10688,7 +10899,9 @@ def check_d3(output_dir: Path) -> list[str]:
             dry_runs.append(
                 dry_run["valid"] is True
                 and dry_run["cycle_id"] == "initial"
-                and not (target_run / "agents" / "pilot_analyst" / "result.json").exists()
+                and not (
+                    target_run / "agents" / "pilot_analyst" / "result.json"
+                ).exists()
             )
             auto_research.submit_agent_result(
                 target_run,
@@ -10697,7 +10910,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 model_family="family-a",
                 payload=pilot_payload,
             )
-            literature_dir = target_run / "agent_outputs" / "literature_researcher" / tag
+            literature_dir = (
+                target_run / "agent_outputs" / "literature_researcher" / tag
+            )
             literature_dir.mkdir(parents=True)
             citations_artifact = literature_dir / "citations.json"
             citations_artifact.write_text("{}\n", encoding="utf-8")
@@ -10706,7 +10921,9 @@ def check_d3(output_dir: Path) -> list[str]:
                 "<html><title>Verified primary source landing page</title></html>\n",
                 encoding="utf-8",
             )
-            citations_relative = f"agent_outputs/literature_researcher/{tag}/citations.json"
+            citations_relative = (
+                f"agent_outputs/literature_researcher/{tag}/citations.json"
+            )
             retrieval_relative = (
                 f"agent_outputs/literature_researcher/{tag}/retrieval-evidence-1.html"
             )
@@ -10774,7 +10991,10 @@ def check_d3(output_dir: Path) -> list[str]:
                 path = target_run / "agent_outputs" / role / tag / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(data)
-                return {"path": path.relative_to(target_run).as_posix(), "sha256": sha256_file(path)}
+                return {
+                    "path": path.relative_to(target_run).as_posix(),
+                    "sha256": sha256_file(path),
+                }
 
             guard = 0
             while state["status"] == "awaiting_agents" and guard < 8:
@@ -10784,30 +11004,73 @@ def check_d3(output_dir: Path) -> list[str]:
                         source = artifact(
                             role,
                             "manuscript.tex",
-                            manuscript_tex(f"Report {tag}", claim_ids=claim_ids, sections=sections).encode(),
+                            manuscript_tex(
+                                f"Report {tag}", claim_ids=claim_ids, sections=sections
+                            ).encode(),
                         )
-                        bib = artifact(role, "references.bib", manuscript_bib().encode())
+                        bib = artifact(
+                            role, "references.bib", manuscript_bib().encode()
+                        )
                         pdf = artifact(role, "manuscript.pdf", TEX_MANUSCRIPT_PDF)
                         payload = {
                             "artifacts": [source, bib, pdf],
                             "claim_ids": claim_ids,
                             "contribution_map": [
-                                {"contribution_id": "c1", "statement": "First bounded finding.", "frontier_delta": "Disclosed delta.", "claim_ids": claim_ids[:1]},
-                                {"contribution_id": "c2", "statement": "Second bounded finding.", "frontier_delta": "Disclosed delta.", "claim_ids": claim_ids[1:2] or claim_ids[:1]},
+                                {
+                                    "contribution_id": "c1",
+                                    "statement": "First bounded finding.",
+                                    "frontier_delta": "Disclosed delta.",
+                                    "claim_ids": claim_ids[:1],
+                                },
+                                {
+                                    "contribution_id": "c2",
+                                    "statement": "Second bounded finding.",
+                                    "frontier_delta": "Disclosed delta.",
+                                    "claim_ids": claim_ids[1:2] or claim_ids[:1],
+                                },
                             ],
                             "reference_list": [
-                                {"reference_id": "ref-1", "title": "Verified primary source", "authors": ["Researcher"], "year": 2025, "venue": "Journal", "identifier": {"type": "doi", "value": "10.0000/example"}}
+                                {
+                                    "reference_id": "ref-1",
+                                    "title": "Verified primary source",
+                                    "authors": ["Researcher"],
+                                    "year": 2025,
+                                    "venue": "Journal",
+                                    "identifier": {
+                                        "type": "doi",
+                                        "value": "10.0000/example",
+                                    },
+                                }
                             ],
-                            "typeset_manifest": {"source_artifact": source["path"], "pdf_artifact": pdf["path"], "bib_artifact": bib["path"], "section_manifest": sections},
+                            "typeset_manifest": {
+                                "source_artifact": source["path"],
+                                "pdf_artifact": pdf["path"],
+                                "bib_artifact": bib["path"],
+                                "section_manifest": sections,
+                            },
                         }
                         family = "family-c"
                     elif role == "figure_designer":
                         artifacts, specs = [], []
                         for index, figure_role in enumerate(figure_roles, 1):
-                            svg = artifact(role, f"figure-{index}.svg", figure_svg_bytes(figure_role, basemap=figure_role in auto_research.SPATIAL_FIGURE_ROLES))
-                            pdf = artifact(role, f"figure-{index}.pdf", PAGE_BEARING_PDF)
-                            png = artifact(role, f"figure-{index}.png", minimal_png_bytes())
-                            src = artifact(role, f"figure-{index}.py", b"print('figure')\n")
+                            svg = artifact(
+                                role,
+                                f"figure-{index}.svg",
+                                figure_svg_bytes(
+                                    figure_role,
+                                    basemap=figure_role
+                                    in auto_research.SPATIAL_FIGURE_ROLES,
+                                ),
+                            )
+                            pdf = artifact(
+                                role, f"figure-{index}.pdf", PAGE_BEARING_PDF
+                            )
+                            png = artifact(
+                                role, f"figure-{index}.png", minimal_png_bytes()
+                            )
+                            src = artifact(
+                                role, f"figure-{index}.py", b"print('figure')\n"
+                            )
                             artifacts.extend([svg, pdf, png, src])
                             specs.append(
                                 {
@@ -10816,22 +11079,58 @@ def check_d3(output_dir: Path) -> list[str]:
                                     "question_answered": f"What does {figure_role} show?",
                                     "claim_ids": claim_ids[:1],
                                     "visual_encoding": "claim-bound marks",
-                                    "artifact_paths": {"svg": svg["path"], "pdf": pdf["path"], "png": png["path"]},
-                                    "candidate_generation": {"candidates_considered": 2, "alternatives_rejected": ["table variant"]},
+                                    "artifact_paths": {
+                                        "svg": svg["path"],
+                                        "pdf": pdf["path"],
+                                        "png": png["path"],
+                                    },
+                                    "candidate_generation": {
+                                        "candidates_considered": 2,
+                                        "alternatives_rejected": ["table variant"],
+                                    },
                                     "source_fidelity": "Every mark traces to a claim ID.",
                                     "editable_source": src["path"],
-                                    "render_review": {"iterations": 1, "inspected": True, "findings": ["labels checked"], "revisions_applied": ["labels enlarged"]},
+                                    "render_review": {
+                                        "iterations": 1,
+                                        "inspected": True,
+                                        "findings": ["labels checked"],
+                                        "revisions_applied": ["labels enlarged"],
+                                    },
                                 }
                             )
-                        payload = {"artifacts": artifacts, "claim_ids": claim_ids, "figure_specs": specs}
+                        payload = {
+                            "artifacts": artifacts,
+                            "claim_ids": claim_ids,
+                            "figure_specs": specs,
+                        }
                         family = "family-d"
                     elif role == "citation_auditor":
-                        evidence = artifact(role, "registry-evidence-ref-1.json", b'{"registry":"doi.org"}\n')
-                        checks_all = {field: True for field in auto_research.CITATION_CHECK_FIELDS}
+                        evidence = artifact(
+                            role,
+                            "registry-evidence-ref-1.json",
+                            b'{"registry":"doi.org"}\n',
+                        )
+                        checks_all = {
+                            field: True for field in auto_research.CITATION_CHECK_FIELDS
+                        }
                         payload = {
                             "artifacts": [evidence],
-                            "reference_audit": [{"reference_id": "ref-1", "verdict": "verified", "checks": checks_all, "registry_evidence_artifact": evidence["path"], "evidence": "Registry metadata compared."}],
-                            "audit_summary": {"total": 1, "verified": 1, "mismatched": 0, "unverifiable": 0, "all_verified": True},
+                            "reference_audit": [
+                                {
+                                    "reference_id": "ref-1",
+                                    "verdict": "verified",
+                                    "checks": checks_all,
+                                    "registry_evidence_artifact": evidence["path"],
+                                    "evidence": "Registry metadata compared.",
+                                }
+                            ],
+                            "audit_summary": {
+                                "total": 1,
+                                "verified": 1,
+                                "mismatched": 0,
+                                "unverifiable": 0,
+                                "all_verified": True,
+                            },
                         }
                         family = "family-e"
                     elif role == "independent_reviewer":
@@ -10839,7 +11138,13 @@ def check_d3(output_dir: Path) -> list[str]:
                         payload = {
                             "artifacts": [review],
                             "gate_results": [
-                                {"gate_id": gate_id, "gate_name": name, "score": 4, "pass": True, "evidence": [f"{name} verified."]}
+                                {
+                                    "gate_id": gate_id,
+                                    "gate_name": name,
+                                    "score": 4,
+                                    "pass": True,
+                                    "evidence": [f"{name} verified."],
+                                }
                                 for gate_id, name in auto_research.REVIEW_GATE_CONTRACT
                             ],
                         }
@@ -10887,7 +11192,10 @@ def check_d3(output_dir: Path) -> list[str]:
             == ["dc-002", "dc-003", "dc-004", "user-question"]
             and exhausted_state["fallback"]["decision"] == "evidence_report"
             and len(exhausted_state["attempt_history"]) == 3
-            and all(item["writeable"] is False for item in exhausted_state["attempt_history"])
+            and all(
+                item["writeable"] is False
+                for item in exhausted_state["attempt_history"]
+            )
             and (pending_run / "attempts" / "attempt-03-dc-003").is_dir()
             and report_gate["writing_basis"] == "evidence_report"
             and report_gate["attempted_directions"] == 3
@@ -10900,8 +11208,10 @@ def check_d3(output_dir: Path) -> list[str]:
             and len(report_registry["pilot_claims"]) == 5
             and sorted(report_figure_contract["result_figures"]["required_roles"])
             == sorted(auto_research.REQUIRED_REPORT_FIGURE_ROLES)
-            and report_writer_packet["required_output"]["deliverable_mode"] == "evidence_report"
-            and "attempt-01-user-question_pilot_result" in report_writer_packet["allowed_inputs"]
+            and report_writer_packet["required_output"]["deliverable_mode"]
+            == "evidence_report"
+            and "attempt-01-user-question_pilot_result"
+            in report_writer_packet["allowed_inputs"]
             and "candidate_fallback_exhausted" in [e["event"] for e in exhausted_events]
             and exhausted_events[-1]["event"] == "evidence_report_started"
             and dry_runs == [True, True],
@@ -10974,14 +11284,17 @@ def check_d3(output_dir: Path) -> list[str]:
             and restored_state["attempt"] == 3
             and restored_state["attempt_history"][0]["restored_as_attempt"] == 3
             and restored_state["attempt_history"][1]["candidate_id"] == "dc-002"
-            and restored_state["fallback"]["decision"] == "best_available_executed_pilot"
+            and restored_state["fallback"]["decision"]
+            == "best_available_executed_pilot"
             and restored_state["fallback"]["written_candidate_id"] == "user-question"
             and restored_state["research_gate"]["writing_basis"]
             == "best_available_executed_pilot"
             and restored_gate["paper_eligible"] is True
             and restored_gate["writing_basis"] == "best_available_executed_pilot"
             and restored_gate["disclosures"][0]["gate_id"] == "frontier"
-            and (best_run / "attempts" / "attempt-01-user-question" / "restored.json").is_file()
+            and (
+                best_run / "attempts" / "attempt-01-user-question" / "restored.json"
+            ).is_file()
             and json_value(
                 best_run / "attempts" / "attempt-01-user-question" / "restored.json"
             )["schema_version"]
@@ -10995,9 +11308,7 @@ def check_d3(output_dir: Path) -> list[str]:
                 best_run / "attempts" / "attempt-01-user-question" / "restored.json"
             )["copied_entries"]
             # The archive stays byte-complete: its manifest still points at real files.
-            and (
-                best_run / "attempts" / "attempt-01-user-question" / "agents"
-            ).is_dir()
+            and (best_run / "attempts" / "attempt-01-user-question" / "agents").is_dir()
             and sha256_file(
                 best_run
                 / "attempts"
@@ -11031,7 +11342,8 @@ def check_d3(output_dir: Path) -> list[str]:
                 and item["frontier_status"] == "weak_frontier_position"
                 for item in best_manifest["disclosed_findings"]
             )
-            and json_value(best_run / "review_receipt.json")["all_seven_gates_pass"] is True,
+            and json_value(best_run / "review_receipt.json")["all_seven_gates_pass"]
+            is True,
             "D3 a manuscript written on a weak-frontier pilot cannot exceed draft_with_disclosed_findings even when every review gate passes",
             checks,
         )
@@ -11203,7 +11515,7 @@ def check_d3(output_dir: Path) -> list[str]:
             },
             "delivery_ready": False,
             "artifacts": artifacts,
-            "claim_ledger": claim_ledger.build_claim_ledger(checkpoint_dir),
+            "claim_ledger": report_claim_ledger.build_claim_ledger(checkpoint_dir),
             "adversarial_source_audit": {
                 "status": "pending_agent_or_discovery_work",
                 "manifest": audit_manifest_path.relative_to(checkpoint_dir).as_posix(),
@@ -11798,9 +12110,9 @@ def check_d3(output_dir: Path) -> list[str]:
         checks,
     )
     china_marine_region = map_builder.selected_region(china_marine_profile)
-    interactive_template = (SKILL_DIR / "assets" / "interactive-atlas-v3.html").read_text(
-        encoding="utf-8"
-    )
+    interactive_template = (
+        SKILL_DIR / "assets" / "interactive-atlas-v3.html"
+    ).read_text(encoding="utf-8")
     require(
         china_marine_profile["custom_region"]["country_code"] is None
         and china_marine_profile["custom_region"]["highlight_country_codes"]

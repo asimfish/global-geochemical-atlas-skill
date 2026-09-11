@@ -15,6 +15,19 @@ description: 构建全球或区域地球化学元素图谱；用于从公开来�
 
 完整任务先读取 [请求与输出契约](references/request-output-contract.md)；涉及科学处理时读取 [科学规则](references/scientific-rules.md)；涉及自适应扩采时读取 [迭代闭环](references/iteration-loop.md)；涉及地图/比较时读取 [D3 契约](references/d3-visualization-contract.md)。只加载当前阶段需要的其他 schema。
 
+## 受限执行器快速路径（autopilot）
+
+自动评审、时间或上下文受限的执行器不要手工串联各阶段，使用单命令入口：
+
+```bash
+python scripts/autopilot.py --prompt-file TASK_PROMPT.txt --output-dir OUT
+# 已有冻结请求时：python scripts/autopilot.py --request REQUEST.json --output-dir OUT
+```
+
+autopilot 确定性完成：冻结请求（抽取证据写 `freeze_report.json`，题面候选全集进入请求、最低线只作验收）→ `task_router.py` 规划 → 执行与全部验证 → 对抗审计 → 断言台账 → 写 `executor_compliance_report.json`。终态机读：`AUTOPILOT_STATE=DONE|CONTINUE_REQUIRED|NEEDS_HUMAN_REVIEW|FAILED`。`CONTINUE_REQUIRED` 时唯一正确动作是执行报告中的 `next_command`（`--continue` 消费修复队列），不得改写为总结交差；最终回复的数字必须逐字取自报告的 `final_answer_facts`，`required_scope_notes` 与 `claims.scoped_claims` 中的范围句必须随对应数字一起出现。回复草稿建议先过 `python scripts/claim_ledger.py --run-dir OUT --check-answer DRAFT.md`（幻数与缺范围句会被判 `answer_unbound`）。autopilot 不豁免任何门禁，手工路径与它执行同一套契约。
+
+跨次运行可传 `--memory-file MEM.json` 启用采集记忆：已证明来源作为第一轮调度种子（loop 的 `--seed-priority-source-id`），本次成败运行后自动收割回记忆文件；建议只重排已路由来源，永不扩大采集面。见 [acquisition-memory.md](references/acquisition-memory.md)。
+
 ## 执行状态机
 
 严格按顺序执行：
@@ -144,6 +157,10 @@ python scripts/run_self_correction_loop.py \
 
 每个带已治理候选的待修 action group 由控制器生成 `agent_audits/round-.../audit-.../`。侦察者与质疑者必须由宿主分别启动全新会话且只读各自 `packet.json`；上一轮记忆只参与选择并留下 hash，不进入本轮 evaluator packet。二者都不能评分或准入，第三层由 `agent_audit.py judge` 从冻结事实确定性计分，结果仍须 D1 门禁和具名人工批准。相同 `invocation_id`、角色/packet 替换、未知输入或任一 hash 变化均失败关闭；完整调用与边界见 [adversarial-agent-audit.md](references/adversarial-agent-audit.md)。
 
+缺口的候选来源不足时，先跑来源发现对决拓宽漏斗：`discovery_duel.py --mode brief` 从修复队列缺口生成 Scout（鼓励过度提名）与 Skeptic（跨族质疑）两份 brief，确定性 Referee 按开放许可/DOI/介质/区域轴打分，`admit_to_spec_draft` 附可执行的 spec 起草命令，`revise` 附逐条行动项，打满轮次如实停下。对决只能起草、永远不能批准——门禁不因互搏而放松。见 [discovery-duel.md](references/discovery-duel.md)。
+
+`skill_maintenance_new_run` 候选若是可直接下载的表格来源，优先走声明式运行内适配器通道，避免缺口停在报告里：`propose_adapter_spec.py` 从修复队列缺口与候选表头机器生成 spec 草案，人工（或已授权策略）补全许可、版本与 CRS 证据并批准后，`declarative_adapter.py` 在许可白名单、HTTPS、哈希固定、逐行拒绝门禁下生成补充采集包，再经 `run_atlas_request.py --input` 走既有 provided-input 契约交付。spec 是哈希绑定的运行输入而非 Skill 代码，来源强制 `spec-*` 命名空间且不抬升证据层级；完整教义见 [declarative-adapter.md](references/declarative-adapter.md)。
+
 ## 3. D1：来源与证据链
 
 来源目录是候选，不是当前请求可执行证明。使用 `source_router.py`、`source_audit.py`、`score_source_evidence.py` 和 `coverage_report.py`；准入规则见 [source-acceptance-standard.md](references/source-acceptance-standard.md)，逐源接口边界见 [source-interface-cards.md](references/source-interface-cards.md)。
@@ -246,9 +263,12 @@ D3 文件的主工作流目录误用此命令并把预期的契约差异当成�
 ```bash
 python scripts/validate_outputs.py --output-dir OUTPUT_DIR
 python scripts/validate_research_delivery.py --output-dir OUTPUT_DIR
+python scripts/adversarial_audit.py --output-dir OUTPUT_DIR
 ```
 
 第一个核验十八文件和 hash 链；第二个仅用于完整在线研究，要求 sufficiency 通过、修复队列清空、根目录与最后合法轮次逐字节一致、Skill 快照稳定。fixture、直接单轮或 `checkpoint-only` 不得产生 delivery-ready 收据。任一门禁失败，不交付“看起来正常”的局部地图。
+
+第三个是内容真实性裁判（Builder/Skeptic/Referee 互搏协议的单 Agent 形态）：先在影子副本植入 10 类金丝雀缺陷校准审计能力，全部抓到后才对真实目录出具可采信裁决；再做单位换算重推、异常 z 重算、证据链与坐标一致性等确定性复核。裁决分级：`pass` / `pass_scope_narrowed`（warning 收窄口径，`scope_notes` 随数字进最终回复）/ `fail`——诚实的代价是一个从句，不是整个结果。执行者可以驱动修复，但永远不能自我豁免——最终回复必须引用 `audit_receipt.json` 的 verdict 与 calibration recall。审计之后由 `claim_ledger.py` 生成断言台账（逐断言绑证据指针并重算复核），回复草稿经 `--check-answer` 抓幻数与缺范围句。双 Agent 深度互搏（`--mode brief` 独立审计考试 + 评审者契约：跨模型家族、新鲜线程、访问分级、路径哈希钉死 + `--adjudicate` 裁决并回流修复队列）见 [adversarial-audit.md](references/adversarial-audit.md)。
 
 显式 demo/回归才使用随包 fixture；它们是真实、hash 固定的工程切片，不代表区域完整性。命令与重建说明见 [demo-guide.md](references/demo-guide.md)、[production-demo.md](references/production-demo.md) 和 [china-fixture.md](references/china-fixture.md)。中国 demo 为 2,400 条 TPDC 土壤加 558 条 Zenodo 河流沉积物；完整 TPDC 6,570 条能力仍通过注册来源和全量 profile 保留。
 
@@ -349,6 +369,9 @@ Boundaries: paper_polish consumes Section 10 artifacts only; it does not collect
 ## 按需资源
 
 - 输入输出与闭环：[request-output-contract.md](references/request-output-contract.md)、[iteration-loop.md](references/iteration-loop.md)、[adversarial-agent-audit.md](references/adversarial-agent-audit.md)、[auto-research.md](references/auto-research.md)、[research-delivery-receipt.schema.json](references/research-delivery-receipt.schema.json)。
+
+- 输入输出与闭环：[request-output-contract.md](references/request-output-contract.md)、[iteration-loop.md](references/iteration-loop.md)、[research-delivery-receipt.schema.json](references/research-delivery-receipt.schema.json)。
+- 受限执行器与互搏：[adversarial-audit.md](references/adversarial-audit.md)、[audit-receipt.schema.json](references/audit-receipt.schema.json)、[claim-ledger.schema.json](references/claim-ledger.schema.json)、[acquisition-memory.md](references/acquisition-memory.md)、[declarative-adapter.md](references/declarative-adapter.md)、[declarative-adapter.schema.json](references/declarative-adapter.schema.json)。
 - 来源与证据：[data-sources.md](references/data-sources.md)、[source-acceptance-standard.md](references/source-acceptance-standard.md)、[source-evidence-standard-v3.md](references/source-evidence-standard-v3.md)、[coordinate-policy-registry.json](references/coordinate-policy-registry.json)。
 - D2 科学：[scientific-rules.md](references/scientific-rules.md)、[data-model.md](references/data-model.md)、[schema-mapping.md](references/schema-mapping.md)、[platform-field-crosswalk.md](references/platform-field-crosswalk.md)。
 - 时序与成因归因：[temporal-analysis.md](references/temporal-analysis.md)（采样时间契约 atlas-sampling-time-v1 与异常成因归因契约 anomaly-provenance-v1 的完整定义、逐源声明与可复现命令）、[temporal-map-design.md](references/temporal-map-design.md)（时间演变地图 temporal-atlas-v1 的双模式设计、payload 契约与美观设计决策）。

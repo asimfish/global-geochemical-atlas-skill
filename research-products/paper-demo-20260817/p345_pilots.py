@@ -6,9 +6,12 @@ import json
 import numpy as np
 import pandas as pd
 from scipy import stats
+import os
+# Data root for the paper demo; override with GGA_HACKATHON_ROOT when reproducing.
+ROOT = os.environ.get("GGA_HACKATHON_ROOT", os.path.expanduser("~/hackathon"))
 
-DB = '/mnt/nas/data/lyf/hackathon/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
-OUT = '/mnt/nas/data/lyf/hackathon/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/p345_results.json'
+DB = ROOT + '/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
+OUT = ROOT + '/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/p345_results.json'
 RNG = np.random.default_rng(20260818)
 
 df = pd.read_csv(DB, low_memory=False)

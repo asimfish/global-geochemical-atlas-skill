@@ -19,7 +19,7 @@ from typing import Any
 
 import validate_outputs as output_validator
 import agent_audit
-import claim_ledger
+import report_claim_ledger
 import skill_snapshot
 
 RECEIPT_FILENAME = "research_delivery_receipt.json"
@@ -310,7 +310,9 @@ def validate_delivery(
         if receipt.get("request_sha256") != loop.get("request_sha256"):
             errors.append("receipt request hash does not match loop report")
         errors.extend(
-            claim_ledger.validate_claim_ledger(output_dir, receipt.get("claim_ledger"))
+            report_claim_ledger.validate_claim_ledger(
+                output_dir, receipt.get("claim_ledger")
+            )
         )
         audit_binding = receipt.get("adversarial_source_audit")
         if not isinstance(audit_binding, Mapping):

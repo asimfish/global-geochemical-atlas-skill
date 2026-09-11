@@ -5,9 +5,12 @@ import json
 import numpy as np
 import pandas as pd
 from scipy import stats
+import os
+# Data root for the paper demo; override with GGA_HACKATHON_ROOT when reproducing.
+ROOT = os.environ.get("GGA_HACKATHON_ROOT", os.path.expanduser("~/hackathon"))
 
 RNG = np.random.default_rng(20260818)
-DB = '/mnt/nas/data/lyf/hackathon/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
+DB = ROOT + '/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
 
 df = pd.read_csv(DB, low_memory=False)
 df = df[df.normalized_value.notna() & (df.normalized_value > 0) & df.latitude.notna()]

@@ -35,6 +35,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import sampling_time  # noqa: E402
+
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "temporal-atlas-v1.html"
 DEFAULT_BASEMAP = SKILL_DIR / "assets" / "natural-earth-110m-land.json"
@@ -333,13 +334,15 @@ def load_provenance(
 def _geometry_rings(geometry: dict[str, Any]) -> list[list[list[float]]]:
     geometry_type = geometry.get("type")
     coordinates = geometry.get("coordinates")
+    if coordinates is None:
+        raise TemporalMapBuildError(
+            f"boundary geometry of type {geometry_type} has no coordinates"
+        )
     if geometry_type == "Polygon":
         return [list(ring) for ring in coordinates]
     if geometry_type == "MultiPolygon":
         return [list(ring) for polygon in coordinates for ring in polygon]
-    raise TemporalMapBuildError(
-        f"unsupported boundary geometry type: {geometry_type}"
-    )
+    raise TemporalMapBuildError(f"unsupported boundary geometry type: {geometry_type}")
 
 
 def load_boundary_layers(
@@ -377,7 +380,9 @@ def load_boundary_layers(
     # the same outline the main map draws in gold; it never clips records.
     focus_codes = [str(code) for code in region.get("highlight_country_codes") or []]
     if focus_codes:
-        by_code = {str(country["iso_a3"]): country for country in admin0_raw["countries"]}
+        by_code = {
+            str(country["iso_a3"]): country for country in admin0_raw["countries"]
+        }
         unknown = [code for code in focus_codes if code not in by_code]
         if unknown:
             raise TemporalMapBuildError(
@@ -476,6 +481,9 @@ def summarize_source_time_semantics(
     for source_id, total in totals.items():
         declaration = sampling_time.SOURCE_SAMPLING_TIME.get(source_id)
         dated_total = dated_counts.get(source_id, 0)
+        basis: str
+        raw_field: str | None
+        reason: str | None
         if declaration is None:
             basis, raw_field, reason = "none", None, REASON_UNDECLARED_SOURCE
         elif "raw_format" in declaration:

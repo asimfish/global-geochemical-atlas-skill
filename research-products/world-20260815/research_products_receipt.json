@@ -34,7 +34,7 @@
   ],
   "generated_at": "2026-08-16T11:34:03+00:00",
   "inputs": {
-    "output_dir": "/mnt/nas/data/lyf/hackathon/retest-acquisition-coverage-v12-6c221cf/world/output",
+    "output_dir": "$GGA_HACKATHON_ROOT/retest-acquisition-coverage-v12-6c221cf/world/output",
     "sha256": {
       "d1_repair_queue.json": "8b8b6d97f6a78c842da80e83f6d4ad3cf24fe243487cd0abd8341674b545a027",
       "geochemistry.csv": "e3616e88b6f5c716f5f69a0c786897f3878838281b7aec4bc280f2f6a653828d",

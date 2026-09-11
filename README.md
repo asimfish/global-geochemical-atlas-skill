@@ -2,59 +2,87 @@
 
 # 🌍 Global Geochemical Atlas Skill
 
-**全球地球化学元素分布图谱 —— 面向 AI Agent 的可复用科研 Skill**
+**A reusable research skill for AI agents — turn scattered public geochemistry into a traceable database, screened anomaly candidates, and self-contained interactive atlases.**
 
-*Turn scattered public geochemistry into a traceable database, screened anomaly candidates, and self-contained interactive atlases.*
+**English** | [简体中文](README.zh-CN.md)
 
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#-90-秒快速开始)
-[![Runtime Deps](https://img.shields.io/badge/%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96-%E9%9B%B6%E7%AC%AC%E4%B8%89%E6%96%B9-brightgreen)](#-90-秒快速开始)
-[![Tests](https://img.shields.io/badge/tests-611%20%2B%2076%20%2B%20117%20passing-brightgreen)](#-开发与验证)
-[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-在你的-ai-agent-中使用)
-[![Works with](https://img.shields.io/badge/Works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Copilot%20CLI-6E56CF)](#-在你的-ai-agent-中使用)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#-quick-start-90-seconds)
+[![Dependencies](https://img.shields.io/badge/runtime%20deps-zero-brightgreen)](#-quick-start-90-seconds)
+[![Tests](https://img.shields.io/badge/tests-677%20%2B%2060%20%2B%2076%20%2B%20117%20passing-brightgreen)](#-development--testing)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-use-it-with-your-ai-agent)
+[![Works with](https://img.shields.io/badge/Works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Copilot%20CLI-6E56CF)](#-use-it-with-your-ai-agent)
+[![Champion](https://img.shields.io/badge/AI4S%20Hackathon-🏆%20Champion-f6c344)](#-awards--media)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[🌐 在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/) ·
-[🚀 快速开始](#-90-秒快速开始) ·
-[🤖 在 Agent 中使用](#-在你的-ai-agent-中使用) ·
-[🧭 数据来源](#-数据来源37-个已冻结可执行来源--69-条审计目录记录) ·
-[📦 输出产物](#-十八个输出产物) ·
+[🌐 Project Site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html) ·
+[🗺️ Live Atlas](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-atlas.html) ·
+[🎬 Demo Video](https://asimfish.github.io/global-geochemical-atlas-demo/finals/Global-Geochemical-Atlas-Final-Demo.mp4) ·
+[🧪 Team Site](https://chembot.zgca.com/)
+
+[🚀 Quick Start](#-quick-start-90-seconds) ·
+[🤖 Use with Your Agent](#-use-it-with-your-ai-agent) ·
+[🏗️ How It Works](#️-how-it-works) ·
+[🧭 Data Sources](#-data-sources-37-frozen-executable-sources--69-audited-catalog-records) ·
+[⏳ Temporal](#-the-temporal-dimension-evolution-maps-and-enrichment-attribution) ·
+[📦 Outputs](#-the-18-output-files) ·
 [❓ FAQ](#-faq)
 
-<img src="skills/global-geochemical-atlas/assets/readme-atlas-map.png" alt="全球地球化学元素图谱交互界面：44,510 条测定的全球分布、采样密度热力、候选异常标记与四介质覆盖侧栏" width="100%">
+<a href="https://synmatai.cn/hackathon/"><img src="docs/readme/synmatai-champion.png" alt="Champion of the SynMatAI AI4S Future ScienceSkills Hackathon — Team Token Agents" width="640"></a>
 
-<sub>真实在线采集运行：15 个公开来源 · 44,510 条测定 · 11,548 个物理采样点 · 7 元素 × 4 介质 · 535 个候选异常（robust-z 筛查候选，非成因结论）。空白区域如实显示数据缺口。<b><a href="https://asimfish.github.io/global-geochemical-atlas-demo/">在线演示与评委讲解页 ↗</a></b></sub>
+<p><img src="docs/readme/orgs-banner.png" alt="Shanghai Jiao Tong University · Zhongguancun Academy · Beihang University · Zhejiang University" width="720"></p>
+
+<img src="docs/readme/atlas-world-map.png" alt="Interactive world atlas from a real production run: 198,445 displayable measurements, anomaly-candidate rings, and a media-coverage sidebar" width="100%">
+
+<sub>Interface capture from the 2026-08-19 global online production run: <b>199,730</b> measurements admitted to the database · <b>45,753</b> distinct physical samples · <b>35</b> public sources · <b>3,721</b> anomaly screening candidates (robust-z candidates, not genetic conclusions). Blank areas honestly show data gaps. <b><a href="https://asimfish.github.io/global-geochemical-atlas-demo/en.html">Live demo ↗</a></b></sub>
 
 <br><br>
 
-<img src="skills/global-geochemical-atlas/assets/readme-atlas-globe.png" alt="同一份自包含产物内置的可旋转三维地球仪视图，样点立柱颜色与二维地图一致" width="88%">
+<img src="skills/global-geochemical-atlas/assets/readme-atlas-globe.png" alt="The same self-contained artifact includes a rotatable 3D globe whose sample columns match the 2D map colors" width="88%">
 
-<sub>同一个自包含 HTML 内置二维世界地图与可拖动旋转的三维地球仪，一键切换；无 CDN、无服务器，断网照常交互。</sub>
+<sub>One self-contained HTML file ships both a 2D world map and a draggable 3D globe — no CDN, no server, fully interactive offline.</sub>
 
 </div>
 
 ---
 
-## 📌 这是什么
+## 📌 What Is This
 
-这是一个面向 AI Agent 的**完整科研 Skill**，而不是一张预制地图。给它一个「元素 × 区域 × 介质」请求，Agent 会按 **D1 → D2 → D3** 工作流发现和冻结公开数据源、执行单位与坐标质量控制、在可比背景组内筛查富集/亏损候选，最终产出可审计的标准数据库、证据报告和交互地图。
+A complete, agent-native **research skill** — not a pre-rendered map. Given an *element × region × medium* request, an AI agent follows the **D1 → D2 → D3** workflow to discover and freeze public data sources, run unit and coordinate quality control, screen enrichment/depletion candidates within comparable background groups, and deliver an auditable standardized database, evidence reports, and interactive atlases.
 
-| 你关心的 | 它给你的 |
+**Capabilities at a glance** — automatically collects element concentrations, sampling coordinates, geological background, and analytical-method metadata from public literature and open data platforms across four media (rock, soil, sediment, water); performs unit unification, spatial matching, quality control, and provenance tracing; renders global or regional distribution maps, heatmaps, and element-combination comparisons filterable by element, region, geological unit, and sample type; and identifies both enrichment and depletion anomaly candidates.
+
+| Your question | What it guarantees |
 |---|---|
-| 数据从哪来 | 69 条审计目录记录，其中 37 个已冻结、可执行公开来源、32 个 discovery-only 候选（岩石/土壤/沉积物/水体）；正式记录逐条绑定 DOI/URL、版本、许可、定位与文件 SHA-256 |
-| 数值和证据能不能用 | 原值永不覆盖、删失值不插补、批次 QC 逐条重算；来源证据/分析就绪度/空间可用性/工作流可用性分开报告 |
-| 结论敢不敢用 | 异常只作筛查候选并列出竞争解释；跑不齐的范围诚实报告缺口，绝不冒充全量覆盖 |
-| 能不能复用 | 40+ JSON Schema、十八文件产物契约、自包含 HTML 地图、纯标准库脚本，可脱离本仓库对接；纯 Markdown + 标准库，Claude Code / Codex / Cursor 等运行时零改动挂载 |
-| 时间维度呢 | 每条记录带采样时刻三列（`atlas-sampling-time-v1`，发表年不算数）；时间演变四模式是主 `interactive_map.html` 的一级选项；异常富集沿岩性/空间/伴生/时序四条证据线归因「母质高背景 / 疑似人为输入」，证据不足如实不判 |
-| Loop 会互相带偏吗 | 当前轮侦察者与质疑者使用独立 fresh-session packet，上一轮记忆只参与选题并留下 hash；第三层由确定性 judge 计分，agent 无权自行准入来源 |
-| 图谱后还能做什么 | 用户可在同一 HTML 选择 Auto-Research：冻结图谱后自动生成候选、试点、文献核验、论文骨架、制图契约与独立评审；失败进入不可覆盖的修订轮，通过后仍停在人工批准 |
+| Where does the data come from? | 69 audited catalog records: 37 frozen, executable public sources (rock / soil / sediment / water) plus 32 discovery-only candidates; every formal record is bound to a DOI/URL, version, license, locator, and file SHA-256 |
+| Can I trust the numbers? | Original values are never overwritten, censored values are never imputed, batch QC is recomputed per record, and a five-component confidence score comes with an explicit "this is not a probability of correctness" disclaimer |
+| Dare I cite the conclusions? | Anomalies are reported strictly as screening candidates with competing explanations listed; scopes that could not be completed are reported as gaps — never dressed up as full coverage |
+| Can I reuse it elsewhere? | 40+ JSON Schemas, an 18-file output contract, self-contained HTML maps, and pure-stdlib scripts that work outside this repository; Markdown + stdlib only, so Claude Code / Codex / Cursor mount it without a single code change |
+| What about time? | Every record carries three sampling-time columns (`atlas-sampling-time-v1`; publication year never counts); the four temporal-evolution modes are first-class options of the main `interactive_map.html`; enrichment candidates are attributed along lithology / spatial / co-element / temporal evidence lines as geogenic background vs. suspected anthropogenic input, and the skill declines to judge when evidence is thin |
+| Can loop rounds bias each other? | The scout and challenger of the current round read isolated fresh-session packets; the previous round's memory only helps choose targets and leaves a hash; a deterministic judge scores the third layer, and no agent can admit a source on its own |
+| What comes after the atlas? | From the same HTML the user may opt into Auto-Research: freeze the atlas, then generate candidates, pilots, literature checks, a paper skeleton, figure contracts, and independent review; failures enter non-overwritable revision rounds, and a pass still stops at human approval |
 
-## 🚀 90 秒快速开始
+Latest global online production run (2026-08-19, fully autonomous): **199,730** deterministically admitted records · **45,753** distinct physical samples · **35** connected public sources (31 further candidates audited and rejected) · **100%** record-level provenance chains · **3,721** anomaly screening candidates · **393** records that failed the standardization gate kept honestly in place — never silently dropped. Structured run evidence with a guided walk-through is on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html).
 
-以下是不需网络、密钥、GPU 或第三方包的**快速回归 demo**，用来确认工程与科学规则可执行；它不是正式图谱研究的默认采集策略。在仓库根目录运行：
+## 🎯 Design Commitments
+
+Six commitments define this skill. Each one is implemented, regression-tested, and documented — the table is your map to where:
+
+| Commitment | What it guarantees | Implementation & docs |
+|---|---|---|
+| **Complete iteration loop** | Nine research steps behind three gates; failed acceptance enters a five-step repair loop; unfixable gaps are flagged `needs_human_review`, never papered over | [The iteration loop](#the-iteration-loop-fix-what-fails-admit-what-cannot-be-fixed) · `run_self_correction_loop.py` |
+| **Three-layer adversarial mechanism** | Scout nominates, Skeptic objects, deterministic Referee scores — at the data entrance; a canary-calibrated auditor guards the exit | [Adversarial mechanisms](#adversarial-mechanisms-it-can-drive-never-acquit) · `discovery_duel.py` / `agent_audit.py` / `adversarial_audit.py` |
+| **Per-round evaluation independence** | Reviewers run in fresh threads from a different model family; cross-run memory seeds round 1 scheduling only and in-run evidence always outranks it — no round inherits another round's conclusions | [Each round stays independent](#the-iteration-loop-fix-what-fails-admit-what-cannot-be-fixed) · `acquisition_memory.py` |
+| **SHA-256 fingerprints, one per result** | Hashes anchor four links — frozen request, source files, all 18 artifacts, and every reportable claim (`file + JSON pointer + SHA-256`) | [The evidence chain](#the-evidence-chain-every-number-carries-a-fingerprint) · `claim_ledger.py` |
+| **Temporal evolution inside the atlas** | Every record carries a sampling-time contract (`atlas-sampling-time-v1`); the four temporal modes and the enrichment-attribution view live inside the main `interactive_map.html`, driven by the same standardized database — not a separate deliverable | [The temporal dimension](#-the-temporal-dimension-evolution-maps-and-enrichment-attribution) · `build_temporal_map.py` / `classify_anomaly_provenance.py` · [live temporal view](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-temporal.html) |
+| **Auto-research genuinely wired in** | After a validated atlas run, the user can opt to continue into the research layer — cohorts, context, and sampling priorities, and onward to a resumable, claim-bound, independently reviewed Auto-Research run that always ends in a packaged product | [After the atlas](#after-the-atlas-continue-into-research-mode) · [Auto-Research](#continue-into-auto-research-from-the-atlas) · `build_research_products.py` / `auto_research.py` / `serve_atlas_research.py` |
+
+## 🚀 Quick Start (90 seconds)
+
+All you need is Python 3.10+ — **no network, no API keys, no GPU, no third-party packages**. From the repository root:
 
 ```bash
-# 1. 运行生产阈值真实数据演示（996 条 hash 固定的 USGS 土壤测定）
+# 1. Run the production-threshold demo on real data (996 hash-pinned USGS soil measurements)
 python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
   --request skills/global-geochemical-atlas/fixtures/production-usgs/request.json \
   --demo production-usgs \
@@ -62,63 +90,91 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
   --generated-at 2026-08-07T00:00:00Z \
   --output-dir /tmp/geochemical-production-demo
 
-# 2. 校验十八文件产物契约
+# 2. Validate the 18-file output contract
 python skills/global-geochemical-atlas/scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-两个命令应分别返回 `"status": "partial_success"` 和 `"status": "valid"`。前者是**刻意的科学状态**：hash 固定切片完整跑通，但不冒充冻结请求的全量空间覆盖；后者证明十八项产物契约全部有效。
+The two commands should return `"status": "partial_success"` and `"status": "valid"` respectively. The former is a **deliberate scientific status**: the hash-pinned slice ran end to end, but the run does not pretend to cover the full spatial scope of the frozen request. The latter confirms all eighteen output contracts are valid.
 
-然后用浏览器打开 `/tmp/geochemical-production-demo/interactive_map.html` —— 一个完全自包含、无 CDN 依赖的交互图谱。
+### Or let the conductor drive: one command, end to end
+
+```bash
+# Freeze the prompt → route the task → run the loop → validate → adversarial audit → compliance report
+python skills/global-geochemical-atlas/scripts/autopilot.py \
+  --prompt-file TASK_PROMPT.txt \
+  --output-dir /tmp/atlas-run
+
+# If the run stops with a repair queue, exactly one follow-up command resumes it
+python skills/global-geochemical-atlas/scripts/autopilot.py \
+  --output-dir /tmp/atlas-run --continue
+```
+
+`autopilot.py` turns the whole SKILL contract into one deterministic command: it freezes the natural-language prompt into a schema-valid request (with an auditable `freeze_report.json`), routes the task, invokes the self-correction loop when an hour-scale budget is authorized (`--time-budget-seconds`), runs every validator plus the adversarial audit, and emits `executor_compliance_report.json` whose `final_answer_facts` are the only numbers the final answer may repeat. Terminal states are machine-readable: `DONE | CONTINUE_REQUIRED | NEEDS_HUMAN_REVIEW | FAILED`.
+
+Then open `/tmp/geochemical-production-demo/interactive_map.html` in a browser — a fully self-contained interactive atlas with zero CDN dependencies.
 
 <details>
-<summary><b>这条回归验证了什么？（点开看预期指标）</b></summary>
+<summary><b>What does this regression prove? (expected metrics inside)</b></summary>
 
-- 996/996 条记录完成 GLiM 岩性地质匹配；
-- 72 个背景组中 **12 个达到生产阈值 `n≥20` 完成分析，60 个样本不足被诚实排除**（不降阈值、不硬凑）；
-- 识别 6 个 high/low 候选异常；
-- 输出校验 0 错误 / 0 警告。
+- 996/996 records matched against GLiM lithology;
+- of 72 background groups, **12 met the production threshold `n≥20` and were analyzed; 60 were honestly excluded for insufficient samples** (no threshold lowering, no forced numbers);
+- 6 high/low anomaly candidates identified;
+- output validation: 0 errors / 0 warnings.
 
-它证明工程和科学规则可执行，不代表美国土壤的统计分布。完整证据见[生产演示说明](skills/global-geochemical-atlas/references/production-demo.md)。
+It proves the engineering and scientific rules are executable — it does not represent the statistical distribution of US soils. Full evidence: [production demo notes](skills/global-geochemical-atlas/references/production-demo.md).
 
 </details>
 
-本地重复基准采用 3 次预热和 10 次独立测量，每次都创建新输出目录并验证全部 18 项产物；记录结果与适用边界见[工作流性能基准](skills/global-geochemical-atlas/BENCHMARK.md)。它不是官方模型得分或 2 CPU 容器成绩。
+A local repeatability benchmark uses 3 warm-ups and 10 independent measurements, each in a fresh output directory with all 18 artifacts validated; results and applicability limits are recorded in the [workflow benchmark](skills/global-geochemical-atlas/BENCHMARK.md). It is not an official model score or a 2-CPU container result.
 
-## 🤖 在你的 AI Agent 中使用
+## 🤖 Use It with Your AI Agent
 
-本 Skill 按 [Agent Skills](https://agentskills.io) 公共子集编写（`SKILL.md` + `references/` + `scripts/` + `assets/`，一层引用、相对路径、纯标准库）。**整个 Skill 就是 Markdown + Python 标准库脚本——没有框架、没有守护进程、没有第三方依赖**，任何能读 `SKILL.md` 的 LLM Agent 都能直接用；换运行时不需要改一行代码：
+The skill follows the [Agent Skills](https://agentskills.io) public subset (`SKILL.md` + `references/` + `scripts/` + `assets/`, one level of references, relative paths, pure stdlib). **The whole skill is Markdown plus Python standard-library scripts — no framework, no daemon, no third-party dependency** — so any LLM agent that can read `SKILL.md` can use it, and switching runtimes needs no code change:
 
 ```bash
-# Claude Code（个人技能目录）
+# Claude Code (personal skills directory)
 cp -r skills/global-geochemical-atlas ~/.claude/skills/
 
 # Codex CLI
 cp -r skills/global-geochemical-atlas ~/.codex/skills/
 
-# Cursor（项目级技能目录）
+# Cursor (project-level skills directory)
 cp -r skills/global-geochemical-atlas /path/to/your-project/.cursor/skills/
 
-# GitHub Copilot CLI（原生 SKILL.md 支持）
+# GitHub Copilot CLI (native SKILL.md support)
 cp -r skills/global-geochemical-atlas ~/.copilot/skills/
 
-# OpenCode / Trae / OpenClaw 及其他兼容运行时：将 skill 目录复制/挂载到其技能目录即可
+# OpenCode / Trae / OpenClaw and other compatible runtimes: copy/mount the skill directory into their skills folder
 ```
 
-挂载后直接向 Agent 提出诉求即可触发，例如：
+### Ready-to-use prompts
 
-- *「用公开数据做一张西欧土壤砷分布图，标出候选富集区并给出来源和置信度」*
-- *「快速模式跑一张全球铅分布图，我先看看效果」*（走 900 秒轻量档）
-- *「这些沉积物铜异常是母质决定的还是人为排放？给我证据线」*（走成因归因）
-- *「基于刚生成的 Cu 图谱继续 Auto-Research，做试点、论文和图，并独立核对每个数字」*（走图谱后续研究状态机）
+Once mounted, a plain natural-language request triggers the skill. **This is the default task prompt** — it exercises the full workflow end to end, and you only replace the three bolded slots (say, swap the region) to make it yours:
 
-- 激活边界与示例：[`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json)（含 3 条应激活与 3 条相邻不应激活样例）
-- 平台元数据：[`agents/openai.yaml`](skills/global-geochemical-atlas/agents/openai.yaml) · 能力卡片：[`skill-card.md`](skills/global-geochemical-atlas/skill-card.md)
-- Agent 的完整执行合同（状态机、门禁、失败状态）：[`SKILL.md`](skills/global-geochemical-atlas/SKILL.md)
+> Using only public literature and open data platforms, build a **soil** **arsenic (As)** atlas for **Western Europe**: automatically collect element concentrations, sampling coordinates, geological background, and analytical-method information; unify units, spatially match records, run quality control, and trace every record to its source; render the distribution map, heatmap, and element-combination comparison, filterable by element, region, geological unit, and sample type; identify candidate enrichment and depletion areas; and deliver the interactive atlas, the standardized geochemical database, the source & confidence documentation, and the anomaly identification results.
 
-## 🧑‍🔬 三种运行方式
+| Slot | What to put there | Examples |
+|---|---|---|
+| **medium** | One or more of the four supported media | `soil` · `sediment` · `water` · `rock` |
+| **element** | Element symbol or analyte name | `arsenic (As)` · `Cu` · `Pb` · `Hg` |
+| **region** | `global`, a named region, or a WGS84 bounding box | `Western Europe` · `China` · `lat 30–45, lon –10–30` |
 
-### ① 使用自己的数据
+Shorter requests activate the skill just as well:
+
+> Using only public data, build a **soil arsenic** atlas for **Western Europe**: standardize the units, flag candidate enrichment areas, and attach per-record sources, licenses, and confidence scores.
+
+> Build a **global sediment mercury** atlas from public sources, screen spatially clustered anomalies with FDR control, and report every data gap honestly.
+
+Useful references while integrating:
+
+- Activation boundary with worked examples: [`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json) (5 should-activate and 4 adjacent should-not-activate cases)
+- Platform metadata: [`agents/openai.yaml`](skills/global-geochemical-atlas/agents/openai.yaml) · capability card: [`skill-card.md`](skills/global-geochemical-atlas/skill-card.md)
+- The agent's full execution contract (state machine, gates, failure states): [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md)
+
+## 🧑‍🔬 Run It Your Way
+
+### Option 1 — Bring your own data
 
 ```bash
 python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
@@ -129,19 +185,32 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
   --output-dir /tmp/geochemical-output
 ```
 
-D2 最低分析字段是 `element_or_analyte,value,unit,medium`；完整证据工作流还要求 `source_id,source_locator,license`。非标准列名必须通过显式 schema map 映射，不能靠语义猜测。正式科学运行还应提供样品标识、measurement basis、WGS84/原 CRS、分析与消解方法、检出限、来源层级及文件 SHA-256。
+The minimum analysis columns for D2 are `element_or_analyte,value,unit,medium`; the full evidence workflow additionally requires `source_id,source_locator,license`. Non-standard column names must be mapped through an explicit schema map — never guessed from semantics. A formal scientific run should also provide sample identifiers, measurement basis, WGS84/original CRS, analysis and digestion methods, detection limits, source tier, and file SHA-256.
 
-### ② 在线采集与数据充分性循环
+### Option 2 — Acquire public sources online
 
-同一个控制器按预算分三档，档位只改时间与轮数，科学与证据门禁完全一致：
+```bash
+python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
+  --request /path/to/request.json \
+  --online-source auto \
+  --cache-dir .cache/data \
+  --analysis-profile production \
+  --output-dir /tmp/geochemical-online
+```
 
-| 模式 | 预算 | 适用场景 | 交付语义 |
+`auto` deterministically allocates record quotas across all routed sources compatible with the request, verifies each source's manifest and SHA-256 before merging, and keeps going on the verified subset when a single source fails — returning `partial_success`. Downloads have timeouts, size caps, bounded retries, and caching; `--offline` mode accepts verified caches only.
+
+#### Budget tiers of the same controller
+
+One controller, three budget tiers. A tier only changes time and round count — the scientific and evidence gates are identical:
+
+| Tier | Budget | Typical use | Delivery semantics |
 |---|---|---|---|
-| ⚡ 快速 quick | ≤900 秒（约 15 分钟） | 想先看效果的轻量试跑、官方沙箱评审 | 真实在线采集，产出全部 18 文件；checkpoint 收据，如实标注非全量覆盖 |
-| 🚶 标准 standard | ≤3,600 秒 | 单区域/少元素的日常研究 | 两个完整扩采轮次，未收敛时如实返回待继续状态 |
-| 🔬 完整 full | ≤43,200 秒 | 显式授权的全球全介质研究（约 2–12 小时） | 唯一能通过 `validate_research_delivery.py` 的正式交付 |
+| ⚡ quick | ≤900 s (about 15 min) | A lightweight first look; the official sandbox review | Real online acquisition producing all 18 files; a checkpoint receipt that states non-full coverage honestly |
+| 🚶 standard | ≤3,600 s | Day-to-day single-region / few-element research | Two full expansion rounds; returns a to-be-continued state when not converged |
+| 🔬 full | ≤43,200 s | Explicitly authorized global, all-media research (about 2–12 h) | The only tier that can pass `validate_research_delivery.py` as a formal delivery |
 
-**简单模式一条命令**（全球地图不用等 2–3 小时，先拿一版轻量真实结果）：
+**Quick mode in one command** (a real lightweight result for a global map without waiting hours):
 
 ```bash
 python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
@@ -152,34 +221,12 @@ python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
   --output-dir /tmp/atlas-quick
 ```
 
-官方自动评审未另给时限时，先生成任务合同并保留 `deadline_seconds=900`；`task_router.py` 会生成 720 秒内部在线检查点，给 Agent 启动、验证和回复预留 180 秒。检查点仍生成可评分的核心产物并如实报告缺口，但不能冒充完整全球研究。
+When the official review gives no other deadline, generate the task contract with `deadline_seconds=900`; `task_router.py` then plans a 720-second internal online checkpoint and reserves 180 seconds for agent start-up, validation, and the reply. The checkpoint still produces gradable core artifacts and reports its gaps — it never poses as a complete global study.
 
-以下直接命令只用于用户或平台明确授权的小时级扩展研究：
-
-```bash
-python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
-  --request /path/to/request.json \
-  --online-source auto \
-  --cache-dir .cache/data \
-  --analysis-profile production \
-  --output-dir /tmp/geochemical-online
-```
-
-`auto` 先审计哪些平台真正包含请求的元素、介质与区域，再按“新增空间区 × 介质证据 + 独立血缘”顺序在线尝试并验证 manifest/SHA-256。官方任务合同未给时限时使用 900 秒外部上限并产出可复核检查点；操作者明确授权的扩展研究才使用最长 12 小时、每轮 30 分钟的循环。轮后审计总体、每个元素、每种介质及每个元素 × 介质地图视图，不足且仍有真实扩采空间时继续下一轮。全球使用陆地国家/大区和海洋扇区，国家或 bbox 按范围选择 5° 至 0.25° 网格。缺口写入 `d1_repair_queue.json`，给出范围、维度、候选来源和 fallback chain。时间只是安全停机线，不替代数据充分性门禁；规则由请求和实际观测派生，不按示例国家逐条打补丁，也不靠重复同源空转。
-
-正式研究交付还需通过：
-
-```bash
-python skills/global-geochemical-atlas/scripts/validate_research_delivery.py \
-  --output-dir /tmp/geochemical-online
-```
-
-该门禁要求在线 loop 已收敛、空间/维度队列清空，并校验执行期间及交付时完整 Skill 快照不变；因此 fixture、直接单轮、数据不足检查点、并发混合版本或手工覆盖的 staging 都不能冒充完整研究结果。
-
-### ③ 复现四介质离线样例（21 来源 · 1,144 条观测）
+### Option 3 — Reproduce the offline four-media sample (21 sources · 1,144 observations)
 
 <details>
-<summary>运行 21 来源、四介质、1,144 条观测的离线样例</summary>
+<summary>Run the 21-source, four-media, 1,144-observation offline sample</summary>
 
 ```bash
 python skills/global-geochemical-atlas/scripts/build_four_media_demo.py \
@@ -194,34 +241,124 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
   --output-dir /tmp/four-media-output
 ```
 
-这些版本化切片来自 GEOROC、USGS、PANGAEA、AfSIS、FOREGS、MarChem、GSJ、GEOTRACES 与 GEMStat 等公开平台。来源适用条件与复现说明见[来源 demo 文档](skills/global-geochemical-atlas/fixtures/source-demos/README.md)。
+These versioned slices come from GEOROC, USGS, PANGAEA, AfSIS, FOREGS, MarChem, GSJ, GEOTRACES, and GEMStat. Source applicability and reproduction notes: [source demos](skills/global-geochemical-atlas/fixtures/source-demos/README.md).
 
 </details>
 
-## 🔬 工作流与科学设计
+### Write your own `request.json`
+
+Every run is driven by a frozen request file. Start from the production fixture and change a few fields:
+
+```json
+{
+  "elements": ["As", "Cu", "Ni", "Zn"],
+  "region": "global",
+  "media": ["soil"],
+  "measurement_basis": null,
+  "time_range": null,
+  "sources": ["usgs-conus-soil"],
+  "output_formats": ["csv", "json", "geojson", "html_map"],
+  "target_crs": "EPSG:4326",
+  "license_policy": "open_only",
+  "research_use_policy": "permitted_research",
+  "minimum_evidence_tier": "A",
+  "minimum_use_mode": "normalized_analysis",
+  "max_records": 1000,
+  "offline": true
+}
+```
+
+| Field you will likely change | Meaning |
+|---|---|
+| `elements` | Element symbols to analyze, e.g. `["As"]` or `["Cu", "Pb"]` |
+| `region` | `"global"`, a named region, or a WGS84 bounding box object |
+| `media` | Any of `soil` / `sediment` / `water` / `rock` |
+| `sources` | Pin specific source IDs, or remove the field and use `--online-source auto` for automatic routing |
+| `max_records` | Record cap for the run |
+| `offline` | `true` = verified local caches only; `false` allows online acquisition |
+
+The full field-by-field schema, defaults, and status semantics live in the [request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md).
+
+## 🏗️ How It Works
+
+"Map global arsenic in soil and tell me where it is anomalous" sounds like a retrieval task. Inside a real research team it immediately becomes four harder questions: can numbers from different surveys, units, and digestion methods share one map (**unified metrics**)? Is a high value pollution or geological background (**temporal dynamics**)? Are detection limits and coordinate systems of decades-old records still traceable (**quality control**)? Would you dare cite every number an AI produces (**provenance**)? This skill turns those four demands into one trustworthy, agent-native research workflow.
+
+<img src="docs/readme/slide-03-question.png" alt="A deceptively simple question: map global soil arsenic — and the four hard problems it unfolds into" width="100%">
+
+### The mechanism: models propose, code decides
+
+<img src="docs/readme/slide-10-mechanism.png" alt="Mechanism overview: admission and input, deterministic processing with a verification loop, and publication audit with modular delivery" width="100%">
+
+The pipeline has three stages. **Admission** — the request is frozen with SHA-256, sources are audited for license/version/hash, and records are acquired one by one with evidence attached. **Deterministic processing with a verification loop** — mg/kg·WGS84 standardization → quality control → GLiM lithology matching → robust-z anomaly screening → per-artifact validation; failed validation enters a repair loop that re-runs and re-compares, and the lessons persist in the cross-run memory `memory.json`. **Publication audit and modular delivery** — the adversarial auditor must pass a planted-defect exam before it may judge, and the claim ledger blocks any number without a source from leaving the building. One principle runs through it all: **models propose; every numeric verdict is rendered by deterministic code.**
 
 ```mermaid
 flowchart LR
-    Q[研究问题<br/>元素·区域·介质] --> D1[D1 来源<br/>发现·准入·采集·证据]
-    D1 --> D2[D2 数据<br/>标准化·QC·空间匹配·异常]
-    D2 --> D3[D3 产品<br/>研究配置·地图·迭代]
-    D3 --> O[数据库<br/>证据与置信度<br/>异常结果<br/>交互地图]
-    O -. iteration_backlog 驱动的多轮闭环 .-> D1
-    O -->|用户选择继续| AR[Auto-Research<br/>试点·文献·论文·图·独立评审]
-    AR -->|评审失败·版本化反馈| AR
-    AR -->|全门通过| H[人工批准<br/>不自动发表]
+    Q[Research question<br/>element · region · medium] --> D1[D1 Sources<br/>discover · admit · acquire · evidence]
+    D1 --> D2[D2 Data<br/>standardize · QC · spatial match · anomalies]
+    D2 --> D3[D3 Products<br/>research profiles · maps · iteration]
+    D3 --> O[Database<br/>evidence & confidence<br/>anomaly results<br/>interactive atlas]
+    O -. multi-round loop driven by iteration_backlog .-> D1
+    O -->|user opts in| AR[Auto-Research<br/>pilots · literature · paper · figures · independent review]
+    AR -->|review failed · versioned feedback| AR
+    AR -->|all gates pass| H[Human approval<br/>never auto-published]
 ```
 
-- **D1** 保存许可、版本、下载请求、文件哈希和记录级定位；来源目录中的候选不等于本次请求可用。
-- **D2** 保守处理单位、删失值、坐标、方法、实验室批次和可选地质匹配；先用稳健 MAD z-score 筛记录级高/低值，再用精确超几何检验 + BH-FDR 筛空间聚集。
-- **D3** 只消费公共产物，通过版本化 profile 生成全球、国家或 WGS84 bbox 研究视图；不重算 D2 科学结果。
-- **多轮迭代**：每次运行产出 `iteration_backlog.csv`、`loop_report.json` 和 `d1_repair_queue.json`。每个预算约束轮次后审计一次：通用数量/背景缺口扩采，空间缺口按 `元素 + 介质 + 动态区域` 定向采集，来源/许可/CRS/方法缺口转 D1 准入；每轮生成新版本，canonical 数据与原始证据不在原地改写。
-- **三层来源对抗**：每个待修 action group 可生成互相隔离的侦察者与质疑者 packet；上一轮记忆不进入本轮 evaluator context。确定性 judge 只按冻结的七维来源事实计分，agent 结果不能直接准入，所有 packet、input、payload、result 与 judge receipt 均作 SHA‑256 绑定。
-- **逐声明对账**：正式 delivery receipt 内含九项 typed claim ledger。展示的记录数、覆盖元素/介质、来源数、删失数、坐标率、异常数和 FDR 区域数均指向精确文件、locator、重算方法与 SHA‑256；改数字或改证据都会使 validator 失败。
+- **D1** records licenses, versions, download requests, file hashes, and record-level locators; a candidate in the source catalog is not automatically usable for this request.
+- **D2** treats units, censored values, coordinates, methods, lab batches, and optional geological matching conservatively; record-level highs/lows are screened with robust MAD z-scores, then spatial clustering with an exact hypergeometric test under BH-FDR control.
+- **D3** consumes public artifacts only and renders global, national, or WGS84-bbox research views through versioned profiles — it never recomputes D2 science.
+- **Three-layer source adversary inside the loop** — each pending repair action group can spawn mutually isolated scout and challenger packets; the previous round's memory never enters this round's evaluator context. A deterministic judge scores only the seven frozen source facts, agent results can never admit a source directly, and every packet, input, payload, result, and judge receipt is SHA-256-bound.
+- **Per-claim reconciliation** — the formal delivery receipt embeds a typed claim ledger: displayed record counts, covered elements/media, source counts, censored counts, coordinate rates, anomaly counts, and FDR region counts each point to an exact file, locator, recompute method, and SHA-256; changing a number or its evidence fails the validator.
 
-## 🧪 从图谱继续 Auto-Research
+### The iteration loop: fix what fails, admit what cannot be fixed
 
-`interactive_map.html` 的 Auto-Research 选项会把当前十八文件冻结成内容寻址快照，然后生成可比研究队列、确定性选题、行级试点合同、原始文献核验队列、科学机会门、贡献优先论文骨架、数据主图契约和五篇候选研究计划。只有已执行的 effect/null 试点与经核验的前沿增量同时成立，才创建写作和绘图任务；缺数据、只需采集、分析无效或选题前沿性弱会停在 `needs_research_redirection`，不会拿修订轮润色成论文。静态页面只导出请求；要真实创建可恢复任务，运行：
+<img src="docs/readme/slide-11-loop.png" alt="The skill's loop state machine: nine research steps, three gates, and a five-step repair loop when acceptance fails" width="100%">
+
+The main line is nine research steps guarded by three gates (source admission, unit/coordinate QC, per-artifact acceptance) — none skippable. When step 09 acceptance fails, the repair loop starts: **list the problems → log each one in `iteration_backlog` → fix by the registered method → re-run and re-accept → bank the lesson in cross-run memory**. Every repair opens a fresh run and the original evidence is immutable; gaps that cannot be repaired are flagged `needs_human_review` and handed to a person rather than papered over. Run it directly with [`run_self_correction_loop.py`](skills/global-geochemical-atlas/scripts/run_self_correction_loop.py) (see the FAQ) or let `autopilot.py` invoke it; the full protocol is in the [iteration loop reference](skills/global-geochemical-atlas/references/iteration-loop.md).
+
+**Each round stays independent.** [Cross-run acquisition memory](skills/global-geochemical-atlas/references/acquisition-memory.md) (`memory.json`) accumulates a per-source success/failure ledger across runs, but it is deliberately powerless to bias evaluation: memory only *reorders* sources the skill has already routed and never adds new ones; its seed influences round 1 scheduling only, after which priorities are derived from this run's own repair actions; and the memory file is a run *input*, not skill code — auditable, deletable, rebuildable. In-run evidence always outranks cross-run memory, so no round inherits another round's conclusions.
+
+### Adversarial mechanisms: it can drive, never acquit
+
+Two adversarial layers keep the executor honest — one guards what enters the database, the other guards what leaves it.
+
+**At the entrance — the source-discovery duel.** Before a new data source is admitted it passes three roles ([discovery duel protocol](skills/global-geochemical-atlas/references/discovery-duel.md)):
+
+<img src="docs/readme/slide-13-adversarial.png" alt="Adversarial audit: a Scout nominates candidate sources, a Skeptic raises objections only, and a deterministic Referee scores against an explicit rubric" width="100%">
+
+The **Scout** (a model) nominates candidate sources for blank regions — it nominates, never approves. The **Skeptic** (an independent model) checks licenses, media, and regions item by item — it raises objections, never scores, never decides. The **Referee** is deterministic code (`discovery_duel.py`) that produces no opinions at all; it evaluates the explicit scorecard — **≥7** clears the source to draft an integration spec, **4–6** sends it back for revision, **<4** eliminates it. Even a passing score only earns drafting rights: formal admission still requires a named human sign-off.
+
+**At the exit — the adversarial output audit.** After every run, [`adversarial_audit.py`](skills/global-geochemical-atlas/scripts/adversarial_audit.py) must prove its own competence before it may judge ([protocol](skills/global-geochemical-atlas/references/adversarial-audit.md)): it copies the artifacts into a shadow directory, deterministically plants **10 classes of known defects** (value tampering, unit flips, censored-value imputation, fabricated sources, orphaned evidence, hash corruption, out-of-range locators, URL swaps, coordinate swaps, tampered z-scores), and audits the shadow copy first. Only a perfect catch (**recall = 1.0**) makes its verdict on the real artifacts *admissible*; anything less auto-degrades to `inadmissible_calibration_failed` and PASS may not be issued. Verdicts are graded — `pass` / `pass_scope_narrowed` / `fail` — and every warning narrows the citable scope with a mandatory scope note instead of killing the run.
+
+**Audit independence is enforced by contract, not by trust.** In dual-agent mode the brief carries a machine-readable `reviewer_contract`: the Skeptic must come from a **different model family** than the executor, must start in a **fresh thread** with no shared memory or Builder narration, reads artifact bytes only, sits the same canary exam first, and must **refuse to review** if any path or SHA-256 in the brief fails to verify. Confirmed findings flow back into the repair queue and drive the next loop round — adversarial results move the pipeline, they do not sit in a report.
+
+**Inside the loop — the isolated source audit.** Between the entrance and the exit, [`agent_audit.py`](skills/global-geochemical-atlas/scripts/agent_audit.py) applies the same discipline to every pending repair action group ([contract](skills/global-geochemical-atlas/references/adversarial-agent-audit.md)): the controller writes a scout packet and a challenger packet under `agent_audits/round-…/`, the host starts each role in a fresh session that reads only its own `packet.json`, and neither role may score or admit anything. The third layer, `agent_audit.py judge`, scores deterministically from frozen facts; its result still has to pass the D1 gate and a named human approval. A reused `invocation_id`, a swapped role or packet, an unknown input, or any hash change fails closed.
+
+### The evidence chain: every number carries a fingerprint
+
+Trust is anchored in SHA-256 at four links, so each result maps one-to-one to its evidence:
+
+1. **Request freeze** — the task itself is hashed before execution; mid-run goal drift is detectable.
+2. **Source files** — every downloaded file is verified against its recorded hash before ingestion.
+3. **Artifacts** — `run_summary.json` records the hash of each of the 18 outputs; the reviewer contract refuses review when a hash fails to verify.
+4. **Claims** — [`claim_ledger.py`](skills/global-geochemical-atlas/scripts/claim_ledger.py) derives every reportable claim from the artifacts and binds each one to a `file + JSON pointer + SHA-256` evidence pointer, recomputed from evidence on every invocation — the executor can build the ledger but can never overwrite its verdicts. A draft answer is then cross-checked with `--check-answer`: any load-bearing number that cannot be traced to the ledger is ruled a *phantom*, and citing a scope-narrowed claim without its scope keyword is ruled out of bounds.
+5. **Delivery receipts** — a formal research delivery additionally carries the typed claim ledger built by `report_claim_ledger.py`; `validate_research_delivery.py` recomputes every claim from its content-addressed artifact, so a formal delivery cannot quote a number its own files do not support.
+
+### After the atlas: continue into research mode
+
+The atlas is a checkpoint, not the exit. On top of any **completed and validated** run, one command layers the optional research post-processing stage ([research mode contract](skills/global-geochemical-atlas/references/research-mode.md)):
+
+```bash
+python skills/global-geochemical-atlas/scripts/build_research_products.py \
+  --output-dir /tmp/atlas-run \
+  --research-dir /tmp/atlas-run/research \
+  --minimum-confidence medium
+```
+
+It acquires no new data and modifies no core artifact; it deterministically reorganizes the existing evidence into three researcher-facing products — **analysis cohorts** (`analysis_cohorts.csv`: which records may be compared, which may not, and why), **environmental context** (`research_context.csv`: lithology, geological unit, depositional environment, depth, grain fraction, sampling time per sample), and **sampling priorities** (`sampling_priority.geojson`: data gaps ranked into the next acquisition queue) — plus a model-card-style receipt (`research_products_receipt.json`) with input hashes, parameters, and non-claims. The same continuation, taken further on a frozen snapshot, is what produced the [five paper drafts](#-from-atlas-to-papers-the-discovery-layer) below.
+
+### Continue into Auto-Research from the atlas
+
+The Auto-Research option in `interactive_map.html` freezes the current 18 files into a content-addressed snapshot and then generates a comparable research queue, deterministic topic selection, row-level pilot contracts, a primary-literature verification queue, a scientific-opportunity gate, a contribution-first paper skeleton, data-figure contracts, and five candidate research plans. Writing and figure tasks are created only when an executed effect/null pilot and a verified frontier increment both hold; missing data, acquisition-only needs, invalid analyses, or a weak frontier stop at `needs_research_redirection` instead of polishing a revision into a paper. The static page only exports the request; to create real resumable tasks, run:
 
 ```bash
 python skills/global-geochemical-atlas/scripts/serve_atlas_research.py \
@@ -229,171 +366,256 @@ python skills/global-geochemical-atlas/scripts/serve_atlas_research.py \
   --research-root /tmp/geochemical-research
 ```
 
-本地服务只绑定 `127.0.0.1`，使用 URL fragment token、单次 nonce、Host/Origin 校验和固定 JSON API。外部 agent 宿主按 `state.json.required_roles` 为试点、文献、写作、绘图和 reviewer 分别启动新会话，并通过 hash-bound payload 推进状态。写作必须提交 2–5 项 claim-bound 贡献；绘图必须提交 primary/spatial/robustness 三类数据主图，分别绑定真实 SVG/PDF/PNG 及检查修改记录。评审使用 controller 固定的科学有效性、新颖性、前沿适配、论文论证、视觉证据等七门 0–4 分量表；失败会自动开启新的 `revision-NN`，只把结构化反馈交给修订角色，下一轮 reviewer 不接收旧评语或 executor summary。选定研究方向是唯一人工输入：全部七门通过后控制器校验各产物哈希并自动打包 `publication/`（等级 `camera_ready`，终态 `completed_published`）；三轮修订或引用修复预算用尽则以 `draft_with_disclosed_findings` 等级打包，未解决反馈逐条写入 `publication_manifest.json`（终态 `completed_with_findings`）；科研机会门失败则把该尝试归档到 `attempts/` 并在同一 run 内改道回退队列中的下一个实证候选（状态回到 `awaiting_agents`，`attempt` 递增）；候选耗尽也绝不空手——有已执行试点就还原最佳一次、披露前沿弱点写成草稿（等级上限 `draft_with_disclosed_findings`），完全无法执行则自动产出经评审的数据充分性与研究方向报告（等级 `evidence_report`，终态 `completed_evidence_report`）。详见 [Auto-Research 运行合同](skills/global-geochemical-atlas/references/auto-research.md)。
+The local service binds `127.0.0.1` only and uses a URL-fragment token, single-use nonces, Host/Origin checks, and a fixed JSON API. The external agent host starts a fresh session per role listed in `state.json.required_roles` — pilot, literature, writer, figure, and reviewer — and advances the state machine through hash-bound payloads. Writers must submit 2–5 claim-bound contributions; figure makers must submit primary / spatial / robustness data figures, each bound to real SVG/PDF/PNG files plus an inspect-and-revise record. Reviewers apply the controller's fixed seven-gate 0–4 rubric (scientific validity, novelty, frontier fit, argumentation, visual evidence, and more); a failure opens a new `revision-NN` that hands only structured feedback to the revising role, and the next reviewer never sees old comments or the executor's summary. Choosing the research direction is the only human input: when all seven gates pass, the controller verifies every artifact hash and packages `publication/` (grade `camera_ready`, terminal state `completed_published`); when three revisions or the citation-repair budget run out, it packages a `draft_with_disclosed_findings` with every unresolved finding listed in `publication_manifest.json` (`completed_with_findings`); when the opportunity gate fails, the attempt is archived under `attempts/` and the run reroutes to the next empirical candidate; and when candidates are exhausted it still never returns empty-handed — the best executed pilot becomes a draft with disclosed frontier weakness, or, with no executable pilot at all, a reviewed data-sufficiency and research-direction report (grade `evidence_report`, `completed_evidence_report`). Full contract: [Auto-Research operating contract](skills/global-geochemical-atlas/references/auto-research.md).
 
-## ⏳ 时间维度：演变地图与成因归因
+## ⏳ The temporal dimension: evolution maps and enrichment attribution
 
-环境监测最大的争议是「超标还是高背景」——比如某地土壤砷本底天然就高，按通用阈值筛就是假异常。本 Skill 从三个层面回答这个问题：
+The most contested question in environmental monitoring is "exceedance or high background?" — a soil whose arsenic baseline is naturally high looks anomalous under any generic threshold. The skill answers on three levels:
 
-<img src="skills/global-geochemical-atlas/assets/readme-temporal-map.jpg" alt="时间演变交互地图·区域对比模式：5° 网格早晚两期中位含量对比，红=上升、蓝=下降，可拖动分割年，虚线暗格如实标注仅单期观测" width="100%">
+<img src="skills/global-geochemical-atlas/assets/readme-temporal-map.jpg" alt="Temporal-evolution interactive map, region-comparison mode: early vs. late median concentration per 5° cell, red = rising, blue = falling, draggable split year; cells observed in only one epoch are drawn as dashed dark cells" width="100%">
 
-<sub>时间演变地图默认模式「区域对比」：同一个 5° 格子早晚两期实测中位含量直接对比（红升 / 蓝降 / 灰平），拖动分割年实时重算；点击格子看该区域的含量—时间散点。只有单期观测的格子如实画成虚线暗格。</sub>
+<sub>Default temporal mode, region comparison: the measured median of the same 5° cell in the early and late epochs is compared directly (red rising / blue falling / grey flat) and recomputed live as the split year is dragged; clicking a cell opens its concentration–time scatter. Cells observed in only one epoch are honestly drawn as dashed dark cells.</sub>
 
 <br><br>
 
-<img src="skills/global-geochemical-atlas/assets/readme-anomaly-provenance.jpg" alt="异常成因模式弹窗：四条证据线（岩性/空间/伴生元素/时序）各给通俗解释，两条同向才下母质或人为结论，否则如实标注证据不足" width="88%">
+<img src="skills/global-geochemical-atlas/assets/readme-anomaly-provenance.jpg" alt="Enrichment-attribution popup: four evidence lines (lithology / spatial / co-element / temporal) each with a plain-language explanation; two concordant lines are required before a geogenic or anthropogenic verdict, otherwise the evidence is labelled insufficient" width="88%">
 
-<sub>「异常成因」模式：每个富集候选沿岩性 / 空间 / 伴生元素 / 时序四条证据线归因，每条给一句通俗解释；至少两条同向才判「母质高背景」或「疑似人为输入」，证据不够就明说不判——不会把高背景硬扣成污染。</sub>
+<sub>Enrichment-attribution mode: every enrichment candidate is attributed along lithology / spatial / co-element / temporal evidence lines, each with a one-sentence plain explanation; at least two concordant lines are required before a "geogenic background" or "suspected anthropogenic input" verdict, and thin evidence is stated as such — a high natural background is never forced into a pollution label.</sub>
 
-- **采样时刻契约**（`atlas-sampling-time-v1`）：`sampling_time` 记录样品被采集那一刻，发表年一律不算；逐源声明取值字段与格式，发布方没报就如实标 `publisher_not_reported`。
-- **时间演变选项**（`interactive_map.html#temporalView`）：区域对比 / 异常成因 / 含量着色采样史回放 / 站点演变四模式完整嵌在主图；`temporal_map.html` 仅保留为相同字节的兼容镜像。
-- **成因归因**（`anomaly_provenance.json`）：时序证据线的规则很直白——同一点位含量随时间明显上升支持「人为输入」，长期平稳支持「母质决定」；与岩性、空间、伴生元素三条线合议。
+- **Sampling-time contract** (`atlas-sampling-time-v1`): `sampling_time` records the moment the sample was collected; the publication year never counts. Each source declares its value field and format, and a publisher that reported nothing is labelled `publisher_not_reported`.
+- **Temporal-evolution option** (`interactive_map.html#temporalView`): region comparison / enrichment attribution / concentration-coloured sampling replay / station evolution — four modes embedded in the main map; `temporal_map.html` is kept only as a byte-identical compatibility mirror.
+- **Enrichment attribution** (`anomaly_provenance.json`): the temporal evidence line is plain — a clear rise at the same site over time supports "anthropogenic input", long-term stability supports "geogenic background" — and it deliberates together with the lithology, spatial, and co-element lines.
 
-## 📦 十八个输出产物
+## 📦 The 18 Output Files
 
-每次完整运行固定生成 18 个文件，逐文件 schema 与状态定义见[输入输出契约](skills/global-geochemical-atlas/references/request-output-contract.md)：
+Every complete run produces the same 18 files; per-file schemas and status semantics are defined in the [request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md):
 
-| 赛题交付物 | 运行产物 | 核心保证 |
+| Deliverable | Artifacts | Core guarantee |
 |---|---|---|
-| **可交互元素分布地图** | `interactive_map.html` · `samples.geojson` | 唯一主产品体验，自包含无 CDN；按元素、介质、区域、方法与工作流可用性筛选；时序演化和 Auto-Research 均为同一主导航的一级选项 |
-| **时序兼容镜像** | `temporal_map.html` | 完整四模式字节嵌入主图，只为旧链接/单页下载保留；主导航不跳转独立文件，无采样时刻的记录绝不假装有时间 |
-| **标准化地球化学数据库** | `geochemistry.csv` · `batch_acceptance.csv` | 保留原值与换算轨迹；统一单位、basis、坐标、方法、分析批次与 QC 字段；含 `atlas-sampling-time-v1` 采样时刻三列（采样那一刻的含量，发表年不算），支持时序查询 |
-| **数据来源与置信度说明** | `sources_and_confidence.json` · `source_manifest.json` · `record_evidence.jsonl` · `confidence_report.json` | URL/DOI、许可、版本、获取时间、哈希、源记录定位；按来源给出测定行/独立样品数，并把来源证据、分析就绪度、空间可用性与工作流可用性分开报告 |
-| **异常区域识别结果** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` · `anomaly_provenance.json` | 记录级 robust-MAD 候选 + 精确超几何富集/BH-FDR 空间筛查；每个富集候选沿岩性/空间/伴生/时序四条证据线归因「母质高背景 / 疑似人为输入 / 混合 / 证据不足」，每条证据线给通俗解释 |
-| **质量与运行证据** | `qc_report.json` · `batch_qc_report.json` · `iteration_backlog.csv` · `run_summary.json` | 逐项 QC 留证、失败批次不静默删除、迭代待办与全运行摘要（含各产物 hash） |
+| **Interactive element atlas** | `interactive_map.html` · `samples.geojson` | The single primary product, self-contained, zero CDN; filter by element, medium, region, geological unit, sample type, method, and confidence; sample, heatmap, element-comparison, and anomaly-candidate views, with temporal evolution and Auto-Research as first-class options of the same navigation |
+| **Temporal compatibility mirror** | `temporal_map.html` | The four temporal modes are embedded byte-for-byte in the main map; this file exists only for old links and single-page downloads — the main navigation never jumps to it, and records without a sampling time never pretend to have one |
+| **Standardized geochemical database** | `geochemistry.csv` · `batch_acceptance.csv` | Original values and conversion trails preserved; unified units, basis, coordinates, methods, batches, and QC fields; three `atlas-sampling-time-v1` columns record when the sample was collected (publication year never counts) so the database supports temporal queries |
+| **Source & confidence documentation** | `source_manifest.json` · `record_evidence.jsonl` · `confidence_report.json` · `sources_and_confidence.json` | URL/DOI, license, version, hash, source-record locator, and five-component confidence — all traceable, plus a merged reader-facing summary |
+| **Anomaly identification results** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` · `anomaly_provenance.json` | Record-level robust-MAD candidates + exact hypergeometric / BH-FDR spatial screening for both enrichment and depletion; every enrichment candidate is attributed along lithology / spatial / co-element / temporal evidence lines as geogenic background / suspected anthropogenic input / mixed / insufficient evidence, each line with a plain-language explanation |
+| **Quality & run evidence** | `qc_report.json` · `batch_qc_report.json` · `iteration_backlog.csv` · `run_summary.json` | Per-item QC evidence, failed batches never silently deleted, iteration backlog, and a full run summary with per-artifact hashes |
 
-第五项赛题交付「可复用 Skill 文档」即 [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) 本体与其 schema、脚本和 fixture。
+The fifth deliverable — the reusable skill documentation — is [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) itself, together with its schemas, scripts, and fixtures. Opting into [research mode](#after-the-atlas-continue-into-research-mode) adds `analysis_cohorts.csv`, `research_context.csv`, `sampling_priority.geojson`, and a receipt in a separate `research/` directory without touching the core contract.
 
-## 🧭 数据来源（37 个已冻结可执行来源 · 69 条审计目录记录）
+## 🧭 Data Sources (37 frozen executable sources · 69 audited catalog records)
 
-| 介质 | 已冻结来源 |
+| Medium | Frozen executable sources |
 |---|---|
-| 🪨 岩石 | GEOROC（太古宙克拉通、汇聚边缘、南极板内火山岩）· EarthChem Library 3338（中国东昆仑德海龙岗岩石）· Gard 2019 全球全岩汇编 |
-| 🌱 土壤 | USGS DS801（美国本土）· GEMAS（欧洲）· FOREGS 表土/底土/腐殖质 · AfSIS Phase I（撒哈拉以南非洲）· PANGAEA 北非/巴伦支海沿岸/Amazonas/Batagay/BraSol · TPDC 中国山地 · EIDC 宁波 · Figshare 长江流域 |
-| 🏞️ 沉积物 | FOREGS 河流/洪泛平原沉积物 · GSJ 日本地球化学图/日本海洋沉积物 · 澳大利亚 NGSA（多元素与 Hg 产品）· 挪威 MarChem · PANGAEA 阿拉伯海/东海/南海 · Zenodo 长江/黄河沉积物 · 4TU 中国北方/西北沉积物（准噶尔、塔里木、柴达木、河套、阿拉善与青藏高原东部） |
-| 💧 水体 | FOREGS 河水 · GEMStat 全球内陆水 · GEOTRACES IDP2025 海水 · 美国 WQP 萨克拉门托河（As）· 珠江 81 站丰/枯水期溶解金属 · 闽粤沿海 124 口井地下水 |
+| 🪨 Rock | GEOROC (Archean cratons · convergent margins · Antarctic intraplate volcanics) · EarthChem Library 3338 (East Kunlun Dehailonggang rocks, China) · Gard 2019 global whole-rock compilation |
+| 🌱 Soil | USGS DS801 (conterminous US) · GEMAS (Europe) · FOREGS topsoil/subsoil/humus · AfSIS Phase I (sub-Saharan Africa) · PANGAEA North Africa / Barents Sea coast / Amazonas / Batagay / BraSol · TPDC Chinese mountains · EIDC Ningbo · Figshare Yangtze River basin |
+| 🏞️ Sediment | FOREGS stream/floodplain sediment · GSJ geochemical map of Japan / Japanese marine sediment · Australian NGSA (multi-element and Hg products) · Norwegian MarChem · PANGAEA Arabian Sea / East China Sea / South China Sea · Zenodo Yangtze/Yellow River sediment · 4TU northern and north-western China sediment (Junggar, Tarim, Qaidam, Hetao, Alxa, and the eastern Tibetan Plateau) |
+| 💧 Water | FOREGS stream water · GEMStat global inland water · GEOTRACES IDP2025 seawater · US WQP Sacramento River (As) · Pearl River 81-station wet/dry-season dissolved metals · 124 coastal Fujian–Guangdong groundwater wells |
 
-37 个 executable source 已完成版本冻结、下载/解析契约与证据评分；69 条 catalog 记录是总目录，其中另外 32 条仍为 discovery-only，不能与正式入库来源重复相加。每个 executable source 的 DOI、版本、许可、科研使用条件、字段边界与八维证据评分记录在[来源目录](skills/global-geochemical-atlas/references/data-sources.md)、[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[许可引用说明](skills/global-geochemical-atlas/references/licenses-and-citations.md)；中国区域 fixture 的登记与重建见[中国区域 fixture](skills/global-geochemical-atlas/references/china-fixture.md)。EarthChem Portal/Library 总入口仍只作发现层；只有像已固定到 DOI、文件、成员 hash 与原始行的 dataset 3338 才能作为测量证据。
+37 executable sources have completed version freezing, download/parse contracts, and evidence scoring; the 69 catalog records are the master directory, of which the remaining 32 are still discovery-only and must never be added to the formally ingested count. Each source's DOI, version, license, research-use terms, field boundaries, and eight-dimension evidence score are recorded in the [source catalog](skills/global-geochemical-atlas/references/data-sources.md), the [source admission standard](skills/global-geochemical-atlas/references/source-acceptance-standard.md), and the [license & citation notes](skills/global-geochemical-atlas/references/licenses-and-citations.md); the dual-source China fixture (full TPDC + Zenodo 7098563) is documented in the [China fixture notes](skills/global-geochemical-atlas/references/china-fixture.md). Federated search portals such as EarthChem serve as a **discovery layer** only: nothing counts as measurement evidence until traced back to original records.
 
-## 🛡️ 科学护栏
+## 🛡️ Scientific Guardrails
 
-- 原值、原单位、qualifier、来源坐标表达和转换记录始终保留；不能证明的转换会失败关闭。
-- 固体质量比可统一为 `mg/kg`，水体质量/体积可统一为 `ug/L`；`nmol/L` 只对冻结原子量表中的明确元素换算，没有摩尔质量或密度证据时失败关闭。
-- `<LOD`、`<LOQ`、`BDL`、`ND` 不替换为 0 或 LOD/2。
-- CRM、空白、重复样按显式 policy 重新计算；失败批次保留在数据库，但不进入异常背景。
-- 不静默交换经纬度，不把未知 CRS 冒充 WGS84；允许 DOI、字段名、URL 与内容哈希同时匹配的版本化平台坐标政策，空间匹配记录数据源、版本、方法和边界距离。
-- 背景组样本不足时诚实返回 `insufficient_background`，绝不降低阈值硬算（上方 demo 中 72 组只分析达标的 12 组）。
-- 异常点和 FDR 网格都只表示筛查候选；网格不是地质/行政/污染边界，不等于污染、矿床或成因结论。
-- demo 与真实来源切片只用于工程复现，不支持全球或区域代表性科学结论。
+- Original values, units, qualifiers, source coordinate expressions, and conversion records are always preserved; unprovable conversions fail closed.
+- Solid mass ratios may be unified to `mg/kg` and aqueous mass/volume to `ug/L`; `nmol/L` converts only for elements in the frozen atomic-weight table — without molar mass or density evidence it fails closed.
+- `<LOD`, `<LOQ`, `BDL`, `ND` are never replaced with 0 or LOD/2.
+- CRMs, blanks, and duplicates are recomputed under an explicit policy; failed batches stay in the database but are excluded from anomaly backgrounds.
+- Latitude/longitude are never silently swapped and an unknown CRS is never passed off as WGS84; the versioned platform coordinate policy requires DOI, field names, URL, and content hash to match simultaneously, and spatial matching records the data source, version, method, and boundary distance.
+- When a background group is too small the run honestly returns `insufficient_background` — thresholds are never lowered to force results (in the demo above, only 12 of 72 groups qualified).
+- Anomaly points and FDR grids are screening candidates only; grid cells are not geological, administrative, or pollution boundaries and imply no conclusions about contamination, mineralization, or causes.
+- Demo and real-source slices exist for engineering reproduction; they do not support globally or regionally representative scientific conclusions.
 
-## 📚 文档导航
+## 🧾 Validated in Three Independent Real Runs
 
-| 如果你想…… | 从这里开始 |
+Beyond the offline regressions in this repository, the skill has been checked by three mutually independent real runs covering different risk surfaces (all evidence files can be inspected on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html)):
+
+| Run | What it tests | Key result |
+|---|---|---|
+| Global online production run (2026-08-15) | Autonomous acquisition, failure handling, and gap reporting under real network conditions | 33 minutes fully autonomous: 63 source candidates audited → 31 formally admitted → 29 actually ingested; two GEOROC endpoints persistently returned HTTP 500 and were recorded as such; all 238 pending fixes were registered in the repair queue |
+| Deterministic regression (`main@ed8249e`) | Byte-level reproducibility in a fresh clone | Regression completed in 0.714 s: 996/996 lithology matches and 6 anomaly candidates byte-identical; hash-bound snapshots prevent cross-environment drift |
+| Adversarial audit (2026-08-20) | A red team planted 10 defect types (value tampering, unit flips, fabricated claims, …) in a shadow copy to calibrate the auditor | 10/10 caught; the hallucinated number "25000" was ruled `answer_unbound` — numbers without evidence bindings are not allowed on stage |
+
+The three runs use separate accounting and are never mixed. Evidence entry points: [`run_summary.json`](https://asimfish.github.io/global-geochemical-atlas-demo/finals/real-run/run_summary.json) · [`audit_receipt.json`](https://asimfish.github.io/global-geochemical-atlas-demo/finals/audit-run/audit_receipt.json) · [`claim_ledger.json`](https://asimfish.github.io/global-geochemical-atlas-demo/finals/audit-run/claim_ledger.json).
+
+## 🌏 Results: One Skill, Four Analysis Domains
+
+<img src="docs/readme/slide-15-four-regions.png" alt="Real run results across four analysis domains: world, China, Europe, and the United States" width="100%">
+
+The same method ran in four domains without changing a line of code: **World** — 198,445 displayable measurements / 3,446 anomalies pending review; **China** — 24,536 / 740 anomalies / 78 clustered regions; **Europe** — 47,459 / 981; **United States** — 91,458 / 1,398. Each domain is counted within its own scope — figures must not be summed or compared against the global total. Every atlas is a self-contained HTML you can open and interrogate:
+
+[World](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-atlas.html) ·
+[China](https://asimfish.github.io/global-geochemical-atlas-demo/live/china-atlas.html) ·
+[Europe](https://asimfish.github.io/global-geochemical-atlas-demo/live/europe-atlas.html) ·
+[United States](https://asimfish.github.io/global-geochemical-atlas-demo/live/us-atlas.html) ·
+[Temporal evolution (1986–2024)](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-temporal.html)
+
+The **temporal-evolution view** is one of the atlas's visualization options, not a separate deliverable: driven by the same standardized database, wherever records carry reliable sampling dates it combines method stratification, geological background, profile comparison, and multi-epoch observations to turn "geological enrichment or industrial activity?" into a testable question — separating stable geogenic backgrounds from anthropogenic signals that track industrial activity.
+
+## 🔭 From Atlas to Papers: the Discovery Layer
+
+<img src="docs/readme/slide-18-papers.png" alt="A complete research pipeline: atlas scanning, topic selection, pilot validation, literature checks, multi-role drafting, and independent review" width="100%">
+
+The atlas is not the finish line. On the same frozen snapshot (191,715 records / 29 sources), `discovery_mode` runs the full pipeline: **scan the atlas for phenomena → select from 31 candidate topics by evidence → pilot-validate on small samples (untenable topics stop on the spot) → reproduction gate and literature checks → multi-role relay drafting → independent review, with gaps fed back into the acquisition queue**. It has completed five end-to-end passes, producing 5 paper drafts (46 pages · 24 figures · 9 tables), every number replayable from the snapshot plus fixed-seed scripts:
+
+1. [Method-stratified screening of legacy Hg/Pb enrichment in European soil profiles](https://asimfish.github.io/global-geochemical-atlas-demo/research/P1-comparability-aware-screening-europe.pdf)
+2. [Surface legacy enrichment is not a global norm: a test on Australian soils](https://asimfish.github.io/global-geochemical-atlas-demo/research/P2-hemispheric-contrast-australia.pdf)
+3. [Same sample, threefold difference: quantifying and converting cross-method bias](https://asimfish.github.io/global-geochemical-atlas-demo/research/P3-method-transfer-models.pdf)
+4. [Do two independent surveys agree? Ground-truthing the global arsenic map](https://asimfish.github.io/global-geochemical-atlas-demo/research/P4-arsenic-validation.pdf)
+5. [Can zero tuning recover known oceanographic structure? A GEOTRACES profile-extraction and method audit](https://asimfish.github.io/global-geochemical-atlas-demo/research/P5-geotraces-audit.pdf)
+
+All five are screening-level: enrichment is not a pollution verdict, profile shape is not mechanistic proof, and expert review is required before submission. Roadmap: [five-paper plan](https://asimfish.github.io/global-geochemical-atlas-demo/research/five-paper-roadmap.md).
+
+## 📊 How It Compares
+
+<img src="docs/readme/slide-19-comparison.png" alt="Capability comparison between GGA and GEOROC, EarthChem, USGS NGDB, and GEOTRACES" width="100%">
+
+An honest premise: this project does not compete with institutional archives on scale. GEOROC / EarthChem / NGDB excel at volume and archiving; dedicated survey databases excel at internal consistency. GGA fills the **unification layer** missing between them — four media in one table, per-row lineage with SHA-256, record-level licensing with four-dimension confidence, and gaps emitted as a machine-readable acquisition queue. External figures cited in this section were verified against official pages (accessed 2026-08-20); per-item sources: [database-comparison.md](https://asimfish.github.io/global-geochemical-atlas-demo/research/database-comparison.md).
+
+## 📚 Documentation Map
+
+| If you want to… | Start here |
 |---|---|
-| 在浏览器里体验完整交互图谱与评委讲解页 | [在线演示站](https://asimfish.github.io/global-geochemical-atlas-demo/) |
-| 让 Agent 执行完整任务 | [Skill 入口](skills/global-geochemical-atlas/SKILL.md) |
-| 为单阶段或完整任务生成最小命令计划 | [任务合同 schema](skills/global-geochemical-atlas/references/task-contract.schema.json) |
-| 对接输入或消费 18 个输出 | [请求与输出契约](skills/global-geochemical-atlas/references/request-output-contract.md) |
-| 从图谱启动可恢复研究流程 | [Auto-Research 运行合同](skills/global-geochemical-atlas/references/auto-research.md) |
-| 审计三层 agent 独立性与准入边界 | [对抗式来源审计合同](skills/global-geochemical-atlas/references/adversarial-agent-audit.md) |
-| 理解数据库字段与专业平台 crosswalk | [数据模型](skills/global-geochemical-atlas/references/data-model.md) |
-| 审查单位、删失值、置信度和异常规则 | [科学规则](skills/global-geochemical-atlas/references/scientific-rules.md) |
-| 复现真实数据生产阈值闭环 | [生产演示](skills/global-geochemical-atlas/references/production-demo.md) |
-| 定制全球、区域或元素组合地图 | [D3 可视化契约](skills/global-geochemical-atlas/references/d3-visualization-contract.md) |
-| 做多轮迭代修复 | [迭代闭环协议](skills/global-geochemical-atlas/references/iteration-loop.md) |
-| 查看通用空间充分性阈值 | [空间策略 Schema](skills/global-geochemical-atlas/references/spatial-sufficiency-policy.schema.json) |
-| 修改 D1/D2/D3 或提交 PR | [贡献指南](CONTRIBUTING.md) |
-| 复现离线工作流性能基线 | [性能基准](skills/global-geochemical-atlas/BENCHMARK.md) |
+| Explore the full interactive atlas in a browser | [Project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html) |
+| Have an agent execute the full task | [Skill entry point](skills/global-geochemical-atlas/SKILL.md) |
+| Generate a minimal command plan for one stage or the whole task | [Task contract schema](skills/global-geochemical-atlas/references/task-contract.schema.json) |
+| Integrate inputs or consume the 18 outputs | [Request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md) |
+| Start a resumable research run from a finished atlas | [Auto-Research operating contract](skills/global-geochemical-atlas/references/auto-research.md) |
+| Audit three-layer agent independence and admission boundaries | [Adversarial agent audit contract](skills/global-geochemical-atlas/references/adversarial-agent-audit.md) |
+| Understand database fields and platform crosswalks | [Data model](skills/global-geochemical-atlas/references/data-model.md) |
+| Review unit, censoring, confidence, and anomaly rules | [Scientific rules](skills/global-geochemical-atlas/references/scientific-rules.md) |
+| Reproduce the production-threshold loop on real data | [Production demo](skills/global-geochemical-atlas/references/production-demo.md) |
+| Customize global, regional, or multi-element maps | [D3 visualization contract](skills/global-geochemical-atlas/references/d3-visualization-contract.md) |
+| Run multi-round iterative repair | [Iteration loop protocol](skills/global-geochemical-atlas/references/iteration-loop.md) |
+| Modify D1/D2/D3 or open a PR | [Contributing guide](CONTRIBUTING.md) |
+| Reproduce the offline performance baseline | [Workflow benchmark](skills/global-geochemical-atlas/BENCHMARK.md) |
 
-## 🧪 开发与验证
+## 🧪 Development & Testing
 
-| 入口 | 验证内容 |
+| Entry point | What it verifies |
 |---|---|
-| `component_test.py --component all` | D1/D2/D3 公共接口与契约边界（以机器输出为准） |
-| `self_test.py` | 科学边界、异常输入与两次运行字节级确定性（76 项检查） |
-| `run_self_correction_loop.py --self-test` | 在线扩采、独立样品、尺度自适应及逐筛选视图空间充分性决策（以机器输出为准） |
-| `benchmark_workflow.py` | 可重复的离线工作流性能基线 |
+| `component_test.py --component all` | D1/D2/D3 public interfaces and contract boundaries (677 checks: D1 447 · D2 63 · D3 167) |
+| `component_test_more.py` | Autopilot, adversarial audit, claim ledger, cross-run memory, discovery duel, and declarative adapters (60 checks) |
+| `self_test.py` | Scientific boundaries, adversarial inputs, and byte-level determinism across two runs (76 checks) |
+| `run_self_correction_loop.py --self-test` | Online expansion, distinct-sample accounting, scale adaptation, and per-view spatial-sufficiency decisions (117 checks) |
+| `benchmark_workflow.py` | A repeatable offline workflow performance baseline |
 
 ```bash
-# 全仓格式、lint 与公共契约类型门
+# Repository-wide formatting, lint, and public-contract type gates
 ruff check .
 ruff format --check .
 mypy --config-file mypy-critical.ini
 
-# D1/D2/D3 公共接口与契约
+# D1/D2/D3 public interfaces and contracts
 python skills/global-geochemical-atlas/scripts/component_test.py --component all
 
-# 端到端离线回归
+# Autopilot, adversarial audit, claim ledger, memory, duel, and declarative adapters
+python skills/global-geochemical-atlas/scripts/component_test_more.py
+
+# End-to-end offline regression
 python skills/global-geochemical-atlas/scripts/self_test.py
 
-# 多轮数据充分性与停止条件回归
+# Online research-loop policy
 python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py --self-test
 
-# 重复执行并验证完整离线工作流性能
+# Repeat and validate the full offline workflow
 python skills/global-geochemical-atlas/scripts/benchmark_workflow.py \
   --warmups 3 --runs 10 \
   --output /tmp/gga-workflow-benchmark.json
 ```
 
-也可以把 `all` 换成 `d1`、`d2` 或 `d3`，单独验证责任域。每个脚本都提供稳定的 `--help` 接口；路径归属、接口变更规则和完成定义见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。以上门禁在每个 PR 和 `main` 推送上由 GitHub Actions 自动执行。
+Swap `all` for `d1`, `d2`, or `d3` to verify one responsibility domain at a time. Every script has a stable `--help`; path ownership, interface-change rules, and the definition of done are in [`CONTRIBUTING.md`](CONTRIBUTING.md). All gates run automatically in GitHub Actions on every PR and push to `main`.
 
 ## ❓ FAQ
 
 <details>
-<summary><b>完全离线能用吗？</b></summary>
+<summary><b>Does it work fully offline?</b></summary>
 
-能。90 秒 demo、四介质样例和全部测试都基于 hash 固定的本地切片，零网络、零第三方包。但 fixture 只是显式 demo/回归；完整研究入口在未指定 `--input` 或 `--demo` 时默认使用 `--online-source auto`。`offline=true` 只接受已验证缓存或已声明 fixture，不能冒充在线研究。
-
-</details>
-
-<details>
-<summary><b>返回 <code>partial_success</code> 是失败吗？</b></summary>
-
-不是。它是刻意设计的科学状态：已验证子集完整跑通并交付，但不冒充冻结请求的全量空间覆盖。缺口、排除原因和下一步建议都写在 `run_summary.json` 里。全部范围与验证通过才会返回 `success`。
+Yes. The 90-second demo, the four-media sample, and the entire test suite run on hash-pinned local slices — zero network, zero third-party packages. Online acquisition happens only when you explicitly pass `--online-source`, and `--offline` mode accepts verified caches only.
 
 </details>
 
 <details>
-<summary><b>异常候选可以直接当矿化/污染结论用吗？</b></summary>
+<summary><b>Is <code>partial_success</code> a failure?</b></summary>
 
-不可以。所有异常均为 screening-only 候选：自然背景、采样偏差、空间自相关、方法差异和人为输入都是竞争解释。任何成因解释都需回看原记录与 QC、做尺度敏感性，并取得独立的采样设计、分析质量与地质/矿物学证据。
+No. It is a deliberately designed scientific status: the verified subset ran end to end and was delivered, but the run does not claim the full spatial coverage of the frozen request. Gaps, exclusion reasons, and suggested next steps are written into `run_summary.json`. `success` is returned only when the full scope passes validation.
 
 </details>
 
 <details>
-<summary><b>任务时限很长（小时级）时，能自动多轮迭代吗？</b></summary>
+<summary><b>Can anomaly candidates be used directly as mineralization/pollution conclusions?</b></summary>
 
-能，一条命令启动自我修正循环：
+No. All anomalies are screening-only candidates: natural background, sampling bias, spatial autocorrelation, method differences, and anthropogenic input are all competing explanations. Any causal interpretation requires going back to original records and QC, scale-sensitivity analysis, and independent evidence from sampling design, analytical quality, and geology/mineralogy.
+
+</details>
+
+<details>
+<summary><b>Can it iterate autonomously when the task budget is long (hours)?</b></summary>
+
+Yes — one command starts the self-correction loop:
 
 ```bash
 python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
   --request /path/to/request.json \
   --online-source auto \
+  --max-rounds 5 \
   --output-dir /tmp/atlas-loop
 ```
 
-控制器先做早期门禁，每轮独立产出并校验十八文件，再评估元素 × 介质、来源血缘与集中度、在线成功率、测定行/独立样品、溯源、四维可用性、异常背景及各筛选视图的空间广度。空间失败会生成精确修复队列，要求 Agent 尝试已注册候选或留下定向发现证据，不能用其他区域数据掩盖。显式扩展研究最多 24 个 30 分钟轮次、累计不超过 12 小时；官方 900 秒任务由 `task_router.py` 预留交接时间并标记检查点。短于一个完整轮次的在线运行必须标记 `--checkpoint-only`。只有队列清空、Skill 快照一致且 `validate_research_delivery.py` 通过才是正式完成。协议详见[迭代闭环](skills/global-geochemical-atlas/references/iteration-loop.md)与[空间覆盖门禁](skills/global-geochemical-atlas/references/global-spatial-coverage.md)。
+The controller runs early gates first (routing feasibility, minimum input columns), produces and validates the 18-file contract independently every round, retries transient acquisition failures automatically, and groups evidence-requiring problems (schema/license/coordinates) into the repair plan in `loop_report.json`; it stops honestly on convergence, no-progress, or budget exhaustion. After manual fixes, re-invoke on the same directory to resume. Canonical data is immutable and each round creates a new version; `scientific_limit` items such as censored values are excluded from the repair rate — scientific limits cannot be "looped away". Full protocol: [iteration loop](skills/global-geochemical-atlas/references/iteration-loop.md).
 
 </details>
 
 <details>
-<summary><b>如何新增一个数据源？</b></summary>
+<summary><b>How do I add a new data source?</b></summary>
 
-按 D1 准入流程：登记来源目录（DOI/版本/许可/科研使用条件）→ 编写来源适配器 → 通过八维证据评分与快照 hash 验证 → 30 条记录具名人工复核后方可进入 `benchmark_ready`。详见[来源准入标准](skills/global-geochemical-atlas/references/source-acceptance-standard.md)与[贡献指南](CONTRIBUTING.md)。
+Follow the D1 admission flow: register it in the source catalog (DOI/version/license/research-use terms) → write a source adapter → pass the eight-dimension evidence score and snapshot hash verification → a named human review of 30 records before it can enter `benchmark_ready`. See the [source admission standard](skills/global-geochemical-atlas/references/source-acceptance-standard.md) and [contributing guide](CONTRIBUTING.md).
 
 </details>
 
 <details>
-<summary><b>为什么坚持零第三方依赖？</b></summary>
+<summary><b>Why insist on zero third-party dependencies?</b></summary>
 
-评测与生产沙箱环境不可控。纯标准库意味着没有安装失败、没有版本冲突、没有供应链风险；交互地图同样自包含（无 CDN），断网可开。
+Evaluation and production sandboxes are uncontrollable environments. Pure stdlib means no install failures, no version conflicts, no supply-chain risk; the interactive maps are equally self-contained (no CDN) and open offline.
 
 </details>
 
-## 📄 License
+## 🏆 Awards & Media
 
-代码和原创文档采用 [MIT License](LICENSE)。外部数据仍遵守各自许可、署名和再分发条件；发布结果前请检查运行生成的 `source_manifest.json`。
+- 🏆 **Champion, [SynMatAI · AI4S Future ScienceSkills Hackathon](https://synmatai.cn/hackathon/)** (Team Token Agents)
+- 🎬 [Presentation deck](https://asimfish.github.io/global-geochemical-atlas-demo/slides.html) (22 HTML slides with the full mechanism walk-through and measured results) · [Poster PDF](https://asimfish.github.io/global-geochemical-atlas-demo/finals/Global-Geochemical-Atlas-Poster.pdf)
+- 📕 [Xiaohongshu feature](https://xhslink.cn/o/7EMuFyOOsO5) · 📘 [Zhihu article](https://zhuanlan.zhihu.com/p/2073539526404879853)
+
+## 👥 Team
+
+**Team Token Agents** — five PhD students spanning machine learning, embodied AI, 3D reconstruction, and lab automation:
+
+| Member | Affiliation | Focus |
+|---|---|---|
+| Yufeng Li | Shanghai Jiao Tong University | Graph machine learning, embodied AI, and optimal transport (advised by Prof. Junchi Yan) |
+| Peishuo Wang | Shanghai Jiao Tong University | Vision-language-action (VLA) models and chemistry lab automation (advised by Prof. Fan Wu) |
+| Xinrui Guo | Beihang University | Artificial intelligence, with a materials-science background |
+| Fengshuo Bai | Shanghai Jiao Tong University | PAIR-Lab; advised by Profs. Yaodong Yang and Ying Wen |
+| Mingwei Li | Zhejiang University | 3D/4D scene reconstruction and generative models |
+
+Team homepage: [chembot.zgca.com](https://chembot.zgca.com/)
+
+## 🤝 Contributing
+
+Issues and PRs are welcome. Before modifying D1/D2/D3, adding a data source, or changing a contract, please read the [contributing guide](CONTRIBUTING.md) (path ownership, interface-change rules, definition of done) and the [architecture notes](ARCHITECTURE.md); every PR must pass the CI lint, type, and 930-check test gates.
+
+## 📄 License & Citation
+
+Code and original documentation are released under the [MIT License](LICENSE). External data remains governed by its own licenses, attribution, and redistribution terms — check the generated `source_manifest.json` before publishing results.
+
+If this project helps your research or engineering, please cite:
+
+```bibtex
+@software{gga_skill_2026,
+  author = {Li, Yufeng and Wang, Peishuo and Guo, Xinrui and Bai, Fengshuo and Li, Mingwei},
+  title  = {Global Geochemical Atlas Skill: A Reusable Research Skill for AI Agents},
+  year   = {2026},
+  url    = {https://github.com/asimfish/global-geochemical-atlas-skill}
+}
+```
 
 <div align="center">
-<sub>用公开数据说话，让每个数字可追溯。</sub>
+<sub>Let public data speak — and make every number traceable.</sub>
 </div>

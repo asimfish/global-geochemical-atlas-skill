@@ -44,10 +44,13 @@ boundaries must stay visible in the generated receipts and UI.
 
 ## Current verification record
 
-Verified on 2026-08-24 against the working release tree:
+Verified on 2026-09-12 against the integration tree that merges GitHub `main`
+(autopilot, adversarial audit, claim ledger, acquisition memory, discovery
+duel, declarative adapters) with `feat/scientific-quality-loop-v14`:
 
-- `component_test.py --component all`: PASS, 604/604 checks
-  (D1 447, D2 62, D3 95).
+- `component_test.py --component all`: PASS, 677/677 checks
+  (D1 447, D2 63, D3 167).
+- `component_test_more.py`: PASS, 60/60 checks.
 - `self_test.py`: PASS, 76/76 checks.
 - `run_self_correction_loop.py --self-test`: PASS, 117/117 checks.
 - `mypy --config-file mypy-critical.ini`: PASS, 0 issues in 9 critical source

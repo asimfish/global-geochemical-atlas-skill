@@ -2460,9 +2460,7 @@ def build_map(
         # coverage-preserving preview instead of failing or fixing an arbitrary
         # record cap.  Deterministic: identical inputs shrink identically.
         embedded_count = len(records)
-        scale = min(
-            EMBED_TARGET_BYTES / html_bytes, EMBED_TARGET_BYTES / geojson_bytes
-        )
+        scale = min(EMBED_TARGET_BYTES / html_bytes, EMBED_TARGET_BYTES / geojson_bytes)
         reduced_limit = max(
             1, min(embedded_count - 1, int(embedded_count * scale * 0.97))
         )

@@ -41,7 +41,9 @@ ASPECT_TOLERANCE = 0.02
 _FONT_SIZE_STYLE = re.compile(r"font-size\s*:\s*([0-9.]+)")
 _NUMBER = re.compile(r"[0-9.]+")
 _PDF_PAGE = re.compile(rb"/Type\s*/Page(?![a-zA-Z])")
-_PDF_MEDIABOX = re.compile(rb"/MediaBox\s*\[\s*([0-9.\-]+)\s+([0-9.\-]+)\s+([0-9.\-]+)\s+([0-9.\-]+)\s*\]")
+_PDF_MEDIABOX = re.compile(
+    rb"/MediaBox\s*\[\s*([0-9.\-]+)\s+([0-9.\-]+)\s+([0-9.\-]+)\s+([0-9.\-]+)\s*\]"
+)
 _PDF_STREAM = re.compile(rb"stream\r?\n")
 # Object-stream dictionaries are short; the header scan stays local to avoid
 # mistaking a preceding object's dictionary for the stream's own.
@@ -165,7 +167,9 @@ def lint_svg_bytes(data: bytes) -> list[str]:
         if has_text:
             # SVG's initial font-size is "medium" = 16 user units when nothing
             # declares one; treat it as such instead of skipping the check.
-            print_pt = (effective if effective is not None else SVG_DEFAULT_FONT_SIZE) * scale
+            print_pt = (
+                effective if effective is not None else SVG_DEFAULT_FONT_SIZE
+            ) * scale
             if print_pt < MIN_PRINT_FONT_PT:
                 errors.append(
                     f"text {text[:40]!r} renders at "
@@ -258,9 +262,14 @@ def lint_figure_renders(
     reference = svg_aspect(svg_data)
     if reference is None:
         return [f"{svg_path.name}: SVG declares no usable viewBox or size"]
-    for label, aspect in (("PDF", pdf_aspect(pdf_path.read_bytes())), ("PNG", png_aspect(png_path.read_bytes()))):
+    for label, aspect in (
+        ("PDF", pdf_aspect(pdf_path.read_bytes())),
+        ("PNG", png_aspect(png_path.read_bytes())),
+    ):
         if aspect is None:
-            errors.append(f"{svg_path.name}: {label} render has no readable page or pixel box")
+            errors.append(
+                f"{svg_path.name}: {label} render has no readable page or pixel box"
+            )
         elif abs(aspect - reference) / reference > ASPECT_TOLERANCE:
             errors.append(
                 f"{svg_path.name}: {label} render aspect {aspect:.3f} differs from the SVG "

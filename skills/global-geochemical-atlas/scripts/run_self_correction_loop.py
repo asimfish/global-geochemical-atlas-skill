@@ -61,7 +61,7 @@ from urllib.parse import urlsplit
 import source_adapters
 import source_router
 import agent_audit
-import claim_ledger
+import report_claim_ledger
 import skill_snapshot
 import spatial_sufficiency
 import spatial_scope
@@ -6505,7 +6505,7 @@ def write_research_delivery_receipt(
             },
             "delivery_ready": delivery_ready,
             "artifacts": artifacts,
-            "claim_ledger": claim_ledger.build_claim_ledger(loop_root),
+            "claim_ledger": report_claim_ledger.build_claim_ledger(loop_root),
             "adversarial_source_audit": {
                 "status": (
                     "pending_agent_or_discovery_work"
@@ -6602,6 +6602,9 @@ def run_loop(args: argparse.Namespace) -> dict[str, Any]:
                 )
         args.active_per_analyte_observations = selected_target
         priority_source_ids = next_round_priority_source_ids(previous_executed)
+        if previous_executed is None and not priority_source_ids:
+            # Round 1 starts from cross-run memory instead of starting blind.
+            priority_source_ids = [str(s) for s in args.seed_priority_source_id]
         round_index = len(rounds) + 1
         interrupted_dir = archive_interrupted_round_dir(loop_root, round_index)
         record = execute_round(
@@ -6751,6 +6754,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--batch-qc-policy", type=Path)
     parser.add_argument("--no-geology", action="store_true")
     parser.add_argument("--require-all-sources", action="store_true")
+    parser.add_argument(
+        "--seed-priority-source-id",
+        action="append",
+        default=[],
+        help=(
+            "Source ID scheduled first in round 1 (repeatable). Intended for "
+            "cross-run acquisition memory (acquisition_memory.py advise); "
+            "later rounds keep deriving priorities from repair actions. "
+            "Seeds only reorder already-routable sources."
+        ),
+    )
     parser.add_argument(
         "--max-rounds",
         type=int,

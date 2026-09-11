@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import claim_ledger
+import report_claim_ledger
 import manuscript_kit
 import publication_lint
 import render_figure
@@ -283,7 +283,7 @@ def build_atlas_snapshot(atlas_dir: Path) -> dict[str, Any]:
     for filename in sorted(validate_outputs.REQUIRED_FILES.values()):
         path = _regular_file(atlas_dir / filename, filename)
         files[filename] = {"sha256": sha256_file(path), "bytes": path.stat().st_size}
-    ledger = claim_ledger.build_claim_ledger(atlas_dir)
+    ledger = report_claim_ledger.build_claim_ledger(atlas_dir)
     body = {
         "schema_version": SNAPSHOT_VERSION,
         "files": files,
@@ -534,7 +534,8 @@ def rank_fallback_candidates(
         == "empirical_candidate"
     ]
     rank = {
-        str(item.get("candidate_id")): index for index, item in enumerate(all_candidates)
+        str(item.get("candidate_id")): index
+        for index, item in enumerate(all_candidates)
     }
     by_type: dict[str, list[Mapping[str, Any]]] = {}
     for item in pool:
@@ -1055,7 +1056,13 @@ def _pilot_payload_contract() -> dict[str, Any]:
         "self_check": SELF_CHECK_RULE,
         "claims": {
             "type": "array",
-            "item_required_keys": ["claim_id", "value", "unit", "artifact", "artifact_sha256"],
+            "item_required_keys": [
+                "claim_id",
+                "value",
+                "unit",
+                "artifact",
+                "artifact_sha256",
+            ],
             "rules": [
                 "claim_id values must be unique",
                 "artifact must equal one artifacts[].path and artifact_sha256 must "
@@ -1613,7 +1620,9 @@ def _validate_typeset_manifest(
     # Typesetting contract gga-paper-v1: the source must be a LaTeX manuscript
     # built on the frozen style, cite numbers only through registered claim
     # marks, keep figures in the body, and the PDF must be a TeX product.
-    source_text = (run_dir / source_artifact).read_text(encoding="utf-8", errors="replace")
+    source_text = (run_dir / source_artifact).read_text(
+        encoding="utf-8", errors="replace"
+    )
     bib_artifact = str(value.get("bib_artifact") or "")
     available_bib_keys: set[str] | None = None
     if re.search(r"\\bibliography\{[^}]+\}", source_text):
@@ -1638,7 +1647,9 @@ def _validate_typeset_manifest(
     )
     errors.extend(manuscript_kit.lint_manuscript_pdf(run_dir / pdf_artifact))
     if errors:
-        raise AutoResearchError("manuscript typesetting gate failed: " + "; ".join(errors))
+        raise AutoResearchError(
+            "manuscript typesetting gate failed: " + "; ".join(errors)
+        )
 
 
 def _reference_manifest_path(run_dir: Path, cycle_id: str) -> Path:
@@ -1873,7 +1884,8 @@ def _validate_figure_storyboard(
         )
         if render_errors:
             raise AutoResearchError(
-                f"figure {figure_id} failed render fidelity: " + "; ".join(render_errors)
+                f"figure {figure_id} failed render fidelity: "
+                + "; ".join(render_errors)
             )
         figure_ids.append(figure_id)
         seen_roles.add(role)
@@ -1915,9 +1927,18 @@ def _review_provenance_hashes(run_dir: Path) -> dict[str, str]:
     they are placed.
     """
     hashes: dict[str, str] = {}
-    roots = [run_dir, *sorted(path for path in (run_dir / "revisions").glob("revision-*") if path.is_dir())] if (
-        run_dir / "revisions"
-    ).is_dir() else [run_dir]
+    roots = (
+        [
+            run_dir,
+            *sorted(
+                path
+                for path in (run_dir / "revisions").glob("revision-*")
+                if path.is_dir()
+            ),
+        ]
+        if (run_dir / "revisions").is_dir()
+        else [run_dir]
+    )
     for root in roots:
         for name in ("feedback_tasks.json", "review_receipt.json"):
             path = root / name
@@ -1925,7 +1946,9 @@ def _review_provenance_hashes(run_dir: Path) -> dict[str, str]:
                 hashes[sha256_file(path)] = path.relative_to(run_dir).as_posix()
         review_result = root / "agents" / "independent_reviewer" / "result.json"
         if review_result.is_file():
-            hashes[sha256_file(review_result)] = review_result.relative_to(run_dir).as_posix()
+            hashes[sha256_file(review_result)] = review_result.relative_to(
+                run_dir
+            ).as_posix()
             envelope = _read_object(review_result)
             for item in (envelope.get("payload") or {}).get("artifacts") or []:
                 if isinstance(item, Mapping) and item.get("sha256"):
@@ -1951,20 +1974,31 @@ def _reject_input_copies_as_artifacts(
     packet_path = _role_root(run_dir, cycle_id, role) / "packet.json"
     previous_hashes: dict[str, str] = {}
     if packet_path.is_file():
-        for key, item in (_read_object(packet_path).get("allowed_inputs") or {}).items():
-            if str(key).startswith("previous_") and isinstance(item, Mapping) and item.get("sha256"):
+        for key, item in (
+            _read_object(packet_path).get("allowed_inputs") or {}
+        ).items():
+            if (
+                str(key).startswith("previous_")
+                and isinstance(item, Mapping)
+                and item.get("sha256")
+            ):
                 previous_hashes[str(item["sha256"])] = f"packet input {key}"
     provenance = _review_provenance_hashes(run_dir)
     digests_by_basename: dict[str, set[str]] = {}
     for item in artifacts:
-        digests_by_basename.setdefault(Path(str(item["path"])).name, set()).add(str(item["sha256"]))
+        digests_by_basename.setdefault(Path(str(item["path"])).name, set()).add(
+            str(item["sha256"])
+        )
     for item in artifacts:
         relative = str(item["path"])
         digest = str(item["sha256"])
         basename = Path(relative).name
         # An unchanged file may be re-submitted; a stale copy of the previous
         # cycle's file declared next to its revised namesake may not.
-        if digest in previous_hashes and len(digests_by_basename.get(basename, set())) > 1:
+        if (
+            digest in previous_hashes
+            and len(digests_by_basename.get(basename, set())) > 1
+        ):
             raise AutoResearchError(
                 f"{role} artifact {relative} is a byte-identical copy of {previous_hashes[digest]} "
                 f"declared alongside a revised {basename}; the previous cycle's deliverables carry "
@@ -1985,9 +2019,9 @@ def _reject_input_copies_as_artifacts(
                 document = json.loads((run_dir / relative).read_text(encoding="utf-8"))
             except (OSError, UnicodeError, json.JSONDecodeError):
                 continue
-            if isinstance(document, Mapping) and str(document.get("schema_version") or "").startswith(
-                FEEDBACK_SCHEMA_PREFIX
-            ):
+            if isinstance(document, Mapping) and str(
+                document.get("schema_version") or ""
+            ).startswith(FEEDBACK_SCHEMA_PREFIX):
                 raise AutoResearchError(
                     f"{role} artifact {relative} carries the feedback-task schema; "
                     "review feedback must not be re-emitted as a deliverable"
@@ -2478,7 +2512,10 @@ def _prepare_reviewer(run_dir: Path, state: dict[str, Any], cycle_id: str) -> No
     provenance = _review_provenance_hashes(run_dir)
     for key, path in reviewer_inputs.items():
         digest = sha256_file(path)
-        if digest in provenance or path.name in {"feedback_tasks.json", "review_receipt.json"}:
+        if digest in provenance or path.name in {
+            "feedback_tasks.json",
+            "review_receipt.json",
+        }:
             raise AutoResearchError(
                 f"reviewer isolation violated: input {key} ({path.relative_to(run_dir).as_posix()}) "
                 f"is review provenance ({provenance.get(digest, path.name)})"
@@ -2577,7 +2614,12 @@ def _prepare_revision_cycle(
                 "claims, on the same paper kit; re-submit the complete LaTeX source, "
                 "bibliography and TeX-compiled PDF, never copies of the inputs."
             ),
-            inputs={**common, **paper_inputs, **figure_inputs, "paper_spine": run_dir / "paper_spine.json"},
+            inputs={
+                **common,
+                **paper_inputs,
+                **figure_inputs,
+                "paper_spine": run_dir / "paper_spine.json",
+            },
             required_output={
                 "artifacts": "revised LaTeX manuscript source, references.bib and typeset PDF",
                 "claim_ids": "all numerical claims",
@@ -2603,7 +2645,11 @@ def _prepare_revision_cycle(
                 "with the same figure kit; re-submit every storyboard figure as your own "
                 "SVG source plus renders, never copies of the previous cycle's files."
             ),
-            inputs={**common, **figure_inputs, "figure_contract": run_dir / "figure_contract.json"},
+            inputs={
+                **common,
+                **figure_inputs,
+                "figure_contract": run_dir / "figure_contract.json",
+            },
             required_output={
                 "artifacts": "revised figure generation source and renders",
                 "claim_ids": "all plotted claims",
@@ -2670,11 +2716,16 @@ def _finalize_publication(
                 ),
             }
         )
-    elif grade == "camera_ready" and gate.get("writing_basis") == WRITING_BASIS_BEST_AVAILABLE:
+    elif (
+        grade == "camera_ready"
+        and gate.get("writing_basis") == WRITING_BASIS_BEST_AVAILABLE
+    ):
         grade = "draft_with_disclosed_findings"
         receipt = _read_object(run_dir / "research_gate_receipt.json")
         disclosed.extend(
-            dict(item) for item in receipt.get("disclosures", []) if isinstance(item, Mapping)
+            dict(item)
+            for item in receipt.get("disclosures", [])
+            if isinstance(item, Mapping)
         )
     findings = disclosed
     writer_cycle = _latest_result_cycle(run_dir, "manuscript_writer", cycle_id)
@@ -2840,9 +2891,16 @@ def _archive_attempt(
         if not source.exists() or source.is_symlink():
             continue
         shutil.move(str(source), str(archive_dir / name))
-        moved.append({"path": name, "kind": "directory" if (archive_dir / name).is_dir() else "file"})
+        moved.append(
+            {
+                "path": name,
+                "kind": "directory" if (archive_dir / name).is_dir() else "file",
+            }
+        )
     result_hashes = {
-        path.relative_to(archive_dir).as_posix(): _read_object(path).get("result_sha256")
+        path.relative_to(archive_dir).as_posix(): _read_object(path).get(
+            "result_sha256"
+        )
         for path in sorted(archive_dir.glob("agents/*/result.json"))
     }
     gate = dict(state.get("research_gate") or {})
@@ -2964,7 +3022,9 @@ def _install_deliverable_kits(
         shutil.copyfile(SCRIPT_DIR / name, figure_dir / name)
     for name in FIGURE_KIT_ASSETS:
         shutil.copyfile(SKILL_ASSETS_DIR / name, figure_dir / name)
-    (figure_dir / "publication_lint.py").write_bytes((SCRIPT_DIR / "publication_lint.py").read_bytes())
+    (figure_dir / "publication_lint.py").write_bytes(
+        (SCRIPT_DIR / "publication_lint.py").read_bytes()
+    )
     paper_inputs = {
         "paper_style": paper_files[manuscript_kit.STYLE_FILE],
         "paper_template": paper_files[manuscript_kit.TEMPLATE_FILE],
@@ -2976,7 +3036,10 @@ def _install_deliverable_kits(
         "figure_toolkit": figure_dir / "paper_figures.py",
         "figure_renderer": figure_dir / "render_figure.py",
         "figure_lint": figure_dir / "publication_lint.py",
-        **{f"basemap_{index:02d}": figure_dir / name for index, name in enumerate(FIGURE_KIT_ASSETS, 1)},
+        **{
+            f"basemap_{index:02d}": figure_dir / name
+            for index, name in enumerate(FIGURE_KIT_ASSETS, 1)
+        },
     }
     return paper_inputs, figure_inputs
 
@@ -3001,11 +3064,20 @@ def _deliverable_kit_inputs(run_dir: Path) -> tuple[dict[str, Path], dict[str, P
         "figure_toolkit": figure_dir / "paper_figures.py",
         "figure_renderer": figure_dir / "render_figure.py",
         "figure_lint": figure_dir / "publication_lint.py",
-        **{f"basemap_{index:02d}": figure_dir / name for index, name in enumerate(FIGURE_KIT_ASSETS, 1)},
+        **{
+            f"basemap_{index:02d}": figure_dir / name
+            for index, name in enumerate(FIGURE_KIT_ASSETS, 1)
+        },
     }
-    missing = [str(path.relative_to(run_dir)) for path in (*paper_inputs.values(), *figure_inputs.values()) if not path.is_file()]
+    missing = [
+        str(path.relative_to(run_dir))
+        for path in (*paper_inputs.values(), *figure_inputs.values())
+        if not path.is_file()
+    ]
     if missing:
-        raise AutoResearchError("deliverable kits are incomplete: " + ", ".join(missing))
+        raise AutoResearchError(
+            "deliverable kits are incomplete: " + ", ".join(missing)
+        )
     return paper_inputs, figure_inputs
 
 
@@ -3069,8 +3141,19 @@ def _manuscript_payload_contract() -> dict[str, Any]:
                 f"{manuscript_kit.MIN_PDF_PAGES} pages"
             ),
         },
-        "required_keys": ["artifacts", "claim_ids", "contribution_map", "reference_list", "typeset_manifest"],
-        "typeset_manifest_keys": ["source_artifact", "pdf_artifact", "section_manifest", "bib_artifact"],
+        "required_keys": [
+            "artifacts",
+            "claim_ids",
+            "contribution_map",
+            "reference_list",
+            "typeset_manifest",
+        ],
+        "typeset_manifest_keys": [
+            "source_artifact",
+            "pdf_artifact",
+            "section_manifest",
+            "bib_artifact",
+        ],
     }
 
 
@@ -3089,7 +3172,7 @@ def _figure_payload_contract() -> dict[str, Any]:
             ),
             "basemap": (
                 f"{FIGURE_KIT_DIR}/natural-earth-*.json; MapPanel draws coastline, Admin-0 and "
-                "China Admin-1 and tags the group data-gga-layer=\"basemap\""
+                'China Admin-1 and tags the group data-gga-layer="basemap"'
             ),
         },
         "rules": [
@@ -3153,7 +3236,9 @@ def _start_paper_production(
                 "draft_with_disclosed_findings."
             ),
         }
-        gate_receipt["receipt_sha256"] = sha256_bytes(canonical_json_bytes(gate_receipt))
+        gate_receipt["receipt_sha256"] = sha256_bytes(
+            canonical_json_bytes(gate_receipt)
+        )
         _write_json(run_dir / "research_gate_receipt.json", gate_receipt)
     paper_inputs, figure_inputs = _install_deliverable_kits(
         run_dir,
@@ -3218,7 +3303,12 @@ def _start_paper_production(
             "executed claims, then typeset it with the frozen gga-paper style into "
             "a section-complete PDF." + framing
         ),
-        inputs={**common, **paper_inputs, **figure_inputs, "paper_spine": run_dir / "paper_spine.json"},
+        inputs={
+            **common,
+            **paper_inputs,
+            **figure_inputs,
+            "paper_spine": run_dir / "paper_spine.json",
+        },
         required_output=writer_output,
     )
     _write_packet(
@@ -3232,7 +3322,11 @@ def _start_paper_production(
             "the frozen figure kit (offline basemap, print typography, same-size "
             "PDF/PNG export); caveats belong in captions, never inside the figure."
         ),
-        inputs={**common, **figure_inputs, "figure_contract": run_dir / "figure_contract.json"},
+        inputs={
+            **common,
+            **figure_inputs,
+            "figure_contract": run_dir / "figure_contract.json",
+        },
         required_output=figure_output,
     )
     state.update(
@@ -3314,11 +3408,15 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
     reviewed -- graded ``evidence_report``, never an empirical article.
     """
     attempts_dir = run_dir / "attempts"
-    archives = sorted(
-        path for path in attempts_dir.glob("attempt-*") if path.is_dir()
-    ) if attempts_dir.is_dir() else []
+    archives = (
+        sorted(path for path in attempts_dir.glob("attempt-*") if path.is_dir())
+        if attempts_dir.is_dir()
+        else []
+    )
     if not archives:
-        raise AutoResearchError("evidence report requires at least one archived attempt")
+        raise AutoResearchError(
+            "evidence report requires at least one archived attempt"
+        )
     attempt_outcomes: list[dict[str, Any]] = []
     pilot_claims: list[dict[str, Any]] = []
     verified_citations: list[dict[str, Any]] = []
@@ -3487,7 +3585,13 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
             "method_figure": {"required": False, "panels": []},
             "result_figures": {
                 "must_reference_claim_ids": True,
-                "caption_fields": ["cohort", "n", "unit", "uncertainty", "claim_boundary"],
+                "caption_fields": [
+                    "cohort",
+                    "n",
+                    "unit",
+                    "uncertainty",
+                    "claim_boundary",
+                ],
                 "required_roles": sorted(REQUIRED_REPORT_FIGURE_ROLES),
                 "minimum_data_bearing_figures": 3,
                 "storyboard_fields": [
@@ -3543,7 +3647,12 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
             "audit work would unlock an empirical article. Claim no empirical effect. "
             "Typeset with the frozen gga-paper style from the paper kit."
         ),
-        inputs={**common, **paper_inputs, **figure_inputs, "paper_spine": run_dir / "paper_spine.json"},
+        inputs={
+            **common,
+            **paper_inputs,
+            **figure_inputs,
+            "paper_spine": run_dir / "paper_spine.json",
+        },
         required_output={
             "artifacts": "report source plus a typeset PDF",
             "claim_ids": "all numerical claims (atlas claims and attempt-prefixed pilot diagnostics)",
@@ -3573,7 +3682,11 @@ def _start_evidence_report(run_dir: Path, state: dict[str, Any], reason: str) ->
             "with the frozen figure kit (offline basemap, print typography, same-size "
             "PDF/PNG export)."
         ),
-        inputs={**common, **figure_inputs, "figure_contract": run_dir / "figure_contract.json"},
+        inputs={
+            **common,
+            **figure_inputs,
+            "figure_contract": run_dir / "figure_contract.json",
+        },
         required_output={
             "artifacts": "figure generation source and SVG/PDF/PNG renders per figure",
             "claim_ids": "all plotted claims",
@@ -3776,9 +3889,7 @@ def _advance(run_dir: Path) -> dict[str, Any]:
             literature_result["payload"].get("frontier_assessment")
         )
         executed_pilot = pilot_outcome["status"] in PAPER_ELIGIBLE_PILOT_OUTCOMES
-        paper_eligible = (
-            executed_pilot and frontier["status"] == WRITING_BASIS_STRONG
-        )
+        paper_eligible = executed_pilot and frontier["status"] == WRITING_BASIS_STRONG
         routing_destination = (
             "paper_production"
             if paper_eligible
@@ -3847,9 +3958,7 @@ def _advance(run_dir: Path) -> dict[str, Any]:
                 ),
             )
         else:
-            _start_paper_production(
-                run_dir, state, writing_basis=WRITING_BASIS_STRONG
-            )
+            _start_paper_production(run_dir, state, writing_basis=WRITING_BASIS_STRONG)
     elif stage == "manuscript_and_figures" and _all_complete(
         run_dir,
         [role for role in state.get("required_roles", []) if role in SECOND_WAVE]
@@ -3867,9 +3976,7 @@ def _advance(run_dir: Path) -> dict[str, Any]:
                 _cycle_root(run_dir, audit_cycle) / "citation_audit_receipt.json"
             )
             if receipt.get("all_references_verified") is not True:
-                raise AutoResearchError(
-                    "carried citation audit is not fully verified"
-                )
+                raise AutoResearchError("carried citation audit is not fully verified")
             _append_event(
                 run_dir,
                 "citation_audit_carried_forward",
@@ -4050,7 +4157,11 @@ REQUIRED_LATEX_PACKAGES = (
     "hyperref",
     "natbib",
 )
-FONT_STACKS = (("newtx", ("newtxtext", "newtxmath", "centernot")), ("mathptmx", ("mathptmx",)), ("lmodern", ("lmodern",)))
+FONT_STACKS = (
+    ("newtx", ("newtxtext", "newtxmath", "centernot")),
+    ("mathptmx", ("mathptmx",)),
+    ("lmodern", ("lmodern",)),
+)
 TOOLCHAIN_REPORT_VERSION = "gga-deliverable-toolchain-v1"
 
 
@@ -4067,7 +4178,11 @@ def _which_with_user_bin(*names: str) -> str | None:
 def _kpsewhich(kpsewhich: str, filename: str) -> bool:
     try:
         completed = subprocess.run(
-            [kpsewhich, filename], capture_output=True, text=True, timeout=30, check=False
+            [kpsewhich, filename],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
         )
     except (OSError, subprocess.SubprocessError):
         return False
@@ -4090,29 +4205,53 @@ def toolchain_report() -> dict[str, Any]:
             if all(_kpsewhich(kpsewhich, f"{style}.sty") for style in styles):
                 font_stack = stack_name
                 break
-        packages = {name: _kpsewhich(kpsewhich, f"{name}.sty") for name in REQUIRED_LATEX_PACKAGES}
+        packages = {
+            name: _kpsewhich(kpsewhich, f"{name}.sty")
+            for name in REQUIRED_LATEX_PACKAGES
+        }
     missing_packages = sorted(name for name, present in packages.items() if not present)
     browser = render_figure.find_chrome()
     svg_renderer = (
-        "chrome" if browser else "rsvg-convert" if shutil.which("rsvg-convert") else "inkscape" if shutil.which("inkscape") else None
+        "chrome"
+        if browser
+        else "rsvg-convert"
+        if shutil.which("rsvg-convert")
+        else "inkscape"
+        if shutil.which("inkscape")
+        else None
     )
-    poppler = {name: bool(shutil.which(name)) for name in ("pdfinfo", "pdftotext", "pdffonts", "pdftoppm")}
+    poppler = {
+        name: bool(shutil.which(name))
+        for name in ("pdfinfo", "pdftotext", "pdffonts", "pdftoppm")
+    }
     blockers: list[str] = []
     if not tex_engine:
-        blockers.append("no TeX engine (latexmk/pdflatex) on PATH or in ~/.local/bin; the manuscript cannot be compiled")
+        blockers.append(
+            "no TeX engine (latexmk/pdflatex) on PATH or in ~/.local/bin; the manuscript cannot be compiled"
+        )
     if tex_engine and not kpsewhich:
-        blockers.append("kpsewhich not found; LaTeX package availability cannot be verified")
+        blockers.append(
+            "kpsewhich not found; LaTeX package availability cannot be verified"
+        )
     if kpsewhich and font_stack is None:
-        blockers.append("no usable Times stack (newtx, mathptmx) nor lmodern; gga-paper.sty cannot load")
+        blockers.append(
+            "no usable Times stack (newtx, mathptmx) nor lmodern; gga-paper.sty cannot load"
+        )
     if missing_packages:
         blockers.append("missing LaTeX packages: " + ", ".join(missing_packages))
     if svg_renderer is None:
-        blockers.append("no SVG renderer (Chrome/Chromium, rsvg-convert or inkscape); figures cannot be exported")
+        blockers.append(
+            "no SVG renderer (Chrome/Chromium, rsvg-convert or inkscape); figures cannot be exported"
+        )
     notes: list[str] = []
     if not poppler["pdftoppm"]:
-        notes.append("pdftoppm absent: figure PNGs fall back to cropped browser screenshots")
+        notes.append(
+            "pdftoppm absent: figure PNGs fall back to cropped browser screenshots"
+        )
     if not (poppler["pdfinfo"] and poppler["pdftotext"] and poppler["pdffonts"]):
-        notes.append("poppler text/font probes absent: manuscript PDF checks degrade to byte-level producer and page-count checks")
+        notes.append(
+            "poppler text/font probes absent: manuscript PDF checks degrade to byte-level producer and page-count checks"
+        )
     return {
         "schema_version": TOOLCHAIN_REPORT_VERSION,
         "ready": not blockers,

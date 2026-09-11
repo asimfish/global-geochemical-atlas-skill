@@ -10,9 +10,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 RNG = np.random.default_rng(20260818)
-DB = '/mnt/nas/data/lyf/hackathon/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
-LAND = '/mnt/nas/data/lyf/hackathon/gga-acquisition-coverage-v12/skills/global-geochemical-atlas/assets/natural-earth-110m-land.json'
-OUT = '/mnt/nas/data/lyf/hackathon/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
+DB = ROOT + '/retest-acquisition-coverage-v12-6c221cf/world/output/geochemistry.csv'
+LAND = ROOT + '/gga-acquisition-coverage-v12/skills/global-geochemical-atlas/assets/natural-earth-110m-land.json'
+OUT = ROOT + '/gga-acquisition-coverage-v12/research-products/paper-demo-20260817/'
 EU = json.load(open(OUT + 'results.json'))['europe_foregs_top_over_sub']
 
 df = pd.read_csv(DB, low_memory=False)
@@ -100,6 +100,9 @@ ax.set_xlabel('surface / deep concentration ratio (site-paired median, 95% boots
 ax.set_xlim(0.62, 1.78)
 ax.tick_params(axis='x', labelsize=8)
 from matplotlib.lines import Line2D
+import os
+# Data root for the paper demo; override with GGA_HACKATHON_ROOT when reproducing.
+ROOT = os.environ.get("GGA_HACKATHON_ROOT", os.path.expanduser("~/hackathon"))
 ax.legend(handles=[
     Line2D([0], [0], color=RED, marker='o', lw=2, label='EU: FOREGS topsoil/subsoil (residual soil)'),
     Line2D([0], [0], color=BLUE, marker='s', lw=2, label='AU: NGSA outlet sediment top/bottom (0\u201310 / ~60\u201380 cm)'),
