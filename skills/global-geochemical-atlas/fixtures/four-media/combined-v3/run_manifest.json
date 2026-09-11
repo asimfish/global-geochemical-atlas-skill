@@ -259,10 +259,10 @@
     },
     {
       "evidence_path": "fixtures/source-demos/australia-ngsa-mercury/sources.jsonl",
-      "evidence_sha256": "1c23e213ab496a19bb3034385b836393871ad2b88da461c99a29604d08e3c6e8",
+      "evidence_sha256": "473eec3118ed64847a749e47b52cc77a81e55999b241d42c264ee12d1c9141d6",
       "evidence_tier": "A",
       "input_path": "fixtures/source-demos/australia-ngsa-mercury/demo_input.csv",
-      "input_sha256": "e1d275b6c625989d84b558d75c4cc7f1ce078ce4757a1fb457e6feb37865abec",
+      "input_sha256": "e60c26b31bd412f50cc4246216b3716a52a085088d5337ce98ac06f89a0c840a",
       "record_count": 48,
       "source_evidence_score": 85.0,
       "source_id": "australia-ngsa-mercury",
@@ -317,14 +317,14 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 1610986,
+      "bytes": 1611435,
       "path": "demo_input.csv",
-      "sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9"
+      "sha256": "743d3b00a095de888d23464e0457db869c7cdee455f52a1b9deee9d689e2a0d2"
     },
     {
-      "bytes": 2064965,
+      "bytes": 2069045,
       "path": "sources.jsonl",
-      "sha256": "84e2b2a558b52bcbb6fe20aafb99aecec6a20841224b55505e4a5ae6c2cb75ed"
+      "sha256": "6d1ff37ea80c515dc2a88361524e8c37091b93b176745a24f39f40240e1626a6"
     }
   ],
   "record_counts": {

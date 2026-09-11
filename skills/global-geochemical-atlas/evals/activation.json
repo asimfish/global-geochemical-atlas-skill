@@ -33,6 +33,26 @@
       ]
     },
     {
+      "id": "positive-adversarial-source-loop",
+      "prompt": "Continue the pending geochemical atlas repair queue using independent scout, challenger, and judge layers, and preserve a hash-bound audit trail.",
+      "should_activate": true,
+      "expected_behavior": [
+        "prepares separate fresh-session scout and challenger packets from current-round facts",
+        "keeps previous memory out of evaluator inputs while fingerprinting its routing use",
+        "uses deterministic scoring plus D1 and human gates instead of agent self-approval"
+      ]
+    },
+    {
+      "id": "positive-atlas-auto-research",
+      "prompt": "Use the completed copper atlas to continue with Auto-Research: choose a supported question, run a pilot, verify literature, draft the paper and figures, and independently review every claim.",
+      "should_activate": true,
+      "expected_behavior": [
+        "freezes and validates the supplied atlas before creating a resumable research run",
+        "binds manuscript and figure claims to atlas or pilot artifacts",
+        "uses fresh independent review, versioned repair rounds, and stops at human approval"
+      ]
+    },
+    {
       "id": "negative-generic-map",
       "prompt": "Create a subway map for my city and suggest the fastest commute.",
       "should_activate": false,
@@ -54,6 +74,14 @@
       "should_activate": false,
       "expected_behavior": [
         "does not activate for a literature-only summary with the data workflow explicitly excluded"
+      ]
+    },
+    {
+      "id": "negative-generic-paper-writing",
+      "prompt": "Write and polish a generic machine-learning paper from my notes; there is no geochemical atlas or measurement workflow to consume.",
+      "should_activate": false,
+      "expected_behavior": [
+        "does not activate Auto-Research for generic writing that lacks a validated atlas snapshot"
       ]
     }
   ],

@@ -11,7 +11,7 @@ hash 固定 fixture 只用于显式 demo、离线回归或在线失败后已声�
 1. 冻结请求，检查 request hash 未变。用户未明确指定来源白名单时必须保留 `sources: auto`；实际选源属于 `source_route.json` 证据，不能反写成固定清单，否则后续发现的区域来源无法在同一请求中加入。
 2. 在版本化 `source_catalog` 和完整来源 profile 中按元素、介质、空间域、区域、measurement basis、许可、evidence tier、已知数据内容与可执行接口路由。空间域按介质确定性派生为 `land`、`inland_water`、`marine`；命名国家的陆地/内陆水体使用冻结 Admin-0 科学分析几何。`China`/`中国`/`CHN` 的分析集合为 `CHN + TWN`，避免台湾记录被静默裁掉；`中国大陆` 才是 `CHN` 单体。该集合不是法定国界或主权表达，中国可视化另须链接自然资源部标准地图服务及审图号。多边形外仅来源明确标注的 marine 记录可进入默认 600 km 邻近海洋分析域，该缓冲区不是领海、EEZ 或主权边界。题面点名的平台必须逐个进入适用性审计；不含请求维度的来源记录排除理由，不盲目下载。
 3. 尝试全部已选且可执行的在线来源，保留逐源 `source_outcomes`、manifest、hash、获取时间与失败。首轮顺序按完整 profile 的空间区 × 介质边际增益与独立血缘确定；后续轮次先消费上一轮自主修复计划中的瞬态失败来源和 `spatial_requery_source_ids`，再执行覆盖均衡与轮转顺序，避免已识别的俄罗斯/中国西部等缺口只写报告却没有真实补采机会。优先级只调整已路由来源的时间顺序，不能绕过兼容性、许可、记录上限或实现新 adapter。reported 覆盖只用于公平调度，仍不计入 canonical 空间通过。研究路径优先真实在线/已验证缓存的完整可扩切片，不以 hash fixture 替代在线采集。
-4. 运行 D2/D3，验证固定十六文件契约和渲染门禁。即使 D2/D3 失败，已完成的来源尝试、过滤数量和 manifest 也先写入 `request_evidence/execution_failure.json`，不得随临时目录丢失。
+4. 运行 D2/D3，验证固定十八文件契约和渲染门禁。即使 D2/D3 失败，已完成的来源尝试、过滤数量和 manifest 也先写入 `request_evidence/execution_failure.json`，不得随临时目录丢失。
 5. 计算 `atlas-data-sufficiency-v9`：
    - 每个显式请求元素、介质、空间域以及每个元素 × 介质组合单元均须有观测；75% 覆盖率或集合并集不得通过；
    - 自适应记录下限 `max(5000, 500 × 元素数 × 介质数)`，不超过 `max_records`；
@@ -63,7 +63,7 @@ python scripts/run_self_correction_loop.py \
 
 官方自动评审的任务合同默认 900 秒，规划器从中预留 180 秒给 Agent 启动、验证和回复，生成 720 秒内部在线检查点；短于一个完整 1,800 秒轮次必须显式声明 `--checkpoint-only`，其结果永远不能成为正式交付。只有操作者明确授权扩展研究时，才使用单轮 1,800 秒、内部工作流 1,740 秒、单来源 600 秒、总预算最多 43,200 秒。续跑累计既有轮次耗时，不重新获得预算；`fixed` 请求在门禁通过时可提前结束，`maximize_evidence_breadth` 还必须满足采集容量门禁。fixture 更快不是跳过在线尝试的理由。
 
-每轮产物保存在 `OUTPUT_DIR/rounds/round-NN/`。最新通过十六文件验证的完整包可作为检查点发布到 `OUTPUT_DIR/`；`loop_report.json` 记录路由、轮次、充分性标准、扩采目标、修复计划、停机理由和已发布轮次，`d1_repair_queue.json` 是 Agent 必须消费的结构化 D1 控制面，`research_delivery_receipt.json` 将根目录十六文件逐字节绑定到该不可变轮次、清空的修复队列与未变的完整 Skill 树。在同一输出目录续跑时，请求 hash 必须不变且既有充分性评估必须是当前 `atlas-data-sufficiency-v9`；v8 及更旧报告应保留作历史证据，并在新输出目录用相同请求重新开始。执行证据使用 `geochemical-request-execution-v6` 并记录 gap-priority 调度输入与实际来源顺序；若另一个进程在一轮中修改 Skill，当前轮以 `conflicting_evidence` 失败关闭，避免混合版本产物。
+每轮产物保存在 `OUTPUT_DIR/rounds/round-NN/`。若进程在子轮已创建文件、但累计报告尚未登记该轮时中断，续跑会先将这份孤儿目录原样移到 `OUTPUT_DIR/rounds/interrupted/round-NN-attempt-NNNN/`，再重试同一逻辑轮；诊断证据不会被覆盖，也不会因非空目录把可恢复中断误判成输入错误。根检查点只在新的有效轮次保留当前已发布的全部 `record_id` 时前移到 `OUTPUT_DIR/`；预算重平衡产生的较小或不可比较记录集仍保留为不可变探索轮并可驱动后续决策，但不得覆盖证据更多的根产物。`loop_report.json` 记录路由、轮次、充分性标准、扩采目标、修复计划、停机理由和实际已发布轮次，`d1_repair_queue.json` 与发布轮的充分性事实对齐，是 Agent 必须消费的结构化 D1 控制面；`research_delivery_receipt.json` 将根目录十八文件逐字节绑定到该不可变轮次、清空的修复队列与未变的完整 Skill 树。在同一输出目录续跑时，请求 hash 必须不变且既有充分性评估必须是当前 `atlas-data-sufficiency-v9`；v8 及更旧报告应保留作历史证据，并在新输出目录用相同请求重新开始。执行证据使用 `geochemical-request-execution-v6` 并记录 gap-priority 调度输入与实际来源顺序；若另一个进程在一轮中修改 Skill，当前轮以 `conflicting_evidence` 失败关闭，避免混合版本产物。
 
 正式交付必须再运行：
 

@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:global-geochemical-atlas:research-delivery-receipt:v3",
+  "$id": "urn:global-geochemical-atlas:research-delivery-receipt:v4",
   "title": "Online research delivery receipt",
-  "description": "Binds the root-level sixteen-file atlas package to one immutable validated loop round. delivery_ready additionally requires a converged online loop, a sufficient v5 assessment, a clear D1 repair queue and an unchanged executable Skill snapshot.",
+  "description": "Binds the root-level eighteen-file atlas package to one immutable validated loop round. delivery_ready additionally requires a converged online loop, a sufficient v5 assessment, a clear D1 repair queue and an unchanged executable Skill snapshot.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -20,10 +20,12 @@
     "skill_snapshot",
     "delivery_ready",
     "artifacts",
+    "adversarial_source_audit",
+    "claim_ledger",
     "claim_boundary"
   ],
   "properties": {
-    "schema_version": {"const": "atlas-research-delivery-receipt-v3"},
+    "schema_version": {"const": "atlas-research-delivery-receipt-v4"},
     "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "published_round": {"type": "integer", "minimum": 1},
     "published_round_dir": {
@@ -84,10 +86,12 @@
         "batch_qc_report.json",
         "anomalies.geojson",
         "anomaly_report.json",
+        "anomaly_provenance.json",
         "anomaly_regions.geojson",
         "spatial_anomaly_report.json",
         "samples.geojson",
         "interactive_map.html",
+        "temporal_map.html",
         "iteration_backlog.csv",
         "run_summary.json"
       ],
@@ -102,12 +106,53 @@
         "batch_qc_report.json": {"$ref": "#/$defs/artifact"},
         "anomalies.geojson": {"$ref": "#/$defs/artifact"},
         "anomaly_report.json": {"$ref": "#/$defs/artifact"},
+        "anomaly_provenance.json": {"$ref": "#/$defs/artifact"},
         "anomaly_regions.geojson": {"$ref": "#/$defs/artifact"},
         "spatial_anomaly_report.json": {"$ref": "#/$defs/artifact"},
         "samples.geojson": {"$ref": "#/$defs/artifact"},
         "interactive_map.html": {"$ref": "#/$defs/artifact"},
+        "temporal_map.html": {"$ref": "#/$defs/artifact"},
         "iteration_backlog.csv": {"$ref": "#/$defs/artifact"},
         "run_summary.json": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "claim_ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "algorithm", "claims", "claim_count",
+        "claim_boundary", "ledger_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "atlas-report-claim-ledger-v1"},
+        "algorithm": {"const": "canonical-json-sha256-v1"},
+        "claims": {
+          "type": "array",
+          "minItems": 9,
+          "maxItems": 9,
+          "items": {"$ref": "#/$defs/claim"}
+        },
+        "claim_count": {"const": 9},
+        "claim_boundary": {"type": "string", "minLength": 1},
+        "ledger_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "adversarial_source_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "manifest", "manifest_sha256"],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending_agent_or_discovery_work",
+            "not_required_no_pending_action_groups"
+          ]
+        },
+        "manifest": {"type": ["string", "null"]},
+        "manifest_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        }
       }
     },
     "claim_boundary": {"type": "string", "minLength": 1}
@@ -120,6 +165,37 @@
       "properties": {
         "root_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "round_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "claim_id", "value", "value_type", "unit",
+        "statement_boundary", "evidence", "verification_status", "claim_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "atlas-report-claim-v1"},
+        "claim_id": {"type": "string", "minLength": 1},
+        "value": {},
+        "value_type": {"enum": ["integer", "number", "sorted_string_array"]},
+        "unit": {"type": "string", "minLength": 1},
+        "statement_boundary": {"type": "string", "minLength": 1},
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "artifact", "artifact_sha256", "locator", "recompute_method"
+          ],
+          "properties": {
+            "artifact": {"type": "string", "minLength": 1},
+            "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "locator": {"type": "string", "minLength": 1},
+            "recompute_method": {"type": "string", "minLength": 1}
+          }
+        },
+        "verification_status": {"const": "recomputed"},
+        "claim_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
       }
     }
   }

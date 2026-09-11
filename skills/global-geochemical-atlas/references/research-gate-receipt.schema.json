@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:research-gate-receipt:v1",
+  "title": "Hash-bound Auto-Research scientific entry decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "paper_eligible", "pilot_outcome",
+    "pilot_result_sha256", "frontier_status", "literature_result_sha256",
+    "routing_destination", "decision_rule", "receipt_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "gga-research-gate-receipt-v1"},
+    "paper_eligible": {"type": "boolean"},
+    "pilot_outcome": {"enum": [
+      "supported_effect", "supported_null", "unsupported_inputs",
+      "acquisition_required", "invalid_analysis"
+    ]},
+    "pilot_result_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "frontier_status": {"enum": [
+      "supports_empirical_article", "weak_frontier_position", "needs_verification"
+    ]},
+    "literature_result_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "routing_destination": {"type": "string", "minLength": 1},
+    "decision_rule": {"type": "string", "minLength": 1},
+    "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

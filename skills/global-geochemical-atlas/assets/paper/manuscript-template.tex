@@ -1,0 +1,75 @@
+% GGA manuscript skeleton -- gga-paper-v1
+%
+% The controller places this file, gga-paper.sty, claims.tex and
+% references.bib next to your manuscript source.  Keep the preamble as is:
+% the typesetting gate rejects manuscripts that do not load gga-paper, that
+% cite numbers without \claimref, that fix figure heights, or that let a
+% figure float behind the bibliography.
+%
+% Compile with:  latexmk -pdf -interaction=nonstopmode manuscript.tex
+% (or pdflatex; bibtex; pdflatex; pdflatex).
+\documentclass[11pt]{article}
+\usepackage{gga-paper}
+
+\input{claims}            % controller-generated claim ledger; do not edit
+
+\title{Replace with a specific, claim-bearing title\\ (two lines at most; no orphan word)}
+\shorttitle{Short running title}
+\author{GGA Auto-Research workflow}
+\date{}
+\deliverablegrade{Grade and writing basis are inserted verbatim from research\_gate\_receipt.json}
+
+\begin{document}
+\maketitle
+\gradeline
+
+\begin{abstract}
+One paragraph, 150--250 words: question, data lineage, executed estimate with
+its dependence-aware interval\claimref{example.claim.id}, robustness, what the
+result does and does not establish.
+\end{abstract}
+
+\noindent\textbf{Keywords:} three to six keywords
+
+\section{Introduction}
+Motivate the narrow question, cite the closest prior work with \cite{lit01},
+and state the frontier delta the contribution map claims.
+
+\section{Results}
+Every numerical sentence carries a claim mark, for example: the matched set
+contained 48 record pairs\claimref{example.claim.id}.  Refer to figures at
+first mention (Fig.~\ref{fig:primary}); the figure environment sits in the
+same section, placed with [t] and full linewidth.
+
+\ggafigure{fig:primary}{figures/fig1_primary.pdf}{%
+  Caption states the reader takeaway first, then the encoding, then which
+  quantities are diagnostics rather than causal effects. Marks such as
+  \claimref{example.claim.id} bind the plotted numbers.}{t}
+
+\begin{boundary}
+Use this quiet block for what the estimate must not be read as.  Never draw
+coloured warning boxes inside figures; the caption and this block carry the
+caveats.
+\end{boundary}
+
+\section{Materials and methods}
+Frozen evidence, record matching, estimand and uncertainty, spatial
+diagnostic, hold-out replication, regeneration command.
+
+\section{Discussion}
+\subsection{Evidence-supported interpretation}
+\subsection{Position within the current frontier}
+\subsection{Contribution map}
+\subsection{New questions generated}
+\subsection{Limitations}
+
+\section*{Data and code availability}
+\section*{Agent disclosure}
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\appendix
+\printclaimledger
+
+\end{document}

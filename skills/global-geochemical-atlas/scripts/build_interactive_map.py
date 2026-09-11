@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import csv
 import hashlib
 import json
@@ -38,11 +39,21 @@ TEMPLATE_CONTRACT_VERSION = "d3-domain-confidence-atlas-v5"
 VISUAL_QUESTION_VERSION = "d3-visual-question-contract-v1"
 TERMINOLOGY_CONTRACT = "competition-geochemistry-v1"
 BASEMAP_ASSET_VERSION = "ai4s-natural-earth-land-v1"
-BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v1"
+BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin0-v2"
 ADMIN1_BOUNDARY_ASSET_VERSION = "ai4s-natural-earth-admin1-china-visual-v1"
 MISSING_METHOD_LABEL = "发布方未报告分析方法"
 MAX_OUTPUT_BYTES = 100_000_000
+# The canonical database may contain 200k rows, but embedding every verbose
+# observation in both HTML and GeoJSON can breach the competition/runtime
+# 100 MB single-file gate.  Instead of a fixed record cap, the build embeds as
+# many records as the byte budget below allows: it assembles the full preview
+# first and, only when the serialized HTML or GeoJSON exceeds the budget,
+# deterministically shrinks the coverage-preserving preview and rebuilds.  The
+# preview retains complete physical sample groups, anomalies and source ×
+# medium × element × spatial strata; unsampled rows always remain in
+# geochemistry.csv and all aggregate summaries.
 DEFAULT_MAX_EMBEDDED_RECORDS = 200_000
+EMBED_TARGET_BYTES = 96_000_000
 COORDINATE_MODES = ("canonical", "reported")
 COORDINATE_BASIS_CANONICAL = "canonical_wgs84"
 COORDINATE_BASIS_REPORTED = "reported_unverified"
@@ -100,6 +111,10 @@ REGION_PRESETS: dict[str, dict[str, Any]] = {
         "label": "中国（国家边界严格裁剪）",
         "bounds": {"w": 73.0, "e": 135.0, "s": 18.0, "n": 54.0},
         "country_code": "CHN",
+        # Scientific analysis-admission units: Natural Earth stores Taiwan as
+        # a separate Admin-0 feature, so a China preset that clips on the CHN
+        # polygon alone would silently drop real Taiwanese observations.
+        "analysis_country_codes": ["CHN", "TWN"],
     },
     "shanghai": {
         "label": "上海范围框",
@@ -443,13 +458,22 @@ def coordinate_in_region(
 ) -> bool:
     if not coordinate_in_bounds(longitude, latitude, region["bounds"]):
         return False
-    country_code = region.get("country_code")
-    if not country_code:
+    country_codes = [
+        str(code)
+        for code in (
+            region.get("analysis_country_codes")
+            or ([region["country_code"]] if region.get("country_code") else [])
+        )
+    ]
+    if not country_codes:
         return True
-    country = countries_by_code.get(str(country_code))
-    if country is None:
-        raise MapBuildError(f"country boundary is unavailable: {country_code}")
-    return point_in_country(longitude, latitude, country)
+    for code in country_codes:
+        country = countries_by_code.get(code)
+        if country is None:
+            raise MapBuildError(f"country boundary is unavailable: {code}")
+        if point_in_country(longitude, latitude, country):
+            return True
+    return False
 
 
 def parse_row_coordinates(
@@ -936,7 +960,10 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
                 "visualization profile custom_region must be null or an object"
             )
         missing = sorted({"label", "bounds"} - set(custom_region))
-        unknown = sorted(set(custom_region) - {"label", "bounds", "country_code"})
+        unknown = sorted(
+            set(custom_region)
+            - {"label", "bounds", "country_code", "highlight_country_codes"}
+        )
         if missing or unknown:
             details = []
             if missing:
@@ -981,13 +1008,34 @@ def load_visualization_profile(path: Path | None = None) -> dict[str, Any]:
             raise MapBuildError(
                 "visualization profile custom_region.country_code must be null or ISO-3"
             )
-        custom_region = {
+        highlight_codes = custom_region.get("highlight_country_codes")
+        if highlight_codes is not None:
+            if (
+                not isinstance(highlight_codes, list)
+                or not highlight_codes
+                or len(highlight_codes) > 6
+                or len(set(highlight_codes)) != len(highlight_codes)
+                or not all(
+                    isinstance(code, str) and re.fullmatch(r"[A-Z]{3}", code)
+                    for code in highlight_codes
+                )
+            ):
+                raise MapBuildError(
+                    "visualization profile custom_region.highlight_country_codes "
+                    "must be 1-6 unique ISO-3 codes"
+                )
+        normalized_custom_region: dict[str, Any] = {
             "label": profile_text(
                 custom_region.get("label"), "custom_region.label", 80
             ),
             "bounds": numbers,
             "country_code": country_code,
         }
+        if highlight_codes is not None:
+            normalized_custom_region["highlight_country_codes"] = [
+                str(code) for code in highlight_codes
+            ]
+        custom_region = normalized_custom_region
     if default_region == "custom" and custom_region is None:
         raise MapBuildError("default_region=custom requires custom_region")
     if default_region != "custom" and custom_region is not None:
@@ -1088,9 +1136,23 @@ def selected_region(profile: Mapping[str, Any]) -> dict[str, Any]:
     selected = {"label": str(region["label"]), "bounds": dict(region["bounds"])}
     if region.get("country_code"):
         selected["country_code"] = str(region["country_code"])
+        if region.get("analysis_country_codes"):
+            selected["analysis_country_codes"] = [
+                str(code) for code in region["analysis_country_codes"]
+            ]
     selected["clip_method"] = (
         "country_polygon_and_bbox" if region.get("country_code") else "bbox"
     )
+    # Cartographic emphasis is independent of clipping: an explicit
+    # highlight list wins, otherwise the analysis/clip countries frame the
+    # view, otherwise nothing is emphasised.
+    highlight = region.get("highlight_country_codes") or region.get(
+        "analysis_country_codes"
+    )
+    if not highlight and region.get("country_code"):
+        highlight = [region["country_code"]]
+    if highlight:
+        selected["highlight_country_codes"] = [str(code) for code in highlight]
     return selected
 
 
@@ -1451,13 +1513,15 @@ def coverage_preserving_map_preview(
         groups.setdefault(sample_display_key(record), []).append(record)
     if len(normalized_records) <= limit:
         return normalized_records, {
-            "policy_version": "d3-coverage-preserving-preview-v1",
+            "policy_version": "d3-coverage-preserving-preview-v2",
             "applied": False,
             "input_record_count": len(normalized_records),
             "embedded_record_count": len(normalized_records),
             "input_physical_sample_count": len(groups),
             "embedded_physical_sample_count": len(groups),
             "maximum_embedded_records": limit,
+            "byte_budget_bytes": EMBED_TARGET_BYTES,
+            "limit_basis": "single_file_byte_budget",
             "stratification_cell_degrees": None,
             "candidate_anomaly_records_preserved": True,
             "whole_physical_sample_groups_preserved": True,
@@ -1535,13 +1599,15 @@ def coverage_preserving_map_preview(
         if str(record.get("record_id")) in anomaly_ids
     }
     return preview, {
-        "policy_version": "d3-coverage-preserving-preview-v1",
+        "policy_version": "d3-coverage-preserving-preview-v2",
         "applied": True,
         "input_record_count": len(normalized_records),
         "embedded_record_count": len(preview),
         "input_physical_sample_count": len(groups),
         "embedded_physical_sample_count": len(selected),
         "maximum_embedded_records": limit,
+        "byte_budget_bytes": EMBED_TARGET_BYTES,
+        "limit_basis": "single_file_byte_budget",
         "stratification_cell_degrees": chosen_degrees,
         "candidate_anomaly_records_preserved": (
             preserved_anomaly_ids == expected_anomaly_ids
@@ -1744,6 +1810,9 @@ def samples_geojson(
             "region_label": scope_region["label"],
             "bounds": dict(scope_region["bounds"]),
             "country_code": scope_region.get("country_code"),
+            "highlight_country_codes": list(
+                scope_region.get("highlight_country_codes") or []
+            ),
             "clip_method": scope_region["clip_method"],
             "output_clipped": profile["spatial_scope"] == "regional",
         },
@@ -1996,6 +2065,7 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         "__BOUNDARIES_JSON__",
         "__ADMIN1_BOUNDARIES_JSON__",
         "__CONTEXT_JSON__",
+        "__TEMPORAL_HTML_BASE64__",
         MAP_VERSION,
         PAYLOAD_VERSION,
         ANOMALY_RENDER_MODE,
@@ -2027,6 +2097,11 @@ def load_html_template(path: Path = DEFAULT_TEMPLATE) -> str:
         'id="databaseEditor"',
         'id="sourceTableBody"',
         'id="anomalyInspector"',
+        'id="temporalView"',
+        'id="temporalFrame"',
+        'id="autoResearchView"',
+        'id="autoResearchForm"',
+        "startAutoResearch",
         'id="exportComparisonProfile"',
         "comparisonProfile",
         "officialSourceLinks",
@@ -2074,6 +2149,7 @@ def build_map(
     boundaries_path: Path = DEFAULT_BOUNDARIES,
     admin1_boundaries_path: Path = DEFAULT_ADMIN1_BOUNDARIES,
     coordinate_mode: str = "canonical",
+    temporal_html_path: Path | None = None,
 ) -> dict[str, Any]:
     if max_points < 1 or max_points > 200_000:
         raise MapBuildError("--max-points must be between 1 and 200000")
@@ -2087,6 +2163,16 @@ def build_map(
     countries_by_code = {
         str(country["iso_a3"]): country for country in boundaries["countries"]
     }
+    unknown_highlights = [
+        code
+        for code in scope_region.get("highlight_country_codes") or []
+        if code not in countries_by_code
+    ]
+    if unknown_highlights:
+        raise MapBuildError(
+            "highlight_country_codes reference countries missing from the "
+            f"offline Admin-0 asset: {', '.join(unknown_highlights)}"
+        )
     records, coordinate_counts = load_records(
         database, max_points, scope_region, countries_by_code, coordinate_mode
     )
@@ -2193,6 +2279,9 @@ def build_map(
         "region_label": scope_region["label"],
         "bounds": dict(scope_region["bounds"]),
         "country_code": scope_region.get("country_code"),
+        "highlight_country_codes": list(
+            scope_region.get("highlight_country_codes") or []
+        ),
         "clip_method": scope_region["clip_method"],
         "output_clipped": profile["spatial_scope"] == "regional",
     }
@@ -2221,6 +2310,8 @@ def build_map(
             "anomaly_results_first_class_ui": True,
             "interactive_map_first_class_ui": True,
             "iteration_backlog_first_class_ui": True,
+            "temporal_evolution_first_class_ui": True,
+            "auto_research_continuation_first_class_ui": True,
         },
         "interaction_design": {
             "hierarchy_version": UI_HIERARCHY_VERSION,
@@ -2263,6 +2354,27 @@ def build_map(
         },
     }
     template = load_html_template()
+    if temporal_html_path is None:
+        temporal_document = (
+            "<!doctype html><html lang='zh-CN'><meta charset='utf-8'>"
+            "<title>时序视图未生成</title><body><h1>时序视图未生成</h1>"
+            "<p>请使用 run_workflow.py 生成完整图谱。</p></body></html>"
+        ).encode("utf-8")
+        temporal_embedded = False
+        temporal_sha256 = None
+    else:
+        if temporal_html_path.is_symlink() or not temporal_html_path.is_file():
+            raise MapBuildError("temporal HTML must be a regular file")
+        temporal_document = temporal_html_path.read_bytes()
+        if len(temporal_document) > 20_000_000:
+            raise MapBuildError("temporal HTML exceeds the 20 MB embedding limit")
+        try:
+            temporal_document.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise MapBuildError("temporal HTML must be UTF-8") from exc
+        temporal_embedded = True
+        temporal_sha256 = hashlib.sha256(temporal_document).hexdigest()
+    temporal_base64 = base64.b64encode(temporal_document).decode("ascii")
     template_sha256 = hashlib.sha256(template.encode("utf-8")).hexdigest()
     template_variant = (
         "regional_focus" if profile["spatial_scope"] == "regional" else "global_globe"
@@ -2320,6 +2432,11 @@ def build_map(
         "iteration_backlog": backlog_builder.load(iteration_backlog_path)
         if iteration_backlog_path
         else backlog_builder.load(Path("")),
+        "temporal_view": {
+            "embedded": temporal_embedded,
+            "sha256": temporal_sha256,
+            "compatibility_artifact": "temporal_map.html",
+        },
     }
     html = (
         template.replace("__SAMPLES_JSON__", safe_embedded_json(map_payload))
@@ -2328,6 +2445,7 @@ def build_map(
         .replace("__BOUNDARIES_JSON__", safe_embedded_json(boundaries))
         .replace("__ADMIN1_BOUNDARIES_JSON__", safe_embedded_json(admin1_boundaries))
         .replace("__CONTEXT_JSON__", safe_embedded_json(context))
+        .replace("__TEMPORAL_HTML_BASE64__", temporal_base64)
     )
     if reported_banner:
         html = inject_reported_coordinate_banner(html, coordinate_statistics)
@@ -2337,6 +2455,42 @@ def build_map(
     )
     html_bytes = len(html.encode("utf-8"))
     geojson_bytes = len(geojson_text.encode("utf-8"))
+    if html_bytes > EMBED_TARGET_BYTES or geojson_bytes > EMBED_TARGET_BYTES:
+        # Byte-budget adaptive preview: rebuild with a proportionally smaller
+        # coverage-preserving preview instead of failing or fixing an arbitrary
+        # record cap.  Deterministic: identical inputs shrink identically.
+        embedded_count = len(records)
+        scale = min(EMBED_TARGET_BYTES / html_bytes, EMBED_TARGET_BYTES / geojson_bytes)
+        reduced_limit = max(
+            1, min(embedded_count - 1, int(embedded_count * scale * 0.97))
+        )
+        if embedded_count <= 1 or reduced_limit >= embedded_count:
+            raise MapBuildError(
+                "map output exceeds the single-file byte budget even at the "
+                "minimum preview size; filter or split the input"
+            )
+        return build_map(
+            database,
+            anomalies_path,
+            output_html,
+            output_geojson,
+            max_points=max_points,
+            max_embedded_records=reduced_limit,
+            qc_report_path=qc_report_path,
+            confidence_report_path=confidence_report_path,
+            source_manifest_path=source_manifest_path,
+            sources_and_confidence_path=sources_and_confidence_path,
+            anomaly_report_path=anomaly_report_path,
+            anomaly_regions_path=anomaly_regions_path,
+            spatial_anomaly_report_path=spatial_anomaly_report_path,
+            iteration_backlog_path=iteration_backlog_path,
+            basemap_path=basemap_path,
+            visualization_profile_path=visualization_profile_path,
+            boundaries_path=boundaries_path,
+            admin1_boundaries_path=admin1_boundaries_path,
+            coordinate_mode=coordinate_mode,
+            temporal_html_path=temporal_html_path,
+        )
     if html_bytes > MAX_OUTPUT_BYTES or geojson_bytes > MAX_OUTPUT_BYTES:
         raise MapBuildError(
             "map output would exceed the 100 MB runtime safety limit; filter or split the input"
@@ -2405,6 +2559,8 @@ def build_map(
             "element_pair_comparison",
             "candidate_anomaly_region_aggregation",
             "fdr_screened_candidate_anomaly_regions",
+            "embedded_temporal_evolution_and_provenance",
+            "auto_research_continuation_launcher",
         ],
         "capability_matrix": capability_matrix,
         "region_presets": [*REGION_PRESETS, "custom_bbox"],
@@ -2420,6 +2576,7 @@ def build_map(
             "anomalies_sha256": sha256_file(anomalies_path),
             "interactive_map_sha256": sha256_file(output_html),
             "samples_geojson_sha256": sha256_file(output_geojson),
+            "temporal_map_sha256": temporal_sha256,
         },
         "basemap": {
             "asset_version": basemap["asset_version"],
@@ -2541,6 +2698,11 @@ def build_parser() -> argparse.ArgumentParser:
             "and injects a prominent warning banner into the HTML"
         ),
     )
+    parser.add_argument(
+        "--temporal-html",
+        type=Path,
+        help="Generated temporal_map.html to embed as a first-class atlas view",
+    )
     return parser
 
 
@@ -2568,6 +2730,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             boundaries_path=args.boundaries,
             admin1_boundaries_path=args.admin1_boundaries,
             coordinate_mode=args.coordinate_mode,
+            temporal_html_path=args.temporal_html,
         )
     except (MapBuildError, OSError) as exc:
         parser.error(str(exc))

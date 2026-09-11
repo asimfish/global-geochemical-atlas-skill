@@ -15,7 +15,7 @@
                           declarative_adapter.py ──→ 采集包（demo_input.csv + sources.jsonl + manifest + receipt）
                                                         │
                                                         ▼
-                          run_atlas_request.py --input ──→ 完整十六文件交付（走既有 provided-input 契约）
+                          run_atlas_request.py --input ──→ 完整十八文件交付（走既有 provided-input 契约）
 ```
 
 ## 教义相容性

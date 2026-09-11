@@ -19,7 +19,8 @@
       "institutional_doi_dataset_download_verification",
       "targeted_south_america_and_russia_doi_dataset_verification",
       "targeted_china_and_brazil_primary_repository_verification",
-      "targeted_northern_western_china_sediment_repository_verification"
+      "targeted_northern_western_china_sediment_repository_verification",
+      "targeted_china_inland_water_repository_verification"
     ],
     "remaining_channels": [
       "additional_country_geological_surveys_round_3",
@@ -27,11 +28,11 @@
       "pacific_island_and_oceania_state_surveys",
       "additional_us_state_and_canadian_provincial_surveys"
     ],
-    "round": 14,
+    "round": 16,
     "saturated": false,
     "status": "in_progress"
   },
-  "reviewed_at": "2026-08-16T00:00:00Z",
+  "reviewed_at": "2026-08-23T00:00:00Z",
   "sources": {
     "4tu-northern-china-sediment": {
       "adapter": {
@@ -1192,6 +1193,64 @@
         "release_date": null,
         "status": "dynamic",
         "value": null
+      }
+    },
+    "europe-pmc-pearl-river-dissolved-metals": {
+      "adapter": {
+        "name": "europe_pmc_pearl_river_dissolved_metals",
+        "status": "implemented"
+      },
+      "coverage": {
+        "extent_class": "regional_two_season_river_transect",
+        "notes": "81 Pearl River sites sampled in high- and low-flow seasons, producing 162 dissolved-water records and 648 selected Cr/Cu/Ni/Pb observations; regional, not national, coverage.",
+        "regions": [
+          "china-zhujiang-pearl-river"
+        ]
+      },
+      "evidence_urls": [
+        "https://europepmc.org/article/PMC/6420802",
+        "https://doi.org/10.7717/peerj.6578",
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6420802/supplementaryFiles"
+      ],
+      "identifiers": {
+        "dataset_doi": "10.7717/peerj.6578",
+        "resource_id": "PMC6420802"
+      },
+      "interfaces": [
+        {
+          "access": "open",
+          "format": "zip_xlsx",
+          "kind": "official_supplement_bundle",
+          "method": "GET",
+          "server_filters": [],
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6420802/supplementaryFiles"
+        }
+      ],
+      "landing_page": "https://europepmc.org/article/PMC/6420802",
+      "license": {
+        "id": "CC-BY-4.0",
+        "notes": "PeerJ full text and supplements are published under CC BY 4.0; retain article citation and DOI.",
+        "status": "open",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "limitations": [
+        "The 81 sites cover one river system in two seasons and do not establish national inland-water coverage.",
+        "The reported coordinate datum is absent, so DMS-to-decimal values remain reported-only and are excluded from canonical map cells.",
+        "Only dissolved Cr, Cu, Ni and Pb are selected; other workbook metals are not silently added to the requested target set.",
+        "The Europe PMC outer archive is generated dynamically; only the exact bounded workbook member is content-addressed and retained."
+      ],
+      "media": [
+        "water"
+      ],
+      "production_eligible": false,
+      "publisher": "PeerJ via Europe PMC",
+      "source_kind": "peer_reviewed_open_supplement_via_official_repository",
+      "status": "needs_human_review",
+      "title": "Dissolved heavy metals in the Zhujiang (Pearl River), Southwest China",
+      "version": {
+        "release_date": "2019-03-13",
+        "status": "pinned",
+        "value": "peerj-7-e6578-supplement-s004"
       }
     },
     "figshare-yangtze-basin-soil-heavy-metals": {
@@ -2775,6 +2834,68 @@
         "value": null
       }
     },
+    "mendeley-guangdong-fujian-groundwater": {
+      "adapter": {
+        "name": "mendeley_guangdong_fujian_groundwater",
+        "status": "implemented"
+      },
+      "coverage": {
+        "extent_class": "regional_groundwater_well_dataset",
+        "notes": "124 Guangdong-Fujian well-water records with 702 selected As/Cr/Cu/Ni/Pb/Zn numeric observations; regional and uneven rather than national coverage.",
+        "regions": [
+          "china-guangdong-fujian-coastal-region"
+        ]
+      },
+      "evidence_urls": [
+        "https://data.mendeley.com/datasets/84gkydb5y9/2",
+        "https://doi.org/10.17632/84gkydb5y9.2",
+        "https://data.mendeley.com/api/datasets-v2/datasets/84gkydb5y9?fields=results.*&version=2"
+      ],
+      "identifiers": {
+        "dataset_doi": "10.17632/84gkydb5y9.2",
+        "file_id": "e292cfea-1d2a-48b1-85ef-319973d863e4",
+        "resource_id": "84gkydb5y9"
+      },
+      "interfaces": [
+        {
+          "access": "open",
+          "format": "xlsx",
+          "kind": "pinned_versioned_repository_file",
+          "method": "GET",
+          "server_filters": [
+            "dataset_version",
+            "file_id"
+          ],
+          "url": "https://data.mendeley.com/public-files/datasets/84gkydb5y9/files/e292cfea-1d2a-48b1-85ef-319973d863e4/file_downloaded"
+        }
+      ],
+      "landing_page": "https://data.mendeley.com/datasets/84gkydb5y9/2",
+      "license": {
+        "id": "CC-BY-4.0",
+        "notes": "Mendeley Data version 2 declares CC BY 4.0; retain dataset DOI, version and in-sheet row provenance.",
+        "status": "open",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "limitations": [
+        "The 124 wells cover parts of Guangdong and Fujian and are not a uniform provincial or national groundwater grid.",
+        "The workbook does not declare a coordinate datum, so reported decimal coordinates are excluded from canonical map cells.",
+        "No analytical method or sampling dates are reported in the workbook or repository metadata; method-aware comparability is therefore withheld.",
+        "Blank target values described as below detection limit have no numeric limits, and hyphen values denote no data; both are omitted rather than converted to zero."
+      ],
+      "media": [
+        "water"
+      ],
+      "production_eligible": false,
+      "publisher": "Mendeley Data",
+      "source_kind": "open_versioned_repository_dataset",
+      "status": "needs_human_review",
+      "title": "Guangdong-Fujian coastal groundwater and geothermal-water chemistry",
+      "version": {
+        "release_date": "2025",
+        "status": "pinned",
+        "value": "mendeley-84gkydb5y9-v2"
+      }
+    },
     "norway-marchem": {
       "adapter": {
         "name": "marchem_dynamic_snapshot",
@@ -4140,12 +4261,90 @@
         "value": "2023-12 snapshot"
       }
     },
+    "zenodo-gard-whole-rock": {
+      "adapter": {
+        "name": "zenodo_gard_whole_rock",
+        "status": "implemented"
+      },
+      "coverage": {
+        "extent_class": "global_literature_compilation",
+        "notes": "1,022,092 whole-rock analyses (1,006,397 with reported coordinates); measured 2026-08-21: country=cn 26,551 rows with 74,384 As/Cr/Cu/Ni/Pb/Zn values, southern-Tibet window (88-99E, 27-31.5N) 1,301 rows, Russia 24,671 rows. About 68 percent of citations resolve to GEOROC, so coverage overlaps the georoc-* lineage and is not an independent replication.",
+        "regions": [
+          "global"
+        ]
+      },
+      "evidence_urls": [
+        "https://zenodo.org/records/3359791",
+        "https://doi.org/10.5281/zenodo.3359791",
+        "https://doi.org/10.5194/essd-11-1553-2019"
+      ],
+      "identifiers": {
+        "dataset_doi": "10.5281/zenodo.3359791",
+        "resource_id": "3359791"
+      },
+      "interfaces": [
+        {
+          "access": "open",
+          "format": "zip",
+          "kind": "official_file_download",
+          "method": "GET",
+          "server_filters": [],
+          "url": "https://zenodo.org/api/records/3359791/files/complete.zip/content"
+        },
+        {
+          "access": "open",
+          "format": "csv",
+          "kind": "official_file_download",
+          "method": "GET",
+          "server_filters": [],
+          "url": "https://zenodo.org/api/records/3359791/files/reference.csv/content"
+        },
+        {
+          "access": "open",
+          "format": "json",
+          "kind": "official_metadata_api",
+          "method": "GET",
+          "server_filters": [],
+          "url": "https://zenodo.org/api/records/3359791"
+        }
+      ],
+      "landing_page": "https://zenodo.org/records/3359791",
+      "license": {
+        "id": "CC-BY-4.0",
+        "notes": "Zenodo record metadata declares license id cc-by-4.0. Retain the dataset DOI and cite Gard, Hasterok & Halpin (2019, ESSD).",
+        "status": "open",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "limitations": [
+        "Sampling dates are not published; the age columns are geological rock ages in Ma and must never be read as collection times.",
+        "Coordinates are retained as reported without a declared datum and are not asserted to be WGS 84.",
+        "About 68 percent of resolved citations come from GEOROC; records overlapping georoc-* compilations are the same literature lineage, not independent replication.",
+        "Analytical method metadata is sparse (frequently 'not given'); method fields stay empty rather than being guessed.",
+        "The compilation snapshot ends in 2019 and adds no post-2019 literature."
+      ],
+      "media": [
+        "rock"
+      ],
+      "production_eligible": false,
+      "publisher": "Zenodo deposit by Matthew Gard, Derrick Hasterok and Jacqueline A. Halpin, University of Adelaide / University of Tasmania",
+      "source_kind": "publication_linked_doi_dataset",
+      "status": "approved",
+      "title": "Global whole-rock geochemical database compilation (v1.1.0)",
+      "version": {
+        "release_date": "2019-08-02",
+        "status": "pinned",
+        "value": "zenodo-record-3359791-v1.1.0"
+      }
+    },
     "zenodo-yangtze-yellow-river-sediment": {
       "adapter": {
         "name": "zenodo_yangtze_yellow_river_sediment",
         "status": "implemented"
       },
       "coverage": {
+        "countries": [
+          "CHN"
+        ],
         "extent_class": "regional_discrete_samples",
         "notes": "Ninety-three leach-residual size-fraction analyses of Yellow River (HH) and Yangtze River (CJ / CJ Sand) sediments; an author supplement without published sampling coordinates, not a basin survey grid.",
         "regions": [

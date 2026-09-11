@@ -37,12 +37,14 @@ EXPECTED_OUTPUTS = {
     "sources_and_confidence.json",
     "anomalies.geojson",
     "anomaly_report.json",
+    "anomaly_provenance.json",
     "anomaly_regions.geojson",
     "spatial_anomaly_report.json",
     "batch_acceptance.csv",
     "batch_qc_report.json",
     "samples.geojson",
     "interactive_map.html",
+    "temporal_map.html",
     "iteration_backlog.csv",
     "run_summary.json",
 }
@@ -168,12 +170,27 @@ def run_suite() -> dict[str, Any]:
         "loop-report.schema.json",
         "research-delivery-receipt.schema.json",
         "d1-repair-queue.schema.json",
+        "agent-audit-packet.schema.json",
+        "auto-research-state.schema.json",
+        "auto-research-agent-packet.schema.json",
+        "auto-research-agent-result.schema.json",
+        "research-quality-contract.schema.json",
+        "research-gate-receipt.schema.json",
     ):
         schema = json_value(SKILL_DIR / "references" / schema_name)
         require(
             schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema",
             f"bad {schema_name}",
         )
+    delivery_schema = json_value(
+        SKILL_DIR / "references" / "research-delivery-receipt.schema.json"
+    )
+    delivery_artifacts = delivery_schema["properties"]["artifacts"]
+    require(
+        set(delivery_artifacts["required"]) == EXPECTED_OUTPUTS
+        and set(delivery_artifacts["properties"]) == EXPECTED_OUTPUTS,
+        "delivery receipt Schema drifted from the eighteen-file output contract",
+    )
 
     snapshot_capture = skill_snapshot.capture_skill_tree(SKILL_DIR)
     snapshot_before = snapshot_capture.snapshot
@@ -1316,7 +1333,7 @@ def run_suite() -> dict[str, Any]:
         require("ALL DATA" in html, "map does not default to the complete overview")
         require("Natural Earth 1:110m" in html, "map omits the offline land basemap")
         require(
-            "ai4s-natural-earth-admin0-v1" in html and "pointInCountry" in html,
+            "ai4s-natural-earth-admin0-v2" in html and "pointInCountry" in html,
             "map omits pinned country boundaries or strict country clipping",
         )
         require(
@@ -1489,7 +1506,7 @@ def run_suite() -> dict[str, Any]:
 
         return {
             "status": "PASS",
-            "tests": 75,
+            "tests": 76,
             "records": len(rows),
             "mapped_records": len(json_value(first / "samples.geojson")["features"]),
             "candidate_anomalies": anomaly_report["candidate_count"],

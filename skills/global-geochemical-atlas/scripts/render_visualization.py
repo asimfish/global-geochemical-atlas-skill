@@ -34,6 +34,7 @@ OPTIONAL_INPUTS = (
     "record_evidence.jsonl",
     "anomaly_regions.geojson",
     "spatial_anomaly_report.json",
+    "temporal_map.html",
 )
 GENERATED_OUTPUTS = (
     "interactive_map.html",
@@ -166,6 +167,11 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             iteration_backlog_path=backlog_path,
             visualization_profile_path=args.profile,
             coordinate_mode=args.coordinate_mode,
+            temporal_html_path=(
+                args.input_dir / "temporal_map.html"
+                if (args.input_dir / "temporal_map.html").is_file()
+                else None
+            ),
         )
     except map_builder.MapBuildError as exc:
         message = str(exc)

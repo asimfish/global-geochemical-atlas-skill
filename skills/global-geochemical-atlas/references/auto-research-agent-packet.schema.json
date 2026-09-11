@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:auto-research-agent-packet:v2",
+  "title": "Hash-bound Auto-Research role packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "cycle_id", "role",
+    "fresh_session_required", "previous_review_allowed",
+    "executor_summary_allowed", "purpose", "allowed_inputs",
+    "required_output", "artifact_output_dir", "claim_boundary",
+    "packet_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "gga-auto-research-agent-packet-v2"},
+    "run_id": {"type": "string", "pattern": "^run-[0-9a-f]{20}$"},
+    "cycle_id": {"type": "string", "pattern": "^(initial|revision-[0-9]{2})$"},
+    "role": {
+      "enum": [
+        "pilot_analyst", "literature_researcher", "manuscript_writer",
+        "figure_designer", "citation_auditor", "independent_reviewer"
+      ]
+    },
+    "fresh_session_required": {"const": true},
+    "previous_review_allowed": {"type": "boolean"},
+    "executor_summary_allowed": {"const": false},
+    "purpose": {"type": "string", "minLength": 1},
+    "allowed_inputs": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "bytes"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "required_output": {"type": "object", "minProperties": 1},
+    "artifact_output_dir": {"type": "string", "minLength": 1},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "packet_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"role": {"const": "independent_reviewer"}}},
+      "then": {"properties": {"previous_review_allowed": {"const": false}}}
+    },
+    {
+      "if": {"properties": {"role": {"const": "citation_auditor"}}},
+      "then": {"properties": {"previous_review_allowed": {"const": false}}}
+    }
+  ]
+}

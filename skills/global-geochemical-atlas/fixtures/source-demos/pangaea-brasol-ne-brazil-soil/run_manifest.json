@@ -22,14 +22,14 @@
   "not_for_scientific_interpretation": true,
   "outputs": [
     {
-      "bytes": 77244,
+      "bytes": 77610,
       "path": "demo_input.csv",
-      "sha256": "8861d3748f6ac9e1c65852e9e49f30f93496222883b0189b2307bfad9da12c69"
+      "sha256": "ae0112f33d88ca7f61b5ff35b058da4769691a6a2c7cb2ab393741e459face08"
     },
     {
-      "bytes": 96420,
+      "bytes": 101412,
       "path": "sources.jsonl",
-      "sha256": "73529936f0457c2c8ee183c31394835a5fe710603d8c0541a580341f61598781"
+      "sha256": "ce6f9b171bc2756539344d5809f726673cbb2ee2e302a8f1c3528bb69e56e61a"
     }
   ],
   "record_counts": {
@@ -49,14 +49,14 @@
     {
       "bytes": 658886,
       "filename": "Data_BraSol-2010_database.xlsx",
-      "retrieved_at": "2026-08-14T12:57:22Z",
+      "retrieved_at": "2026-08-18T18:15:55Z",
       "sha256": "0b1ade544b3b4faaade86eaed6378999e542d978ab0af9b7fa5ceb0dc6b3574d",
       "source_url": "https://download.pangaea.de/dataset/969055/files/Data_BraSol-2010_database.xlsx"
     },
     {
       "bytes": 17037,
       "filename": "Metadata_BraSol-2010_database.txt",
-      "retrieved_at": "2026-08-14T12:57:22Z",
+      "retrieved_at": "2026-08-18T18:15:56Z",
       "sha256": "256a3e392f236205a0358f014b96fce1e4ced9657ba0f73f3c34b1196290dd40",
       "source_url": "https://download.pangaea.de/dataset/969055/files/Metadata_BraSol-2010_database.txt"
     }

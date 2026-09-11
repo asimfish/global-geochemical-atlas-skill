@@ -1,6 +1,6 @@
 {
   "adapter_registered": true,
-  "as_of": "2026-08-15T07:00:00Z",
+  "as_of": "2026-08-23T00:00:00Z",
   "cache_hit_count": 3,
   "cached_parse_status": "pass",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -11,26 +11,26 @@
       "bytes": 295287,
       "cache_status": "cache_hit",
       "file_id": "data",
-      "filename": "MarChem_Inorganic_Data_20260818T181648Z.csv",
+      "filename": "MarChem_Inorganic_Data_20260820T193508Z.csv",
       "sha256": "0fdf99c5bfa3147c689d923acb9b56bea4ac9dac0455b58239eb2073858d2d10"
     },
     {
       "bytes": 3383,
       "cache_status": "cache_hit",
       "file_id": "info",
-      "filename": "MarChem_Info_20260818T181648Z",
-      "sha256": "9a31734d831fb1911fc28d82a95bc3bbed1e1a06e2063b344900a3602b42c5cf"
+      "filename": "MarChem_Info_20260820T193508Z",
+      "sha256": "2d5f5bb286e21d7fcdef6e3430c189ce652aa82031d4d99077227ab42caa72ed"
     },
     {
       "bytes": 320402,
       "cache_status": "cache_hit",
       "file_id": "metadata",
-      "filename": "MarChem_Inorganic_LabParameter_20260818T181648Z.csv",
+      "filename": "MarChem_Inorganic_LabParameter_20260820T193508Z.csv",
       "sha256": "b6bcba10eab4bb8f2109cb7ac793c778dfe6e199b31214fdd2ab6d5a34056d2d"
     }
   ],
   "last_successful_fetch_at": null,
-  "last_successful_parse_at": "2026-08-15T07:00:00Z",
+  "last_successful_parse_at": "2026-08-23T00:00:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",
   "parsed_source_record_count": 1070,

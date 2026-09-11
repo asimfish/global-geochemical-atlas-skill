@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 import evaluate_batch_qc as batch_qc
+import sampling_time
 
 INTERFACE_VERSION = "d2-interface-v2"
 PIPELINE_VERSION = "d2-pipeline-v2"
@@ -134,6 +135,9 @@ SCHEMA_COLUMNS = (
     "coordinate_representation_resolution_basis",
     "coordinate_accuracy_evidence_status",
     "sampled_at",
+    "sampling_time",
+    "sampling_time_precision",
+    "sampling_time_status",
     "sample_depth_min_m",
     "sample_depth_max_m",
     "grain_fraction",
@@ -1778,6 +1782,9 @@ def normalize_row(
         "coordinate_representation_resolution_basis": coordinate_resolution_basis,
         "coordinate_accuracy_evidence_status": coordinate_accuracy_status,
         "sampled_at": blank_to_none(row.get("sampled_at")),
+        **sampling_time.normalize_sampling_time(
+            source_id or "", blank_to_none(row.get("sampled_at"))
+        ),
         "sample_depth_min_m": depth_min,
         "sample_depth_max_m": depth_max,
         "grain_fraction": blank_to_none(row.get("grain_fraction")),

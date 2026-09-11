@@ -1,0 +1,240 @@
+{
+ "P2": {
+  "ks": {
+   "Pb": {
+    "D": 0.453,
+    "p": 2.214760072166027e-53,
+    "eu_share_gt1": 0.807,
+    "au_share_gt1": 0.446
+   },
+   "As": {
+    "D": 0.271,
+    "p": 1.0737711742569187e-18,
+    "eu_share_gt1": 0.557,
+    "au_share_gt1": 0.292
+   },
+   "Cu": {
+    "D": 0.217,
+    "p": 4.0843435622837714e-12,
+    "eu_share_gt1": 0.568,
+    "au_share_gt1": 0.407
+   },
+   "Zn": {
+    "D": 0.095,
+    "p": 0.011440276415947599,
+    "eu_share_gt1": 0.563,
+    "au_share_gt1": 0.508
+   }
+  },
+  "raw_pairs": {
+   "EU_Hg": {
+    "n": 392,
+    "share_above": 0.732
+   },
+   "EU_Pb": {
+    "n": 389,
+    "share_above": 0.807
+   },
+   "EU_As": {
+    "n": 384,
+    "share_above": 0.557
+   },
+   "EU_Cu": {
+    "n": 384,
+    "share_above": 0.568
+   },
+   "EU_Zn": {
+    "n": 387,
+    "share_above": 0.563
+   },
+   "AU_Pb": {
+    "n": 1064,
+    "share_above": 0.446
+   },
+   "AU_As": {
+    "n": 1042,
+    "share_above": 0.292
+   },
+   "AU_Cu": {
+    "n": 1055,
+    "share_above": 0.407
+   },
+   "AU_Zn": {
+    "n": 1057,
+    "share_above": 0.508
+   }
+  }
+ },
+ "P3": {
+  "bland_altman": {
+   "As": {
+    "median_log2": 0.296,
+    "loa_low": -0.85,
+    "loa_high": 1.818,
+    "loa_low_ratio": 0.555,
+    "loa_high_ratio": 3.525
+   },
+   "Cr": {
+    "median_log2": 1.557,
+    "loa_low": 0.573,
+    "loa_high": 2.778,
+    "loa_low_ratio": 1.487,
+    "loa_high_ratio": 6.86
+   },
+   "Cu": {
+    "median_log2": -0.21,
+    "loa_low": -1.451,
+    "loa_high": 0.763,
+    "loa_low_ratio": 0.366,
+    "loa_high_ratio": 1.697
+   },
+   "Ni": {
+    "median_log2": 0.344,
+    "loa_low": -0.164,
+    "loa_high": 1.418,
+    "loa_low_ratio": 0.893,
+    "loa_high_ratio": 2.671
+   },
+   "Pb": {
+    "median_log2": 0.365,
+    "loa_low": -0.53,
+    "loa_high": 1.663,
+    "loa_low_ratio": 0.692,
+    "loa_high_ratio": 3.167
+   },
+   "Zn": {
+    "median_log2": 0.425,
+    "loa_low": 0.089,
+    "loa_high": 1.15,
+    "loa_low_ratio": 1.064,
+    "loa_high_ratio": 2.219
+   }
+  },
+  "oos": {
+   "As": {
+    "n_test": 445,
+    "mdape_powerlaw": 0.173,
+    "mdape_constant": 0.173
+   },
+   "Cr": {
+    "n_test": 445,
+    "mdape_powerlaw": 0.203,
+    "mdape_constant": 0.211
+   },
+   "Cu": {
+    "n_test": 445,
+    "mdape_powerlaw": 0.141,
+    "mdape_constant": 0.135
+   },
+   "Ni": {
+    "n_test": 445,
+    "mdape_powerlaw": 0.116,
+    "mdape_constant": 0.117
+   },
+   "Pb": {
+    "n_test": 445,
+    "mdape_powerlaw": 0.11,
+    "mdape_constant": 0.182
+   },
+   "Zn": {
+    "n_test": 445,
+    "mdape_powerlaw": 0.062,
+    "mdape_constant": 0.075
+   }
+  }
+ },
+ "P4": {
+  "scale_sensitivity": [
+   {
+    "scale": 0.05,
+    "n": 7,
+    "rho": 0.536,
+    "p": 0.21521745567801298,
+    "median_ratio": 1.294,
+    "within2": 4,
+    "within2_pct": 57.1
+   },
+   {
+    "scale": 0.1,
+    "n": 26,
+    "rho": 0.681,
+    "p": 0.00012977061090720265,
+    "median_ratio": 0.982,
+    "within2": 19,
+    "within2_pct": 73.1
+   },
+   {
+    "scale": 0.2,
+    "n": 67,
+    "rho": 0.544,
+    "p": 1.940813483458232e-06,
+    "median_ratio": 0.931,
+    "within2": 51,
+    "within2_pct": 76.1
+   },
+   {
+    "scale": 0.5,
+    "n": 306,
+    "rho": 0.39,
+    "p": 1.3835662605823e-12,
+    "median_ratio": 0.967,
+    "within2": 186,
+    "within2_pct": 60.8
+   },
+   {
+    "scale": 1.0,
+    "n": 264,
+    "rho": 0.474,
+    "p": 3.1998877605168976e-16,
+    "median_ratio": 1.03,
+    "within2": 189,
+    "within2_pct": 71.6
+   }
+  ]
+ },
+ "P5": {
+  "stations": 1005,
+  "records": 18563,
+  "by_basin": {
+   "Atlantic": {
+    "records": 4790,
+    "stations": 352
+   },
+   "Pacific": {
+    "records": 5547,
+    "stations": 332
+   },
+   "Indian": {
+    "records": 877,
+    "stations": 33
+   },
+   "Southern": {
+    "records": 4866,
+    "stations": 197
+   },
+   "Arctic": {
+    "records": 2483,
+    "stations": 91
+   }
+  },
+  "covariation": {
+   "zn_ni": {
+    "n": 4965,
+    "rho_all": 0.831,
+    "rho_surface": 0.778,
+    "rho_deep": 0.899,
+    "n_surface": 1408,
+    "n_deep": 1381
+   },
+   "cu_ni": {
+    "n": 2521,
+    "rho_all": 0.749,
+    "rho_surface": 0.758,
+    "rho_deep": 0.736,
+    "n_surface": 922,
+    "n_deep": 428
+   }
+  }
+ },
+ "seed": 20260819
+}

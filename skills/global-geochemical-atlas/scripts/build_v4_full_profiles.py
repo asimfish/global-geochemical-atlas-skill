@@ -438,6 +438,27 @@ def _sample_and_place(
             _text(fields.get("Longitude_degrees")),
             "",
         )
+    if source_id == "mendeley-guangdong-fujian-groundwater":
+        return (
+            _text(fields.get("Site")),
+            "Guangdong-Fujian coastal region, China",
+            _text(fields.get("_reported_latitude")),
+            _text(fields.get("_reported_longitude")),
+            _text(fields.get("_source_crs")),
+        )
+    if source_id == "europe-pmc-pearl-river-dissolved-metals":
+        return (
+            "|".join(
+                (
+                    _text(fields.get("Site number")),
+                    _text(fields.get("_sampled_at")),
+                )
+            ),
+            _text(fields.get("River reach")) or "Zhujiang (Pearl River), China",
+            _text(fields.get("_reported_latitude")),
+            _text(fields.get("_reported_longitude")),
+            _text(fields.get("_source_crs")),
+        )
     if source_id == "gemas-europe":
         return (
             _text(fields.get("_physical_sample_id")),
@@ -445,6 +466,14 @@ def _sample_and_place(
             _text(fields.get("YCOO")),
             _text(fields.get("XCOO")),
             _text(fields.get("_source_crs")) or "EPSG:4326",
+        )
+    if source_id == "zenodo-gard-whole-rock":
+        return (
+            _text(fields.get("sample_id")),
+            _text(fields.get("country")),
+            _text(fields.get("latitude")),
+            _text(fields.get("longitude")),
+            "",
         )
     if source_id == "zenodo-yangtze-yellow-river-sediment":
         # Data Set S2 publishes no sampling coordinates (fail closed).
@@ -487,6 +516,10 @@ def _method(
             locator = _text(item.get("_metadata_source_locator"))
     elif source_id == "pangaea-north-africa-soil":
         method = _text(fields.get("_analytical_method"))
+    elif source_id == "zenodo-gard-whole-rock":
+        reported = _text(fields.get("method"))
+        if reported and reported != "not given":
+            method = reported
     return method, locator
 
 
@@ -572,6 +605,12 @@ def _target_values(
                 )
             elif source_id in {"georoc-archaean", "georoc-convergent-margins"}:
                 values["measurement_basis"] = "reported_whole_rock_concentration"
+            elif source_id == "zenodo-gard-whole-rock":
+                unit = "ppm" if candidate.endswith("_ppm") else unit
+                values["unit"] = unit
+                values["measurement_basis"] = (
+                    "compilation_reported_whole_rock_concentration"
+                )
             yield _text(analyte), candidate, raw, values
             break
 
@@ -668,6 +707,22 @@ def _semantic_evidence(
     elif source_id == "eidc-ningbo-soil":
         evidence["sample_id"] = _text(fields.get("IGFS no."))
         evidence["sample_type"] = _text(fields.get("_sample_type"))
+    elif source_id == "mendeley-guangdong-fujian-groundwater":
+        evidence["sample_id"] = _text(fields.get("Site"))
+        evidence["sample_type"] = _text(fields.get("_sample_type_raw"))
+        evidence["row_provenance"] = _text(fields.get("_row_provenance"))
+        evidence["reported_latitude"] = _text(fields.get("_reported_latitude"))
+        evidence["reported_longitude"] = _text(fields.get("_reported_longitude"))
+    elif source_id == "europe-pmc-pearl-river-dissolved-metals":
+        evidence["site_number"] = _text(fields.get("Site number"))
+        evidence["river_reach"] = _text(fields.get("River reach"))
+        evidence["season"] = _text(fields.get("_season"))
+        evidence["sampled_at"] = _text(fields.get("_sampled_at"))
+        evidence["reported_coordinate_text"] = _text(
+            fields.get("_reported_coordinate_text")
+        )
+        evidence["reported_latitude"] = _text(fields.get("_reported_latitude"))
+        evidence["reported_longitude"] = _text(fields.get("_reported_longitude"))
     elif source_id == "gemas-europe":
         evidence["sample_type"] = _text(fields.get("TYPE_"))
         evidence["country_raw"] = _text(fields.get("COUNTRY"))
@@ -733,6 +788,7 @@ def _observation(
         "measurement_basis": _text(values.get("measurement_basis")),
         "value_qualifier": _text(values.get("qualifier")),
         "detection_limit": _text(values.get("detection_limit")),
+        "sampled_at": _text(raw.fields.get("_sampled_at")),
         "latitude": latitude,
         "longitude": longitude,
         "source_crs": source_crs,

@@ -4,10 +4,10 @@
     "confidence_version": "d2-confidence-v3",
     "contract": "D2 computes confidence; D1 validates provenance linkage and packages the report unchanged.",
     "filename": "confidence_report.json",
-    "input_sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9",
+    "input_sha256": "743d3b00a095de888d23464e0457db869c7cdee455f52a1b9deee9d689e2a0d2",
     "not_a_probability": true,
-    "run_id": "1cf19df7e86db31e",
-    "sha256": "3592dbb51c664ea99e607aada8b781c9f6e8d0be8498e67464e796c7d277ed71"
+    "run_id": "f22b7360d4e99345",
+    "sha256": "e81f1912828b274afd50a9a690f75300f95525e36a774fb8fcc517ca47a7bed8"
   },
   "coverage": {
     "declared_license_rate": 1.0,
@@ -19,10 +19,10 @@
   },
   "data_mode": "fixture",
   "input": {
-    "bytes": 1610986,
+    "bytes": 1611435,
     "filename": "demo_input.csv",
     "record_count": 1144,
-    "sha256": "ff9e2e273c939737cce603d907341ae9f081a549632b0a76902094eb60066ad9"
+    "sha256": "743d3b00a095de888d23464e0457db869c7cdee455f52a1b9deee9d689e2a0d2"
   },
   "manifest_version": "geochemical-source-manifest-v2",
   "not_for_scientific_interpretation": true,
@@ -32,14 +32,14 @@
       "filename": "run_manifest.json",
       "generation_version": null,
       "not_for_scientific_interpretation": true,
-      "sha256": "30e5707f9c03be8a4a2a8d68261f4d127ccf460bc10ec22c8e3d7e02dd885746"
+      "sha256": "b4a61c40e15bd2b451e173cf0eeeefdba71c31d6af03fe6b1b7e72d7eb6e305a"
     },
     "evidence_level": "verified_record_evidence",
     "exact_record_id_match": true,
     "filename": "record_evidence.jsonl",
     "record_count": 1144,
     "schema_version": "geochemical-record-evidence-v1",
-    "sha256": "84e2b2a558b52bcbb6fe20aafb99aecec6a20841224b55505e4a5ae6c2cb75ed"
+    "sha256": "6d1ff37ea80c515dc2a88361524e8c37091b93b176745a24f39f40240e1626a6"
   },
   "source_count": 21,
   "sources": [

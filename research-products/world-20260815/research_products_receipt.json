@@ -1,0 +1,80 @@
+{
+  "counts": {
+    "cohort_tiers": {
+      "exploratory_only": 30,
+      "insufficient_background": 17,
+      "single_lineage_ready": 290
+    },
+    "cohorts": 337,
+    "context_samples": 27232,
+    "coverage_repair_tasks": 238,
+    "database_rows_scanned": 191715,
+    "rows_excluded_before_cohorts": 60445,
+    "sampling_priority_features": 528
+  },
+  "external_covariate_interface": [
+    {
+      "candidate_source": "ERA5-Land (Copernicus Climate Data Store)",
+      "covariate_family": "climate_reanalysis",
+      "official_url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-land",
+      "status": "declared_interface_not_fetched"
+    },
+    {
+      "candidate_source": "HydroBASINS (HydroSHEDS)",
+      "covariate_family": "hydrological_basins",
+      "official_url": "https://www.hydrosheds.org/products/hydrobasins",
+      "status": "declared_interface_not_fetched"
+    },
+    {
+      "candidate_source": "SoilGrids (ISRIC)",
+      "covariate_family": "soil_properties",
+      "official_url": "https://docs.isric.org/globaldata/soilgrids/index.html",
+      "status": "declared_interface_not_fetched"
+    }
+  ],
+  "generated_at": "2026-08-16T11:34:03+00:00",
+  "inputs": {
+    "output_dir": "$GGA_HACKATHON_ROOT/retest-acquisition-coverage-v12-6c221cf/world/output",
+    "sha256": {
+      "d1_repair_queue.json": "8b8b6d97f6a78c842da80e83f6d4ad3cf24fe243487cd0abd8341674b545a027",
+      "geochemistry.csv": "e3616e88b6f5c716f5f69a0c786897f3878838281b7aec4bc280f2f6a653828d",
+      "run_summary.json": "74d5a56c9bda4dcf5081dbda48aebdb4409609f248cf055e029e104d3a79d512",
+      "sources_and_confidence.json": "e8e4c3df9b3fbf645d8708c77e46d96ecb2a104526a8465a77fa7ab09bee91c5"
+    },
+    "upstream_run_status": "partial_success"
+  },
+  "non_claims": [
+    "cohorts, context rows and sampling priorities are screening/data-preparation products, not pollution, mineralization, weathering-rate or climate-mechanism conclusions",
+    "latitude_band is a geometric latitude class, not a climate observation",
+    "no interpolation surface is built and no observation is fabricated for empty areas",
+    "spatial emptiness means missing evidence, not absence of natural signal",
+    "tiers describe comparability under current evidence, not data quality or scientific truth"
+  ],
+  "outputs": [
+    "analysis_cohorts.csv",
+    "analysis_cohort_exclusions.csv",
+    "research_context.csv",
+    "sampling_priority.geojson",
+    "research_products_receipt.json"
+  ],
+  "parameters": {
+    "cohort_key_fields": [
+      "element_or_analyte",
+      "medium",
+      "sample_type",
+      "grain_fraction",
+      "measurement_basis",
+      "method_family",
+      "digestion_or_extraction",
+      "unit_layer"
+    ],
+    "minimum_confidence": "medium",
+    "tier_thresholds": {
+      "exploratory_min_samples": 8,
+      "max_single_source_share": 0.9,
+      "min_quantified_fraction": 0.7,
+      "min_quantified_samples": 20
+    }
+  },
+  "tool_version": "research-mode-v1"
+}

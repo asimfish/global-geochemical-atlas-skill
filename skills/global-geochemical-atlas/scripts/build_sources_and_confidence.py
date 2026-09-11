@@ -144,6 +144,9 @@ def _empty_observed() -> dict[str, Any]:
         "method_absence_reasons": Counter(),
         "coordinate_accuracy_statuses": Counter(),
         "coordinate_reference_statuses": Counter(),
+        "sampling_time_statuses": Counter(),
+        "sampling_time_min": None,
+        "sampling_time_max": None,
     }
 
 
@@ -243,6 +246,7 @@ def build(
     method_absence_reasons: Counter[str] = Counter()
     coordinate_accuracy_statuses: Counter[str] = Counter()
     coordinate_reference_statuses: Counter[str] = Counter()
+    sampling_time_statuses: Counter[str] = Counter()
     row_official_urls: dict[str, set[str]] = {}
     try:
         handle = database_path.open("r", encoding="utf-8-sig", newline="")
@@ -261,6 +265,22 @@ def build(
                 item["element_counts"][element] += 1
             if medium:
                 item["medium_counts"][medium] += 1
+            sampling_status = str(row.get("sampling_time_status") or "").strip()
+            if sampling_status:
+                item["sampling_time_statuses"][sampling_status] += 1
+                sampling_time_statuses[sampling_status] += 1
+            sampling_value = str(row.get("sampling_time") or "").strip()
+            if sampling_value:
+                if (
+                    item["sampling_time_min"] is None
+                    or sampling_value < item["sampling_time_min"]
+                ):
+                    item["sampling_time_min"] = sampling_value
+                if (
+                    item["sampling_time_max"] is None
+                    or sampling_value > item["sampling_time_max"]
+                ):
+                    item["sampling_time_max"] = sampling_value
             row_metadata = {
                 "analytical_method": bool(
                     str(row.get("analytical_method") or "").strip()
@@ -440,6 +460,13 @@ def build(
                     sorted(observed["element_counts"].items())
                 ),
                 "medium_record_counts": dict(sorted(observed["medium_counts"].items())),
+                "sampling_time": {
+                    "status_record_counts": dict(
+                        sorted(observed["sampling_time_statuses"].items())
+                    ),
+                    "earliest": observed["sampling_time_min"],
+                    "latest": observed["sampling_time_max"],
+                },
                 "record_provenance": {
                     "located_record_count": int(
                         source.get("located_record_count") or 0
@@ -537,6 +564,27 @@ def build(
             "not_for_scientific_interpretation"
         ),
         "single_quality_label_prohibited": True,
+        "sampling_time_coverage": {
+            "contract": "atlas-sampling-time-v1",
+            "meaning": (
+                "sampling_time records when the sample was physically collected -- "
+                "the moment whose element content the measurement describes. "
+                "Publication years never substitute for sampling times; sources "
+                "without collection dates stay publisher_not_reported."
+            ),
+            "status_record_counts": dict(sorted(sampling_time_statuses.items())),
+            "dated_record_count": int(
+                sampling_time_statuses.get("publisher_reported", 0)
+            ),
+            "dated_record_share": (
+                round(
+                    sampling_time_statuses.get("publisher_reported", 0) / total_records,
+                    6,
+                )
+                if total_records
+                else None
+            ),
+        },
         "interpretation": (
             "source_evidence measures traceability; analytical_readiness measures method/QC comparability; "
             "spatial_usability measures coordinate fitness; workflow_usability is the operational pipeline band. "

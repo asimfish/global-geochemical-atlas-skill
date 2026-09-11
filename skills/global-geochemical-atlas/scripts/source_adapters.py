@@ -8,7 +8,9 @@ import csv
 import hashlib
 import html
 import ipaddress
+import io
 import json
+import math
 import os
 import re
 import shutil
@@ -24,6 +26,7 @@ from abc import ABC, abstractmethod
 from collections import Counter
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 
@@ -294,6 +297,25 @@ def _download_args(
         required_member=[],
         required_field=list(required_fields),
     )
+
+
+def accepted_content_types_for_file(
+    download_entry: Mapping[str, Any], file_entry: Mapping[str, Any]
+) -> set[str]:
+    """Return an explicit per-file MIME allowlist, falling back to the bundle list."""
+
+    values = file_entry.get(
+        "accepted_content_types", download_entry.get("accepted_content_types", ())
+    )
+    if (
+        not isinstance(values, list)
+        or not values
+        or not all(isinstance(value, str) and value.strip() for value in values)
+    ):
+        raise SourceAdapterError(
+            "download MIME allowlist must be a non-empty string list"
+        )
+    return {value.casefold().strip() for value in values}
 
 
 def _request_allows(
@@ -5204,6 +5226,487 @@ class TpdcChinaMountainSoilAdapter(RegistryAdapter):
             )
 
 
+class MendeleyGuangdongFujianGroundwaterAdapter(_PinnedSingleFileAdapter):
+    """Pinned Mendeley workbook of reported Guangdong-Fujian well water."""
+
+    source_id = "mendeley-guangdong-fujian-groundwater"
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "table-s1":
+            raise SourceAdapterError(
+                "Mendeley groundwater adapter requires the verified Table S1 workbook"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        rows = TpdcChinaMountainSoilAdapter._xlsx_rows(
+            downloaded.path, workbook_label="Mendeley groundwater"
+        )
+        if len(rows) < 3:
+            raise SourceAdapterError("Mendeley groundwater workbook is empty")
+        headers = rows[0][1]
+        units = rows[1][1]
+        expected_headers = registry["header_fields"]
+        if headers != expected_headers:
+            raise SourceAdapterError("Mendeley groundwater workbook schema changed")
+        if len(units) != len(headers) or any(
+            units[headers.index(field)] != "μg/l"
+            for field in registry["target_analytes"].values()
+        ):
+            raise SourceAdapterError(
+                "Mendeley groundwater target-analyte unit row changed"
+            )
+
+        sample_type_raw = ""
+        row_provenance = ""
+        samples: set[str] = set()
+        coordinates: set[tuple[str, str]] = set()
+        provenance_counts: Counter[str] = Counter()
+        counts: Counter[str] = Counter()
+        data_rows = 0
+        for row_number, row in rows[2:]:
+            padded = row + [""] * max(0, len(headers) - len(row))
+            sample_type_raw = padded[0].strip() or sample_type_raw
+            row_provenance = padded[1].strip() or row_provenance
+            site = padded[2].strip()
+            if not site:
+                if any(value.strip() for value in padded[2:]):
+                    raise SourceAdapterError(
+                        f"Mendeley groundwater row lacks Site at row {row_number}"
+                    )
+                continue
+            if not re.fullmatch(r"W(?:[1-9]|[1-9][0-9]|1[01][0-9]|12[0-4])", site):
+                raise SourceAdapterError(
+                    f"Mendeley groundwater Site changed at row {row_number}"
+                )
+            if site in samples:
+                raise SourceAdapterError(
+                    f"Mendeley groundwater Site duplicated at row {row_number}"
+                )
+            if sample_type_raw != "well water" or row_provenance not in {
+                "This study",
+                "Yao B \net al.2024",
+            }:
+                raise SourceAdapterError(
+                    f"Mendeley groundwater row provenance changed at row {row_number}"
+                )
+            values = {
+                header: padded[index] for index, header in enumerate(headers) if header
+            }
+            longitude = values["Longitude"].strip()
+            latitude = values["Latitude"].strip()
+            try:
+                longitude_value = float(longitude)
+                latitude_value = float(latitude)
+            except ValueError as exc:
+                raise SourceAdapterError(
+                    f"Mendeley groundwater coordinate is not numeric at row {row_number}"
+                ) from exc
+            if (
+                not math.isfinite(longitude_value)
+                or not math.isfinite(latitude_value)
+                or not -180 <= longitude_value <= 180
+                or not -90 <= latitude_value <= 90
+            ):
+                raise SourceAdapterError(
+                    f"Mendeley groundwater coordinate is invalid at row {row_number}"
+                )
+
+            observations: dict[str, dict[str, Any]] = {}
+            for analyte, field_name in registry["target_analytes"].items():
+                raw_value = values[field_name].strip()
+                if not raw_value or raw_value == "-":
+                    continue
+                try:
+                    numeric = float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"Mendeley groundwater {analyte} is not numeric at row {row_number}"
+                    ) from exc
+                if not math.isfinite(numeric) or numeric < 0:
+                    raise SourceAdapterError(
+                        f"Mendeley groundwater {analyte} is invalid at row {row_number}"
+                    )
+                counts[analyte] += 1
+                observations[analyte] = {
+                    "field": field_name,
+                    "value": raw_value,
+                    "unit": "ug/L",
+                    "measurement_basis": (
+                        "groundwater_reported_mass_per_volume_fraction_unspecified"
+                    ),
+                    "variable_metadata_locator": "Table S1.xlsx#sheet1-row=2",
+                }
+            samples.add(site)
+            coordinates.add((latitude, longitude))
+            provenance_counts[row_provenance] += 1
+            data_rows += 1
+            source_locator = f"{downloaded.path.name}#sheet1-row={row_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, site, source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "_sample_type_raw": sample_type_raw,
+                    "_row_provenance": row_provenance,
+                    "_reported_latitude": latitude,
+                    "_reported_longitude": longitude,
+                    "_source_crs": "",
+                    "_source_file": downloaded.path.name,
+                    "_target_observations": observations,
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        observed = {
+            "physical_rows": data_rows,
+            "distinct_sites": len(samples),
+            "distinct_reported_coordinates": len(coordinates),
+            "row_provenance_counts": dict(sorted(provenance_counts.items())),
+            "target_observations": sum(counts.values()),
+            "target_value_counts": dict(sorted(counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"Mendeley groundwater reconciliation changed: {observed!r}"
+            )
+
+
+class EuropePmcPearlRiverDissolvedMetalsAdapter(RegistryAdapter):
+    """Pinned workbook member from Europe PMC's generated supplement bundle."""
+
+    source_id = "europe-pmc-pearl-river-dissolved-metals"
+
+    _FOOTER_NOTES = frozenset(
+        {
+            "NPR, Nanpanjiang River; HSR, Hongshuihe River; QJR, Qianjiang River; XUJ, Xunjiang River; XJR, Xijiang River.",
+            "T-NPR, T-BPR, T-HSR, T-QJR, T-XUJ and T-XJR represents the tributaries of Nanpanjiang River, Beipanjiang River, Hongshuihe River, Qianjiang River, Xunjiang River and Xijiang River.",
+        }
+    )
+
+    @staticmethod
+    def _verified_member_payload(
+        archive_path: Path, download_entry: Mapping[str, Any]
+    ) -> bytes:
+        member_entry = download_entry["files"][0]
+        target = str(member_entry["archive_member"])
+        try:
+            with zipfile.ZipFile(archive_path) as archive:
+                members = archive.infolist()
+                names = [item.filename for item in members]
+                if (
+                    len(members) > int(download_entry["max_members"])
+                    or sum(item.file_size for item in members)
+                    > int(download_entry["max_extracted_bytes"])
+                    or len(names) != len(set(names))
+                    or any(
+                        item.is_dir()
+                        or PurePosixPath(item.filename).is_absolute()
+                        or ".." in PurePosixPath(item.filename).parts
+                        or "\\" in item.filename
+                        for item in members
+                    )
+                ):
+                    raise SourceAdapterError(
+                        "Europe PMC supplement archive violates structural limits"
+                    )
+                if names.count(target) != 1:
+                    raise SourceAdapterError(
+                        "Europe PMC supplement archive target member changed"
+                    )
+                payload = archive.read(target)
+        except (OSError, zipfile.BadZipFile, KeyError, RuntimeError) as exc:
+            raise SourceAdapterError(
+                "Europe PMC supplement archive is unreadable"
+            ) from exc
+        if (
+            len(payload) != int(member_entry["bytes"])
+            or hashlib.sha256(payload).hexdigest() != member_entry["expected_sha256"]
+        ):
+            raise SourceAdapterError("Europe PMC workbook member changed")
+        return payload
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError("Europe PMC adapter received another source")
+        if mode == "fixture":
+            raise SourceAdapterError(
+                "use the checked-in Europe PMC demo for fixture tests"
+            )
+        root = self._cache_root(cache_dir)
+        root.mkdir(parents=True, exist_ok=True)
+        download_entry = candidate.registry_entry["download"]
+        member_entry = download_entry["files"][0]
+        source_url = str(download_entry["url"])
+        output = root / str(member_entry["filename"])
+        manifest_path = root / "dataset.download.json"
+        result: dict[str, Any] = {}
+        try:
+            if output.is_file() and manifest_path.is_file():
+                result = downloader.existing_verified_cache(
+                    output,
+                    manifest_path,
+                    source_url,
+                    str(member_entry["expected_sha256"]),
+                    candidate.version,
+                )
+            elif mode == "cached":
+                raise downloader.DownloadError(
+                    "offline Europe PMC cache is incomplete",
+                    status="network_unavailable",
+                )
+        except downloader.DownloadError:
+            if mode == "cached":
+                raise SourceAdapterError(
+                    "Europe PMC verified offline cache is unavailable"
+                ) from None
+            result = {}
+
+        archive_path: Path | None = None
+        temporary_output: Path | None = None
+        if not result:
+            try:
+                with tempfile.NamedTemporaryFile(
+                    "wb",
+                    prefix=".europe-pmc-supplements.",
+                    suffix=".zip",
+                    dir=root,
+                    delete=False,
+                ) as handle:
+                    archive_path = Path(handle.name)
+                container = downloader.download_with_retries(
+                    source_url,
+                    archive_path,
+                    30.0,
+                    int(download_entry["max_bytes"]),
+                    None,
+                    2,
+                )
+                content_type = str(container.get("content_type") or "")
+                if content_type and content_type not in set(
+                    download_entry["accepted_content_types"]
+                ):
+                    raise SourceAdapterError(
+                        f"Europe PMC returned unexpected content type: {content_type}"
+                    )
+                payload = self._verified_member_payload(archive_path, download_entry)
+                with tempfile.NamedTemporaryFile(
+                    "wb",
+                    prefix=f".{output.name}.",
+                    suffix=".part",
+                    dir=root,
+                    delete=False,
+                ) as handle:
+                    temporary_output = Path(handle.name)
+                    handle.write(payload)
+                os.replace(temporary_output, output)
+                temporary_output = None
+                result = {
+                    **container,
+                    "manifest_version": "geochemical-download-v1",
+                    "license": candidate.license_id,
+                    "output_filename": output.name,
+                    "dataset_doi": candidate.dataset_doi,
+                    "dataset_version": candidate.version,
+                    "container_sha256": container["sha256"],
+                    "container_bytes": container["bytes"],
+                    "archive_member": member_entry["archive_member"],
+                    "sha256": member_entry["expected_sha256"],
+                    "sha256_basis": "publisher_supplement_member_pin",
+                    "bytes": len(payload),
+                }
+                downloader.atomic_json(manifest_path, result)
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(
+                    f"Europe PMC supplement download failed: {exc}"
+                ) from exc
+            finally:
+                if archive_path is not None:
+                    archive_path.unlink(missing_ok=True)
+                if temporary_output is not None:
+                    temporary_output.unlink(missing_ok=True)
+        if output.stat().st_size != int(member_entry["bytes"]):
+            raise SourceAdapterError("Europe PMC workbook byte count changed")
+        return [
+            DownloadedFile(
+                source_id=self.source_id,
+                file_id=str(member_entry["file_id"]),
+                path=output,
+                source_url=source_url,
+                bytes=output.stat().st_size,
+                cache_status=str(result["status"]),
+                retrieved_at=result.get("accessed_at")
+                or result.get("cache_verified_at"),
+            )
+        ]
+
+    @staticmethod
+    def _reported_coordinates(value: str, row_number: int) -> tuple[str, str]:
+        match = re.fullmatch(
+            r"N[：:]\s*(\d{1,2})[º°](\d{1,2}(?:\.\d+)?)'\s+"
+            r"E[：:]\s*(\d{1,3})[º°](\d{1,2}(?:\.\d+)?)'",
+            value.strip(),
+        )
+        if match is None:
+            raise SourceAdapterError(
+                f"Pearl River reported coordinate changed at row {row_number}"
+            )
+        latitude_degrees, latitude_minutes, longitude_degrees, longitude_minutes = (
+            float(item) for item in match.groups()
+        )
+        latitude = latitude_degrees + latitude_minutes / 60
+        longitude = longitude_degrees + longitude_minutes / 60
+        if (
+            latitude_minutes >= 60
+            or longitude_minutes >= 60
+            or latitude > 90
+            or longitude > 180
+        ):
+            raise SourceAdapterError(
+                f"Pearl River reported coordinate is invalid at row {row_number}"
+            )
+        return (
+            format(latitude, ".12g"),
+            format(longitude, ".12g"),
+        )
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        if len(files) != 1 or files[0].file_id != "raw-data-workbook":
+            raise SourceAdapterError(
+                "Europe PMC Pearl River adapter requires the verified workbook"
+            )
+        downloaded = files[0]
+        registry = self.candidate.registry_entry
+        rows = TpdcChinaMountainSoilAdapter._xlsx_rows(
+            downloaded.path, workbook_label="Pearl River"
+        )
+        if len(rows) < 4 or rows[0][1] != registry["header_fields"]:
+            raise SourceAdapterError("Pearl River workbook schema changed")
+        headers = rows[0][1]
+        units = rows[1][1]
+        if len(units) != len(headers) or any(
+            units[headers.index(field)] != "μg L-1"
+            for field in registry["target_analytes"].values()
+        ):
+            raise SourceAdapterError("Pearl River target-analyte unit row changed")
+
+        season = ""
+        samples: set[str] = set()
+        sites: set[str] = set()
+        dates: set[str] = set()
+        season_counts: Counter[str] = Counter()
+        counts: Counter[str] = Counter()
+        for row_number, row in rows[2:]:
+            padded = row + [""] * max(0, len(headers) - len(row))
+            first = padded[0].strip()
+            if first in {"High flow season", "Low flow season"}:
+                season = first
+                continue
+            if not first.isdigit():
+                if first in self._FOOTER_NOTES:
+                    continue
+                if any(value.strip() for value in padded):
+                    raise SourceAdapterError(
+                        f"Pearl River workbook has an unexpected row at {row_number}"
+                    )
+                continue
+            if season not in {"High flow season", "Low flow season"}:
+                raise SourceAdapterError(
+                    f"Pearl River season is missing at row {row_number}"
+                )
+            values = dict(zip(headers, padded, strict=False))
+            site = values["Site number"].strip()
+            if not site.isdigit() or not 1 <= int(site) <= 81:
+                raise SourceAdapterError(
+                    f"Pearl River site identity changed at row {row_number}"
+                )
+            sampled_raw = values["Date      (m-d-y)"].strip()
+            try:
+                sampled_at = (
+                    datetime.strptime(sampled_raw, "%m/%d/%y").date().isoformat()
+                )
+            except ValueError as exc:
+                raise SourceAdapterError(
+                    f"Pearl River sampling date changed at row {row_number}"
+                ) from exc
+            latitude, longitude = self._reported_coordinates(
+                values["Sample location"], row_number
+            )
+            sample_key = f"{site}|{season}"
+            if sample_key in samples:
+                raise SourceAdapterError(
+                    f"Pearl River site-season duplicated at row {row_number}"
+                )
+            observations: dict[str, dict[str, Any]] = {}
+            for analyte, field_name in registry["target_analytes"].items():
+                raw_value = values[field_name].strip()
+                try:
+                    numeric = float(raw_value)
+                except ValueError as exc:
+                    raise SourceAdapterError(
+                        f"Pearl River {analyte} is not numeric at row {row_number}"
+                    ) from exc
+                if not math.isfinite(numeric) or numeric < 0:
+                    raise SourceAdapterError(
+                        f"Pearl River {analyte} is invalid at row {row_number}"
+                    )
+                counts[analyte] += 1
+                observations[analyte] = {
+                    "field": field_name,
+                    "value": raw_value,
+                    "unit": "ug/L",
+                    "measurement_basis": "dissolved_filtered_river_water_mass_per_volume",
+                    "analytical_method": "ICP-MS (PerkinElmer Elan DRC-e)",
+                    "digestion_or_extraction": (
+                        "0.22 um filtration; HNO3 acidification to pH < 2"
+                    ),
+                    "variable_metadata_locator": "doi:10.7717/peerj.6578#materials-and-methods",
+                }
+            samples.add(sample_key)
+            sites.add(site)
+            dates.add(sampled_at)
+            season_counts[season] += 1
+            source_locator = f"{downloaded.path.name}#sheet1-row={row_number}"
+            yield RawRecord(
+                source_id=self.source_id,
+                source_record_id=stable_source_record_id(
+                    self.source_id, f"{site}|{sampled_at}", source_locator
+                ),
+                source_locator=source_locator,
+                fields={
+                    **values,
+                    "_season": season,
+                    "_sampled_at": sampled_at,
+                    "_reported_coordinate_text": values["Sample location"],
+                    "_reported_latitude": latitude,
+                    "_reported_longitude": longitude,
+                    "_source_crs": "",
+                    "_sample_type_raw": "0.22 um filtered river water",
+                    "_source_file": downloaded.path.name,
+                    "_target_observations": observations,
+                    "_dataset_version": self.candidate.version,
+                },
+            )
+        observed = {
+            "physical_rows": len(samples),
+            "distinct_sites": len(sites),
+            "distinct_sampling_dates": len(dates),
+            "season_counts": dict(sorted(season_counts.items())),
+            "target_observations": sum(counts.values()),
+            "target_value_counts": dict(sorted(counts.items())),
+        }
+        if observed != registry["expected_counts"]:
+            raise SourceAdapterError(
+                f"Pearl River reconciliation changed: {observed!r}"
+            )
+
+
 class EarthchemDehailonggangRockAdapter(RegistryAdapter):
     """EarthChem Library whole-rock workbook acquired by its fixed public form."""
 
@@ -6656,6 +7159,178 @@ class ZenodoYangtzeYellowRiverSedimentAdapter(_PinnedSingleFileAdapter):
             )
 
 
+class ZenodoGardWholeRockAdapter(RegistryAdapter):
+    """Pinned Gard/Hasterok/Halpin 2019 global whole-rock compilation.
+
+    The Zenodo v1.1.0 record is immutable, so both files are exact-pinned.
+    ``complete.zip`` carries the joined analysis table (1,022,092 rows) and
+    ``reference.csv`` resolves ``ref_id`` to the original article citation.
+    Roughly 68 percent of the citations come from GEOROC, so this source is
+    a literature compilation overlapping the georoc-* lineage and never
+    counts as an independent replication of those archives.
+    """
+
+    source_id = "zenodo-gard-whole-rock"
+
+    _KEPT_FIELDS = (
+        "sample_id",
+        "sample_name",
+        "latitude",
+        "longitude",
+        "loc_prec",
+        "rock_name",
+        "rock_type",
+        "rock_group",
+        "rock_origin",
+        "rock_facies",
+        "sample_description",
+        "country",
+        "ref_id",
+        "method",
+        "age",
+        "as_ppm",
+        "cr_ppm",
+        "cu_ppm",
+        "ni_ppm",
+        "pb_ppm",
+        "zn_ppm",
+    )
+
+    def download(
+        self,
+        candidate: DatasetCandidate,
+        cache_dir: Path,
+        mode: DownloadMode = "online",
+    ) -> list[DownloadedFile]:
+        if candidate.source_id != self.source_id:
+            raise SourceAdapterError(
+                f"{self.source_id} adapter received a candidate for another source"
+            )
+        if mode == "fixture":
+            raise SourceAdapterError(
+                f"use the checked-in {self.source_id} demo directly for fixture tests"
+            )
+        root = self._cache_root(cache_dir)
+        download_entry = candidate.registry_entry["download"]
+        results: list[DownloadedFile] = []
+        for file_entry in download_entry["files"]:
+            output = root / file_entry["filename"]
+            args = _download_args(
+                url=file_entry["url"],
+                output=output,
+                manifest=root / f"{file_entry['file_id']}.download.json",
+                license_id=candidate.license_id,
+                expected_sha256=file_entry.get("expected_sha256"),
+                max_bytes=int(download_entry["max_bytes"]),
+                dataset_doi=candidate.dataset_doi,
+                dataset_version=candidate.version,
+                offline=mode == "cached",
+                required_fields=(),
+            )
+            try:
+                result = downloader.run(args)
+            except (downloader.DownloadError, OSError) as exc:
+                raise SourceAdapterError(
+                    f"{self.source_id} download failed: {exc}"
+                ) from exc
+            content_type = result.get("content_type")
+            if content_type and content_type.casefold() not in (
+                accepted_content_types_for_file(download_entry, file_entry)
+            ):
+                raise SourceAdapterError(
+                    f"{self.source_id} returned unexpected content type: {content_type}"
+                )
+            if output.stat().st_size != file_entry["bytes"]:
+                raise SourceAdapterError(f"{self.source_id} file size changed")
+            results.append(
+                DownloadedFile(
+                    source_id=self.source_id,
+                    file_id=file_entry["file_id"],
+                    path=output,
+                    source_url=file_entry["url"],
+                    bytes=result["bytes"],
+                    cache_status=result["status"],
+                    retrieved_at=result.get("accessed_at")
+                    or result.get("cache_verified_at"),
+                )
+            )
+        return results
+
+    def reference_map(
+        self, files: Sequence[DownloadedFile]
+    ) -> dict[str, dict[str, str]]:
+        """Return ref_id -> citation fields from the pinned reference table."""
+        by_id = {item.file_id: item for item in files}
+        reference_file = by_id.get("reference-csv")
+        if reference_file is None:
+            raise SourceAdapterError(
+                f"{self.source_id} requires the pinned reference.csv"
+            )
+        references: dict[str, dict[str, str]] = {}
+        with reference_file.path.open(encoding="utf-8", errors="replace") as handle:
+            for row in csv.DictReader(handle):
+                ref_id = str(row.get("ref_id") or "").strip()
+                if ref_id:
+                    references[ref_id] = {
+                        "author": str(row.get("author") or "").strip(),
+                        "title": str(row.get("title") or "").strip(),
+                        "journal": str(row.get("journal") or "").strip(),
+                        "year": str(row.get("year") or "").strip(),
+                        "doi": str(row.get("doi") or "").strip(),
+                        "data_source": str(row.get("data_source") or "").strip(),
+                    }
+        return references
+
+    def parse(self, files: Sequence[DownloadedFile]) -> Iterable[RawRecord]:
+        by_id = {item.file_id: item for item in files}
+        archive = by_id.get("complete-zip")
+        if archive is None or "reference-csv" not in by_id:
+            raise SourceAdapterError(
+                f"{self.source_id} requires complete.zip and reference.csv"
+            )
+        expected = self.candidate.registry_entry["expected_counts"]
+        total = 0
+        with zipfile.ZipFile(archive.path) as bundle:
+            with bundle.open("complete.csv") as raw:
+                text_stream = io.TextIOWrapper(raw, encoding="utf-8", errors="replace")
+                reader = csv.DictReader(text_stream)
+                fieldnames = set(reader.fieldnames or [])
+                missing = [
+                    field for field in self._KEPT_FIELDS if field not in fieldnames
+                ]
+                if missing:
+                    raise SourceAdapterError(
+                        f"{self.source_id} table structure changed; missing: {missing}"
+                    )
+                for row in reader:
+                    total += 1
+                    line = reader.line_num
+                    fields = {
+                        field: str(row.get(field) or "").strip()
+                        for field in self._KEPT_FIELDS
+                    }
+                    fields["_source_file"] = archive.path.name
+                    sample_id = fields["sample_id"]
+                    if not sample_id:
+                        raise SourceAdapterError(
+                            f"{self.source_id} row {line} lacks the sample_id key"
+                        )
+                    source_locator = f"complete.csv#row={line}"
+                    yield RawRecord(
+                        source_id=self.source_id,
+                        source_record_id=stable_source_record_id(
+                            self.source_id, sample_id, source_locator
+                        ),
+                        source_locator=source_locator,
+                        fields=fields,
+                    )
+        if total != int(expected["total_rows"]):
+            raise SourceAdapterError(
+                f"{self.source_id} row count changed: expected "
+                f"{expected['total_rows']}, found {total}"
+            )
+
+
 class GemasEuropeAdapter(RegistryAdapter):
     """GSI's official GEMAS Ap/Gr DBF republication with method-separated analyses."""
 
@@ -6903,6 +7578,12 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
     GeorocAntarcticaIntraplateAdapter.source_id: GeorocAntarcticaIntraplateAdapter,
     EidcNingboSoilAdapter.source_id: EidcNingboSoilAdapter,
     TpdcChinaMountainSoilAdapter.source_id: TpdcChinaMountainSoilAdapter,
+    MendeleyGuangdongFujianGroundwaterAdapter.source_id: (
+        MendeleyGuangdongFujianGroundwaterAdapter
+    ),
+    EuropePmcPearlRiverDissolvedMetalsAdapter.source_id: (
+        EuropePmcPearlRiverDissolvedMetalsAdapter
+    ),
     EarthchemDehailonggangRockAdapter.source_id: EarthchemDehailonggangRockAdapter,
     FourTuNorthernChinaSedimentAdapter.source_id: FourTuNorthernChinaSedimentAdapter,
     PangaeaBrasolNeBrazilSoilAdapter.source_id: PangaeaBrasolNeBrazilSoilAdapter,
@@ -6910,6 +7591,7 @@ ADAPTERS: Mapping[str, type[RegistryAdapter]] = {
         FigshareYangtzeBasinSoilHeavyMetalsAdapter
     ),
     GemasEuropeAdapter.source_id: GemasEuropeAdapter,
+    ZenodoGardWholeRockAdapter.source_id: ZenodoGardWholeRockAdapter,
 }
 
 

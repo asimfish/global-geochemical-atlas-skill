@@ -7,10 +7,11 @@
 **English** | [简体中文](README.zh-CN.md)
 
 [![CI](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/asimfish/global-geochemical-atlas-skill/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](#-quick-start-90-seconds)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#-quick-start-90-seconds)
 [![Dependencies](https://img.shields.io/badge/runtime%20deps-zero-brightgreen)](#-quick-start-90-seconds)
-[![Tests](https://img.shields.io/badge/tests-394%20%2B%2060%20%2B%2075%20passing-brightgreen)](#-development--testing)
+[![Tests](https://img.shields.io/badge/tests-677%20%2B%2060%20%2B%2076%20%2B%20117%20passing-brightgreen)](#-development--testing)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4B2E83)](#-use-it-with-your-ai-agent)
+[![Works with](https://img.shields.io/badge/Works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Copilot%20CLI-6E56CF)](#-use-it-with-your-ai-agent)
 [![Champion](https://img.shields.io/badge/AI4S%20Hackathon-🏆%20Champion-f6c344)](#-awards--media)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -22,8 +23,9 @@
 [🚀 Quick Start](#-quick-start-90-seconds) ·
 [🤖 Use with Your Agent](#-use-it-with-your-ai-agent) ·
 [🏗️ How It Works](#️-how-it-works) ·
-[🧭 Data Sources](#-data-sources-22-frozen-sources) ·
-[📦 Outputs](#-the-16-output-files) ·
+[🧭 Data Sources](#-data-sources-37-frozen-executable-sources--69-audited-catalog-records) ·
+[⏳ Temporal](#-the-temporal-dimension-evolution-maps-and-enrichment-attribution) ·
+[📦 Outputs](#-the-18-output-files) ·
 [❓ FAQ](#-faq)
 
 <a href="https://synmatai.cn/hackathon/"><img src="docs/readme/synmatai-champion.png" alt="Champion of the SynMatAI AI4S Future ScienceSkills Hackathon — Team Token Agents" width="640"></a>
@@ -52,10 +54,13 @@ A complete, agent-native **research skill** — not a pre-rendered map. Given an
 
 | Your question | What it guarantees |
 |---|---|
-| Where does the data come from? | 22 frozen public sources (rock / soil / sediment / water), every record bound to a DOI, version, license, and file SHA-256 |
+| Where does the data come from? | 69 audited catalog records: 37 frozen, executable public sources (rock / soil / sediment / water) plus 32 discovery-only candidates; every formal record is bound to a DOI/URL, version, license, locator, and file SHA-256 |
 | Can I trust the numbers? | Original values are never overwritten, censored values are never imputed, batch QC is recomputed per record, and a five-component confidence score comes with an explicit "this is not a probability of correctness" disclaimer |
 | Dare I cite the conclusions? | Anomalies are reported strictly as screening candidates with competing explanations listed; scopes that could not be completed are reported as gaps — never dressed up as full coverage |
-| Can I reuse it elsewhere? | 40+ JSON Schemas, a 16-file output contract, self-contained HTML maps, and pure-stdlib scripts that work outside this repository |
+| Can I reuse it elsewhere? | 40+ JSON Schemas, an 18-file output contract, self-contained HTML maps, and pure-stdlib scripts that work outside this repository; Markdown + stdlib only, so Claude Code / Codex / Cursor mount it without a single code change |
+| What about time? | Every record carries three sampling-time columns (`atlas-sampling-time-v1`; publication year never counts); the four temporal-evolution modes are first-class options of the main `interactive_map.html`; enrichment candidates are attributed along lithology / spatial / co-element / temporal evidence lines as geogenic background vs. suspected anthropogenic input, and the skill declines to judge when evidence is thin |
+| Can loop rounds bias each other? | The scout and challenger of the current round read isolated fresh-session packets; the previous round's memory only helps choose targets and leaves a hash; a deterministic judge scores the third layer, and no agent can admit a source on its own |
+| What comes after the atlas? | From the same HTML the user may opt into Auto-Research: freeze the atlas, then generate candidates, pilots, literature checks, a paper skeleton, figure contracts, and independent review; failures enter non-overwritable revision rounds, and a pass still stops at human approval |
 
 Latest global online production run (2026-08-19, fully autonomous): **199,730** deterministically admitted records · **45,753** distinct physical samples · **35** connected public sources (31 further candidates audited and rejected) · **100%** record-level provenance chains · **3,721** anomaly screening candidates · **393** records that failed the standardization gate kept honestly in place — never silently dropped. Structured run evidence with a guided walk-through is on the [project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html).
 
@@ -66,15 +71,15 @@ Six commitments define this skill. Each one is implemented, regression-tested, a
 | Commitment | What it guarantees | Implementation & docs |
 |---|---|---|
 | **Complete iteration loop** | Nine research steps behind three gates; failed acceptance enters a five-step repair loop; unfixable gaps are flagged `needs_human_review`, never papered over | [The iteration loop](#the-iteration-loop-fix-what-fails-admit-what-cannot-be-fixed) · `run_self_correction_loop.py` |
-| **Three-layer adversarial mechanism** | Scout nominates, Skeptic objects, deterministic Referee scores — at the data entrance; a canary-calibrated auditor guards the exit | [Adversarial mechanisms](#adversarial-mechanisms-it-can-drive-never-acquit) · `discovery_duel.py` / `adversarial_audit.py` |
+| **Three-layer adversarial mechanism** | Scout nominates, Skeptic objects, deterministic Referee scores — at the data entrance; a canary-calibrated auditor guards the exit | [Adversarial mechanisms](#adversarial-mechanisms-it-can-drive-never-acquit) · `discovery_duel.py` / `agent_audit.py` / `adversarial_audit.py` |
 | **Per-round evaluation independence** | Reviewers run in fresh threads from a different model family; cross-run memory seeds round 1 scheduling only and in-run evidence always outranks it — no round inherits another round's conclusions | [Each round stays independent](#the-iteration-loop-fix-what-fails-admit-what-cannot-be-fixed) · `acquisition_memory.py` |
-| **SHA-256 fingerprints, one per result** | Hashes anchor four links — frozen request, source files, all 16 artifacts, and every reportable claim (`file + JSON pointer + SHA-256`) | [The evidence chain](#the-evidence-chain-every-number-carries-a-fingerprint) · `claim_ledger.py` |
-| **Temporal evolution inside the atlas** | The temporal view is one of the atlas's visualization options driven by the same standardized database — not a separate deliverable | [Results](#-results-one-skill-four-analysis-domains) · [live temporal view](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-temporal.html) |
-| **Auto-research genuinely wired in** | After a validated atlas run, the user can opt to continue into the research layer — cohorts, context, sampling priorities, and onward to paper drafts | [After the atlas](#after-the-atlas-continue-into-research-mode) · `build_research_products.py` |
+| **SHA-256 fingerprints, one per result** | Hashes anchor four links — frozen request, source files, all 18 artifacts, and every reportable claim (`file + JSON pointer + SHA-256`) | [The evidence chain](#the-evidence-chain-every-number-carries-a-fingerprint) · `claim_ledger.py` |
+| **Temporal evolution inside the atlas** | Every record carries a sampling-time contract (`atlas-sampling-time-v1`); the four temporal modes and the enrichment-attribution view live inside the main `interactive_map.html`, driven by the same standardized database — not a separate deliverable | [The temporal dimension](#-the-temporal-dimension-evolution-maps-and-enrichment-attribution) · `build_temporal_map.py` / `classify_anomaly_provenance.py` · [live temporal view](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-temporal.html) |
+| **Auto-research genuinely wired in** | After a validated atlas run, the user can opt to continue into the research layer — cohorts, context, and sampling priorities, and onward to a resumable, claim-bound, independently reviewed Auto-Research run that always ends in a packaged product | [After the atlas](#after-the-atlas-continue-into-research-mode) · [Auto-Research](#continue-into-auto-research-from-the-atlas) · `build_research_products.py` / `auto_research.py` / `serve_atlas_research.py` |
 
 ## 🚀 Quick Start (90 seconds)
 
-All you need is Python 3.11+ — **no network, no API keys, no GPU, no third-party packages**. From the repository root:
+All you need is Python 3.10+ — **no network, no API keys, no GPU, no third-party packages**. From the repository root:
 
 ```bash
 # 1. Run the production-threshold demo on real data (996 hash-pinned USGS soil measurements)
@@ -85,12 +90,12 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
   --generated-at 2026-08-07T00:00:00Z \
   --output-dir /tmp/geochemical-production-demo
 
-# 2. Validate the 16-file output contract
+# 2. Validate the 18-file output contract
 python skills/global-geochemical-atlas/scripts/validate_outputs.py \
   --output-dir /tmp/geochemical-production-demo
 ```
 
-The two commands should return `"status": "partial_success"` and `"status": "valid"` respectively. The former is a **deliberate scientific status**: the hash-pinned slice ran end to end, but the run does not pretend to cover the full spatial scope of the frozen request. The latter confirms all sixteen output contracts are valid.
+The two commands should return `"status": "partial_success"` and `"status": "valid"` respectively. The former is a **deliberate scientific status**: the hash-pinned slice ran end to end, but the run does not pretend to cover the full spatial scope of the frozen request. The latter confirms all eighteen output contracts are valid.
 
 ### Or let the conductor drive: one command, end to end
 
@@ -121,11 +126,11 @@ It proves the engineering and scientific rules are executable — it does not re
 
 </details>
 
-A local repeatability benchmark uses 3 warm-ups and 10 independent measurements, each in a fresh output directory with all 16 artifacts validated; results and applicability limits are recorded in the [workflow benchmark](skills/global-geochemical-atlas/BENCHMARK.md). It is not an official model score or a 2-CPU container result.
+A local repeatability benchmark uses 3 warm-ups and 10 independent measurements, each in a fresh output directory with all 18 artifacts validated; results and applicability limits are recorded in the [workflow benchmark](skills/global-geochemical-atlas/BENCHMARK.md). It is not an official model score or a 2-CPU container result.
 
 ## 🤖 Use It with Your AI Agent
 
-The skill follows the [Agent Skills](https://agentskills.io) public subset (`SKILL.md` + `references/` + `scripts/` + `assets/`, one level of references, relative paths, pure stdlib), so it mounts directly on any compatible runtime:
+The skill follows the [Agent Skills](https://agentskills.io) public subset (`SKILL.md` + `references/` + `scripts/` + `assets/`, one level of references, relative paths, pure stdlib). **The whole skill is Markdown plus Python standard-library scripts — no framework, no daemon, no third-party dependency** — so any LLM agent that can read `SKILL.md` can use it, and switching runtimes needs no code change:
 
 ```bash
 # Claude Code (personal skills directory)
@@ -134,7 +139,13 @@ cp -r skills/global-geochemical-atlas ~/.claude/skills/
 # Codex CLI
 cp -r skills/global-geochemical-atlas ~/.codex/skills/
 
-# OpenCode and other compatible runtimes: copy/mount the skill directory into their skills folder
+# Cursor (project-level skills directory)
+cp -r skills/global-geochemical-atlas /path/to/your-project/.cursor/skills/
+
+# GitHub Copilot CLI (native SKILL.md support)
+cp -r skills/global-geochemical-atlas ~/.copilot/skills/
+
+# OpenCode / Trae / OpenClaw and other compatible runtimes: copy/mount the skill directory into their skills folder
 ```
 
 ### Ready-to-use prompts
@@ -157,7 +168,7 @@ Shorter requests activate the skill just as well:
 
 Useful references while integrating:
 
-- Activation boundary with worked examples: [`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json) (4 should-activate / should-not-activate cases)
+- Activation boundary with worked examples: [`evals/activation.json`](skills/global-geochemical-atlas/evals/activation.json) (5 should-activate and 4 adjacent should-not-activate cases)
 - Platform metadata: [`agents/openai.yaml`](skills/global-geochemical-atlas/agents/openai.yaml) · capability card: [`skill-card.md`](skills/global-geochemical-atlas/skill-card.md)
 - The agent's full execution contract (state machine, gates, failure states): [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md)
 
@@ -188,6 +199,29 @@ python skills/global-geochemical-atlas/scripts/run_atlas_request.py \
 ```
 
 `auto` deterministically allocates record quotas across all routed sources compatible with the request, verifies each source's manifest and SHA-256 before merging, and keeps going on the verified subset when a single source fails — returning `partial_success`. Downloads have timeouts, size caps, bounded retries, and caching; `--offline` mode accepts verified caches only.
+
+#### Budget tiers of the same controller
+
+One controller, three budget tiers. A tier only changes time and round count — the scientific and evidence gates are identical:
+
+| Tier | Budget | Typical use | Delivery semantics |
+|---|---|---|---|
+| ⚡ quick | ≤900 s (about 15 min) | A lightweight first look; the official sandbox review | Real online acquisition producing all 18 files; a checkpoint receipt that states non-full coverage honestly |
+| 🚶 standard | ≤3,600 s | Day-to-day single-region / few-element research | Two full expansion rounds; returns a to-be-continued state when not converged |
+| 🔬 full | ≤43,200 s | Explicitly authorized global, all-media research (about 2–12 h) | The only tier that can pass `validate_research_delivery.py` as a formal delivery |
+
+**Quick mode in one command** (a real lightweight result for a global map without waiting hours):
+
+```bash
+python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
+  --request /path/to/request.json \
+  --online-source auto \
+  --analysis-profile production \
+  --time-budget-seconds 900 --max-rounds 1 --checkpoint-only \
+  --output-dir /tmp/atlas-quick
+```
+
+When the official review gives no other deadline, generate the task contract with `deadline_seconds=900`; `task_router.py` then plans a 720-second internal online checkpoint and reserves 180 seconds for agent start-up, validation, and the reply. The checkpoint still produces gradable core artifacts and reports its gaps — it never poses as a complete global study.
 
 ### Option 3 — Reproduce the offline four-media sample (21 sources · 1,144 observations)
 
@@ -264,11 +298,16 @@ flowchart LR
     D2 --> D3[D3 Products<br/>research profiles · maps · iteration]
     D3 --> O[Database<br/>evidence & confidence<br/>anomaly results<br/>interactive atlas]
     O -. multi-round loop driven by iteration_backlog .-> D1
+    O -->|user opts in| AR[Auto-Research<br/>pilots · literature · paper · figures · independent review]
+    AR -->|review failed · versioned feedback| AR
+    AR -->|all gates pass| H[Human approval<br/>never auto-published]
 ```
 
 - **D1** records licenses, versions, download requests, file hashes, and record-level locators; a candidate in the source catalog is not automatically usable for this request.
 - **D2** treats units, censored values, coordinates, methods, lab batches, and optional geological matching conservatively; record-level highs/lows are screened with robust MAD z-scores, then spatial clustering with an exact hypergeometric test under BH-FDR control.
 - **D3** consumes public artifacts only and renders global, national, or WGS84-bbox research views through versioned profiles — it never recomputes D2 science.
+- **Three-layer source adversary inside the loop** — each pending repair action group can spawn mutually isolated scout and challenger packets; the previous round's memory never enters this round's evaluator context. A deterministic judge scores only the seven frozen source facts, agent results can never admit a source directly, and every packet, input, payload, result, and judge receipt is SHA-256-bound.
+- **Per-claim reconciliation** — the formal delivery receipt embeds a typed claim ledger: displayed record counts, covered elements/media, source counts, censored counts, coordinate rates, anomaly counts, and FDR region counts each point to an exact file, locator, recompute method, and SHA-256; changing a number or its evidence fails the validator.
 
 ### The iteration loop: fix what fails, admit what cannot be fixed
 
@@ -292,14 +331,17 @@ The **Scout** (a model) nominates candidate sources for blank regions — it nom
 
 **Audit independence is enforced by contract, not by trust.** In dual-agent mode the brief carries a machine-readable `reviewer_contract`: the Skeptic must come from a **different model family** than the executor, must start in a **fresh thread** with no shared memory or Builder narration, reads artifact bytes only, sits the same canary exam first, and must **refuse to review** if any path or SHA-256 in the brief fails to verify. Confirmed findings flow back into the repair queue and drive the next loop round — adversarial results move the pipeline, they do not sit in a report.
 
+**Inside the loop — the isolated source audit.** Between the entrance and the exit, [`agent_audit.py`](skills/global-geochemical-atlas/scripts/agent_audit.py) applies the same discipline to every pending repair action group ([contract](skills/global-geochemical-atlas/references/adversarial-agent-audit.md)): the controller writes a scout packet and a challenger packet under `agent_audits/round-…/`, the host starts each role in a fresh session that reads only its own `packet.json`, and neither role may score or admit anything. The third layer, `agent_audit.py judge`, scores deterministically from frozen facts; its result still has to pass the D1 gate and a named human approval. A reused `invocation_id`, a swapped role or packet, an unknown input, or any hash change fails closed.
+
 ### The evidence chain: every number carries a fingerprint
 
 Trust is anchored in SHA-256 at four links, so each result maps one-to-one to its evidence:
 
 1. **Request freeze** — the task itself is hashed before execution; mid-run goal drift is detectable.
 2. **Source files** — every downloaded file is verified against its recorded hash before ingestion.
-3. **Artifacts** — `run_summary.json` records the hash of each of the 16 outputs; the reviewer contract refuses review when a hash fails to verify.
+3. **Artifacts** — `run_summary.json` records the hash of each of the 18 outputs; the reviewer contract refuses review when a hash fails to verify.
 4. **Claims** — [`claim_ledger.py`](skills/global-geochemical-atlas/scripts/claim_ledger.py) derives every reportable claim from the artifacts and binds each one to a `file + JSON pointer + SHA-256` evidence pointer, recomputed from evidence on every invocation — the executor can build the ledger but can never overwrite its verdicts. A draft answer is then cross-checked with `--check-answer`: any load-bearing number that cannot be traced to the ledger is ruled a *phantom*, and citing a scope-narrowed claim without its scope keyword is ruled out of bounds.
+5. **Delivery receipts** — a formal research delivery additionally carries the typed claim ledger built by `report_claim_ledger.py`; `validate_research_delivery.py` recomputes every claim from its content-addressed artifact, so a formal delivery cannot quote a number its own files do not support.
 
 ### After the atlas: continue into research mode
 
@@ -314,30 +356,61 @@ python skills/global-geochemical-atlas/scripts/build_research_products.py \
 
 It acquires no new data and modifies no core artifact; it deterministically reorganizes the existing evidence into three researcher-facing products — **analysis cohorts** (`analysis_cohorts.csv`: which records may be compared, which may not, and why), **environmental context** (`research_context.csv`: lithology, geological unit, depositional environment, depth, grain fraction, sampling time per sample), and **sampling priorities** (`sampling_priority.geojson`: data gaps ranked into the next acquisition queue) — plus a model-card-style receipt (`research_products_receipt.json`) with input hashes, parameters, and non-claims. The same continuation, taken further on a frozen snapshot, is what produced the [five paper drafts](#-from-atlas-to-papers-the-discovery-layer) below.
 
-## 📦 The 16 Output Files
+### Continue into Auto-Research from the atlas
 
-Every complete run produces the same 16 files; per-file schemas and status semantics are defined in the [request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md):
+The Auto-Research option in `interactive_map.html` freezes the current 18 files into a content-addressed snapshot and then generates a comparable research queue, deterministic topic selection, row-level pilot contracts, a primary-literature verification queue, a scientific-opportunity gate, a contribution-first paper skeleton, data-figure contracts, and five candidate research plans. Writing and figure tasks are created only when an executed effect/null pilot and a verified frontier increment both hold; missing data, acquisition-only needs, invalid analyses, or a weak frontier stop at `needs_research_redirection` instead of polishing a revision into a paper. The static page only exports the request; to create real resumable tasks, run:
+
+```bash
+python skills/global-geochemical-atlas/scripts/serve_atlas_research.py \
+  --atlas-dir /tmp/geochemical-output \
+  --research-root /tmp/geochemical-research
+```
+
+The local service binds `127.0.0.1` only and uses a URL-fragment token, single-use nonces, Host/Origin checks, and a fixed JSON API. The external agent host starts a fresh session per role listed in `state.json.required_roles` — pilot, literature, writer, figure, and reviewer — and advances the state machine through hash-bound payloads. Writers must submit 2–5 claim-bound contributions; figure makers must submit primary / spatial / robustness data figures, each bound to real SVG/PDF/PNG files plus an inspect-and-revise record. Reviewers apply the controller's fixed seven-gate 0–4 rubric (scientific validity, novelty, frontier fit, argumentation, visual evidence, and more); a failure opens a new `revision-NN` that hands only structured feedback to the revising role, and the next reviewer never sees old comments or the executor's summary. Choosing the research direction is the only human input: when all seven gates pass, the controller verifies every artifact hash and packages `publication/` (grade `camera_ready`, terminal state `completed_published`); when three revisions or the citation-repair budget run out, it packages a `draft_with_disclosed_findings` with every unresolved finding listed in `publication_manifest.json` (`completed_with_findings`); when the opportunity gate fails, the attempt is archived under `attempts/` and the run reroutes to the next empirical candidate; and when candidates are exhausted it still never returns empty-handed — the best executed pilot becomes a draft with disclosed frontier weakness, or, with no executable pilot at all, a reviewed data-sufficiency and research-direction report (grade `evidence_report`, `completed_evidence_report`). Full contract: [Auto-Research operating contract](skills/global-geochemical-atlas/references/auto-research.md).
+
+## ⏳ The temporal dimension: evolution maps and enrichment attribution
+
+The most contested question in environmental monitoring is "exceedance or high background?" — a soil whose arsenic baseline is naturally high looks anomalous under any generic threshold. The skill answers on three levels:
+
+<img src="skills/global-geochemical-atlas/assets/readme-temporal-map.jpg" alt="Temporal-evolution interactive map, region-comparison mode: early vs. late median concentration per 5° cell, red = rising, blue = falling, draggable split year; cells observed in only one epoch are drawn as dashed dark cells" width="100%">
+
+<sub>Default temporal mode, region comparison: the measured median of the same 5° cell in the early and late epochs is compared directly (red rising / blue falling / grey flat) and recomputed live as the split year is dragged; clicking a cell opens its concentration–time scatter. Cells observed in only one epoch are honestly drawn as dashed dark cells.</sub>
+
+<br><br>
+
+<img src="skills/global-geochemical-atlas/assets/readme-anomaly-provenance.jpg" alt="Enrichment-attribution popup: four evidence lines (lithology / spatial / co-element / temporal) each with a plain-language explanation; two concordant lines are required before a geogenic or anthropogenic verdict, otherwise the evidence is labelled insufficient" width="88%">
+
+<sub>Enrichment-attribution mode: every enrichment candidate is attributed along lithology / spatial / co-element / temporal evidence lines, each with a one-sentence plain explanation; at least two concordant lines are required before a "geogenic background" or "suspected anthropogenic input" verdict, and thin evidence is stated as such — a high natural background is never forced into a pollution label.</sub>
+
+- **Sampling-time contract** (`atlas-sampling-time-v1`): `sampling_time` records the moment the sample was collected; the publication year never counts. Each source declares its value field and format, and a publisher that reported nothing is labelled `publisher_not_reported`.
+- **Temporal-evolution option** (`interactive_map.html#temporalView`): region comparison / enrichment attribution / concentration-coloured sampling replay / station evolution — four modes embedded in the main map; `temporal_map.html` is kept only as a byte-identical compatibility mirror.
+- **Enrichment attribution** (`anomaly_provenance.json`): the temporal evidence line is plain — a clear rise at the same site over time supports "anthropogenic input", long-term stability supports "geogenic background" — and it deliberates together with the lithology, spatial, and co-element lines.
+
+## 📦 The 18 Output Files
+
+Every complete run produces the same 18 files; per-file schemas and status semantics are defined in the [request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md):
 
 | Deliverable | Artifacts | Core guarantee |
 |---|---|---|
-| **Interactive element atlas** | `interactive_map.html` · `samples.geojson` | Self-contained, zero CDN; filter by element, medium, region, geological unit, sample type, method, and confidence; sample, heatmap, element-comparison, and anomaly-candidate views |
-| **Standardized geochemical database** | `geochemistry.csv` · `batch_acceptance.csv` | Original values and conversion trails preserved; unified units, basis, coordinates, methods, batches, and QC fields |
+| **Interactive element atlas** | `interactive_map.html` · `samples.geojson` | The single primary product, self-contained, zero CDN; filter by element, medium, region, geological unit, sample type, method, and confidence; sample, heatmap, element-comparison, and anomaly-candidate views, with temporal evolution and Auto-Research as first-class options of the same navigation |
+| **Temporal compatibility mirror** | `temporal_map.html` | The four temporal modes are embedded byte-for-byte in the main map; this file exists only for old links and single-page downloads — the main navigation never jumps to it, and records without a sampling time never pretend to have one |
+| **Standardized geochemical database** | `geochemistry.csv` · `batch_acceptance.csv` | Original values and conversion trails preserved; unified units, basis, coordinates, methods, batches, and QC fields; three `atlas-sampling-time-v1` columns record when the sample was collected (publication year never counts) so the database supports temporal queries |
 | **Source & confidence documentation** | `source_manifest.json` · `record_evidence.jsonl` · `confidence_report.json` · `sources_and_confidence.json` | URL/DOI, license, version, hash, source-record locator, and five-component confidence — all traceable, plus a merged reader-facing summary |
-| **Anomaly identification results** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` | Record-level robust-MAD candidates + exact hypergeometric / BH-FDR spatial screening for both enrichment and depletion; failure boundaries reported in full |
+| **Anomaly identification results** | `anomalies.geojson` · `anomaly_report.json` · `anomaly_regions.geojson` · `spatial_anomaly_report.json` · `anomaly_provenance.json` | Record-level robust-MAD candidates + exact hypergeometric / BH-FDR spatial screening for both enrichment and depletion; every enrichment candidate is attributed along lithology / spatial / co-element / temporal evidence lines as geogenic background / suspected anthropogenic input / mixed / insufficient evidence, each line with a plain-language explanation |
 | **Quality & run evidence** | `qc_report.json` · `batch_qc_report.json` · `iteration_backlog.csv` · `run_summary.json` | Per-item QC evidence, failed batches never silently deleted, iteration backlog, and a full run summary with per-artifact hashes |
 
 The fifth deliverable — the reusable skill documentation — is [`SKILL.md`](skills/global-geochemical-atlas/SKILL.md) itself, together with its schemas, scripts, and fixtures. Opting into [research mode](#after-the-atlas-continue-into-research-mode) adds `analysis_cohorts.csv`, `research_context.csv`, `sampling_priority.geojson`, and a receipt in a separate `research/` directory without touching the core contract.
 
-## 🧭 Data Sources (22 frozen sources)
+## 🧭 Data Sources (37 frozen executable sources · 69 audited catalog records)
 
-| Medium | Frozen sources |
+| Medium | Frozen executable sources |
 |---|---|
-| 🪨 Rock | GEOROC (Archean craton compilation · Antarctic intraplate volcanics) |
-| 🌱 Soil | USGS DS801 (conterminous US) · GEMAS (Europe) · FOREGS topsoil/subsoil/humus · AfSIS Phase I (sub-Saharan Africa) · PANGAEA North Africa · TPDC Chinese mountains |
-| 🏞️ Sediment | FOREGS stream/floodplain sediment · GSJ geochemical map of Japan · GSJ Japanese marine sediment · Australian NGSA (Hg) · Norwegian MarChem · PANGAEA Arabian Sea · Zenodo Yangtze/Yellow River sediment (China regional fixture) |
-| 💧 Water | FOREGS stream water · GEMStat global inland water · GEOTRACES IDP2025 seawater · US WQP Sacramento River (As) |
+| 🪨 Rock | GEOROC (Archean cratons · convergent margins · Antarctic intraplate volcanics) · EarthChem Library 3338 (East Kunlun Dehailonggang rocks, China) · Gard 2019 global whole-rock compilation |
+| 🌱 Soil | USGS DS801 (conterminous US) · GEMAS (Europe) · FOREGS topsoil/subsoil/humus · AfSIS Phase I (sub-Saharan Africa) · PANGAEA North Africa / Barents Sea coast / Amazonas / Batagay / BraSol · TPDC Chinese mountains · EIDC Ningbo · Figshare Yangtze River basin |
+| 🏞️ Sediment | FOREGS stream/floodplain sediment · GSJ geochemical map of Japan / Japanese marine sediment · Australian NGSA (multi-element and Hg products) · Norwegian MarChem · PANGAEA Arabian Sea / East China Sea / South China Sea · Zenodo Yangtze/Yellow River sediment · 4TU northern and north-western China sediment (Junggar, Tarim, Qaidam, Hetao, Alxa, and the eastern Tibetan Plateau) |
+| 💧 Water | FOREGS stream water · GEMStat global inland water · GEOTRACES IDP2025 seawater · US WQP Sacramento River (As) · Pearl River 81-station wet/dry-season dissolved metals · 124 coastal Fujian–Guangdong groundwater wells |
 
-Each source's DOI, version, license, research-use terms, field boundaries, and eight-dimension evidence score are recorded in the [source catalog](skills/global-geochemical-atlas/references/data-sources.md), the [source admission standard](skills/global-geochemical-atlas/references/source-acceptance-standard.md), and the [license & citation notes](skills/global-geochemical-atlas/references/licenses-and-citations.md); the dual-source China fixture (full TPDC + Zenodo 7098563) is documented in the [China fixture notes](skills/global-geochemical-atlas/references/china-fixture.md). Federated search portals such as EarthChem serve as a **discovery layer** only: nothing counts as measurement evidence until traced back to original records.
+37 executable sources have completed version freezing, download/parse contracts, and evidence scoring; the 69 catalog records are the master directory, of which the remaining 32 are still discovery-only and must never be added to the formally ingested count. Each source's DOI, version, license, research-use terms, field boundaries, and eight-dimension evidence score are recorded in the [source catalog](skills/global-geochemical-atlas/references/data-sources.md), the [source admission standard](skills/global-geochemical-atlas/references/source-acceptance-standard.md), and the [license & citation notes](skills/global-geochemical-atlas/references/licenses-and-citations.md); the dual-source China fixture (full TPDC + Zenodo 7098563) is documented in the [China fixture notes](skills/global-geochemical-atlas/references/china-fixture.md). Federated search portals such as EarthChem serve as a **discovery layer** only: nothing counts as measurement evidence until traced back to original records.
 
 ## 🛡️ Scientific Guardrails
 
@@ -403,7 +476,9 @@ An honest premise: this project does not compete with institutional archives on 
 | Explore the full interactive atlas in a browser | [Project site](https://asimfish.github.io/global-geochemical-atlas-demo/en.html) |
 | Have an agent execute the full task | [Skill entry point](skills/global-geochemical-atlas/SKILL.md) |
 | Generate a minimal command plan for one stage or the whole task | [Task contract schema](skills/global-geochemical-atlas/references/task-contract.schema.json) |
-| Integrate inputs or consume the 16 outputs | [Request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md) |
+| Integrate inputs or consume the 18 outputs | [Request/output contract](skills/global-geochemical-atlas/references/request-output-contract.md) |
+| Start a resumable research run from a finished atlas | [Auto-Research operating contract](skills/global-geochemical-atlas/references/auto-research.md) |
+| Audit three-layer agent independence and admission boundaries | [Adversarial agent audit contract](skills/global-geochemical-atlas/references/adversarial-agent-audit.md) |
 | Understand database fields and platform crosswalks | [Data model](skills/global-geochemical-atlas/references/data-model.md) |
 | Review unit, censoring, confidence, and anomaly rules | [Scientific rules](skills/global-geochemical-atlas/references/scientific-rules.md) |
 | Reproduce the production-threshold loop on real data | [Production demo](skills/global-geochemical-atlas/references/production-demo.md) |
@@ -416,9 +491,10 @@ An honest premise: this project does not compete with institutional archives on 
 
 | Entry point | What it verifies |
 |---|---|
-| `component_test.py --component all` | D1/D2/D3 public interfaces and contract boundaries (394 checks) |
+| `component_test.py --component all` | D1/D2/D3 public interfaces and contract boundaries (677 checks: D1 447 · D2 63 · D3 167) |
 | `component_test_more.py` | Autopilot, adversarial audit, claim ledger, cross-run memory, discovery duel, and declarative adapters (60 checks) |
-| `self_test.py` | Scientific boundaries, adversarial inputs, and byte-level determinism across two runs (75 checks) |
+| `self_test.py` | Scientific boundaries, adversarial inputs, and byte-level determinism across two runs (76 checks) |
+| `run_self_correction_loop.py --self-test` | Online expansion, distinct-sample accounting, scale adaptation, and per-view spatial-sufficiency decisions (117 checks) |
 | `benchmark_workflow.py` | A repeatable offline workflow performance baseline |
 
 ```bash
@@ -430,8 +506,14 @@ mypy --config-file mypy-critical.ini
 # D1/D2/D3 public interfaces and contracts
 python skills/global-geochemical-atlas/scripts/component_test.py --component all
 
+# Autopilot, adversarial audit, claim ledger, memory, duel, and declarative adapters
+python skills/global-geochemical-atlas/scripts/component_test_more.py
+
 # End-to-end offline regression
 python skills/global-geochemical-atlas/scripts/self_test.py
+
+# Online research-loop policy
+python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py --self-test
 
 # Repeat and validate the full offline workflow
 python skills/global-geochemical-atlas/scripts/benchmark_workflow.py \
@@ -477,7 +559,7 @@ python skills/global-geochemical-atlas/scripts/run_self_correction_loop.py \
   --output-dir /tmp/atlas-loop
 ```
 
-The controller runs early gates first (routing feasibility, minimum input columns), produces and validates the 16-file contract independently every round, retries transient acquisition failures automatically, and groups evidence-requiring problems (schema/license/coordinates) into the repair plan in `loop_report.json`; it stops honestly on convergence, no-progress, or budget exhaustion. After manual fixes, re-invoke on the same directory to resume. Canonical data is immutable and each round creates a new version; `scientific_limit` items such as censored values are excluded from the repair rate — scientific limits cannot be "looped away". Full protocol: [iteration loop](skills/global-geochemical-atlas/references/iteration-loop.md).
+The controller runs early gates first (routing feasibility, minimum input columns), produces and validates the 18-file contract independently every round, retries transient acquisition failures automatically, and groups evidence-requiring problems (schema/license/coordinates) into the repair plan in `loop_report.json`; it stops honestly on convergence, no-progress, or budget exhaustion. After manual fixes, re-invoke on the same directory to resume. Canonical data is immutable and each round creates a new version; `scientific_limit` items such as censored values are excluded from the repair rate — scientific limits cannot be "looped away". Full protocol: [iteration loop](skills/global-geochemical-atlas/references/iteration-loop.md).
 
 </details>
 
@@ -517,7 +599,7 @@ Team homepage: [chembot.zgca.com](https://chembot.zgca.com/)
 
 ## 🤝 Contributing
 
-Issues and PRs are welcome. Before modifying D1/D2/D3, adding a data source, or changing a contract, please read the [contributing guide](CONTRIBUTING.md) (path ownership, interface-change rules, definition of done) and the [architecture notes](ARCHITECTURE.md); every PR must pass the CI lint, type, and 469-check test gates.
+Issues and PRs are welcome. Before modifying D1/D2/D3, adding a data source, or changing a contract, please read the [contributing guide](CONTRIBUTING.md) (path ownership, interface-change rules, definition of done) and the [architecture notes](ARCHITECTURE.md); every PR must pass the CI lint, type, and 930-check test gates.
 
 ## 📄 License & Citation
 

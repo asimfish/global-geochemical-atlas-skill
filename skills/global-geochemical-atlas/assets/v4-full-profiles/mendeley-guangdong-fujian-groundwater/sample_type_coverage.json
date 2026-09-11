@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-08-23T00:00:00Z",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "mendeley-84gkydb5y9-v2",
+  "media": {
+    "water": 702
+  },
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "sample_types": {
+    "water_groundwater": 702
+  },
+  "sediment_environments": {
+    "not_applicable": 702
+  },
+  "source_id": "mendeley-guangdong-fujian-groundwater",
+  "water_body_types": {
+    "groundwater": 702
+  },
+  "water_fractions": {
+    "not_applicable": 702
+  }
+}

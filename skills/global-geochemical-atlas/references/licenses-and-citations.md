@@ -1,6 +1,6 @@
 # 数据许可与引用说明
 
-核对日期：2026-08-05。机器可读详情以 `../assets/source_manifest.json` 为准。
+核对日期：2026-08-23。机器可读详情以 `../assets/source_manifest.json` 为准。
 
 ## 仓库原创内容
 
@@ -48,6 +48,13 @@
 - fixture 输出必须标明仅用于流水线演示，不得用于科学解释；
 - 不兼容许可的数据不合并发布为一个统一开放数据包。
 
+## 中国内陆水补充来源
+
+- 珠江溶解金属：Zhen et al. (2019), *Geochemical characteristics of dissolved heavy metals in Zhujiang River, Southwest China*, PeerJ 7:e6578，DOI <https://doi.org/10.7717/peerj.6578>，CC BY 4.0；
+- 闽粤沿海地下水：*Recharge sources, hydrochemical evolution, and health risks of groundwater and geothermal water in the Guangdong-Fujian coastal region, southeastern China* 支撑数据，Mendeley Data V2，DOI <https://doi.org/10.17632/84gkydb5y9.2>，CC BY 4.0。
+
+使用两源的派生记录时必须保留作者/标题、DOI、版本、源行定位与获取日期。完整工作簿只进本地缓存，不随 MIT 代码仓库重新分发；下游若分发数据衍生物，应继续履行 CC BY 4.0 署名条件。
+
 ## Natural Earth 离线底图
 
 - 标题：Natural Earth 1:110m Land；
@@ -66,14 +73,23 @@
 - 冻结版本：5.1.1；
 - 官方说明页：<https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/>；
 - 固定上游提交：`ca96624a56bd078437bca8184e78163e5039ad19`；
-- 固定 GeoJSON SHA-256：`6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f`；
+- 固定 GeoJSON SHA-256（1:110m Admin-0 Countries）：`6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f`；
+- 固定 GeoJSON SHA-256（1:10m Admin-0 Disputed Areas，同一提交）：`9cafef8b7dfb6b164dc58f218f981f4ace9f716f6c03795d4c62d1ac9f3d50f5`；
+- 固定 GeoJSON SHA-256（1:50m Admin-0 Countries，同一提交）：`3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb`；
 - 使用条款：Natural Earth 数据为 public domain；
-- 仓库资产：`../assets/natural-earth-110m-admin0.json`，177 个国家 feature、10,654 个坐标点；
+- 仓库资产：`../assets/natural-earth-110m-admin0.json`（asset_version `ai4s-natural-earth-admin0-v2`），177 个国家 feature、11,523 个坐标点；
 - 生成工具：`../scripts/prepare_country_boundaries.py` 只接受上述固定 hash，并将坐标四舍五入到 4 位小数。
 
+v2 资产在 Natural Earth 底图上应用了三处固定的中国分析单元修正（记录在资产的
+`analysis_modifications` 字段）：CHN 并入取自 1:10m Disputed Areas「Arunachal Pradesh」要素的
+藏南多边形；IND 以内部排除环剔除同一多边形，避免争议区双重归属；TWN 以 1:50m 几何替换 9 点
+1:110m 轮廓（粗轮廓曾把高雄等陆上点误判在界外）。上述修正与自然资源部标准地图
+GS(2023)2767 号口径对齐，仅用于科学点位准入与参考线绘制，不构成独立的法定边界主张。
+
 该资产用于绘制 Admin‑0 国家线，并让 `china`、`usa`、`usa48`、`australia` 预设执行国家多边形与
-bbox 联合点内判定。Natural Earth 默认表达 de facto 制图边界；它只用于定位和数据范围裁剪，不构成
-法定边界、外交立场、地质单元或异常范围声明。`shanghai`、`europe` 与自定义范围仍是显式 bbox。
+bbox 联合点内判定；`china` 预设按 CHN+TWN 科学分析单元联合判定。Natural Earth 默认表达 de facto
+制图边界；它只用于定位和数据范围裁剪，不构成法定边界、外交立场、地质单元或异常范围声明。
+`shanghai`、`europe` 与自定义范围仍是显式 bbox。
 
 ## Natural Earth Admin-1 搜索地名录
 

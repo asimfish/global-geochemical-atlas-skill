@@ -29,7 +29,8 @@ artifacts are never edited in place. The cumulative ``loop_report.json``
 follows ``references/loop-report.schema.json``. Re-invoking the controller
 on the same output directory appends rounds (agent-in-the-loop manual
 repairs between invocations), refuses to continue if the frozen request
-changed, and runs at most one explicit probe round when the caller resumes
+changed, preserves an unreported partial round under ``rounds/interrupted``
+before retrying that logical round, and runs at most one explicit probe round when the caller resumes
 after a manual-repair stop (``no_autonomous_repair``, ``no_progress`` or
 ``repair_queue_pending``), so an out-of-loop source repair is observed instead
 of restating the stale verdict.
@@ -59,6 +60,8 @@ from urllib.parse import urlsplit
 
 import source_adapters
 import source_router
+import agent_audit
+import report_claim_ledger
 import skill_snapshot
 import spatial_sufficiency
 import spatial_scope
@@ -82,6 +85,7 @@ D1_QUEUE_CANDIDATE_FACT_KEYS = frozenset(
 )
 SOURCE_CATALOG_PATH = SKILL_DIR / "assets" / "source_catalog.json"
 SOURCE_MANIFEST_PATH = SKILL_DIR / "assets" / "source_manifest.json"
+SOURCE_EVIDENCE_PATH = SKILL_DIR / "assets" / "source_evidence_scores.json"
 FULL_PROFILE_ROOT = SKILL_DIR / "assets" / "v4-full-profiles"
 ADMIN1_SEARCH_GAZETTEER_PATH = (
     SKILL_DIR / "assets" / "natural-earth-50m-admin1-search.json"
@@ -218,6 +222,8 @@ RETRYABLE_SOURCE_MARKERS = (
     "budget",
     "http 5",
     "http error 5",
+    "response ended before its declared content-length",
+    "response length does not match content-range",
 )
 NON_RETRYABLE_SOURCE_MARKERS = (
     "source_not_accessible",
@@ -4151,14 +4157,26 @@ def build_d1_repair_queue(
     request = request if isinstance(request, Mapping) else {}
 
     rounds = report.get("rounds") if isinstance(report.get("rounds"), list) else []
+    published_round = report.get("published_round")
     last = next(
         (
             item
-            for item in reversed(rounds)
-            if isinstance(item, Mapping) and item.get("sufficiency")
+            for item in rounds
+            if isinstance(item, Mapping)
+            and item.get("round") == published_round
+            and item.get("sufficiency")
         ),
-        {},
+        None,
     )
+    if last is None:
+        last = next(
+            (
+                item
+                for item in reversed(rounds)
+                if isinstance(item, Mapping) and item.get("sufficiency")
+            ),
+            {},
+        )
     sufficiency = last.get("sufficiency") if isinstance(last, Mapping) else {}
     sufficiency = sufficiency if isinstance(sufficiency, Mapping) else {}
     gaps = sufficiency.get("discovery_gaps")
@@ -5436,7 +5454,7 @@ def next_step_text(
         ),
         "needs_human_review": "流水线返回 needs_human_review；按 run_summary.json 与失败矩阵处理后续跑。",
         "contract_validation_failed": (
-            "产物违反十六文件契约；这是工程缺陷，勿盲目重试，检查 validate_outputs 输出并修复代码或输入。"
+            "产物违反十八文件契约；这是工程缺陷，勿盲目重试，检查 validate_outputs 输出并修复代码或输入。"
         ),
         "run_failed": "非瞬态运行失败；按 stderr 状态码与 SKILL.md 第 8 节失败矩阵处理。",
         "unsupported_scope": "路由无任何候选来源；调整请求（元素/介质/区域/许可政策）或改用 --input 提供数据。",
@@ -5587,6 +5605,40 @@ def gate_input_header(input_path: Path) -> tuple[bool, str]:
     if missing:
         return False, f"input is missing required columns: {missing}"
     return True, "minimum D2 columns present"
+
+
+def archive_interrupted_round_dir(loop_root: Path, round_index: int) -> Path | None:
+    """Preserve an orphaned partial round before retrying its logical index.
+
+    A controller can be terminated after ``run_atlas_request.py`` has created
+    its output directory but before the cumulative report is checkpointed.
+    On resumption, ``len(rounds) + 1`` then names that same non-empty directory
+    and the child correctly refuses to overwrite it.  Move the orphan aside
+    within the same ``rounds`` filesystem so the retry is atomic and the
+    interrupted evidence remains available for diagnosis.
+    """
+
+    round_dir = loop_root / "rounds" / f"round-{round_index:02d}"
+    if not round_dir.is_symlink():
+        if not round_dir.exists():
+            return None
+        if round_dir.is_dir() and not any(round_dir.iterdir()):
+            return None
+
+    archive_root = loop_root / "rounds" / "interrupted"
+    archive_root.mkdir(parents=True, exist_ok=True)
+    for attempt in range(1, 10_000):
+        destination = archive_root / (f"round-{round_index:02d}-attempt-{attempt:04d}")
+        if destination.exists() or destination.is_symlink():
+            continue
+        try:
+            round_dir.rename(destination)
+        except FileExistsError:
+            continue
+        return destination
+    raise LoopUsageError(
+        f"cannot preserve interrupted round {round_index}: archive namespace exhausted"
+    )
 
 
 def execute_round(
@@ -5978,12 +6030,90 @@ def compute_delta(rounds: list[dict[str, Any]]) -> None:
     }
 
 
+def round_record_ids(round_record: Mapping[str, Any]) -> frozenset[str] | None:
+    """Read the validated database identity set used for monotonic publication."""
+
+    output_dir = str(round_record.get("output_dir") or "").strip()
+    if not output_dir:
+        return None
+    database = Path(output_dir) / output_validator.REQUIRED_FILES["database"]
+    try:
+        with database.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.DictReader(handle)
+            if reader.fieldnames is None or "record_id" not in reader.fieldnames:
+                return None
+            record_ids = frozenset(
+                str(row.get("record_id") or "").strip() for row in reader
+            )
+    except (OSError, UnicodeError, csv.Error):
+        return None
+    if not record_ids or "" in record_ids:
+        return None
+    return record_ids
+
+
+def select_published_round(
+    rounds: Sequence[Mapping[str, Any]],
+) -> Mapping[str, Any] | None:
+    """Select the latest valid round that never drops published record evidence.
+
+    Adaptive source rebalancing may produce a scientifically useful probe whose
+    record set is smaller than, or incomparable with, the current checkpoint.
+    Such immutable rounds remain in the audit history and may drive the next
+    repair decision, but they must not replace a validated root publication and
+    silently remove evidence.  Legacy/test records without readable databases
+    retain the former latest-valid behavior.
+    """
+
+    selected: Mapping[str, Any] | None = None
+    selected_ids: frozenset[str] | None = None
+    selected_count: int | None = None
+    for item in rounds:
+        if not (
+            item.get("exit_code") == 0
+            and item.get("validation_status") == "valid"
+            and item.get("output_dir")
+        ):
+            continue
+        raw_count = (item.get("counts") or {}).get("records")
+        current_count = int(raw_count) if isinstance(raw_count, (int, float)) else None
+        current_ids = round_record_ids(item)
+        if selected is None:
+            selected = item
+            selected_ids = current_ids
+            selected_count = current_count
+            continue
+        if (
+            selected_count is not None
+            and current_count is not None
+            and current_count < selected_count
+        ):
+            continue
+        if selected_ids is not None and current_ids is not None:
+            if not selected_ids.issubset(current_ids):
+                continue
+        elif selected_ids is not None:
+            # A validated checkpoint with readable evidence must not be replaced
+            # by a round whose identity set cannot be independently compared.
+            continue
+        selected = item
+        selected_ids = current_ids
+        selected_count = current_count
+    return selected
+
+
 def assemble_report(
     args: argparse.Namespace, rounds: list[dict[str, Any]], stop_reason: str
 ) -> dict[str, Any]:
     executed = [item for item in rounds if not is_gate_round(item)]
     last = executed[-1] if executed else None
-    plan = build_repair_plan(last) if last else {"autonomous": [], "manual": []}
+    published = select_published_round(rounds)
+    plan_source = published or last
+    plan = (
+        build_repair_plan(plan_source)
+        if plan_source
+        else {"autonomous": [], "manual": []}
+    )
     return {
         "schema_version": REPORT_VERSION,
         "request_path": str(args.request),
@@ -5993,15 +6123,7 @@ def assemble_report(
         "checkpoint_only": bool(args.checkpoint_only),
         "max_rounds": args.max_rounds,
         "time_budget_seconds": args.time_budget_seconds,
-        "published_round": next(
-            (
-                int(item["round"])
-                for item in reversed(rounds)
-                if item.get("exit_code") == 0
-                and item.get("validation_status") == "valid"
-            ),
-            None,
-        ),
+        "published_round": int(published["round"]) if published else None,
         "published_output_dir": str(args.output_dir),
         "rounds": [public_round(item) for item in rounds],
         "repair_plan": plan,
@@ -6064,23 +6186,14 @@ def needs_current_sufficiency_probe(rounds: Sequence[Mapping[str, Any]]) -> bool
 def publish_latest_valid_round(
     loop_root: Path, rounds: Sequence[dict[str, Any]]
 ) -> int | None:
-    """Expose the latest valid sixteen-file bundle at the requested output root.
+    """Expose the latest evidence-monotonic valid bundle at the output root.
 
     Immutable round directories remain the audit history.  The root-level
     files are a convenience publication view required by prompts that expect
     ``./output/interactive_map.html`` and sibling deliverables.
     """
 
-    selected = next(
-        (
-            item
-            for item in reversed(rounds)
-            if item.get("exit_code") == 0
-            and item.get("validation_status") == "valid"
-            and item.get("output_dir")
-        ),
-        None,
-    )
+    selected = select_published_round(rounds)
     if selected is None:
         return None
     source = Path(str(selected["output_dir"]))
@@ -6093,6 +6206,200 @@ def publish_latest_valid_round(
         else:
             shutil.copy2(child, destination)
     return int(selected["round"])
+
+
+def _audit_source_facts(
+    source_ids: Sequence[str], required_media: Sequence[str]
+) -> list[dict[str, Any]]:
+    """Project governed D1 catalog facts into the adversarial audit contract."""
+
+    catalog = read_json(SOURCE_CATALOG_PATH)
+    evidence = read_json(SOURCE_EVIDENCE_PATH)
+    catalog_sources = catalog.get("sources") or {}
+    scored_sources = evidence.get("sources") or {}
+    required_media_set = {str(item) for item in required_media}
+    facts: list[dict[str, Any]] = []
+    for source_id in sorted(set(source_ids)):
+        entry = catalog_sources.get(source_id)
+        score = scored_sources.get(source_id)
+        if not isinstance(entry, Mapping) or not isinstance(score, Mapping):
+            continue
+        dimensions = score.get("source_evidence_dimensions") or {}
+
+        def verified(name: str) -> bool | None:
+            item = dimensions.get(name)
+            if not isinstance(item, Mapping):
+                return None
+            status = str(item.get("status") or "")
+            if status == "verified":
+                return True
+            if status in {"conflict", "missing"}:
+                return False
+            return None
+
+        access_status = str(score.get("access_status") or "unknown")
+        research_use = str(score.get("research_use_status") or "unknown")
+        media = {str(item) for item in entry.get("media") or []}
+        official_url = str(entry.get("landing_page") or "")
+        if not official_url:
+            official_url = next(
+                (str(item) for item in entry.get("evidence_urls") or [] if str(item)),
+                "https://invalid.example/not-a-source-claim",
+            )
+        version_ok = verified("version_snapshot")
+        integrity_ok = verified("file_record_integrity")
+        version_and_integrity = (
+            True
+            if version_ok is True and integrity_ok is True
+            else False
+            if version_ok is False or integrity_ok is False
+            else None
+        )
+        locators = {
+            name: str(item)
+            for name, item in {
+                "official_identity": official_url,
+                "machine_access": official_url,
+                "research_use_license": entry.get("license"),
+                "version_and_integrity": entry.get("version"),
+                "medium_relevance": ",".join(sorted(media)),
+                "record_locator": official_url,
+            }.items()
+            if item
+        }
+        facts.append(
+            {
+                "source_id": source_id,
+                "title": str(entry.get("title") or source_id),
+                "official_url": official_url,
+                "dimensions": {
+                    "official_identity": verified("identity_publisher"),
+                    "machine_access": access_status == "open",
+                    "research_use_license": research_use
+                    not in {"unknown", "permission_required", "restricted"},
+                    "version_and_integrity": version_and_integrity,
+                    "region_relevance": None,
+                    "medium_relevance": bool(media & required_media_set)
+                    if required_media_set
+                    else None,
+                    "record_locator": verified("provenance"),
+                },
+                "evidence_locators": locators,
+            }
+        )
+    return facts
+
+
+def prepare_pending_agent_audits(
+    loop_root: Path,
+    report: Mapping[str, Any],
+    queue: Mapping[str, Any],
+) -> dict[str, Any] | None:
+    """Attach isolated source-review packets to pending D1 action groups."""
+
+    groups = queue.get("action_groups")
+    if not isinstance(groups, list) or not groups:
+        return None
+    published_round = int(report.get("published_round") or 0)
+    queue_hash = sha256_file(loop_root / D1_REPAIR_QUEUE_FILENAME)
+    root = loop_root / "agent_audits" / f"round-{published_round:02d}-{queue_hash[:12]}"
+    manifest_path = root / "manifest.json"
+    if manifest_path.is_file():
+        return read_json(manifest_path)
+    root.mkdir(parents=True, exist_ok=False)
+    audits: list[dict[str, Any]] = []
+    prior_memory = {
+        "loop_report_sha256": sha256_file(loop_root / REPORT_FILENAME),
+        "round_count": len(report.get("rounds") or []),
+    }
+    for group in groups[:50]:
+        if not isinstance(group, Mapping):
+            continue
+        group_id = str(group.get("action_group_id") or "")
+        source_ids = list(
+            dict.fromkeys(
+                str(item)
+                for field in (
+                    "selected_source_candidates",
+                    "registered_source_candidates",
+                    "catalog_candidate_source_ids",
+                )
+                for item in group.get(field) or []
+                if str(item)
+            )
+        )
+        facts = _audit_source_facts(source_ids, group.get("required_media") or [])
+        if not facts:
+            audits.append(
+                {
+                    "action_group_id": group_id,
+                    "status": "awaiting_candidate_discovery",
+                    "reason": (
+                        "No governed candidate facts exist yet. Complete targeted discovery "
+                        "and D1 catalog registration before adversarial evaluation."
+                    ),
+                }
+            )
+            continue
+        audit_dir = root / f"audit-{group_id}"
+        selection = agent_audit.prepare_audit_round(
+            audit_dir,
+            round_id=f"round-{published_round:02d}-{group_id}",
+            gap={
+                key: group.get(key)
+                for key in (
+                    "action_group_id",
+                    "target_label",
+                    "scope_key",
+                    "country_iso_a3",
+                    "bbox",
+                    "required_elements",
+                    "required_media",
+                    "required_spatial_domains",
+                    "reason_codes",
+                    "completion_evidence_required",
+                )
+            },
+            source_facts=facts,
+            prior_memory=prior_memory,
+        )
+        audits.append(
+            {
+                "action_group_id": group_id,
+                "status": "awaiting_fresh_agents",
+                "audit_dir": audit_dir.relative_to(loop_root).as_posix(),
+                "selection_receipt_sha256": sha256_file(
+                    audit_dir / "selection_receipt.json"
+                ),
+                "role_packet_sha256": selection["role_packet_sha256"],
+            }
+        )
+    body = {
+        "schema_version": "gga-loop-adversarial-audit-manifest-v1",
+        "published_round": published_round,
+        "d1_repair_queue_sha256": queue_hash,
+        "action_group_count": len(groups),
+        "prepared_audit_count": sum(
+            item["status"] == "awaiting_fresh_agents" for item in audits
+        ),
+        "awaiting_candidate_discovery_count": sum(
+            item["status"] == "awaiting_candidate_discovery" for item in audits
+        ),
+        "audits": audits,
+        "claim_boundary": (
+            "Packets prepare independent source review but do not admit sources. "
+            "Missing candidates stay discovery work; completed judge receipts still "
+            "require deterministic D1 gates and human approval."
+        ),
+    }
+    manifest = {
+        **body,
+        "manifest_sha256": hashlib.sha256(
+            json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest(),
+    }
+    write_json(manifest_path, manifest)
+    return manifest
 
 
 def write_research_delivery_receipt(
@@ -6165,10 +6472,19 @@ def write_research_delivery_receipt(
             sha256_file(execution_path) if execution_path.is_file() else None
         ),
     }
+    current_queue_hash = control_files["d1_repair_queue_sha256"]
+    audit_manifests = sorted(
+        (loop_root / "agent_audits").glob(
+            f"round-*-{current_queue_hash[:12]}/manifest.json"
+        )
+        if (loop_root / "agent_audits").is_dir()
+        else []
+    )
+    latest_audit_manifest = audit_manifests[-1] if audit_manifests else None
     write_json(
         loop_root / RESEARCH_RECEIPT_FILENAME,
         {
-            "schema_version": "atlas-research-delivery-receipt-v3",
+            "schema_version": "atlas-research-delivery-receipt-v4",
             "request_sha256": report.get("request_sha256"),
             "published_round": published_round,
             "published_round_dir": f"rounds/round-{int(published_round):02d}",
@@ -6189,10 +6505,30 @@ def write_research_delivery_receipt(
             },
             "delivery_ready": delivery_ready,
             "artifacts": artifacts,
+            "claim_ledger": report_claim_ledger.build_claim_ledger(loop_root),
+            "adversarial_source_audit": {
+                "status": (
+                    "pending_agent_or_discovery_work"
+                    if latest_audit_manifest is not None
+                    else "not_required_no_pending_action_groups"
+                ),
+                "manifest": (
+                    latest_audit_manifest.relative_to(loop_root).as_posix()
+                    if latest_audit_manifest is not None
+                    else None
+                ),
+                "manifest_sha256": (
+                    sha256_file(latest_audit_manifest)
+                    if latest_audit_manifest is not None
+                    else None
+                ),
+            },
             "claim_boundary": (
                 "delivery_ready binds a validated online loop round, a clear D1 repair queue, "
                 "the stable executable Skill snapshot and its sufficiency gate; "
-                "it does not claim national/global statistical representativeness."
+                "each typed result claim is independently recomputed and content-addressed; "
+                "hash identity does not claim measurement correctness, causality or "
+                "national/global statistical representativeness."
             ),
         },
     )
@@ -6269,12 +6605,27 @@ def run_loop(args: argparse.Namespace) -> dict[str, Any]:
         if previous_executed is None and not priority_source_ids:
             # Round 1 starts from cross-run memory instead of starting blind.
             priority_source_ids = [str(s) for s in args.seed_priority_source_id]
+        round_index = len(rounds) + 1
+        interrupted_dir = archive_interrupted_round_dir(loop_root, round_index)
         record = execute_round(
             args,
-            len(rounds) + 1,
+            round_index,
             loop_root,
             priority_source_ids=priority_source_ids,
         )
+        if interrupted_dir is not None:
+            preserved_path = interrupted_dir.relative_to(loop_root).as_posix()
+            record["gate_events"].insert(
+                0,
+                {
+                    "gate": "interrupted_round_recovery",
+                    "status": "info",
+                    "detail": (
+                        f"preserved unreported partial output at {preserved_path} "
+                        f"before retrying logical round {round_index}"
+                    ),
+                },
+            )
         rounds.append(record)
         compute_delta(rounds)
         interim_report = assemble_report(args, rounds, "in_progress")
@@ -6285,6 +6636,7 @@ def run_loop(args: argparse.Namespace) -> dict[str, Any]:
     report = assemble_report(args, rounds, stop_reason)
     write_json(loop_root / REPORT_FILENAME, report)
     queue = write_d1_repair_queue(loop_root, report, args.normalized_request)
+    prepare_pending_agent_audits(loop_root, report, queue)
     write_research_delivery_receipt(loop_root, report, rounds, queue)
     return report
 
@@ -6469,6 +6821,10 @@ def _self_test() -> int:
     check(
         source_failure_retryable("HTTP Error 503: connection timed out"),
         "transient retryable",
+    )
+    check(
+        source_failure_retryable("response ended before its declared Content-Length"),
+        "truncated HTTP response retryable",
     )
     check(
         not source_failure_retryable("research use conditions unclear"),
@@ -6846,6 +7202,39 @@ def _self_test() -> int:
             },
         )
         check(len(load_previous_rounds(tmp_path, digest)) == 1, "resume loads rounds")
+        orphan_root = tmp_path / "orphan-loop"
+        orphan_round = orphan_root / "rounds" / "round-02"
+        orphan_round.mkdir(parents=True)
+        orphan_evidence = orphan_round / "request_evidence" / "execution_progress.json"
+        orphan_evidence.parent.mkdir()
+        orphan_evidence.write_text('{"status":"interrupted"}\n', encoding="utf-8")
+        archived = archive_interrupted_round_dir(orphan_root, 2)
+        check(
+            archived is not None
+            and archived.name == "round-02-attempt-0001"
+            and not orphan_round.exists()
+            and (archived / "request_evidence" / "execution_progress.json").read_text(
+                encoding="utf-8"
+            )
+            == '{"status":"interrupted"}\n',
+            "resume preserves an orphaned partial round before retry",
+        )
+        orphan_round.mkdir()
+        (orphan_round / "partial.txt").write_text("second\n", encoding="utf-8")
+        archived_again = archive_interrupted_round_dir(orphan_root, 2)
+        check(
+            archived_again is not None
+            and archived_again.name == "round-02-attempt-0002"
+            and (archived_again / "partial.txt").read_text(encoding="utf-8")
+            == "second\n",
+            "resume preserves repeated interrupted attempts without collision",
+        )
+        orphan_round.mkdir()
+        check(
+            archive_interrupted_round_dir(orphan_root, 2) is None
+            and orphan_round.is_dir(),
+            "resume leaves an empty child-compatible round directory in place",
+        )
         try:
             load_previous_rounds(tmp_path, "0" * 64)
             check(False, "freeze violation must raise")
@@ -6865,6 +7254,41 @@ def _self_test() -> int:
             check(False, "stale loop report must not be resumed in place")
         except LoopUsageError:
             check(True, "stale loop report fails closed before resumption")
+        publication_rounds: list[dict[str, Any]] = []
+
+        def publication_round(number: int, record_ids: Sequence[str]) -> dict[str, Any]:
+            output_dir = tmp_path / f"round-{number:02d}"
+            output_dir.mkdir()
+            with (output_dir / output_validator.REQUIRED_FILES["database"]).open(
+                "w", encoding="utf-8", newline=""
+            ) as handle:
+                writer = csv.DictWriter(handle, fieldnames=("record_id",))
+                writer.writeheader()
+                writer.writerows({"record_id": item} for item in record_ids)
+            return {
+                "round": number,
+                "exit_code": 0,
+                "validation_status": "valid",
+                "output_dir": str(output_dir),
+                "counts": {"records": len(record_ids)},
+            }
+
+        publication_rounds.append(publication_round(1, ("a", "b", "c")))
+        publication_rounds.append(publication_round(2, ("a", "b")))
+        check(
+            (select_published_round(publication_rounds) or {}).get("round") == 1,
+            "publication rejects a valid round that strictly drops record evidence",
+        )
+        publication_rounds.append(publication_round(3, ("a", "b", "d", "e")))
+        check(
+            (select_published_round(publication_rounds) or {}).get("round") == 1,
+            "publication rejects an incomparable round that removes checkpoint records",
+        )
+        publication_rounds.append(publication_round(4, ("a", "b", "c", "d")))
+        check(
+            (select_published_round(publication_rounds) or {}).get("round") == 4,
+            "publication advances when a valid round preserves every checkpoint record",
+        )
     # 13. The real sufficiency assessor expands only repairable acquisition
     # gaps and refuses to hide a provenance defect behind more records.
     with tempfile.TemporaryDirectory() as tmp:

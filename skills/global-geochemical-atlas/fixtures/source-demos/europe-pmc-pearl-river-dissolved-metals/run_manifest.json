@@ -1,0 +1,63 @@
+{
+  "data_mode": "fixture",
+  "demo_generation_version": "d1-demo-slice-v1",
+  "exchange_schema": "d1-v4-exchange-v1",
+  "failures": [],
+  "generated_at": "2026-08-23T00:00:00Z",
+  "generation_request": {
+    "analytes": [
+      "Cr",
+      "Cu",
+      "Ni",
+      "Pb"
+    ],
+    "bbox": null,
+    "filter_execution": "local deterministic filtering after verified source parsing",
+    "mode": "cached",
+    "observations": 48,
+    "purpose": "demo"
+  },
+  "not_for_scientific_interpretation": true,
+  "outputs": [
+    {
+      "bytes": 79256,
+      "path": "demo_input.csv",
+      "sha256": "b39e15f29d4bab5b366b0d56a47ae9d99f4d2df75005675c12bd3071585a0d81"
+    },
+    {
+      "bytes": 97424,
+      "path": "sources.jsonl",
+      "sha256": "305a7cc1782b2762a91e92d44d59abcff5223797c363981e123954034b952801"
+    }
+  ],
+  "record_counts": {
+    "emitted_observations": 48,
+    "raw_source_rows": 162,
+    "selected_source_rows": 12
+  },
+  "scientific_scope": "pipeline demonstration only",
+  "source": {
+    "dataset_doi": "10.7717/peerj.6578",
+    "dataset_version": "peerj-7-e6578-supplement-s004",
+    "license": "CC-BY-4.0",
+    "source_id": "europe-pmc-pearl-river-dissolved-metals",
+    "title": "Geochemical characteristics of dissolved heavy metals in Zhujiang River, Southwest China"
+  },
+  "source_files": [
+    {
+      "bytes": 46580,
+      "filename": "peerj-07-6578-s004.xlsx",
+      "retrieved_at": "2026-08-23T13:25:46Z",
+      "sha256": "dbe27bbd31c9de335dcacca5bc6ae8a3e14d117c443048efb7449ab8453d09ba",
+      "source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6420802/supplementaryFiles"
+    }
+  ],
+  "v4_semantics_version": "d1-v4-source-semantics-v1",
+  "warnings": [
+    "This is a deterministic demonstration slice, not a statistically representative sample.",
+    "Scientific normalization, QC, confidence and anomaly decisions are owned by D2.",
+    "V4 sample, method, geography, citation and use-condition fields come only from source evidence or registered constants.",
+    "The 81 Pearl River sites and two flow seasons are regional evidence, not national inland-water coverage.",
+    "The article documents dissolved 0.22 um filtered water and ICP-MS, while the coordinate datum remains unreported; map canonicalization is withheld."
+  ]
+}

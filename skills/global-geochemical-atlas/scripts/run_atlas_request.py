@@ -60,6 +60,7 @@ PARAMETERIZED_SOURCES = {
     "pangaea-brasol-ne-brazil-soil",
     "figshare-yangtze-basin-soil-heavy-metals",
     "4tu-northern-china-sediment",
+    "zenodo-gard-whole-rock",
 }
 # These sources support request-element filtering but deliberately do not
 # accept a bbox.  In particular, the GSJ marine table keeps its reported
@@ -70,6 +71,7 @@ ELEMENT_ONLY_PARAMETERIZED_SOURCES = {
     "japan-gsj-marine-sediment",
 }
 SCALABLE_BALANCED_SOURCES = {
+    "zenodo-gard-whole-rock",
     "gemstat-open-archive",
     "geotraces-idp2025",
     "afsis-phase-i-wet-chemistry",
@@ -364,6 +366,119 @@ def _inside_bbox(row: Mapping[str, str], bbox: Sequence[float]) -> bool:
     return spatial_scope.coordinate_in_bbox(longitude, latitude, bbox)
 
 
+_DECLARED_SOURCE_COUNTRIES: dict[str, tuple[str, ...]] | None = None
+
+
+def _declared_source_countries() -> dict[str, tuple[str, ...]]:
+    """Publisher-declared ISO country coverage per source (coverage.countries).
+
+    Only sources whose publisher states that every sample lies inside a known
+    country set carry this field; it is the sole evidence that lets a
+    coordinate-less record stay in a regional standardized database.
+    """
+    global _DECLARED_SOURCE_COUNTRIES
+    if _DECLARED_SOURCE_COUNTRIES is None:
+        declared: dict[str, tuple[str, ...]] = {}
+        catalog_path = SKILL_DIR / "assets" / "source_catalog.json"
+        try:
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            catalog = {}
+        raw_sources = catalog.get("sources") if isinstance(catalog, dict) else None
+        if isinstance(raw_sources, dict):
+            for source_id, entry in raw_sources.items():
+                if not isinstance(entry, dict):
+                    continue
+                countries = (entry.get("coverage") or {}).get("countries")
+                if isinstance(countries, list) and countries:
+                    declared[str(source_id)] = tuple(str(code) for code in countries)
+        _DECLARED_SOURCE_COUNTRIES = declared
+    return _DECLARED_SOURCE_COUNTRIES
+
+
+def _declared_coverage_inside_region(
+    source_id: str, resolved_region: dict[str, Any]
+) -> bool:
+    """True when the publisher-declared country coverage of a source is
+    provably inside the requested region.
+
+    Named regions compare ISO country-code sets.  Bbox regions require every
+    declared country's registry bounds to sit inside the requested bbox within
+    the boundary-registry resolution tolerance (Natural Earth 1:110m is only
+    accurate to a few tens of kilometres).  Wrapped bboxes fail closed.
+    """
+    declared = _declared_source_countries().get(source_id)
+    if not declared:
+        return False
+    region_codes = set(spatial_scope.analysis_country_codes(resolved_region))
+    if region_codes:
+        return set(declared) <= region_codes
+    request_bbox = resolved_region.get("bbox")
+    if (
+        not isinstance(request_bbox, list)
+        or len(request_bbox) != 4
+        or float(request_bbox[0]) > float(request_bbox[2])
+    ):
+        return False
+    tolerance = 0.5
+    try:
+        countries = spatial_scope.analysis_countries(
+            {"analysis_country_codes": list(declared)}
+        )
+    except spatial_scope.SpatialScopeError:
+        return False
+    for country in countries:
+        west, south, east, north = spatial_scope.country_bbox(country)
+        if west > east:
+            return False
+        if (
+            west < float(request_bbox[0]) - tolerance
+            or south < float(request_bbox[1]) - tolerance
+            or east > float(request_bbox[2]) + tolerance
+            or north > float(request_bbox[3]) + tolerance
+        ):
+            return False
+    return True
+
+
+def _capacity_truncate_balanced(
+    selected: list[dict[str, str]], cap: int
+) -> list[dict[str, str]]:
+    """Deterministic per-medium balanced truncation for the record cap.
+
+    Plain head-truncation evicts whichever media happen to be routed last
+    (observed: a full world run capped at 200k kept only 173 rock rows).
+    Instead, capacity is water-filled across media in equal shares; input
+    order is preserved inside each medium and in the final output.
+    """
+    if len(selected) <= cap:
+        return selected
+    if cap <= 0:
+        return []
+    groups: dict[str, list[int]] = {}
+    for index, row in enumerate(selected):
+        groups.setdefault(str(row.get("medium") or ""), []).append(index)
+    quota = {medium: 0 for medium in groups}
+    remaining = cap
+    active = sorted(medium for medium in groups if groups[medium])
+    while remaining > 0 and active:
+        share = max(1, remaining // len(active))
+        still_active: list[str] = []
+        for medium in active:
+            if remaining <= 0:
+                break
+            take = min(share, len(groups[medium]) - quota[medium], remaining)
+            quota[medium] += take
+            remaining -= take
+            if quota[medium] < len(groups[medium]):
+                still_active.append(medium)
+        active = still_active
+    keep: set[int] = set()
+    for medium, indices in groups.items():
+        keep.update(indices[: quota[medium]])
+    return [row for index, row in enumerate(selected) if index in keep]
+
+
 def _basis_matches(requested: Sequence[str], actual: str) -> bool:
     return any(source_router.basis_matches(item, actual) for item in requested)
 
@@ -574,6 +689,7 @@ def filter_bundle(
     selected: list[dict[str, str]] = []
     exclusion_counts: dict[str, int] = {}
     unlocated_kept = 0
+    unlocated_keep_by_source: dict[str, bool] = {}
     for row in rows:
         reason = None
         if row.get("element_or_analyte") not in request["elements"]:
@@ -600,9 +716,24 @@ def filter_bundle(
                     row.get("original_longitude_raw") or ""
                 ).strip()
                 if not reported_latitude and not reported_longitude:
-                    # No coordinates at all: keep for the standardized database;
-                    # the map and spatial screening exclude it downstream.
-                    unlocated_kept += 1
+                    # No coordinates at all.  Keep the record for the
+                    # standardized database only when the source catalog
+                    # carries a publisher coverage declaration that lies
+                    # fully inside the requested region; map layers and
+                    # spatial screening still exclude it downstream.
+                    # Anything else fails closed so foreign arc samples
+                    # cannot leak into a regional dataset.
+                    source_key = str(row.get("source_id") or "")
+                    if source_key not in unlocated_keep_by_source:
+                        unlocated_keep_by_source[source_key] = (
+                            _declared_coverage_inside_region(
+                                source_key, resolved_region
+                            )
+                        )
+                    if unlocated_keep_by_source[source_key]:
+                        unlocated_kept += 1
+                    else:
+                        reason = "region_unlocatable_no_coordinates"
                 else:
                     try:
                         latitude = float(reported_latitude)
@@ -679,7 +810,7 @@ def filter_bundle(
             f"no records remain after deterministic request filters; exclusions={exclusion_counts}",
         )
     original_selected = len(selected)
-    selected = selected[: int(request["max_records"])]
+    selected = _capacity_truncate_balanced(selected, int(request["max_records"]))
     warnings: list[str] = []
     if unlocated_kept:
         warnings.append(
@@ -689,7 +820,10 @@ def filter_bundle(
         )
     if len(selected) < original_selected:
         warnings.append(
-            f"request max_records truncated {original_selected} matching records to {len(selected)}; coverage is incomplete"
+            f"request max_records truncated {original_selected} matching records "
+            f"to {len(selected)} with per-medium balanced quotas so late-routed "
+            "media (e.g. rock) are not evicted by earlier bulk sources; "
+            "coverage is incomplete"
         )
 
     output_input.parent.mkdir(parents=True, exist_ok=True)
@@ -1064,6 +1198,17 @@ def supported_request_analytes(source_id: str, elements: Sequence[str]) -> list[
     return [str(item) for item in elements if str(item) in registered]
 
 
+def generator_bbox_argument(region_bbox: Sequence[float]) -> str:
+    """Return the generator --bbox flag as a single --bbox=value token.
+
+    A west-negative scope such as the United States (-171.79...) or the Europe
+    frame (-25.0...) starts the value with a dash. Passed as a separate argv
+    token, argparse reads it as an option name and aborts with 'expected one
+    argument', which kills every parameterized online source for that request.
+    """
+    return "--bbox=" + ",".join(str(item) for item in region_bbox)
+
+
 def acquire_online_source(
     source_id: str,
     request: Mapping[str, Any],
@@ -1113,7 +1258,7 @@ def acquire_online_source(
     if element_parameterized:
         command.extend(["--elements", ",".join(analytes)])
     if source_id in PARAMETERIZED_SOURCES and region_bbox is not None:
-        command.extend(["--bbox", ",".join(str(item) for item in region_bbox)])
+        command.append(generator_bbox_argument(region_bbox))
     try:
         result = subprocess.run(
             command,
@@ -1132,6 +1277,46 @@ def acquire_online_source(
             "incomplete_retrieval",
             f"source acquisition failed for {source_id}: {(result.stderr or result.stdout).strip()}",
         )
+
+
+def allocated_source_timeout(
+    configured_timeout: float,
+    acquisition_window: float,
+    remaining_source_count: int,
+    *,
+    priority_retry: bool,
+) -> float:
+    """Allocate one source subprocess budget inside the shared deadline.
+
+    Ordinary first-pass sources share the remaining acquisition window so a
+    long tail cannot starve every later candidate. A source explicitly moved
+    to the front by the previous round's repair queue instead receives the
+    configured cap, still bounded by the global deadline. Without that
+    exception, a 26-source route turns a 600-second configured timeout into
+    about 60 seconds on every retry, so a verified CPU-heavy source can never
+    finish and the controller falsely stops for no progress.
+    """
+
+    if remaining_source_count < 1:
+        raise RequestRunError(
+            "invalid_input", "remaining source count must be positive"
+        )
+    if priority_retry:
+        return min(configured_timeout, acquisition_window)
+    source_timeout = min(
+        configured_timeout,
+        acquisition_window / remaining_source_count,
+    )
+    if source_timeout < MIN_SOURCE_TIMEOUT_SECONDS:
+        if acquisition_window >= MIN_SOURCE_TIMEOUT_SECONDS:
+            return min(configured_timeout, MIN_SOURCE_TIMEOUT_SECONDS)
+        raise RequestRunError(
+            "incomplete_retrieval",
+            f"deferred: remaining acquisition window {acquisition_window:.1f}s "
+            f"is below the {MIN_SOURCE_TIMEOUT_SECONDS:.0f}s per-source budget "
+            "floor; retry in the next round",
+        )
+    return source_timeout
 
 
 def minimum_source_records(source_id: str, analyte_count: int) -> int:
@@ -1516,10 +1701,22 @@ def request_visualization_profile(
             spatial_domains,
             float(request.get("adjacent_marine_distance_km") or 0),
         )
-        west, south, east, north = analysis_bbox
         adjacent_marine = bool(
             resolved_region.get("country_code") and "marine" in spatial_domains
         )
+        # Retrieval may include a bounded adjacent-marine ring, but expanding
+        # the primary map frame to that rectangular envelope makes a country
+        # product look continental or global.  Keep the scientific database
+        # scope unchanged and frame named-country atlas views on the frozen
+        # country extent.  In-frame marine observations remain visible; every
+        # admitted row, including out-of-frame marine evidence, stays in the
+        # complete CSV and provenance artifacts.
+        display_bbox = (
+            list(resolved_region["bbox"])
+            if resolved_region.get("country_code")
+            else analysis_bbox
+        )
+        west, south, east, north = display_bbox
         analysis_country_codes = list(
             resolved_region.get("analysis_country_codes") or []
         )
@@ -1528,7 +1725,7 @@ def request_visualization_profile(
         profile["default_region"] = "custom"
         profile["custom_region"] = {
             "label": (
-                f"{resolved_region['label']}陆地与邻近海洋分析域"
+                f"{resolved_region['label']}（国家范围主视图）"
                 if adjacent_marine
                 else str(resolved_region["label"])
             ),
@@ -1541,12 +1738,25 @@ def request_visualization_profile(
                 else resolved_region.get("country_code")
             ),
         }
+        # Framing is separate from clipping: a named-country atlas always
+        # draws its Admin-0 outline(s) as the study frame, even when the
+        # admitted adjacent-marine rows forbid a polygon clip.
+        highlight_country_codes = analysis_country_codes or (
+            [str(resolved_region["country_code"])]
+            if resolved_region.get("country_code")
+            else []
+        )
+        if highlight_country_codes:
+            profile["custom_region"]["highlight_country_codes"] = (
+                highlight_country_codes
+            )
         profile["title"] = f"{resolved_region['label']}地球化学元素图谱"
         if adjacent_marine:
             profile["subtitle"] = (
                 f"范围 = 冻结 Admin-0 陆地边界 + 距其边界不超过 "
                 f"{request.get('adjacent_marine_distance_km')} km 的来源明确标注海洋观测；"
-                "该分析缓冲区不表示领海、EEZ 或主权边界。"
+                "该分析缓冲区不表示领海、EEZ 或主权边界。主图与时序视图按冻结国家范围取景；"
+                "范围外邻海记录仍保留在完整数据库与证据链中，可下载审计。"
             )
         if resolved_region.get("cartographic_reference"):
             reference = resolved_region["cartographic_reference"]
@@ -1936,6 +2146,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 elements=request["elements"],
             )
             successful: list[dict[str, Any]] = []
+            priority_source_ids = set(args.priority_source_id)
             for source_index, source_id in enumerate(requested_ids):
                 acquired = work / "acquired" / source_id
                 source_request = dict(request)
@@ -1947,26 +2158,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                         reserve_seconds=args.workflow_reserve_seconds,
                         minimum_seconds=1.0,
                     )
-                    source_timeout = min(
+                    source_timeout = allocated_source_timeout(
                         float(args.source_timeout_seconds),
-                        acquisition_window / remaining_source_count,
+                        acquisition_window,
+                        remaining_source_count,
+                        priority_retry=source_id in priority_source_ids,
                     )
-                    if source_timeout < MIN_SOURCE_TIMEOUT_SECONDS:
-                        if acquisition_window >= MIN_SOURCE_TIMEOUT_SECONDS:
-                            # Borrow from later sources' shares rather than
-                            # launching a doomed sub-minute attempt.
-                            source_timeout = min(
-                                float(args.source_timeout_seconds),
-                                MIN_SOURCE_TIMEOUT_SECONDS,
-                            )
-                        else:
-                            raise RequestRunError(
-                                "incomplete_retrieval",
-                                f"deferred: remaining acquisition window "
-                                f"{acquisition_window:.1f}s is below the "
-                                f"{MIN_SOURCE_TIMEOUT_SECONDS:.0f}s per-source "
-                                "budget floor; retry in the next round",
-                            )
                     if source_timeout < float(args.source_timeout_seconds):
                         acquisition_warnings.append(
                             f"global deadline capped {source_id} acquisition at {source_timeout:.3f}s"

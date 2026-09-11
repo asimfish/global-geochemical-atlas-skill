@@ -1,6 +1,6 @@
 # research_mode：可选研究后处理层契约
 
-`research_mode` 是叠加在一次**已完成并通过校验**的图谱运行之上的确定性后处理层。它不采集新数据、不修改任何核心产物、不改变十六文件契约，只把已有证据重组为三类面向气候与地球科学研究者的产品：
+`research_mode` 是叠加在一次**已完成并通过校验**的图谱运行之上的确定性后处理层。它不采集新数据、不修改任何核心产物、不改变十八文件契约，只把已有证据重组为三类面向气候与地球科学研究者的产品：
 
 1. **研究队列构建**（`analysis_cohorts.csv` + `analysis_cohort_exclusions.csv`）：哪些记录可以相互比较，哪些不能、为什么。
 2. **环境背景融合**（`research_context.csv`）：以独立样品为单位汇总本次运行内已有证据的环境背景（岩性、地质单元、沉积环境、水体类型、深度、粒级、几何纬度带）。
@@ -18,7 +18,7 @@ python scripts/build_research_products.py \
 ```
 
 - `--output-dir`：一次已完成运行的根目录，必须含 `geochemistry.csv`、`d1_repair_queue.json`、`sources_and_confidence.json`、`run_summary.json`。
-- `--research-dir`：研究产品输出目录，默认 `OUTPUT_DIR/research`；不得写回核心十五/十六文件所在的根目录文件名。
+- `--research-dir`：研究产品输出目录，默认 `OUTPUT_DIR/research`；不得写回核心十八文件所在的根目录文件名。
 - `--minimum-confidence`：记录级 `workflow_usability` band 下限（`low|medium|high`），默认 `medium`。
 
 核心运行时只用 Python 标准库、单次流式扫描数据库、输出全部按稳定键排序，满足 2 CPU / 4 GB / 无 GPU 沙箱与确定性复现要求。

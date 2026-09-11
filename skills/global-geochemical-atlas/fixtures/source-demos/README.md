@@ -179,6 +179,6 @@ python skills/global-geochemical-atlas/scripts/generate_demo_data.py \
 
 ## 四介质联合 fixture
 
-`fixtures/four-media/combined-v3/` 将二十一个可执行来源合并到同一个 `sources=auto` 请求：1,144 条观测包括 rock 96、soil 440、sediment 408、water 200。`run_manifest.json` 绑定二十一个输入 fixture 的 hash、来源证据等级、路由结果和 156 个 D2 比较分区；`expected-output/` 是可字节级重建的十六文件工作流结果。
+`fixtures/four-media/combined-v3/` 将二十一个可执行来源合并到同一个 `sources=auto` 请求：1,144 条观测包括 rock 96、soil 440、sediment 408、water 200。`run_manifest.json` 绑定二十一个输入 fixture 的 hash、来源证据等级、路由结果和 156 个 D2 比较分区；`expected-output/` 是可字节级重建的十八文件工作流结果。
 
 这只是接口联合测试。156 个背景组按元素、介质、样品类型、分相、measurement basis、地质单元、方法和消解/提取方法隔离；只有两个同属 GEOROC compilation 血缘且字段契约相同的专题数据集共享四个组，不跨越独立来源血缘。输出中的 27 个候选异常只验证筛查流程，不构成区域异常、污染或矿化结论。8 条水体中 suspended `µg/g` 记录及其他歧义比值单位明确失败关闭，不作 `µg/L` 标准化。

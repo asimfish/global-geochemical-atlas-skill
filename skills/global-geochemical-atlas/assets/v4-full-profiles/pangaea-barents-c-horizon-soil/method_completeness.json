@@ -3,7 +3,7 @@
     "Element analysis, AAS, graphite furnace, Aqua regia (Reimann et al., 1998)": 1209,
     "ICP-AES, Aqua regia (Reimann et al., 1998, NGU-GTK-CKE spec.publ. Trondheim)": 1210
   },
-  "as_of": "2026-08-15T07:00:00Z",
+  "as_of": "2026-08-23T00:00:00Z",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
   "dataset_version": "1998-01-01",
   "method_scope_counts": {

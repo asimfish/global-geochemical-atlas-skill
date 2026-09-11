@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:global-geochemical-atlas:agent-audit-packet:v1",
+  "title": "Role-isolated adversarial source-audit packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "protocol_version", "round_id", "role",
+    "fresh_session_required", "previous_memory_allowed",
+    "previous_review_allowed", "hidden_scratch_allowed", "allowed_inputs",
+    "context", "output_contract", "packet_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "gga-agent-role-packet-v1"},
+    "protocol_version": {"const": "gga-adversarial-source-audit-v1"},
+    "round_id": {"type": "string", "minLength": 1, "maxLength": 160},
+    "role": {"enum": ["scout", "challenger"]},
+    "fresh_session_required": {"const": true},
+    "previous_memory_allowed": {"const": false},
+    "previous_review_allowed": {"const": false},
+    "hidden_scratch_allowed": {"const": false},
+    "allowed_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context"],
+      "properties": {
+        "context": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "context": {"type": "object"},
+    "output_contract": {"type": "object"},
+    "packet_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "adapter_registered": true,
+  "as_of": "2026-08-23T00:00:00Z",
+  "cache_hit_count": 2,
+  "cached_parse_status": "pass",
+  "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
+  "dataset_version": "zenodo-record-3359791-v1.1.0",
+  "expected_target_observation_count": 2695045,
+  "files": [
+    {
+      "bytes": 192615473,
+      "cache_status": "cache_hit",
+      "file_id": "complete-zip",
+      "filename": "complete.zip",
+      "sha256": "c9054b2f87ec51589d1974aa35e00ce2efb696e5db7f265ef279e8c67beb61ba"
+    },
+    {
+      "bytes": 3339065,
+      "cache_status": "cache_hit",
+      "file_id": "reference-csv",
+      "filename": "reference.csv",
+      "sha256": "a36aaf931456d4cb28e42e43e3700eec78823b252974c5399f7d37159386ba6a"
+    }
+  ],
+  "last_successful_fetch_at": "2026-08-21T00:00:00Z",
+  "last_successful_parse_at": "2026-08-23T00:00:00Z",
+  "offline_replay_status": "pass",
+  "online_fetch_health": "not_probed_by_reproducible_offline_run",
+  "parsed_source_record_count": 1022092,
+  "profile_version": "d1-v4-full-population-profile-v1",
+  "raw_schema_field_count": 22,
+  "raw_schema_fields": [
+    "_source_file",
+    "age",
+    "as_ppm",
+    "country",
+    "cr_ppm",
+    "cu_ppm",
+    "latitude",
+    "loc_prec",
+    "longitude",
+    "method",
+    "ni_ppm",
+    "pb_ppm",
+    "ref_id",
+    "rock_facies",
+    "rock_group",
+    "rock_name",
+    "rock_origin",
+    "rock_type",
+    "sample_description",
+    "sample_id",
+    "sample_name",
+    "zn_ppm"
+  ],
+  "retry_health": "not_measured_in_offline_profile",
+  "row_count_drift_status": "matches_registered_expected_count",
+  "schema_drift_detection": "checked-in profile exact comparison",
+  "source_id": "zenodo-gard-whole-rock",
+  "supported_modes": [
+    "online",
+    "cached",
+    "offline_fixture"
+  ],
+  "target_observation_count": 2695045,
+  "version_drift": {
+    "outer_archive_drift": false,
+    "status": "matches_registered_snapshot"
+  }
+}

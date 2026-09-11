@@ -10,3 +10,4 @@ demo_output/
 dist/
 *.zip
 *.log
+test-runs/**/results/

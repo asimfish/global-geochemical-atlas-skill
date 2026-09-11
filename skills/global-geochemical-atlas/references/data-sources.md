@@ -1,6 +1,6 @@
 # 公开地球化学数据源路由
 
-核对日期：2026-08-16。端点和使用条件可能变化；每次运行重新记录访问日期和实际响应。
+核对日期：2026-08-23。端点和使用条件可能变化；每次运行重新记录访问日期和实际响应。
 
 ## 优先级
 
@@ -119,6 +119,22 @@
 - 对账：492,999 条 As 观测、15,621 个站点、33 个国家，覆盖 dissolved/suspended/total 三种分相和河流、湖泊、地下水、水库、湿地五类站点；
 - 质量边界：保留 `<`/`>`、Good/Fair/Unknown/Pending review/Suspect、5,655 条额外精确重复观测和所有源行定位；演示排除方法代码 0、Pending review、Suspect、负哨兵和极端值；
 - 覆盖边界：它是各国自愿提交的不均匀淡水汇编，不是规则全球网格。As 与 GEOTRACES 的海水 Cu/Ni/Zn 共同补齐登记目标，但不能把淡水和海水静默合并为同一背景。
+
+### `europe-pmc-pearl-river-dissolved-metals`
+
+- 数据集：Zhen et al. (2019) 珠江流域溶解态重金属论文补充表；DOI `10.7717/peerj.6578`，PMCID `PMC6420802`；CC BY 4.0；
+- 获取：Europe PMC 官方补充文件端点每次生成外层 ZIP，因此不伪造稳定容器 hash；适配器对成员数、路径和总展开量设上限，只提取 `peerj-07-6578-s004.xlsx`，并强制校验 46,580 bytes 与 SHA-256 `dbe27bbd31c9de335dcacca5bc6ae8a3e14d117c443048efb7449ab8453d09ba`；
+- 对账：81 个站点各含丰水期、枯水期一次采样，162 个物理记录、29 个不同采样日期，Cr/Cu/Ni/Pb 各 162 条，共 648 条测定；
+- 方法：论文方法段明确给出 0.22 µm 过滤、HNO₃ 酸化至 pH < 2 和 PerkinElmer Elan DRC-e ICP-MS，只绑定到这一补充表的四种溶解金属；
+- 坐标边界：表内 DMS 按原文严格转成十进制以便证据审核，但论文和表格均未声明 datum；不写入 canonical WGS84 坐标，不计入空间充分性或网格异常。
+
+### `mendeley-guangdong-fujian-groundwater`
+
+- 数据集：闽粤沿海地下水与地热水补给、水化学演化及健康风险数据；Mendeley Data v2，DOI `10.17632/84gkydb5y9.2`；CC BY 4.0；
+- 获取：版本化官方文件 ID `e292cfea-1d2a-48b1-85ef-319973d863e4`；`Table S1.xlsx` 为 44,162 bytes，SHA-256 `0269b4ff66c268775dc8fe2aea4a7d67e61bdde73327f3a19077f2252be1598a`；
+- 对账：124 口井、124 组发布坐标，其中 95 行标为 `This study`、29 行在表内归属 `Yao B et al.2024`；As 108、Cr 119、Cu 119、Ni 116、Pb 120、Zn 120，共 702 条数值测定；
+- 缺失语义：发布方只说空白低于检出限，未给数值限；`-` 表示无数据。两者均不生成伪数值、不做 LOD/2 插补；
+- 证据边界：档案没有可绑定的分析方法、采样日期和坐标 datum；方法与时间显式缺失，坐标只作 reported evidence，这些测定不进入方法感知的可比分析。
 
 ### FOREGS 六个独立来源
 

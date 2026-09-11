@@ -1,6 +1,6 @@
 {
   "adapter_registered": true,
-  "as_of": "2026-08-15T07:00:00Z",
+  "as_of": "2026-08-23T00:00:00Z",
   "cache_hit_count": 1,
   "cached_parse_status": "pass",
   "claim_boundary": "Counts describe target observations in one verified source snapshot. Reported coordinates are kept separate from canonical EPSG:4326 coordinates; only canonical cells enter cross-source spatial coverage. Cells are observed, not interpolated; comparable means the minimum declared V4 grouping fields are present.",
@@ -16,7 +16,7 @@
     }
   ],
   "last_successful_fetch_at": "2026-08-12T21:32:57Z",
-  "last_successful_parse_at": "2026-08-15T07:00:00Z",
+  "last_successful_parse_at": "2026-08-23T00:00:00Z",
   "offline_replay_status": "pass",
   "online_fetch_health": "not_probed_by_reproducible_offline_run",
   "parsed_source_record_count": 7890,

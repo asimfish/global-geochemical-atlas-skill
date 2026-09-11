@@ -32,11 +32,22 @@ jobs:
           pattern = re.compile(
               r"^\[[a-z0-9_/-]+/(feat|fix|refactor|docs|test|chore|perf|style|ci|build|revert)!?\]: .{1,72}$"
           )
-          subjects = subprocess.check_output(
-              ["git", "log", "--no-merges", "--format=%s", f"{os.environ['BASE_SHA']}..HEAD"],
+          # Commits that predate this lint on a long-lived branch are grandfathered
+          # by full SHA in .github/legacy-commit-subjects.txt (one per line).
+          allowlist = {
+              line.split()[0]
+              for line in open(".github/legacy-commit-subjects.txt", encoding="utf-8")
+              if line.strip() and not line.startswith("#")
+          }
+          entries = subprocess.check_output(
+              ["git", "log", "--no-merges", "--format=%H %s", f"{os.environ['BASE_SHA']}..HEAD"],
               text=True,
           ).splitlines()
-          invalid = [subject for subject in subjects if not pattern.fullmatch(subject)]
+          invalid = [
+              subject
+              for sha, subject in (entry.split(" ", 1) for entry in entries)
+              if sha not in allowlist and not pattern.fullmatch(subject)
+          ]
           if invalid:
               raise SystemExit("invalid Forge commit subjects:\n" + "\n".join(invalid))
           PY

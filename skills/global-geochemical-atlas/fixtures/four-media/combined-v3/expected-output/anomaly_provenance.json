@@ -1,0 +1,465 @@
+{
+  "anomalies": [
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Cu",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本上伴随偏高的是 Ni 这类基性岩指示元素，指向母质本身。",
+          "verdict": "supports_geogenic"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "邻域内偏高点数量介于两可之间，空间证据不倾向任何一方。",
+          "verdict": "available_but_neutral"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-044ff636938f7cd45e288a4bc05469f5f79d56a1636b811ac4548036e4493458"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Cr",
+      "evidence_lines": {},
+      "medium": "rock",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-1975361d48f5e69a253ebc8c9aaed00e23c7bedf47c5c50ef8bb342d85832d9c"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Cu",
+      "evidence_lines": {},
+      "medium": "soil",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-1f8d8d2ed37c7a6ea4635fbd7adbaa33a86d40133188defe0bfd04e93e52840b"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Hg",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-2267ccc05903fb8438fbc5f46cc8834cb3ad369b356825a79058cd9ea9b6a06e"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Zn",
+      "evidence_lines": {},
+      "medium": "soil",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-2e15d81f012cb6f543619091eae2d804830d472f1b275ac1f5f5b839e988dc21"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Cu",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-31c2cbe87dd5978155a033d450ad578066466b24bfb3816b15c856240d559fe9"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Pb",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本测了其它元素但只有这一个偏高，伴生证据不构成组合指纹。",
+          "verdict": "available_but_neutral"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "该点缺少规范坐标，无法检查空间连片性。",
+          "verdict": "unavailable"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-3390391487f858a7a72cd11bcc5ad18a50db44c9a45c3164c106541f61b4ac78"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Zn",
+      "evidence_lines": {},
+      "medium": "rock",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-354c838b00457ee0be1cf37b8e8e26ef88f77e87c9134ebdbab85a70e2ee791a"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Cu",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本上伴随偏高的是 Ni 这类基性岩指示元素，指向母质本身。",
+          "verdict": "supports_geogenic"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "邻域内偏高点数量介于两可之间，空间证据不倾向任何一方。",
+          "verdict": "available_but_neutral"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-3d7d2fed1eeb211e3246122b7be318d5bcf58243875da653225c3424e3dacccd"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Zn",
+      "evidence_lines": {},
+      "medium": "soil",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-403d66f7d2ae827eaec5ac9fe3983715f781b39e6b2d5531ec52142dbbf43f06"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "As",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-48a0083ddb6cceb4b17682861a2f04ae844d19506c7c5594326f23e53f218097"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Ni",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-4aa202c7c8f607e2e6b7a94aca0e11658b629f33602e86b4312676d5001dd566"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Cu",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-4d1f81d9955060f051ba0f482d71bbc6efa02c950dee8423e7a6b24315e0ee81"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Ni",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "伴生偏高元素的组合不构成明确的污染或母质指纹。",
+          "verdict": "available_but_neutral"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "邻域内偏高点数量介于两可之间，空间证据不倾向任何一方。",
+          "verdict": "available_but_neutral"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-5a7735103332f92f0608696355ca01022c54c99d4ebd19d805b438714b8687ab"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Cu",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本测了其它元素但只有这一个偏高，伴生证据不构成组合指纹。",
+          "verdict": "available_but_neutral"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "同元素同介质的其它偏高点都离得很远，这个点是孤立热点，更像点源输入。",
+          "verdict": "supports_anthropogenic"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-6ab236df71eae9eeb4d4cef3e2fd83f8c17c5e78bb6f10154d12b4fdf968c541"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Ni",
+      "evidence_lines": {},
+      "medium": "soil",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-842bd6c020a491d2a17a38bc20df4b53966b308cc8bfc7f49884158c4735d069"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Ni",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-8604fc061b27ae9d25586a6bf8a5bae0774fe4e95d9cf6ccbda65626d7064b73"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Hg",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本没有其它元素的测量，伴生证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "邻域内偏高点数量介于两可之间，空间证据不倾向任何一方。",
+          "verdict": "available_but_neutral"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-8a8818da62e396cb7294f1d75432fb426ab5121c5094460b19d8e31339bd6202"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Ni",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-9438a9df8d2ddde5ee72dc082c5ae2fc8980a6267c757683a472878d8b77eb5d"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "As",
+      "evidence_lines": {},
+      "medium": "water",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-9a486fb72f66adf0f1507096724a8db49cd682b75243583b397cdc307f360dde"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Ni",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "伴生偏高元素的组合不构成明确的污染或母质指纹。",
+          "verdict": "available_but_neutral"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "邻域内偏高点数量介于两可之间，空间证据不倾向任何一方。",
+          "verdict": "available_but_neutral"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-9a5b3ecb16bdc982229c31b3d6a306fbffedd953fa41adc59051041c41daebc3"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Cu",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本测了其它元素但只有这一个偏高，伴生证据不构成组合指纹。",
+          "verdict": "available_but_neutral"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "同元素同介质的其它偏高点都离得很远，这个点是孤立热点，更像点源输入。",
+          "verdict": "supports_anthropogenic"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-9a84b1a74bd5bce5bc4913ec6799f58971dc3d37154c2b22feef2bcb6b5e629b"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Zn",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-b227c47c3bfc7de8d7e86bc95d9b372c575456a4d5eb75eeb4b77272dca8874a"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "Cu",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本测了其它元素但只有这一个偏高，伴生证据不构成组合指纹。",
+          "verdict": "available_but_neutral"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "同元素同介质的其它偏高点都离得很远，这个点是孤立热点，更像点源输入。",
+          "verdict": "supports_anthropogenic"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-b60a42668e4a9223e52ab2958f1c61aea4c06d722abc2bea43ec53c558af8ae6"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Zn",
+      "evidence_lines": {},
+      "medium": "sediment",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-ce3ab261803c4b8b828e0952272eb1b845f6d90a314fa9f38e6cf1f88b574e4d"
+    },
+    {
+      "classification": "insufficient_evidence",
+      "classification_label_zh": "证据不足，暂不判定",
+      "direction": "high",
+      "element": "As",
+      "evidence_lines": {
+        "association": {
+          "plain_language": "同一样本测了其它元素但只有这一个偏高，伴生证据不构成组合指纹。",
+          "verdict": "available_but_neutral"
+        },
+        "lithology": {
+          "plain_language": "样本未附岩性/地质单元信息，这条证据线用不上。",
+          "verdict": "unavailable"
+        },
+        "spatial": {
+          "plain_language": "邻域内偏高点数量介于两可之间，空间证据不倾向任何一方。",
+          "verdict": "available_but_neutral"
+        },
+        "temporal": {
+          "plain_language": "该点位带采样时间的观测少于 3 次，看不出时间趋势。",
+          "verdict": "unavailable"
+        }
+      },
+      "medium": "sediment",
+      "plain_language": "可用的证据线不足两条同向支持，按本契约保持不判定，等补充岩性、时序或伴生元素数据后再归因。",
+      "record_id": "rec-d0e29f1f3803d46ee78b7042982051de5eaea408e8955dac107269a25fd90f4c"
+    },
+    {
+      "classification": "not_applicable_depletion",
+      "classification_label_zh": "亏损候选（本版不做成因归因）",
+      "direction": "low",
+      "element": "Zn",
+      "evidence_lines": {},
+      "medium": "soil",
+      "plain_language": "这是相对背景偏低（亏损）的候选，本契约的成因归因只覆盖富集，该点保留为筛查线索。",
+      "record_id": "rec-ea8eb881bc0a1f0566f6db68efb42e0c42ea379ae230be6cb841865a2f88b57e"
+    }
+  ],
+  "candidate_count": 27,
+  "caveat": "筛查级归因，非因果结论。判定只使用已注册来源内的证据；缺证据时保持“证据不足，暂不判定”，不借用发表年冒充采样时间，也不虚构污染源。",
+  "classification_counts": {
+    "insufficient_evidence": 10,
+    "not_applicable_depletion": 17
+  },
+  "classification_labels_zh": {
+    "geogenic_background": "母质高背景型（地质成因）",
+    "insufficient_evidence": "证据不足，暂不判定",
+    "mixed_or_undistinguished": "混合叠加型",
+    "not_applicable_depletion": "亏损候选（本版不做成因归因）",
+    "suspected_anthropogenic_input": "疑似人为输入型"
+  },
+  "contract": "anomaly-provenance-v1",
+  "evidence_line_definitions": {
+    "association": "伴生线：同一样本上其它元素是否组合性偏高（亲硫组合像污染指纹，基性岩组合像母质信号）。",
+    "lithology": "岩性线：样本是否落在该元素天然高背景的岩类上。",
+    "spatial": "空间线：同元素同介质的偏高点是否在邻域内成片（地质格局）还是孤立（点源特征）。",
+    "temporal": "时序线：同一点位多次带采样时间的观测，浓度上升支持后天输入，平稳支持稳定背景。"
+  },
+  "interpretation": "异常区域识别在“相对背景偏高/偏低”的基础上增加了成因归因：结合时序信息等证据，分析元素富集究竟是土壤或其他介质的母质先天决定的，还是工业排放或其他人为原因导致的。归因是筛查级的，不指认具体污染源，也不替代法规判定。"
+}

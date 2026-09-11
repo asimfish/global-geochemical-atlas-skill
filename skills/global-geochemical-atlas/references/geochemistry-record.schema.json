@@ -51,6 +51,9 @@
     "coordinate_representation_resolution_basis",
     "coordinate_accuracy_evidence_status",
     "sampled_at",
+    "sampling_time",
+    "sampling_time_precision",
+    "sampling_time_status",
     "sample_depth_min_m",
     "sample_depth_max_m",
     "grain_fraction",
@@ -137,75 +140,310 @@
     "operational_confidence"
   ],
   "properties": {
-    "record_id": {"type": "string", "minLength": 1},
-    "source_record_id": {"type": ["string", "null"]},
-    "sample_id": {"type": ["string", "null"]},
-    "sample_identity_group": {"type": ["string", "null"]},
-    "replicate_group_id": {"type": ["string", "null"]},
-    "analysis_batch_id": {"type": ["string", "null"]},
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_record_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sample_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sample_identity_group": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "replicate_group_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "analysis_batch_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "batch_qc_status": {
       "type": "string",
-      "enum": ["not_supplied", "pass", "fail", "incomplete"]
+      "enum": [
+        "not_supplied",
+        "pass",
+        "fail",
+        "incomplete"
+      ]
     },
     "batch_qc_disposition": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "enum": [
         "accept_for_scientific_analysis",
         "exclude_batch_and_investigate",
         null
       ]
     },
-    "igsn": {"type": ["string", "null"]},
-    "element_or_analyte": {"type": "string", "minLength": 1},
-    "analyte_reported": {"type": ["string", "null"]},
-    "species_or_oxide": {"type": ["string", "null"]},
+    "igsn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "element_or_analyte": {
+      "type": "string",
+      "minLength": 1
+    },
+    "analyte_reported": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "species_or_oxide": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "medium": {
       "type": "string",
-      "enum": ["rock", "soil", "sediment", "water", "mineral", "concentrate", "unknown"]
+      "enum": [
+        "rock",
+        "soil",
+        "sediment",
+        "water",
+        "mineral",
+        "concentrate",
+        "unknown"
+      ]
     },
-    "material": {"type": ["string", "null"]},
-    "measurement_basis": {"type": ["string", "null"]},
-    "original_value_raw": {"type": ["string", "null"]},
-    "source_qualifier_raw": {"type": ["string", "null"]},
-    "original_value": {"type": ["number", "null"]},
-    "original_unit": {"type": ["string", "null"]},
+    "material": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "measurement_basis": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "original_value_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_qualifier_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "original_value": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "original_unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "value_qualifier": {
       "type": "string",
-      "enum": ["reported", "approximate", "lt", "le", "gt", "ge", "bdl", "loq", "nd", "trace", "unknown"]
+      "enum": [
+        "reported",
+        "approximate",
+        "lt",
+        "le",
+        "gt",
+        "ge",
+        "bdl",
+        "loq",
+        "nd",
+        "trace",
+        "unknown"
+      ]
     },
-    "censored": {"type": "boolean"},
+    "censored": {
+      "type": "boolean"
+    },
     "missing_reason": {
-      "type": ["string", "null"],
-      "enum": ["not_reported", "not_analyzed", "insufficient_sample", "invalid_value", "unknown", null]
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "not_reported",
+        "not_analyzed",
+        "insufficient_sample",
+        "invalid_value",
+        "unknown",
+        null
+      ]
     },
-    "normalized_value": {"type": ["number", "null"]},
-    "normalized_unit": {"type": ["string", "null"], "enum": ["mg/kg", "ug/L", "nmol/kg", null]},
-    "normalized_censoring_limit": {"type": ["number", "null"], "minimum": 0},
-    "conversion_factor": {"type": ["number", "null"], "minimum": 0},
-    "conversion_formula": {"type": ["string", "null"]},
-    "original_latitude_raw": {"type": ["string", "null"]},
-    "original_longitude_raw": {"type": ["string", "null"]},
-    "latitude": {"type": ["number", "null"], "minimum": -90, "maximum": 90},
-    "longitude": {"type": ["number", "null"], "minimum": -180, "maximum": 180},
-    "source_crs": {"type": ["string", "null"]},
-    "coordinate_transform_method": {"type": ["string", "null"]},
+    "normalized_value": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "normalized_unit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "mg/kg",
+        "ug/L",
+        "nmol/kg",
+        null
+      ]
+    },
+    "normalized_censoring_limit": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "conversion_factor": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "conversion_formula": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "original_latitude_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "original_longitude_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "latitude": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": -90,
+      "maximum": 90
+    },
+    "longitude": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": -180,
+      "maximum": 180
+    },
+    "source_crs": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "coordinate_transform_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "coordinate_evidence_scope": {
-      "type": ["string", "null"],
-      "enum": ["file_declared", "dataset_metadata_declared", "platform_policy_declared", null]
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "file_declared",
+        "dataset_metadata_declared",
+        "platform_policy_declared",
+        null
+      ]
     },
-    "coordinate_policy_id": {"type": ["string", "null"]},
-    "coordinate_policy_version": {"type": ["string", "null"]},
-    "coordinate_policy_url": {"type": ["string", "null"], "format": "uri"},
+    "coordinate_policy_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "coordinate_policy_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "coordinate_policy_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
     "coordinate_policy_sha256": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[0-9a-f]{64}$"
     },
-    "coordinate_latitude_field": {"type": ["string", "null"]},
-    "coordinate_longitude_field": {"type": ["string", "null"]},
-    "coordinate_uncertainty_m": {"type": ["number", "null"], "minimum": 0},
-    "coordinate_representation_resolution_m": {"type": ["number", "null"], "minimum": 0},
+    "coordinate_latitude_field": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "coordinate_longitude_field": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "coordinate_uncertainty_m": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "coordinate_representation_resolution_m": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
     "coordinate_representation_resolution_basis": {
-      "enum": ["derived_from_source_decimal_places", "not_available"]
+      "enum": [
+        "derived_from_source_decimal_places",
+        "not_available"
+      ]
     },
     "coordinate_accuracy_evidence_status": {
       "enum": [
@@ -214,113 +452,608 @@
         "not_applicable_no_canonical_coordinate"
       ]
     },
-    "sampled_at": {"type": ["string", "null"]},
-    "sample_depth_min_m": {"type": ["number", "null"], "minimum": 0},
-    "sample_depth_max_m": {"type": ["number", "null"], "minimum": 0},
-    "grain_fraction": {"type": ["string", "null"]},
-    "sample_type_raw": {"type": ["string", "null"]},
-    "sample_type": {"type": ["string", "null"]},
-    "sample_type_mapping_status": {"type": ["string", "null"]},
-    "sample_type_missing_reason": {"type": ["string", "null"]},
-    "geographic_context_raw": {"type": ["string", "null"]},
-    "survey_area": {"type": ["string", "null"]},
-    "map_sheet": {"type": ["string", "null"]},
-    "cruise_track": {"type": ["string", "null"]},
-    "lithology_raw": {"type": ["string", "null"]},
-    "lithology": {"type": ["string", "null"]},
-    "soil_horizon_raw": {"type": ["string", "null"]},
-    "soil_horizon": {"type": ["string", "null"]},
-    "sediment_environment": {"type": ["string", "null"]},
-    "water_body_type": {"type": ["string", "null"]},
-    "water_fraction": {"type": ["string", "null"]},
-    "filtered_state": {"type": ["string", "null"]},
-    "geologic_unit": {"type": ["string", "null"]},
-    "geologic_unit_raw": {"type": ["string", "null"]},
-    "geologic_age_raw": {"type": ["string", "null"]},
-    "tectonic_setting_raw": {"type": ["string", "null"]},
-    "matched_geologic_unit": {"type": ["string", "null"]},
-    "geology_map_source": {"type": ["string", "null"]},
-    "geology_map_version": {"type": ["string", "null"]},
-    "match_method": {"type": ["string", "null"]},
-    "match_scale": {"type": ["string", "null"]},
-    "boundary_distance_m": {"type": ["number", "null"], "minimum": 0},
-    "match_uncertainty": {"type": ["string", "null"]},
-    "geology_missing_reason": {"type": ["string", "null"]},
-    "geologic_unit_id": {"type": ["string", "null"]},
-    "geologic_context_source": {"type": ["string", "null"]},
-    "geologic_context_version": {"type": ["string", "null"]},
-    "geologic_match_method": {"type": ["string", "null"]},
-    "distance_to_geologic_boundary_m": {"type": ["number", "null"], "minimum": 0},
-    "geologic_match_confidence": {
-      "type": ["string", "null"],
-      "enum": ["high", "medium", "low", "unknown", null]
+    "sampled_at": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
-    "analytical_method": {"type": ["string", "null"]},
-    "method_scope": {"type": ["string", "null"]},
-    "method_assignment_basis": {"type": ["string", "null"]},
-    "preparation": {"type": ["string", "null"]},
-    "analytical_technique": {"type": ["string", "null"]},
-    "instrument": {"type": ["string", "null"]},
-    "method_family": {"type": ["string", "null"]},
-    "digestion_or_extraction": {"type": ["string", "null"]},
-    "laboratory": {"type": ["string", "null"]},
-    "reference_material": {"type": ["string", "null"]},
-    "detection_limit": {"type": ["number", "null"], "minimum": 0},
-    "detection_limit_unit": {"type": ["string", "null"]},
-    "quantitation_limit": {"type": ["number", "null"], "minimum": 0},
-    "quantitation_limit_unit": {"type": ["string", "null"]},
-    "reference_materials": {"type": ["string", "null"]},
-    "method_source_locator": {"type": ["string", "null"]},
-    "method_publication_id": {"type": ["string", "null"]},
-    "method_missing_reason": {"type": ["string", "null"]},
-    "citation_id_raw": {"type": ["string", "null"]},
-    "publication_id": {"type": ["string", "null"]},
-    "publication_doi": {"type": ["string", "null"]},
-    "citation_text_raw": {"type": ["string", "null"]},
-    "citation_scope": {"type": ["string", "null"]},
-    "citation_assignment_basis": {"type": ["string", "null"]},
-    "upstream_primary_source_id": {"type": ["string", "null"]},
-    "citation_resolution_status": {"type": ["string", "null"]},
-    "citation_missing_reason": {"type": ["string", "null"]},
-    "source_id": {"type": ["string", "null"]},
-    "dataset_title": {"type": ["string", "null"]},
-    "dataset_doi": {"type": ["string", "null"]},
-    "dataset_version": {"type": ["string", "null"]},
-    "source_file": {"type": ["string", "null"]},
-    "source_row": {"type": ["string", "null"]},
-    "source_locator": {"type": ["string", "null"]},
+    "sampling_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sampling_time_precision": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "second",
+        "minute",
+        "day",
+        "month",
+        "year",
+        "year_range",
+        null
+      ]
+    },
+    "sampling_time_status": {
+      "type": "string",
+      "enum": [
+        "publisher_reported",
+        "publisher_not_reported",
+        "unparseable_raw_value"
+      ]
+    },
+    "sample_depth_min_m": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "sample_depth_max_m": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "grain_fraction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sample_type_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sample_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sample_type_mapping_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sample_type_missing_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geographic_context_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "survey_area": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "map_sheet": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cruise_track": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lithology_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lithology": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "soil_horizon_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "soil_horizon": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sediment_environment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "water_body_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "water_fraction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "filtered_state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geologic_unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geologic_unit_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geologic_age_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tectonic_setting_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "matched_geologic_unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geology_map_source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geology_map_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "match_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "match_scale": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "boundary_distance_m": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "match_uncertainty": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geology_missing_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geologic_unit_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geologic_context_source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geologic_context_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "geologic_match_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "distance_to_geologic_boundary_m": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "geologic_match_confidence": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "high",
+        "medium",
+        "low",
+        "unknown",
+        null
+      ]
+    },
+    "analytical_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "method_scope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "method_assignment_basis": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "preparation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "analytical_technique": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "instrument": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "method_family": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "digestion_or_extraction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "laboratory": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_material": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "detection_limit": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "detection_limit_unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "quantitation_limit": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "quantitation_limit_unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_materials": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "method_source_locator": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "method_publication_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "method_missing_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "citation_id_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publication_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "publication_doi": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "citation_text_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "citation_scope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "citation_assignment_basis": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "upstream_primary_source_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "citation_resolution_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "citation_missing_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dataset_title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dataset_doi": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dataset_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_file": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_row": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_locator": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "official_source_url": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^https?://"
     },
-    "file_sha256": {"type": ["string", "null"]},
-    "license": {"type": ["string", "null"]},
-    "access_status": {"type": ["string", "null"]},
-    "research_use_status": {"type": ["string", "null"]},
-    "license_url": {"type": ["string", "null"]},
-    "license_scope": {"type": ["string", "null"]},
-    "attribution_required": {"type": ["string", "null"]},
-    "redistribution_status": {"type": ["string", "null"]},
-    "terms_verified_at": {"type": ["string", "null"]},
-    "source_tier": {"type": "string"},
+    "file_sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "license": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "access_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "research_use_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "license_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "license_scope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "attribution_required": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "redistribution_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "terms_verified_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_tier": {
+      "type": "string"
+    },
     "qc_flags": {
       "type": "array",
-      "items": {"type": "string"},
+      "items": {
+        "type": "string"
+      },
       "uniqueItems": true
     },
     "operational_confidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["version", "source", "completeness", "method", "spatial", "qc", "overall", "band", "gates_applied", "quality_dimensions"],
+      "required": [
+        "version",
+        "source",
+        "completeness",
+        "method",
+        "spatial",
+        "qc",
+        "overall",
+        "band",
+        "gates_applied",
+        "quality_dimensions"
+      ],
       "properties": {
-        "version": {"const": "d2-confidence-v3"},
-        "source": {"type": "number", "minimum": 0, "maximum": 1},
-        "completeness": {"type": "number", "minimum": 0, "maximum": 1},
-        "method": {"type": "number", "minimum": 0, "maximum": 1},
-        "spatial": {"type": "number", "minimum": 0, "maximum": 1},
-        "qc": {"type": "number", "minimum": 0, "maximum": 1},
-        "overall": {"type": "number", "minimum": 0, "maximum": 1},
-        "band": {"type": "string", "enum": ["high", "medium", "low"]},
+        "version": {
+          "const": "d2-confidence-v3"
+        },
+        "source": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "completeness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "method": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "spatial": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "qc": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "overall": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "band": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
         "gates_applied": {
           "type": "array",
           "uniqueItems": true,
@@ -339,21 +1072,54 @@
         "quality_dimensions": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["source_evidence", "analytical_readiness", "spatial_usability", "workflow_usability"],
+          "required": [
+            "source_evidence",
+            "analytical_readiness",
+            "spatial_usability",
+            "workflow_usability"
+          ],
           "properties": {
-            "source_evidence": {"$ref": "#/$defs/qualityDimension"},
-            "analytical_readiness": {"$ref": "#/$defs/qualityDimension"},
+            "source_evidence": {
+              "$ref": "#/$defs/qualityDimension"
+            },
+            "analytical_readiness": {
+              "$ref": "#/$defs/qualityDimension"
+            },
             "spatial_usability": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["score", "band", "coordinate_status"],
+              "required": [
+                "score",
+                "band",
+                "coordinate_status"
+              ],
               "properties": {
-                "score": {"type": "number", "minimum": 0, "maximum": 1},
-                "band": {"type": "string", "enum": ["high", "medium", "low"]},
-                "coordinate_status": {"type": "string", "enum": ["canonical_wgs84", "reported_only", "unlocated"]}
+                "score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "band": {
+                  "type": "string",
+                  "enum": [
+                    "high",
+                    "medium",
+                    "low"
+                  ]
+                },
+                "coordinate_status": {
+                  "type": "string",
+                  "enum": [
+                    "canonical_wgs84",
+                    "reported_only",
+                    "unlocated"
+                  ]
+                }
               }
             },
-            "workflow_usability": {"$ref": "#/$defs/qualityDimension"}
+            "workflow_usability": {
+              "$ref": "#/$defs/qualityDimension"
+            }
           }
         }
       }
@@ -362,33 +1128,81 @@
   "$defs": {
     "qualityDimension": {
       "type": "object",
-      "required": ["score", "band"],
+      "required": [
+        "score",
+        "band"
+      ],
       "properties": {
-        "score": {"type": "number", "minimum": 0, "maximum": 1},
-        "band": {"type": "string", "enum": ["high", "medium", "low"]}
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "band": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        }
       },
       "additionalProperties": false
     }
   },
   "allOf": [
     {
-      "if": {"properties": {"batch_qc_status": {"const": "not_supplied"}}},
-      "then": {"properties": {"batch_qc_disposition": {"type": "null"}}}
-    },
-    {
-      "if": {"properties": {"batch_qc_status": {"const": "pass"}}},
+      "if": {
+        "properties": {
+          "batch_qc_status": {
+            "const": "not_supplied"
+          }
+        }
+      },
       "then": {
         "properties": {
-          "analysis_batch_id": {"type": "string", "minLength": 1},
-          "batch_qc_disposition": {"const": "accept_for_scientific_analysis"}
+          "batch_qc_disposition": {
+            "type": "null"
+          }
         }
       }
     },
     {
-      "if": {"properties": {"batch_qc_status": {"enum": ["fail", "incomplete"]}}},
+      "if": {
+        "properties": {
+          "batch_qc_status": {
+            "const": "pass"
+          }
+        }
+      },
       "then": {
         "properties": {
-          "batch_qc_disposition": {"const": "exclude_batch_and_investigate"}
+          "analysis_batch_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "batch_qc_disposition": {
+            "const": "accept_for_scientific_analysis"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "batch_qc_status": {
+            "enum": [
+              "fail",
+              "incomplete"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "batch_qc_disposition": {
+            "const": "exclude_batch_and_investigate"
+          }
         }
       }
     }

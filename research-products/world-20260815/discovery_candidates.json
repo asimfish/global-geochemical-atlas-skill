@@ -1,0 +1,1482 @@
+{
+  "discovery_candidates": [
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "Pb",
+      "medium": "sediment",
+      "score": 2131,
+      "title": "Pb surface/deep enrichment screening in sediment (sediment_outlet_top vs sediment_outlet_bottom)",
+      "question": "Is Pb systematically enriched or depleted in sediment_outlet_top relative to sediment_outlet_bottom at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-2a93019a42ab",
+          "element": "Pb",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_top",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1064
+        },
+        {
+          "cohort_id": "cohort-dc4ce9dfd5cd",
+          "element": "Pb",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_bottom",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1067
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-001"
+    },
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "Zn",
+      "medium": "sediment",
+      "score": 2122,
+      "title": "Zn surface/deep enrichment screening in sediment (sediment_outlet_top vs sediment_outlet_bottom)",
+      "question": "Is Zn systematically enriched or depleted in sediment_outlet_top relative to sediment_outlet_bottom at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-e2aae853da04",
+          "element": "Zn",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_top",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1060
+        },
+        {
+          "cohort_id": "cohort-36ab0beea49b",
+          "element": "Zn",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_bottom",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1062
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-002"
+    },
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "Cu",
+      "medium": "sediment",
+      "score": 2119,
+      "title": "Cu surface/deep enrichment screening in sediment (sediment_outlet_top vs sediment_outlet_bottom)",
+      "question": "Is Cu systematically enriched or depleted in sediment_outlet_top relative to sediment_outlet_bottom at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-4a97743edc51",
+          "element": "Cu",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_top",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1060
+        },
+        {
+          "cohort_id": "cohort-692d22c3028b",
+          "element": "Cu",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_bottom",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1059
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-003"
+    },
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "As",
+      "medium": "sediment",
+      "score": 2104,
+      "title": "As surface/deep enrichment screening in sediment (sediment_outlet_top vs sediment_outlet_bottom)",
+      "question": "Is As systematically enriched or depleted in sediment_outlet_top relative to sediment_outlet_bottom at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-d0494d3d550f",
+          "element": "As",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_top",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1046
+        },
+        {
+          "cohort_id": "cohort-3c4787e5b0ad",
+          "element": "As",
+          "medium": "sediment",
+          "sample_type": "sediment_outlet_bottom",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1058
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-004"
+    },
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "Cu",
+      "medium": "soil",
+      "score": 1322,
+      "title": "Cu surface/deep enrichment screening in soil (soil_topsoil vs soil_c_horizon)",
+      "question": "Is Cu systematically enriched or depleted in soil_topsoil relative to soil_c_horizon at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-ca015462671a",
+          "element": "Cu",
+          "medium": "soil",
+          "sample_type": "soil_topsoil",
+          "method_family": "icp_oes",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 661
+        },
+        {
+          "cohort_id": "cohort-ef4c96eecd7c",
+          "element": "Cu",
+          "medium": "soil",
+          "sample_type": "soil_c_horizon",
+          "method_family": "icp_oes",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 661
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-005"
+    },
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "Ni",
+      "medium": "soil",
+      "score": 1322,
+      "title": "Ni surface/deep enrichment screening in soil (soil_a_horizon vs soil_c_horizon)",
+      "question": "Is Ni systematically enriched or depleted in soil_a_horizon relative to soil_c_horizon at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-cd8778457566",
+          "element": "Ni",
+          "medium": "soil",
+          "sample_type": "soil_a_horizon",
+          "method_family": "icp_oes",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 661
+        },
+        {
+          "cohort_id": "cohort-52956c7feadb",
+          "element": "Ni",
+          "medium": "soil",
+          "sample_type": "soil_c_horizon",
+          "method_family": "icp_oes",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 661
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-006"
+    },
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "Zn",
+      "medium": "soil",
+      "score": 1322,
+      "title": "Zn surface/deep enrichment screening in soil (soil_a_horizon vs soil_c_horizon)",
+      "question": "Is Zn systematically enriched or depleted in soil_a_horizon relative to soil_c_horizon at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-a67afe1da4b6",
+          "element": "Zn",
+          "medium": "soil",
+          "sample_type": "soil_a_horizon",
+          "method_family": "icp_oes",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 661
+        },
+        {
+          "cohort_id": "cohort-889f16a48e91",
+          "element": "Zn",
+          "medium": "soil",
+          "sample_type": "soil_c_horizon",
+          "method_family": "icp_oes",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 661
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-007"
+    },
+    {
+      "type": "T1_paired_layer_screening",
+      "element": "As",
+      "medium": "soil",
+      "score": 1318,
+      "title": "As surface/deep enrichment screening in soil (soil_topsoil vs soil_c_horizon)",
+      "question": "Is As systematically enriched or depleted in soil_topsoil relative to soil_c_horizon at the same sites, and is the pattern anthropogenic or geogenic?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-5734329b244f",
+          "element": "As",
+          "medium": "soil",
+          "sample_type": "soil_topsoil",
+          "method_family": "aas",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 660
+        },
+        {
+          "cohort_id": "cohort-d1900a447251",
+          "element": "As",
+          "medium": "soil",
+          "sample_type": "soil_c_horizon",
+          "method_family": "aas",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 658
+        }
+      ],
+      "suggested_design": "sites = coordinates rounded to 0.01 deg; per-site median within one method family; surface/deep ratio per site; report median ratio, bootstrap 95% CI, Wilcoxon signed-rank on log ratio; sensitivity: 0.1 deg grid and alternative method family; geogenic controls (Ni, Cr).",
+      "expected_products": [
+        "per-site pair table",
+        "ratio + CI + p per element",
+        "enrichment map",
+        "gap queue for uncovered regions"
+      ],
+      "caveats": "screening only; ratios conflate pedogenic redistribution with input history",
+      "candidate_id": "dc-008"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "Ni",
+      "medium": "water",
+      "score": 6099,
+      "title": "Ni inter-method comparability in water_seawater ( vs other_bodc_originator_and_methods_record_310901 vs other_bodc_originator_and_methods_record_320981 vs other_bodc_originator_and_methods_record_321968 vs other_bodc_originator_and_methods_record_571336 vs other_bodc_originator_and_methods_record_577993 vs other_bodc_originator_and_methods_record_579050 vs other_bodc_originator_and_methods_record_583243 vs other_bodc_originator_and_methods_record_584489 vs other_bodc_originator_and_methods_record_584797 vs other_bodc_originator_and_methods_record_591363 vs other_bodc_originator_and_methods_record_591664 vs other_bodc_originator_and_methods_record_591909 vs other_bodc_originator_and_methods_record_668909 vs other_bodc_originator_and_methods_record_672829 vs other_bodc_originator_and_methods_record_675923 vs other_bodc_originator_and_methods_record_676007 vs other_bodc_originator_and_methods_record_676476 vs other_bodc_originator_and_methods_record_682902)",
+      "question": "How large is the same-sample measurement offset for Ni in water_seawater between  and other_bodc_originator_and_methods_record_310901 and other_bodc_originator_and_methods_record_320981 and other_bodc_originator_and_methods_record_321968 and other_bodc_originator_and_methods_record_571336 and other_bodc_originator_and_methods_record_577993 and other_bodc_originator_and_methods_record_579050 and other_bodc_originator_and_methods_record_583243 and other_bodc_originator_and_methods_record_584489 and other_bodc_originator_and_methods_record_584797 and other_bodc_originator_and_methods_record_591363 and other_bodc_originator_and_methods_record_591664 and other_bodc_originator_and_methods_record_591909 and other_bodc_originator_and_methods_record_668909 and other_bodc_originator_and_methods_record_672829 and other_bodc_originator_and_methods_record_675923 and other_bodc_originator_and_methods_record_676007 and other_bodc_originator_and_methods_record_676476 and other_bodc_originator_and_methods_record_682902, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-0e337574a109",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_584489",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 114
+        },
+        {
+          "cohort_id": "cohort-103ad634f2dc",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_591909",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 132
+        },
+        {
+          "cohort_id": "cohort-1d49f343510f",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_321968",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 121
+        },
+        {
+          "cohort_id": "cohort-25f37480fe02",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_310901",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 919
+        },
+        {
+          "cohort_id": "cohort-2f401a49c026",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_591363",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 292
+        },
+        {
+          "cohort_id": "cohort-30400a3665b5",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_682902",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 154
+        },
+        {
+          "cohort_id": "cohort-3e7cc80dc410",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_584797",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 122
+        },
+        {
+          "cohort_id": "cohort-508831826472",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_672829",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 170
+        },
+        {
+          "cohort_id": "cohort-85e69682eb36",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_676476",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 51
+        },
+        {
+          "cohort_id": "cohort-8e572f7f6a1d",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_579050",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 341
+        },
+        {
+          "cohort_id": "cohort-924047a02377",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_583243",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 238
+        },
+        {
+          "cohort_id": "cohort-a803a8339737",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_577993",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 127
+        },
+        {
+          "cohort_id": "cohort-b87615ad6146",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_571336",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 52
+        },
+        {
+          "cohort_id": "cohort-be536b8d3f5c",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_320981",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 113
+        },
+        {
+          "cohort_id": "cohort-c21a8a1ebe5f",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_676007",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 292
+        },
+        {
+          "cohort_id": "cohort-cac963341413",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_675923",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 193
+        },
+        {
+          "cohort_id": "cohort-e04eb9c46ca8",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2393
+        },
+        {
+          "cohort_id": "cohort-f50b16f371ac",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_668909",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 158
+        },
+        {
+          "cohort_id": "cohort-f6828f1df383",
+          "element": "Ni",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_591664",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 117
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-009"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "Zn",
+      "medium": "water",
+      "score": 6020,
+      "title": "Zn inter-method comparability in water_seawater ( vs other_bodc_originator_and_methods_record_213440 vs other_bodc_originator_and_methods_record_310901 vs other_bodc_originator_and_methods_record_320981 vs other_bodc_originator_and_methods_record_321968 vs other_bodc_originator_and_methods_record_571336 vs other_bodc_originator_and_methods_record_577993 vs other_bodc_originator_and_methods_record_578889 vs other_bodc_originator_and_methods_record_579050 vs other_bodc_originator_and_methods_record_584223 vs other_bodc_originator_and_methods_record_584489 vs other_bodc_originator_and_methods_record_591664 vs other_bodc_originator_and_methods_record_591909 vs other_bodc_originator_and_methods_record_673984 vs other_bodc_originator_and_methods_record_675923 vs other_bodc_originator_and_methods_record_676007 vs other_bodc_originator_and_methods_record_682902)",
+      "question": "How large is the same-sample measurement offset for Zn in water_seawater between  and other_bodc_originator_and_methods_record_213440 and other_bodc_originator_and_methods_record_310901 and other_bodc_originator_and_methods_record_320981 and other_bodc_originator_and_methods_record_321968 and other_bodc_originator_and_methods_record_571336 and other_bodc_originator_and_methods_record_577993 and other_bodc_originator_and_methods_record_578889 and other_bodc_originator_and_methods_record_579050 and other_bodc_originator_and_methods_record_584223 and other_bodc_originator_and_methods_record_584489 and other_bodc_originator_and_methods_record_591664 and other_bodc_originator_and_methods_record_591909 and other_bodc_originator_and_methods_record_673984 and other_bodc_originator_and_methods_record_675923 and other_bodc_originator_and_methods_record_676007 and other_bodc_originator_and_methods_record_682902, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-1a549a9746eb",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_579050",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 373
+        },
+        {
+          "cohort_id": "cohort-25a1683ef274",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_584223",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 55
+        },
+        {
+          "cohort_id": "cohort-3f29eb9a7ffd",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_578889",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 111
+        },
+        {
+          "cohort_id": "cohort-4a46e93a0371",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_321968",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 127
+        },
+        {
+          "cohort_id": "cohort-6c3f423ebd60",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_676007",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 289
+        },
+        {
+          "cohort_id": "cohort-7bf9573ea4d9",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_675923",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 223
+        },
+        {
+          "cohort_id": "cohort-832d7f01a1d5",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_584489",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 116
+        },
+        {
+          "cohort_id": "cohort-8a4008d85f65",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_577993",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 137
+        },
+        {
+          "cohort_id": "cohort-8f75b92e07d9",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_673984",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 127
+        },
+        {
+          "cohort_id": "cohort-9c8666bff0b9",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_310901",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 967
+        },
+        {
+          "cohort_id": "cohort-aa551585a71b",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_591909",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 120
+        },
+        {
+          "cohort_id": "cohort-aedf05f7eee2",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_213440",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 97
+        },
+        {
+          "cohort_id": "cohort-d10b8476ae5a",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2814
+        },
+        {
+          "cohort_id": "cohort-d1d9f81549f8",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_682902",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 178
+        },
+        {
+          "cohort_id": "cohort-e9258cff13f6",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_571336",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 67
+        },
+        {
+          "cohort_id": "cohort-f056c8aa86e6",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_320981",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 87
+        },
+        {
+          "cohort_id": "cohort-fd4aef0a48ff",
+          "element": "Zn",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_591664",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 132
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-010"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "Cu",
+      "medium": "water",
+      "score": 5921,
+      "title": "Cu inter-method comparability in water_seawater ( vs other_bodc_originator_and_methods_record_484452 vs other_bodc_originator_and_methods_record_579050 vs other_bodc_originator_and_methods_record_585056 vs other_bodc_originator_and_methods_record_591363 vs other_bodc_originator_and_methods_record_668909 vs other_bodc_originator_and_methods_record_672087 vs other_bodc_originator_and_methods_record_675923 vs other_bodc_originator_and_methods_record_676007 vs other_bodc_originator_and_methods_record_682902 vs other_bodc_originator_and_methods_record_684582)",
+      "question": "How large is the same-sample measurement offset for Cu in water_seawater between  and other_bodc_originator_and_methods_record_484452 and other_bodc_originator_and_methods_record_579050 and other_bodc_originator_and_methods_record_585056 and other_bodc_originator_and_methods_record_591363 and other_bodc_originator_and_methods_record_668909 and other_bodc_originator_and_methods_record_672087 and other_bodc_originator_and_methods_record_675923 and other_bodc_originator_and_methods_record_676007 and other_bodc_originator_and_methods_record_682902 and other_bodc_originator_and_methods_record_684582, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-001cde72840f",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 1719
+        },
+        {
+          "cohort_id": "cohort-11d4615529dd",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_675923",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 229
+        },
+        {
+          "cohort_id": "cohort-2e4412b66c5c",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_672087",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 366
+        },
+        {
+          "cohort_id": "cohort-3b4fa90296cc",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_676007",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 291
+        },
+        {
+          "cohort_id": "cohort-3da54ba1c0db",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_579050",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 567
+        },
+        {
+          "cohort_id": "cohort-6cce8290d0f1",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_668909",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 450
+        },
+        {
+          "cohort_id": "cohort-90035708d4b5",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_591363",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 508
+        },
+        {
+          "cohort_id": "cohort-a25a4b273f02",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_585056",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 385
+        },
+        {
+          "cohort_id": "cohort-b7e2f7f596ff",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_682902",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 864
+        },
+        {
+          "cohort_id": "cohort-c8694c98d29c",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_684582",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 79
+        },
+        {
+          "cohort_id": "cohort-d1366f643e20",
+          "element": "Cu",
+          "medium": "water",
+          "sample_type": "water_seawater",
+          "method_family": "other_bodc_originator_and_methods_record_484452",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 463
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-011"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "As",
+      "medium": "soil",
+      "score": 4216,
+      "title": "As inter-method comparability in soil_agricultural_ploughed (icp_ms vs xrf)",
+      "question": "How large is the same-sample measurement offset for As in soil_agricultural_ploughed between icp_ms and xrf, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-57a705448c1a",
+          "element": "As",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "xrf",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        },
+        {
+          "cohort_id": "cohort-a53249cbb98f",
+          "element": "As",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-012"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "Cr",
+      "medium": "soil",
+      "score": 4216,
+      "title": "Cr inter-method comparability in soil_agricultural_ploughed (icp_ms vs xrf)",
+      "question": "How large is the same-sample measurement offset for Cr in soil_agricultural_ploughed between icp_ms and xrf, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-92297ba6a546",
+          "element": "Cr",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "xrf",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        },
+        {
+          "cohort_id": "cohort-a90f2e937694",
+          "element": "Cr",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-013"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "Cu",
+      "medium": "soil",
+      "score": 4216,
+      "title": "Cu inter-method comparability in soil_agricultural_ploughed (icp_ms vs xrf)",
+      "question": "How large is the same-sample measurement offset for Cu in soil_agricultural_ploughed between icp_ms and xrf, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-4753fd5e5146",
+          "element": "Cu",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "xrf",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        },
+        {
+          "cohort_id": "cohort-50cde350cb7e",
+          "element": "Cu",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-014"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "Ni",
+      "medium": "soil",
+      "score": 4216,
+      "title": "Ni inter-method comparability in soil_agricultural_ploughed (icp_ms vs xrf)",
+      "question": "How large is the same-sample measurement offset for Ni in soil_agricultural_ploughed between icp_ms and xrf, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-bebb90a0a8a2",
+          "element": "Ni",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "xrf",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        },
+        {
+          "cohort_id": "cohort-d8a3d643938d",
+          "element": "Ni",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-015"
+    },
+    {
+      "type": "T2_method_artifact",
+      "element": "Pb",
+      "medium": "soil",
+      "score": 4216,
+      "title": "Pb inter-method comparability in soil_agricultural_ploughed (icp_ms vs xrf)",
+      "question": "How large is the same-sample measurement offset for Pb in soil_agricultural_ploughed between icp_ms and xrf, and can a transfer model make the cohorts poolable?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-153dd8e10c8d",
+          "element": "Pb",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "xrf",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        },
+        {
+          "cohort_id": "cohort-ce74d282beb6",
+          "element": "Pb",
+          "medium": "soil",
+          "sample_type": "soil_agricultural_ploughed",
+          "method_family": "icp_ms",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 2108
+        }
+      ],
+      "suggested_design": "join determinations on shared sample identifiers; paired ratio or log-offset model per element; report offset, spread, and covariate dependence (e.g. refractory host phases)",
+      "expected_products": [
+        "same-sample offset table",
+        "transfer-model coefficients",
+        "poolability verdict per cohort pair"
+      ],
+      "caveats": "requires shared sample identifiers across determinations within one source",
+      "candidate_id": "dc-016"
+    },
+    {
+      "type": "T3_single_source_dependency",
+      "element": "Hg",
+      "medium": "water",
+      "score": 740,
+      "title": "Hg in water: all evidence from a single source (gemstat-open-archive)",
+      "question": "Every usable Hg/water cohort descends from gemstat-open-archive; which independent survey could falsify or confirm its patterns?",
+      "evidence": [
+        {
+          "cohort_id": "cohort-09cd5dea5553",
+          "element": "Hg",
+          "medium": "water",
+          "sample_type": "water_river",
+          "method_family": "other_mercury_by_cold_vapor_atomic_fluorescence_detector_with_concentration_by_an_inline_gold_trap",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 71
+        },
+        {
+          "cohort_id": "cohort-3e4eea411b8c",
+          "element": "Hg",
+          "medium": "water",
+          "sample_type": "water_river",
+          "method_family": "other_mercury_in_water_is_determined_by_spectrometric_fluorescence",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 341
+        },
+        {
+          "cohort_id": "cohort-d8a21f0772f0",
+          "element": "Hg",
+          "medium": "water",
+          "sample_type": "water_river",
+          "method_family": "other_mercury_in_water_is_determined_by_spectrometric_fluorescence",
+          "tier": "single_lineage_ready",
+          "n_quantified_samples": 328
+        }
+      ],
+      "suggested_design": "treat as acquisition target: locate an independent open survey, admit it through D1 source acceptance, re-run cohorts, compare",
+      "expected_products": [
+        "candidate source shortlist",
+        "cross-survey consistency check"
+      ],
+      "caveats": "proposal only; acquisition must go through the D1 evidence chain",
+      "candidate_id": "dc-017"
+    },
+    {
+      "type": "T4_coverage_gap",
+      "element": "As,Cr,Cu,Hg,Ni,Pb",
+      "medium": "region",
+      "score": 293,
+      "title": "unknown: 293 prioritized coverage-repair tasks",
+      "question": "Which open sources can close the unknown gaps (e.g. ) for As, Cr, Cu, Hg, and what does the closed gap change?",
+      "evidence": [
+        {
+          "gap_tasks": 293,
+          "example_countries": [],
+          "required_elements": [
+            "As",
+            "Cr",
+            "Cu",
+            "Hg",
+            "Ni",
+            "Pb",
+            "Zn"
+          ]
+        }
+      ],
+      "suggested_design": "follow discovery_platform_sequence per task; each admitted source re-enters the standard pipeline; report coverage delta",
+      "expected_products": [
+        "acquisition plan",
+        "coverage-delta report"
+      ],
+      "caveats": "acquisition planning only; no new claims until data are admitted",
+      "candidate_id": "dc-018"
+    },
+    {
+      "type": "T4_coverage_gap",
+      "element": "As,Cr,Cu,Hg,Ni,Pb",
+      "medium": "region",
+      "score": 59,
+      "title": "North America: 59 prioritized coverage-repair tasks",
+      "question": "Which open sources can close the North America gaps (e.g. Canada, Mexico, United States of America) for As, Cr, Cu, Hg, and what does the closed gap change?",
+      "evidence": [
+        {
+          "gap_tasks": 59,
+          "example_countries": [
+            "Canada",
+            "Mexico",
+            "United States of America"
+          ],
+          "required_elements": [
+            "As",
+            "Cr",
+            "Cu",
+            "Hg",
+            "Ni",
+            "Pb",
+            "Zn"
+          ]
+        }
+      ],
+      "suggested_design": "follow discovery_platform_sequence per task; each admitted source re-enters the standard pipeline; report coverage delta",
+      "expected_products": [
+        "acquisition plan",
+        "coverage-delta report"
+      ],
+      "caveats": "acquisition planning only; no new claims until data are admitted",
+      "candidate_id": "dc-019"
+    },
+    {
+      "type": "T4_coverage_gap",
+      "element": "As,Cr,Cu,Hg,Ni,Pb",
+      "medium": "region",
+      "score": 41,
+      "title": "Asia: 41 prioritized coverage-repair tasks",
+      "question": "Which open sources can close the Asia gaps (e.g. China, India, Indonesia, Iran) for As, Cr, Cu, Hg, and what does the closed gap change?",
+      "evidence": [
+        {
+          "gap_tasks": 41,
+          "example_countries": [
+            "China",
+            "India",
+            "Indonesia",
+            "Iran",
+            "Kazakhstan",
+            "Mongolia",
+            "Saudi Arabia",
+            "Turkey"
+          ],
+          "required_elements": [
+            "As",
+            "Cr",
+            "Cu",
+            "Hg",
+            "Ni",
+            "Pb",
+            "Zn"
+          ]
+        }
+      ],
+      "suggested_design": "follow discovery_platform_sequence per task; each admitted source re-enters the standard pipeline; report coverage delta",
+      "expected_products": [
+        "acquisition plan",
+        "coverage-delta report"
+      ],
+      "caveats": "acquisition planning only; no new claims until data are admitted",
+      "candidate_id": "dc-020"
+    },
+    {
+      "type": "T4_coverage_gap",
+      "element": "As,Cr,Cu,Hg,Ni,Pb",
+      "medium": "region",
+      "score": 37,
+      "title": "Africa: 37 prioritized coverage-repair tasks",
+      "question": "Which open sources can close the Africa gaps (e.g. Algeria, Chad, Democratic Republic of the Congo, Egypt) for As, Cr, Cu, Hg, and what does the closed gap change?",
+      "evidence": [
+        {
+          "gap_tasks": 37,
+          "example_countries": [
+            "Algeria",
+            "Chad",
+            "Democratic Republic of the Congo",
+            "Egypt",
+            "Libya",
+            "Mali",
+            "Mauritania",
+            "Namibia"
+          ],
+          "required_elements": [
+            "As",
+            "Cr",
+            "Cu",
+            "Hg",
+            "Ni",
+            "Pb",
+            "Zn"
+          ]
+        }
+      ],
+      "suggested_design": "follow discovery_platform_sequence per task; each admitted source re-enters the standard pipeline; report coverage delta",
+      "expected_products": [
+        "acquisition plan",
+        "coverage-delta report"
+      ],
+      "caveats": "acquisition planning only; no new claims until data are admitted",
+      "candidate_id": "dc-021"
+    },
+    {
+      "type": "T4_coverage_gap",
+      "element": "As,Cr,Cu,Hg,Ni,Pb",
+      "medium": "region",
+      "score": 36,
+      "title": "Europe: 36 prioritized coverage-repair tasks",
+      "question": "Which open sources can close the Europe gaps (e.g. Russia) for As, Cr, Cu, Hg, and what does the closed gap change?",
+      "evidence": [
+        {
+          "gap_tasks": 36,
+          "example_countries": [
+            "Russia"
+          ],
+          "required_elements": [
+            "As",
+            "Cr",
+            "Cu",
+            "Hg",
+            "Ni",
+            "Pb",
+            "Zn"
+          ]
+        }
+      ],
+      "suggested_design": "follow discovery_platform_sequence per task; each admitted source re-enters the standard pipeline; report coverage delta",
+      "expected_products": [
+        "acquisition plan",
+        "coverage-delta report"
+      ],
+      "caveats": "acquisition planning only; no new claims until data are admitted",
+      "candidate_id": "dc-022"
+    },
+    {
+      "type": "T4_coverage_gap",
+      "element": "As,Cr,Cu,Hg,Ni,Pb",
+      "medium": "region",
+      "score": 34,
+      "title": "South America: 34 prioritized coverage-repair tasks",
+      "question": "Which open sources can close the South America gaps (e.g. Argentina, Bolivia, Brazil, Chile) for As, Cr, Cu, Hg, and what does the closed gap change?",
+      "evidence": [
+        {
+          "gap_tasks": 34,
+          "example_countries": [
+            "Argentina",
+            "Bolivia",
+            "Brazil",
+            "Chile",
+            "Colombia"
+          ],
+          "required_elements": [
+            "As",
+            "Cr",
+            "Cu",
+            "Hg",
+            "Ni",
+            "Pb",
+            "Zn"
+          ]
+        }
+      ],
+      "suggested_design": "follow discovery_platform_sequence per task; each admitted source re-enters the standard pipeline; report coverage delta",
+      "expected_products": [
+        "acquisition plan",
+        "coverage-delta report"
+      ],
+      "caveats": "acquisition planning only; no new claims until data are admitted",
+      "candidate_id": "dc-023"
+    },
+    {
+      "type": "T4_coverage_gap",
+      "element": "As,Cr,Cu,Hg,Ni,Pb",
+      "medium": "region",
+      "score": 28,
+      "title": "Oceania: 28 prioritized coverage-repair tasks",
+      "question": "Which open sources can close the Oceania gaps (e.g. Australia) for As, Cr, Cu, Hg, and what does the closed gap change?",
+      "evidence": [
+        {
+          "gap_tasks": 28,
+          "example_countries": [
+            "Australia"
+          ],
+          "required_elements": [
+            "As",
+            "Cr",
+            "Cu",
+            "Hg",
+            "Ni",
+            "Pb",
+            "Zn"
+          ]
+        }
+      ],
+      "suggested_design": "follow discovery_platform_sequence per task; each admitted source re-enters the standard pipeline; report coverage delta",
+      "expected_products": [
+        "acquisition plan",
+        "coverage-delta report"
+      ],
+      "caveats": "acquisition planning only; no new claims until data are admitted",
+      "candidate_id": "dc-024"
+    },
+    {
+      "type": "T5_cross_media",
+      "element": "Zn",
+      "medium": "soil+water",
+      "score": 17081,
+      "title": "Zn: soil-water coupling screening",
+      "question": "Do spatial patterns of Zn in soil and water co-vary at basin scale, consistent with export from the soil reservoir?",
+      "evidence": [
+        {
+          "element": "Zn",
+          "medium": "sediment",
+          "n_quantified_samples": 7679
+        },
+        {
+          "element": "Zn",
+          "medium": "soil",
+          "n_quantified_samples": 9375
+        },
+        {
+          "element": "Zn",
+          "medium": "water",
+          "n_quantified_samples": 7706
+        }
+      ],
+      "suggested_design": "aggregate both media to shared spatial units; rank-correlate; stratify by method family and confidence band",
+      "expected_products": [
+        "basin-level co-variation table",
+        "coupling map"
+      ],
+      "caveats": "correlation screening only; no transport-mechanism claims",
+      "candidate_id": "dc-025"
+    },
+    {
+      "type": "T5_cross_media",
+      "element": "Cu",
+      "medium": "soil+water",
+      "score": 17029,
+      "title": "Cu: soil-water coupling screening",
+      "question": "Do spatial patterns of Cu in soil and water co-vary at basin scale, consistent with export from the soil reservoir?",
+      "evidence": [
+        {
+          "element": "Cu",
+          "medium": "sediment",
+          "n_quantified_samples": 7663
+        },
+        {
+          "element": "Cu",
+          "medium": "soil",
+          "n_quantified_samples": 9457
+        },
+        {
+          "element": "Cu",
+          "medium": "water",
+          "n_quantified_samples": 7572
+        }
+      ],
+      "suggested_design": "aggregate both media to shared spatial units; rank-correlate; stratify by method family and confidence band",
+      "expected_products": [
+        "basin-level co-variation table",
+        "coupling map"
+      ],
+      "caveats": "correlation screening only; no transport-mechanism claims",
+      "candidate_id": "dc-026"
+    },
+    {
+      "type": "T5_cross_media",
+      "element": "Ni",
+      "medium": "soil+water",
+      "score": 16450,
+      "title": "Ni: soil-water coupling screening",
+      "question": "Do spatial patterns of Ni in soil and water co-vary at basin scale, consistent with export from the soil reservoir?",
+      "evidence": [
+        {
+          "element": "Ni",
+          "medium": "sediment",
+          "n_quantified_samples": 5560
+        },
+        {
+          "element": "Ni",
+          "medium": "soil",
+          "n_quantified_samples": 8692
+        },
+        {
+          "element": "Ni",
+          "medium": "water",
+          "n_quantified_samples": 7758
+        }
+      ],
+      "suggested_design": "aggregate both media to shared spatial units; rank-correlate; stratify by method family and confidence band",
+      "expected_products": [
+        "basin-level co-variation table",
+        "coupling map"
+      ],
+      "caveats": "correlation screening only; no transport-mechanism claims",
+      "candidate_id": "dc-027"
+    },
+    {
+      "type": "T5_cross_media",
+      "element": "As",
+      "medium": "soil+water",
+      "score": 10640,
+      "title": "As: soil-water coupling screening",
+      "question": "Do spatial patterns of As in soil and water co-vary at basin scale, consistent with export from the soil reservoir?",
+      "evidence": [
+        {
+          "element": "As",
+          "medium": "sediment",
+          "n_quantified_samples": 7646
+        },
+        {
+          "element": "As",
+          "medium": "soil",
+          "n_quantified_samples": 8913
+        },
+        {
+          "element": "As",
+          "medium": "water",
+          "n_quantified_samples": 1727
+        }
+      ],
+      "suggested_design": "aggregate both media to shared spatial units; rank-correlate; stratify by method family and confidence band",
+      "expected_products": [
+        "basin-level co-variation table",
+        "coupling map"
+      ],
+      "caveats": "correlation screening only; no transport-mechanism claims",
+      "candidate_id": "dc-028"
+    },
+    {
+      "type": "T5_cross_media",
+      "element": "Pb",
+      "medium": "soil+water",
+      "score": 8810,
+      "title": "Pb: soil-water coupling screening",
+      "question": "Do spatial patterns of Pb in soil and water co-vary at basin scale, consistent with export from the soil reservoir?",
+      "evidence": [
+        {
+          "element": "Pb",
+          "medium": "sediment",
+          "n_quantified_samples": 6813
+        },
+        {
+          "element": "Pb",
+          "medium": "soil",
+          "n_quantified_samples": 7389
+        },
+        {
+          "element": "Pb",
+          "medium": "water",
+          "n_quantified_samples": 1421
+        }
+      ],
+      "suggested_design": "aggregate both media to shared spatial units; rank-correlate; stratify by method family and confidence band",
+      "expected_products": [
+        "basin-level co-variation table",
+        "coupling map"
+      ],
+      "caveats": "correlation screening only; no transport-mechanism claims",
+      "candidate_id": "dc-029"
+    },
+    {
+      "type": "T5_cross_media",
+      "element": "Cr",
+      "medium": "soil+water",
+      "score": 7806,
+      "title": "Cr: soil-water coupling screening",
+      "question": "Do spatial patterns of Cr in soil and water co-vary at basin scale, consistent with export from the soil reservoir?",
+      "evidence": [
+        {
+          "element": "Cr",
+          "medium": "sediment",
+          "n_quantified_samples": 4682
+        },
+        {
+          "element": "Cr",
+          "medium": "soil",
+          "n_quantified_samples": 6419
+        },
+        {
+          "element": "Cr",
+          "medium": "water",
+          "n_quantified_samples": 1387
+        }
+      ],
+      "suggested_design": "aggregate both media to shared spatial units; rank-correlate; stratify by method family and confidence band",
+      "expected_products": [
+        "basin-level co-variation table",
+        "coupling map"
+      ],
+      "caveats": "correlation screening only; no transport-mechanism claims",
+      "candidate_id": "dc-030"
+    },
+    {
+      "type": "T5_cross_media",
+      "element": "Hg",
+      "medium": "soil+water",
+      "score": 4361,
+      "title": "Hg: soil-water coupling screening",
+      "question": "Do spatial patterns of Hg in soil and water co-vary at basin scale, consistent with export from the soil reservoir?",
+      "evidence": [
+        {
+          "element": "Hg",
+          "medium": "sediment",
+          "n_quantified_samples": 3854
+        },
+        {
+          "element": "Hg",
+          "medium": "soil",
+          "n_quantified_samples": 3621
+        },
+        {
+          "element": "Hg",
+          "medium": "water",
+          "n_quantified_samples": 740
+        }
+      ],
+      "suggested_design": "aggregate both media to shared spatial units; rank-correlate; stratify by method family and confidence band",
+      "expected_products": [
+        "basin-level co-variation table",
+        "coupling map"
+      ],
+      "caveats": "correlation screening only; no transport-mechanism claims",
+      "candidate_id": "dc-031"
+    }
+  ],
+  "receipt": {
+    "inputs": {
+      "analysis_cohorts.csv": "0024166c63fb4ccf368845d32b4eaff536774b2232d578f8affed5cf74b2ade5",
+      "sampling_priority.geojson": "cb5c194242c11a952a643dbfb8977158a93d001c972e9ff09bfc1505f7a2623d"
+    },
+    "parameters": {
+      "min_samples": 50,
+      "top_per_type": 8
+    },
+    "counts": {
+      "cohorts_total": 337,
+      "cohorts_usable": 220,
+      "candidates": 31
+    }
+  }
+}

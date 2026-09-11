@@ -15,7 +15,7 @@ Library（ECL）、USGS Alaska Geochemical Database 2.0（AGDB2）、ODM2，以�
 交换标准。IGSN/DataCite 主要描述实体样品和持久标识符，不负责承载逐项分析结果。
 
 机器可读版本见 `platform-field-crosswalk.json`；其结构由
-`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 125 个 canonical 字段
+`platform-field-crosswalk.schema.json` 约束。自动测试还会验证 crosswalk 与当前 132 个 canonical 字段
 完全分区，防止 Schema 改动后文档悄悄过期。
 
 ## 2. 映射类型

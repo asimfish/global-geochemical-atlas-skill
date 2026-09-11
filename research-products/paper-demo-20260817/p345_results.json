@@ -1,0 +1,152 @@
+{
+ "P3_method_offsets": {
+  "GEMAS_As_xrf_over_icpms": {
+   "n_samples": 2224,
+   "median_ratio": 1.228,
+   "iqr": [
+    1.058,
+    1.435
+   ],
+   "log_log_slope": 0.83,
+   "log_log_r2": 0.815
+  },
+  "GEMAS_Cr_xrf_over_icpms": {
+   "n_samples": 2224,
+   "median_ratio": 2.942,
+   "iqr": [
+    2.366,
+    3.66
+   ],
+   "log_log_slope": 0.849,
+   "log_log_r2": 0.805
+  },
+  "GEMAS_Cu_xrf_over_icpms": {
+   "n_samples": 2224,
+   "median_ratio": 0.864,
+   "iqr": [
+    0.742,
+    0.973
+   ],
+   "log_log_slope": 1.0,
+   "log_log_r2": 0.863
+  },
+  "GEMAS_Ni_xrf_over_icpms": {
+   "n_samples": 2224,
+   "median_ratio": 1.269,
+   "iqr": [
+    1.146,
+    1.486
+   ],
+   "log_log_slope": 0.909,
+   "log_log_r2": 0.925
+  },
+  "GEMAS_Pb_xrf_over_icpms": {
+   "n_samples": 2224,
+   "median_ratio": 1.288,
+   "iqr": [
+    1.108,
+    1.628
+   ],
+   "log_log_slope": 0.735,
+   "log_log_r2": 0.647
+  },
+  "GEMAS_Zn_xrf_over_icpms": {
+   "n_samples": 2224,
+   "median_ratio": 1.342,
+   "iqr": [
+    1.25,
+    1.486
+   ],
+   "log_log_slope": 0.837,
+   "log_log_r2": 0.833
+  },
+  "FOREGS_soil_topsoil_Cr_xrf_over_icpoes": {
+   "n_samples": 420,
+   "median_ratio": 2.537,
+   "iqr": [
+    2.093,
+    3.163
+   ],
+   "log_log_slope": 0.938,
+   "log_log_r2": 0.805
+  },
+  "FOREGS_soil_subsoil_Cr_xrf_over_icpoes": {
+   "n_samples": 417,
+   "median_ratio": 2.5,
+   "iqr": [
+    2.036,
+    3.16
+   ],
+   "log_log_slope": 0.891,
+   "log_log_r2": 0.864
+  },
+  "FOREGS_soil_topsoil_Zn_xrf_over_icpoes": {
+   "n_samples": 420,
+   "median_ratio": 1.091,
+   "iqr": [
+    1.0,
+    1.198
+   ],
+   "log_log_slope": 1.131,
+   "log_log_r2": 0.906
+  },
+  "FOREGS_soil_subsoil_Zn_xrf_over_icpoes": {
+   "n_samples": 417,
+   "median_ratio": 1.075,
+   "iqr": [
+    0.982,
+    1.179
+   ],
+   "log_log_slope": 1.261,
+   "log_log_r2": 0.915
+  }
+ },
+ "P4_arsenic": {
+  "colocated_0p1deg_cells": 26,
+  "spearman_rho": 0.681,
+  "spearman_p": 0.00012977061090720262,
+  "median_gemas_over_foregs": 0.982,
+  "both_gt20_cells": 2,
+  "both_gt45_cells": 1,
+  "soil_as_records": 8979,
+  "soil_as_gt20": 688,
+  "soil_as_gt45": 162,
+  "top_colocated_cells": [
+   {
+    "cell": "47.6_-2.3",
+    "gemas": 208.5,
+    "foregs": 59.5
+   },
+   {
+    "cell": "39.0_-7.7",
+    "gemas": 31.5,
+    "foregs": 28.4
+   },
+   {
+    "cell": "47.2_11.9",
+    "gemas": 14.8,
+    "foregs": 29.8
+   },
+   {
+    "cell": "39.4_-5.3",
+    "gemas": 19.6,
+    "foregs": 20.4
+   },
+   {
+    "cell": "44.7_6.6",
+    "gemas": 20.0,
+    "foregs": 11.1
+   }
+  ]
+ },
+ "P5_geotraces": {
+  "records": 18563,
+  "depth_column": null,
+  "method_families_total": 34,
+  "records_missing_method": 7007,
+  "top_method_share": 0.377,
+  "Zn_method_families": 23,
+  "Cu_method_families": 13,
+  "Ni_method_families": 25
+ }
+}
