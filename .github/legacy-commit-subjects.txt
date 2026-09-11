@@ -1,0 +1,18 @@
+# Commit subjects grandfathered by the CI Forge-subject lint (full SHA, one per line).
+# These 14 commits were written on feat/scientific-quality-loop-v14 before the lint
+# existed on that line; they are kept unchanged to avoid rewriting shared history.
+# Every commit after this file was added must follow `[scope/op]: title` (<= 72 chars).
+868664b02ac834184f12ad63f3a53fd29fa0a055
+c4a987be5ec3d9a56d639641967375cc0eb774a2
+c10ee2a5688844a0225b8a8dbed7a462a80b9658
+3a70d177804f7b2d1a71ee8358df8512a2147059
+944454d0f0b2f59da37781a903cfcaba0740af5d
+e015c54cb154b40d1e0511a675abd85e2f0a0dd2
+49ca372fa423072389cb91e661ab4555890488ce
+0d4be50379c6de12f72ecbf2b7bcc98a868e7ee3
+1bb06baceee6b633d395e2e92bcdcbb8265232b8
+44ec4b36ff4e21cc1216cbd2c51a0a2979b2f9ba
+aa47cea40c05640d451f58145141958dec3edb62
+f2416e23ba53cf612fc285778878aa388457744f
+02991520d5a1c6e5fb4e8635bac93bfd5f5ec18f
+4280c4c03a716212412b43b912c64a0b19d6ed42
