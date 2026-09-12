@@ -338,10 +338,11 @@ def collect_final_answer_facts(output_dir: Path, audit_dir: Path) -> dict[str, A
     if isinstance(audit, dict) and audit.get("scope_notes"):
         facts["required_scope_notes"] = audit["scope_notes"]
     facts["instruction"] = (
-        "copy these numbers verbatim into the final reply; do not restate from "
-        "memory. Scoped claims may only be quoted together with their scope "
-        "sentence. Before sending, cross-check the draft with "
-        "claim_ledger.py --check-answer."
+        "copy these numbers verbatim; do not restate from memory. Preserve all "
+        "required scope notes. Generate the certified evidence appendix with "
+        "claim_ledger.py --run-dir OUT --render-answer NEW_ANSWER.md, then run "
+        "--check-answer NEW_ANSWER.md. Only its canonical claim lines are "
+        "certified; any accompanying prose requires separate review."
     )
     return facts
 

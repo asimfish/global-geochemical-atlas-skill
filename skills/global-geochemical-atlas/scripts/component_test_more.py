@@ -18,6 +18,8 @@ Run:  python scripts/component_test_more.py
 from __future__ import annotations
 
 import csv
+import hashlib
+import argparse
 import json
 import shutil
 import subprocess
@@ -32,6 +34,7 @@ PYTHON = sys.executable or "python3"
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from autopilot import freeze_prompt  # noqa: E402
+import claim_ledger  # noqa: E402
 
 PASSED = 0
 FAILED: list[str] = []
@@ -484,6 +487,111 @@ def test_proposer(tmp: Path) -> None:
     )
 
 
+def test_answer_binding_regressions() -> None:
+    ledger = {"claims": [{"claim_id": "records", "value": 10000, "integrity": "pass"}]}
+    for name, answer in (
+        ("inexact_count", "共有 10001 条记录。"),
+        ("wrong_subject", "已证实有 10000 个污染区域。"),
+        ("small_count", "有 8 个无证据的污染区域。"),
+        ("year_like_count", "有 2026 个污染区域。"),
+        ("empty", ""),
+    ):
+        result = claim_ledger.check_answer(ledger, answer)
+        check(
+            "ledger.reject_" + name, result["verdict"] == "answer_unbound", str(result)
+        )
+    claim = {
+        "claim_id": "records",
+        "statement": "standardized measurement records",
+        "value": 10000,
+        "integrity": "pass",
+        "scope": None,
+        "evidence": {
+            "file": "geochemistry.csv",
+            "pointer": "/records",
+            "sha256": "a" * 64,
+        },
+        "recompute": {"method": "row count", "value": 10000, "match": True},
+    }
+    ledger = {"claims": [claim]}
+    if not hasattr(claim_ledger, "render_answer"):
+        check("ledger.canonical_renderer", False)
+        return
+    canonical = claim_ledger.render_answer(ledger)
+    check(
+        "ledger.canonical_passes",
+        claim_ledger.check_answer(ledger, canonical)["verdict"] == "answer_bound",
+    )
+    for name, answer in (
+        ("changed_value", canonical.replace("10000", "10001")),
+        (
+            "changed_subject",
+            canonical.replace(
+                "standardized measurement records", "confirmed pollution regions"
+            ),
+        ),
+        ("changed_locator", canonical.replace("/records", "/pollution")),
+        ("changed_evidence_hash", canonical.replace("a" * 64, "b" * 64)),
+        ("changed_claim_id", canonical.replace("[records]", "[sources]")),
+        ("duplicate", canonical + canonical),
+        ("prose_append", canonical + "These prove contamination.\n"),
+        ("list_prefix", "1. " + canonical),
+        ("year_prefix", "2026\n" + canonical),
+    ):
+        check(
+            "ledger.reject_" + name,
+            claim_ledger.check_answer(ledger, answer)["verdict"] == "answer_unbound",
+        )
+    for key, value in (
+        ("integrity", "fail_unsupported"),
+        ("value", None),
+        ("value", float("nan")),
+    ):
+        invalid = {"claims": [{**claim, key: value}]}
+        check(
+            "ledger.reject_unsupported_" + key,
+            claim_ledger.check_answer(invalid, canonical)["verdict"]
+            == "answer_unbound",
+        )
+    invalid = {
+        "claims": [{**claim, "recompute": {**claim["recompute"], "match": False}}]
+    }
+    check(
+        "ledger.failed_recompute_not_licensed",
+        claim_ledger.check_answer(invalid, canonical)["verdict"] == "answer_unbound",
+    )
+    scoped = {
+        **claim,
+        "claim_id": "anomaly_candidates",
+        "integrity": "warn_scope",
+        "scope": "candidates, not confirmed",
+    }
+    scoped_ledger = {"claims": [scoped]}
+    scoped_answer = claim_ledger.render_answer(scoped_ledger)
+    check(
+        "ledger.scoped_passes",
+        claim_ledger.check_answer(scoped_ledger, scoped_answer)["verdict"]
+        == "answer_bound",
+    )
+    check(
+        "ledger.scope_removal_rejected",
+        claim_ledger.check_answer(
+            scoped_ledger,
+            scoped_answer.replace("candidates, not confirmed", "confirmed"),
+        )["verdict"]
+        == "answer_unbound",
+    )
+    for count in (0, 8, 2026, 10000):
+        counted = {"claims": [{**claim, "value": count, "recompute": None}]}
+        check(
+            "ledger.exact_count_" + str(count),
+            claim_ledger.check_answer(counted, claim_ledger.render_answer(counted))[
+                "verdict"
+            ]
+            == "answer_bound",
+        )
+
+
 def test_claim_ledger(tmp: Path, out_dir: Path) -> None:
     ledger_path = tmp / "ledger" / "claim_ledger.json"
     result = run(
@@ -519,13 +627,24 @@ def test_claim_ledger(tmp: Path, out_dir: Path) -> None:
     )
 
     run_summary = json.loads((out_dir / "run_summary.json").read_text(encoding="utf-8"))
-    records = run_summary["metrics"]["standardized_record_count"]
     anomalies = run_summary["metrics"]["candidate_anomaly_count"]
     good = tmp / "ledger" / "draft_good.md"
-    good.write_text(
-        f"standardized {records} records; {anomalies} statistical candidate "
-        "anomalies (robust-z screen, not confirmed).",
-        encoding="utf-8",
+    rendered = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "claim_ledger.py"),
+            "--run-dir",
+            str(out_dir),
+            "--ledger",
+            str(ledger_path),
+            "--render-answer",
+            str(good),
+        ]
+    )
+    check(
+        "ledger.render_cli",
+        rendered.returncode == 0 and good.is_file(),
+        rendered.stdout[-300:],
     )
     bad = tmp / "ledger" / "draft_bad.md"
     bad.write_text(
@@ -549,6 +668,52 @@ def test_claim_ledger(tmp: Path, out_dir: Path) -> None:
         good_result.returncode == 0 and "answer_bound" in good_result.stdout,
         good_result.stdout[-300:],
     )
+    original_answer = good.read_bytes()
+    overwrite = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "claim_ledger.py"),
+            "--run-dir",
+            str(out_dir),
+            "--ledger",
+            str(ledger_path),
+            "--render-answer",
+            str(good),
+        ]
+    )
+    check(
+        "ledger.render_preserves_existing_file",
+        overwrite.returncode == 3 and good.read_bytes() == original_answer,
+    )
+    receipt = json.loads(
+        (ledger_path.parent / "answer_check.json").read_text(encoding="utf-8")
+    )
+    check(
+        "ledger.receipt_binds_answer",
+        receipt["answer_sha256"] == hashlib.sha256(original_answer).hexdigest(),
+    )
+    changed_run = tmp / "ledger-changed-evidence"
+    shutil.copytree(out_dir, changed_run)
+    changed_path = changed_run / "sources_and_confidence.json"
+    changed_path.write_text(
+        changed_path.read_text(encoding="utf-8") + "\n", encoding="utf-8"
+    )
+    stale = run(
+        [
+            PYTHON,
+            str(SCRIPT_DIR / "claim_ledger.py"),
+            "--run-dir",
+            str(changed_run),
+            "--ledger",
+            str(tmp / "stale-ledger.json"),
+            "--check-answer",
+            str(good),
+        ]
+    )
+    check(
+        "ledger.stale_source_bytes_rejected",
+        stale.returncode == 1 and "answer_unbound" in stale.stdout,
+    )
     bad_result = run(
         [
             PYTHON,
@@ -567,10 +732,13 @@ def test_claim_ledger(tmp: Path, out_dir: Path) -> None:
         bad_result.returncode == 1 and bad_payload["phantom_count"] >= 1,
         bad_result.stdout[-300:],
     )
+    scoped_claim = next(c for c in ledger["claims"] if c["integrity"] == "warn_scope")
+    altered = claim_ledger.canonical_claim_line(scoped_claim).replace(
+        scoped_claim["scope"], "confirmed"
+    )
     check(
         "ledger.scope_violation_caught",
-        bad_payload["scope_violation_count"] >= 1,
-        bad_result.stdout[-300:],
+        len(claim_ledger.check_answer(ledger, altered)["scope_violations"]) == 1,
     )
 
 
@@ -896,6 +1064,17 @@ def test_graded_verdict_schema() -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--binding-only",
+        action="store_true",
+        help="run focused answer-binding regressions",
+    )
+    args = parser.parse_args()
+    test_answer_binding_regressions()
+    if args.binding_only:
+        print(f"answer binding: {PASSED}/{PASSED + len(FAILED)} passed")
+        return 1 if FAILED else 0
     with tempfile.TemporaryDirectory(prefix="skill-more-tests.") as tmp_name:
         tmp = Path(tmp_name)
         test_freeze_prompt()
