@@ -64,6 +64,8 @@ jobs:
         run: python skills/global-geochemical-atlas/scripts/component_test.py --component all
       - name: Run deterministic regression suite
         run: python skills/global-geochemical-atlas/scripts/self_test.py
+      - name: Run supplemental and strict answer-binding regressions
+        run: python skills/global-geochemical-atlas/scripts/component_test_more.py
       - name: Validate versioned spatial sufficiency policy
         run: python skills/global-geochemical-atlas/scripts/spatial_sufficiency.py
       - name: Validate online research-loop policy

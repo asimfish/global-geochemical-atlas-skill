@@ -75,7 +75,7 @@
 | **完整的 Loop 机制** | 九个研究步骤、三道门禁；验收不过进入五步修复循环；修不动的缺口标记 `needs_human_review`，绝不粉饰 | [Loop 状态机](#loop-状态机发现问题就回头修修不动就承认) · `run_self_correction_loop.py` |
 | **三层 Agent 对抗机制** | 数据入口处侦察提名、质疑挑错、确定性裁判计分；出口处金丝雀校准的审计器把关 | [对抗机制](#对抗机制它可以驱动修复但永远不能自我豁免) · `discovery_duel.py` / `agent_audit.py` / `adversarial_audit.py` |
 | **每轮评测相对独立** | 评审者在全新线程、跨模型家族运行；跨次记忆只影响第 1 轮调度，运行内证据永远压过记忆——任何一轮都不继承上一轮的结论 | [每一轮保持相对独立](#loop-状态机发现问题就回头修修不动就承认) · `acquisition_memory.py` |
-| **SHA-256 数字指纹与结果一一对应** | 哈希锚定四个环节——冻结请求、来源文件、全部 18 个产物、每条可报告断言（`文件 + JSON 指针 + SHA-256`） | [证据链](#证据链每个数字都带指纹) · `claim_ledger.py` |
+| **SHA-256 数字指纹与结果一一对应** | 哈希锚定冻结请求、来源文件、摘要提交标记内其余 17 个产物、支持的规范断言（`文件 + JSON 指针 + SHA-256`） | [证据链](#证据链每个数字都带指纹) · `claim_ledger.py` |
 | **时序演化是图谱内的视图选项** | 每条记录带采样时刻契约（`atlas-sampling-time-v1`）；时间演变四模式与异常成因视图都嵌在主 `interactive_map.html` 内，由同一份标准化数据库驱动——不是独立交付物 | [时间维度](#-时间维度演变地图与成因归因) · `build_temporal_map.py` / `classify_anomaly_provenance.py` · [时序视图在线演示](https://asimfish.github.io/global-geochemical-atlas-demo/live/world-temporal.html) |
 | **Auto-research 真实接入** | 图谱运行通过校验后，用户可选择继续进入研究层——分析队列、环境背景、采样优先级，再到可恢复、声明绑定、独立评审且必以打包产物收尾的 Auto-Research | [图谱之后](#图谱之后可选择继续进入研究模式) · [Auto-Research](#从图谱继续-auto-research) · `build_research_products.py` / `auto_research.py` / `serve_atlas_research.py` |
 
@@ -291,7 +291,7 @@ python skills/global-geochemical-atlas/scripts/validate_outputs.py \
 
 <img src="docs/readme/slide-10-mechanism.png" alt="Skill 机制总图：输入与准入、确定性处理与验证循环、出版审计与模块化交付" width="100%">
 
-整条流水线分三段。**输入与准入**：请求以 SHA-256 冻结，来源经许可/版本/哈希审计，逐记录采集并附证据。**确定性处理与验证循环**：mg/kg·WGS84 标准化 → 质量控制 → GLiM 地质匹配 → robust-z 异常筛查 → 产物逐项验证；验证不过进入修复 Loop 重跑比对，经验沉淀进跨次记忆 `memory.json`。**出版审计与模块化交付**：对抗审计先通过植入缺陷的「考试」才能上岗，断言台账拦住一切没有出处的数字。贯穿全程的原则只有一句：**模型负责提案，数值判定一律由确定性代码裁决。**
+整条流水线分三段。**输入与准入**：请求以 SHA-256 冻结，来源经许可/版本/哈希审计，逐记录采集并附证据。**确定性处理与验证循环**：按介质和量纲标准化（固体 mg/kg、水体质量/体积 µg/L），有据转换坐标，再做 QC、GLiM 地质匹配、robust-z 筛查和产物验证；失败进入修复 Loop 重跑比对，`memory.json` 只影响后续调度，不改变本轮判定。**出版审计与模块化交付**：植入缺陷的「考试」校准审计器，规范断言逐条绑定支持的事实与证据。自由文本科学解释另行审查。**模型负责提案，确定性检查执行已声明的规则，不证明科学真实性。**
 
 ```mermaid
 flowchart LR
@@ -341,8 +341,8 @@ flowchart LR
 
 1. **请求冻结**——任务本身在执行前先被哈希，中途目标漂移可被发现；
 2. **来源文件**——每个下载文件入库前都要通过记录在案的哈希校验；
-3. **产物**——`run_summary.json` 记录 18 个产物各自的哈希，评审契约在哈希不符时直接拒审；
-4. **断言**——[`claim_ledger.py`](skills/global-geochemical-atlas/scripts/claim_ledger.py) 从产物推导全部可报告断言，每条绑定「文件 + JSON 指针 + SHA-256」证据指针，且每次调用都从证据重新计算——执行者可以构建台账，但永远改写不了完整性判定。回复草稿再经 `--check-answer` 交叉核对：追溯不到台账的承重数字判为幻数（phantom），引用了收窄口径的断言却缺范围关键词判为越界。
+3. **产物**——`run_summary.json` 是十八文件事务的提交标记，记录其余 17 个产物哈希，不包含自身；评审契约在哈希不符时拒审；
+4. **断言**——[`claim_ledger.py`](skills/global-geochemical-atlas/scripts/claim_ledger.py) 从当前产物重建支持的断言。先用 `--run-dir OUT --render-answer NEW_ANSWER.md` 生成新证据附录，再用 `--run-dir OUT --check-answer NEW_ANSWER.md` 核验。`atlas-answer-binding-v2` 仅接受原样规范行：断言身份、语义、JSON 类型/值、完整范围句、证据定位/hash 与整条断言 digest。无效断言、改字段、重复、追加说明和空答复均失败关闭。这是对旧自由文本接口的有意收紧，不再用数字碰巧相同、计数容差、小整数或年份豁免来认证答复。补充说明单独审查，不能把附录通过宣称为全文或科学结论已认证。
 5. **交付收据**——正式研究交付另带由 `report_claim_ledger.py` 生成的 typed claim ledger；`validate_research_delivery.py` 逐条从内容寻址产物重算，正式交付引用不了自己文件不支持的数字。
 
 ### 图谱之后：可选择继续进入研究模式

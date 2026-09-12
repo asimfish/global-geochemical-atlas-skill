@@ -19,10 +19,10 @@ This module closes both gaps with a two-stage discipline:
                   - ``fail_unsupported`` evidence missing or recompute
                                          mismatch.
 
-``check-answer``  cross-check a draft final answer against the ledger: every
-                  load-bearing number must trace back to a licensed claim
-                  value, and every quoted ``warn_scope`` claim must carry its
-                  scope keywords.
+``render-answer`` generate canonical, evidence-bound claim lines.
+``check-answer``  accept only those exact lines, including statement, typed
+                  value, full scope and evidence identity. Free prose cannot
+                  be certified through numeric coincidence.
 
 The executor can build the ledger but can never edit a verdict: integrity
 grades are recomputed from evidence on every invocation. A scoped claim
@@ -42,6 +42,7 @@ from typing import Any
 
 LEDGER_VERSION = "atlas-claim-ledger-v1"
 LEDGER_SCHEMA = "claim-ledger.schema.json"
+ANSWER_CHECK_VERSION = "atlas-answer-binding-v2"
 
 # Scope keywords accept English or Chinese drafts (CJK spelled as escapes to
 # keep this file ASCII-safe).
@@ -369,101 +370,116 @@ def build_ledger(run_dir: Path) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 NUMBER_TOKEN = re.compile(r"\d[\d,]*(?:\.\d+)?%?")
-HEX_RUN = re.compile(r"\b[0-9a-f]{8,}\b")
 
 
-def _licensed_floats(ledger: dict[str, Any]) -> list[float]:
-    values: list[float] = []
+def canonical_claim_line(claim: dict[str, Any]) -> str:
+    """Render a trusted, freshly recomputed claim, never caller-authored prose.
 
-    def _collect(raw: Any) -> None:
-        if isinstance(raw, bool):
-            return
-        if isinstance(raw, (int, float)):
-            values.append(float(raw))
-        elif isinstance(raw, dict):
-            for item in raw.values():
-                _collect(item)
-        elif isinstance(raw, list):
-            for item in raw:
-                _collect(item)
+    JSON escaping prevents a value or source locator from introducing another
+    line. The digest binds the complete typed claim, including recomputation.
+    It is a content identity, not a signature or proof of scientific truth.
+    """
+    evidence = claim.get("evidence") or {}
+    recompute = claim.get("recompute")
+    if (
+        claim.get("integrity") not in {"pass", "warn_scope"}
+        or not isinstance(claim.get("claim_id"), str)
+        or not re.fullmatch(r"[a-z_]+", claim["claim_id"])
+        or not claim.get("statement")
+        or claim.get("value") is None
+        or not evidence.get("file")
+        or not evidence.get("pointer")
+        or not re.fullmatch(r"[0-9a-f]{64}", str(evidence.get("sha256", "")))
+        or (recompute is not None and recompute.get("match") is not True)
+        or (claim.get("integrity") == "warn_scope" and not claim.get("scope"))
+    ):
+        raise LedgerError("claim is unsupported or lacks binding evidence")
+    canonical = json.dumps(claim, sort_keys=True, ensure_ascii=True, allow_nan=False)
+    digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    payload = {
+        key: claim.get(key) for key in ("statement", "value", "scope", "evidence")
+    }
+    rendered = json.dumps(payload, sort_keys=True, ensure_ascii=True, allow_nan=False)
+    return f"- [{claim['claim_id']}] {rendered} | claim_sha256={digest}"
 
+
+def _answer_lines(ledger: dict[str, Any]) -> dict[str, str]:
+    lines: dict[str, str] = {}
+    seen: set[str] = set()
     for claim in ledger.get("claims", []):
-        _collect(claim.get("value"))
-        recompute = claim.get("recompute")
-        if isinstance(recompute, dict):
-            _collect(recompute.get("value"))
-    return values
+        claim_id = claim.get("claim_id")
+        if not isinstance(claim_id, str):
+            continue
+        if claim_id in seen:
+            raise LedgerError("duplicate claim identity")
+        seen.add(claim_id)
+        try:
+            lines[canonical_claim_line(claim)] = claim_id
+        except (LedgerError, ValueError):
+            continue
+    return lines
 
 
-def _token_matches(token_value: float, licensed: list[float]) -> bool:
-    for value in licensed:
-        if abs(token_value - value) <= 0.005 * max(1.0, abs(value)):
-            return True
-        # Percent renderings of a rate (0.87 quoted as 87 or 87%).
-        if 0.0 <= value <= 1.0 and abs(token_value - value * 100.0) <= 0.05:
-            return True
-    return False
+def render_answer(ledger: dict[str, Any]) -> str:
+    lines = _answer_lines(ledger)
+    if not lines:
+        raise LedgerError("no supported claims to render")
+    return "\n".join(lines) + "\n"
 
 
 def check_answer(ledger: dict[str, Any], answer_text: str) -> dict[str, Any]:
-    text = HEX_RUN.sub(" ", answer_text)
-    licensed = _licensed_floats(ledger)
+    allowed = _answer_lines(ledger)
     phantom: list[dict[str, str]] = []
-    matched_tokens = 0
-    for match in NUMBER_TOKEN.finditer(text):
-        token = match.group(0)
-        numeric = float(token.rstrip("%").replace(",", ""))
-        if numeric == int(numeric) and 0 <= numeric <= 12 and not token.endswith("%"):
-            continue  # small enumerators (list positions, section numbers)
-        if numeric == int(numeric) and 1900 <= numeric <= 2100:
-            continue  # calendar years
-        if _token_matches(numeric, licensed):
-            matched_tokens += 1
-        else:
-            start = max(0, match.start() - 40)
-            phantom.append(
-                {"token": token, "context": text[start : match.end() + 40].strip()}
-            )
-
+    unbound: list[dict[str, Any]] = []
+    matched: list[str] = []
     scope_violations: list[dict[str, str]] = []
-    lowered = answer_text.lower()
-    for claim in ledger.get("claims", []):
-        if claim["integrity"] != "warn_scope":
+    for line_number, line in enumerate(answer_text.splitlines(), 1):
+        if not line.strip():
             continue
-        value = claim.get("value")
-        quoted = (
-            isinstance(value, (int, float))
-            and not isinstance(value, bool)
-            and _value_quoted(float(value), lowered)
+        claim_id = allowed.get(line)
+        if claim_id is not None and claim_id not in matched:
+            matched.append(claim_id)
+            continue
+        unbound.append(
+            {"line": line_number, "reason": "noncanonical_or_duplicate_claim"}
         )
-        if quoted and not any(
-            keyword.lower() in lowered for keyword in claim.get("scope_keywords", ())
-        ):
-            scope_violations.append(
-                {"claim_id": claim["claim_id"], "required_scope": claim["scope"] or ""}
-            )
-
-    verdict = (
-        "answer_bound" if not phantom and not scope_violations else "answer_unbound"
-    )
+        phantom.extend(
+            {"token": m.group(), "context": line[:160]}
+            for m in NUMBER_TOKEN.finditer(line)
+        )
+        for claim in ledger.get("claims", []):
+            if (
+                line.startswith(f"- [{claim.get('claim_id')}]")
+                and claim.get("integrity") == "warn_scope"
+            ):
+                scope_violations.append(
+                    {
+                        "claim_id": claim["claim_id"],
+                        "required_scope": claim.get("scope") or "",
+                    }
+                )
+    if not matched and not unbound:
+        unbound.append({"line": 0, "reason": "empty_answer"})
     return {
-        "check_version": LEDGER_VERSION,
-        "licensed_value_count": len(licensed),
-        "matched_token_count": matched_tokens,
+        "check_version": ANSWER_CHECK_VERSION,
+        "answer_sha256": hashlib.sha256(answer_text.encode("utf-8")).hexdigest(),
+        "ledger_sha256": hashlib.sha256(
+            json.dumps(ledger, sort_keys=True, ensure_ascii=True).encode("utf-8")
+        ).hexdigest(),
+        "licensed_value_count": len(allowed),
+        "matched_token_count": sum(
+            len(NUMBER_TOKEN.findall(line))
+            for line in answer_text.splitlines()
+            if line in allowed
+        ),
+        "matched_claim_count": len(matched),
+        "matched_claim_ids": matched,
+        "unbound_lines": unbound,
         "phantom_numbers": phantom,
         "scope_violations": scope_violations,
-        "verdict": verdict,
+        "verdict": "answer_bound" if matched and not unbound else "answer_unbound",
+        "boundary": "Only canonical claim lines are certified; no free-text semantic or scientific-truth certification.",
     }
-
-
-def _value_quoted(value: float, lowered_text: str) -> bool:
-    for match in NUMBER_TOKEN.finditer(lowered_text):
-        numeric = float(match.group(0).rstrip("%").replace(",", ""))
-        if abs(numeric - value) <= 0.005 * max(1.0, abs(value)):
-            return True
-        if 0.0 <= value <= 1.0 and abs(numeric - value * 100.0) <= 0.05:
-            return True
-    return False
 
 
 # ---------------------------------------------------------------------------
@@ -480,11 +496,17 @@ def main() -> int:
         default=None,
         help="ledger path; defaults to <run>_audit/claim_ledger.json",
     )
-    parser.add_argument(
+    action = parser.add_mutually_exclusive_group()
+    action.add_argument(
+        "--render-answer",
+        type=Path,
+        help="write canonical evidence-bound answer lines to a new file",
+    )
+    action.add_argument(
         "--check-answer",
         type=Path,
         default=None,
-        help="draft answer file to cross-check against the ledger",
+        help="check exact canonical lines generated by --render-answer; free prose fails closed",
     )
     args = parser.parse_args()
 
@@ -504,6 +526,19 @@ def main() -> int:
     ledger_path.write_text(
         json.dumps(ledger, ensure_ascii=False, indent=2), encoding="utf-8"
     )
+
+    if args.render_answer is not None:
+        try:
+            answer = render_answer(ledger)
+            with args.render_answer.open("x", encoding="utf-8") as handle:
+                handle.write(answer)
+        except (LedgerError, OSError, ValueError) as exc:
+            print(json.dumps({"error": str(exc)}), file=sys.stderr)
+            return 3
+        print(
+            json.dumps({"answer": str(args.render_answer), "ledger": str(ledger_path)})
+        )
+        return 0
 
     if args.check_answer is not None:
         answer_text = args.check_answer.read_text(encoding="utf-8")

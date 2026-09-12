@@ -68,7 +68,18 @@ python scripts/adversarial_audit.py --output-dir OUTPUT_DIR --mode brief
 
 ## 断言台账（结果到断言映射）
 
-审计通过只说明产物完整，不担保**最终回复**里的每个数字。`claim_ledger.py` 从运行产物推导全部可报告断言，逐条绑定证据指针（文件 + JSON pointer + sha256）并尽可能从证据重算复核，给出 `pass` / `warn_scope` / `fail_unsupported` 三级完整性；回复草稿再经 `--check-answer` 交叉核对——不能追溯到台账的承重数字判为幻数（phantom），引用了 `warn_scope` 断言却缺范围关键词判为越界。执行者可以构建台账，但永远不能改写完整性判定：每次调用都从证据重新计算。schema 见 [claim-ledger.schema.json](claim-ledger.schema.json)。
+审计通过只说明产物完整，不担保**最终回复**里的每个数字。`claim_ledger.py` 从运行产物推导当前支持的断言，绑定证据指针（文件 + JSON pointer + sha256）并尽可能重算，给出 `pass` / `warn_scope` / `fail_unsupported`。schema 见 [claim-ledger.schema.json](claim-ledger.schema.json)。
+
+答复核验协议 `atlas-answer-binding-v2` 不再用全文数字集合匹配。先生成规范证据附录，再对同一运行重新构建台账并核对：
+
+```bash
+python scripts/claim_ledger.py --run-dir OUTPUT_DIR --render-answer NEW_ANSWER.md
+python scripts/claim_ledger.py --run-dir OUTPUT_DIR --check-answer NEW_ANSWER.md
+```
+
+`NEW_ANSWER.md` 必须是新文件，生成器拒绝覆盖。每行绑定 claim ID、完整语义、JSON 类型和值、完整范围句、证据文件/指针/hash 与整条断言 SHA-256。允许选择或重排完整行；重复、删改字段、附加说明、空答复、不支持的断言均失败关闭。整数必须精确，不豁免小整数、年份或哈希外观数字。无效断言不参与生成。
+
+兼容性变化：原有自由文本草稿现在返回 `answer_unbound`（退出码 1），即使其中数字恰巧正确。人类可读的补充说明单独审查，不得把附录通过说成全文语义已认证。状态、路径和非台账指标仍按主流程报告，但不冒用此认证。`answer_bound` 只证明规范行与本次重算台账一致，不证明科学真实性、测量准确性或外部运行身份。CLI 从运行文件重建台账，不读取用户提交的台账作为裁决依据；任意修改证据后必须重新运行上游产物与审计门禁，不能靠生成新哈希自证。
 
 ## 与交付门禁的关系
 
